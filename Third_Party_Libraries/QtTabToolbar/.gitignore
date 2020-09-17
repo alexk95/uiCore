@@ -1,0 +1,13 @@
+/debug/*
+/release/*
+CMakeFiles
+*.Debug
+*.Release
+*.vcxproj
+*.vcxproj.filters
+Makefile
+.qmake.stash
+*.user
+ui*.h
+CMakeCache.txt
+*.log

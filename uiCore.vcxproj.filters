@@ -1,0 +1,371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Header Files\ak">
+      <UniqueIdentifier>{14403387-bbc5-485c-86f5-ecaa3145bdcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ak\ui">
+      <UniqueIdentifier>{5d63d4b2-951f-4b8d-ab53-94aaf8e074ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ak\notifier">
+      <UniqueIdentifier>{9edc5ce7-639b-40f1-bd7c-59279fdbac33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ak\ui\qt">
+      <UniqueIdentifier>{97fa1844-ef21-43f0-9c18-15b30ea24162}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ak\ui\ttb">
+      <UniqueIdentifier>{366068b2-c828-4eaf-b175-0a6a2888f627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ak\ui\widget">
+      <UniqueIdentifier>{66e73c4e-5a0e-4e05-813b-946991d40e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ak\ui\core">
+      <UniqueIdentifier>{a5464064-4516-4317-9f2f-651b6201be0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ak">
+      <UniqueIdentifier>{13a70937-b7e2-4d8d-898d-b2e38f655cef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ak\ui">
+      <UniqueIdentifier>{2c5f024b-3c46-415d-92fc-052f372d4dee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ak\ui\core">
+      <UniqueIdentifier>{36b2799b-0eb3-45e5-9fbc-a80fd911ee0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ak\ui\qt">
+      <UniqueIdentifier>{bc01b182-2c7b-44c7-9c24-8ccd30e090f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ak\ui\widget">
+      <UniqueIdentifier>{2b8929e1-747b-434d-9b14-5f493d57e5e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ak\ui\ttb">
+      <UniqueIdentifier>{5714a2dc-a744-4fba-8471-ed48317228c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ak\notifier">
+      <UniqueIdentifier>{c4f561c8-c068-40c8-bd57-c48c5dcdf289}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ak_core.h">
+      <Filter>Header Files\ak</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_exception.h">
+      <Filter>Header Files\ak</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_globalDataTypes.h">
+      <Filter>Header Files\ak</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_messenger.h">
+      <Filter>Header Files\ak</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_uiAPI.h">
+      <Filter>Header Files\ak</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_uidMangager.h">
+      <Filter>Header Files\ak</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_color.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_colorStyle.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_colorStyleDefaultBright.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_colorStyleDefaultDark.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_core.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_iconManager.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_objectManager.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_uiManager.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_notifier.h">
+      <Filter>Header Files\ak\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_notifierColorEditButton.h">
+      <Filter>Header Files\ak\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_notifierForwardMessage.h">
+      <Filter>Header Files\ak\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_notifierObjectManager.h">
+      <Filter>Header Files\ak\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_notifierPropertyGrid.h">
+      <Filter>Header Files\ak\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_notifierStaticEvent.h">
+      <Filter>Header Files\ak\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_notifierTreeFilter.h">
+      <Filter>Header Files\ak\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_core_aObject.h">
+      <Filter>Header Files\ak\ui\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_core_aPaintable.h">
+      <Filter>Header Files\ak\ui\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_core_aWidget.h">
+      <Filter>Header Files\ak\ui\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_core_aWidgetManager.h">
+      <Filter>Header Files\ak\ui\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_core_ttbContainer.h">
+      <Filter>Header Files\ak\ui\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_qt_dock.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_qt_treeItem.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_widget_colorEditButton.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_widget_propertyGrid.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_widget_propertyGridItem.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_widget_table.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_widget_tree.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_ttb_group.h">
+      <Filter>Header Files\ak\ui\ttb</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_ttb_page.h">
+      <Filter>Header Files\ak\ui\ttb</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_ttb_subgroup.h">
+      <Filter>Header Files\ak\ui\ttb</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_singletonAllowedMessages.h">
+      <Filter>Header Files\ak</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="include\ak_ui_signalLinker.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_treeSignalLinker.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_uiManagerTimerSignalLinker.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_action.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_checkBox.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_comboBox.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_comboButton.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_comboButtonItem.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_pushButton.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_table.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_textEdit.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_tree.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_core.cpp">
+      <Filter>Source Files\ak</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_exception.cpp">
+      <Filter>Source Files\ak</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_messenger.cpp">
+      <Filter>Source Files\ak</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_uiAPI.cpp">
+      <Filter>Source Files\ak</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_uidManager.cpp">
+      <Filter>Source Files\ak</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_color.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_colorStyle.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_colorStyleDefaultBright.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_colorStyleDefaultDark.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_core.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_iconManager.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_objectManager.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_signalLinker.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_treeSignalLinker.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_uiManager.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_uiManagerTimerSignalLinker.cpp">
+      <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_core_aObject.cpp">
+      <Filter>Source Files\ak\ui\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_core_aPaintable.cpp">
+      <Filter>Source Files\ak\ui\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_core_aWidget.cpp">
+      <Filter>Source Files\ak\ui\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_core_aWidgetManager.cpp">
+      <Filter>Source Files\ak\ui\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_core_ttbContainer.cpp">
+      <Filter>Source Files\ak\ui\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_action.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_checkBox.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_comboBox.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_comboButton.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_comboButtonItem.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_dock.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_pushButton.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_table.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_textEdit.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_tree.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_treeItem.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_widget_colorEditButton.cpp">
+      <Filter>Source Files\ak\ui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_widget_propertyGrid.cpp">
+      <Filter>Source Files\ak\ui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_widget_propertyGridItem.cpp">
+      <Filter>Source Files\ak\ui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_widget_table.cpp">
+      <Filter>Source Files\ak\ui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_widget_tree.cpp">
+      <Filter>Source Files\ak\ui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_ttb_group.cpp">
+      <Filter>Source Files\ak\ui\ttb</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_ttb_page.cpp">
+      <Filter>Source Files\ak\ui\ttb</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_ttb_subgroup.cpp">
+      <Filter>Source Files\ak\ui\ttb</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_notifier.cpp">
+      <Filter>Source Files\ak\notifier</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_notifierColorEditButton.cpp">
+      <Filter>Source Files\ak\notifier</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_notifierForwardMessage.cpp">
+      <Filter>Source Files\ak\notifier</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_notifierObjectManager.cpp">
+      <Filter>Source Files\ak\notifier</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_notifierPropertyGrid.cpp">
+      <Filter>Source Files\ak\notifier</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_notifierStaticEvent.cpp">
+      <Filter>Source Files\ak\notifier</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_notifierTreeFilter.cpp">
+      <Filter>Source Files\ak\notifier</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_singletonAllowedMessages.cpp">
+      <Filter>Source Files\ak</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mainBACKUP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
