@@ -15,6 +15,10 @@
 *.so
 *.dylib
 *.dll
+*.lib
+*.pdb
+*.ilk
+*.idb
 
 # Fortran module files
 *.mod
@@ -30,3 +34,19 @@
 *.exe
 *.out
 *.app
+
+# Logfiles
+*.tlog
+
+# Build Logs
+buildLog_Debug.txt
+buildLog_Release.txt
+
+# Private batch files
+PrivateBatchFiles
+
+# Output directory
+x64
+
+# VS internal build directory
+/**/.vs
