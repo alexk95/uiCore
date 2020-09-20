@@ -41,7 +41,9 @@ ak::ui::iconManager::iconManager(
 }
 
 ak::ui::iconManager::~iconManager() {
-	if (my_mutex != nullptr) { my_mutex->unlock(); delete my_mutex; my_mutex = nullptr; }
+	if (my_mutex != nullptr) { 
+		my_mutex->lock(); my_mutex->unlock();  delete my_mutex;  my_mutex = nullptr;
+	}
 	// Delete all imported icons
 	for (my_iconsIterator icon = my_icons.begin(); icon != my_icons.end(); icon++) {
 		if (icon->second != nullptr) {

@@ -23,7 +23,7 @@ namespace ak {
 
 		namespace qt {
 
-			//! @brief This class combines the functionallity of a QComboBox and a sim::object
+			//! @brief This class combines the functionallity of a QComboBox and a ak::ui::core::aObject
 			class comboBox : public QComboBox, public ak::ui::core::aWidget
 			{
 				Q_OBJECT
@@ -43,11 +43,12 @@ namespace ak {
 
 				//! @brief Will set the objects color style
 				//! @param _colorStyle The color style to set
-				//! @throw sim::Exception if the provided color style is a nullptr or failed to repaint the object
+				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
 				);
 			};
-		}
-	}
-}
+
+		} // namespace qt
+	} // namespace ui
+} // namespace ak

@@ -25,7 +25,7 @@ namespace ak {
 
 		namespace qt {
 
-			//! @brief This class combines the functionallity of a QTextEdit and a sim::object
+			//! @brief This class combines the functionallity of a QTextEdit and a ak::ui::core::aWidget
 			class textEdit : public QTextEdit, public ak::ui::core::aWidget
 			{
 				Q_OBJECT
@@ -57,7 +57,7 @@ namespace ak {
 
 				//! @brief Will set the objects color style
 				//! @param _colorStyle The color style to set
-				//! @throw sim::Exception if the provided color style is a nullptr or failed to repaint the object
+				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
 				);

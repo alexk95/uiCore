@@ -1,3 +1,11 @@
+/*
+ * ak_singletonAllowedMessages.cpp
+ *
+ *  Created on: September 16, 2020
+ *	Last modified on: September 17, 2020
+ *	Author: Alexander Kuester
+ *  Copyright (c) 2020 Alexander Kuester
+ */
 
 #include "ak_singletonAllowedMessages.h"
 

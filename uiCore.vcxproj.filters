@@ -177,6 +177,12 @@
     <ClInclude Include="include\ak_singletonAllowedMessages.h">
       <Filter>Header Files\ak</Filter>
     </ClInclude>
+    <ClInclude Include="include\ak_ui_widget_tabView.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_qt_tabView.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\ak_ui_signalLinker.h">
@@ -214,6 +220,9 @@
     </QtMoc>
     <QtMoc Include="include\ak_ui_qt_tree.h">
       <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_tabViewSignalLinker.h">
+      <Filter>Header Files\ak\ui</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -364,8 +373,14 @@
     <ClCompile Include="src\ak_singletonAllowedMessages.cpp">
       <Filter>Source Files\ak</Filter>
     </ClCompile>
-    <ClCompile Include="src\mainBACKUP.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\ak_ui_widget_tabView.cpp">
+      <Filter>Source Files\ak\ui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_tabView.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_tabViewSignalLinker.cpp">
+      <Filter>Source Files\ak\ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

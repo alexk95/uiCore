@@ -99,6 +99,7 @@ ak::ui::uiManager::uiManager(
 
 		my_window->statusBar()->addPermanentWidget(my_progressBar, 180);
 		my_window->statusBar()->addPermanentWidget(my_statusLabel, 250);
+		my_window->statusBar()->setVisible(true);
 
 		// Setup timer
 		my_timerLabelHide = new QTimer;
@@ -250,41 +251,52 @@ void ak::ui::uiManager::tabifyDock(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::tabifyDock()"); }
 }
 
-void ak::ui::uiManager::setDockPriorityLeftbottom(
+void ak::ui::uiManager::setDockPriorityBottomLeft(
 	ak::ui::core::dockLocation						_dockLocation
 ) {
-	switch (_dockLocation)
-	{
-	case ak::ui::core::dockLeft:
-		my_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::LeftDockWidgetArea); break;
-	case ak::ui::core::dockRight:
-		my_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::RightDockWidgetArea); break;
-	case ak::ui::core::dockBottom:
-		my_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::BottomDockWidgetArea); break;
+	try {
+		switch (_dockLocation)
+		{
+		case ak::ui::core::dockLeft:
+			my_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::LeftDockWidgetArea); break;
+		case ak::ui::core::dockBottom:
+			my_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::BottomDockWidgetArea); break;
+		default:
+			throw ak::Exception("Invalid dock location", "Check dock location");
+		}
 	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::setDockPriorityBottomLeft()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::setDockPriorityBottomLeft()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::setDockPriorityBottomLeft()"); }
 }
 
-void ak::ui::uiManager::setDockPriorityRightbottom(
+void ak::ui::uiManager::setDockPriorityBottomRight(
 	ak::ui::core::dockLocation						_dockLocation
 ) {
-	switch (_dockLocation)
-	{
-	case ak::ui::core::dockLeft:
-		my_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::LeftDockWidgetArea); break;
-	case ak::ui::core::dockRight:
-		my_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::RightDockWidgetArea); break;
-	case ak::ui::core::dockBottom:
-		my_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::BottomDockWidgetArea); break;
+	try {
+		switch (_dockLocation)
+		{
+		case ak::ui::core::dockRight:
+			my_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::RightDockWidgetArea); break;
+		case ak::ui::core::dockBottom:
+			my_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::BottomDockWidgetArea); break;
+		default:
+			throw ak::Exception("Invalid dock location", "Check dock location");
+		}
 	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::setDockPriorityBottomLeft()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::setDockPriorityBottomLeft()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::setDockPriorityBottomLeft()"); }
 }
 
 // #############################################################################################################
+
 // Status
 
 void ak::ui::uiManager::setStatusBarProgress(
 	int											_progress
 ) {
-	if (_progress < 0 || _progress > 100) { throw ak::Exception("Progress out of range", "sui::ui::uiManager::setStatusProgress()"); }
+	if (_progress < 0 || _progress > 100) { throw ak::Exception("Progress out of range", "ak::ui::uiManager::setStatusProgress()"); }
 	setStatusBarContinuous(false);
 	my_progressBar->setValue(_progress);
 }
@@ -329,6 +341,16 @@ void ak::ui::uiManager::setStatusBarContinuous(
 		my_progressBar->setRange(0, 100);
 	}
 }
+
+bool ak::ui::uiManager::getStatusBarVisible(void) const { return my_progressBar->isVisible(); }
+
+bool ak::ui::uiManager::getStatusLabelVisible(void) const { return my_statusLabel->isVisible(); }
+
+QString ak::ui::uiManager::getStatusLabelText(void) const { return my_statusLabel->text(); }
+
+int ak::ui::uiManager::getStatusBarProgress(void) const { return my_progressBar->value(); }
+
+bool ak::ui::uiManager::getStatusBarContinuous(void) const { return my_progressBarContinuous; }
 
 void ak::ui::uiManager::setStatusLabelText(
 	const QString &														_status

@@ -2,7 +2,7 @@
  * ak_uiAPI.cpp
  *
  *  Created on: February 06, 2020
- *	Last modified on: August 27, 2020
+ *	Last modified on: September 20, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
  */
@@ -71,17 +71,17 @@ ak::uiAPI::apiManager::~apiManager() {
 	}
 
 	// Qt Application
-	delete my_app;
+	//delete my_app;
 }
 
 void ak::uiAPI::apiManager::ini(
-	bool						_createQApplication,
-	int							_argc,
-	char **						_argv,
-	ak::messenger *				_messenger,
-	ak::uidManager *			_uidManager,
-	ak::ui::iconManager *		_iconManager,
-	ak::ui::objectManager *		_objectManager
+	bool												_createQApplication,
+	int													_argc,
+	char **												_argv,
+	ak::messenger *										_messenger,
+	ak::uidManager *									_uidManager,
+	ak::ui::iconManager *								_iconManager,
+	ak::ui::objectManager *								_objectManager
 ) {
 	try {
 		if (my_isInitialized) { throw ak::Exception("API is already initialized!", "Check API status"); }
@@ -134,7 +134,7 @@ void ak::uiAPI::apiManager::ini(
 bool ak::uiAPI::apiManager::isInitialized(void) const { return my_isInitialized; }
 
 void ak::uiAPI::apiManager::setColorStyle(
-	ak::ui::colorStyle *		_colorStyle
+	ak::ui::colorStyle *								_colorStyle
 ) {
 	// Check if the same color style was provided
 	if (_colorStyle == my_colorStyle) { return; }
@@ -246,25 +246,31 @@ int ak::uiAPI::apiManager::exec(void) {
 // ###############################################################################################################################################
 
 void ak::uiAPI::ini(
-	bool													_createQApplication,
-	int														_argc,
-	char **													_argv,
-	ak::messenger *											_messenger,
-	ak::uidManager *										_uidManager,
-	ak::ui::iconManager *									_iconManager,
-	ak::ui::objectManager *									_objectManager,
-	ak::ui::colorStyle *									_colorStyle
+	bool												_createQApplication,
+	int													_argc,
+	char **												_argv,
+	ak::messenger *										_messenger,
+	ak::uidManager *									_uidManager,
+	ak::ui::iconManager *								_iconManager,
+	ak::ui::objectManager *								_objectManager,
+	ak::ui::colorStyle *								_colorStyle
 ) {
 	if (_colorStyle != nullptr) { my_apiManager.setColorStyle(_colorStyle); }
 	my_apiManager.ini(_createQApplication, _argc, _argv, _messenger, _uidManager, _iconManager, _objectManager);
 }
 
 void ak::uiAPI::destroy(void) {
-	assert(0); // Not implemented yet
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->destroyAll();
+	}
+	catch (const ak::Exception &e) { throw ak::Exception(e, "ak::uiAPI::destroy()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::destroy()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::destroy()"); }
 }
 
 void ak::uiAPI::destroyObject(
-	ak::UID										_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -276,11 +282,11 @@ void ak::uiAPI::destroyObject(
 }
 
 void ak::uiAPI::enableEventTypes(
-	ak::core::eventType										_types
+	ak::core::eventType									_types
 ) { ak::singletonAllowedMessages::instance()->setFlag(_types); }
 
 void ak::uiAPI::disableEventTypes(
-	ak::core::eventType										_types
+	ak::core::eventType									_types
 ) { ak::singletonAllowedMessages::instance()->removeFlag(_types); }
 
 std::vector<ak::core::eventType> ak::uiAPI::enabledEventTypes(void) { return ak::singletonAllowedMessages::instance()->enabledMessages(); }
@@ -290,9 +296,9 @@ std::vector<ak::core::eventType> ak::uiAPI::disabledEventTypes(void) { return ak
 // ###############################################################################################################################################
 
 ak::UID ak::uiAPI::registerNotifier(
-	ak::UID										_senderUid,
-	ak::notifier *											_notifier,
-	ak::core::messageType									_messageType
+	ak::UID												_senderUid,
+	ak::notifier *										_notifier,
+	ak::core::messageType								_messageType
 ) {
 	try
 	{
@@ -306,11 +312,11 @@ ak::UID ak::uiAPI::registerNotifier(
 }
 
 void ak::uiAPI::sendMessage(
-	ak::UID										_senderUid,
-	ak::core::messageType									_messageType,
-	int														_message,
-	int														_info1,
-	int														_info2
+	ak::UID												_senderUid,
+	ak::core::messageType								_messageType,
+	int													_message,
+	int													_info1,
+	int													_info2
 ) {
 	try {
 		ak::messenger * m = my_apiManager.messenger();
@@ -324,10 +330,10 @@ void ak::uiAPI::sendMessage(
 // ###############################################################################################################################################
 
 ak::UID ak::uiAPI::createAction(
-	ak::UID										_creatorUid,
-	const char *											_text,
-	const char *											_iconName,
-	const char *											_iconSize
+	ak::UID												_creatorUid,
+	const char *										_text,
+	const char *										_iconName,
+	const char *										_iconSize
 ) {
 	try {
 		if (_iconSize != nullptr && _iconName != nullptr) {
@@ -346,10 +352,10 @@ ak::UID ak::uiAPI::createAction(
 }
 
 ak::UID ak::uiAPI::createAction(
-	ak::UID										_creatorUid,
-	const QString &											_text,
-	const QString &											_iconName,
-	const QString &											_iconSize
+	ak::UID												_creatorUid,
+	const QString &										_text,
+	const QString &										_iconName,
+	const QString &										_iconSize
 ) {
 	try {
 		if (_iconSize.length() > 0 && _iconName.length() > 0) {
@@ -368,9 +374,9 @@ ak::UID ak::uiAPI::createAction(
 }
 
 ak::UID ak::uiAPI::createAction(
-	ak::UID										_creatorUid,
-	const QString &											_text,
-	const QIcon &											_icon
+	ak::UID												_creatorUid,
+	const QString &										_text,
+	const QIcon &										_icon
 ) {
 	try {
 		// Get manager
@@ -383,9 +389,9 @@ ak::UID ak::uiAPI::createAction(
 }
 
 ak::UID ak::uiAPI::createCheckbox(
-	ak::UID										_creatorUid,
-	const char *											_text,
-	bool													_checked
+	ak::UID												_creatorUid,
+	const char *										_text,
+	bool												_checked
 ) {
 	try {
 		return createCheckbox(_creatorUid, QString(_text), _checked);
@@ -396,9 +402,9 @@ ak::UID ak::uiAPI::createCheckbox(
 }
 
 ak::UID ak::uiAPI::createCheckbox(
-	ak::UID										_creatorUid,
-	const QString &											_text,
-	bool													_checked
+	ak::UID												_creatorUid,
+	const QString &										_text,
+	bool												_checked
 ) {
 	try {
 		// Get manager
@@ -414,12 +420,12 @@ ak::UID ak::uiAPI::createCheckbox(
 }
 
 ak::UID ak::uiAPI::createColorEditButton(
-	ak::UID										_creatorUid,
-	int														_r,
-	int														_g,
-	int														_b,
-	int														_a,
-	const char *											_textOverride
+	ak::UID												_creatorUid,
+	int													_r,
+	int													_g,
+	int													_b,
+	int													_a,
+	const char *										_textOverride
 ) {
 	try {
 		// Get manager
@@ -432,12 +438,12 @@ ak::UID ak::uiAPI::createColorEditButton(
 }
 
 ak::UID ak::uiAPI::createColorEditButton(
-	ak::UID										_creatorUid,
-	int														_r,
-	int														_g,
-	int														_b,
-	int														_a,
-	const QString &											_textOverride
+	ak::UID												_creatorUid,
+	int													_r,
+	int													_g,
+	int													_b,
+	int													_a,
+	const QString &										_textOverride
 ) {
 	try {
 		// Get manager
@@ -450,9 +456,9 @@ ak::UID ak::uiAPI::createColorEditButton(
 }
 
 ak::UID ak::uiAPI::createColorEditButton(
-	ak::UID										_creatorUid,
-	const ak::ui::color &									_color,
-	const QString &											_textOverride
+	ak::UID												_creatorUid,
+	const ak::ui::color &								_color,
+	const QString &										_textOverride
 ) {
 	try {
 		// Get manager
@@ -465,7 +471,7 @@ ak::UID ak::uiAPI::createColorEditButton(
 }
 
 ak::UID ak::uiAPI::createComboBox(
-	ak::UID										_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		// Get manager
@@ -478,9 +484,9 @@ ak::UID ak::uiAPI::createComboBox(
 }
 
 ak::UID ak::uiAPI::createComboButton(
-	ak::UID										_creatorUid,
-	const char *											_text,
-	const std::vector<ak::ui::qt::comboButtonItem> &		_possibleSelection
+	ak::UID												_creatorUid,
+	const char *										_text,
+	const std::vector<ak::ui::qt::comboButtonItem> &	_possibleSelection
 ) {
 	try {
 		// Get manager
@@ -493,9 +499,9 @@ ak::UID ak::uiAPI::createComboButton(
 }
 
 ak::UID ak::uiAPI::createComboButton(
-	ak::UID										_creatorUid,
-	const QString &											_text,
-	const std::vector<ak::ui::qt::comboButtonItem> &		_possibleSelection
+	ak::UID												_creatorUid,
+	const QString &										_text,
+	const std::vector<ak::ui::qt::comboButtonItem> &	_possibleSelection
 ) {
 	try {
 		// Get manager
@@ -508,8 +514,8 @@ ak::UID ak::uiAPI::createComboButton(
 }
 
 ak::UID ak::uiAPI::createComboButtonItem(
-	ak::UID										_creatorUid,
-	const char *											_text
+	ak::UID												_creatorUid,
+	const char *										_text
 ) {
 	try {
 		// Get manager
@@ -522,8 +528,8 @@ ak::UID ak::uiAPI::createComboButtonItem(
 }
 
 ak::UID ak::uiAPI::createComboButtonItem(
-	ak::UID										_creatorUid,
-	const QString &											_text
+	ak::UID												_creatorUid,
+	const QString &										_text
 ) {
 	try {
 		// Get manager
@@ -536,9 +542,9 @@ ak::UID ak::uiAPI::createComboButtonItem(
 }
 
 ak::UID ak::uiAPI::createComboButtonItem(
-	ak::UID										_creatorUid,
-	const QIcon &											_icon,
-	const QString &											_text
+	ak::UID												_creatorUid,
+	const QIcon &										_icon,
+	const QString &										_text
 ) {
 	try {
 		// Get manager
@@ -551,8 +557,8 @@ ak::UID ak::uiAPI::createComboButtonItem(
 }
 
 ak::UID ak::uiAPI::createDock(
-	ak::UID										_creatorUid,
-	const char *											_text
+	ak::UID												_creatorUid,
+	const char *										_text
 ) {
 	try {
 		// Get manager
@@ -565,8 +571,8 @@ ak::UID ak::uiAPI::createDock(
 }
 
 ak::UID ak::uiAPI::createDock(
-	ak::UID										_creatorUid,
-	const QString &											_text
+	ak::UID												_creatorUid,
+	const QString &										_text
 ) {
 	try {
 		// Get manager
@@ -579,7 +585,7 @@ ak::UID ak::uiAPI::createDock(
 }
 
 ak::UID ak::uiAPI::createPropertyGrid(
-	ak::UID										_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		// Get manager
@@ -592,8 +598,8 @@ ak::UID ak::uiAPI::createPropertyGrid(
 }
 
 ak::UID ak::uiAPI::createPushButton(
-	ak::UID										_creatorUid,
-	const char *											_text
+	ak::UID												_creatorUid,
+	const char *										_text
 ) {
 	try {
 		// Get manager
@@ -606,8 +612,8 @@ ak::UID ak::uiAPI::createPushButton(
 }
 
 ak::UID ak::uiAPI::createPushButton(
-	ak::UID										_creatorUid,
-	const QString &											_text
+	ak::UID												_creatorUid,
+	const QString &										_text
 ) {
 	try {
 		// Get manager
@@ -620,9 +626,9 @@ ak::UID ak::uiAPI::createPushButton(
 }
 
 ak::UID ak::uiAPI::createPushButton(
-	ak::UID										_creatorUid,
-	const QIcon &											_icon,
-	const QString &											_text
+	ak::UID												_creatorUid,
+	const QIcon &										_icon,
+	const QString &										_text
 ) {
 	try {
 		// Get manager
@@ -635,9 +641,9 @@ ak::UID ak::uiAPI::createPushButton(
 }
 
 ak::UID ak::uiAPI::createTable(
-	ak::UID										_creatorUid,
-	int														_rows,
-	int														_columns
+	ak::UID												_creatorUid,
+	int													_rows,
+	int													_columns
 ) {
 	try {
 		// Get manager
@@ -650,9 +656,9 @@ ak::UID ak::uiAPI::createTable(
 }
 
 ak::UID ak::uiAPI::createTabToolBarSubContainer(
-	ak::UID										_creatorUid,
-	ak::UID										_parentUid,
-	const char *											_text
+	ak::UID												_creatorUid,
+	ak::UID												_parentUid,
+	const char *										_text
 ) {
 	try {
 		// Get manager
@@ -665,9 +671,9 @@ ak::UID ak::uiAPI::createTabToolBarSubContainer(
 }
 
 ak::UID ak::uiAPI::createTabToolBarSubContainer(
-	ak::UID										_creatorUid,
-	ak::UID										_parentUid,
-	const QString &											_text
+	ak::UID												_creatorUid,
+	ak::UID												_parentUid,
+	const QString &										_text
 ) {
 	try {
 		// Get manager
@@ -680,8 +686,8 @@ ak::UID ak::uiAPI::createTabToolBarSubContainer(
 }
 
 ak::UID ak::uiAPI::createTextEdit(
-	ak::UID										_creatorUid,
-	const char *											_initialText
+	ak::UID												_creatorUid,
+	const char *										_initialText
 ) {
 	try {
 		// Get manager
@@ -694,8 +700,8 @@ ak::UID ak::uiAPI::createTextEdit(
 }
 
 ak::UID ak::uiAPI::createTextEdit(
-	ak::UID										_creatorUid,
-	const QString &											_initialText
+	ak::UID												_creatorUid,
+	const QString &										_initialText
 ) {
 	try {
 		// Get manager
@@ -708,7 +714,7 @@ ak::UID ak::uiAPI::createTextEdit(
 }
 
 ak::UID ak::uiAPI::createTree(
-	ak::UID										_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		// Get manager
@@ -721,7 +727,7 @@ ak::UID ak::uiAPI::createTree(
 }
 
 ak::UID ak::uiAPI::createUiManager(
-	ak::UID										_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		// Get manager
@@ -733,24 +739,39 @@ ak::UID ak::uiAPI::createUiManager(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createUiManager()"); }
 }
 
+ak::UID ak::uiAPI::createTabView(
+	ak::UID												_creatorUid
+) {
+	try {
+		// Get manager
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->createTabView(_creatorUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createTabView()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createTabView()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTabView()"); }
+}
+
 // ###############################################################################################################################################
 
-void ak::uiAPI::addObjectToContainer(
-	ak::UID										_parentUid,
-	ak::UID										_objectUid
+// object setter
+
+void ak::uiAPI::obj::addObjectToContainer(
+	ak::UID												_parentUid,
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_addObjectToContainer(_parentUid, _objectUid);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addObjectToContainer()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addObjectToContainer()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addObjectToContainer()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addObjectToContainer()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addObjectToContainer()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addObjectToContainer()"); }
 }
 
-void ak::uiAPI::setCentralWidget(
-	ak::UID										_parentUid,
-	ak::UID										_objectUid
+void ak::uiAPI::obj::setCentralWidget(
+	ak::UID												_parentUid,
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -759,87 +780,87 @@ void ak::uiAPI::setCentralWidget(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setCentralWidget(UID)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setCentralWidget(UID)"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setCentralWidget(UID)"); }
-}
+}	
 
-void ak::uiAPI::setCentralWidget(
-	ak::UID										_parentUid,
-	QWidget *									_widget
+void ak::uiAPI::obj::setCentralWidget(
+	ak::UID												_parentUid,
+	QWidget *											_widget
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setCentralWidget(_parentUid, _widget);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setCentralWidget(QWidget)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setCentralWidget(QWidget)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setCentralWidget(QWidget)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setCentralWidget(QWidget)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setCentralWidget(QWidget)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setCentralWidget(QWidget)"); }
 }
 
-void ak::uiAPI::setObjectText(
-	ak::UID										_objectUid,
-	const char *											_text
+void ak::uiAPI::obj::setText(
+	ak::UID												_objectUid,
+	const char *										_text
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setText(_objectUid, QString(_text));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setObjectText(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setObjectText(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setObjectText(char *)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setText(char *)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setText(char *)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setText(char *)"); }
 }
 
-void ak::uiAPI::setObjectText(
-	ak::UID										_objectUid,
-	const QString &											_text
+void ak::uiAPI::obj::setText(
+	ak::UID												_objectUid,
+	const QString &										_text
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setText(_objectUid, _text);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setObjectText(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setObjectText(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setObjectText(QString)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setText(QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setText(QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setText(QString)"); }
 }
 
-void ak::uiAPI::setObjectChecked(
-	ak::UID										_objectUid,
-	bool													_checked
+void ak::uiAPI::obj::setChecked(
+	ak::UID												_objectUid,
+	bool												_checked
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setChecked(_objectUid, _checked);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setObjectChecked()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setObjectChecked()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setObjectChecked()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setChecked()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setChecked()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setChecke()"); }
 }
 
-void ak::uiAPI::setObjectTristate(
-	ak::UID										_objectUid,
-	bool													_isTristate
+void ak::uiAPI::obj::setTristate(
+	ak::UID												_objectUid,
+	bool												_isTristate
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setTristate(_objectUid, _isTristate);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setObjectTristate()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setObjectTristate()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setObjectTristate()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setTristate()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setTristate()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setTristate()"); }
 }
 
-void ak::uiAPI::setFilterVisible(
-	ak::UID										_objectUid,
-	bool													_vis
+void ak::uiAPI::obj::setFilterVisible(
+	ak::UID												_objectUid,
+	bool												_vis
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setFilterVisible(_objectUid, _vis);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setFilterVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setFilterVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setFilterVisible()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setFilterVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setFilterVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setFilterVisible()"); }
 }
 
-void ak::uiAPI::setFilterCaseSensitive(
+void ak::uiAPI::obj::setFilterCaseSensitive(
 	ak::UID												_objectUid,
 	bool												_caseSensitive,
 	bool												_refresh
@@ -848,12 +869,12 @@ void ak::uiAPI::setFilterCaseSensitive(
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setFilterCaseSensitive(_objectUid, _caseSensitive, _refresh);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setFilterCaseSensitive()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setFilterCaseSensitive()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setFilterCaseSensitive()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setFilterCaseSensitive()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setFilterCaseSensitive()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setFilterCaseSensitive()"); }
 }
 
-void ak::uiAPI::setFilterRefreshOnChange(
+void ak::uiAPI::obj::setFilterRefreshOnChange(
 	ak::UID												_objectUid,
 	bool												_refreshOnChange
 ) {
@@ -861,54 +882,54 @@ void ak::uiAPI::setFilterRefreshOnChange(
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setFilterRefreshOnChange(_objectUid, _refreshOnChange);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setFilterRefreshOnChange()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setFilterRefreshOnChange()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setFilterRefreshOnChange()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setFilterRefreshOnChange()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setFilterRefreshOnChange()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setFilterRefreshOnChange()"); }
 }
 
-void ak::uiAPI::setObjectItems(
-	ak::UID										_objectUid,
-	const std::vector<ak::ui::qt::comboButtonItem> &		_items
+void ak::uiAPI::obj::setItems(
+	ak::UID												_objectUid,
+	const std::vector<ak::ui::qt::comboButtonItem> &	_items
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setItems(_objectUid, _items);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setObjectItems()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setObjectItems()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setObjectItems()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setItems()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setItems()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setItems()"); }
 }
 
-void ak::uiAPI::setObjectColor(
-	ak::UID										_objectUid,
-	int														_r,
-	int														_g,
-	int														_b,
-	int														_a
+void ak::uiAPI::obj::setColor(
+	ak::UID												_objectUid,
+	int													_r,
+	int													_g,
+	int													_b,
+	int													_a
 ) {
 	try {
-		setObjectColor(_objectUid, ak::ui::color(_r, _g, _b, _a));
+		setColor(_objectUid, ak::ui::color(_r, _g, _b, _a));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setObjectColor(RGBA)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setObjectColor(RGBA)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setObjectColor(RGBA)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setColor(RGBA)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setColor(RGBA)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setColor(RGBA)"); }
 }
 
-void ak::uiAPI::setObjectColor(
-	ak::UID										_objectUid,
-	const ak::ui::color &									_color
+void ak::uiAPI::obj::setColor(
+	ak::UID												_objectUid,
+	const ak::ui::color &								_color
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setColor(_objectUid, _color);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setObjectColor(color)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setObjectColor(color)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setObjectColor(color)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setColor(color)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setColor(color)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setColor(color)"); }
 }
 
-void ak::uiAPI::setObjectIcon(
-	ak::UID									_objectUid,
+void ak::uiAPI::obj::setIcon(
+	ak::UID												_objectUid,
 	const char *										_iconName,
 	const char *										_iconSize
 ) {
@@ -917,13 +938,13 @@ void ak::uiAPI::setObjectIcon(
 		ak::ui::iconManager * iM = my_apiManager.iconManager();
 		oM->obj_setIcon(_objectUid, *iM->icon(QString(_iconName), QString(_iconSize)));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setIcon(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setIcon(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setIcon(char *)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setIcon(char *)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setIcon(char *)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setIcon(char *)"); }
 }
 
-void ak::uiAPI::setObjectIcon(
-	ak::UID									_objectUid,
+void ak::uiAPI::obj::setIcon(
+	ak::UID												_objectUid,
 	const QString &										_iconName,
 	const QString &										_iconSize
 ) {
@@ -932,13 +953,13 @@ void ak::uiAPI::setObjectIcon(
 		ak::ui::iconManager * iM = my_apiManager.iconManager();
 		oM->obj_setIcon(_objectUid, *iM->icon(_iconName, _iconSize));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setIcon(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setIcon(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setIcon(QString)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setIcon(QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setIcon(QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setIcon(QString)"); }
 }
 
-void ak::uiAPI::setObjectIcon(
-	ak::UID									_objectUid,
+void ak::uiAPI::obj::setIcon(
+	ak::UID												_objectUid,
 	const QIcon &										_icon
 ) {
 	try {
@@ -946,443 +967,586 @@ void ak::uiAPI::setObjectIcon(
 		ak::ui::iconManager * iM = my_apiManager.iconManager();
 		oM->obj_setIcon(_objectUid, _icon);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setIcon(QIcon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setIcon(QIcon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setIcon(QIcon)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setIcon(QIcon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setIcon(QIcon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setIcon(QIcon)"); }
 }
 
-void ak::uiAPI::setTabToolBarVisible(
-	ak::UID										_uiManagerUid,
-	bool													_vis
+void ak::uiAPI::obj::setReadOnly(
+	ak::UID												_objectUid,
+	bool												_readOnly
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		ak::ui::iconManager * iM = my_apiManager.iconManager();
+		oM->obj_setReadOnly(_objectUid, _readOnly);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setReadOnly()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setReadOnly()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setReadOnly()"); }
+}
+
+void ak::uiAPI::obj::setTabToolBarVisible(
+	ak::UID												_uiManagerUid,
+	bool												_vis
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setTabToolBarVisible(_uiManagerUid, _vis);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setTabToolBarVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setTabToolBarVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setTabToolBarVisible()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setTabToolBarVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setTabToolBarVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setTabToolBarVisible()"); }
 }
 
-void ak::uiAPI::appendText(
-	ak::UID									_objectUid,
+void ak::uiAPI::obj::appendText(
+	ak::UID												_objectUid,
 	const char *										_text
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_appendText(_objectUid, QString(_text));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::appendText(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::appendText(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::appendText(char *)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::appendText(char *)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::appendText(char *)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::appendText(char *)"); }
 }
 
-void ak::uiAPI::appendText(
-	ak::UID									_objectUid,
+void ak::uiAPI::obj::appendText(
+	ak::UID												_objectUid,
 	const QString &										_text
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_appendText(_objectUid, _text);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::appendText(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::appendText(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::appendText(QString)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::appendText(QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::appendText(QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::appendText(QString)"); }
 }
 
-void ak::uiAPI::setAutoScrollToBottomEnabled(
-	ak::UID									_objectUid,
-	bool									_enabled
+void ak::uiAPI::obj::setAutoScrollToBottomEnabled(
+	ak::UID												_objectUid,
+	bool												_enabled
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_setAutoScrollToBottomEnabled(_objectUid, _enabled);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setAutoScrollToBottomEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setAutoScrollToBottomEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setAutoScrollToBottomEnabled()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setAutoScrollToBottomEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setAutoScrollToBottomEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setAutoScrollToBottomEnabled()"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const char *									_itemName,
-	bool											_value,
-	bool											_isMultipleValues
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const char *										_itemName,
+	bool												_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_addProperty(_objectUid, QString(_itemName), _value, _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(bool)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(bool)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(bool)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(bool)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(bool)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(bool)"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
-	bool											_value,
-	bool											_isMultipleValues
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const QString &										_itemName,
+	bool												_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(bool)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(bool)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(bool)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(bool)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(bool)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(bool)"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const char *									_itemName,
-	int												_value,
-	bool											_isMultipleValues
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const char *										_itemName,
+	int													_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_addProperty(_objectUid, QString(_itemName), _value, _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(int)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(int)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(int)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(int)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(int)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(int)"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
-	int												_value,
-	bool											_isMultipleValues
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const QString &										_itemName,
+	int													_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(int)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(int)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(int)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(int)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(int)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(int)"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const char *									_itemName,
-	double											_value,
-	bool											_isMultipleValues
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const char *										_itemName,
+	double												_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_addProperty(_objectUid, QString(_itemName), _value, _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(double)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(double)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(double)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(double)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(double)"); }
+}
+
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const QString &										_itemName,
+	double												_value,
+	bool												_isMultipleValues
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(double)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(double)"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(double)"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
-	double											_value,
-	bool											_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(double)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(double)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(double)"); }
-}
-
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const char *									_itemName,
-	const char *									_value,
-	bool											_isMultipleValues
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const char *										_itemName,
+	const char *										_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_addProperty(_objectUid, QString(_itemName), QString(_value), _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(QString)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(QString)"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
-	const QString &									_value,
-	bool											_isMultipleValues
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const QString &										_itemName,
+	const QString &										_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(QString)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(QString)"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const char *									_itemName,
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const char *										_itemName,
 	const ak::ui::color &								_value,
-	bool											_isMultipleValues
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_addProperty(_objectUid, QString(_itemName), _value, _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(color)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(color)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(color)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(color)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(color)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(color)"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const QString &										_itemName,
 	const ak::ui::color &								_value,
-	bool											_isMultipleValues
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(color)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(color)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(color)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(color)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(color)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(color)"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const char *									_itemName,
-	const std::vector<ak::ui::qt::comboButtonItem> &	_selection,
-	const QString &									_selectedValue,
-	bool											_isMultipleValues
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const char *										_itemName,
+	const std::vector<QString> &						_selection,
+	const QString &										_selectedValue,
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, QString(_itemName), _selection, _selectedValue, _isMultipleValues);
+		oM->obj_addProperty(_objectUid, QString(_itemName), toComboButtonItem(_selection), _selectedValue, _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(comboButtonItems)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(comboButtonItems)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(comboButtonItems)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
 }
 
-void ak::uiAPI::addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
-	const std::vector<ak::ui::qt::comboButtonItem> &	_selection,
-	const QString &									_selectedValue,
-	bool											_isMultipleValues
+void ak::uiAPI::obj::addProperty(
+	ak::UID												_objectUid,
+	const QString &										_itemName,
+	const std::vector<QString> &						_selection,
+	const QString &										_selectedValue,
+	bool												_isMultipleValues
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, _itemName, _selection, _selectedValue, _isMultipleValues);
+		oM->obj_addProperty(_objectUid, _itemName, toComboButtonItem(_selection), _selectedValue, _isMultipleValues);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addProperty(comboButtonItems)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addProperty(comboButtonItems)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(comboButtonItems)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
 }
 
-ak::UID ak::uiAPI::addObjectToTree(
-	ak::UID								_objectUid,
-	ak::UID								_parentUid,
-	const QString &									_text,
-	ak::ui::core::textAlignment						_textAlignment,
-	QIcon											_icon
+ak::ID ak::uiAPI::obj::createItem(
+	ak::UID												_objectUid,
+	ak::ID												_parentId,
+	const QString &										_text,
+	ak::ui::core::textAlignment							_textAlignment,
+	QIcon												_icon
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_createItem(_objectUid, _parentUid, _text, _textAlignment, _icon);
+		return oM->obj_createItem(_objectUid, _parentId, _text, _textAlignment, _icon);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addObjectToTree(parent)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addObjectToTree(parent)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addObjectToTree(parent)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::createItem(parent)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::createItem(parent)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::createItem(parent)"); }
 }
 
-ak::UID ak::uiAPI::addObjectToTree(
-	ak::UID								_objectUid,
-	const QString &									_cmd,
-	char											_delimiter,
-	ak::ui::core::textAlignment						_textAlignment,
-	const QIcon  &									_icon
+ak::ID ak::uiAPI::obj::createItem(
+	ak::UID												_objectUid,
+	ak::ID												_parentItemId,
+	const QString &										_iconName,
+	const QString &										_iconSize,
+	const QString &										_text,
+	ak::ui::core::textAlignment							_textAlignment
+) {
+	try {
+		return createItem(_objectUid, _parentItemId, _text, _textAlignment, *my_apiManager.iconManager()->icon(_iconName, _iconSize));
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::createItem(parent, icon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::createItem(parent, icon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::createItem(parent, icon)"); }
+}
+
+ak::ID ak::uiAPI::obj::createItem(
+	ak::UID												_objectUid,
+	const QString &										_cmd,
+	char												_delimiter,
+	ak::ui::core::textAlignment							_textAlignment,
+	const QIcon  &										_icon
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->obj_createItem(_objectUid, _cmd, _delimiter, _textAlignment, _icon);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addObjectToTree(command)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addObjectToTree(command)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addObjectToTree(command)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::createItem(command)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::createItem(command)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::createItem(command)"); }
 }
 
-void ak::uiAPI::setItemSelected(
-	ak::UID											_objectUid,
-	ak::ID											_itemId,
-	bool											_selected
+ak::ID ak::uiAPI::obj::createItem(
+	ak::UID												_objectUid,
+	const QString &										_cmd,
+	const QString &										_iconName,
+	const QString &										_iconSize,
+	char												_delimiter,
+	ak::ui::core::textAlignment							_textAlignment
 ) {
 	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setSelected(_objectUid, _itemId, _selected);
+		return createItem(_objectUid, _cmd, _delimiter, _textAlignment, *my_apiManager.iconManager()->icon(_iconName, _iconSize));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setItemSelected()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setItemSelected()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setItemSelected()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::createItem(command, icon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::createItem(command, icon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::createItem(command, icon)"); }
 }
 
-void ak::uiAPI::setSingleItemSelected(
-	ak::UID											_objectUid,
-	ak::ID											_itemId,
-	bool											_selected
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setSingleSelected(_objectUid, _itemId, _selected);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setSingleItemSelected()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setSingleItemSelected()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setSingleItemSelected()"); }
-}
-
-void ak::uiAPI::toggleItemSelection(
-	ak::UID											_objectUid,
-	ak::ID											_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_toggleSelection(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toggleItemSelection()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toggleItemSelection()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toggleItemSelection()"); }
-}
-
-void ak::uiAPI::deselectAllItems(
-	ak::UID											_objectUid
+void ak::uiAPI::obj::deselectAllItems(
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->obj_deselectAllItems(_objectUid);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::deselectAllItems()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::deselectAllItems()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::deselectAllItems()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::deselectAllItems()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::deselectAllItems()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::deselectAllItems()"); }
 }
 
-void ak::uiAPI::setMultiSelectionEnabled(
-	ak::UID											_objectUid,
-	bool											_multiSelection
+ak::ID ak::uiAPI::obj::addTab(
+	ak::UID												_objectUid,
+	ak::UID												_widgetUid,
+	const QString &										_title,
+	const QIcon &										_icon
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_addTab(_objectUid, _widgetUid, _title, _icon);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addTab(UID)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addTab(UID)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addTab(UID)"); }
+}
+
+ak::ID ak::uiAPI::obj::addTab(
+	ak::UID												_objectUid,
+	QWidget *											_widget,
+	const QString &										_title,
+	const QIcon &										_icon
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_addTab(_objectUid, _widget, _title, _icon);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addTab()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addTab()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addTab()"); }
+}
+
+ak::ID ak::uiAPI::obj::addTab(
+	ak::UID												_objectUid,
+	ak::UID												_widgetUid,
+	const QString &										_title,
+	const QString &										_iconName,
+	const QString &										_iconSize
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_addTab(_objectUid, _widgetUid, _title, _iconName, _iconSize);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addTab(UID, icon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addTab(UID, icon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addTab(UID, icon)"); }
+}
+
+ak::ID ak::uiAPI::obj::addTab(
+	ak::UID												_objectUid,
+	QWidget *											_widget,
+	const QString &										_title,
+	const QString &										_iconName,
+	const QString &										_iconSize
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_addTab(_objectUid, _widget, _title, _iconName, _iconSize);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addTab(widget, icon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addTab(widget, icon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addTab(widget, icon)"); }
+}
+
+void ak::uiAPI::obj::setMultiSelectionEnabled(
+	ak::UID												_objectUid,
+	bool												_multiSelection
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->obj_setMultiSelectionEnabled(_objectUid, _multiSelection);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setMultiSelectionEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setMultiSelectionEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setMultiSelectionEnabled()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setMultiSelectionEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setMultiSelectionEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setMultiSelectionEnabled()"); }
 }
 
-void ak::uiAPI::setSelectAndDeselectChildrenEnabled(
-	ak::UID											_objectUid,
-	bool											_enabled
+void ak::uiAPI::obj::setAutoSelectAndDeselectChildrenEnabled(
+	ak::UID												_objectUid,
+	bool												_enabled
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->obj_setAutoSelectAndDeselectChildrenEnabled(_objectUid, _enabled);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setSelectAndDeselectChildrenEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setSelectAndDeselectChildrenEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setSelectAndDeselectChildrenEnabled()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
+}
+
+void ak::uiAPI::obj::clear(
+	ak::UID												_objectUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_clear(_objectUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::clear()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::clear()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::clear()"); }
 }
 
 // ###############################################################################################################################################
 
-QString ak::uiAPI::getObjectText(
-	ak::UID										_objectUid
+// Object getter
+
+QString ak::uiAPI::obj::getText(
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->obj_getText(_objectUid);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getObjectText()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getObjectText()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getObjectText()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getText()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getText()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getText()"); }
 }
 
-bool ak::uiAPI::getObjectTristate(
-	ak::UID										_objectUid
+bool ak::uiAPI::obj::getTristate(
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->obj_getTristate(_objectUid);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getObjectTristate()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getObjectTristate()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getObjectTristate()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getTristate()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getTristate()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getTristate()"); }
 }
 
-bool ak::uiAPI::getObjectChecked(
-	ak::UID										_objectUid
+bool ak::uiAPI::obj::getChecked(
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->obj_getChecked(_objectUid);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getObjectChecked()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getObjectChecked()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getObjectChecked()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getChecked()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getChecked()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getChecked()"); }
 }
 
-std::vector<ak::ID> ak::uiAPI::getSelectedItems(
-	ak::UID									_objectUid
+std::vector<ak::ID> ak::uiAPI::obj::getSelectedItems(
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->obj_getSelectedItems(_objectUid);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getSelectedItems()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getSelectedItems()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getSelectedItems()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getSelectedItems()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getSelectedItems()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getSelectedItems()"); }
 }
 
-bool ak::uiAPI::getAutoScrollToBottomEnabled(
-	ak::UID									_objectUid
+bool ak::uiAPI::obj::getAutoScrollToBottomEnabled(
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->obj_getAutoScrollToBottomEnabled(_objectUid);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getAutoScrollToBottomEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getAutoScrollToBottomEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getAutoScrollToBottomEnabled()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getAutoScrollToBottomEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getAutoScrollToBottomEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getAutoScrollToBottomEnabled()"); }
 }
 
-std::vector<QString> ak::uiAPI::getTreeItemPath(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+// ###############################################################################################################################################
+
+// Item setter
+
+void ak::uiAPI::itm::setSelected(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	bool												_selected
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_setSelected(_objectUid, _itemId, _selected);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setItemSelected()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setItemSelected()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setItemSelected()"); }
+}
+
+void ak::uiAPI::itm::setSingleSelected(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	bool												_selected
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_setSingleSelected(_objectUid, _itemId, _selected);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setSingleSelected()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setSingleSelected()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setSingleSelected()"); }
+}
+
+void ak::uiAPI::itm::toggleSelection(
+	ak::UID												_objectUid,
+	ak::ID												_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_toggleSelection(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::toggleSelection()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::toggleSelection()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::toggleSelection()"); }
+}
+
+// ###############################################################################################################################################
+
+// Item getter
+
+std::vector<QString> ak::uiAPI::itm::getPath(
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->itm_getPath(_objectUid, _itemId);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getTreeItemPath()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getTreeItemPath()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getTreeItemPath()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getPath()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getPath()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getPath()"); }
 }
 
-QString ak::uiAPI::getTreeItemPathString(
-	ak::UID									_objectUid,
-	ak::ID									_itemId,
-	char									_delimiter
+QString ak::uiAPI::itm::getPathString(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	char												_delimiter
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		return oM->itm_getPathString(_objectUid, _itemId, _delimiter);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getTreeItemPathString()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getTreeItemPathString()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getTreeItemPathString()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getPathString()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getPathString()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getPathString()"); }
+}
+
+QString ak::uiAPI::itm::getText(
+	ak::UID												_objectUid,
+	ak::ID												_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getText(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getText()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getText()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getText()"); }
 }
 
 // ###############################################################################################################################################
@@ -1402,7 +1566,7 @@ std::string ak::uiAPI::toString(
 // ###############################################################################################################################################
 
 void ak::uiAPI::creatorDestroyed(
-	ak::UID										_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1414,7 +1578,7 @@ void ak::uiAPI::creatorDestroyed(
 }
 
 void ak::uiAPI::setColorStyle(
-	ak::ui::colorStyle *									_colorStyle
+	ak::ui::colorStyle *								_colorStyle
 ) {
 	try {
 		my_apiManager.setColorStyle(_colorStyle);
@@ -1443,7 +1607,7 @@ void ak::uiAPI::setDefaultBrightColorStyle() {
 }
 
 void ak::uiAPI::showMessageBox(
-	ak::UID									_uiManagerUid,
+	ak::UID												_uiManagerUid,
 	const char *										_message,
 	const char *										_title
 ) {
@@ -1463,7 +1627,7 @@ void ak::uiAPI::showMessageBox(
 }
 
 void ak::uiAPI::showMessageBox(
-	ak::UID									_uiManagerUid,
+	ak::UID												_uiManagerUid,
 	const QString &										_message,
 	const QString &										_title
 ) {
@@ -1482,13 +1646,138 @@ void ak::uiAPI::showMessageBox(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::showMessageBox(QString)"); }
 }
 
+void ak::uiAPI::setStatusLabelVisible(
+	ak::UID												_uiManagerUid,
+	bool												_visible
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->setStatusLabelVisible(_uiManagerUid, _visible);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setStatusLabelVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setStatusLabelVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setStatusLabelVisible()"); }
+}
+
+void ak::uiAPI::setStatusProgressVisible(
+	ak::UID												_uiManagerUid,
+	bool												_visible
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->setStatusProgressVisible(_uiManagerUid, _visible);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setStatusProgressVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setStatusProgressVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setStatusProgressVisible()"); }
+}
+
+void ak::uiAPI::setStatusLabelText(
+	ak::UID												_uiManagerUid,
+	const QString &										_text
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->setStatusLabelText(_uiManagerUid, _text);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setStatusLabelText()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setStatusLabelText()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setStatusLabelText()"); }
+}
+
+void ak::uiAPI::setStatusProgressValue(
+	ak::UID												_uiManagerUid,
+	int													_value
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->setStatusProgressValue(_uiManagerUid, _value);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setStatusProgressValue()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setStatusProgressValue()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setStatusProgressValue()"); }
+}
+
+void ak::uiAPI::setStatusProgressContinuous(
+	ak::UID												_uiManagerUid,
+	bool												_continuous
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->setStatusProgressContinuous(_uiManagerUid, _continuous);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setStatusProgressContinuous()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setStatusProgressContinuous()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setStatusProgressContinuous()"); }
+}
+
+bool ak::uiAPI::getStatusLabelVisible(
+	ak::UID												_uiManagerUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->getStatusLabelVisible(_uiManagerUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getStatusLabelVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getStatusLabelVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getStatusLabelVisible()"); }
+}
+
+bool ak::uiAPI::getStatusProgressVisible(
+	ak::UID												_uiManagerUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->getStatusProgressVisible(_uiManagerUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getStatusProgressVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getStatusProgressVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getStatusProgressVisible()"); }
+}
+
+QString ak::uiAPI::getStatusLabelText(
+	ak::UID												_uiManagerUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->getStatusLabelText(_uiManagerUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getStatusLabelText()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getStatusLabelText()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getStatusLabelText()"); }
+}
+
+int ak::uiAPI::getStatusProgressValue(
+	ak::UID												_uiManagerUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->getStatusProgressValue(_uiManagerUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getStatusProgressValue()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getStatusProgressValue()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getStatusProgressValue()"); }
+}
+
+bool ak::uiAPI::getStatusProgressContinuous(
+	ak::UID												_uiManagerUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->getStatusProgressContinuous(_uiManagerUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getStatusProgressContinuous()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getStatusProgressContinuous()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getStatusProgressContinuous()"); }
+}
+
 // ###############################################################################################################################################
 
 // dock
 
 void ak::uiAPI::addDock(
-	ak::UID									_uiManagerUid,
-	ak::UID									_dockUid,
+	ak::UID												_uiManagerUid,
+	ak::UID												_dockUid,
 	ak::ui::core::dockLocation							_dockLocation
 ) {
 	try {
@@ -1501,9 +1790,9 @@ void ak::uiAPI::addDock(
 }
 
 void ak::uiAPI::tabifyDock(
-	ak::UID									_uiManagerUid,
-	ak::UID									_parentUid,
-	ak::UID									_dockUid
+	ak::UID												_uiManagerUid,
+	ak::UID												_parentUid,
+	ak::UID												_dockUid
 ) {
 	try {
 		ak::ui::objectManager * obj = my_apiManager.objectManager();
@@ -1514,10 +1803,48 @@ void ak::uiAPI::tabifyDock(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::tabifyDock()"); }
 }
 
+void ak::uiAPI::setDockBottomLeftPriority(
+	ak::UID												_uiManagerUid,
+	ak::ui::core::dockLocation							_dockLocation
+) {
+	try {
+		ak::ui::objectManager * obj = my_apiManager.objectManager();
+		obj->setDockBottomLeftPriority(_uiManagerUid, _dockLocation);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setDockBottomLeftPriority()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setDockBottomLeftPriority()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setDockBottomLeftPriority()"); }
+}
+
+void ak::uiAPI::setDockBottomRightPriority(
+	ak::UID												_uiManagerUid,
+	ak::ui::core::dockLocation							_dockLocation
+) {
+	try {
+		ak::ui::objectManager * obj = my_apiManager.objectManager();
+		obj->setDockBottomRightPriority(_uiManagerUid, _dockLocation);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setDockBottomRightPriority()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setDockBottomRightPriority()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setDockBottomRightPriority()"); }
+}
+
+void ak::uiAPI::close(
+	ak::UID												_uiManagerUid
+) {
+	try {
+		ak::ui::objectManager * obj = my_apiManager.objectManager();
+		obj->close(_uiManagerUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::close()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::close()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::close()"); }
+}
+
 // ###############################################################################################################################################
 
 void ak::uiAPI::addIconSearchPath(
-	const char *											_path
+	const char *										_path
 ) {
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
@@ -1529,7 +1856,7 @@ void ak::uiAPI::addIconSearchPath(
 }
 
 void ak::uiAPI::addIconSearchPath(
-	const QString &											_path
+	const QString &										_path
 ) {
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
@@ -1541,7 +1868,7 @@ void ak::uiAPI::addIconSearchPath(
 }
 
 void ak::uiAPI::removeIconSearchPath(
-	const char *											_path
+	const char *										_path
 ) {
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
@@ -1553,7 +1880,7 @@ void ak::uiAPI::removeIconSearchPath(
 }
 
 void ak::uiAPI::removeIconSearchPath(
-	const QString &											_path
+	const QString &										_path
 ) {
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
@@ -1592,6 +1919,10 @@ ak::ui::iconManager * ak::uiAPI::getIconManager(void) {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getIconManager()"); }
 }
 
+// ###############################################################################################################################################
+
+// special
+
 int ak::uiAPI::exec(void) {
 	try {
 		// Return icon manager
@@ -1600,4 +1931,21 @@ int ak::uiAPI::exec(void) {
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getIconManager()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getIconManager()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getIconManager()"); }
+}
+
+std::vector<ak::ui::qt::comboButtonItem> ak::uiAPI::toComboButtonItem(
+	const std::vector<QString> &							_items
+) {
+	std::vector<ak::ui::qt::comboButtonItem> ret;
+	if (_items.size() > 0) {
+		ret.reserve(_items.size());
+		assert(ret.size() == 0);
+
+		for (QString str : _items) {
+			ak::ui::qt::comboButtonItem itm(str);
+			ret.push_back(itm);
+		}
+	}
+	assert(ret.size() == _items.size());
+	return ret;
 }

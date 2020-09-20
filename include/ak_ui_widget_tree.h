@@ -64,7 +64,7 @@ namespace ak {
 
 				//! @brief Will set the objects color style
 				//! @param _colorStyle The color style to set
-				//! @throw sim::Exception if the provided color style is a nullptr or failed to repaint the object
+				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
 				);
@@ -206,6 +206,12 @@ namespace ak {
 					char									_delimiter = '|'
 				);
 
+				//! @brief Will return the text of the specified item
+				//! @param _itemId The ID of the item to get the text of
+				QString getItemText(
+					ak::ID									_itemId
+				);
+
 				// ###########################################################################################################################################
 
 				// Events
@@ -281,195 +287,6 @@ namespace ak {
 				bool										my_selectAndDeselectChildren;
 
 			};
-
-			/*
-
-			//! This class is used to manage a QTreeWidget and provides the functionality for a filter
-			class tree : public ak::ui::core::aWidgetManager {
-			public:
-
-		
-				// ###########################################################################################################################################
-				
-				// Data manipulation
-
-				
-				//void remove(std::list<ak::uidManager::UID> items);
-
-				
-
-				// ###########################################################################################################################################
-
-				// ###########################################################################################################################################
-			
-				//! @brief Will set the text of the specified tree item
-				//! @param _itemUid The items UID to change the text of
-				//! @param _text The text to set at the specified item
-				void setText(
-					ak::ID									_itemId,
-					const QString &							_text
-				);
-
-				//! @brief Will set the text color of the specified tree item
-				//! @param _itemUid The items UID to change the text color of
-				//! @param _color The text color to set at the specified item
-				void setTextColor(
-					ak::ID									_itemId,
-					const QColor &							_color
-				);
-
-				//! @brief Will set the text alignment of the specified tree item
-				//! @param _itemUid The items UID to change the text alignment of
-				//! @param _textAlignment The text alignment to set at the specified item
-				void setTextAlignment(
-					ak::ID									_itemId,
-					ak::ui::core::textAlignment				_textAlignment
-				);
-
-				//! @brief Will set the back color of the specified tree item
-				//! @param _itemUid The items UID to change the back color of
-				//! @param _color The back color to set at the specified item
-				void setBackColor(
-					ak::ID									_itemId,
-					const QColor &							_color
-				);
-
-				//! @brief Will set the specified tree item endabled or disabled
-				//! @param _itemUid The items UID to change the enabled state of
-				//! @param _enabled If true, the specified item will be enabled
-				void setEnabled(
-					ak::ID									_itemId,
-					bool									_enabled
-				);
-
-				//! @brief Will set the icon of the specified tree item
-				//! @param _itemUid The items UID to change the icon of
-				//! @param _icon The icon to set at the specified item
-				void setIcon(
-					ak::ID									_itemId,
-					const QIcon &							_icon
-				);
-
-				// ###########################################################################################################################################
-
-				
-
-				// ###########################################################################################################################################
-		
-				// Getter
-
-				//! @brief Returns the UID of the specified item
-				//! Will return the UID of the very last item in the command
-				//! The command describes all childs from root to the required ited. The command may look like this:
-				//! root|child|child2
-				//! In this case the delimiter is '|'.
-				//! The requsted item, is the item with the text "child2".
-				//! The items parent is the item with the text "child",
-				//! and its parent is the item with the text "root".
-				//! @param _cmd The requested items tree command
-				//! @param _delimiter The character which is the delimiter between the items in the command,
-				//! @param _throwException If true, an ak::Exception will be thrown in the case that the requested item doesn't exist
-				ak::ID getItemId(
-					const QString &					_cmd,
-					char							_delimiter = '|',
-					bool							_throwException = true
-				);
-
-				//! @brief Will return the tree header text
-				QString getHeaderText() const;
-
-				//! @brief Will return true if the tree header is visible
-				bool getHeaderVisible() const;
-
-				//! @brief Will return the text of the specified tree item
-				//! @brief The UID of the tree item
-				QString getText(
-					ak::ID								_itemId
-				);
-
-				//! @brief Will return the text color of the specified tree item
-				//! @brief The UID of the tree item
-				QColor getTextColor(
-					ak::ID								_itemId
-				);
-
-				//! @brief Will return the text alignment of the specified tree item
-				//! @brief The UID of the tree item
-				ak::ui::core::textAlignment getTextAlignment(
-					ak::ID								_itemId
-				);
-
-				//! @brief Will return the back color of the specified tree item
-				//! @brief The UID of the tree item
-				QColor getBackColor(
-					ak::ID								_itemId
-				);
-
-				//! @brief Will return true if the specified item is enabled
-				//! @brief The UID of the tree item
-				bool getEnabled(
-					ak::ID								_itemId
-				);
-
-				//! @brief Will return the icon of the specified tree item
-				//! @brief The UID of the tree item
-				QIcon getIcon(
-					ak::ID								_itemId
-				);
-
-				//! @brief Returns true if the filter is case sensitive
-				bool filterCaseSensitive(void);
-
-				//! @brief Returns the UID of the filter
-				ak::UID filterUid(void);
-
-				//! @brief Returns true if the filter will be applied when its text changes
-				bool filterRefreshOnChange(void);
-
-			private:
-				
-
-				std::map<ak::ID, ak::ui::qt::treeItem *>	my_items;					//! All items that are currently created in this tree
-				typedef std::map<ak::ID,
-					ak::ui::qt::treeItem *>::iterator		my_itemsIterator;			//! Iterator used to iterate trough the items
-
-
-				// ###########################################################################################################################################
-
-				//! @brief Will remove all childs from the item provided
-				//! Will not delete the provided item, but all childs
-				//! @param _parent The item to remove all childs from
-				void removeChildsFromItem(
-					ak::ID									_parent
-				);
-
-				//! @brief Will return the UID of the provided item, throws exception if doesnt exist
-				//! @param _item The item to find the UID
-				ak::ID getItemId(
-					ak::ui::qt::treeItem *					_item
-				);
-
-				//! @brief Will check if one of the childs matches the filter
-				//! Will also check all childs of the child aswell
-				//! @param _item The child to check
-				bool checkFilter(
-					ak::ui::qt::treeItem *					_item
-				);
-
-				//! @brief Will show all childs of the tree widget item provided and iteself
-				//! @param _item The item to show all its childs of
-				void showAll(
-					ak::ui::qt::treeItem *					_item
-				);
-
-				//! @brief Will cast the provided QTreeWidgetItem to a treeItem
-				//! @param _item The item to cast
-				//! @throw ak::Exception if the cast fails or provided item is nullptr
-				static ak::ui::qt::treeItem * castTreeItem(QTreeWidgetItem * _item);
-
-			}; // class tree
-
-			*/
 
 		} // namespace widget
 	} // namespace ui

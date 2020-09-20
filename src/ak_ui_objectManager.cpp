@@ -2,36 +2,40 @@
  * ak_ui_objectManager.cpp
  *
  *  Created on: July 14, 2020
- *	Last modified on: September 07, 2020
+ *	Last modified on: September 19, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
  */
 
  // AK header
-#include "ak_ui_objectManager.h"		// corresponding header
-#include "ak_messenger.h"				// messenger
-#include "ak_notifierObjectManager.h"	// notifierObjectManager
-#include "ak_exception.h"				// error handling
-#include "ak_ui_uiManager.h"			// uiManager
-#include "ak_ui_signalLinker.h"			// signalLinker
-#include "ak_uidMangager.h"				// UID manager
+#include <ak_ui_objectManager.h>			// corresponding header
+#include <ak_messenger.h>					// messenger
+#include <ak_notifierObjectManager.h>		// notifierObjectManager
+#include <ak_exception.h>					// error handling
+#include <ak_ui_uiManager.h>				// uiManager
+#include <ak_ui_signalLinker.h>				// signalLinker
+#include <ak_uidMangager.h>					// UID manager
+#include <ak_ui_iconManager.h>				// icon manager
+#include <ak_ui_core_aWidget.h>
+#include <ak_ui_core_aObject.h>
 
 // AK Qt objects
-#include "ak_ui_qt_action.h"
-#include "ak_ui_qt_checkBox.h"
-#include "ak_ui_qt_comboBox.h"
-#include "ak_ui_qt_comboButton.h"
-#include "ak_ui_qt_dock.h"
-#include "ak_ui_qt_pushButton.h"
-#include "ak_ui_qt_textEdit.h"
-#include "ak_ui_qt_tree.h"
+#include <ak_ui_qt_action.h>				// action
+#include <ak_ui_qt_checkBox.h>				// checkBox
+#include <ak_ui_qt_comboBox.h>				// comboBox
+#include <ak_ui_qt_comboButton.h>			// comboButton
+#include <ak_ui_qt_dock.h>					// dock
+#include <ak_ui_qt_pushButton.h>			// pushButton
+#include <ak_ui_qt_textEdit.h>				// textEdit
+//#include <ak_ui_qt_tree.h>					
 
 // AK widget objects
-#include "ak_ui_widget_propertyGrid.h"
-#include "ak_ui_widget_colorEditButton.h"
-#include "ak_ui_widget_propertyGridItem.h"
-#include "ak_ui_widget_table.h"
-#include "ak_ui_widget_tree.h"
+#include <ak_ui_widget_propertyGrid.h>		// propertyGrid
+#include <ak_ui_widget_colorEditButton.h>	// colorEditButton
+#include <ak_ui_widget_propertyGridItem.h>	// propertyGridItem
+#include <ak_ui_widget_table.h>				// table
+#include <ak_ui_widget_tabView.h>			// tabView
+#include <ak_ui_widget_tree.h>				// tree
 
 // AK ttb objects
 #include "ak_ui_ttb_group.h"
@@ -404,6 +408,23 @@ ak::UID ak::ui::objectManager::createUiManager(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::createUiManager()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::createUiManager()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::createUiManager()"); }
+}
+
+ak::UID ak::ui::objectManager::createTabView(
+	ak::UID												_creatorUid
+) {
+	try {
+		// Create object
+		ak::ui::widget::tabView * obj = new ak::ui::widget::tabView(my_iconManager, my_messenger, my_uidManager, this, my_colorStyle);
+		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create action"); }
+		// Store data
+		my_mapObjects.insert_or_assign(obj->uid(), obj);
+		addCreatedUid(_creatorUid, obj->uid());
+		return obj->uid();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::createTabView()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::createTabView()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::createTabView()"); }
 }
 
 ak::UID ak::ui::objectManager::createTabToolBarSubContainer(
@@ -925,6 +946,34 @@ void ak::ui::objectManager::obj_setIcon(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_setIcon()"); }
 }
 
+void ak::ui::objectManager::obj_setReadOnly(
+	ak::UID									_objectUid,
+	bool									_readOnly
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oTextEdit:
+		{
+			// Cast object
+			ak::ui::qt::textEdit * obj = nullptr;
+			obj = dynamic_cast<ak::ui::qt::textEdit *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast textEdit"); }
+			obj->setReadOnly(_readOnly);
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_setReadOnly()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_setReadOnly()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_setReadOnly()"); }
+}
+
 void ak::ui::objectManager::obj_appendText(
 	ak::UID									_objectUid,
 	const QString &										_text
@@ -1224,6 +1273,7 @@ void ak::ui::objectManager::obj_addProperty(
 	bool												_isMultipleValues
 ) {
 	try {
+		if (_selection.size() == 0) { throw ak::Exception("Selection is empty", "Check selection count"); }
 		// Get object
 		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
 		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
@@ -1434,6 +1484,124 @@ void ak::ui::objectManager::obj_deselectAllItems(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_deselectAllItems()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_deselectAllItems()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_deselectAllItems()"); }
+}
+
+ak::ID ak::ui::objectManager::obj_addTab(
+	ak::UID											_objectUid,
+	ak::UID											_widgetUid,
+	const QString &									_title,
+	const QIcon &									_icon
+) {
+	try {
+		QWidget * Widget = castToWidget(_widgetUid);
+		return obj_addTab(_objectUid, Widget, _title, _icon);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addTab(UID)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addTab(UID)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addTab(UID)"); }
+}
+
+ak::ID ak::ui::objectManager::obj_addTab(
+	ak::UID											_objectUid,
+	QWidget *										_widget,
+	const QString &									_title,
+	const QIcon &									_icon
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oTabView:
+		{
+			// Cast tree
+			ak::ui::widget::tabView * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tabView *>(obj->second);
+			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tabView"); }
+			// Add object
+			return t->createTab(_widget, _title, _icon);
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+			break;
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addTab()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addTab()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addTab()"); }
+}
+
+ak::ID ak::ui::objectManager::obj_addTab(
+	ak::UID											_objectUid,
+	ak::UID											_widgetUid,
+	const QString &									_title,
+	const QString &									_iconName,
+	const QString &									_iconSize
+) {
+	try {
+		return obj_addTab(_objectUid, _widgetUid, _title, *my_iconManager->icon(_iconName, _iconSize));
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addTab(icon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addTab(icon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addTab(icon)"); }
+}
+
+ak::ID ak::ui::objectManager::obj_addTab(
+	ak::UID											_objectUid,
+	QWidget *										_widget,
+	const QString &									_title,
+	const QString &									_iconName,
+	const QString &									_iconSize
+) {
+	try {
+		return obj_addTab(_objectUid, _widget, _title, *my_iconManager->icon(_iconName, _iconSize));
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addTab(widget, icon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addTab(widget, icon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addTab(widget, icon)"); }
+}
+
+void ak::ui::objectManager::obj_clear(
+	ak::UID											_objectUid
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast tree
+			ak::ui::widget::tree * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
+			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+			// Add object
+			return t->clear();
+		}
+		break;
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast tree
+			ak::ui::widget::propertyGrid * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::propertyGrid *>(obj->second);
+			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+			// Add object
+			return t->clear();
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+			break;
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_clear()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_clear()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_clear()"); }
 }
 
 // ###############################################################################################################################################
@@ -1891,6 +2059,33 @@ QString ak::ui::objectManager::itm_getPathString(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getPathString()"); }
 }
 
+QString ak::ui::objectManager::itm_getText(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast object
+			ak::ui::widget::tree * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::tree *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+			return obj->getItemText(_itemId);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getText()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getText()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getText()"); }
+}
+
 // ###############################################################################################################################################
 
 void ak::ui::objectManager::addDock(
@@ -1945,6 +2140,273 @@ void ak::ui::objectManager::tabifyDock(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::tabifyDock()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::tabifyDock()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::tabifyDock()"); }
+}
+
+void ak::ui::objectManager::setDockBottomLeftPriority(
+	ak::UID									_uiManagerUid,
+	ak::ui::core::dockLocation				_dockLocation
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		ui->setDockPriorityBottomLeft(_dockLocation);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setDockBottomLeftPriority()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setDockBottomLeftPriority()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setDockBottomLeftPriority()"); }
+}
+
+void ak::ui::objectManager::setDockBottomRightPriority(
+	ak::UID									_uiManagerUid,
+	ak::ui::core::dockLocation				_dockLocation
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		ui->setDockPriorityBottomRight(_dockLocation);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setDockBottomRightPriority()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setDockBottomRightPriority()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setDockBottomRightPriority()"); }
+}
+
+void ak::ui::objectManager::setStatusLabelVisible(
+	ak::UID									_uiManagerUid,
+	bool									_visible
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		ui->setStatusLabelVisible(_visible);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setStatusLabelVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setStatusLabelVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setStatusLabelVisible()"); }
+}
+
+void ak::ui::objectManager::setStatusProgressVisible(
+	ak::UID									_uiManagerUid,
+	bool									_visible
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		ui->setStatusBarVisible(_visible);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setStatusProgressVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setStatusProgressVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setStatusProgressVisible()"); }
+}
+
+void ak::ui::objectManager::setStatusLabelText(
+	ak::UID									_uiManagerUid,
+	const QString &							_text
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		ui->setStatusLabelText(_text);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setStatusLabelText()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setStatusLabelText()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setStatusLabelText()"); }
+}
+
+void ak::ui::objectManager::setStatusProgressValue(
+	ak::UID									_uiManagerUid,
+	int										_value
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		ui->setStatusBarProgress(_value);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setStatusProgressValue()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setStatusProgressValue()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setStatusProgressValue()"); }
+}
+
+void ak::ui::objectManager::setStatusProgressContinuous(
+	ak::UID									_uiManagerUid,
+	bool									_continuous
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		ui->setStatusBarContinuous(_continuous);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setStatusProgressContinuous()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setStatusProgressContinuous()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setStatusProgressContinuous()"); }
+}
+
+bool ak::ui::objectManager::getStatusLabelVisible(
+	ak::UID									_uiManagerUid
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+		
+		return ui->getStatusLabelVisible();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::getStatusLabelVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::getStatusLabelVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::getStatusLabelVisible()"); }
+}
+
+bool ak::ui::objectManager::getStatusProgressVisible(
+	ak::UID									_uiManagerUid
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		return ui->getStatusBarVisible();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::getStatusProgressVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::getStatusProgressVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::getStatusProgressVisible()"); }
+}
+
+QString ak::ui::objectManager::getStatusLabelText(
+	ak::UID									_uiManagerUid
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		return ui->getStatusLabelText();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::getStatusLabelText()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::getStatusLabelText()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::getStatusLabelText()"); }
+}
+
+int ak::ui::objectManager::getStatusProgressValue(
+	ak::UID									_uiManagerUid
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		return ui->getStatusBarProgress();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::getStatusProgressValue()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::getStatusProgressValue()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::getStatusProgressValue()"); }
+}
+
+bool ak::ui::objectManager::getStatusProgressContinuous(
+	ak::UID									_uiManagerUid
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		return ui->getStatusBarContinuous();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::getStatusProgressContinuous()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::getStatusProgressContinuous()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::getStatusProgressContinuous()"); }
+}
+
+void ak::ui::objectManager::close(
+	ak::UID												_uiManagerUid
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check UI manager UID"); }
+		if (itm->second->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected MainWindow", "Check object type"); }
+		// Cast UI
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+
+		ui->close();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::close()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::close()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::close()"); }
 }
 
 // ###############################################################################################################################################
@@ -2009,6 +2471,36 @@ void ak::ui::objectManager::setColorStyle(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setColorStyle()"); }
 }
 
+void ak::ui::objectManager::destroyAll(void) {
+	try {
+		return;
+
+		my_mapObjectsIterator itm = my_mapObjects.begin();
+
+		// Destroy all objects that are not a main window
+		while (itm != my_mapObjects.end()) {
+			ak::ui::core::aObject * obj = itm->second;
+			if (obj->objectType() != ak::ui::core::objectType::oMainWindow) {
+				// Erase item
+				my_mapObjects.erase(obj->uid());
+				// Destroy all objects that were created by this item
+				creatorDestroyed(obj->uid());
+				delete obj;
+				itm = my_mapObjects.begin();
+			} else {
+				creatorDestroyed(obj->uid()); itm++;
+			}
+		}
+		for (itm = my_mapObjects.begin(); itm != my_mapObjects.end(); itm++) {
+			ak::ui::core::aObject * obj = itm->second;
+			if (obj != nullptr) { delete obj; }
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::destroyAll()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::destroyAll()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::destroyAll()"); }
+}
+
 // ###############################################################################################################################################
 
 void ak::ui::objectManager::addCreatedUid(
@@ -2041,4 +2533,22 @@ void ak::ui::objectManager::addCreatedUid(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::addCreatedUid()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::addCreatedUid()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::addCreatedUid()"); }
+}
+
+QWidget * ak::ui::objectManager::castToWidget(
+	ak::UID									_objectUid
+) {
+	try {
+		// Get widget
+		my_mapObjectsIterator wid = my_mapObjects.find(_objectUid);
+		if (wid == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		if (!wid->second->isWidgetType()) { throw ak::Exception("Provided object is not widget type", "Check object type"); }
+		ak::ui::core::aWidget * Widget = nullptr;
+		Widget = dynamic_cast<ak::ui::core::aWidget *>(wid->second);
+		if (Widget == nullptr) { throw ak::Exception("Cast failed", "Cast widget"); }
+		return Widget->widget();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::castToWidget()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::castToWidget()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::castToWidget()"); }
 }

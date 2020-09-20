@@ -253,6 +253,18 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 
 		// ######################################################################################################
 
+		// Menu
+
+		case ak::ui::colorStyle::styleableObject::sMenu:
+
+			out.append("QMenu{"
+				_fore _backWindow
+				"}\n");
+
+			break;
+
+		// ######################################################################################################
+
 		// Object header
 
 		case ak::ui::colorStyle::styleableObject::sObjectHeader:

@@ -32,7 +32,7 @@ namespace ak {
 		public:
 			//! @brief Constructor will initialize the file extension with png
 			//! @param _mainDirectory The main directory for the icon manager
-			//! @throw sim::Exception if the provided directory does not exist or an object creation failed
+			//! @throw ak::Exception if the provided directory does not exist or an object creation failed
 			iconManager(
 				const QString &									_mainDirectory = QString("")
 			);
@@ -42,14 +42,14 @@ namespace ak {
 
 			//! @brief Will add the provided directory to the iconManager
 			//! @param _directory The new search directory to add
-			//! @throw sim::Exception if the provided directory does not exist
+			//! @throw ak::Exception if the provided directory does not exist
 			void addDirectory(
 				const QString &									_directory
 			);
 
 			//! @brief Will remove the provided directory from the iconManager, returns false if directory does not exist before
 			//! @param _throwException If true, an exception will be thrown if the provided directory does not exist
-			//! @throw sim::Exception if the provided directory does not exist
+			//! @throw ak::Exception if the provided directory does not exist
 			bool removeDirectory(
 				const QString &									_directory,
 				bool											_throwException = false
@@ -58,7 +58,7 @@ namespace ak {
 			//! @brief Will return the icon loaded from the files location
 			//! @param _iconName The name of the icon (without extension)
 			//! @param _the size of the icon
-			//! @throw sim::Exception if the map creation failed
+			//! @throw ak::Exception if the map creation failed
 			const QIcon * icon(
 				const QString &									_iconName,
 				const QString &									_iconSize
@@ -93,7 +93,7 @@ namespace ak {
 			//! Mutex will not be locked. Caller must take care of it
 			//! @param _iconName The name of the requested icon (Without extension)
 			//! @param _iconSize The size of the requested icon (According to the file structure)
-			//! @throw sim::Exception if the icon creation failed
+			//! @throw ak::Exception if the icon creation failed
 			QIcon * createIcon(
 				const QString &									_iconName,
 				const QString &									_iconSize
@@ -101,5 +101,5 @@ namespace ak {
 
 		};
 
-	}
-}
+	} // namespace ui
+} // namespace ak

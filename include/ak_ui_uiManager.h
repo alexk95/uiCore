@@ -104,15 +104,15 @@ namespace ak {
 				ak::UID										_subDockUid
 			);
 
-			//! @brief Will set the priority of the lower left corner to the specified dock location
+			//! @brief Will set the priority of the bottom left corner to the specified dock location
 			//! @param _dockLocation Which dock location will get the priority over the lower left corner of the UI
-			void setDockPriorityLeftbottom(
+			void setDockPriorityBottomLeft(
 				ak::ui::core::dockLocation								_dockLocation
 			);
 
-			//! @brief Will set the priority of the lower right corner to the specified dock location
+			//! @brief Will set the priority of the bottom right corner to the specified dock location
 			//! @param _dockLocation Which dock location will get the priority over the lower right corner of the UI
-			void setDockPriorityRightbottom(
+			void setDockPriorityBottomRight(
 				ak::ui::core::dockLocation								_dockLocation
 			);
 
@@ -154,6 +154,16 @@ namespace ak {
 			void setStatusBarContinuous(
 				bool													_continuos = true
 			);
+
+			bool getStatusBarVisible(void) const;
+
+			bool getStatusLabelVisible(void) const;
+
+			QString getStatusLabelText(void) const;
+
+			int getStatusBarProgress(void) const;
+
+			bool getStatusBarContinuous(void) const;
 
 			//! @brief Will set the interval for the status label and progress bar show timer
 			//! @param _interval The interval to be set

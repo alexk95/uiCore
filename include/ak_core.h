@@ -21,7 +21,6 @@
 // Qt header
 #include <qstring.h>
 
-//! Contains all functionallity of the base simulation plattform objects
 namespace ak {
 
 	namespace core {
@@ -35,7 +34,7 @@ namespace ak {
 			mText,
 			mUnknownMessageType
 		};
-
+		
 		enum valueType {
 			vArray,
 			vBool,
@@ -62,22 +61,23 @@ namespace ak {
 			eChanged					= 1 << 2,
 			eCleared					= 1 << 3,
 			eClicked					= 1 << 4,
-			eCollpased					= 1 << 5,
-			eCursorPosotionChanged		= 1 << 6,
-			eDestroyed					= 1 << 7,
-			eDoubleClicked				= 1 << 8,
-			eExpanded					= 1 << 9,
-			eFocused					= 1 << 10,
-			eInvalidEntry				= 1 << 11,
-			eIndexChanged				= 1 << 12,
-			eLocationChanged			= 1 << 13,
-			eReleased					= 1 << 14,
-			eReturnPressed				= 1 << 15,
-			eSelectionChanged			= 1 << 16,
-			eStateChanged				= 1 << 17,
-			eTextChanged				= 1 << 18,
-			eToggeledChecked			= 1 << 19,
-			eToggeledUnchecked			= 1 << 20
+			eClosing					= 1 << 5,
+			eCollpased					= 1 << 6,
+			eCursorPosotionChanged		= 1 << 7,
+			eDestroyed					= 1 << 8,
+			eDoubleClicked				= 1 << 9,
+			eExpanded					= 1 << 10,
+			eFocused					= 1 << 11,
+			eInvalidEntry				= 1 << 12,
+			eIndexChanged				= 1 << 13,
+			eLocationChanged			= 1 << 14,
+			eReleased					= 1 << 15,
+			eReturnPressed				= 1 << 16,
+			eSelectionChanged			= 1 << 17,
+			eStateChanged				= 1 << 18,
+			eTextChanged				= 1 << 19,
+			eToggeledChecked			= 1 << 20,
+			eToggeledUnchecked			= 1 << 21
 		};
 
 		inline eventType operator | (eventType a, eventType b)

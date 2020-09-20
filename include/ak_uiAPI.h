@@ -54,13 +54,13 @@ namespace ak {
 			//! @param _iconManager The external icon manager. If nullptr a new one will be created
 			//! @param _objectManager The external object manager. If nullptr a new one will be created
 			void ini(
-				bool						_createQApplication,
-				int							_argc = 0,
-				char **						_argv = nullptr,
-				ak::messenger *				_messenger = nullptr,
-				ak::uidManager *			_uidManager = nullptr,
-				ak::ui::iconManager *		_iconManager = nullptr,
-				ak::ui::objectManager *		_objectManager = nullptr
+				bool												_createQApplication,
+				int													_argc = 0,
+				char **												_argv = nullptr,
+				ak::messenger *										_messenger = nullptr,
+				ak::uidManager *									_uidManager = nullptr,
+				ak::ui::iconManager *								_iconManager = nullptr,
+				ak::ui::objectManager *								_objectManager = nullptr
 			);
 
 			//! @brief Returns true if the API was initialized
@@ -113,7 +113,7 @@ namespace ak {
 			bool						my_isInitialized;				//! If true, then the API was initialized
 		};
 
-		// ###################################################################################################################################################
+		// ###############################################################################################################################################
 
 		//! @brief Will initialize the application
 		//! @param _messenger The messenger that will be used in the aplication, if nullptr a new one will be created
@@ -159,7 +159,7 @@ namespace ak {
 		//! @brief Will return the disabled event types that will be send
 		__declspec(dllexport) std::vector<ak::core::eventType> disabledEventTypes(void);
 
-		// ###############################################################################
+		// ###############################################################################################################################################
 		
 		// message functions
 
@@ -191,7 +191,7 @@ namespace ak {
 			int														_info2 = 0
 		);
 
-		// ###############################################################################
+		// ###############################################################################################################################################
 
 		// object creation
 
@@ -227,7 +227,7 @@ namespace ak {
 		//! @param _icon The icon of the action
 		//! @throw ak::Exception if the API is not initialized
 		__declspec(dllexport) ak::UID createAction(
-			ak::UID										_craetorUid,
+			ak::UID													_craetorUid,
 			const QString &											_text,
 			const QIcon &											_icon
 		);
@@ -238,7 +238,7 @@ namespace ak {
 		//! @param _checked The initial checked state of the checkbox
 		//! @throw ak::Exception if the API is not initialized
 		__declspec(dllexport) ak::UID createCheckbox(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const char *											_text,
 			bool													_checked = false
 		);
@@ -249,7 +249,7 @@ namespace ak {
 		//! @param _checked The initial checked state of the checkbox
 		//! @throw ak::Exception if the API is not initialized
 		__declspec(dllexport) ak::UID createCheckbox(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const QString &											_text,
 			bool													_checked = false
 		);
@@ -263,7 +263,7 @@ namespace ak {
 		//! @param _textOverride If provided the RGB-text representation of the provided color will be overwritten by the text provided
 		//! @throw ak::Exception if the API is not initialized
 		__declspec(dllexport) ak::UID createColorEditButton(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			int														_r,
 			int														_g,
 			int														_b,
@@ -280,7 +280,7 @@ namespace ak {
 		//! @param _textOverride If provided the RGB-text representation of the provided color will be overwritten by the text provided
 		//! @throw ak::Exception if the API is not initialized
 		__declspec(dllexport) ak::UID createColorEditButton(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			int														_r,
 			int														_g,
 			int														_b,
@@ -294,7 +294,7 @@ namespace ak {
 		//! @param _textOverride If provided the RGB-text representation of the provided color will be overwritten by the text provided
 		//! @throw ak::Exception if the API is not initialized
 		__declspec(dllexport) ak::UID createColorEditButton(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const ak::ui::color &									_color,
 			const QString &											_textOverride = QString("")
 		);
@@ -303,7 +303,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the API is not initialized
 		__declspec(dllexport) ak::UID createComboBox(
-			ak::UID										_creatorUid
+			ak::UID													_creatorUid
 		);
 
 		//! @brief Will create a new ComboButton and return its UID
@@ -312,7 +312,7 @@ namespace ak {
 		//! @param _possibleSelection The items the ComboButton will display when showing the drop-down menu
 		//! @throw ak::Exception if the API is not initialized
 		__declspec(dllexport) ak::UID createComboButton(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const char *											_text,
 			const std::vector<ak::ui::qt::comboButtonItem> &		_possibleSelection = std::vector<ak::ui::qt::comboButtonItem>()
 		);
@@ -323,7 +323,7 @@ namespace ak {
 		//! @param _possibleSelection The items the ComboButton will display when showing the drop-down menu
 		//! @throw ak::Exception if the API is not initialized
 		__declspec(dllexport) ak::UID createComboButton(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const QString &											_text = QString(""),
 			const std::vector<ak::ui::qt::comboButtonItem> &		_possibleSelection = std::vector<ak::ui::qt::comboButtonItem>()
 		);
@@ -333,16 +333,16 @@ namespace ak {
 		//! @param _text The text of the ComboButtonItem
 		//! @throw ak::Exception if the API is not initialized
 		__declspec(dllexport) ak::UID createComboButtonItem(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const char *											_text
 		);
 
 		//! @brief Will create a new ComboButtonItem and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The text of the ComboButtonItem
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createComboButtonItem(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const QString &											_text = QString("")
 		);
 
@@ -350,9 +350,9 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _icon The icon of the ComboButtonItem
 		//! @param _text The text of the ComboButtonItem
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createComboButtonItem(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const QIcon &											_icon,
 			const QString &											_text = QString("")
 		);
@@ -360,43 +360,43 @@ namespace ak {
 		//! @brief Will create a new Dock and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the Dock
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createDock(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const char *											_text
 		);
 
 		//! @brief Will create a new Dock and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the Dock
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createDock(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const QString &											_text = QString("")
 		);
 
 		//! @brief Will create a new PropertyGrid and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createPropertyGrid(
-			ak::UID										_creatorUid
+			ak::UID													_creatorUid
 		);
 
 		//! @brief Will create a new PushButton and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the PushButton
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createPushButton(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const char *											_text
 		);
 
 		//! @brief Will create a new PushButton and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the PushButton
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createPushButton(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const QString &											_text = QString("")
 		);
 
@@ -404,9 +404,9 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _icon The icon of the PushButton
 		//! @param _text The initial text of the PushButton
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createPushButton(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const QIcon &											_icon,
 			const QString &											_text = QString("")
 		);
@@ -415,9 +415,9 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _rows The initial row count of the Table
 		//! @param _columns The initial column count of the Table
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createTable(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			int														_rows,
 			int														_columns
 		);
@@ -426,10 +426,10 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _parentUid The UID of the parent TabToolBar object (may be a uiManager, TabToolBarPage or TabToolBarGroup)
 		//! @param _text The text of the SubContainer
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createTabToolBarSubContainer(
-			ak::UID										_creatorUid,
-			ak::UID										_parentUid,
+			ak::UID													_creatorUid,
+			ak::UID													_parentUid,
 			const char *											_text
 		);
 
@@ -437,530 +437,689 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _parentUid The UID of the parent TabToolBar object (may be a uiManager, TabToolBarPage or TabToolBarGroup)
 		//! @param _text The text of the SubContainer
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createTabToolBarSubContainer(
-			ak::UID										_creatorUid,
-			ak::UID										_parentUid,
+			ak::UID													_creatorUid,
+			ak::UID													_parentUid,
 			const QString &											_text = QString("")
 		);
 
 		//! @brief Will create a new TextEdit and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _initialText The initial text of the TextEdit
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createTextEdit(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const char *											_initialText
 		);
 
 		//! @brief Will create a new TextEdit and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _initialText The initial text of the TextEdit
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createTextEdit(
-			ak::UID										_creatorUid,
+			ak::UID													_creatorUid,
 			const QString &											_initialText = QString("")
 		);
 
 		//! @brief Will create a new Tree and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createTree(
-			ak::UID										_creatorUid
+			ak::UID													_creatorUid
 		);
 
 		//! @brief Will create a new UI manager and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
-		//! @throw ak::Exception if the API is not initialized
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
 		__declspec(dllexport) ak::UID createUiManager(
-			ak::UID										_creatorUid
+			ak::UID													_creatorUid
 		);
 
-		// ###############################################################################
-		
-		// object manipulation
-
-		//! @brief Will add the specified object to the specified container
-		//! @param _parentUid The container UID to add the object to
-		//! @param _objectUid The object UID to add to the container
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void addObjectToContainer(
-			ak::UID									_parentUid,
-			ak::UID									_objectUid
-		);
-
-		//! @brief Will set the specified object as the central widget of the parent object
-		//! @param _parentUid The parent object to set the object as central widget
-		//! @param _objectUid The UID of the object to set as central widget
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void setCentralWidget(
-			ak::UID									_parentUid,
-			ak::UID									_objectUid
-		);
-
-		//! @brief Will set the specified widget as the central widget of the parent object
-		//! @param _parentUid The parent object to set the object as central widget
-		//! @param _widget The widget to set as central widget
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void setCentralWidget(
-			ak::UID									_parentUid,
-			QWidget *								_widget
-		);
-
-		//! @brief Will set the text of the object
-		//! @param _objectUid The object to set the text at
-		//! @param _text The text to set
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void setObjectText(
-			ak::UID									_objectUid,
-			const char *										_text
-		);
-
-		//! @brief Will set the text of the object
-		//! @param _objectUid The object to set the text at
-		//! @param _text The text to set
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void setObjectText(
-			ak::UID									_objectUid,
-			const QString &										_text
-		);
-
-		//! @brief Will set the checked state of the object
-		//! @param _objectUid The object to set the checked state at
-		//! @param _checked The checked state to set
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void setObjectChecked(
-			ak::UID									_objectUid,
-			bool												_checked
-		);
-
-		//! @brief Will set the tristate of the object
-		//! @param _objectUid The object to set the tristate at
-		//! @param _isTristate The tristate to set
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void setObjectTristate(
-			ak::UID									_objectUid,
-			bool												_isTristate
-		);
-
-		//! @brief Will set the filter visible state of the specified object
-		//! @param _objectUid The UID of the object the filters visible state should be set
-		//! @param _vis If true, then the filter of the object will be visible
-		//! @throw ak::Exception if the object UID is invalid
-		__declspec(dllexport) void setFilterVisible(
-			ak::UID									_objectUid,
-			bool												_vis = true
-		);
-
-		//! @brief Will set the filter case sensitive state of the specified object
-		//! @param _objectUid The UID of the object the filters visible state should be set
-		//! @param _vis If true, then the filter of the object will be visible
-		//! @throw ak::Exception if the object UID is invalid
-		__declspec(dllexport) void setFilterCaseSensitive(
-			ak::UID												_objectUid,
-			bool												_caseSensitive,
-			bool												_refresh = true
-		);
-
-		//! @brief Will set the filter refresh on change state of the specified object
-		//! @param _objectUid The UID of the object the filters visible state should be set
-		//! @param _vis If true, then the filter of the object will be visible
-		//! @throw ak::Exception if the object UID is invalid
-		__declspec(dllexport) void setFilterRefreshOnChange(
-			ak::UID												_objectUid,
-			bool												_refreshOnChange
-		);
-
-		//! @brief Will set the comboButtonItems to the object
-		//! @param _objectUid The object to set the items at
-		//! @param _items The items to set
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void setObjectItems(
-			ak::UID									_objectUid,
-			const std::vector<ak::ui::qt::comboButtonItem> &	_items
-		);
-
-		//! @brief Will set the color to the object
-		//! @param _objectUid The object to set to color at
-		//! @param _r The Red-Channel value of the color to set
-		//! @param _g The Green-Channel value of the color to set
-		//! @param _b The Blue-Channel value of the color to set
-		//! @param _a The Alpha-Channel value of the color to set
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void setObjectColor(
-			ak::UID									_objectUid,
-			int													_r,
-			int													_g,
-			int													_b,
-			int													_a = 255
-		);
-
-		//! @brief Will set the color to the object
-		//! @param _objectUid The object to set to color at
-		//! @param _color The color to set
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void setObjectColor(
-			ak::UID									_objectUid,
-			const ak::ui::color &								_color
-		);
-
-		__declspec(dllexport) void setObjectIcon(
-			ak::UID									_objectUid,
-			const char *										_iconName,
-			const char *										_iconSize
-		);
-
-		__declspec(dllexport) void setObjectIcon(
-			ak::UID									_objectUid,
-			const QString &										_iconName,
-			const QString &										_iconSize
-		);
-
-		__declspec(dllexport) void setObjectIcon(
-			ak::UID									_objectUid,
-			const QIcon &										_icon
-		);
-
-		//! @brief Will set the visible status of the tabToolbar
-		//! @param _uiManagerUid The UID of the UI manager the tab toolbar is located at
-		//! @param _vis If true, the tab toolBar will be visible
-		__declspec(dllexport) void setTabToolBarVisible(
-			ak::UID									_uiManagerUid,
-			bool												_vis = true
-		);
-
-		//! @brief Will append the provided text to the provided object
-		//! @param _objectUid The UID of the object
-		//! @param _text The text to append
-		__declspec(dllexport) void appendText(
-			ak::UID									_objectUid,
-			const char *										_text
-		);
-
-		//! @brief Will append the provided text to the provided object
-		//! @param _objectUid The UID of the object
-		//! @param _text The text to append
-		__declspec(dllexport) void appendText(
-			ak::UID									_objectUid,
-			const QString &										_text
-		);
-
-		//! @brief Will set the auto scroll option for the provided object
-			//! @param _objectUid The UID of the requested object
-			//! @param _enabled If true, the auto scroll option for the object will be enabled
-			//! @throw ak::Exception if the provided object UID is invalid
-		__declspec(dllexport) void setAutoScrollToBottomEnabled(
-			ak::UID									_objectUid,
-			bool									_enabled = true
-		);
-
-		//! @brief Will add a new object with the value type Boolean to the property Grid
-		//! @param _itemName The name of the property
-		//! @param _value The value of the property
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const char *									_itemName,
-			bool											_value,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type Boolean to the property Grid
-		//! @param _itemName The name of the property
-		//! @param _value The value of the property
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const QString &									_itemName,
-			bool											_value,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type Integer to the property Grid
-		//! @param _itemName The name of the property
-		//! @param _value The value of the property
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const char *									_itemName,
-			int												_value,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type Integer to the property Grid
-		//! @param _itemName The name of the property
-		//! @param _value The value of the property
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const QString &									_itemName,
-			int												_value,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type Double to the property Grid
-		//! @param _itemName The name of the property
-		//! @param _value The value of the property
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const char *									_itemName,
-			double											_value,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type Double to the property Grid
-		//! @param _itemName The name of the property
-		//! @param _value The value of the property
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const QString &									_itemName,
-			double											_value,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type String to the property Grid
-		//! @param _itemName The name of the property
-		//! @param _value The value of the property
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const char *									_itemName,
-			const char *									_value,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type String to the property Grid
-		//! @param _itemName The name of the property
-		//! @param _value The value of the property
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const QString &									_itemName,
-			const QString &									_value,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type Color to the property Grid
-		//! @param _itemName The name of the property
-		//! @param _value The value of the property
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const char *									_itemName,
-			const ak::ui::color &								_value,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type Color to the property Grid
-		//! @param _itemName The name of the property
-		//! @param _value The value of the property
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const QString &									_itemName,
-			const ak::ui::color &								_value,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type Selection to the property Grid
-		//! @param _objectUid The UID of the object to add the property at
-		//! @param _itemName The name of the property
-		//! @param _selection The possible selection values
-		//! @param _selectedValues The currently selected value
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const char *									_itemName,
-			const std::vector<ak::ui::qt::comboButtonItem> &	_selection,
-			const QString &									_selectedValue,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new object with the value type Selection to the property Grid
-		//! @param _objectUid The UID of the object to add the property at
-		//! @param _itemName The name of the property
-		//! @param _selection The possible selection values
-		//! @param _selectedValues The currently selected value
-		//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
-		//! @throw ak::Exception if a object creation failed
-		__declspec(dllexport) void addProperty(
-			ak::UID								_objectUid,
-			const QString &									_itemName,
-			const std::vector<ak::ui::qt::comboButtonItem> &	_selection,
-			const QString &									_selectedValue,
-			bool											_isMultipleValues = false
-		);
-
-		//! @brief Will add a new item to the tree widget
-		//! @param _objectUid The UID of the object
-		//! @param _parentUid The UID of the parent object
-		//! @param _text The text of the object to add
-		//! @param _textAlignment The text alignment of the very last child
-		//! @param _foreColor The foreground color of the very last child
-		//! @param _backColor The background color of the very last child
-		//! @param _icon The icon to add to the very last child
-		__declspec(dllexport) ak::UID addObjectToTree(
-			ak::UID								_objectUid,
-			ak::UID								_parentUid,
-			const QString &									_text = QString(""),
-			ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::alignLeft,
-			QIcon											_icon = QIcon()
-		);
-
-		//! @brief Will add new items to the tree according to the provided command
-		//! The command consists of the root item and the childs.
-		//! The command may look like this:
-		//! root|child|child2
-		//! In this case the delimiter will be the '|' and the tree will get a root item with the text "root" (if doesnt exist before)
-		//! The root gets a child item with the text "child" and the child gets a child with the text "child2", so the tree looks like this:
-		//! ->root
-		//! ->->child
-		//! ->->->child2
-		//! The very last item will also get the alignment, colors and icon set.
-		//! Will return the UID of the very last item.
-		//! @param _objectUid The UID of the object
-		//! @param _cmd The tree command
-		//! @param _delimiter The delimiter used in the command which seperates the items
-		//! @param _textAlignment The text alignment of the very last child
-		//! @param _foreColor The foreground color of the very last child
-		//! @param _backColor The background color of the very last child
-		//! @param _icon The icon to add to the very last child
-		__declspec(dllexport) ak::UID addObjectToTree(
-			ak::UID								_objectUid,
-			const QString &									_cmd,
-			char											_delimiter = '|',
-			ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::alignLeft,
-			const QIcon  &									_icon = QIcon()
-		);
-
-		//! @brief Will set the selected state of the provided item.
-		//! Will also set the selected state of the items childs if the selectAndDeselectChilds option is true
-		//! @param _objectUid The UID of the object
-		//! @param _itemId The ID of the item
-		//! @param _selected The selected state of the item
-		//! @throw ak::Exception if the ID is invalid
-		__declspec(dllexport) void setItemSelected(
-			ak::UID											_objectUid,
-			ak::ID											_itemId,
-			bool											_selected = true
-		);
-
-		//! @brief Will set the selected state of the provided item.
-		//! Will not change the selected state of the childs item even if the selectAndDeselectChilds option is true
-		//! @param _objectUid The UID of the object
-		//! @param _itemId The ID of the item
-		//! @param _selected The selected state of the item
-		//! @throw ak::Exception if the ID is invalid
-		__declspec(dllexport) void setSingleItemSelected(
-			ak::UID											_objectUid,
-			ak::ID											_itemId,
-			bool											_selected = true
-		);
-
-		//! @brief Will toggle the selected state of the provided item.
-		//! Will also set the selected state of the items childs if the selectAndDeselectChilds option is true
-		//! @param _objectUid The UID of the object
-		//! @param _itemId The ID of the item
-		//! @param _selected The selected state of the item
-		//! @throw ak::Exception if the ID is invalid
-		__declspec(dllexport) void toggleItemSelection(
-			ak::UID											_objectUid,
-			ak::ID											_itemId
-		);
-
-		//! @brief Will deselect all items
-		//! @param _objectUid The UID of the object
-		__declspec(dllexport) void deselectAllItems(
-			ak::UID											_objectUid
-		);
-
-		//! @brief Enables or disables the ability to select multiple items
-			//! @param _objectUid The UID of the object
-			//! @param _multiSelection Specify whether multiple items can be selected
-		__declspec(dllexport) void setMultiSelectionEnabled(
-			ak::UID											_objectUid,
-			bool											_multiSelection = true
-		);
-
-		//! @brief Enables or disables the ability to automatically select/deselect the childrens of an item
-		//! @param _objectUid The UID of the object
-		//! @param _enabled if true, the childs of an item will be selected/deselected automatically
-		__declspec(dllexport) void setSelectAndDeselectChildrenEnabled(
-			ak::UID											_objectUid,
-			bool											_enabled = true
+		//! @brief Will create a new tab view and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
+		__declspec(dllexport) ak::UID createTabView(
+			ak::UID													_creatorUid
 		);
 
 		// ###############################################################################################################################################
+		
+		// object setter
 
-		//! @brief Will return the object text of the specified object
-		//! @param _objectUid The UID of the object
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) QString getObjectText(
-			ak::UID									_objectUid
-		);
+		namespace obj {
 
-		//! @brief Will return the object tristate of the specified object
-		//! @param _objectUid The UID of the object
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) bool getObjectTristate(
-			ak::UID									_objectUid
-		);
+			//! @brief Will add the specified object to the specified container
+			//! @param _parentUid The container UID to add the object to
+			//! @param _objectUid The object UID to add to the container
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) void addObjectToContainer(
+				ak::UID												_parentUid,
+				ak::UID												_objectUid
+			);
 
-		//! @brief Will return the object checked state of the specified object
-		//! @param _objectUid The UID of the object
-		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) bool getObjectChecked(
-			ak::UID									_objectUid
-		);
+			//! @brief Will set the specified object as the central widget of the parent object
+			//! @param _parentUid The parent object to set the object as central widget
+			//! @param _objectUid The UID of the object to set as central widget
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) void setCentralWidget(
+				ak::UID												_parentUid,
+				ak::UID												_objectUid
+			);
 
-		//! @brief Will return all selected objects of the specified object
-		//! @param _objectUid The object to return the slection from
-		__declspec(dllexport) std::vector<ak::ID> getSelectedItems(
-			ak::UID									_objectUid
-		);
+			//! @brief Will set the specified widget as the central widget of the parent object
+			//! @param _parentUid The parent object to set the object as central widget
+			//! @param _widget The widget to set as central widget
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) void setCentralWidget(
+				ak::UID												_parentUid,
+				QWidget *											_widget
+			);
 
-		//! @brief Will return the auto scroll option for the provided object
-		//! @param _objectUid The UID of the requested object
-		//! @throw ak::Exception if the provided object UID is invalid
-		__declspec(dllexport) bool getAutoScrollToBottomEnabled(
-			ak::UID									_objectUid
-		);
+			//! @brief Will set the text of the object
+			//! @param _objectUid The object to set the text at
+			//! @param _text The text to set
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) void setText(
+				ak::UID												_objectUid,
+				const char *										_text
+			);
 
-		//! @brief Will return all items from root to specified item as a vector where the first item is the root item
-		//! @param _objectUid The UID of the requested tree object
-		//! @param _itemId The ID of the requested item
-		//! @throw ak::Exception if the provided object UID is invalid
-		//! @throw ak::Exception if the provided item ID is invalid
-		__declspec(dllexport) std::vector<QString> getTreeItemPath(
-			ak::UID									_objectUid,
-			ak::ID									_itemId
-		);
+			//! @brief Will set the text of the object
+			//! @param _objectUid The object to set the text at
+			//! @param _text The text to set
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) void setText(
+				ak::UID												_objectUid,
+				const QString &										_text
+			);
 
-		//! @brief Will return all items from root to specified item as a string seperated with the provided delimiter where the first item is the root item
-		//! @param _objectUid The UID of the requested tree object
-		//! @param _itemId The ID of the requested item
-		//! @param _delimiter The delimiter between the items
-		//! @throw ak::Exception if the provided object UID is invalid
-		//! @throw ak::Exception if the provided item ID is invalid
-		__declspec(dllexport) QString getTreeItemPathString(
-			ak::UID									_objectUid,
-			ak::ID									_itemId,
-			char									_delimiter = '|'
-		);
+			//! @brief Will set the checked state of the object
+			//! @param _objectUid The object to set the checked state at
+			//! @param _checked The checked state to set
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) void setChecked(
+				ak::UID												_objectUid,
+				bool												_checked
+			);
 
+			//! @brief Will set the tristate of the object
+			//! @param _objectUid The object to set the tristate at
+			//! @param _isTristate The tristate to set
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) void setTristate(
+				ak::UID												_objectUid,
+				bool												_isTristate
+			);
+
+			//! @brief Will set the filter visible state of the specified object
+			//! @param _objectUid The UID of the object the filters visible state should be set
+			//! @param _vis If true, then the filter of the object will be visible
+			//! @throw ak::Exception if the object UID is invalid
+			__declspec(dllexport) void setFilterVisible(
+				ak::UID												_objectUid,
+				bool												_vis = true
+			);
+
+			//! @brief Will set the filter case sensitive state of the specified object
+			//! @param _objectUid The UID of the object the filters visible state should be set
+			//! @param _vis If true, then the filter of the object will be visible
+			//! @throw ak::Exception if the object UID is invalid
+			__declspec(dllexport) void setFilterCaseSensitive(
+				ak::UID												_objectUid,
+				bool												_caseSensitive,
+				bool												_refresh = true
+			);
+
+			//! @brief Will set the filter refresh on change state of the specified object
+			//! @param _objectUid The UID of the object the filters visible state should be set
+			//! @param _vis If true, then the filter of the object will be visible
+			//! @throw ak::Exception if the object UID is invalid
+			__declspec(dllexport) void setFilterRefreshOnChange(
+				ak::UID												_objectUid,
+				bool												_refreshOnChange
+			);
+
+			//! @brief Will set the comboButtonItems to the object
+			//! @param _objectUid The object to set the items at
+			//! @param _items The items to set
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) void setItems(
+				ak::UID												_objectUid,
+				const std::vector<ak::ui::qt::comboButtonItem> &	_items
+			);
+
+			//! @brief Will set the color to the object
+			//! @param _objectUid The object to set to color at
+			//! @param _r The Red-Channel value of the color to set
+			//! @param _g The Green-Channel value of the color to set
+			//! @param _b The Blue-Channel value of the color to set
+			//! @param _a The Alpha-Channel value of the color to set
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) void setColor(
+				ak::UID												_objectUid,
+				int													_r,
+				int													_g,
+				int													_b,
+				int													_a = 255
+			);
+
+			//! @brief Will set the object color
+			//! @param _objectUid The object to set to color at
+			//! @param _color The color to set
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) void setColor(
+				ak::UID												_objectUid,
+				const ak::ui::color &								_color
+			);
+
+			//! @brief Will set the object icon
+			//! The icon will be imported vias the iconManager
+			//! @param _objectUid The UID of the object to set the icon an
+			//! @param _iconName The name of the icon to set
+			//! @param _iconSize The size of the icon to set
+			//! @throw ak::Exception if the object UID is invalid
+			//! @throw ak::Exception if the icon does not exist
+			__declspec(dllexport) void setIcon(
+				ak::UID												_objectUid,
+				const char *										_iconName,
+				const char *										_iconSize
+			);
+
+			//! @brief Will set the object icon
+			//! The icon will be imported vias the iconManager
+			//! @param _objectUid The UID of the object to set the icon an
+			//! @param _iconName The name of the icon to set
+			//! @param _iconSize The size of the icon to set
+			//! @throw ak::Exception if the object UID is invalid
+			//! @throw ak::Exception if the icon does not exist
+			__declspec(dllexport) void setIcon(
+				ak::UID												_objectUid,
+				const QString &										_iconName,
+				const QString &										_iconSize
+			);
+
+			//! @brief Will set the object icon
+			//! @param _objectUid The UID of the object to set the icon an
+			//! @param _icon The icon to set
+			//! @throw ak::Exception if the object UID is invalid
+			__declspec(dllexport) void setIcon(
+				ak::UID												_objectUid,
+				const QIcon &										_icon
+			);
+
+			//! @brief Will set the read only option for the provided object
+			//! @param _objectUid The UID of the object to set the option at
+			//! @param _readOnly If true, the object will be read only
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void setReadOnly(
+				ak::UID												_objectUid,
+				bool												_readOnly = true
+			);
+
+			//! @brief Will set the visible status of the tabToolbar
+			//! @param _uiManagerUid The UID of the UI manager the tab toolbar is located at
+			//! @param _vis If true, the tab toolBar will be visible
+			//! @throw ak::Exception if the uiManager UID is invalid
+			__declspec(dllexport) void setTabToolBarVisible(
+				ak::UID												_uiManagerUid,
+				bool												_vis = true
+			);
+
+			//! @brief Will append the provided text to the provided object
+			//! @param _objectUid The UID of the object to append the text at
+			//! @param _text The text to append
+			//! @throw ak::Exception if the object UID is invalid
+			__declspec(dllexport) void appendText(
+				ak::UID												_objectUid,
+				const char *										_text
+			);
+
+			//! @brief Will append the provided text to the provided object
+			//! @param _objectUid The UID of the object to append the text at
+			//! @param _text The text to append
+			//! @throw ak::Exception if the object UID is invalid
+			__declspec(dllexport) void appendText(
+				ak::UID												_objectUid,
+				const QString &										_text
+			);
+
+			//! @brief Will set the auto scroll option for the provided object
+			//! @param _objectUid The UID of the requested object
+			//! @param _enabled If true, the auto scroll option for the object will be enabled
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void setAutoScrollToBottomEnabled(
+				ak::UID												_objectUid,
+				bool												_enabled = true
+			);
+
+			//! @brief Will add a new object with the value type Boolean to the property Grid
+			//! @param _itemName The name of the property
+			//! @param _value The value of the property
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const char *										_itemName,
+				bool												_value,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type Boolean to the property Grid
+			//! @param _itemName The name of the property
+			//! @param _value The value of the property
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				bool												_value,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type Integer to the property Grid
+			//! @param _itemName The name of the property
+			//! @param _value The value of the property
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const char *										_itemName,
+				int													_value,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type Integer to the property Grid
+			//! @param _itemName The name of the property
+			//! @param _value The value of the property
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				int													_value,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type Double to the property Grid
+			//! @param _itemName The name of the property
+			//! @param _value The value of the property
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const char *										_itemName,
+				double												_value,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type Double to the property Grid
+			//! @param _itemName The name of the property
+			//! @param _value The value of the property
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				double												_value,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type String to the property Grid
+			//! @param _itemName The name of the property
+			//! @param _value The value of the property
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const char *										_itemName,
+				const char *										_value,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type String to the property Grid
+			//! @param _itemName The name of the property
+			//! @param _value The value of the property
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				const QString &										_value,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type Color to the property Grid
+			//! @param _itemName The name of the property
+			//! @param _value The value of the property
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const char *										_itemName,
+				const ak::ui::color &								_value,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type Color to the property Grid
+			//! @param _itemName The name of the property
+			//! @param _value The value of the property
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				const ak::ui::color &								_value,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type Selection to the property Grid
+			//! @param _objectUid The UID of the object to add the property at
+			//! @param _itemName The name of the property
+			//! @param _selection The possible selection values
+			//! @param _selectedValues The currently selected value
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const char *										_itemName,
+				const std::vector<QString> &						_selection,
+				const QString &										_selectedValue,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new object with the value type Selection to the property Grid
+			//! @param _objectUid The UID of the object to add the property at
+			//! @param _itemName The name of the property
+			//! @param _selection The possible selection values
+			//! @param _selectedValues The currently selected value
+			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void addProperty(
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				const std::vector<QString> &						_selection,
+				const QString &										_selectedValue,
+				bool												_isMultipleValues = false
+			);
+
+			//! @brief Will add a new item to the tree widget
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item, if -1 is provided the item will be created as a root item
+			//! @param _text The text of the object to add
+			//! @param _textAlignment The text alignment of the very last child
+			//! @param _icon The icon to add to the very last child
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) ak::ID createItem(
+				ak::UID												_objectUid,
+				ak::ID												_parentItemId,
+				const QString &										_text = QString(""),
+				ak::ui::core::textAlignment							_textAlignment = ak::ui::core::textAlignment::alignLeft,
+				QIcon												_icon = QIcon()
+			);
+
+			//! @brief Will add a new item to the tree widget
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item, if -1 is provided the item will be created as a root item
+			//! @param _iconName The name of the icon to add to the very last child
+			//! @param _iconSize The size of the icon to add to the very last child
+			//! @param _text The text of the object to add
+			//! @param _textAlignment The text alignment of the very last child
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) ak::ID createItem(
+				ak::UID												_objectUid,
+				ak::ID												_parentItemId,
+				const QString &										_iconName,
+				const QString &										_iconSize,
+				const QString &										_text = QString(""),
+				ak::ui::core::textAlignment							_textAlignment = ak::ui::core::textAlignment::alignLeft
+			);
+
+			//! @brief Will add new items to the tree according to the provided command
+			//! The command consists of the root item and the childs.
+			//! The command may look like this:
+			//! root|child|child2
+			//! In this case the delimiter will be the '|' and the tree will get a root item with the text "root" (if doesnt exist before)
+			//! The root gets a child item with the text "child" and the child gets a child with the text "child2", so the tree looks like this:
+			//!   root
+			//!   |>child
+			//!     |->child2
+			//! The very last item will also get the alignment, colors and icon set.
+			//! Will return the ID of the very last item.
+			//! @param _objectUid The UID of the object
+			//! @param _cmd The tree command
+			//! @param _delimiter The delimiter used in the command which seperates the items
+			//! @param _textAlignment The text alignment of the very last child
+			//! @param _icon The icon to add to the very last child
+			__declspec(dllexport) ak::ID createItem(
+				ak::UID											_objectUid,
+				const QString &									_cmd,
+				char											_delimiter = '|',
+				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::alignLeft,
+				const QIcon  &									_icon = QIcon()
+			);
+
+			//! @brief Will add new items to the tree according to the provided command
+			//! The command consists of the root item and the childs.
+			//! The command may look like this:
+			//! root|child|child2
+			//! In this case the delimiter will be the '|' and the tree will get a root item with the text "root" (if doesnt exist before)
+			//! The root gets a child item with the text "child" and the child gets a child with the text "child2", so the tree looks like this:
+			//!   root
+			//!   |>child
+			//!     |->child2
+			//! The very last item will also get the alignment, colors and icon set.
+			//! Will return the ID of the very last item.
+			//! @param _objectUid The UID of the object
+			//! @param _cmd The tree command
+			//! @param _iconName The name of the icon to add to the very last child
+			//! @param _iconSize The size of the icon to add to the very last child
+			//! @param _delimiter The delimiter used in the command which seperates the items
+			//! @param _textAlignment The text alignment of the very last child
+			__declspec(dllexport) ak::ID createItem(
+				ak::UID											_objectUid,
+				const QString &									_cmd,
+				const QString &									_iconName,
+				const QString &									_iconSize,
+				char											_delimiter = '|',
+				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::alignLeft
+			);
+
+			//! @brief Will deselect all items
+			//! @param _objectUid The UID of the object
+			__declspec(dllexport) void deselectAllItems(
+				ak::UID											_objectUid
+			);
+
+			//! @brief Will create a new tab at the provided object
+			//! @param _objectUid The UID of the object to add the tab at
+			//! @param _widgetUid The UID of the widget to set as a central widget
+			//! @param _title The title of the tab
+			//! @param _icon The icon of the tab
+			__declspec(dllexport) ak::ID addTab(
+				ak::UID											_objectUid,
+				ak::UID											_widgetUid,
+				const QString &									_title,
+				const QIcon &									_icon = QIcon()
+			);
+
+			//! @brief Will create a new tab at the provided object
+			//! @param _objectUid The UID of the object to add the tab at
+			//! @param _widget The widget to set as the central widget
+			//! @param _title The title of the tab
+			//! @param _icon The icon of the tab
+			__declspec(dllexport) ak::ID addTab(
+				ak::UID											_objectUid,
+				QWidget *										_widget,
+				const QString &									_title,
+				const QIcon &									_icon = QIcon()
+			);
+
+			//! @brief Will create a new tab at the provided object
+			//! @param _objectUid The UID of the object to add the tab at
+			//! @param _widgetUid The UID of the widget to set as a central widget
+			//! @param _title The title of the tab
+			//! @param _icon The icon of the tab
+			__declspec(dllexport) ak::ID addTab(
+				ak::UID											_objectUid,
+				ak::UID											_widgetUid,
+				const QString &									_title,
+				const QString &									_iconName,
+				const QString &									_iconSize
+			);
+
+			//! @brief Will create a new tab at the provided object
+			//! @param _objectUid The UID of the object to add the tab at
+			//! @param _widget The widget to set as the central widget
+			//! @param _title The title of the tab
+			//! @param _icon The icon of the tab
+			__declspec(dllexport) ak::ID addTab(
+				ak::UID											_objectUid,
+				QWidget *										_widget,
+				const QString &									_title,
+				const QString &									_iconName,
+				const QString &									_iconSize
+			);
+
+			//! @brief Enables or disables the ability to select multiple items
+				//! @param _objectUid The UID of the object
+				//! @param _multiSelection Specify whether multiple items can be selected
+			__declspec(dllexport) void setMultiSelectionEnabled(
+				ak::UID											_objectUid,
+				bool											_multiSelection = true
+			);
+
+			//! @brief Enables or disables the ability to automatically select/deselect the childrens of an item
+			//! @param _objectUid The UID of the object
+			//! @param _enabled if true, the childs of an item will be selected/deselected automatically
+			__declspec(dllexport) void setAutoSelectAndDeselectChildrenEnabled(
+				ak::UID											_objectUid,
+				bool											_enabled = true
+			);
+
+			//! @brief Will clear the items of the provided object
+			//! @param _objectUid The UID of the object to clear its items
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void clear(
+				ak::UID											_objectUid
+			);
+
+			// ###############################################################################################################################################
+
+			// Object getter
+
+			//! @brief Will return the object text of the specified object
+			//! @param _objectUid The UID of the object
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) QString getText(
+				ak::UID									_objectUid
+			);
+
+			//! @brief Will return the object tristate of the specified object
+			//! @param _objectUid The UID of the object
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) bool getTristate(
+				ak::UID									_objectUid
+			);
+
+			//! @brief Will return the object checked state of the specified object
+			//! @param _objectUid The UID of the object
+			//! @throw ak::Exception if the API is not initialized
+			__declspec(dllexport) bool getChecked(
+				ak::UID									_objectUid
+			);
+
+			//! @brief Will return all selected objects of the specified object
+			//! @param _objectUid The object to return the slection from
+			__declspec(dllexport) std::vector<ak::ID> getSelectedItems(
+				ak::UID									_objectUid
+			);
+
+			//! @brief Will return the auto scroll option for the provided object
+			//! @param _objectUid The UID of the requested object
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) bool getAutoScrollToBottomEnabled(
+				ak::UID									_objectUid
+			);
+
+		} // namespace obj
+
+		// ###############################################################################################################################################
+
+		namespace itm {
+
+			// Item setter
+
+			//! @brief Will set the selected state of the provided item.
+			//! Will also set the selected state of the items childs if the selectAndDeselectChilds option is true
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item
+			//! @param _selected The selected state of the item
+			//! @throw ak::Exception if the ID is invalid
+			__declspec(dllexport) void setSelected(
+				ak::UID											_objectUid,
+				ak::ID											_itemId,
+				bool											_selected = true
+			);
+
+			//! @brief Will set the selected state of the provided item.
+			//! Will not change the selected state of the childs item even if the selectAndDeselectChilds option is true
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item
+			//! @param _selected The selected state of the item
+			//! @throw ak::Exception if the ID is invalid
+			__declspec(dllexport) void setSingleSelected(
+				ak::UID											_objectUid,
+				ak::ID											_itemId,
+				bool											_selected = true
+			);
+
+			//! @brief Will toggle the selected state of the provided item.
+			//! Will also set the selected state of the items childs if the selectAndDeselectChilds option is true
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item
+			//! @param _selected The selected state of the item
+			//! @throw ak::Exception if the ID is invalid
+			__declspec(dllexport) void toggleSelection(
+				ak::UID											_objectUid,
+				ak::ID											_itemId
+			);
+
+			// ###############################################################################################################################################
+
+			// Item getter
+
+			//! @brief Will return all items from root to specified item as a vector where the first item is the root item
+			//! @param _objectUid The UID of the requested tree object
+			//! @param _itemId The ID of the requested item
+			//! @throw ak::Exception if the provided object UID is invalid
+			//! @throw ak::Exception if the provided item ID is invalid
+			__declspec(dllexport) std::vector<QString> getPath(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return all items from root to specified item as a string seperated with the provided delimiter where the first item is the root item
+			//! @param _objectUid The UID of the requested tree object
+			//! @param _itemId The ID of the requested item
+			//! @param _delimiter The delimiter between the items
+			//! @throw ak::Exception if the provided object UID is invalid
+			//! @throw ak::Exception if the provided item ID is invalid
+			__declspec(dllexport) QString getPathString(
+				ak::UID									_objectUid,
+				ak::ID									_itemId,
+				char									_delimiter = '|'
+			);
+
+			//! @brief Will return the text of the specified item at the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item to get the text of
+			__declspec(dllexport) QString getText(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+		}
 
 		// ###############################################################################################################################################
 
@@ -976,6 +1135,18 @@ namespace ak {
 		__declspec(dllexport) void creatorDestroyed(
 			ak::UID									_creatorUid
 		);
+
+		//! @brief Will set the current color style used in this API
+			//! @param _colorStyle The color style to set
+		__declspec(dllexport) void setColorStyle(
+			ak::ui::colorStyle *		_colorStyle
+		);
+
+		//! @brief Will set the current color style to the default dark color style
+		__declspec(dllexport) void setDefaultDarkColorStyle(void);
+
+		//! @brief Will set the current color style to the default bright color style
+		__declspec(dllexport) void setDefaultBrightColorStyle(void);
 
 		//! @brief Will show a message box with the provided main window as parent
 		//! @param _uiManagerUid The UI manager that will be the parent for the message box
@@ -995,6 +1166,93 @@ namespace ak {
 			ak::UID									_uiManagerUid,
 			const QString &										_message,
 			const QString &										_title
+		);
+
+		//! @brief Will close the provided uiManager
+		//! @param _uiManagerUid The UID of the uiManager to close
+		//! @throw ak::Exception if the provided UID is invalid
+		__declspec(dllexport) void close(
+			ak::UID												_uiManagerUid
+		);
+
+		//! @brief Will set the visible state of the status label of the provided uiManager.
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @param _visible If true the status label will be visible
+		//! @throw ak::Exception if the provided UI manager UID is invalid
+		__declspec(dllexport) void setStatusLabelVisible(
+			ak::UID									_uiManagerUid,
+			bool									_visible = true
+		);
+
+		//! @brief Will set the visible state of the status progress bar of the provided uiManager.
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @param _visible If true the status progress bar will be visible
+		//! @throw ak::Exception if the provided UI manager UID is invalid
+		__declspec(dllexport) void setStatusProgressVisible(
+			ak::UID									_uiManagerUid,
+			bool									_visible = true
+		);
+
+		//! @brief Will set the status label text at the provided uiManager
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @param _text The text to set
+		//! @throw ak::Exception if the provided UI manager UID is invalid
+		__declspec(dllexport) void setStatusLabelText(
+			ak::UID									_uiManagerUid,
+			const QString &							_text
+		);
+
+		//! @brief Will set the value of the status progress bar at the provided uiManager
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @param _value The value to set (0 - 100)
+		//! @throw ak::Exception if the provided UI manager UID is invalid or the provided value is out of range
+		__declspec(dllexport) void setStatusProgressValue(
+			ak::UID									_uiManagerUid,
+			int										_value
+		);
+
+		//! @brief Will set the continuous option of the status progress bar at the provided uiManager
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @param _continuous If true the status progress bar will be displayed as a continuous bar
+		//! @throw ak::Exception if the provided UI manager UID is invalid
+		__declspec(dllexport) void setStatusProgressContinuous(
+			ak::UID									_uiManagerUid,
+			bool									_continuous = true
+		);
+
+		//! @brief Will return true if the status label is visible at the provided uiManager
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @throw ak::Exception if the provided UI manager UID is invalid
+		__declspec(dllexport) bool getStatusLabelVisible(
+			ak::UID									_uiManagerUid
+		);
+
+		//! @brief Will return true if the status progress bar is visible at the provided uiManager
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @throw ak::Exception if the provided UI manager UID is invalid
+		__declspec(dllexport) bool getStatusProgressVisible(
+			ak::UID									_uiManagerUid
+		);
+
+		//! @brief Will return the status label text at the provided uiManager
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @throw ak::Exception if the provided UI manager UID is invalid
+		__declspec(dllexport) QString getStatusLabelText(
+			ak::UID									_uiManagerUid
+		);
+
+		//! @brief Will return the status progress bar value at the provided uiManager
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @throw ak::Exception if the provided UI manager UID is invalid
+		__declspec(dllexport) int getStatusProgressValue(
+			ak::UID									_uiManagerUid
+		);
+
+		//! @brief Will return the continuous option of the status progress bar at the provided uiManager
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @throw ak::Exception if the provided UI manager UID is invalid
+		__declspec(dllexport) bool getStatusProgressContinuous(
+			ak::UID									_uiManagerUid
 		);
 
 		// ###############################################################################################################################################
@@ -1020,17 +1278,25 @@ namespace ak {
 			ak::UID									_dockUid
 		);
 
-		//! @brief Will set the current color style used in this API
-			//! @param _colorStyle The color style to set
-		__declspec(dllexport) void setColorStyle(
-			ak::ui::colorStyle *		_colorStyle
+		//! @brief Will set the dock priority on the bottom left corner.
+			//! The dock with the priority will expand into the corner.
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @param _dockLocation The dock location to set the priority for (allowed dockBottom and dockLeft)
+			//! @throw ak::Exception if the uiManager UID or the dock location is invalid
+		__declspec(dllexport) void setDockBottomLeftPriority(
+			ak::UID									_uiManagerUid,
+			ak::ui::core::dockLocation				_dockLocation
 		);
 
-		//! @brief Will set the current color style to the default dark color style
-		__declspec(dllexport) void setDefaultDarkColorStyle(void);
-
-		//! @brief Will set the current color style to the default bright color style
-		__declspec(dllexport) void setDefaultBrightColorStyle(void);
+		//! @brief Will set the dock priority on the bottom left corner.
+		//! The dock with the priority will expand into the corner.
+		//! @param _uiManagerUid The UID of the UI manager
+		//! @param _dockLocation The dock location to set the priority for (allowed dockBottom and dockRight)
+		//! @throw ak::Exception if the uiManager UID or the dock location is invalid
+		__declspec(dllexport) void setDockBottomRightPriority(
+			ak::UID									_uiManagerUid,
+			ak::ui::core::dockLocation				_dockLocation
+		);
 
 		// ###############################################################################################################################################
 
@@ -1083,6 +1349,10 @@ namespace ak {
 		//! @brief Will run a QApplication to start the event callback routine
 		//! The return value will be returned as soon as the application is closing
 		__declspec(dllexport) int exec(void);
+
+		std::vector<ak::ui::qt::comboButtonItem> toComboButtonItem(
+			const std::vector<QString> &							_items
+		);
 
 	} // namespace uiAPI
 } // namespace ak

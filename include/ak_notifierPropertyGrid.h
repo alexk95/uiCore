@@ -27,7 +27,7 @@ namespace ak {
 		//! @brief Constructor
 		//! @param _propertyGrid The property grid using this notifier
 		//! @param _tableUid The UID of the table the property grid is managing 
-		//! @throw sim::Exception if the provided propetyGrid was a nullptr
+		//! @throw ak::Exception if the provided propetyGrid was a nullptr
 		notifierPropertyGrid(
 			ak::ui::widget::propertyGrid *			_propertyGrid,
 			ak::UID									_tableUid
@@ -39,7 +39,7 @@ namespace ak {
 		//! @param _message The message
 		//! @param _info1 Message addition 1
 		//! @param _info2 Message addition 2
-		//! @throw sim::Exception if any error occured on a function call
+		//! @throw ak::Exception if any error occured on a function call
 		virtual void notify(
 			ak::UID									_senderId,
 			ak::core::messageType					_messageType,
@@ -55,4 +55,4 @@ namespace ak {
 		ak::UID										my_tableUid;			//! The UID of the corresponding table
 	};
 
-}
+} // namespace ak

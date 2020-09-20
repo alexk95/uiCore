@@ -41,7 +41,7 @@ namespace ak {
 				//! @param _initialText The initial text of this combo button
 				//! @param _colorStyle The color style used for this combo button
 				//! @param _parent The parent QWidget for this combo button
-				//! @throw sim::Exception if the creation of the menu failed
+				//! @throw ak::Exception if the creation of the menu failed
 				comboButton(
 					const QString &										_initialText = QString(""),
 					ak::ui::colorStyle *								_colorStyle = nullptr,
@@ -56,14 +56,14 @@ namespace ak {
 
 				//! @brief Will set the items for the combo button
 				//! @param _menu The items to set as the menu for this combo button
-				//! @throw sim::Exception if the creation of a new item failed
+				//! @throw ak::Exception if the creation of a new item failed
 				void setItems(
 					const std::vector<ak::ui::qt::comboButtonItem> &		_menu
 				);
 
 				//! @brief Will add a new item to the combo button
 				//! @param _other The new item to add
-				//! @throw sim::Exception if the creation of the new item failed
+				//! @throw ak::Exception if the creation of the new item failed
 				int addItem(
 					const ak::ui::qt::comboButtonItem &					_other
 				);
@@ -79,7 +79,7 @@ namespace ak {
 
 				//! @brief Will set the objects color style
 				//! @param _colorStyle The color style to set
-				//! @throw sim::Exception if the provided color style is a nullptr or failed to repaint the object
+				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
 				);

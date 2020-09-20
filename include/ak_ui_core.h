@@ -51,6 +51,7 @@ namespace ak {
 				oTabToolbarGroup,
 				oTabToolbarPage,
 				oTabToolbarSubgroup,
+				oTabView,
 				oTextEdit,
 				oTree,
 				oTreeItem,

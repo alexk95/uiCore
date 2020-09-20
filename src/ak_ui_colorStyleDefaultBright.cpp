@@ -229,7 +229,9 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 			break;
 
 		// ######################################################################################################
+	
 		// Mdi Area
+		
 		case ak::ui::colorStyle::styleableObject::sMdiArea:
 			out.append("QMdiArea{"
 				_fore _backWindow
@@ -238,11 +240,25 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 			break;
 
 		// ######################################################################################################
+
 		// Mdi Sub area
+		
 		case ak::ui::colorStyle::styleableObject::sMdiSubArea:
 
 			out.append("QMdiSubWindow{"
 				_fore _backWindow _borderDefaultWindow
+				"}\n");
+
+			break;
+
+		// ######################################################################################################
+		
+		// Menu
+
+		case ak::ui::colorStyle::styleableObject::sMenu:
+
+			out.append("QMenu{"
+				_fore _backWindow
 				"}\n");
 
 			break;
@@ -381,44 +397,6 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 				"}\n");
 			break;
 
-		// ######################################################################################################
-		// Table pushbutton
-		/*case ak::ui::colorStyle::styleableObject::sTablePushButton:
-			out.append("QPushButton{"
-				_fore _backTransparent _borderButtonNormal
-				"}\n");
-
-			out.append("QPushButton:pressed{"
-				_selectedFore _selectedBack _borderButtonPressed
-				"}\n");
-
-			out.append("QPushButton:hover:!pressed{"
-				_focusFore _focusBack _borderButtonFocus
-				"}\n");
-
-			break;
-
-		// ######################################################################################################
-		// Table pushbutton menu
-		case ak::ui::colorStyle::styleableObject::sTablePushButtonMenu:
-			out.append("QMenu{"
-				_fore _backWindow _alternateBackWindow
-				"}\n");
-
-			out.append("QMenu::item{"
-				_fore _backWindow _alternateBackWindow
-				"}\n");
-
-			out.append("QMenu::item:selected:!pressed{"
-				_focusFore _focusBack
-				"}\n");
-
-			out.append("QMenu::item:pressed{"
-				_selectedFore _selectedBack
-				"}\n");
-
-			break;
-			*/
 		// ######################################################################################################
 		// Tab widget
 		case ak::ui::colorStyle::styleableObject::sTabWidget:

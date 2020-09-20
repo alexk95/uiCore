@@ -64,7 +64,7 @@ void ak::ui::qt::comboButton::setItems(
 			// Create new item
 			ak::ui::qt::comboButtonItem * n_itm = nullptr;
 			n_itm = new ak::ui::qt::comboButtonItem(_menu.at(i));
-			if (n_itm == nullptr) { throw ak::Exception("Failed to create", "Create sim comboButtonItem"); }
+			if (n_itm == nullptr) { throw ak::Exception("Failed to create", "Create comboButtonItem"); }
 			// Set the items UID
 			n_itm->setUid(my_itemsUIDmanager.getId());
 			// Add the new item to the menu
@@ -88,7 +88,7 @@ int ak::ui::qt::comboButton::addItem(
 		// Create new item
 		ak::ui::qt::comboButtonItem * n_itm = nullptr;
 		n_itm = new ak::ui::qt::comboButtonItem(_other);
-		if (n_itm == nullptr) { throw ak::Exception("Failed to create", "Create sim comboButtonItem"); }
+		if (n_itm == nullptr) { throw ak::Exception("Failed to create", "Create comboButtonItem"); }
 		// Set the items UID
 		n_itm->setUid(my_itemsUIDmanager.getId());
 		// Add the new item to the menu

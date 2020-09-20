@@ -24,7 +24,7 @@ namespace ak {
 
 		namespace qt {
 
-			//! @brief This class combines the functionallity of a QCheckBox and a sim::object
+			//! @brief This class combines the functionallity of a QCheckBox and a ak::object
 			class checkBox : public QCheckBox, public ak::ui::core::aWidget
 			{
 				Q_OBJECT
@@ -49,12 +49,12 @@ namespace ak {
 
 				//! @brief Will set the objects color style
 				//! @param _colorStyle The color style to set
-				//! @throw sim::Exception if the provided color style is a nullptr or failed to repaint the object
+				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
 				);
 
 			};
-		}
-	}
-}
+		} // namespace qt
+	} // namespace ui
+} // namespace ak

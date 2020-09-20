@@ -24,7 +24,7 @@ namespace ak {
 	public:
 		//! @brief Constructor
 		//! @param _btn The color edit button that will get notified by this notifier
-		//! @throw sim::Exception when the provided colorEditButton was a nullptr
+		//! @throw ak::Exception when the provided colorEditButton was a nullptr
 		notifierColorEditButton(
 			ak::ui::widget::colorEditButton *		_btn
 		);
@@ -41,7 +41,7 @@ namespace ak {
 		//! @param _messageType The type of the messsage
 		//! @param _info1 Message addition 1
 		//! @param _info2 Message addition 2
-		//! @throw sim::Exception to forward exceptions coming from the application core class
+		//! @throw ak::Exception to forward exceptions coming from the application core class
 		virtual void notify(
 			ak::UID									_senderId,
 			ak::core::messageType					_messageType,
@@ -55,4 +55,4 @@ namespace ak {
 
 	};
 
-}
+} // namespace ak

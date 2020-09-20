@@ -208,6 +208,13 @@ namespace ak {
 				ak::UID												_creatorUid
 			);
 
+			//! @brief Will create a new tab view and return its UID
+			//! @param _creatorUid The UID of the creator who creates this object
+			//! @throw ak::Exception if the provided UID is invali
+			ak::UID createTabView(
+				ak::UID												_creatorUid
+			);
+
 			//! @brief Will create a tab toolbar sub container and return its UID
 			//! @param _creatorUid The UID of the creator
 			//! @param _parentUid The UID of the parent container or 
@@ -296,6 +303,15 @@ namespace ak {
 			void obj_setIcon(
 				ak::UID									_objectUid,
 				const QIcon &										_icon
+			);
+
+			//! @brief Will set the read only option for the provided object
+			//! @param _objectUid The UID of the object to set the option at
+			//! @param _readOnly If true, the object will be read only
+			//! @throw ak::Exception if the provided object UID is invalid
+			void obj_setReadOnly(
+				ak::UID									_objectUid,
+				bool									_readOnly = true
 			);
 
 			//! @brief Will append the text to the provided object
@@ -410,7 +426,7 @@ namespace ak {
 
 			//! @brief Will add a new item to the tree widget
 			//! @param _objectUid The UID of the object
-			//! @param _parentUid The UID of the parent object
+			//! @param _parentId The ID of the parent object
 			//! @param _text The text of the object to add
 			//! @param _textAlignment The text alignment of the very last child
 			//! @param _foreColor The foreground color of the very last child
@@ -418,7 +434,7 @@ namespace ak {
 			//! @param _icon The icon to add to the very last child
 			ak::ID obj_createItem(
 				ak::UID											_objectUid,
-				ak::ID											_parentUid,
+				ak::ID											_parentId,
 				const QString &									_text = QString(""),
 				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::alignLeft,
 				QIcon											_icon = QIcon()
@@ -483,7 +499,64 @@ namespace ak {
 			void obj_deselectAllItems(
 				ak::UID											_objectUid
 			);
+
+			//! @brief Will create a new tab at the provided object
+			//! @param _objectUid The UID of the object to add the tab at
+			//! @param _widgetUid The UID of the widget to set as a central widget
+			//! @param _title The title of the tab
+			//! @param _icon The icon of the tab
+			ak::ID obj_addTab(
+				ak::UID											_objectUid,
+				ak::UID											_widgetUid,
+				const QString &									_title,
+				const QIcon &									_icon = QIcon()
+			);
 			
+			//! @brief Will create a new tab at the provided object
+			//! @param _objectUid The UID of the object to add the tab at
+			//! @param _widget The widget to set as the central widget
+			//! @param _title The title of the tab
+			//! @param _icon The icon of the tab
+			ak::ID obj_addTab(
+				ak::UID											_objectUid,
+				QWidget *										_widget,
+				const QString &									_title,
+				const QIcon &									_icon = QIcon()
+			);
+
+			//! @brief Will create a new tab at the provided object
+			//! @param _objectUid The UID of the object to add the tab at
+			//! @param _widgetUid The UID of the widget to set as a central widget
+			//! @param _title The title of the tab
+			//! @param _icon The icon of the tab
+			ak::ID obj_addTab(
+				ak::UID											_objectUid,
+				ak::UID											_widgetUid,
+				const QString &									_title,
+				const QString &									_iconName,
+				const QString &									_iconSize
+			);
+
+			//! @brief Will create a new tab at the provided object
+			//! @param _objectUid The UID of the object to add the tab at
+			//! @param _widget The widget to set as the central widget
+			//! @param _title The title of the tab
+			//! @param _icon The icon of the tab
+			ak::ID obj_addTab(
+				ak::UID											_objectUid,
+				QWidget *										_widget,
+				const QString &									_title,
+				const QString &									_iconName,
+				const QString &									_iconSize
+			);
+
+			//! @brief Will clear the items of the provided object
+			//! @param _objectUid The UID of the object to clear its items
+			//! @throw ak::Exception if the provided object UID is invalid
+			void obj_clear(
+				ak::UID											_objectUid
+			);
+
 			// ###############################################################################################################################################
 
 			// Object getter
@@ -614,6 +687,14 @@ namespace ak {
 				char									_delimiter = '|'
 			);
 
+			//! @brief Will return the text of the specified item at the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item to get the text of
+			QString itm_getText(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
 			// ###############################################################################################################################################
 
 			//! @brief Will add the dock to the uiManager at the specified dock location
@@ -623,7 +704,7 @@ namespace ak {
 			void addDock(
 				ak::UID									_uiManagerUid,
 				ak::UID									_dockUid,
-				ak::ui::core::dockLocation							_dockLocation
+				ak::ui::core::dockLocation				_dockLocation
 			);
 
 			//! @brief Will add the dock as a tab to the parent dock
@@ -633,6 +714,113 @@ namespace ak {
 				ak::UID									_uiManagerUid,
 				ak::UID									_parentUid,
 				ak::UID									_dockUid
+			);
+
+			//! @brief Will set the dock priority on the bottom left corner.
+			//! The dock with the priority will expand into the corner.
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @param _dockLocation The dock location to set the priority for (allowed dockBottom and dockLeft)
+			//! @throw ak::Exception if the uiManager UID or the dock location is invalid
+			void setDockBottomLeftPriority(
+				ak::UID									_uiManagerUid,
+				ak::ui::core::dockLocation				_dockLocation
+			);
+
+			//! @brief Will set the dock priority on the bottom left corner.
+			//! The dock with the priority will expand into the corner.
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @param _dockLocation The dock location to set the priority for (allowed dockBottom and dockRight)
+			//! @throw ak::Exception if the uiManager UID or the dock location is invalid
+			void setDockBottomRightPriority(
+				ak::UID									_uiManagerUid,
+				ak::ui::core::dockLocation				_dockLocation
+			);
+
+			//! @brief Will set the visible state of the status label of the provided uiManager.
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @param _visible If true the status label will be visible
+			//! @throw ak::Exception if the provided UI manager UID is invalid
+			void setStatusLabelVisible(
+				ak::UID									_uiManagerUid,
+				bool									_visible
+			);
+
+			//! @brief Will set the visible state of the status progress bar of the provided uiManager.
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @param _visible If true the status progress bar will be visible
+			//! @throw ak::Exception if the provided UI manager UID is invalid
+			void setStatusProgressVisible(
+				ak::UID									_uiManagerUid,
+				bool									_visible
+			);
+
+			//! @brief Will set the status label text at the provided uiManager
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @param _text The text to set
+			//! @throw ak::Exception if the provided UI manager UID is invalid
+			void setStatusLabelText(
+				ak::UID									_uiManagerUid,
+				const QString &							_text
+			);
+
+			//! @brief Will set the value of the status progress bar at the provided uiManager
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @param _value The value to set (0 - 100)
+			//! @throw ak::Exception if the provided UI manager UID is invalid or the provided value is out of range
+			void setStatusProgressValue(
+				ak::UID									_uiManagerUid,
+				int										_value
+			);
+
+			//! @brief Will set the continuous option of the status progress bar at the provided uiManager
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @param _continuous If true the status progress bar will be displayed as a continuous bar
+			//! @throw ak::Exception if the provided UI manager UID is invalid
+			void setStatusProgressContinuous(
+				ak::UID									_uiManagerUid,
+				bool									_continuous
+			);
+
+			//! @brief Will return true if the status label is visible at the provided uiManager
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @throw ak::Exception if the provided UI manager UID is invalid
+			bool getStatusLabelVisible(
+				ak::UID									_uiManagerUid
+			);
+
+			//! @brief Will return true if the status progress bar is visible at the provided uiManager
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @throw ak::Exception if the provided UI manager UID is invalid
+			bool getStatusProgressVisible(
+				ak::UID									_uiManagerUid
+			);
+
+			//! @brief Will return the status label text at the provided uiManager
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @throw ak::Exception if the provided UI manager UID is invalid
+			QString getStatusLabelText(
+				ak::UID									_uiManagerUid
+			);
+
+			//! @brief Will return the status progress bar value at the provided uiManager
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @throw ak::Exception if the provided UI manager UID is invalid
+			int getStatusProgressValue(
+				ak::UID									_uiManagerUid
+			);
+
+			//! @brief Will return the continuous option of the status progress bar at the provided uiManager
+			//! @param _uiManagerUid The UID of the UI manager
+			//! @throw ak::Exception if the provided UI manager UID is invalid
+			bool getStatusProgressContinuous(
+				ak::UID									_uiManagerUid
+			);
+
+			//! @brief Will close the provided uiManager
+			//! @param _uiManagerUid The UID of the uiManager to close
+			//! @throw ak::Exception if the provided UID is invalid
+			void close(
+				ak::UID												_uiManagerUid
 			);
 
 			// ###############################################################################################################################################
@@ -647,6 +835,9 @@ namespace ak {
 				ak::ui::colorStyle *								_colorStyle
 			);
 
+			//! @brief Will destroy all objects
+			void destroyAll(void);
+
 		private:
 
 			objectManager() = delete;
@@ -660,6 +851,11 @@ namespace ak {
 			void addCreatedUid(
 				ak::UID									_creatorUid,
 				ak::UID									_createdUid
+			);
+			
+			//! @brief Will cast and return the object to a QWidget
+			QWidget * castToWidget(
+				ak::UID									_objectUid
 			);
 
 			// ###############################################################################################################################################

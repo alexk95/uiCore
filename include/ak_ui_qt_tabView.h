@@ -1,19 +1,25 @@
 /*
- * ak_ui_qt_table.h
+ * ak_ui_qt_tabView.h
  *
- *  Created on: March 19, 2020
- *	Last modified on: August 22, 2020
+ *  Created on: September 18, 2020
+ *	Last modified on: September 18, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
  */
 
 #pragma once
 
- // Qt header
-#include <qtablewidget.h>			// base class
+// C++ header
+#include <vector>
+
+// Qt header
+#include <qtabwidget.h>
 
 // AK header
-#include "ak_ui_core_aWidget.h"		// base class
+#include <ak_ui_core_aWidget.h>
+
+// Forward declaration
+class QWidget;
 
 namespace ak {
 	namespace ui {
@@ -21,26 +27,20 @@ namespace ak {
 		// Forward declaration
 		class colorStyle;
 
-		namespace qt {
+		namespace qt{
 
-			//! @brief This class combines the functionallity of a QTableWidget and a ak::ui::core::aWidget
-			class table : public QTableWidget, public ak::ui::core::aWidget
-			{
-				Q_OBJECT
+			class tabView : public QTabWidget, public core::aWidget {
 			public:
-
+				
 				//! @brief Constructor
-				//! @param _parent The parent QWidget for this table
-				table(QWidget * _parent = (QWidget *) nullptr);
+				//! @param _colorStyle The initial color style to set
+				//! @param _parent The parent widget
+				tabView(
+					colorStyle *			_colorStyle = (colorStyle *) nullptr,
+					QWidget *				_parent = (QWidget *) nullptr
+				);
 
-				//! @brief Constructor
-				//! @param _rows The initial row count
-				//! @param _columns The initial columns count
-				//! @param _parent The parent QWidget for this table
-				table(int _rows, int _columns, QWidget * _parent = (QWidget *) nullptr);
-
-				//! @brief Deconstructor
-				virtual ~table();
+				virtual ~tabView();
 
 				// #######################################################################################################
 				// Base class functions
@@ -55,6 +55,8 @@ namespace ak {
 					ak::ui::colorStyle *			_colorStyle
 				);
 
+			private:
+				
 			};
 
 		} // namespace qt

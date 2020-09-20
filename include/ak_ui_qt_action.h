@@ -22,7 +22,7 @@ namespace ak {
 	namespace ui {
 		namespace qt {
 
-			//! @brief This class combines the functionallity of a QAction and a sim::aPaintable
+			//! @brief This class combines the functionallity of a QAction and a ak::ui::core::aPaintable
 			class action : public QAction, public ak::ui::core::aObject
 			{
 				Q_OBJECT

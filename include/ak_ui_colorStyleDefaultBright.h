@@ -35,17 +35,17 @@ namespace ak {
 
 			//! @brief Creates an returns a QStylesheet for all provided objects
 			//! @param _items The items to create a stylesheet string for
-			//! @throw sim::Exception if one of the image files needed does not exist
+			//! @throw ak::Exception if one of the image files needed does not exist
 			virtual QString getStylesheet(
 				const std::vector<styleableObject>	_items
 			) const;
 
 			//! @brief Creates an returns a QStylesheet for the provided object
 			//! @param _object The object to create a stylesheet string for
-			//! @throw sim::Exception if one of the image files needed does not exist
+			//! @throw ak::Exception if one of the image files needed does not exist
 			virtual QString getStylesheet(
 				styleableObject					_object
 			) const;
 		};
 	} // namespace ui
-} // namespace sim
+} // namespace ak

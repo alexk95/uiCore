@@ -23,7 +23,7 @@ namespace ak {
 	public:
 		//! @brief Constructor
 		//! @param _ui The UI_test class where messages will be formwarded to
-		//! @throw sim::Exception when the provided UI_test class was a nullptr
+		//! @throw ak::Exception when the provided UI_test class was a nullptr
 		notifierObjectManager(
 			ak::ui::objectManager *					_manager
 		);
@@ -40,7 +40,7 @@ namespace ak {
 		//! @param _messageType The type of the messsage
 		//! @param _info1 Message addition 1
 		//! @param _info2 Message addition 2
-		//! @throw sim::Exception to forward exceptions coming from the application core class
+		//! @throw ak::Exception to forward exceptions coming from the application core class
 		virtual void notify(
 			ak::UID									_senderId,
 			ak::core::messageType					_messageType,
@@ -54,4 +54,4 @@ namespace ak {
 
 	};
 
-}
+} // namespace ak

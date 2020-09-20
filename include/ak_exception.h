@@ -126,4 +126,4 @@ namespace ak {
 		std::string						my_out;									//! Contains the output message which will be returned in the what() function
 	};
 
-} // namespace sim
+} // namespace ak

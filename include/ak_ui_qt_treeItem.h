@@ -89,7 +89,7 @@ namespace ak {
 
 				//! @brief Will return all childs of this item
 				std::vector<treeItem *> childs(void) const;
-
+				 
 				//! @brief Will return the ammound of childs this item has
 				int childCount(void) const;
 
