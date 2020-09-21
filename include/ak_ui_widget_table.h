@@ -167,6 +167,12 @@ namespace ak {
 					bool															_visible
 				);
 
+				//! @brief Will set the column header enabled in this table
+				//! @param _enabled If true, the column header will be enabled
+				void setColumnHeaderEnabled(
+					bool															_enabled = true
+				);
+
 				//! @brief Will set the focus on the specified cell
 				//! @param _row The row of the cell
 				//! @param _celumn The column of the cell

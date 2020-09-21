@@ -84,6 +84,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 	try
 	{
 		QString out = "";
+
 		switch (_object)
 		{
 			// ######################################################################################################
@@ -260,6 +261,23 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("QMenu{"
 				_fore _backWindow
 				"}\n");
+
+			out.append("QMenu::item{"
+				_fore _backControl
+				"}\n");
+
+			out.append("QMenu::item:selected:!pressed{"
+				_focusFore _focusBack
+				"}\n");
+
+			out.append("QMenu::item:pressed{"
+				_selectedFore _selectedBack
+				"}\n");
+
+			out.append("QToolTip {"
+				_fore _backWindow
+				"}");
+
 
 			break;
 
@@ -474,7 +492,6 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("QToolBar QToolBar *{"
 				_backWindow "border: none;"
 				"}\n");
-
 
 			break;
 

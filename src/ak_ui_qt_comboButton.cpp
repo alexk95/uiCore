@@ -20,7 +20,7 @@ ak::ui::qt::comboButton::comboButton(
 	ak::ui::colorStyle *		_colorStyle,
 	QWidget *					_parent
 ) : QPushButton(_initialText, _parent),
-	ak::ui::core::aWidget(ak::ui::core::objectType::oComboButton),
+	ak::ui::core::aWidget(ak::ui::core::objectType::oComboButton, _colorStyle),
 	my_menu(nullptr)
 {
 	try {
@@ -29,7 +29,7 @@ ak::ui::qt::comboButton::comboButton(
 		if (my_menu == nullptr) { throw ak::Exception("Failed to create", "Create menu"); }
 
 		// Apply color style and menu
-		setColorStyle(_colorStyle);		
+		if (my_colorStyle != nullptr) { setColorStyle(_colorStyle); }
 		setMenu(my_menu);
 		my_itemsUIDmanager.setLatestUid(1);
 	}

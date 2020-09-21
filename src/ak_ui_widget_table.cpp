@@ -294,6 +294,10 @@ void ak::ui::widget::table::setRowHeaderVisible(
 	bool															_visible
 ) { my_table->verticalHeader()->setVisible(_visible); }
 
+void ak::ui::widget::table::setColumnHeaderEnabled(
+	bool															_enabled
+) { my_table->horizontalHeader()->setEnabled(_enabled); }
+
 void ak::ui::widget::table::setCellSelected(
 	int																_row,
 	int																_column,
@@ -345,6 +349,7 @@ void ak::ui::widget::table::clear(void) {
 }
 
 // ##############################################################################################################
+
 // Information
 
 void ak::ui::widget::table::raiseCellEvent(

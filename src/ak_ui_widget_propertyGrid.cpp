@@ -60,7 +60,8 @@ ak::ui::widget::propertyGrid::propertyGrid(
 		my_table->setRowHeaderVisible(false);
 		my_table->setColumnResizeMode(0, QHeaderView::ResizeMode::Stretch);
 		my_table->setColumnResizeMode(1, QHeaderView::ResizeMode::Stretch);
-
+		my_table->setColumnHeaderEnabled(false);
+		
 		// Create notifier
 		my_internalNotifier = new ak::notifierPropertyGrid(this, my_table->uid());
 		if (my_internalNotifier == nullptr) { throw ak::Exception("Failed to create", "Create internal notifier"); }
@@ -96,7 +97,7 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 		my_table->setColorStyle(my_colorStyle);
 		my_colorNormal = my_colorStyle->getControlsMainForecolor();
 		my_colorInvalidInput = my_colorStyle->getControlsErrorForecolor();
-		
+		my_objectManager->setColorStyle(my_colorStyle);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::colorEditButton::setColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::colorEditButton::setColorStyle()"); }
@@ -349,7 +350,7 @@ void ak::ui::widget::propertyGrid::addObject(
 		ak::UID newUID;
 		if (_isMultipleValues) { newUID = my_objectManager->createColorEditButton(my_uid, _value, "..."); }
 		else { newUID = my_objectManager->createColorEditButton(my_uid, _value); }
-		my_table->setCellWidget(newUID, my_table->rowCount(), 1);
+		my_table->setCellWidget(newUID, my_table->rowCount() -1, 1);
 		my_messenger->registerReceiver(newUID, ak::core::messageType::mEvent, my_internalNotifier);
 
 		// Store UID information
@@ -410,6 +411,7 @@ void ak::ui::widget::propertyGrid::addObject(
 		if (_isMultipleValues) { newUID = my_objectManager->createComboButton(my_uid, "...", _selection); }
 		else { newUID = my_objectManager->createComboButton(my_uid, _selectedValue, _selection); }
 		my_messenger->registerReceiver(newUID, ak::core::messageType::mEvent, my_internalNotifier);
+		my_table->setCellWidget(newUID, my_table->rowCount() - 1, 1);
 
 		// Store UID information
 		pItm->setUid(newUID);

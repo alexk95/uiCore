@@ -101,7 +101,7 @@ ak::ui::objectManager::~objectManager() {}
 // Object creation
 
 ak::UID ak::ui::objectManager::createAction(
-	ak::UID									_creatorUid,
+	ak::UID												_creatorUid,
 	const QString &										_text,
 	const QIcon &										_icon,
 	QToolButton::ToolButtonPopupMode					_popupMode
@@ -110,6 +110,7 @@ ak::UID ak::ui::objectManager::createAction(
 		// Create object
 		ak::ui::qt::action * obj = new ak::ui::qt::action(_icon, _text, _popupMode);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create action"); }
+		obj->setToolTip("Test information");
 		// Set parameter
 		my_signalLinker->addLink(obj);
 		// Store data

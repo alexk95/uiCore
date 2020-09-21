@@ -261,6 +261,18 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 				_fore _backWindow
 				"}\n");
 
+			out.append("QMenu::item{"
+				_fore _backControl
+				"}\n");
+
+			out.append("QMenu::item:selected:!pressed{"
+				_focusFore _focusBack
+				"}\n");
+
+			out.append("QMenu::item:pressed{"
+				_selectedFore _selectedBack
+				"}\n");
+
 			break;
 
 		// ######################################################################################################
