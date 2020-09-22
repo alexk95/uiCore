@@ -1,5 +1,5 @@
 <p align="center">
-uiCore
+**uiCore**
 </p>
 
 The **uiCore** is a library meant to be used with **Qt**.
