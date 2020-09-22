@@ -1,6 +1,7 @@
 <p align="center">
-#uiCore
+uiCore
 </p>
+
 The **uiCore** is a library meant to be used with **Qt**.
 
 This library takes away the effort to create and manage the fundamental objects for a technical user interface (UI).
