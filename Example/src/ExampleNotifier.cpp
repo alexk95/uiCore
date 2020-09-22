@@ -1,27 +1,11 @@
 /*
-	The following copyright affects the following files in the uiCore repository:
-	.../uiCore/Example/Example.vcxproj
-	.../uiCore/Example/include/Example.h
-	.../uiCore/Example/src/Example.cpp
-	.../uiCore/Example/src/main.cpp
-
-	Copyright (c) 2020 Alexander Küster
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, without conditions:
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.
-*/
+ * ExampleNotifier.cpp
+ *
+ *  Created on: September 15, 2020
+ *	Last modified on: September 22, 2020
+ *	Author: Alexander Kuester
+ *  Copyright (c) 2020 Alexander Kuester
+ */
 
 #include <ExampleNotifier.h>		// Corresponding header
 #include <ak_exception.h>			// Error handling
@@ -51,6 +35,8 @@ void ExampleNotifier::notify(
 			my_callbackClass->eventCallback(_senderId, (ak::core::eventType)_message, _info1, _info2);
 		}
 	}
+	// Just forward the error message. A message box will be displayed automatically when an exception is thrown inside a notify function.
+	// The error message will contain the error message and a "callStack"
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ExampleNotifier::notify()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ExampleNotifier::notify()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ExampleNotifier::notify()"); }

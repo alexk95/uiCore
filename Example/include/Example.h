@@ -1,42 +1,29 @@
 /*
-	The following copyright affects the following files in the uiCore repository:
-	.../uiCore/Example/Example.vcxproj
-	.../uiCore/Example/include/Example.h
-	.../uiCore/Example/include/ExampleNotifier.h
-	.../uiCore/Example/src/Example.cpp
-	.../uiCore/Example/src/ExampleNotifier.cpp
-	.../uiCore/Example/src/main.cpp
-
-	Copyright (c) 2020 Alexander Küster
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, without conditions:
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.
-*/
+ * Example.h
+ *
+ *  Created on: September 15, 2020
+ *	Last modified on: September 22, 2020
+ *	Author: Alexander Kuester
+ *  Copyright (c) 2020 Alexander Kuester
+ */
 
 #pragma once
 
 #include <ak_globalDataTypes.h>			// ID and UID types
 #include <ak_core.h>					// eventType type
 
+// Forward declaration
 class ExampleNotifier;
 
+//! This class is managing the UI
 class Example
 {
 public:
+	//! @brief Constructor
+	//! This constructor is creating all the objects and registering all callbacks
     Example();
 	
+	//! @brief Deconstructor
 	virtual ~Example();
 
 	//! @brief This function will be called when an event occurs
@@ -57,26 +44,21 @@ private:
 	void defaultData(void);
 
 	struct structUi {
-		ak::UID				mainWindow;
-		ak::UID				ttb_pFile;
-		ak::UID				ttb_gNONE;
-		ak::UID				ttb_aExit;
-		ak::UID				ttb_aColorStyle;
-		ak::UID				dockTree;
-		ak::UID				dockProperties;
-		ak::UID				dockOutput;
-		ak::UID				treeWidget;
-		ak::UID				propertiesWidget;
-		ak::UID				outputWidget;
-		ak::UID				tabViewWidget;
-		ak::UID				table1;
-		ak::UID				table2;
-
-		ak::UID				ttb_delete;
-
+		ak::UID				mainWindow;			//! The UID of the main window
+		ak::UID				ttb_pFile;			//! The UID of the file page in the tab toolbar
+		ak::UID				ttb_gNONE;			//! The UID of the group in the file page in the tab toolbar
+		ak::UID				ttb_aExit;			//! The UID of exit action
+		ak::UID				ttb_aColorStyle;	//! The UID of the colorStlye action
+		ak::UID				dockTree;			//! The UID of the dock containing the tree widget
+		ak::UID				dockProperties;		//! The UID of the dock containing the propertyGrid widget
+		ak::UID				dockOutput;			//! The UID of the dock containing the output textEdit widget
+		ak::UID				treeWidget;			//! The UID of the dock containing the tree widget
+		ak::UID				propertiesWidget;	//! The UID of the propertyGrid widget
+		ak::UID				outputWidget;		//! The UID of the output textEdit widget
+		ak::UID				tabViewWidget;		//! The UID of the tabView widget
+		ak::UID				table1;				//! The UID of the table on the first page at the tabView
+		ak::UID				table2;				//! The UID of the table on the second page at the tabView
 	};
-
-	int cc;
 	structUi					my_ui;			//! Contains all UIDs of the UI
 	ak::UID						my_uid;			//! The UID of this application
 	ExampleNotifier *			my_notifier;	//! The notifier that receives the callback messages

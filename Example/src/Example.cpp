@@ -1,32 +1,17 @@
 /*
-	The following copyright affects the following files in the uiCore repository:
-	.../uiCore/Example/Example.vcxproj
-	.../uiCore/Example/include/Example.h
-	.../uiCore/Example/src/Example.cpp
-	.../uiCore/Example/src/main.cpp
-
-	Copyright (c) 2020 Alexander Küster
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, without conditions:
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.
-*/
+ * Example.cpp
+ *
+ *  Created on: September 15, 2020
+ *	Last modified on: September 22, 2020
+ *	Author: Alexander Kuester
+ *  Copyright (c) 2020 Alexander Kuester
+ */
 
 #include <Example.h>			// Corresponding header
 #include <ExampleNotifier.h>	// Notifier
 #include <ak_exception.h>		// Error handling
 #include <ak_uiAPI.h>			// uiAPI
+#include <ak_ui_core.h>			// dockLocation type
 
 #include <qstring.h>
 #include <vector>
@@ -36,7 +21,7 @@
 #define ICO_Bright "Sun"
 #define ICO_Dark "Moon"
 
-Example::Example():cc(0)
+Example::Example()
 {
 	// Create own UID
 	my_uid = ak::uiAPI::createUid();
@@ -70,11 +55,9 @@ Example::Example():cc(0)
 			my_ui.ttb_gNONE = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.ttb_pFile, "");
 			my_ui.ttb_aExit = ak::uiAPI::createAction(my_uid, "Exit", "ExitAppBlue", "32");
 			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
-			my_ui.ttb_delete = ak::uiAPI::createAction(my_uid, "Delete", "Delete", "32");
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aExit);
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aColorStyle);
-			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_delete);
-
+			
 			// Create docks
 			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
 			my_ui.dockProperties = ak::uiAPI::createDock(my_uid, "Properties");
@@ -130,8 +113,7 @@ Example::Example():cc(0)
 			ak::uiAPI::registerNotifier(my_ui.treeWidget, my_notifier, ak::core::messageType::mEvent);
 			ak::uiAPI::registerNotifier(my_ui.ttb_aExit, my_notifier, ak::core::messageType::mEvent);
 			ak::uiAPI::registerNotifier(my_ui.ttb_aColorStyle, my_notifier, ak::core::messageType::mEvent);
-			ak::uiAPI::registerNotifier(my_ui.ttb_delete, my_notifier, ak::core::messageType::mEvent);
-
+			
 			// Create default data
 			defaultData();
 
@@ -189,43 +171,6 @@ void Example::eventCallback(
 
 				// Enable the notifier again
 				my_notifier->enable();
-			}
-			else if (_sender == my_ui.ttb_delete) {
-				
-				std::vector<ak::ID> v;
-				switch (cc)
-				{
-				case 0:
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B|B2|B2B"));
-					break;
-				case 1:
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B|B2"));
-					break;
-				case 2:
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1B"));
-					break;
-				case 3:
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A"));
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1"));
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A"));
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A2"));
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A"));
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1A"));
-					break;
-				case 4:
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "C"));
-					break;
-				case 5:
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B"));
-					break;
-				default:
-					ak::uiAPI::showMessageBox(my_ui.mainWindow, "Done", "Status");
-					return;
-					break;
-				}
-				
-				ak::uiAPI::obj::deleteItems(my_ui.treeWidget,v);
-				cc++;
 			}
 		}
 
