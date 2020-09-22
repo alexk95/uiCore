@@ -1565,6 +1565,96 @@ ak::ID ak::ui::objectManager::obj_addTab(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addTab(widget, icon)"); }
 }
 
+void ak::ui::objectManager::obj_setEnabled(
+	ak::UID											_objectUid,
+	bool											_enabled
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (obj->second->objectType()) {
+		case ak::ui::core::objectType::oAction:
+		{
+			// Cast object
+			ak::ui::qt::action * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::action *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast action"); }
+			o->setEnabled(_enabled);
+		}
+		break;
+		case ak::ui::core::objectType::oCheckBox:
+		{
+			// Cast object
+			ak::ui::qt::checkBox * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::checkBox *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast checkbox"); }
+			o->setEnabled(_enabled);
+		}
+		break;
+		case ak::ui::core::objectType::oColorEditButton:
+		{
+			// Cast object
+			ak::ui::widget::colorEditButton * o = nullptr;
+			o = dynamic_cast<ak::ui::widget::colorEditButton *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast color edit button"); }
+			o->setEnabled(_enabled);
+		}
+		break;
+		case ak::ui::core::objectType::oComboButton:
+		{
+			// Cast object
+			ak::ui::qt::comboButton * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::comboButton *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast combo button"); }
+			o->setEnabled(_enabled);
+		}
+		break;
+		case ak::ui::core::objectType::oComboButtonItem:
+		{
+			// Cast object
+			ak::ui::qt::comboButtonItem * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::comboButtonItem *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast combo button item"); }
+			o->setEnabled(_enabled);
+		}
+		break;
+		case ak::ui::core::objectType::oDock:
+		{
+			// Cast object
+			ak::ui::qt::dock * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::dock *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast dock"); }
+			o->setEnabled(_enabled);
+		}
+		break;
+		case ak::ui::core::objectType::oPushButton:
+		{
+			// Cast object
+			ak::ui::qt::pushButton * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::pushButton *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast push button"); }
+			o->setEnabled(_enabled);
+		}
+		break;
+		case ak::ui::core::objectType::oTextEdit:
+		{
+			// Cast object
+			ak::ui::qt::textEdit * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::textEdit *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast text edit"); }
+			o->setEnabled(_enabled);
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_setAutoSelectAndDeselectChildrenEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_setAutoSelectAndDeselectChildrenEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_setAutoSelectAndDeselectChildrenEnabled()"); }
+}
+
 void ak::ui::objectManager::obj_clear(
 	ak::UID											_objectUid
 ) {
@@ -1603,6 +1693,37 @@ void ak::ui::objectManager::obj_clear(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_clear()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_clear()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_clear()"); }
+}
+
+void ak::ui::objectManager::obj_deleteItems(
+	ak::UID												_objectUid,
+	const std::vector<ak::ID> &							_items
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast tree
+			ak::ui::widget::tree * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
+			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+			// Add object
+			t->deleteItems(_items);
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+			break;
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_deleteItems()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_deleteItems()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_deleteItems()"); }
 }
 
 // ###############################################################################################################################################
@@ -1683,7 +1804,7 @@ QAction * ak::ui::objectManager::obj_getAction(
 		// Cast action
 		QAction * ret = nullptr;
 		ret = dynamic_cast<QAction *>(obj->second);
-		if (ret == nullptr) { throw ak::Exception("Cast failed", "Cast object to action"); }
+		if (ret == nullptr) { throw ak::Exception("Cast failed", "Cast action"); }
 		return ret;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getAction()"); }
@@ -1816,7 +1937,7 @@ bool ak::ui::objectManager::obj_getTristate(
 			// Cast object
 			ak::ui::qt::checkBox * obj = nullptr;
 			obj = dynamic_cast<ak::ui::qt::checkBox *>(itm->second);
-			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast combo button"); }
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast check box"); }
 			return obj->isTristate();
 		}
 		break;
@@ -1843,7 +1964,7 @@ bool ak::ui::objectManager::obj_getChecked(
 			// Cast object
 			ak::ui::qt::checkBox * obj = nullptr;
 			obj = dynamic_cast<ak::ui::qt::checkBox *>(itm->second);
-			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast combo button"); }
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast check box"); }
 			return obj->isChecked();
 		}
 		break;
@@ -1869,7 +1990,7 @@ std::vector<ak::ID> ak::ui::objectManager::obj_getSelectedItems(
 			// Cast object
 			ak::ui::widget::tree * obj = nullptr;
 			obj = dynamic_cast<ak::ui::widget::tree *>(itm->second);
-			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast combo button"); }
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
 			return obj->selectedItems();
 		}
 		break;
@@ -1895,7 +2016,7 @@ bool ak::ui::objectManager::obj_getAutoScrollToBottomEnabled(
 			// Cast object
 			ak::ui::qt::textEdit * obj = nullptr;
 			obj = dynamic_cast<ak::ui::qt::textEdit *>(itm->second);
-			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast combo button"); }
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast text edit"); }
 			return obj->autoScrollToBottom();
 		}
 		break;
@@ -1906,6 +2027,95 @@ bool ak::ui::objectManager::obj_getAutoScrollToBottomEnabled(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getAutoScrollToBottomEnabled()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getAutoScrollToBottomEnabled()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getAutoScrollToBottomEnabled()"); }
+}
+
+bool ak::ui::objectManager::obj_getEnabled(
+	ak::UID									_objectUid
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (obj->second->objectType()) {
+		case ak::ui::core::objectType::oAction:
+		{
+			// Cast object
+			ak::ui::qt::action * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::action *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast action"); }
+			return o->isEnabled();
+		}
+		break;
+		case ak::ui::core::objectType::oCheckBox:
+		{
+			// Cast object
+			ak::ui::qt::checkBox * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::checkBox *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast checkbox"); }
+			return o->isEnabled();
+		}
+		break;
+		case ak::ui::core::objectType::oColorEditButton:
+		{
+			// Cast object
+			ak::ui::widget::colorEditButton * o = nullptr;
+			o = dynamic_cast<ak::ui::widget::colorEditButton *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast color edit button"); }
+			return o->enabled();
+		}
+		break;
+		case ak::ui::core::objectType::oComboButton:
+		{
+			// Cast object
+			ak::ui::qt::comboButton * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::comboButton *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast combo button"); }
+			return o->isEnabled();
+		}
+		break;
+		case ak::ui::core::objectType::oComboButtonItem:
+		{
+			// Cast object
+			ak::ui::qt::comboButtonItem * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::comboButtonItem *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast combo button item"); }
+			return o->isEnabled();
+		}
+		break;
+		case ak::ui::core::objectType::oDock:
+		{
+			// Cast object
+			ak::ui::qt::dock * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::dock *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast dock"); }
+			return o->isEnabled();
+		}
+		break;
+		case ak::ui::core::objectType::oPushButton:
+		{
+			// Cast object
+			ak::ui::qt::pushButton * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::pushButton *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast push button"); }
+			return o->isEnabled();
+		}
+		break;
+		case ak::ui::core::objectType::oTextEdit:
+		{
+			// Cast object
+			ak::ui::qt::textEdit * o = nullptr;
+			o = dynamic_cast<ak::ui::qt::textEdit *>(obj->second);
+			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast text edit"); }
+			return o->isEnabled();
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getEnabled()"); }
 }
 
 // ###############################################################################################################################################
@@ -2085,6 +2295,34 @@ QString ak::ui::objectManager::itm_getText(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getText()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getText()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getText()"); }
+}
+
+ak::ID ak::ui::objectManager::itm_getID(
+	ak::UID									_objectUid,
+	const QString &							_itemPath,
+	char									_delimiter
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast object
+			ak::ui::widget::tree * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::tree *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+			return obj->getItemID(_itemPath, _delimiter);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getID()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getID()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getID()"); }
 }
 
 // ###############################################################################################################################################

@@ -124,8 +124,6 @@ void ak::ui::widget::colorEditButton::setColorStyle(
 
 // #############################################################################################################################
 
-ak::ui::color ak::ui::widget::colorEditButton::color(void) const { return my_color; }
-
 void ak::ui::widget::colorEditButton::setColor(
 	const ak::ui::color &							_color
 ) {
@@ -143,6 +141,14 @@ void ak::ui::widget::colorEditButton::setColor(
 	catch (const std::exception & e) { my_notifier->enable(); throw ak::Exception(e.what(), "ak::ui::widget::colorEditButton::setColor()"); }
 	catch (...) { my_notifier->enable(); throw ak::Exception("Unknown error", "ak::ui::widget::colorEditButton::setColor()"); }
 }
+
+void ak::ui::widget::colorEditButton::setEnabled(
+	bool											_enabled
+) { my_button->setEnabled(_enabled); }
+
+bool ak::ui::widget::colorEditButton::enabled() const { return my_button->isEnabled(); }
+
+ak::ui::color ak::ui::widget::colorEditButton::color(void) const { return my_color; }
 
 void ak::ui::widget::colorEditButton::overrideText(
 	const QString &								_text

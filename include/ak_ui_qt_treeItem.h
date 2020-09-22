@@ -14,8 +14,9 @@
 #include <qtreewidget.h>			// Base class
 #include <qstring.h>				// QString
 
-#include "ak_ui_core_aObject.h"		// Base class
-#include "ak_globalDataTypes.h"		// UID and ID type
+#include <ak_ui_core_aObject.h>		// Base class
+#include <ak_globalDataTypes.h>		// UID and ID type
+#include <ak_fastContainer.h>		// fastContainer
 
 namespace ak {
 	namespace ui {
@@ -87,9 +88,30 @@ namespace ak {
 					const QString &					_text
 				);
 
-				//! @brief Will return all childs of this item
-				std::vector<treeItem *> childs(void) const;
+				//! @brief Will return the ID of the specified item
+				//! @param _itemPath The path of the requested item
+				//! @param _delimiter The delimiter of the item path
+				ak::ID getItemID(
+					const QStringList &				_itemPath,
+					int								_currentIndex
+				);
+
+				//! @brief Will erase this child from the information storage
+				//! This function should only be called from the child itself to clear up its data
+				//! @param _id The ID of the item to erase
+				void eraseChild(
+					ak::ID							_id
+				);
+
+				//! @brief Will return all next level childs of this item
+				const std::vector<treeItem *> & childs(void);
 				 
+				//! @brief Will return all childs of this item
+				const std::vector<treeItem *> & allChilds(void);
+
+				//! @brief Will return the IDs of all childs at this item
+				const std::vector<ak::ID> & allChildsIDs(void);
+
 				//! @brief Will return the ammound of childs this item has
 				int childCount(void) const;
 
@@ -115,13 +137,19 @@ namespace ak {
 				//! @param _delimiter The delimiter between the items
 				//! @throw ak::Exception if the provided item ID is invalid
 				QString getItemPathString(
-					char									_delimiter = '|'
+					char							_delimiter = '|'
 				);
 
 			private:
 				treeItem *					my_parent;
-				std::vector<treeItem *>		my_childs;			//! Contains all childs of this item
+				fastContainer<treeItem *>	my_childs;			//! Contains all childs of this item
+				fastContainer<treeItem *>	my_allChilds;
+				fastContainer<ak::ID>		my_allChildsIDs;
 				ak::ID						my_id;
+
+				treeItem(treeItem &) = delete;
+				treeItem & operator = (treeItem &) = delete;
+
 			};
 
 		} // namespace qt

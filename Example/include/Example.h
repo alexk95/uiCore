@@ -71,8 +71,12 @@ private:
 		ak::UID				tabViewWidget;
 		ak::UID				table1;
 		ak::UID				table2;
+
+		ak::UID				ttb_delete;
+
 	};
 
+	int cc;
 	structUi					my_ui;			//! Contains all UIDs of the UI
 	ak::UID						my_uid;			//! The UID of this application
 	ExampleNotifier *			my_notifier;	//! The notifier that receives the callback messages

@@ -997,11 +997,28 @@ namespace ak {
 				bool											_enabled = true
 			);
 
+			//! @brief Enables or disables the provided object
+			//! @param _objectUid The UID of the object
+			//! @param _enabled if true, the object will be enabled
+			__declspec(dllexport) void setEnabled(
+				ak::UID											_objectUid,
+				bool											_enabled = true
+			);
+
 			//! @brief Will clear the items of the provided object
 			//! @param _objectUid The UID of the object to clear its items
 			//! @throw ak::Exception if the provided object UID is invalid
 			__declspec(dllexport) void clear(
 				ak::UID											_objectUid
+			);
+
+			//! @brief Will delete all provided items from the provided object
+			//! @param _objectUid The UID of the object to delete the items from
+			//! @param _items The items to delete
+			//! @throw ak::Exception if the provided object UID or any item ID is invalid
+			__declspec(dllexport) void deleteItems(
+				ak::UID											_objectUid,
+				const std::vector<ak::ID> &						_items
 			);
 
 			// ###############################################################################################################################################
@@ -1117,6 +1134,16 @@ namespace ak {
 			__declspec(dllexport) QString getText(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
+			);
+
+			//! @brief Will return the ID of the specified item in the specified object
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemPath The path of the requested item
+			//! @param _delimiter The delimiter of the path string
+			__declspec(dllexport) ak::ID getID(
+				ak::UID									_objectUid,
+				const QString &							_itemPath,
+				char									_delimiter = '|'
 			);
 
 		}

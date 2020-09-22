@@ -137,6 +137,11 @@ namespace ak {
 				//! @brief Will deselect all items
 				void deselectAllItems(void);
 
+				//! @brief Will set the enabled state of this tree
+				void setEnabled(
+					bool							_enabled = true
+				);
+
 				// ###########################################################################################################################################
 
 				// Filter
@@ -183,6 +188,13 @@ namespace ak {
 				//! @brief Will collapse all items in this tree
 				void collapseAllItems(void);
 
+				//! @brief Will delete the provided items in this tree
+				//! @param _items The items to delete
+				//! @throw ak::Exception if any of the item IDs is invalid
+				void deleteItems(
+					const std::vector<ak::ID> &							_items
+				);
+
 				// ###########################################################################################################################################
 
 				// Information gathering
@@ -206,11 +218,22 @@ namespace ak {
 					char									_delimiter = '|'
 				);
 
+				//! @brief Will return the ID of the specified item
+				//! @param _itemPath The path of the requested item
+				//! @param _delimiter The delimiter of the item path
+				ak::ID getItemID(
+					const QString &							_itemPath,
+					char									_delimiter = '|'
+				);
+
 				//! @brief Will return the text of the specified item
 				//! @param _itemId The ID of the item to get the text of
 				QString getItemText(
 					ak::ID									_itemId
 				);
+
+				//! @brief Will return the enabled state of this tree
+				bool enabled() const;
 
 				// ###########################################################################################################################################
 

@@ -266,6 +266,10 @@ void ak::ui::widget::tree::deselectAllItems(void) {
 	my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eSelectionChanged);
 }
 
+void ak::ui::widget::tree::setEnabled(
+	bool							_enabled
+) { my_tree->setEnabled(_enabled); }
+
 // ###########################################################################################################################################
 
 // Filter
@@ -304,6 +308,39 @@ void ak::ui::widget::tree::expandAllItems(void) {
 
 void ak::ui::widget::tree::collapseAllItems(void) {
 	for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) { itm->second->setExpanded(false); }
+}
+
+void ak::ui::widget::tree::deleteItems(
+	const std::vector<ak::ID> &				_items
+) {
+	try {
+		std::map<ak::ID, bool> destroyed;
+		typedef std::map<ak::ID, bool>::iterator ite;
+
+		for (size_t i = 0; i < _items.size(); i++) {
+			ak::ID id = _items.at(i);
+			ite itm = destroyed.find(_items.at(i));
+			if (itm == destroyed.end()) {
+				my_itemsIterator item = my_items.find(id);
+				if (item == my_items.end()) { throw ak::Exception("Invalid ID", "Check item id"); }
+				ak::ui::qt::treeItem * t = item->second;
+				QString txt = t->text(0);
+				// Store all childs of the provided item
+				std::vector<ak::ID> v = t->allChildsIDs();
+				// Delete the item and it will delete all of its childs
+				delete t;
+				my_items.erase(id);
+				for (size_t clr = 0; clr < v.size(); clr++) {
+					ak::ID id = v.at(clr);
+					my_items.erase(id);
+					destroyed.insert_or_assign(id, false);
+				}
+			}
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::deleteItems()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::deleteItems()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::deleteItems()"); }
 }
 
 // ###########################################################################################################################
@@ -345,6 +382,27 @@ QString ak::ui::widget::tree::getItemPathString(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::getItemPathString()"); }
 }
 
+ak::ID ak::ui::widget::tree::getItemID(
+	const QString &							_itemPath,
+	char									_delimiter
+) {
+	try {
+		if (_itemPath.length() == 0) { throw ak::Exception("No item path provided", "Check item path"); }
+		QStringList lst = _itemPath.split(_delimiter);
+		assert(lst.count() > 0); // split error
+		for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
+			if (itm->second->text(0) == lst.at(0)) {
+				if (lst.count() == 1) { return itm->second->id(); }
+				return itm->second->getItemID(lst, 1);
+			}
+		}
+		throw ak::Exception("Item path is invalid", "Check item path");
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::getItemID()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::getItemID()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::getItemID()"); }
+}
+
 QString ak::ui::widget::tree::getItemText(
 	ak::ID									_itemId
 ) {
@@ -357,6 +415,8 @@ QString ak::ui::widget::tree::getItemText(
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::getItemText()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::getItemText()"); }
 }
+
+bool ak::ui::widget::tree::enabled() const { return my_tree->isEnabled(); }
 
 // ###########################################################################################################################
 

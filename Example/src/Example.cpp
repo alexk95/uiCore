@@ -36,7 +36,7 @@
 #define ICO_Bright "Sun"
 #define ICO_Dark "Moon"
 
-Example::Example()
+Example::Example():cc(0)
 {
 	// Create own UID
 	my_uid = ak::uiAPI::createUid();
@@ -70,8 +70,10 @@ Example::Example()
 			my_ui.ttb_gNONE = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.ttb_pFile, "");
 			my_ui.ttb_aExit = ak::uiAPI::createAction(my_uid, "Exit", "ExitAppBlue", "32");
 			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
+			my_ui.ttb_delete = ak::uiAPI::createAction(my_uid, "Delete", "Delete", "32");
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aExit);
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aColorStyle);
+			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_delete);
 
 			// Create docks
 			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
@@ -128,6 +130,7 @@ Example::Example()
 			ak::uiAPI::registerNotifier(my_ui.treeWidget, my_notifier, ak::core::messageType::mEvent);
 			ak::uiAPI::registerNotifier(my_ui.ttb_aExit, my_notifier, ak::core::messageType::mEvent);
 			ak::uiAPI::registerNotifier(my_ui.ttb_aColorStyle, my_notifier, ak::core::messageType::mEvent);
+			ak::uiAPI::registerNotifier(my_ui.ttb_delete, my_notifier, ak::core::messageType::mEvent);
 
 			// Create default data
 			defaultData();
@@ -186,6 +189,43 @@ void Example::eventCallback(
 
 				// Enable the notifier again
 				my_notifier->enable();
+			}
+			else if (_sender == my_ui.ttb_delete) {
+				
+				std::vector<ak::ID> v;
+				switch (cc)
+				{
+				case 0:
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B|B2|B2B"));
+					break;
+				case 1:
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B|B2"));
+					break;
+				case 2:
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1B"));
+					break;
+				case 3:
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A"));
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1"));
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A"));
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A2"));
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A"));
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1A"));
+					break;
+				case 4:
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "C"));
+					break;
+				case 5:
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B"));
+					break;
+				default:
+					ak::uiAPI::showMessageBox(my_ui.mainWindow, "Done", "Status");
+					return;
+					break;
+				}
+				
+				ak::uiAPI::obj::deleteItems(my_ui.treeWidget,v);
+				cc++;
 			}
 		}
 

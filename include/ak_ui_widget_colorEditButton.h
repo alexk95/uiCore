@@ -43,12 +43,12 @@ namespace ak {
 			public:
 
 				colorEditButton(
-					ak::messenger *									_messenger,
-					ak::uidManager *								_uidManager,
-					const ak::ui::color &							_color,
-					ak::ui::iconManager *							_iconManager,
-					const QString &									_textOverride = QString(""),
-					ak::ui::colorStyle *							_colorStyle = nullptr
+					ak::messenger *				_messenger,
+					ak::uidManager *			_uidManager,
+					const ak::ui::color &		_color,
+					ak::ui::iconManager *		_iconManager,
+					const QString &				_textOverride = QString(""),
+					ak::ui::colorStyle *		_colorStyle = nullptr
 				);
 
 				virtual ~colorEditButton();
@@ -63,15 +63,23 @@ namespace ak {
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
-					ak::ui::colorStyle *			_colorStyle
+					ak::ui::colorStyle *		_colorStyle
 				);
 
 				// #############################################################################################################################
 
 				//! @brief Will set the widgets
 				void setColor(
-					const ak::ui::color &							_color
+					const ak::ui::color &		_color
 				);
+
+				//! @brief Will set the enabled state of this colorEditButton
+				void setEnabled(
+					bool						_enabled = true
+				);
+
+				//! @brief Will return the enabled state of this colorEditButton
+				bool enabled() const;
 
 				//! @brief Returns the currently set color
 				ak::ui::color color(void) const;
@@ -79,7 +87,7 @@ namespace ak {
 				//! @brief Will override the currently set text to the text provided
 				//! @param _text The text to set
 				void overrideText(
-					const QString &									_text
+					const QString &				_text
 				);
 
 				//! @brief Will perform actions for the provided widget event
@@ -88,23 +96,23 @@ namespace ak {
 				//! @param _info1 Additional information 1
 				//! @param _info2 Additional information 2
 				void widgetEvent(
-					ak::UID											_sender,
-					ak::core::eventType								_eventType,
-					int												_info1 = 0,
-					int												_info2 = 0
+					ak::UID						_sender,
+					ak::core::eventType			_eventType,
+					int							_info1 = 0,
+					int							_info2 = 0
 				);
 
 			private:
 
-				QGraphicsView *										my_view;					//! Graphics view required to display the color
-				ak::ui::qt::pushButton *							my_button;					//! The button to change the color
-				QHBoxLayout *										my_layout;					//! The layout used to place the widgets
-				QWidget *											my_widget;					//! The central widget of the color edit button
+				QGraphicsView *					my_view;					//! Graphics view required to display the color
+				ak::ui::qt::pushButton *		my_button;					//! The button to change the color
+				QHBoxLayout *					my_layout;					//! The layout used to place the widgets
+				QWidget *						my_widget;					//! The central widget of the color edit button
 
-				ak::messenger *										my_externalMessenger;		//! The external messenger used to send notifications
-				ak::uidManager *									my_externalUidManager;		//! The external UID manager
-				ak::notifierColorEditButton *						my_notifier;				//! The notifier used for the internal messaging system
-				ak::ui::color										my_color;					//! The currently set color
+				ak::messenger *					my_externalMessenger;		//! The external messenger used to send notifications
+				ak::uidManager *				my_externalUidManager;		//! The external UID manager
+				ak::notifierColorEditButton *	my_notifier;				//! The notifier used for the internal messaging system
+				ak::ui::color					my_color;					//! The currently set color
 
 				//! Block default constructor
 				colorEditButton() = delete;

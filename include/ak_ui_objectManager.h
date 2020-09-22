@@ -550,11 +550,28 @@ namespace ak {
 				const QString &									_iconSize
 			);
 
+			//! @brief Enables or disables the provided object
+			//! @param _objectUid The UID of the object
+			//! @param _enabled if true, the object will be enabled
+			void obj_setEnabled(
+				ak::UID											_objectUid,
+				bool											_enabled = true
+			);
+
 			//! @brief Will clear the items of the provided object
 			//! @param _objectUid The UID of the object to clear its items
 			//! @throw ak::Exception if the provided object UID is invalid
 			void obj_clear(
 				ak::UID											_objectUid
+			);
+
+			//! @brief Will delete all provided items from the provided object
+			//! @param _objectUid The UID of the object to delete the items from
+			//! @param _items The items to delete
+			//! @throw ak::Exception if the provided object UID or any item ID is invalid
+			void obj_deleteItems(
+				ak::UID												_objectUid,
+				const std::vector<ak::ID> &							_items
 			);
 
 			// ###############################################################################################################################################
@@ -619,6 +636,13 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @throw ak::Exception if the provided object UID is invalid
 			bool obj_getAutoScrollToBottomEnabled(
+				ak::UID									_objectUid
+			);
+
+			//! @brief Will return the enabled state of the provided object
+			//! @param _objectUid The UID of the requested object
+			//! @throw ak::Exception if the provided object UID is invalid
+			bool obj_getEnabled(
 				ak::UID									_objectUid
 			);
 
@@ -693,6 +717,16 @@ namespace ak {
 			QString itm_getText(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
+			);
+
+			//! @brief Will return the ID of the specified item in the specified object
+			//! @param _objectUid The UID the specified item is located at
+			//! @param _itemPath The path of the item
+			//! @param _delimiter The of the item path
+			ak::ID itm_getID(
+				ak::UID									_objectUid,
+				const QString &							_itemPath,
+				char									_delimiter = '|'
 			);
 
 			// ###############################################################################################################################################
