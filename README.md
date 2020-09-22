@@ -43,17 +43,16 @@ Features:
 
 1) Create a new Qt Widgets Application (Core, Gui and Widgets must be selected in the dialog)
 2) Create an Evironment variable (System Settings or batch file) for the %UICORE_LIB_ROOT%
-3) Configuration Properties (For a x64 build):
 
-	Add:		VC++ Directories->Include Directories:				$(ProjectDir)include;
-	Ensure:		C/C++->General->Additional Include Directories contains:	$(Qt_INCLUDEPATH_);
-	Add:		C/C++->General->Additional Include Directories:			%UI_CORE_ROOT%\include;
-	Ensure:		Linker->General->Additional Library Directories contains:	$(Qt_LIBPATH_);
-	Add <Debug>:	Linker->General->Additional Library Directories:		%UI_CORE_ROOT%\x64\Debug;
-	Add <Release>:	Linker->General->Additional Library Directories:		%UI_CORE_ROOT%\x64\Release;
-	Ensure:		Linker->Input->Additional Dependencies contains:		$(Qt_LIBS_);
-	Add <Debug>:	Linker->Input->Additional Dependencies:				%UI_CORE_ROOT%\x64\Debug\uiCore.lib;
-	Add <Release>:	Linker->Input->Additional Dependencies:				%UI_CORE_ROOT%\x64\Release\uiCore.lib;
+**Configuration Properties (For a x64 build)**
+
+	Add:		VC++ Directories->Include Directories:				$(ProjectDir)include
+	Ensure:		C/C++->General->Additional Include Directories contains:	$(Qt_INCLUDEPATH_)
+	Add:		C/C++->General->Additional Include Directories:			%UI_CORE_ROOT%\include
+	Ensure:		Linker->General->Additional Library Directories contains:	$(Qt_LIBPATH_)
+	Add:		Linker->General->Additional Library Directories:		%UI_CORE_ROOT%\x64\[Debug/Release]
+	Ensure:		Linker->Input->Additional Dependencies contains:		$(Qt_LIBS_)
+	Add:		Linker->Input->Additional Dependencies:				%UI_CORE_ROOT%\x64\[Debug/Release]\uiCore.lib
 
 -------------
 
@@ -67,29 +66,3 @@ This will create a "qt.conf" file which will be placed in the output directory.
 This file must be in the same directory as the executable.
 
 -------------
-**Legal notes**
-
-The following copyright affects the following files in the uiCore repository:
-	.../uiCore/Example/Example.vcxproj
-	.../uiCore/Example/include/Example.h
-	.../uiCore/Example/include/ExampleNotifier.h
-	.../uiCore/Example/src/Example.cpp
-	.../uiCore/Example/src/ExampleNotifier.cpp
-	.../uiCore/Example/src/main.cpp
-
-	Copyright (c) 2020 Alexander Küster
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, without conditions:
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.
