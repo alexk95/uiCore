@@ -7,6 +7,10 @@ The uiCore library is still in development and will be updated on a regular base
 	uiCore
 </p>
 
+<p align="center">
+  <img src="https://github.com/alexk95/uiCore/master/uiCore_ExampleApplication.jpg">
+</p>
+
 The **uiCore** is a library meant to be used with **Qt**.
 
 This library takes away the effort to create and manage the fundamental objects for a technical user interface (UI).
