@@ -57,11 +57,12 @@ Example::Example()
 			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aExit);
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aColorStyle);
-			
+
 			// Create docks
 			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
 			my_ui.dockProperties = ak::uiAPI::createDock(my_uid, "Properties");
 			my_ui.dockTree = ak::uiAPI::createDock(my_uid, "Tree");
+			//my_ui.dockTester = ak::uiAPI::createDock(my_uid, "Tester");
 
 			// Create widgets
 			my_ui.treeWidget = ak::uiAPI::createTree(my_uid);
@@ -82,6 +83,7 @@ Example::Example()
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockOutput, my_ui.outputWidget);
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockProperties, my_ui.propertiesWidget);
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockTree, my_ui.treeWidget);
+			//ak::uiAPI::obj::setCentralWidget(my_ui.dockTester, my_ui.tester);
 
 			// Set central widget
 			ak::uiAPI::obj::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
@@ -102,6 +104,12 @@ Example::Example()
 				my_ui.dockProperties,
 				ak::ui::core::dockLeft
 			);
+
+			//ak::uiAPI::addDock(
+			//	my_ui.mainWindow,
+			//	my_ui.dockTester,
+			//	ak::ui::core::dockRight
+			//);
 			
 			// Create my notifier
 			my_notifier = new ExampleNotifier(this);
@@ -113,7 +121,8 @@ Example::Example()
 			ak::uiAPI::registerNotifier(my_ui.treeWidget, my_notifier, ak::core::messageType::mEvent);
 			ak::uiAPI::registerNotifier(my_ui.ttb_aExit, my_notifier, ak::core::messageType::mEvent);
 			ak::uiAPI::registerNotifier(my_ui.ttb_aColorStyle, my_notifier, ak::core::messageType::mEvent);
-			
+			//ak::uiAPI::registerNotifier(my_ui.tester, my_notifier);
+
 			// Create default data
 			defaultData();
 

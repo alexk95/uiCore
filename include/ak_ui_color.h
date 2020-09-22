@@ -17,7 +17,7 @@ namespace ak {
 	namespace ui {
 
 		//! This class is used to discribe a color
-		class color {
+		class __declspec(dllexport) color {
 		public:
 
 			//! @brief Default constructor

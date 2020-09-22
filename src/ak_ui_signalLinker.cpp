@@ -59,8 +59,8 @@ ak::ui::signalLinker::~signalLinker()
 			break;
 		case ak::ui::core::objectType::oPushButton:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(pressed()), this, SLOT(slotPressed()));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(released()), this, SLOT(slotReleased()));
+			//itm->second.object->disconnect(itm->second.object, SIGNAL(pressed()), this, SLOT(slotPressed()));
+			//itm->second.object->disconnect(itm->second.object, SIGNAL(released()), this, SLOT(slotReleased()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 			break;
 		case ak::ui::core::objectType::oTable:

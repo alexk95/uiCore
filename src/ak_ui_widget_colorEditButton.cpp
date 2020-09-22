@@ -63,10 +63,10 @@ ak::ui::widget::colorEditButton::colorEditButton(
 		my_button->setContentsMargins(QMargins(0, 0, 0, 0));
 		my_button->setMinimumWidth(50);
 
+		my_signalLinker->addLink(my_button);
+
 		if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
 		
-		my_button->setUid(my_uidManager->getId());
-
 		// Create layout
 		my_layout = new QHBoxLayout();
 		my_layout->setSpacing(0);
@@ -178,8 +178,12 @@ void ak::ui::widget::colorEditButton::widgetEvent(
 				if (newColor != my_color) {
 					setColor(my_color);
 					// Send changed message
-					my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged);
+					my_externalMessenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged);
 				}
+			}
+			else {
+				int r = 1;
+
 			}
 		}
 	}
