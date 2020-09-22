@@ -3,9 +3,7 @@ The uiCore library is still in development and will be updated on a regular base
 
 -------------
 
-<p align="center">
-	uiCore
-</p>
+# **uiCore**
 
 <p align="center">
   <img src="https://github.com/alexk95/uiCore/blob/master/Screenshots/uiCore_ExampleApplication.jpg">
