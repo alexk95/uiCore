@@ -66,3 +66,7 @@ This will create a "qt.conf" file which will be placed in the output directory.
 This file must be in the same directory as the executable.
 
 -------------
+
+For more information visit: **https://github.com/alexk95/uiCore/wiki**
+
+If you have any suggestion or found a bug, please report it to improve the library ASAP
