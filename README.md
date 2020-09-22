@@ -44,6 +44,7 @@ Features:
 1) Create a new Qt Widgets Application (Core, Gui and Widgets must be selected in the dialog)
 2) Create an Evironment variable (System Settings or batch file) for the %UICORE_LIB_ROOT%
 3) Configuration Properties (For a x64 build):
+
 	Add:		VC++ Directories->Include Directories:				$(ProjectDir)include;
 	Ensure:		C/C++->General->Additional Include Directories contains:	$(Qt_INCLUDEPATH_);
 	Add:		C/C++->General->Additional Include Directories:			%UI_CORE_ROOT%\include;
@@ -53,8 +54,6 @@ Features:
 	Ensure:		Linker->Input->Additional Dependencies contains:		$(Qt_LIBS_);
 	Add <Debug>:	Linker->Input->Additional Dependencies:				%UI_CORE_ROOT%\x64\Debug\uiCore.lib;
 	Add <Release>:	Linker->Input->Additional Dependencies:				%UI_CORE_ROOT%\x64\Release\uiCore.lib;
-	Set <Debug>:	Debugging->Environment:						PATH=$(QtDllPath);%UI_CORE_ROOT%\x64\Debug;%UI_CORE_ROOT%\Third_Party_Libraries\QtTabToolbar\DLL; ...<other paths>... ;%PATH%
-	Set <Release>:	Debugging->Environment:						PATH=$(QtDllPath);%UI_CORE_ROOT%\x64\Release;%UI_CORE_ROOT%\Third_Party_Libraries\QtTabToolbar\DLL; ...<other paths>... ;%PATH%
 
 -------------
 
