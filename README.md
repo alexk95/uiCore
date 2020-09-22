@@ -13,9 +13,9 @@ The uiCore library is still in development and will be updated on a regular base
 
 The **uiCore** is a library meant to be used with **Qt**.
 
-This library takes away the effort to create and manage the fundamental objects for a technical user interface (UI).
+This library takes away the effort to create and manage the fundamental objects for a technical user interface (UI) for CAD like applications.
 
-To create the user inteface no widget creation is required. The API provides all common objects, but also allowes external QWidgets to be displayed.
+To create the user inteface no widget creation is required. The API provides all common objects, but also allowes external QWidgets to be displayed if required.
 
 Features:
   - **Skriptable UI** - The UI will be created from code by using the API that provides the functions to modify the UI.
