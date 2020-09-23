@@ -78,7 +78,7 @@ namespace ak {
 				ak::ID add(
 					ak::ID							_parentId = -1,
 					const QString &					_text = "",
-					ak::ui::core::textAlignment		_textAlignment = ak::ui::core::textAlignment::alignLeft,
+					ak::ui::core::textAlignment		_textAlignment = ak::ui::core::textAlignment::align_alignLeft,
 					QIcon							_icon = QIcon()
 				);
 
@@ -98,7 +98,7 @@ namespace ak {
 				ak::ID add(
 					const QString &					_cmd,
 					char							_delimiter = '|',
-					ak::ui::core::textAlignment		_textAlignment = ak::ui::core::textAlignment::alignLeft,
+					ak::ui::core::textAlignment		_textAlignment = ak::ui::core::textAlignment::align_alignLeft,
 					const QIcon  &					_icon = QIcon()
 				);
 
@@ -239,6 +239,12 @@ namespace ak {
 
 				// Events
 
+				//! @brief Will perform the key pressed event
+				//! @param _key The key to perfom its pressed event
+				void raiseKeyPressedEvent(
+					ui::core::keyType				_key
+				);
+
 				//! @brief Will perform actions on the filter text changed event
 				void performFilterTextChanged(void);
 
@@ -270,7 +276,7 @@ namespace ak {
 				//! @throw ak::Exception If failed to create
 				ak::ui::qt::treeItem * createItem(
 					const QString &					_text = "",
-					ak::ui::core::textAlignment		_textAlignment = ak::ui::core::textAlignment::alignLeft,
+					ak::ui::core::textAlignment		_textAlignment = ak::ui::core::textAlignment::align_alignLeft,
 					QIcon							_icon = QIcon()
 				);
 

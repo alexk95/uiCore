@@ -69,11 +69,11 @@ namespace ak {
 
 		bool indexChangedEvent(void) const;
 
+		bool keyPressedEvent(void) const;
+
 		bool locationChangedEvent(void) const;
 
 		bool releasedEvent(void) const;
-
-		bool returnPressedEvent(void) const;
 
 		bool selectionChangedEvent(void) const;
 
@@ -105,7 +105,7 @@ namespace ak {
 		bool						my_indexChanged;
 		bool						my_locationChanged;
 		bool						my_released;
-		bool						my_returnPressed;
+		bool						my_keyPressed;
 		bool						my_selectionChanged;
 		bool						my_stateChanged;
 		bool						my_textChanged;

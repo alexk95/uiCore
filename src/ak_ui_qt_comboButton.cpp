@@ -41,6 +41,17 @@ ak::ui::qt::comboButton::comboButton(
 //! @brief Deconstructor
 ak::ui::qt::comboButton::~comboButton() { clearItems(); }
 
+// #######################################################################################################
+// Event handling
+
+void ak::ui::qt::comboButton::keyPressEvent(QKeyEvent *_event)
+{
+	QPushButton::keyPressEvent(_event);
+	emit keyPressed(_event);
+}
+
+// #######################################################################################################
+
 void ak::ui::qt::comboButton::clearItems(void) {
 	for (int i = 0; i < my_items.size(); i++){
 		// Remove the action from the menu of this combo button

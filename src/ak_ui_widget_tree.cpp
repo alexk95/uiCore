@@ -327,6 +327,11 @@ void ak::ui::widget::tree::deleteItems(
 				QString txt = t->text(0);
 				// Store all childs of the provided item
 				std::vector<ak::ID> v = t->allChildsIDs();
+				// Deselect item and its childs
+				bool stat = my_selectAndDeselectChildren;
+				my_selectAndDeselectChildren = true;
+				setItemSelected(id, false);
+				my_selectAndDeselectChildren = stat;
 				// Delete the item and it will delete all of its childs
 				delete t;
 				my_items.erase(id);
@@ -422,6 +427,17 @@ bool ak::ui::widget::tree::enabled() const { return my_tree->isEnabled(); }
 
 // Events
 
+void ak::ui::widget::tree::raiseKeyPressedEvent(
+	ui::core::keyType						_key
+) { 
+	try {
+		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eKeyPressed, 0, _key);
+	}
+	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::raiseKeyPressedEvent()"); }
+	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::raiseKeyPressedEvent()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::raiseKeyPressedEvent()"); }
+}
+
 void ak::ui::widget::tree::performFilterTextChanged(void) {
 	try {
 		if (my_filterRefreshOnChange) { performFilterEnterPressed(); }
@@ -469,6 +485,7 @@ void ak::ui::widget::tree::raiseItemEvent(
 		case ak::core::eventType::eDoubleClicked: break;
 		case ak::core::eventType::eFocused: break;
 		case ak::core::eventType::eExpanded: break;
+		case ak::core::eventType::eLocationChanged: break;
 		default: throw ak::Exception("Invalid event type", "Check event type"); break;
 		}
 

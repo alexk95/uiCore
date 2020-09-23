@@ -17,8 +17,7 @@
 
 // Qt header
 #include <qtreewidget.h>				// QTreeWidget
-//#include <QStandardItem>
-//#include <QApplication>
+#include <qevent.h>
 
 ak::ui::treeSignalLinker::treeSignalLinker(
 	ak::ui::widget::tree *				_treeManager,
@@ -39,8 +38,8 @@ ak::ui::treeSignalLinker::treeSignalLinker(
 		connect(my_tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(treeItemDoubleClicked(QTreeWidgetItem *, int)));
 		connect(my_tree, SIGNAL(itemEntered(QTreeWidgetItem *, int)), this, SLOT(treeItemEntered(QTreeWidgetItem *, int)));
 		connect(my_tree, SIGNAL(itemExpanded(QTreeWidgetItem *)), this, SLOT(treeItemExpanded(QTreeWidgetItem *)));
-		connect(my_tree, SIGNAL(itemPressed(QTreeWidgetItem *, int)), this, SLOT(treeItemPressed(QTreeWidgetItem *, int)));
 		connect(my_tree, SIGNAL(itemSelectionChanged()), this, SLOT(treeItemSelectionChanged()));
+		connect(my_tree, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(treeKeyPressed(QKeyEvent *)));
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::treeSignalLinker::treeSignalLinker()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::treeSignalLinker::treeSignalLinker()");}
@@ -58,6 +57,7 @@ ak::ui::treeSignalLinker::~treeSignalLinker() {
 	disconnect(my_tree, SIGNAL(itemExpanded(QTreeWidgetItem *)), this, SLOT(treeItemExpanded(QTreeWidgetItem *)));
 	disconnect(my_tree, SIGNAL(itemPressed(QTreeWidgetItem *, int)), this, SLOT(treeItemPressed(QTreeWidgetItem *, int)));
 	disconnect(my_tree, SIGNAL(itemSelectionChanged()), this, SLOT(treeItemSelectionChanged()));
+	disconnect(my_tree, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(treeKeyPressed(QKeyEvent *)));
 }
 
 void ak::ui::treeSignalLinker::enable(void) { my_enabled = true; }
@@ -69,6 +69,10 @@ bool ak::ui::treeSignalLinker::enabled(void) const { return my_enabled; }
 // ######################################################################################################################################
 
 // Slots
+
+void ak::ui::treeSignalLinker::treeKeyPressed(QKeyEvent *) {
+	//if (my_enabled) { my_treeManager->raiseKeyPressedEvent(key); }
+}
 
 void ak::ui::treeSignalLinker::treeDestroyed() {
 	if (my_enabled) { my_treeManager->raiseItemEvent(-1, ak::core::eventType::eDestroyed, 0); }

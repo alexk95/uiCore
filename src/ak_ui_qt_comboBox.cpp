@@ -17,6 +17,17 @@ ak::ui::qt::comboBox::comboBox(QWidget * _parent)
 
 ak::ui::qt::comboBox::~comboBox() {}
 
+// #######################################################################################################
+// Event handling
+
+void ak::ui::qt::comboBox::keyPressEvent(QKeyEvent *_event)
+{
+	QComboBox::keyPressEvent(_event);
+	emit keyPressed(_event);
+}
+
+// #######################################################################################################
+
 QWidget * ak::ui::qt::comboBox::widget(void) { return this; }
 
 void ak::ui::qt::comboBox::setColorStyle(

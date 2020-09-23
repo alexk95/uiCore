@@ -1594,16 +1594,81 @@ ak::ID ak::uiAPI::itm::getID(
 
 // ###############################################################################################################################################
 
-std::string ak::uiAPI::toString(
-	ak::core::eventType									_eventType
+QString ak::uiAPI::toString(
+	ak::core::eventType									_type
 ) {
 	try {
-		QString v = ak::core::toQString(_eventType);
-		return v.toStdString();
+		QString v = ak::core::toQString(_type); return v;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(eventType)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(eventType)"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(eventType)"); }
+}
+
+QString ak::uiAPI::toString(
+	ak::core::messageType								_type
+) {
+	try {
+		QString v = ak::core::toQString(_type); return v;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(messageType)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(messageType)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(messageType)"); }
+}
+
+QString ak::uiAPI::toString(
+	ak::core::valueType									_type
+) {
+	try {
+		QString v = ak::core::toQString(_type); return v;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(valueType)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(valueType)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(valueType)"); }
+}
+
+QString ak::uiAPI::toString(
+	ak::ui::core::textAlignment							_type
+) {
+	try {
+		QString v = ak::ui::core::toQString(_type); return v;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(textAlignment)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(textAlignment)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(textAlignment)"); }
+}
+
+QString ak::uiAPI::toString(
+	ak::ui::core::dockLocation							_dockLocation
+) {
+	try {
+		QString v = ak::ui::core::toQString(_dockLocation); return v;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(dockLocation)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(dockLocation)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(dockLocation)"); }
+}
+
+QString ak::uiAPI::toString(
+	ak::ui::core::keyType								_type
+) {
+	try {
+		QString v = ak::ui::core::toQString(_type); return v;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(keyType)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(keyType)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(keyType)"); }
+}
+
+QString ak::uiAPI::toString(
+	ak::ui::core::objectType							_type
+) {
+	try {
+		QString v = ak::ui::core::toQString(_type); return v;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(objectType)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(objectType)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(objectType)"); }
 }
 
 // ###############################################################################################################################################

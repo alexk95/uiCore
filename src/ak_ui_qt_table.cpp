@@ -18,6 +18,17 @@ ak::ui::qt::table::table(int _rows, int _columns, QWidget * _parent)
 
 ak::ui::qt::table::~table() {}
 
+// #######################################################################################################
+// Event handling
+
+void ak::ui::qt::table::keyPressEvent(QKeyEvent *_event)
+{
+	QTableWidget::keyPressEvent(_event);
+	emit keyPressed(_event);
+}
+
+// #######################################################################################################
+
 QWidget * ak::ui::qt::table::widget(void) { return this; }
 
 void ak::ui::qt::table::setColorStyle(

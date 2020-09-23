@@ -11,11 +11,12 @@
 
 // Qt header
 #include <qtextedit.h>				// base class
-//#include <qscrollbar.h>
-#include <qevent.h>					// QKeyEvent
 
 // AK header
-#include "ak_ui_core_aWidget.h"		// base class
+#include <ak_ui_core.h>				// Key type
+#include <ak_ui_core_aWidget.h>		// base class
+
+class QKeyEvent;
 
 namespace ak {
 	namespace ui {
@@ -44,12 +45,12 @@ namespace ak {
 
 				// #######################################################################################################
 				// Event handling
-				// #######################################################################################################
-
+				
 				//! @brief Emits a returnPressed signal if the return key is pressed
-				void keyPressEvent(QKeyEvent *event);
+				virtual void keyPressEvent(QKeyEvent * _event) override;
 
 				// #######################################################################################################
+			
 				// Base class functions
 
 				//! @brief Will return the widgets widget to display it
@@ -75,7 +76,7 @@ namespace ak {
 				void performAutoScrollToBottom(void);
 
 			signals:
-				void returnPressed(void);
+				void keyPressed(QKeyEvent *);
 
 			private:
 				bool							my_autoScrollToBottom;		//! If true, the textbox will automatically scroll down on text change

@@ -15,11 +15,12 @@
 
  // Qt header
 #include <qtreewidget.h>					// base class
-#include <qevent.h>							// mouse event
 
 // AK header
 #include "ak_ui_core_aWidget.h"				// base class
 #include "ak_globalDataTypes.h"				// UID and ID types
+
+class QKeyEvent;
 
 namespace ak {
 	namespace ui {
@@ -42,6 +43,14 @@ namespace ak {
 				);
 
 				virtual ~tree();
+
+				// #######################################################################################################
+				// Event handling
+
+				//! @brief Emits a returnPressed signal if the return key is pressed
+				virtual void keyPressEvent(QKeyEvent * _event) override;
+
+				// #######################################################################################################
 
 				//! @brief Will return the widgets widget to display it
 				virtual QWidget * widget(void);
@@ -82,6 +91,9 @@ namespace ak {
 				static ak::ID getItemId(
 					QTreeWidgetItem *				_item
 				);
+
+			signals:
+				void keyPressed(QKeyEvent *);
 
 			private:
 				std::map<ak::ID,treeItem *>			my_topLevelItems;

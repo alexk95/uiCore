@@ -24,6 +24,17 @@ ak::ui::qt::tree::tree(
 
 ak::ui::qt::tree::~tree() {}
 
+// #######################################################################################################
+// Event handling
+
+void ak::ui::qt::tree::keyPressEvent(QKeyEvent *_event)
+{
+	QTreeWidget::keyPressEvent(_event);
+	emit keyPressed(_event);
+}
+
+// #######################################################################################################
+
 QWidget * ak::ui::qt::tree::widget(void) { return this; }
 
 void ak::ui::qt::tree::setColorStyle(
@@ -98,6 +109,7 @@ std::vector<QString> ak::ui::qt::tree::topLevelItemsText(void) {
 ak::ID ak::ui::qt::tree::getItemId(
 	QTreeWidgetItem *		_item
 ) {
+	if (_item == nullptr) { return ak::invalidID; }
 	treeItem * itm = nullptr;
 	itm = dynamic_cast<treeItem *>(_item);
 	assert(itm != nullptr); // Cast failed

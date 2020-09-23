@@ -58,6 +58,8 @@ namespace ak {
 				//! @brief Deconstructor
 				virtual ~action();
 
+				// #######################################################################################################
+
 				//! @brief Retuns the popup mode this Action is using
 				QToolButton::ToolButtonPopupMode popupMode(void);
 

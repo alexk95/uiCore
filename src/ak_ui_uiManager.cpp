@@ -205,13 +205,13 @@ void ak::ui::uiManager::addDock(
 		if (_dock == nullptr) { throw ak::Exception("Is nullptr", "Check dock"); }
 		switch (_dockLocation)
 		{
-		case ak::ui::core::dockLeft:
+		case ak::ui::core::dock_dockLeft:
 			my_window->addDockWidget(Qt::LeftDockWidgetArea, _dock);
 			break;
-		case ak::ui::core::dockRight:
+		case ak::ui::core::dock_dockRight:
 			my_window->addDockWidget(Qt::RightDockWidgetArea, _dock);
 			break;
-		case ak::ui::core::dockBottom:
+		case ak::ui::core::dock_dockBottom:
 			my_window->addDockWidget(Qt::BottomDockWidgetArea, _dock);
 			break;
 		default:
@@ -257,9 +257,9 @@ void ak::ui::uiManager::setDockPriorityBottomLeft(
 	try {
 		switch (_dockLocation)
 		{
-		case ak::ui::core::dockLeft:
+		case ak::ui::core::dock_dockLeft:
 			my_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::LeftDockWidgetArea); break;
-		case ak::ui::core::dockBottom:
+		case ak::ui::core::dock_dockBottom:
 			my_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::BottomDockWidgetArea); break;
 		default:
 			throw ak::Exception("Invalid dock location", "Check dock location");
@@ -276,9 +276,9 @@ void ak::ui::uiManager::setDockPriorityBottomRight(
 	try {
 		switch (_dockLocation)
 		{
-		case ak::ui::core::dockRight:
+		case ak::ui::core::dock_dockRight:
 			my_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::RightDockWidgetArea); break;
-		case ak::ui::core::dockBottom:
+		case ak::ui::core::dock_dockBottom:
 			my_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::BottomDockWidgetArea); break;
 		default:
 			throw ak::Exception("Invalid dock location", "Check dock location");

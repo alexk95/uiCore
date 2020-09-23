@@ -46,7 +46,7 @@ namespace ak {
 					treeItem *						_parent = nullptr,
 					int								_type = 0
 				);
-
+				
 				//! @brief Deconstructor
 				virtual ~treeItem();
 

@@ -46,8 +46,8 @@ Example::Example()
 	try {
 		try {
 			// Setup UI
-			ak::uiAPI::setDockBottomLeftPriority(my_ui.mainWindow, ak::ui::core::dockLocation::dockLeft);
-			ak::uiAPI::setDockBottomRightPriority(my_ui.mainWindow, ak::ui::core::dockLocation::dockRight);
+			ak::uiAPI::setDockBottomLeftPriority(my_ui.mainWindow, ak::ui::core::dock_dockLeft);
+			ak::uiAPI::setDockBottomRightPriority(my_ui.mainWindow, ak::ui::core::dock_dockRight);
 
 			// Setup tab toolbar
 			ak::uiAPI::obj::setTabToolBarVisible(my_ui.mainWindow);
@@ -55,22 +55,23 @@ Example::Example()
 			my_ui.ttb_gNONE = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.ttb_pFile, "");
 			my_ui.ttb_aExit = ak::uiAPI::createAction(my_uid, "Exit", "ExitAppBlue", "32");
 			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
-			my_ui.tester = ak::uiAPI::createAction(my_uid, "Delete", "Delete", "32");
+			my_ui.ttb_aDelete = ak::uiAPI::createAction(my_uid, "Delete", "Delete", "32");
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aExit);
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aColorStyle);
-			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.tester);
+			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aDelete);
 
 			// Create docks
 			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
 			my_ui.dockProperties = ak::uiAPI::createDock(my_uid, "Properties");
 			my_ui.dockTree = ak::uiAPI::createDock(my_uid, "Tree");
-			//my_ui.dockTester = ak::uiAPI::createDock(my_uid, "Tester");
+			my_ui.dockTester = ak::uiAPI::createDock(my_uid, "Tester");
 
 			// Create widgets
 			my_ui.treeWidget = ak::uiAPI::createTree(my_uid);
 			my_ui.propertiesWidget = ak::uiAPI::createPropertyGrid(my_uid);
 			my_ui.outputWidget = ak::uiAPI::createTextEdit(my_uid, "Welcome to the test application\n");
 			my_ui.tabViewWidget = ak::uiAPI::createTabView(my_uid);
+			my_ui.tester = ak::uiAPI::createTextEdit(my_uid);
 			my_ui.table1 = ak::uiAPI::createTable(my_uid, 2, 2);
 			my_ui.table2 = ak::uiAPI::createTable(my_uid, 3, 3);
 
@@ -85,7 +86,7 @@ Example::Example()
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockOutput, my_ui.outputWidget);
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockProperties, my_ui.propertiesWidget);
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockTree, my_ui.treeWidget);
-			//ak::uiAPI::obj::setCentralWidget(my_ui.dockTester, my_ui.tester);
+			ak::uiAPI::obj::setCentralWidget(my_ui.dockTester, my_ui.tester);
 
 			// Set central widget
 			ak::uiAPI::obj::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
@@ -94,24 +95,24 @@ Example::Example()
 			ak::uiAPI::addDock(
 				my_ui.mainWindow,
 				my_ui.dockOutput,
-				ak::ui::core::dockBottom
+				ak::ui::core::dock_dockBottom
 			);
 			ak::uiAPI::addDock(
 				my_ui.mainWindow,
 				my_ui.dockTree,
-				ak::ui::core::dockLeft
+				ak::ui::core::dock_dockLeft
 			);
 			ak::uiAPI::addDock(
 				my_ui.mainWindow,
 				my_ui.dockProperties,
-				ak::ui::core::dockLeft
+				ak::ui::core::dock_dockLeft
 			);
 
-			//ak::uiAPI::addDock(
-			//	my_ui.mainWindow,
-			//	my_ui.dockTester,
-			//	ak::ui::core::dockRight
-			//);
+			ak::uiAPI::addDock(
+				my_ui.mainWindow,
+				my_ui.dockTester,
+				ak::ui::core::dock_dockRight
+			);
 			
 			// Create my notifier
 			my_notifier = new ExampleNotifier(this);
@@ -124,6 +125,7 @@ Example::Example()
 			ak::uiAPI::registerNotifier(my_ui.ttb_aExit, my_notifier, ak::core::messageType::mEvent);
 			ak::uiAPI::registerNotifier(my_ui.ttb_aColorStyle, my_notifier, ak::core::messageType::mEvent);
 			ak::uiAPI::registerNotifier(my_ui.tester, my_notifier);
+			ak::uiAPI::registerNotifier(my_ui.ttb_aDelete, my_notifier);
 
 			// Create default data
 			defaultData();
@@ -145,16 +147,17 @@ void Example::eventCallback(
 	int						_info2
 ) {
 	try {
-		std::string str("Event { Sender=\"");
-		str.append(std::to_string(_sender));
+		QString str("Event { Sender=\"");
+		str.append(QString::number(_sender));
 		str.append("\"; EventType = \"");
 		str.append(ak::uiAPI::toString(_eventType));
 		str.append("\"; Info1=\"");
-		str.append(std::to_string(_info1));
+		str.append(QString::number(_info1));
 		str.append("\"; Info2=\"");
-		str.append(std::to_string(_info2));
+		if (_eventType == ak::core::eKeyPressed) { str.append(ak::uiAPI::toString((ak::ui::core::keyType)_info2)); }
+		else { str.append(QString::number(_info2)); }
 		str.append("\"; }");
-		ak::uiAPI::obj::appendText(my_ui.outputWidget, str.c_str());
+		ak::uiAPI::obj::appendText(my_ui.outputWidget, str);
 
 		if (_eventType == ak::core::eventType::eClicked) {
 			if (_sender == my_ui.ttb_aExit) {
@@ -183,7 +186,7 @@ void Example::eventCallback(
 				// Enable the notifier again
 				my_notifier->enable();
 			}
-			else if (_sender == my_ui.tester) {
+			else if (_sender == my_ui.ttb_aDelete) {
 				std::vector<ak::ID> v;
 				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1B"));
 				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B"));

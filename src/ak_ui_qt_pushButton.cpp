@@ -10,6 +10,8 @@
 #include "ak_ui_qt_pushButton.h"		// corresponding class
 #include "ak_ui_colorStyle.h"			// colorStyle
 
+#include <qevent.h>
+
 ak::ui::qt::pushButton::pushButton(QWidget * _parent)
 : QPushButton(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oPushButton) {}
 ak::ui::qt::pushButton::pushButton(const QString & _text, QWidget * _parent)
@@ -18,6 +20,17 @@ ak::ui::qt::pushButton::pushButton(const QIcon & _icon, const QString & _text, Q
 : QPushButton(_icon, _text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oPushButton) {}
 
 ak::ui::qt::pushButton::~pushButton() {}
+
+// #######################################################################################################
+// Event handling
+
+void ak::ui::qt::pushButton::keyPressEvent(QKeyEvent *_event)
+{
+	QPushButton::keyPressEvent(_event);
+	emit keyPressed(_event);
+}
+
+// #######################################################################################################
 
 QWidget * ak::ui::qt::pushButton::widget(void) { return this; }
 

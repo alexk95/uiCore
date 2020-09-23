@@ -436,7 +436,7 @@ namespace ak {
 				ak::UID											_objectUid,
 				ak::ID											_parentId,
 				const QString &									_text = QString(""),
-				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::alignLeft,
+				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::align_alignLeft,
 				QIcon											_icon = QIcon()
 			);
 
@@ -462,7 +462,7 @@ namespace ak {
 				ak::UID											_objectUid,
 				const QString &									_cmd,
 				char											_delimiter = '|',
-				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::alignLeft,
+				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::align_alignLeft,
 				const QIcon  &									_icon = QIcon()
 			);
 

@@ -43,9 +43,9 @@ QString ak::core::toQString(
 	case ak::core::eFocused: return QString("Focused");
 	case ak::core::eIndexChanged: return QString("Index changed");
 	case ak::core::eInvalidEntry: return QString("Invalid entry");
+	case ak::core::eKeyPressed: return QString("Key pressed");
 	case ak::core::eLocationChanged: return QString("Location changed");
 	case ak::core::eReleased: return QString("Released");
-	case ak::core::eReturnPressed: return QString("Return pressed");
 	case ak::core::eSelectionChanged: return QString("Selection changed");
 	case ak::core::eStateChanged: return QString("State changed");
 	case ak::core::eTextChanged: return QString("Text changed");

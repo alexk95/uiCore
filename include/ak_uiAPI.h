@@ -10,7 +10,6 @@
 #pragma once
 
 // C++ header
-#include <string>						// C++ string
 #include <vector>						// vector<>
 
 // Qt header
@@ -854,7 +853,7 @@ namespace ak {
 				ak::UID												_objectUid,
 				ak::ID												_parentItemId,
 				const QString &										_text = QString(""),
-				ak::ui::core::textAlignment							_textAlignment = ak::ui::core::textAlignment::alignLeft,
+				ak::ui::core::textAlignment							_textAlignment = ak::ui::core::align_alignLeft,
 				QIcon												_icon = QIcon()
 			);
 
@@ -872,7 +871,7 @@ namespace ak {
 				const QString &										_iconName,
 				const QString &										_iconSize,
 				const QString &										_text = QString(""),
-				ak::ui::core::textAlignment							_textAlignment = ak::ui::core::textAlignment::alignLeft
+				ak::ui::core::textAlignment							_textAlignment = ak::ui::core::align_alignLeft
 			);
 
 			//! @brief Will add new items to the tree according to the provided command
@@ -895,7 +894,7 @@ namespace ak {
 				ak::UID											_objectUid,
 				const QString &									_cmd,
 				char											_delimiter = '|',
-				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::alignLeft,
+				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::align_alignLeft,
 				const QIcon  &									_icon = QIcon()
 			);
 
@@ -922,7 +921,7 @@ namespace ak {
 				const QString &									_iconName,
 				const QString &									_iconSize,
 				char											_delimiter = '|',
-				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::alignLeft
+				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::align_alignLeft
 			);
 
 			//! @brief Will deselect all items
@@ -1150,8 +1149,46 @@ namespace ak {
 
 		// ###############################################################################################################################################
 
-		__declspec(dllexport) std::string toString(
-			ak::core::eventType									_eventType
+		//! @brief Will return a string representation of the provided eventType
+		//! @param _type The event type that should be represented
+		__declspec(dllexport) QString toString(
+			ak::core::eventType									_type
+		);
+
+		//! @brief Will return a string representation of the provided messageType
+		//! @param _type The message type that should be represented
+		__declspec(dllexport) QString toString(
+			ak::core::messageType								_type
+		);
+
+		//! @brief Will return a string representation of the provided valueType
+		//! @param _type The value type that should be represented
+		__declspec(dllexport) QString toString(
+			ak::core::valueType									_type
+		);
+
+		//! @brief Will return a string representation of the provided valtextAlignmentueType
+		//! @param _type The text alignment that should be represented
+		__declspec(dllexport) QString toString(
+			ak::ui::core::textAlignment							_type
+		);
+
+		//! @brief Will return a string representation of the provided dockLocation
+		//! @param _type The dock location that should be represented
+		__declspec(dllexport) QString toString(
+			ak::ui::core::dockLocation							_dockLocation
+		);
+
+		//! @brief Will return a string representation of the provided keyType
+		//! @param _type The key type that should be represented
+		__declspec(dllexport) QString toString(
+			ak::ui::core::keyType								_type
+		);
+
+		//! @brief Will return a string representation of the provided objectType
+		//! @param _type The object type that should be represented
+		__declspec(dllexport) QString toString(
+			ak::ui::core::objectType							_type
 		);
 
 		// ###############################################################################################################################################

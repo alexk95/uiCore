@@ -15,8 +15,10 @@
 
 // AK header
 #include "ak_ui_core_aWidget.h"		// base class
-#include "ak_ui_core.h"				// objectType
+#include "ak_ui_core.h"				// objectType and keyType
 #include "ak_globalDataTypes.h"		// UID and ID type
+
+class QKeyEvent;
 
 namespace ak {
 	namespace ui {
@@ -27,6 +29,7 @@ namespace ak {
 		namespace qt {
 
 			class dock : public QDockWidget, public ak::ui::core::aWidget {
+				Q_OBJECT
 			public:
 				dock(
 					const QString &				_title = QString(""),
@@ -37,6 +40,14 @@ namespace ak {
 
 				virtual ~dock();
 
+				// #######################################################################################################
+				// Event handling
+
+				//! @brief Emits a returnPressed signal if the return key is pressed
+				virtual void keyPressEvent(QKeyEvent * _event) override;
+
+				// #######################################################################################################
+
 				//! @brief Will return the widgets widget to display it
 				virtual QWidget * widget(void);
 
@@ -46,12 +57,16 @@ namespace ak {
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
 				);
+
+			signals:
+				void keyPressed(QKeyEvent *);
+			
 			private:
 				// Block default constructor
-				dock() : ak::ui::core::aWidget(ak::ui::core::objectType::oNone) {}
+				dock() = delete;
 
 				// Copy constructor
-				dock(const dock & _o) : ak::ui::core::aWidget(ak::ui::core::objectType::oNone) {}
+				dock(const dock & _o) = delete;
 			};
 
 		} // namespace qt

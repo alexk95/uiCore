@@ -26,6 +26,7 @@
 
 // Qt header
 #include <qmessagebox.h>			// QMessageBox
+#include <qdockwidget.h>
 
 ak::ui::signalLinker::signalLinker(
 	ak::messenger *								_messanger,
@@ -57,11 +58,33 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(hovered()), this, SLOT(slotFocused()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 			break;
+		case ak::ui::core::objectType::oCheckBox:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(pressed()), this, SLOT(slotPressed()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(released()), this, SLOT(slotReleased()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			break;
+		case ak::ui::core::objectType::oComboBox:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(activated(int)), this, SLOT(slotIndexActivated(int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged(int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			break;
+		case ak::ui::core::objectType::oComboButton:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(changed()), this, SLOT(slotChanged()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			break;
+		case ak::ui::core::objectType::oDock:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(void slotDockLocationChanged(Qt::DockWidgetArea)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			break;
 		case ak::ui::core::objectType::oPushButton:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-			//itm->second.object->disconnect(itm->second.object, SIGNAL(pressed()), this, SLOT(slotPressed()));
-			//itm->second.object->disconnect(itm->second.object, SIGNAL(released()), this, SLOT(slotReleased()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oTable:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cellActivated(int, int)), this, SLOT(tableCellActivated(int, int)));
@@ -69,20 +92,13 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cellClicked(int, int)), this, SLOT(tableCellClicked(int, int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(tableCellDoubleClicked(int, int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cellEntered(int, int)), this, SLOT(tableCellEntered(int, int)));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(cellPressed(int, int)), this, SLOT(tableCellPressed(int, int)));
-			break;
-		case ak::ui::core::objectType::oCheckBox:
-			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(pressed()), this, SLOT(slotPressed()));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(released()), this, SLOT(slotReleased()));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oTextEdit:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(returnPressed()), this, SLOT(slotReturnPressed()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			break;
 		default:
 			assert(0); // Not implemented object type
@@ -92,6 +108,7 @@ ak::ui::signalLinker::~signalLinker()
 }
 
 // ###################################################################################
+
 // Add objects
 
 ak::UID ak::ui::signalLinker::addLink(
@@ -115,6 +132,84 @@ ak::UID ak::ui::signalLinker::addLink(
 }
 
 ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::checkBox *								_object,
+	ak::UID										_objectUid
+) {
+	try {
+		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
+		_object->setUid(_objectUid);
+		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oCheckBox });
+		_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
+		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+		_object->connect(_object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
+		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+		return _objectUid;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::checkBox)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::checkBox)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::checkBox)"); }
+}
+
+ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::comboBox *								_object,
+	ak::UID										_objectUid
+) {
+	try {
+		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
+		_object->setUid(_objectUid);
+		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oComboBox });
+		_object->connect(_object, SIGNAL(activated(int)), this, SLOT(slotIndexActivated(int)));
+		_object->connect(_object, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged(int)));
+		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+		return _objectUid;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboBox)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::comboBox)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::comboBox)"); }
+}
+
+ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::comboButton *							_object,
+	ak::UID										_objectUid
+) {
+	try {
+		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
+		_object->setUid(_objectUid);
+		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oComboButton });
+		_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
+		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+		_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
+		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+		return _objectUid;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
+}
+
+ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::dock *												_object,
+	ak::UID													_objectUid
+) {
+	try {
+		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
+		_object->setUid(_objectUid);
+		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oDock });
+		_object->connect(_object, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(void slotDockLocationChanged(Qt::DockWidgetArea)));
+		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+
+		return _objectUid;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
+}
+
+ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::pushButton *							_object,
 	ak::UID										_objectUid
 ) {
@@ -124,8 +219,8 @@ ak::UID ak::ui::signalLinker::addLink(
 		_object->setUid(_objectUid);
 		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oPushButton });
 		_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-		//_object->connect(_object, SIGNAL(pressed()), this, SLOT(slotPressed()));
 		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 		return _objectUid;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::pushButton)"); }
@@ -147,32 +242,12 @@ ak::UID ak::ui::signalLinker::addLink(
 		_object->connect(_object, SIGNAL(cellClicked(int, int)), this, SLOT(tableCellClicked(int, int)));
 		_object->connect(_object, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(tableCellDoubleClicked(int, int)));
 		_object->connect(_object, SIGNAL(cellEntered(int, int)), this, SLOT(tableCellEntered(int, int)));
-		//_object->connect(_object, SIGNAL(cellPressed(int, int)), this, SLOT(tableCellPressed(int, int)));
+		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 		return _objectUid;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::table)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::table)"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::table)"); }
-}
-
-ak::UID ak::ui::signalLinker::addLink(
-	ak::ui::qt::checkBox *								_object,
-	ak::UID										_objectUid
-) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oCheckBox });
-		_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-		//_object->connect(_object, SIGNAL(pressed()), this, SLOT(slotPressed()));
-		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-		_object->connect(_object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::checkBox)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::checkBox)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::checkBox)"); }
 }
 
 ak::UID ak::ui::signalLinker::addLink(
@@ -187,7 +262,7 @@ ak::UID ak::ui::signalLinker::addLink(
 		_object->connect(_object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
 		_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 		_object->connect(_object, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-		_object->connect(_object, SIGNAL(returnPressed()), this, SLOT(slotReturnPressed()));
+		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 		return _objectUid;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::textEdit)"); }
@@ -195,61 +270,6 @@ ak::UID ak::ui::signalLinker::addLink(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::textEdit)"); }
 }
 
-ak::UID ak::ui::signalLinker::addLink(
-	ak::ui::qt::comboBox *								_object,
-	ak::UID										_objectUid
-) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oComboBox });
-		_object->connect(_object, SIGNAL(activated(int)), this, SLOT(slotIndexActivated(int)));
-		_object->connect(_object, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged(int)));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboBox)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::comboBox)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::comboBox)"); }
-}
-
-ak::UID ak::ui::signalLinker::addLink(
-	ak::ui::qt::comboButton *							_object,
-	ak::UID										_objectUid
-) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oComboButton });
-		_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-		//_object->connect(_object, SIGNAL(pressed()), this, SLOT(slotPressed()));
-		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-		_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
-}
-
-ak::UID ak::ui::signalLinker::addLink(
-	ak::ui::qt::dock *												_object,
-	ak::UID													_objectUid
-) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oDock });
-		_object->connect(_object, SIGNAL(dockLocationChanged(Qt::DockWidgetArea area)), this, SLOT(void slotDockLocationChanged(Qt::DockWidgetArea area)));
-		
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
-}
 
 // ###################################################################################
 
@@ -295,9 +315,10 @@ void ak::ui::signalLinker::slotReleased() {
 	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eReleased, 0, 0);
 }
 
-void ak::ui::signalLinker::slotReturnPressed() {
-	if (!ak::singletonAllowedMessages::instance()->returnPressedEvent()) { return; }
-	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eReturnPressed, 0, 0);
+void ak::ui::signalLinker::slotKeyPressed(QKeyEvent * _key) {
+	if (!ak::singletonAllowedMessages::instance()->keyPressedEvent()) { return; }
+	ui::core::keyType k = ui::core::getKey(_key);
+	if (k != ui::core::key_Unknown) { raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eKeyPressed, 0, k); }
 }
 
 void ak::ui::signalLinker::slotSelectionChanged() {

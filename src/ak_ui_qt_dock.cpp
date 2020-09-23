@@ -7,9 +7,10 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_qt_dock.h"			// corresponding class
-#include "ak_exception.h"			// error handling
-#include "ak_ui_colorStyle.h"		// colorStyle
+#include <ak_ui_qt_dock.h>			// corresponding class
+#include <ak_exception.h>			// error handling
+#include <ak_ui_colorStyle.h>		// colorStyle
+#include <qevent.h>					// QKeyEvent
 
 ak::ui::qt::dock::dock(
 	const QString &				_title,
@@ -22,6 +23,17 @@ ak::ui::qt::dock::dock(
 {}
 
 ak::ui::qt::dock::~dock() {}
+
+// #######################################################################################################
+// Event handling
+
+void ak::ui::qt::dock::keyPressEvent(QKeyEvent *_event)
+{
+	QDockWidget::keyPressEvent(_event);
+	emit keyPressed(_event);
+}
+
+// #######################################################################################################
 
 QWidget * ak::ui::qt::dock::widget(void) { return this; }
 

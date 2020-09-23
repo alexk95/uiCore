@@ -39,7 +39,8 @@ void ak::notifierTreeFilter::notify(
 			switch (_message)
 			{
 			case ak::core::eventType::eTextChanged: my_tree->performFilterTextChanged(); break;
-			case ak::core::eventType::eReturnPressed: my_tree->performFilterEnterPressed(); break;
+			case ak::core::eventType::eKeyPressed:
+				if ((ui::core::keyType) _info2 == ui::core::key_Return) { my_tree->performFilterEnterPressed(); } break;
 			default: break;
 			}
 		}

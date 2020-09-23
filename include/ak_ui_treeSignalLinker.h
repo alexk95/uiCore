@@ -14,7 +14,8 @@
 #include <qitemselectionmodel.h>	// QItemSelection
 
 // AK header
-#include "ak_globalDataTypes.h"
+#include <ak_ui_core.h>
+#include <ak_globalDataTypes.h>
 
 // Forward declaration
 class QTreeWidgetItem;
@@ -54,6 +55,7 @@ namespace ak {
 		private slots:
 			// ##### Tree
 			void treeDestroyed();
+			void treeKeyPressed(QKeyEvent *);
 			void treeItemActivated(QTreeWidgetItem *item, int column);
 			void treeItemChanged(QTreeWidgetItem *item, int column);
 			void treeItemClicked(QTreeWidgetItem *item, int column);

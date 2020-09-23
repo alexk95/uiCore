@@ -19,11 +19,16 @@ ak::ui::qt::textEdit::textEdit(const QString & _text, QWidget * _parent)
 
 ak::ui::qt::textEdit::~textEdit() {}
 
-void ak::ui::qt::textEdit::textEdit::keyPressEvent(QKeyEvent *event)
+// #######################################################################################################
+// Event handling
+
+void ak::ui::qt::textEdit::keyPressEvent(QKeyEvent *_event)
 {
-	if (event->key() == Qt::Key_Return) { emit returnPressed(); }
-	else { QTextEdit::keyPressEvent(event); }
+	QTextEdit::keyPressEvent(_event);
+	emit keyPressed(_event);
 }
+
+// #######################################################################################################
 
 QWidget * ak::ui::qt::textEdit::widget(void) { return this; }
 
@@ -39,6 +44,8 @@ void ak::ui::qt::textEdit::setColorStyle(
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::qt::textEdit::setColorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::textEdit::setColorStyle()"); }
 }
+
+// #######################################################################################################
 
 void ak::ui::qt::textEdit::setAutoScrollToBottom(
 	bool							_autoScroll

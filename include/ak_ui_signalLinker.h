@@ -21,6 +21,8 @@
 #include "ak_globalDataTypes.h"		// UID and ID type
 #include "ak_core.h"				// eventType
 
+class QKeyEvent;
+
 namespace ak {
 
 	// Forward declaration
@@ -137,21 +139,21 @@ namespace ak {
 			// ###################################################################################
 			// SLOTS
 
-			void slotIndexActivated(int _index);
+			void slotIndexActivated(int);
 			void slotChanged();
 			void slotClicked();
 			void slotCursorPositionChanged();
-			void slotDockLocationChanged(Qt::DockWidgetArea area);
+			void slotDockLocationChanged(Qt::DockWidgetArea);
 			void slotFocused();
 			//void slotHovered();
-			void slotIndexChanged(int _index);
+			void slotIndexChanged(int);
 			//void slotPressed();
 			void slotReleased();
-			void slotReturnPressed();
+			void slotKeyPressed(QKeyEvent *);
 			void slotSelectionChanged();
-			void slotStateChanged(int _state);
+			void slotStateChanged(int);
 			void slotTextChanged();
-			void slotToggled(bool _checked);
+			void slotToggled(bool);
 
 			// ##### Table
 

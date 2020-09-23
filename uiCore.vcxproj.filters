@@ -144,9 +144,6 @@
     <ClInclude Include="include\ak_ui_core_ttbContainer.h">
       <Filter>Header Files\ak\ui\core</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_ui_qt_dock.h">
-      <Filter>Header Files\ak\ui\qt</Filter>
-    </ClInclude>
     <ClInclude Include="include\ak_ui_qt_treeItem.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </ClInclude>
@@ -226,6 +223,9 @@
     </QtMoc>
     <QtMoc Include="include\ak_ui_tabViewSignalLinker.h">
       <Filter>Header Files\ak\ui</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_dock.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

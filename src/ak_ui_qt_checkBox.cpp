@@ -8,9 +8,11 @@
  */
 
 // AK header
-#include "ak_ui_qt_checkBox.h"			// corresponding header
-#include "ak_ui_colorStyle.h"			// colorStyle
-#include "ak_exception.h"				// error handling
+#include "ak_ui_qt_checkBox.h"	// corresponding header
+#include "ak_ui_colorStyle.h"	// colorStyle
+#include "ak_exception.h"		// error handling
+
+#include <qevent.h>				// QKeyEvent
 
 ak::ui::qt::checkBox::checkBox(QWidget * _parent)
 : QCheckBox(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oCheckBox) {}
@@ -32,4 +34,9 @@ void ak::ui::qt::checkBox::setColorStyle(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::qt::checkBox::setColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::qt::checkBox::setColorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::checkBox::setColorStyle()"); }
+}
+
+void ak::ui::qt::checkBox::keyPressEvent(QKeyEvent * _event) {
+	QCheckBox::keyPressEvent(_event);
+	emit keyPressed(_event);
 }
