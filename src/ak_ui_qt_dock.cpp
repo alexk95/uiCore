@@ -25,15 +25,6 @@ ak::ui::qt::dock::dock(
 ak::ui::qt::dock::~dock() {}
 
 // #######################################################################################################
-// Event handling
-
-void ak::ui::qt::dock::keyPressEvent(QKeyEvent *_event)
-{
-	QDockWidget::keyPressEvent(_event);
-	emit keyPressed(_event);
-}
-
-// #######################################################################################################
 
 QWidget * ak::ui::qt::dock::widget(void) { return this; }
 

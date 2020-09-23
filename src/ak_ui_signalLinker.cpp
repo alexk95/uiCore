@@ -78,8 +78,6 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oDock:
-			itm->second.object->disconnect(itm->second.object, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(void slotDockLocationChanged(Qt::DockWidgetArea)));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oPushButton:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
@@ -199,9 +197,6 @@ ak::UID ak::ui::signalLinker::addLink(
 		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
 		_object->setUid(_objectUid);
 		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oDock });
-		_object->connect(_object, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(void slotDockLocationChanged(Qt::DockWidgetArea)));
-		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-
 		return _objectUid;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
@@ -288,11 +283,6 @@ void ak::ui::signalLinker::slotClicked() {
 void ak::ui::signalLinker::slotCursorPositionChanged() {
 	if (!ak::singletonAllowedMessages::instance()->cursorPositionChangedEvent()) { return; }
 	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eCursorPosotionChanged, 0, 0);
-}
-
-void ak::ui::signalLinker::slotDockLocationChanged(Qt::DockWidgetArea area) {
-	if (!ak::singletonAllowedMessages::instance()->locationChangedEvent()) { return; }
-	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eLocationChanged, 0, 0);
 }
 
 void ak::ui::signalLinker::slotFocused() {

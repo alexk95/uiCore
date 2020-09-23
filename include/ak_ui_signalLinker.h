@@ -143,7 +143,6 @@ namespace ak {
 			void slotChanged();
 			void slotClicked();
 			void slotCursorPositionChanged();
-			void slotDockLocationChanged(Qt::DockWidgetArea);
 			void slotFocused();
 			//void slotHovered();
 			void slotIndexChanged(int);

@@ -41,12 +41,6 @@ namespace ak {
 				virtual ~dock();
 
 				// #######################################################################################################
-				// Event handling
-
-				//! @brief Emits a returnPressed signal if the return key is pressed
-				virtual void keyPressEvent(QKeyEvent * _event) override;
-
-				// #######################################################################################################
 
 				//! @brief Will return the widgets widget to display it
 				virtual QWidget * widget(void);
@@ -57,9 +51,6 @@ namespace ak {
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
 				);
-
-			signals:
-				void keyPressed(QKeyEvent *);
 			
 			private:
 				// Block default constructor
