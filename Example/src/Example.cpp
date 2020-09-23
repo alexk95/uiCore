@@ -55,8 +55,10 @@ Example::Example()
 			my_ui.ttb_gNONE = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.ttb_pFile, "");
 			my_ui.ttb_aExit = ak::uiAPI::createAction(my_uid, "Exit", "ExitAppBlue", "32");
 			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
+			my_ui.tester = ak::uiAPI::createAction(my_uid, "Delete", "Delete", "32");
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aExit);
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aColorStyle);
+			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.tester);
 
 			// Create docks
 			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
@@ -121,7 +123,7 @@ Example::Example()
 			ak::uiAPI::registerNotifier(my_ui.treeWidget, my_notifier, ak::core::messageType::mEvent);
 			ak::uiAPI::registerNotifier(my_ui.ttb_aExit, my_notifier, ak::core::messageType::mEvent);
 			ak::uiAPI::registerNotifier(my_ui.ttb_aColorStyle, my_notifier, ak::core::messageType::mEvent);
-			//ak::uiAPI::registerNotifier(my_ui.tester, my_notifier);
+			ak::uiAPI::registerNotifier(my_ui.tester, my_notifier);
 
 			// Create default data
 			defaultData();
@@ -180,6 +182,12 @@ void Example::eventCallback(
 
 				// Enable the notifier again
 				my_notifier->enable();
+			}
+			else if (_sender == my_ui.tester) {
+				std::vector<ak::ID> v;
+				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1B"));
+				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B"));
+				ak::uiAPI::obj::deleteItems(my_ui.treeWidget, v);
 			}
 		}
 

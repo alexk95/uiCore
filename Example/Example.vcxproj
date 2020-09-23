@@ -63,7 +63,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%UI_CORE_ROOT%\include;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%QTDIR%\include\QtCore\;%QTDIR%\include\QtGui\;%QTDIR%\include\QtWidgets\;%UI_CORE_ROOT%\include;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%UI_CORE_ROOT%\x64\Debug;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -82,7 +82,7 @@
       <AdditionalDependencies>%UI_CORE_ROOT%\x64\Release\uiCore.lib;$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>%UI_CORE_ROOT%\include;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%QTDIR%\include\QtCore\;%QTDIR%\include\QtGui\;%QTDIR%\include\QtWidgets\;%UI_CORE_ROOT%\include;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <CustomBuildStep>
       <Command>copy $(MSBuildProjectDirectory)\qt.conf $(OutputPath)</Command>
