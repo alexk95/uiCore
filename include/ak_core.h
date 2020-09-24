@@ -17,6 +17,7 @@
 
 // C++ header
 #include <vector>
+#include <list>
 
 // Qt header
 #include <qstring.h>
@@ -298,6 +299,13 @@ namespace ak {
 			);
 		}
 
+	} // namespace core
+
+	template <class T> std::vector<T> toVector(const std::list<T> & _list) {
+		std::vector<T> ret;
+		ret.reserve(_list.size());
+		for (auto itm : _list) { ret.push_back(itm); }
+		return ret;
 	}
 
-}
+} // namespace ak

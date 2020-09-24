@@ -34,8 +34,11 @@ ak::ui::qt::treeItem::~treeItem() {
 	treeItem * dx = this;
 	QString txt = dx->text(0);
 	if (my_parent != nullptr) { my_parent->eraseChild(my_id); }
-	const std::vector<ak::ui::qt::treeItem *> & v = my_childs.toVector();
-	for (auto itm : v) { delete itm; }
+	while (my_childs.size() > 0) {
+		for (auto itm : my_childs) {
+			delete itm; break;
+		}
+	}
 }
 
 // ##############################################################################################
@@ -49,7 +52,7 @@ void ak::ui::qt::treeItem::AddChild(
 		if (findChild(_child->text(0)) != nullptr) { throw ak::Exception("Item does already exist", "Check duplicate"); }
 		if (_child == nullptr) { throw ak::Exception("Is nullptr", "Check child"); }
 		_child->setParentItem(this);
-		my_childs.add(_child);
+		my_childs.push_back(_child);
 		addChild(_child);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::qt::treeItem::AddChild(treeItem)"); }
@@ -64,9 +67,7 @@ void ak::ui::qt::treeItem::setParentItem(
 void ak::ui::qt::treeItem::setChildsSelected(
 	bool							_selected
 ) {
-	const std::vector<treeItem *> & childs = my_childs.toVector();
-	for (size_t i = 0; i < childs.size(); i++) {
-		ak::ui::qt::treeItem * itm = childs.at(i);
+	for (auto itm : my_childs) {
 		itm->setSelected(_selected);
 		itm->setChildsSelected(_selected);
 	}
@@ -79,16 +80,14 @@ void ak::ui::qt::treeItem::setChildsSelected(
 ak::ui::qt::treeItem * ak::ui::qt::treeItem::findChild(
 	ak::ID							_id
 ) {
-	const std::vector<treeItem *> & childs = my_childs.toVector();
-	for (treeItem * itm : childs) { if (itm->id() == _id) { return itm; } }
+	for (auto itm : my_childs) { if (itm->id() == _id) { return itm; } }
 	return nullptr;
 }
 
 ak::ui::qt::treeItem * ak::ui::qt::treeItem::findChild(
 	const QString &					_text
 ) {
-	const std::vector<treeItem *> & childs = my_childs.toVector();
-	for (treeItem * itm : childs) { if (itm->text(0) == _text) { return itm; } }
+	for (auto itm : my_childs) { if (itm->text(0) == _text) { return itm; } }
 	return nullptr;
 }
 
@@ -99,7 +98,7 @@ ak::ID ak::ui::qt::treeItem::getItemID(
 	try {
 		assert(_currentIndex < _itemPath.count()); // Invalid index provided
 		ak::ui::qt::treeItem * child = findChild(_itemPath.at(_currentIndex));
-		if (child == nullptr) { throw ak::Exception("Invalid item path provided", "Check item path"); }
+		if (child == nullptr) { return ak::invalidID; }
 		if (_currentIndex == _itemPath.count() - 1) { return child->id(); }
 		return child->getItemID(_itemPath, _currentIndex + 1);
 	}
@@ -111,45 +110,52 @@ ak::ID ak::ui::qt::treeItem::getItemID(
 void ak::ui::qt::treeItem::eraseChild(
 	ak::ID							_id
 ) {	
-	treeItem * itm = findChild(_id);
-	my_allChildsIDs.erase(_id);
-	my_allChilds.erase(itm);
-	my_childs.erase(itm);
+	std::list<treeItem *>::iterator it1 = my_allChilds.begin();
+	std::list<ak::ID>::iterator it2 = my_allChildsIDs.begin();
+	for (auto itm : my_allChilds) {
+		if (itm->id() == _id) { my_allChilds.erase(it1); break; }
+		it1++;
+	}
+	it1 = my_childs.begin();
+	for (auto itm : my_childs) {
+		if (itm->id() == _id) { my_childs.erase(it1); break; }
+		it1++;
+	}
+	for (auto itm : my_allChildsIDs) {
+		if (itm == _id) { my_allChildsIDs.erase(it2); break; }
+		it2++;
+	}
 }
 
 
-const std::vector<ak::ui::qt::treeItem *> & ak::ui::qt::treeItem::childs(void) { return my_childs.toVector(); }
+const std::list<ak::ui::qt::treeItem *> & ak::ui::qt::treeItem::childs(void) { return my_childs; }
 
-const std::vector<ak::ui::qt::treeItem *> & ak::ui::qt::treeItem::allChilds(void) {
+const std::list<ak::ui::qt::treeItem *> & ak::ui::qt::treeItem::allChilds(void) {
 	my_allChilds.clear();
-	const std::vector<ak::ui::qt::treeItem *> & v = my_childs.toVector();
-	for (int i = 0; i < v.size(); i++) {
-		ak::ui::qt::treeItem * itm = v.at(i);
-		my_allChilds.add(itm);
-		const std::vector<ak::ui::qt::treeItem *> & v2 = itm->allChilds();
-		for (int c = 0; c < v2.size(); c++) { my_allChilds.add(v2.at(c)); }
+	for (auto itm : my_childs) {
+		my_allChilds.push_back(itm);
+		const std::list<ak::ui::qt::treeItem *> & lst = itm->allChilds();
+		for (auto cpy : lst) { my_allChilds.push_back(cpy); }
 	}
-	return my_allChilds.toVector();
+	return my_allChilds;
 }
 
-const std::vector<ak::ID> & ak::ui::qt::treeItem::allChildsIDs(void) {
+const std::list<ak::ID> & ak::ui::qt::treeItem::allChildsIDs(void) {
 	my_allChildsIDs.clear();
-	const std::vector<ak::ui::qt::treeItem *> & v = my_childs.toVector();
-	for (int i = 0; i < v.size(); i++) {
-		ak::ui::qt::treeItem * itm = v.at(i);
-		my_allChildsIDs.add(itm->id());
-		const std::vector<ak::ui::qt::treeItem *> & v2 = itm->allChilds();
-		for (int c = 0; c < v2.size(); c++) { my_allChildsIDs.add(v2.at(c)->id()); }
+	for (auto itm : my_childs) {
+		my_allChildsIDs.push_back(itm->id());
+		const std::list<ak::ID> & lst = itm->allChildsIDs();
+		for (auto cpy : lst) { my_allChildsIDs.push_back(cpy); }
 	}
-	return my_allChildsIDs.toVector();
+	return my_allChildsIDs;
 }
 
-int ak::ui::qt::treeItem::childCount(void) const { return my_childs.count(); }
+int ak::ui::qt::treeItem::childCount(void) const { return my_childs.size(); }
 
 ak::ID ak::ui::qt::treeItem::id(void) const { return my_id; }
 
 ak::ID ak::ui::qt::treeItem::parentId(void) const {
-	if (my_parent == nullptr) { return -1; }
+	if (my_parent == nullptr) { return ak::invalidID; }
 	else { return my_parent->id(); }
 }
 
@@ -163,8 +169,8 @@ void ak::ui::qt::treeItem::setVisible(
 	}
 }
 
-std::vector<QString> ak::ui::qt::treeItem::getItemPath() {
-	std::vector<QString> ret;
+std::list<QString> ak::ui::qt::treeItem::getItemPath() {
+	std::list<QString> ret;
 	if (my_parent != nullptr) { ret = my_parent->getItemPath(); }
 	ret.push_back(text(0));
 	return ret;

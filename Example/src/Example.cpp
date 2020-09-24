@@ -188,8 +188,13 @@ void Example::eventCallback(
 			}
 			else if (_sender == my_ui.ttb_aDelete) {
 				std::vector<ak::ID> v;
-				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1B"));
-				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B"));
+				if (ak::uiAPI::itm::getID(my_ui.treeWidget, "B") == ak::invalidID) {
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A"));
+				}
+				else {
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1B"));
+					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B"));
+				}
 				ak::uiAPI::obj::deleteItems(my_ui.treeWidget, v);
 			}
 		}

@@ -314,32 +314,13 @@ void ak::ui::widget::tree::deleteItems(
 	const std::vector<ak::ID> &				_items
 ) {
 	try {
-		std::map<ak::ID, bool> destroyed;
-		typedef std::map<ak::ID, bool>::iterator ite;
-
-		for (size_t i = 0; i < _items.size(); i++) {
-			ak::ID id = _items.at(i);
-			ite itm = destroyed.find(_items.at(i));
-			if (itm == destroyed.end()) {
-				my_itemsIterator item = my_items.find(id);
-				if (item == my_items.end()) { throw ak::Exception("Invalid ID", "Check item id"); }
-				ak::ui::qt::treeItem * t = item->second;
-				QString txt = t->text(0);
-				// Store all childs of the provided item
-				std::vector<ak::ID> v = t->allChildsIDs();
-				// Deselect item and its childs
-				bool stat = my_selectAndDeselectChildren;
-				my_selectAndDeselectChildren = true;
-				setItemSelected(id, false);
-				my_selectAndDeselectChildren = stat;
-				// Delete the item and it will delete all of its childs
-				delete t;
+		for (auto id : _items) {
+			my_itemsIterator itm = my_items.find(id);
+			if (itm != my_items.end()) {
+				qt::treeItem * item = itm->second;
+				for (auto cId : item->allChildsIDs()) { my_items.erase(cId); }
+				delete item;
 				my_items.erase(id);
-				for (size_t clr = 0; clr < v.size(); clr++) {
-					ak::ID id = v.at(clr);
-					my_items.erase(id);
-					destroyed.insert_or_assign(id, false);
-				}
 			}
 		}
 	}
@@ -366,7 +347,7 @@ std::vector<QString> ak::ui::widget::tree::getItemPath(
 	try {
 		my_itemsIterator itm = my_items.find(_itemId);
 		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
-		return itm->second->getItemPath();
+		return toVector(itm->second->getItemPath());
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::getItemPath()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::getItemPath()"); }
@@ -401,7 +382,7 @@ ak::ID ak::ui::widget::tree::getItemID(
 				return itm->second->getItemID(lst, 1);
 			}
 		}
-		throw ak::Exception("Item path is invalid", "Check item path");
+		return ak::invalidID;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::getItemID()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::getItemID()"); }
@@ -578,10 +559,8 @@ void ak::ui::widget::tree::clearItem(
 	ak::ui::qt::treeItem *			_item
 ) {
 	try {
-		std::vector<ak::ui::qt::treeItem *> v = _item->childs();
-		for (size_t i = 0; i < v.size(); i++) {
-			ak::ui::qt::treeItem * itm = v.at(i);
-			clearItem(itm);
+		for (auto itm : _item->childs()) {
+			clearItem(_item);
 			my_items.erase(itm->id());
 			delete itm;
 		}

@@ -109,7 +109,6 @@
   <ItemGroup>
     <ClInclude Include="include\ak_core.h" />
     <ClInclude Include="include\ak_exception.h" />
-    <ClInclude Include="include\ak_fastContainer.h" />
     <ClInclude Include="include\ak_globalDataTypes.h" />
     <ClInclude Include="include\ak_messenger.h" />
     <ClInclude Include="include\ak_notifier.h" />

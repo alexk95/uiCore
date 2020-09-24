@@ -9,14 +9,13 @@
 
 #pragma once
 
-#include <vector>					// vector<>
+#include <list>						// vector<>
 
 #include <qtreewidget.h>			// Base class
 #include <qstring.h>				// QString
 
 #include <ak_ui_core_aObject.h>		// Base class
 #include <ak_globalDataTypes.h>		// UID and ID type
-#include <ak_fastContainer.h>		// fastContainer
 
 namespace ak {
 	namespace ui {
@@ -104,13 +103,13 @@ namespace ak {
 				);
 
 				//! @brief Will return all next level childs of this item
-				const std::vector<treeItem *> & childs(void);
+				const std::list<treeItem *> & childs(void);
 				 
 				//! @brief Will return all childs of this item
-				const std::vector<treeItem *> & allChilds(void);
+				const std::list<treeItem *> & allChilds(void);
 
 				//! @brief Will return the IDs of all childs at this item
-				const std::vector<ak::ID> & allChildsIDs(void);
+				const std::list<ak::ID> & allChildsIDs(void);
 
 				//! @brief Will return the ammound of childs this item has
 				int childCount(void) const;
@@ -130,7 +129,7 @@ namespace ak {
 
 				//! @brief Will return all items from root to this item as a vector where the first item is the root item
 				//! @throw ak::Exception if the provided item ID is invalid
-				std::vector<QString> getItemPath();
+				std::list<QString> getItemPath();
 
 				//! @brief Will return all items from root to this item as a string seperated with the provided delimiter where the first item is the root item
 				//! @param _itemId The ID of the requested item
@@ -142,9 +141,9 @@ namespace ak {
 
 			private:
 				treeItem *					my_parent;
-				fastContainer<treeItem *>	my_childs;			//! Contains all childs of this item
-				fastContainer<treeItem *>	my_allChilds;
-				fastContainer<ak::ID>		my_allChildsIDs;
+				std::list<treeItem *>		my_childs;			//! Contains all childs of this item
+				std::list<treeItem *>		my_allChilds;
+				std::list<ak::ID>			my_allChildsIDs;
 				ak::ID						my_id;
 
 				treeItem(treeItem &) = delete;
