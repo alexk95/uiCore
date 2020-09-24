@@ -16,8 +16,6 @@
 #include <qstring.h>
 
 // AK header
-#include "ak_ui_core_aObject.h"	// base class
-
 #include "ak_core.h"			// value type
 #include "ak_ui_color.h"		// color
 #include "ak_globalDataTypes.h"	// UID and ID type
@@ -30,7 +28,7 @@ namespace ak {
 			//! @brief Stores the information about an property grid item
 			//! The get and set functions may only be called corresponding to the value type set on creation
 			//! The allowed value types for a propertyGridObject are: Bool, Color, Double, Int, String, Selection
-			class propertyGridItem : public ak::ui::core::aObject {
+			class propertyGridItem {
 			public:
 
 				//! @brief Contructor
@@ -41,7 +39,7 @@ namespace ak {
 				//! @param _isMultivalued If true, this item will be assumed to be multivalued
 				//! @throw ak::Exception if the provided value type is invalid
 				propertyGridItem(
-					int										_index,
+					ak::ID									_index,
 					const QString &							_propertyName,
 					ak::core::valueType						_valueType,
 					ak::UID									_itemsUid = ak::invalidUID,
@@ -67,7 +65,12 @@ namespace ak {
 				//! @brief Will set the current index of this item
 				//! @param _index The items index
 				void setIndex(
-					int													_index
+					ak::ID												_index
+				);
+
+				//! @brief Will set the UID of the properties widget
+				void setWidgetUid(
+					ak::UID												_widgetUid
 				);
 
 				//! @brief Will set the property name of this item
@@ -155,7 +158,10 @@ namespace ak {
 				// Get
 
 				//! @brief Returns the currently set index of this item
-				int index(void) const;
+				ak::ID index(void) const;
+
+				//! @brief Returns the UID of the items widget
+				ak::UID getWidgetUid(void) const;
 
 				//! @brief Returns the value type of this item
 				ak::core::valueType valueType(void) const;
@@ -220,10 +226,11 @@ namespace ak {
 
 			private:
 				ak::core::valueType						my_valueType;			//! The value type of this object
-				int										my_index;				//! The index of this object
+				ak::ID									my_index;				//! The index of this object
 				QString									my_propertyName;		//! The property name of this object
 				QString									my_lastText;			//! The last text of this object
 				bool									my_isMultivalued;		//! If true, this item is assumed to be multivalued
+				ak::UID									my_widgetUid;
 
 				bool									my_bool;				//! The Boolean value
 				int										my_int;					//! The Integer value

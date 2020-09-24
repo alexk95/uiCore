@@ -104,6 +104,8 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::colorEditButton::setColorStyle()"); }
 }
 
+// ###########################################################################################################################
+
 void ak::ui::widget::propertyGrid::addObject(
 	const QString &									_itemName,
 	bool											_value,
@@ -132,7 +134,7 @@ void ak::ui::widget::propertyGrid::addObject(
 		my_messenger->registerReceiver(newUID, ak::core::messageType::mEvent, my_internalNotifier);
 
 		// Store UID information
-		pItm->setUid(newUID);
+		pItm->setWidgetUid(newUID);
 		my_UIDmap.insert_or_assign(newUID, my_items.size() - 1);
 
 		// Enable the notifier again
@@ -354,7 +356,7 @@ void ak::ui::widget::propertyGrid::addObject(
 		my_messenger->registerReceiver(newUID, ak::core::messageType::mEvent, my_internalNotifier);
 
 		// Store UID information
-		pItm->setUid(newUID);
+		pItm->setWidgetUid(newUID);
 		my_UIDmap.insert_or_assign(newUID, my_items.size() - 1);
 
 		// Enable the notifier again
@@ -414,7 +416,7 @@ void ak::ui::widget::propertyGrid::addObject(
 		my_table->setCellWidget(newUID, my_table->rowCount() - 1, 1);
 
 		// Store UID information
-		pItm->setUid(newUID);
+		pItm->setWidgetUid(newUID);
 		my_UIDmap.insert_or_assign(newUID, my_items.size() - 1);
 
 		// Enable the notifier again
@@ -435,6 +437,7 @@ void ak::ui::widget::propertyGrid::addObject(
 }
 
 // ############################################################################################################
+
 // Manipulate existing
 
 void ak::ui::widget::propertyGrid::clear(void) { 
@@ -454,6 +457,7 @@ void ak::ui::widget::propertyGrid::clear(void) {
 }
 
 // ############################################################################################################
+
 // Information
 
 void ak::ui::widget::propertyGrid::setShowMessageboxOnSyntaxError(
@@ -511,11 +515,11 @@ int ak::ui::widget::propertyGrid::getObjectCount(void) const { return my_table->
 bool ak::ui::widget::propertyGrid::getShowMessageboxOnSyntaxError(void) const { return my_showMessageboxOnSyntaxError; }
 
 ak::core::valueType ak::ui::widget::propertyGrid::getValueType(
-	int												_row
+	ak::ID											_itemID
 ) const {
 	try {
-		checkRow(_row, true); // Check row index and throw if out of range
-		return my_items.at(_row)->valueType();
+		checkRow(_itemID, true); // Check row index and throw if out of range
+		return my_items.at(_itemID)->valueType();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::propertyGrid::getValueType()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::getValueType()"); }
@@ -523,11 +527,11 @@ ak::core::valueType ak::ui::widget::propertyGrid::getValueType(
 }
 
 QString ak::ui::widget::propertyGrid::getPropertyName(
-	int												_row
+	ak::ID											_itemID
 ) const {
 	try {
-		checkRow(_row, true); // Check row index and throw if out of range
-		return my_items.at(_row)->propertyName();
+		checkRow(_itemID, true); // Check row index and throw if out of range
+		return my_items.at(_itemID)->propertyName();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::propertyGrid::getPropertyName()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::getPropertyName()"); }
@@ -535,11 +539,11 @@ QString ak::ui::widget::propertyGrid::getPropertyName(
 }
 
 bool ak::ui::widget::propertyGrid::getIsMultivalued(
-	int												_row
+	ak::ID											_itemID
 ) const {
 	try {
-		checkRow(_row, true); // Check row index and throw if out of range, also check value type
-		return my_items.at(_row)->isMultivalued();
+		checkRow(_itemID, true); // Check row index and throw if out of range, also check value type
+		return my_items.at(_itemID)->isMultivalued();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::propertyGrid::getIsMultivalued()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::getIsMultivalued()"); }
@@ -548,7 +552,7 @@ bool ak::ui::widget::propertyGrid::getIsMultivalued(
 
 // Get values
 
-bool ak::ui::widget::propertyGrid::getBool(int _row) const {
+bool ak::ui::widget::propertyGrid::getBool(ak::ID _row) const {
 	try {
 		checkItemTypeEqual(_row, ak::core::valueType::vBool, true); // Check row index and throw if out of range, also check value type
 		if (my_items.at(_row)->isMultivalued()) { throw ak::Exception("Is multivalued", "Check value"); }
@@ -559,7 +563,7 @@ bool ak::ui::widget::propertyGrid::getBool(int _row) const {
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::getBool()"); }
 }
 
-int ak::ui::widget::propertyGrid::getInt(int _row) const {
+int ak::ui::widget::propertyGrid::getInt(ak::ID _row) const {
 	try {
 		checkItemTypeEqual(_row, ak::core::valueType::vInt, true); // Check row index and throw if out of range, also check value type
 		if (my_items.at(_row)->isMultivalued()) { throw ak::Exception("Is multivalued", "Check value"); }
@@ -570,7 +574,7 @@ int ak::ui::widget::propertyGrid::getInt(int _row) const {
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::getInt()"); }
 }
 
-double ak::ui::widget::propertyGrid::getDouble(int _row) const  {
+double ak::ui::widget::propertyGrid::getDouble(ak::ID _row) const  {
 	try {
 		checkItemTypeEqual(_row, ak::core::valueType::vDouble, true); // Check row index and throw if out of range, also check value type
 		if (my_items.at(_row)->isMultivalued()) { throw ak::Exception("Is multivalued", "Check value"); }
@@ -581,7 +585,7 @@ double ak::ui::widget::propertyGrid::getDouble(int _row) const  {
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::getDouble()"); }
 }
 
-QString ak::ui::widget::propertyGrid::getString(int _row) const {
+QString ak::ui::widget::propertyGrid::getString(ak::ID _row) const {
 	try {
 		checkItemTypeEqual(_row, ak::core::valueType::vString, true); // Check row index and throw if out of range, also check value type
 		if (my_items.at(_row)->isMultivalued()) { throw ak::Exception("Is multivalued", "Check value"); }
@@ -592,7 +596,7 @@ QString ak::ui::widget::propertyGrid::getString(int _row) const {
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::getString()"); }
 }
 
-QString ak::ui::widget::propertyGrid::getSelection(int _row) const {
+QString ak::ui::widget::propertyGrid::getSelection(ak::ID _row) const {
 	try {
 		checkItemTypeEqual(_row, ak::core::valueType::vSelection, true); // Check row index and throw if out of range, also check value type
 		if (my_items.at(_row)->isMultivalued()) { throw ak::Exception("Is multivalued", "Check value"); }
@@ -603,7 +607,7 @@ QString ak::ui::widget::propertyGrid::getSelection(int _row) const {
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::getSelection()"); }
 }
 
-std::vector<QString> ak::ui::widget::propertyGrid::getSelectionPossibleValues(int _row) const {
+std::vector<QString> ak::ui::widget::propertyGrid::getSelectionPossibleValues(ak::ID _row) const {
 	try {
 		checkItemTypeEqual(_row, ak::core::valueType::vSelection, true); // Check row index and throw if out of range, also check value type
 		if (my_items.at(_row)->isMultivalued()) { throw ak::Exception("Is multivalued", "Check value"); }
@@ -615,7 +619,7 @@ std::vector<QString> ak::ui::widget::propertyGrid::getSelectionPossibleValues(in
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::getSelectionPossibleValues()"); }
 }
 
-ak::ui::color ak::ui::widget::propertyGrid::getColor(int _row) const {
+ak::ui::color ak::ui::widget::propertyGrid::getColor(ak::ID _row) const {
 	try {
 		checkItemTypeEqual(_row, ak::core::valueType::vColor, true); // Check row index and throw if out of range, also check value type
 		if (my_items.at(_row)->isMultivalued()) { throw ak::Exception("Is multivalued", "Check value"); }
@@ -812,6 +816,15 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::propertyGrid::raiseWidgetEvent()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::raiseWidgetEvent()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::raiseWidgetEvent()"); }
+}
+
+void ak::ui::widget::propertyGrid::keyPressedEvent(
+	ak::ui::core::keyType							_key
+) {
+	try { my_messenger->sendMessage(my_uid, ak::core::mEvent, ak::core::eKeyPressed, 0, _key); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::propertyGrid::keyPressedEvent()"); }
+	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::keyPressedEvent()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::keyPressedEvent()"); }
 }
 
 bool ak::ui::widget::propertyGrid::checkRow(

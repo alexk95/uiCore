@@ -1135,6 +1135,14 @@ namespace ak {
 				ak::ID									_itemId
 			);
 
+			//! @brief Will return the value type of the specified item at the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item to get the text of
+			__declspec(dllexport) ak::core::valueType getValueType(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
 			//! @brief Will return the ID of the specified item in the specified object
 			//! @param _objectUid The UID of the requested object
 			//! @param _itemPath The path of the requested item
@@ -1145,7 +1153,79 @@ namespace ak {
 				char									_delimiter = '|'
 			);
 
-		}
+			//! @brief Will return the boolean value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			__declspec(dllexport) bool getValueBoolean(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the color value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			__declspec(dllexport) ui::color getValueColor(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the double value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			__declspec(dllexport) double getValueDouble(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the integer value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			__declspec(dllexport) int getValueInteger(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the boolean value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			__declspec(dllexport) std::vector<QString> getValuePossibleSelection(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the selected value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			__declspec(dllexport) QString getValueSelection(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the string value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			__declspec(dllexport) QString getValueString(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the boolean value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			__declspec(dllexport) bool getValueIsMultivalued(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+		} // namespace itm
 
 		// ###############################################################################################################################################
 

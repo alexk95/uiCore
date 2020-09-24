@@ -1578,6 +1578,19 @@ QString ak::uiAPI::itm::getText(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getText()"); }
 }
 
+ak::core::valueType ak::uiAPI::itm::getValueType(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getValueType(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueType()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueType()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueType()"); }
+}
+
 ak::ID ak::uiAPI::itm::getID(
 	ak::UID												_objectUid,
 	const QString &										_itemPath,
@@ -1590,6 +1603,110 @@ ak::ID ak::uiAPI::itm::getID(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getID()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getID()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getID()"); }
+}
+
+bool ak::uiAPI::itm::getValueBoolean(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getValueBoolean(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueBoolean()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueBoolean()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueBoolean()"); }
+}
+
+ak::ui::color ak::uiAPI::itm::getValueColor(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getValueColor(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueColor()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueColor()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueColor()"); }
+}
+
+double ak::uiAPI::itm::getValueDouble(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getValueDouble(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueDouble()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueDouble()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueDouble()"); }
+}
+
+int ak::uiAPI::itm::getValueInteger(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getValueInteger(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueInteger()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueInteger()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueInteger()"); }
+}
+
+std::vector<QString> ak::uiAPI::itm::getValuePossibleSelection(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getValuePossibleSelection(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValuePossibleSelection()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValuePossibleSelection()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValuePossibleSelection()"); }
+}
+
+QString ak::uiAPI::itm::getValueSelection(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getValueSelection(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueSelection()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueSelection()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueSelection()"); }
+}
+
+QString ak::uiAPI::itm::getValueString(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getValueString(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueString()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueString()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueString()"); }
+}
+
+bool ak::uiAPI::itm::getValueIsMultivalued(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getValueIsMultivalued(_objectUid, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueIsMultivalued()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueIsMultivalued()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueIsMultivalued()"); }
 }
 
 // ###############################################################################################################################################

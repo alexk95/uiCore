@@ -2288,6 +2288,15 @@ QString ak::ui::objectManager::itm_getText(
 			return obj->getItemText(_itemId);
 		}
 		break;
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
+			return obj->getPropertyName(_itemId);
+		}
+		break;
 		default: throw ak::Exception("Invalid object type", "Check object type");
 		}
 
@@ -2295,6 +2304,33 @@ QString ak::ui::objectManager::itm_getText(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getText()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getText()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getText()"); }
+}
+
+ak::core::valueType ak::ui::objectManager::itm_getValueType(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
+			return obj->getValueType(_itemId);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getValueType()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getValueType()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getValueType()"); }
 }
 
 ak::ID ak::ui::objectManager::itm_getID(
@@ -2323,6 +2359,222 @@ ak::ID ak::ui::objectManager::itm_getID(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getID()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getID()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getID()"); }
+}
+
+bool ak::ui::objectManager::itm_getValueBoolean(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
+			return obj->getBool(_itemId);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getValueBoolean()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getValueBoolean()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getValueBoolean()"); }
+}
+
+ak::ui::color ak::ui::objectManager::itm_getValueColor(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
+			return obj->getColor(_itemId);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getValueColor()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getValueColor()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getValueColor()"); }
+}
+
+double ak::ui::objectManager::itm_getValueDouble(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
+			return obj->getDouble(_itemId);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getValueDouble()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getValueDouble()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getValueDouble()"); }
+}
+
+int ak::ui::objectManager::itm_getValueInteger(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
+			return obj->getInt(_itemId);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getValueInteger()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getValueInteger()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getValueInteger()"); }
+}
+
+std::vector<QString> ak::ui::objectManager::itm_getValuePossibleSelection(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
+			return obj->getSelectionPossibleValues(_itemId);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getValuePossibleSelection()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getValuePossibleSelection()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getValuePossibleSelection()"); }
+}
+
+QString ak::ui::objectManager::itm_getValueSelection(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
+			return obj->getSelection(_itemId);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getValueSelection()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getValueSelection()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getValueSelection()"); }
+}
+
+QString ak::ui::objectManager::itm_getValueString(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
+			return obj->getString(_itemId);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getValueString()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getValueString()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getValueString()"); }
+}
+
+bool ak::ui::objectManager::itm_getValueIsMultivalued(
+	ak::UID									_objectUid,
+	ak::ID									_itemId
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
+			return obj->getIsMultivalued(_itemId);
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getValueIsMultivalued()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getValueIsMultivalued()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getValueIsMultivalued()"); }
 }
 
 // ###############################################################################################################################################

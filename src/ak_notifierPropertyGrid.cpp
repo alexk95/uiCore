@@ -58,6 +58,7 @@ void ak::notifierPropertyGrid::notify(
 							my_propertyGrid->raiseWidgetEvent(_senderId, (ak::core::eventType)_message);
 						}
 					}
+					else if (_message == ak::core::eKeyPressed) { my_propertyGrid->keyPressedEvent((ak::ui::core::keyType) _info2); }
 					else { assert(0); } // Invalid column (table is expected to have only two columns
 				}
 				else {

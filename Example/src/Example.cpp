@@ -198,7 +198,48 @@ void Example::eventCallback(
 				ak::uiAPI::obj::deleteItems(my_ui.treeWidget, v);
 			}
 		}
+		else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {
+			QString msg("PropteryChange{ id=\"");
+			msg.append(QString::number(_info1));
+			msg.append("\"; Name=\"");
+			ak::uiAPI::itm::getText(my_ui.propertiesWidget, _info1);
+			msg.append("\"; Type=\"");
 
+			switch (ak::uiAPI::itm::getValueType(my_ui.propertiesWidget, _info1))
+			{
+			case ak::core::valueType::vBool:
+				if (ak::uiAPI::itm::getValueBoolean(my_ui.propertiesWidget, _info1)) {
+					msg.append("Boolean\"; Value=\"True");
+				}
+				else { msg.append("Boolean\"; Value=\"False"); }
+				break;
+			case ak::core::valueType::vColor:
+				msg.append("Color\"; Value=\"");
+				msg.append(ak::uiAPI::itm::getValueColor(my_ui.propertiesWidget, _info1).toRGBString(":"));
+				break;
+			case ak::core::valueType::vDouble:
+				msg.append("Double\"; Value=\"");
+				msg.append(QString::number(ak::uiAPI::itm::getValueDouble(my_ui.propertiesWidget, _info1)));
+				break;
+			case ak::core::valueType::vInt:
+				msg.append("Integer\"; Value=\"");
+				msg.append(QString::number(ak::uiAPI::itm::getValueInteger(my_ui.propertiesWidget, _info1)));
+				break;
+			case ak::core::valueType::vSelection:
+				msg.append("Selection\"; Value=\"");
+				msg.append(ak::uiAPI::itm::getValueSelection(my_ui.propertiesWidget, _info1));
+				break;
+			case ak::core::valueType::vString:
+				msg.append("String\"; Value=\"");
+				msg.append(ak::uiAPI::itm::getValueString(my_ui.propertiesWidget, _info1));
+				break;
+			default:
+				assert(0); // Unknown type
+				break;
+			}
+			msg.append("\"; }");
+			ak::uiAPI::obj::appendText(my_ui.outputWidget, msg);
+		}
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "Example::eventCallback()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "Example::eventCallback()"); }

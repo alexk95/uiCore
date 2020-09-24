@@ -199,14 +199,14 @@ namespace ak {
 				//! @param _row The row index
 				//! @throw ak::Exception if any error occurs during a subroutine call
 				ak::core::valueType getValueType(
-					int												_row
+					ak::ID												_row
 				) const;
 
 				//! @brief Returns the name of the property at the specified row
 				//! @param _row The row index
 				//! @throw ak::Exception if any error occurs during a subroutine call
 				QString getPropertyName(
-					int												_row
+					ak::ID												_row
 				) const;
 
 				//! @brief Return true if the item is stil in a multi value state
@@ -214,7 +214,7 @@ namespace ak {
 				//! @param _row The row index of the requested item
 				//! @throw ak::Exception if any error occurs during a subroutine call
 				bool getIsMultivalued(
-					int												_row
+					ak::ID												_row
 				) const;
 
 				// ############################################################################################################
@@ -224,43 +224,43 @@ namespace ak {
 				//! The value type at the specified row must be a Boolean
 				//! @param _row The row index
 				//! @throw ak::Exception if any error occurs during a subroutine call or the multivalued state is true
-				bool getBool(int _row) const;
+				bool getBool(ak::ID _row) const;
 
 				//! @brief Return the Integer value at the specified row
 				//! The value type at the specified row must be a Integer
 				//! @param _row The row index
 				//! @throw ak::Exception if any error occurs during a subroutine call or the multivalued state is true
-				int getInt(int _row) const;
+				int getInt(ak::ID _row) const;
 
 				//! @brief Return the Double value at the specified row
 				//! The value type at the specified row must be a Double
 				//! @param _row The row index
 				//! @throw ak::Exception if any error occurs during a subroutine call or the multivalued state is true
-				double getDouble(int _row) const;
+				double getDouble(ak::ID _row) const;
 
 				//! @brief Return the String value at the specified row
 				//! The value type at the specified row must be a String
 				//! @param _row The row index
 				//! @throw ak::Exception if any error occurs during a subroutine call or the multivalued state is true
-				QString getString(int _row) const;
+				QString getString(ak::ID _row) const;
 
 				//! @brief Return the Current Selection value at the specified row
 				//! The value type at the specified row must be a Selection
 				//! @param _row The row index
 				//! @throw ak::Exception if any error occurs during a subroutine call or the multivalued state is true
-				QString getSelection(int _row) const;
+				QString getSelection(ak::ID _row) const;
 
 				//! @brief Return the Possible selection values value at the specified row
 				//! The value type at the specified row must be a Selection
 				//! @param _row The row index
 				//! @throw ak::Exception if any error occurs during a subroutine call or the multivalued state is true
-				std::vector<QString> getSelectionPossibleValues(int _row) const;
+				std::vector<QString> getSelectionPossibleValues(ak::ID _row) const;
 
 				//! @brief Return the Color value at the specified row
 				//! The value type at the specified row must be a Color
 				//! @param _row The row index
 				//! @throw ak::Exception if any error occurs during a subroutine call or the multivalued state is true
-				ak::ui::color getColor(int	_row) const;
+				ak::ui::color getColor(ak::ID	_row) const;
 
 				// ############################################################################################################
 				// Event handling
@@ -283,6 +283,12 @@ namespace ak {
 				void raiseWidgetEvent(
 					ak::UID											_widgetUid,
 					ak::core::eventType								_eventType
+				);
+
+				//! @brief Will send a key pressed event message with the provided key
+				//! @param _key The key that was pressed
+				void keyPressedEvent(
+					ak::ui::core::keyType							_key
 				);
 
 			protected:

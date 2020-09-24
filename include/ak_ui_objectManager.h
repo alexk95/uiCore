@@ -10,20 +10,21 @@
 #pragma once
 
 // C++ header
-#include <map>						// map
-#include <vector>					// vector
+#include <map>							// map
+#include <vector>						// vector
 
 // Qt header
-#include <qicon.h>					// QIcon
-#include <qstring.h>				// QString
-#include <qtoolbutton.h>			// QToolButton
+#include <qicon.h>						// QIcon
+#include <qstring.h>					// QString
+#include <qtoolbutton.h>				// QToolButton
 
-#include "ak_globalDataTypes.h"		// UID and ID type
+#include <ak_globalDataTypes.h>			// UID and ID type
 
 // AK ui header
-#include "ak_ui_core.h"				// objectType, dockLocation
-#include "ak_ui_color.h"			// color
-#include "ak_ui_qt_comboButtonItem.h"
+#include <ak_core.h>					// valueType
+#include <ak_ui_core.h>					// objectType, dockLocation
+#include <ak_ui_color.h>				// color
+#include <ak_ui_qt_comboButtonItem.h>
 
 // Forward declaration
 class QWidget;
@@ -719,6 +720,14 @@ namespace ak {
 				ak::ID									_itemId
 			);
 
+			//! @brief Will return the value type of the specified item at the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item to get the text of
+			ak::core::valueType itm_getValueType(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
 			//! @brief Will return the ID of the specified item in the specified object
 			//! @param _objectUid The UID the specified item is located at
 			//! @param _itemPath The path of the item
@@ -727,6 +736,78 @@ namespace ak {
 				ak::UID									_objectUid,
 				const QString &							_itemPath,
 				char									_delimiter = '|'
+			);
+
+			//! @brief Will return the boolean value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			bool itm_getValueBoolean(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the color value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			ui::color itm_getValueColor(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the double value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			double itm_getValueDouble(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the integer value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			int itm_getValueInteger(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the boolean value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			std::vector<QString> itm_getValuePossibleSelection(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the selected value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			QString itm_getValueSelection(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the string value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			QString itm_getValueString(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
+			);
+
+			//! @brief Will return the boolean value of the specified item
+			//! @param _objectUid The UID of the requested object
+			//! @param _itemId The ID of the item to get its value from
+			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
+			bool itm_getValueIsMultivalued(
+				ak::UID									_objectUid,
+				ak::ID									_itemId
 			);
 
 			// ###############################################################################################################################################

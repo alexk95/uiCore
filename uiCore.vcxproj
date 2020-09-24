@@ -51,16 +51,16 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%QTDIR%\include\QtCore\;%QTDIR%\include\QtGui\;%QTDIR%\include\QtWidgets\;%QT_TT_ROOT%\include\;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%QDIR%\include\QtCore\;%QDIR%\include\QtGui\;%QDIR%\include\QtWidgets\;%QT_TT_ROOT%\include\;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%QT_TT_ROOT%\lib\;%QTDIR%\lib;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%QT_TT_ROOT%\lib\;%QDIR%\lib;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%QT_TT_ROOT%\lib\TabToolbard.lib;$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%QTDIR%\include\QtCore\;%QTDIR%\include\QtGui\;%QTDIR%\include\QtWidgets\;%QT_TT_ROOT%\include\;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%QDIR%\include\QtCore\;%QDIR%\include\QtGui\;%QDIR%\include\QtWidgets\;%QT_TT_ROOT%\include\;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%QT_TT_ROOT%\lib\;%QDIR%\lib;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

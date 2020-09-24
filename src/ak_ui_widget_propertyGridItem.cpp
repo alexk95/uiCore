@@ -12,15 +12,14 @@
 #include "ak_ui_core.h"						// objectType
 
 ak::ui::widget::propertyGridItem::propertyGridItem(
-	int					_index,
+	ak::ID				_index,
 	const QString &		_propertyName,
 	ak::core::valueType	_valueType,
 	ak::UID				_itemsUid,
 	bool				_isMultivalued
-)
-	: ak::ui::core::aObject(ak::ui::core::objectType::oPropertyGridItem, _itemsUid, 1),
-	my_bool(false),
+) : my_bool(false),
 	my_index(_index),
+	my_widgetUid(ak::invalidUID),
 	my_lastText(QString()),
 	my_int(0),
 	my_double(0.0),
@@ -44,16 +43,15 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 
 ak::ui::widget::propertyGridItem::propertyGridItem(
 	const ak::ui::widget::propertyGridItem &		_other
-) : ak::ui::core::aObject(ak::ui::core::objectType::oPropertyGridItem),
-	my_bool(false),
+) :	my_bool(false),
 	my_index(0),
+	my_widgetUid(ak::invalidUID),
 	my_int(0),
 	my_double(0.0),
 	my_string(QString()),
 	my_color(ak::ui::color()),
 	my_isMultivalued(_other.isMultivalued())
 {
-	my_uid = _other.uid();
 	my_valueType = _other.valueType();
 	my_index = _other.index();
 	my_bool = _other.getBool(false);
@@ -64,9 +62,9 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 }
 
 ak::ui::widget::propertyGridItem & ak::ui::widget::propertyGridItem::operator = (const ak::ui::widget::propertyGridItem & _other) {
-	my_uid = _other.uid();
 	my_valueType = _other.valueType();
 	my_index = _other.index();
+	my_widgetUid = _other.getWidgetUid();
 	my_bool = _other.getBool(false);
 	my_color = _other.getColor(false);
 	my_double = _other.getDouble(false);
@@ -81,8 +79,12 @@ ak::ui::widget::propertyGridItem::~propertyGridItem() {}
 // Set values
 
 void ak::ui::widget::propertyGridItem::setIndex(
-	int					_index
+	ak::ID									_index
 ) { my_index = _index; }
+
+void ak::ui::widget::propertyGridItem::setWidgetUid(
+	ak::UID									_widgetUid
+) { my_widgetUid = _widgetUid; }
 
 void ak::ui::widget::propertyGridItem::setPropertyName(
 	const QString &							_propertyName
@@ -97,39 +99,39 @@ void ak::ui::widget::propertyGridItem::setIsMultivalued(
 ) { my_isMultivalued = _isMultivalued; }
 
 void ak::ui::widget::propertyGridItem::setBool(
-	bool				_value,
-	bool				_throwIfInvalidType
+	bool									_value,
+	bool									_throwIfInvalidType
 ) {
 	if (my_valueType == ak::core::valueType::vBool || !_throwIfInvalidType) { my_bool = _value; }
 	else { throw ak::Exception("Object type is not [bool]", "ak::ui::widget::propertyGridItem::setBool()"); }
 }
 
 void ak::ui::widget::propertyGridItem::setInt(
-	int					_value,
-	bool				_throwIfInvalidType
+	int										_value,
+	bool									_throwIfInvalidType
 ) {
 	if (my_valueType == ak::core::valueType::vInt || !_throwIfInvalidType) { my_int = _value; }
 	else { throw ak::Exception("Object type is not [int]", "ak::ui::widget::propertyGridItem::setInt()"); }
 }
 
 void ak::ui::widget::propertyGridItem::setDouble(
-	double					_value,
-	bool				_throwIfInvalidType
+	double									_value,
+	bool									_throwIfInvalidType
 ) {
 	if (my_valueType == ak::core::valueType::vDouble || !_throwIfInvalidType) { my_double = _value; }
 	else { throw ak::Exception("Object type is not [double]", "ak::ui::widget::propertyGridItem::setDouble()"); }
 }
 
 void ak::ui::widget::propertyGridItem::setString(
-	const QString &		_value,
-	bool				_throwIfInvalidType
+	const QString &							_value,
+	bool									_throwIfInvalidType
 ) {
 	if (my_valueType == ak::core::valueType::vString || !_throwIfInvalidType) { my_string = _value; }
 	else { throw ak::Exception("Object type is not [string]", "ak::ui::widget::propertyGridItem::setString()"); }
 }
 
 void ak::ui::widget::propertyGridItem::setColor(
-	const ak::ui::color &						_value,
+	const ak::ui::color &					_value,
 	bool									_throwIfInvalidType
 ) {
 	if (my_valueType == ak::core::valueType::vColor || !_throwIfInvalidType) { my_color = _value; }
@@ -158,7 +160,9 @@ void ak::ui::widget::propertyGridItem::setPossibleSelection(
 // #############################################################################################
 // Get
 
-int ak::ui::widget::propertyGridItem::index(void) const { return my_index; }
+ak::ID ak::ui::widget::propertyGridItem::index(void) const { return my_index; }
+
+ak::UID ak::ui::widget::propertyGridItem::getWidgetUid(void) const { return my_widgetUid; }
 
 ak::core::valueType ak::ui::widget::propertyGridItem::valueType(void) const { return my_valueType; }
 
