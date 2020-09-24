@@ -24,6 +24,7 @@
 
 // Qt header
 #include <qapplication.h>
+#include <qsurfaceformat.h>
 
 static ak::uiAPI::apiManager					my_apiManager;					//! The API manager
 
@@ -40,7 +41,8 @@ ak::uiAPI::apiManager::apiManager()
 	my_colorStyleIsExtern(false),
 	my_isInitialized(false),
 	my_app(nullptr),
-	my_appIsRunning(false)
+	my_appIsRunning(false),
+	my_defaultSurfaceFormat(nullptr)
 { ak::singletonAllowedMessages::instance(); }
 
 ak::uiAPI::apiManager::~apiManager() {
@@ -243,6 +245,12 @@ int ak::uiAPI::apiManager::exec(void) {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::exec()"); }
 }
 
+QSurfaceFormat * ak::uiAPI::apiManager::getDefaultSurfaceFormat(void) {
+	if (my_defaultSurfaceFormat == nullptr) { my_defaultSurfaceFormat = new QSurfaceFormat(); }
+	return my_defaultSurfaceFormat;
+}
+
+
 // ###############################################################################################################################################
 
 void ak::uiAPI::ini(
@@ -325,6 +333,14 @@ void ak::uiAPI::sendMessage(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::sendMessage()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::sendMessage()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::sendMessage()"); }
+}
+
+void ak::uiAPI::setSurfaceFormatDefaultSamplesCount(
+	int														_count
+) {
+	QSurfaceFormat * format = my_apiManager.getDefaultSurfaceFormat();
+	format->setSamples(_count);
+	QSurfaceFormat::setDefaultFormat(*format);
 }
 
 // ###############################################################################################################################################

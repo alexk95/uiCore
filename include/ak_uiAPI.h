@@ -24,6 +24,9 @@
 #include "ak_globalDataTypes.h"			// UID and ID type
 #include "ak_ui_qt_comboButtonItem.h"	// comboButtonItem
 
+// Forward declaration
+class QSurfaceFormat;
+
 namespace ak {
 
 	// Forward declaration
@@ -95,9 +98,13 @@ namespace ak {
 			//! @brief Will call the execute function of the QApplication
 			int exec(void);
 
+			//! @breif Will return the default surface format
+			QSurfaceFormat * getDefaultSurfaceFormat(void);
+
 		protected:
 			QApplication *				my_app;							//! The core application
 			bool						my_appIsRunning;				//! True if the core application is already running
+			QSurfaceFormat *			my_defaultSurfaceFormat;
 
 			ak::ui::objectManager *		my_objManager;					//! The object manager used in this API
 			bool						my_objManagerIsExtern;			//! If true, then the object manager was created externally
@@ -188,6 +195,12 @@ namespace ak {
 			int														_message,
 			int														_info1 = 0,
 			int														_info2 = 0
+		);
+
+		//! @brief Will set the samples count for the default surface formt
+		//! @param _count The count of samples
+		__declspec(dllexport) void setSurfaceFormatDefaultSamplesCount(
+			int														_count
 		);
 
 		// ###############################################################################################################################################
