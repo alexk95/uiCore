@@ -130,6 +130,12 @@ Example::Example()
 			// Create default data
 			defaultData();
 
+			ak::uiAPI::setStatusLabelText(my_ui.mainWindow, "test");
+			ak::uiAPI::setStatusProgressContinuous(my_ui.mainWindow);
+			ak::uiAPI::setStatusLabelVisible(my_ui.mainWindow, true);
+			ak::uiAPI::setStatusProgressVisible(my_ui.mainWindow, true);
+			ak::uiAPI::setStatusLabelVisible(my_ui.mainWindow, false);
+
 		}
 		catch (const ak::Exception & e) { throw ak::Exception(e, "Example::Example()"); }
 		catch (const std::exception & e) { throw ak::Exception(e.what(), "Example::Example()"); }
@@ -202,7 +208,7 @@ void Example::eventCallback(
 			QString msg("PropteryChange{ id=\"");
 			msg.append(QString::number(_info1));
 			msg.append("\"; Name=\"");
-			ak::uiAPI::itm::getText(my_ui.propertiesWidget, _info1);
+			msg.append(ak::uiAPI::itm::getText(my_ui.propertiesWidget, _info1));
 			msg.append("\"; Type=\"");
 
 			switch (ak::uiAPI::itm::getValueType(my_ui.propertiesWidget, _info1))

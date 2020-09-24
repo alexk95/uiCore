@@ -21,8 +21,8 @@
 #include "ak_ui_core.h"					// object type
 #include "ak_ui_color.h"				// color
 
-#include "ak_globalDataTypes.h"			// UID and ID type
-#include "ak_ui_qt_comboButtonItem.h"	// comboButtonItem
+#include "ak_globalDataTypes.h"				// UID and ID type
+#include "ak_ui_qt_comboButtonItem.h"			// comboButtonItem
 
 // Forward declaration
 class QSurfaceFormat;
