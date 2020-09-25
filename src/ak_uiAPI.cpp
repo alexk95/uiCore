@@ -8,23 +8,25 @@
  */
 
 // AK header
-#include <ak_uiAPI.h>							// corresponding header
-#include <ak_ui_colorStyleDefaultBright.h>		// colorStyleDefaultBright
-#include <ak_ui_colorStyleDefaultDark.h>		// colorStyleDefaultDark
-#include <ak_messenger.h>						// messenger
-#include <ak_ui_objectManager.h>				// objectManager
-#include <ak_notifierStaticEvent.h>				// notifierStaticEvent
-#include <ak_notifier.h>						// notifier
-#include <ak_exception.h>						// error handling
-#include <ak_ui_colorStyle.h>					// colorStyle
-#include <ak_ui_iconManager.h>					// iconManager
-#include <ak_ui_uiManager.h>					// uiManager
-#include <ak_uidMangager.h>						// UID manager
-#include <ak_singletonAllowedMessages.h>
+#include <ak_uiAPI.h>						// corresponding header
+#include <ak_ui_colorStyleDefaultBright.h>	// colorStyleDefaultBright
+#include <ak_ui_colorStyleDefaultDark.h>	// colorStyleDefaultDark
+#include <ak_messenger.h>					// messenger
+#include <ak_ui_objectManager.h>			// objectManager
+#include <ak_notifierStaticEvent.h>			// notifierStaticEvent
+#include <ak_notifier.h>					// notifier
+#include <ak_exception.h>					// error handling
+#include <ak_ui_colorStyle.h>				// colorStyle
+#include <ak_ui_iconManager.h>				// iconManager
+#include <ak_ui_uiManager.h>				// uiManager
+#include <ak_uidMangager.h>					// UID manager
+#include <ak_singletonAllowedMessages.h>	// allowed messages
 
 // Qt header
-#include <qapplication.h>
-#include <qsurfaceformat.h>
+#include <qapplication.h>					// QApplication
+#include <qsurfaceformat.h>					// QSurfaceFormat
+#include <qfiledialog.h>					// Open/Save file dialog
+#include <qfile.h>
 
 static ak::uiAPI::apiManager					my_apiManager;					//! The API manager
 
@@ -194,7 +196,7 @@ void ak::uiAPI::apiManager::setBrightColorStyle(void) {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::setBrightColorStyle()"); }
 }
 
-ak::messenger * ak::uiAPI::apiManager::messenger(void) {
+ak::messenger * ak::uiAPI::apiManager::messenger(void) const {
 	try {
 		if (!my_isInitialized) { throw ak::Exception("API is not initialized", "Check API status"); }
 		return my_messenger;
@@ -204,7 +206,7 @@ ak::messenger * ak::uiAPI::apiManager::messenger(void) {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::messenger()"); }
 }
 
-ak::uidManager * ak::uiAPI::apiManager::uidManager(void) {
+ak::uidManager * ak::uiAPI::apiManager::uidManager(void) const {
 	try {
 		if (!my_isInitialized) { throw ak::Exception("API is not initialized", "Check API status"); }
 		return my_uidManager;
@@ -214,7 +216,7 @@ ak::uidManager * ak::uiAPI::apiManager::uidManager(void) {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::uidManager()"); }
 }
 
-ak::ui::iconManager * ak::uiAPI::apiManager::iconManager(void) {
+ak::ui::iconManager * ak::uiAPI::apiManager::iconManager(void) const {
 	try {
 		if (!my_isInitialized) { throw ak::Exception("API is not initialized", "Check API status"); }
 		return my_iconManager;
@@ -224,7 +226,7 @@ ak::ui::iconManager * ak::uiAPI::apiManager::iconManager(void) {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::iconManager()"); }
 }
 
-ak::ui::objectManager * ak::uiAPI::apiManager::objectManager(void) {
+ak::ui::objectManager * ak::uiAPI::apiManager::objectManager(void) const {
 	try {
 		if (!my_isInitialized) { throw ak::Exception("API is not initialized", "Check API status"); }
 		return my_objManager;
@@ -232,6 +234,16 @@ ak::ui::objectManager * ak::uiAPI::apiManager::objectManager(void) {
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::objectManager()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::objectManager()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::objectManager()"); }
+}
+
+ak::ui::colorStyle * ak::uiAPI::apiManager::colorStyle(void) const {
+	try {
+		if (!my_isInitialized) { throw ak::Exception("API is not initialized", "Check API status"); }
+		return my_colorStyle;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::colorStyle()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::colorStyle()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::colorStyle()"); }
 }
 
 int ak::uiAPI::apiManager::exec(void) {
@@ -1790,6 +1802,118 @@ bool ak::uiAPI::itm::getValueIsMultivalued(
 
 // ###############################################################################################################################################
 
+void ak::uiAPI::special::showMessageBox(
+	ak::UID												_uiManagerUid,
+	const char *										_message,
+	const char *										_title
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		// Get UI manager
+		ak::ui::core::aObject * obj = oM->obj_get(_uiManagerUid);
+		if (obj->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected main window", "Check object type"); }
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(obj);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+		ui->showMessageBox(QString(_message), QString(_title));
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::showMessageBox(char *)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::showMessageBox(char *)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::showMessageBox(char *)"); }
+}
+
+void ak::uiAPI::special::showMessageBox(
+	ak::UID												_uiManagerUid,
+	const QString &										_message,
+	const QString &										_title
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		// Get UI manager
+		ak::ui::core::aObject * obj = oM->obj_get(_uiManagerUid);
+		if (obj->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected main window", "Check object type"); }
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(obj);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+		ui->showMessageBox(_message, _title);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::showMessageBox(QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::showMessageBox(QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::showMessageBox(QString)"); }
+}
+
+QString ak::uiAPI::special::openFile(
+	ak::UID									_uiManagerUid,
+	const QString &							_caption,
+	const QString &							_initialDir,
+	const QString &							_filter,
+	QString *								_selectedFilter
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		// Get UI manager
+		ak::ui::core::aObject * obj = oM->obj_get(_uiManagerUid);
+		if (obj->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected main window", "Check object type"); }
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(obj);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+		return QFileDialog::getOpenFileName(nullptr, _caption, _initialDir, _filter, _selectedFilter);
+		
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::special::openFile()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::special::openFile()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::special::openFile()"); }
+}
+
+QString ak::uiAPI::special::saveFile(
+	ak::UID									_uiManagerUid,
+	const QString &							_caption,
+	const QString &							_initialDir,
+	const QString &							_filter,
+	QString *								_selectedFilter
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		// Get UI manager
+		ak::ui::core::aObject * obj = oM->obj_get(_uiManagerUid);
+		if (obj->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected main window", "Check object type"); }
+		ak::ui::uiManager * ui = nullptr;
+		ui = dynamic_cast<ak::ui::uiManager *>(obj);
+		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+		return QFileDialog::getSaveFileName(nullptr, _caption, _initialDir, _filter, _selectedFilter);
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::special::saveFile()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::special::saveFile()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::special::saveFile()"); }
+}
+
+QStringList ak::uiAPI::special::importFile(
+	const QString &										_fileName,
+	bool												_includeEmptyLines
+) {
+	try {
+		QFile file(_fileName);
+		if (!file.exists()) { throw ak::Exception("The provided file deos not exist", "Check file"); }
+		
+		if (!file.open(QIODevice::ReadOnly)) {
+			throw ak::Exception("Failed to open file for reading", "Open file");
+		}
+		QStringList ret;
+		while (!file.atEnd()) {
+			QString line = file.readLine();
+			if (line.length() > 0 || _includeEmptyLines) { ret.push_back(line); }
+		}
+		file.close();
+		return ret;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::special::importFile()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::special::importFile()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::special::importFile()"); }
+}
+
+// ###############################################################################################################################################
+
 QString ak::uiAPI::toString(
 	ak::core::eventType									_type
 ) {
@@ -1919,46 +2043,6 @@ void ak::uiAPI::setDefaultBrightColorStyle() {
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setDefaultBrightColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setDefaultBrightColorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setDefaultBrightColorStyle()"); }
-}
-
-void ak::uiAPI::showMessageBox(
-	ak::UID												_uiManagerUid,
-	const char *										_message,
-	const char *										_title
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		// Get UI manager
-		ak::ui::core::aObject * obj = oM->obj_get(_uiManagerUid);
-		if (obj->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected main window", "Check object type"); }
-		ak::ui::uiManager * ui = nullptr;
-		ui = dynamic_cast<ak::ui::uiManager *>(obj);
-		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
-		ui->showMessageBox(QString(_message), QString(_title));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::showMessageBox(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::showMessageBox(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::showMessageBox(char *)"); }
-}
-
-void ak::uiAPI::showMessageBox(
-	ak::UID												_uiManagerUid,
-	const QString &										_message,
-	const QString &										_title
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		// Get UI manager
-		ak::ui::core::aObject * obj = oM->obj_get(_uiManagerUid);
-		if (obj->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected main window", "Check object type"); }
-		ak::ui::uiManager * ui = nullptr;
-		ui = dynamic_cast<ak::ui::uiManager *>(obj);
-		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
-		ui->showMessageBox(_message, _title);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::showMessageBox(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::showMessageBox(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::showMessageBox(QString)"); }
 }
 
 void ak::uiAPI::setStatusLabelVisible(
@@ -2164,6 +2248,8 @@ void ak::uiAPI::addIconSearchPath(
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
 		manager->addDirectory(QString(_path));
+		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
+		cS->setDirectories(manager->searchDirectories());
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addIconSearchPath(char *)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addIconSearchPath(char *)"); }
@@ -2176,6 +2262,8 @@ void ak::uiAPI::addIconSearchPath(
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
 		manager->addDirectory(_path);
+		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
+		cS->setDirectories(manager->searchDirectories());
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addIconSearchPath(QString)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addIconSearchPath(QString)"); }
@@ -2188,6 +2276,8 @@ void ak::uiAPI::removeIconSearchPath(
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
 		manager->removeDirectory(QString(_path));
+		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
+		cS->setDirectories(manager->searchDirectories());
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::removeIconSearchPath(char *)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::removeIconSearchPath(char *)"); }
@@ -2200,6 +2290,8 @@ void ak::uiAPI::removeIconSearchPath(
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
 		manager->removeDirectory(_path);
+		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
+		cS->setDirectories(manager->searchDirectories());
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::removeIconSearchPath(QString)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::removeIconSearchPath(QString)"); }

@@ -29,7 +29,7 @@ ak::ui::widget::tree::tree(
 	ak::ui::colorStyle *	_colorStyle
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTree, _iconManager,  _messenger, _uidManager, nullptr, _colorStyle),
 	my_tree(nullptr), my_filter(nullptr), my_layout(nullptr), my_multiWidget(nullptr), my_treeSignalLinker(nullptr), my_filterSignalLinker(nullptr),
-	my_notifierFilter(nullptr), my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(1), 
+	my_notifierFilter(nullptr), my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0), 
 	my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false)
 {
 	try {
@@ -203,7 +203,13 @@ ak::ID ak::ui::widget::tree::add(
 
 //! @brief Will clear all tree items, receivers will get a destroyed message for each item
 void ak::ui::widget::tree::clear(void) {
-	assert(0); // Not implemented yet
+	my_tree->clear();
+	for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
+		ak::ui::qt::treeItem * item = itm->second;
+		if (item == nullptr) { delete item; }
+	}
+	my_items.clear();
+	my_currentId = 0;
 }
 
 void ak::ui::widget::tree::setItemSelected(

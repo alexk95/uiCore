@@ -15,6 +15,7 @@
 // Qt header
 #include <qstring.h>					// QString
 #include <qicon.h>						// QIcon
+#include <qstringlist.h>				// QStringList
 
 // AK header
 #include "ak_core.h"					// message type
@@ -69,16 +70,19 @@ namespace ak {
 			bool isInitialized(void) const;
 
 			//! @brief Will return the messenger
-			ak::messenger * messenger(void);
+			ak::messenger * messenger(void) const;
 
 			//! @brief Will return the UID manager
-			ak::uidManager * uidManager(void);
+			ak::uidManager * uidManager(void) const;
 
 			//! @brief Will return the icon manager
-			ak::ui::iconManager * iconManager(void);
+			ak::ui::iconManager * iconManager(void) const;
 
 			//! @brief Will return the object manager
-			ak::ui::objectManager * objectManager(void);
+			ak::ui::objectManager * objectManager(void) const;
+
+			//! @brief Will return the color style
+			ak::ui::colorStyle * colorStyle(void) const;
 
 			//! @brief Will set the color style
 			//! @param _colorStyle The colorStyle to set
@@ -1281,6 +1285,68 @@ namespace ak {
 
 		// ###############################################################################################################################################
 
+		namespace special {
+
+			//! @brief Will show a message box with the provided main window as parent
+			//! @param _uiManagerUid The UI manager that will be the parent for the message box
+			//! @param _messega The message to display
+			//! @param _title The title of the message box
+			__declspec(dllexport) void showMessageBox(
+				ak::UID									_uiManagerUid,
+				const char *										_message,
+				const char *										_title
+			);
+
+			//! @brief Will show a message box with the provided main window as parent
+			//! @param _uiManagerUid The UI manager that will be the parent for the message box
+			//! @param _messega The message to display
+			//! @param _title The title of the message box
+			__declspec(dllexport) void showMessageBox(
+				ak::UID									_uiManagerUid,
+				const QString &										_message,
+				const QString &										_title
+			);
+
+			//! @brief Will show an open file dialog and return the selected file
+			//! @param _uiManagerUid The UID of the parent uiManager that the dialog will be displayed on
+			//! @param _caption The caption
+			//! @param _initialDir The initial search directory
+			//! @param _filter The filter of the open file dialog
+			//! @param _selectedFilter The selected filter
+			__declspec(dllexport) QString openFile(
+				ak::UID												_uiManagerUid,
+				const QString &										_caption,
+				const QString &										_initialDir = QString(""),
+				const QString &										_filter = QString(""),
+				QString *											_selectedFilter = nullptr
+			);
+
+			//! @brief Will show an open file dialog and return the selected file
+			//! @param _uiManagerUid The UID of the parent uiManager that the dialog will be displayed on
+			//! @param _caption The caption
+			//! @param _initialDir The initial search directory
+			//! @param _filter The filter of the open file dialog
+			//! @param _selectedFilter The selected filter
+			__declspec(dllexport) QString saveFile(
+				ak::UID												_uiManagerUid,
+				const QString &										_caption,
+				const QString &										_initialDir = QString(""),
+				const QString &										_filter = QString(""),
+				QString *											_selectedFilter = nullptr
+			);
+
+			//! @brief Will import all information from the file and return it (line by line) as a string list
+			//! @param _fileName The name of the file
+			//! @param _includeEmptyLines If true empty lines will also be added to the list
+			__declspec(dllexport) QStringList importFile(
+				const QString &										_fileName,
+				bool												_includeEmptyLines = true
+			);
+
+		}
+
+		// ###############################################################################################################################################
+
 		//! @brief Will return a string representation of the provided eventType
 		//! @param _type The event type that should be represented
 		__declspec(dllexport) QString toString(
@@ -1349,26 +1415,6 @@ namespace ak {
 
 		//! @brief Will set the current color style to the default bright color style
 		__declspec(dllexport) void setDefaultBrightColorStyle(void);
-
-		//! @brief Will show a message box with the provided main window as parent
-		//! @param _uiManagerUid The UI manager that will be the parent for the message box
-		//! @param _messega The message to display
-		//! @param _title The title of the message box
-		__declspec(dllexport) void showMessageBox(
-			ak::UID									_uiManagerUid,
-			const char *										_message,
-			const char *										_title
-		);
-
-		//! @brief Will show a message box with the provided main window as parent
-		//! @param _uiManagerUid The UI manager that will be the parent for the message box
-		//! @param _messega The message to display
-		//! @param _title The title of the message box
-		__declspec(dllexport) void showMessageBox(
-			ak::UID									_uiManagerUid,
-			const QString &										_message,
-			const QString &										_title
-		);
 
 		//! @brief Will close the provided uiManager
 		//! @param _uiManagerUid The UID of the uiManager to close
