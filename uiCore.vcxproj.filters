@@ -180,8 +180,8 @@
     <ClInclude Include="include\ak_ui_qt_tabView.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_fastContainer.h">
-      <Filter>Header Files\ak</Filter>
+    <ClInclude Include="include\ak_ui_qt_timer.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +384,9 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_tabViewSignalLinker.cpp">
       <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_timer.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

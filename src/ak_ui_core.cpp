@@ -29,6 +29,7 @@ QString ak::ui::core::toQString(
 	case ak::ui::core::oTabToolbarPage: return QString("TabBoolBarPage");
 	case ak::ui::core::oTabToolbarSubgroup: return QString("TabToolBarSubGroup");
 	case ak::ui::core::oTextEdit: return QString("TextEdit");
+	case ak::ui::core::oTimer: return QString("Timer");
 	case ak::ui::core::oTree: return QString("Tree");
 	case ak::ui::core::objectType::oTreeItem: return QString("TreeItem");
 	case ak::ui::core::objectType::oWidget: return QString("Widget");
@@ -46,6 +47,21 @@ QString ak::ui::core::toQString(
 	case ak::ui::core::align_alignLeft: return QString("AlignLeft");
 	case ak::ui::core::align_alignRight: return QString("AlignRight");
 	default: assert(0); // Not implemented yet
+	}
+	return QString("");
+}
+
+QString ak::ui::core::toQString(
+	tabLocation								_tabLocation
+) {
+	switch (_tabLocation)
+	{
+	case ak::ui::core::tabLocation::tab_locationDown: return QString("Down");
+	case ak::ui::core::tabLocation::tab_locationLeft: return QString("Left");
+	case ak::ui::core::tabLocation::tab_locationRight: return QString("Right");
+	case ak::ui::core::tabLocation::tab_locationUp: return QString("Up");
+	default: assert(0); // Not implemented yet
+		break;
 	}
 	return QString("");
 }

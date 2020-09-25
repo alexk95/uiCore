@@ -474,6 +474,12 @@ namespace ak {
 			const QString &											_initialText = QString("")
 		);
 
+		//! @brief Will create a new timer and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		__declspec(dllexport) ak::UID createTimer(
+			ak::UID													_creatorUid
+		);
+
 		//! @brief Will create a new Tree and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
@@ -676,6 +682,14 @@ namespace ak {
 			__declspec(dllexport) void setTabToolBarVisible(
 				ak::UID												_uiManagerUid,
 				bool												_vis = true
+			);
+
+			//! @brief Will set the tab location of the provided object
+			//! @param _location The tab location to set
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void setTabLocation(
+				ak::UID											_objectUid,
+				ak::ui::core::tabLocation						_location
 			);
 
 			//! @brief Will append the provided text to the provided object
@@ -1033,6 +1047,31 @@ namespace ak {
 				const std::vector<ak::ID> &						_items
 			);
 
+			//! @brief Will call the start function of the provided object with the given value
+			//! @param _objectUid The UID of the object
+			//! @param _value The value to set to the object
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void start(
+				ak::UID												_objectUid,
+				int													_value
+			);
+
+			//! @brief Will call the stop function of the provided object
+			//! @param _objectUid The UID of the object
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void stop(
+				ak::UID												_objectUid
+			);
+
+			//! @brief Will call the shoot function of the provided object
+			//! @param _objectUid The UID of the object
+			//! @param _value The value to set to the object
+			//! @throw ak::Exception if the provided object UID is invalid
+			__declspec(dllexport) void shoot(
+				ak::UID												_objectUid,
+				int													_value
+			);
+
 			// ###############################################################################################################################################
 
 			// Object getter
@@ -1270,6 +1309,12 @@ namespace ak {
 		//! @param _type The dock location that should be represented
 		__declspec(dllexport) QString toString(
 			ak::ui::core::dockLocation							_dockLocation
+		);
+
+		//! @brief Will return a string representation of the provided tab location
+		//! @param _type The tab location that should be represented
+		__declspec(dllexport) QString toString(
+			ak::ui::core::tabLocation							_tabLocation
 		);
 
 		//! @brief Will return a string representation of the provided keyType

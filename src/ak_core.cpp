@@ -49,6 +49,7 @@ QString ak::core::toQString(
 	case ak::core::eSelectionChanged: return QString("Selection changed");
 	case ak::core::eStateChanged: return QString("State changed");
 	case ak::core::eTextChanged: return QString("Text changed");
+	case ak::core::eTimeout: return QString("Timeout");
 	case ak::core::eToggeledChecked: return QString("Toggeled to checked");
 	case ak::core::eToggeledUnchecked: return QString("Toggeled to unchecked");
 	default: assert(0); // not implemented yet

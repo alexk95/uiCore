@@ -21,6 +21,7 @@
 #include <ak_ui_qt_textEdit.h>
 #include <ak_ui_qt_comboBox.h>
 #include <ak_ui_qt_comboButton.h>
+#include <ak_ui_qt_timer.h>
 #include <ak_ui_qt_tree.h>
 #include <ak_singletonAllowedMessages.h>
 
@@ -97,6 +98,9 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			break;
+		case ak::ui::core::objectType::oTimer:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(timeout()), this, SLOT(slotTimeout()));
 			break;
 		default:
 			assert(0); // Not implemented object type
@@ -224,6 +228,23 @@ ak::UID ak::ui::signalLinker::addLink(
 }
 
 ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::timer *										_object,
+	ak::UID													_objectUid
+) {
+	try {
+		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
+		_object->setUid(_objectUid);
+		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTimer });
+		_object->connect(_object, SIGNAL(timeout()), this, SLOT(slotTimeout()));
+		return _objectUid;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::timer)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::timer)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::timer)"); }
+}
+
+ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::table *								_object,
 	ak::UID										_objectUid
 ) {
@@ -348,6 +369,10 @@ void ak::ui::signalLinker::slotToggled(bool _checked)
 		if (!ak::singletonAllowedMessages::instance()->toggledUncheckedEvent()) { return; }
 		raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eToggeledUnchecked, 0, 0);
 	}
+}
+
+void ak::ui::signalLinker::slotTimeout(void) {
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eTimeout, 0, 0);
 }
 
 // ##### Table

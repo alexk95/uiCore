@@ -25,6 +25,14 @@ namespace ak {
 				dock_dockBottom
 			};
 
+			//! Descirbes the tab location
+			enum tabLocation {
+				tab_locationUp,
+				tab_locationDown,
+				tab_locationLeft,
+				tab_locationRight
+			};
+
 			//! Describes the text alignment
 			enum textAlignment {
 				align_alignLeft,
@@ -55,6 +63,7 @@ namespace ak {
 				oTabToolbarSubgroup,
 				oTabView,
 				oTextEdit,
+				oTimer,
 				oTree,
 				oTreeItem,
 				oWidget
@@ -93,6 +102,12 @@ namespace ak {
 			//! @param _textAlignment The text alignment to be converted
 			QString toQString(
 				textAlignment							_textAlignment
+			);
+
+			//! @brief Create a string representation of the provided tabLocation
+			//! @param _tabLocation The tab location to be converted
+			QString toQString(
+				tabLocation								_tabLocation
 			);
 
 			//! @brief Create a string representation of the provided dockLocation

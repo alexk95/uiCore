@@ -18,8 +18,10 @@
 #include <ak_ui_iconManager.h>				// iconManager
 #include <ak_ui_tabViewSignalLinker.h>		// signal linking
 
+
 // Qt header
 #include <qwidget.h>
+#include <qtabwidget.h>
 
 ak::ui::widget::tabView::tabView(
 	iconManager *				_iconManager,
@@ -44,6 +46,7 @@ ak::ui::widget::tabView::tabView(
 
 		// Get id for myself
 		my_uid = my_uidManager->getId();
+
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tabView::tabView()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tabView::tabView()"); }
@@ -116,6 +119,20 @@ ak::ID ak::ui::widget::tabView::createTab(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tabView::createTab()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tabView::createTab()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tabView::createTab()"); }
+}
+
+void ak::ui::widget::tabView::setTabLocation(
+	ak::ui::core::tabLocation			_location
+) {
+	switch (_location)
+	{
+	case ak::ui::core::tabLocation::tab_locationDown: my_tabView->setTabPosition(QTabWidget::TabPosition::South); break;
+	case ak::ui::core::tabLocation::tab_locationLeft: my_tabView->setTabPosition(QTabWidget::TabPosition::West); break;
+	case ak::ui::core::tabLocation::tab_locationRight: my_tabView->setTabPosition(QTabWidget::TabPosition::East); break;
+	case ak::ui::core::tabLocation::tab_locationUp: my_tabView->setTabPosition(QTabWidget::TabPosition::North); break;
+	default:
+		break;
+	}
 }
 
 // #######################################################################################################

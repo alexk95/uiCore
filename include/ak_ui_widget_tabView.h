@@ -13,6 +13,7 @@
 #include <ak_ui_core_aWidgetManager.h>		// Base class
 #include <ak_globalDataTypes.h>				// UID and ID data types
 #include <ak_ui_tabViewSignalLinker.h>		// tab event type
+#include <ak_ui_core.h>						// tabLocation type
 
 // Qt header
 #include <qstring.h>
@@ -87,6 +88,12 @@ namespace ak {
 					QWidget *							_widget,
 					const QString &						_title,
 					const QIcon &						_icon = QIcon()
+				);
+
+				//! @brief Will set the tab location of the tab view
+				//! @param _location The location to set
+				void setTabLocation(
+					ak::ui::core::tabLocation			_location
 				);
 
 				// #######################################################################################################

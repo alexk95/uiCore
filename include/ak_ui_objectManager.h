@@ -195,6 +195,13 @@ namespace ak {
 				const QString &										_initialText = QString("")
 			);
 
+			//! @brief WIll create a timer and return its UID
+			//! @param _creatorUid The UID of the creator
+			//! @throw ak::Exception if failed to create
+			ak::UID createTimer(
+				ak::UID												_creatorUid
+			);
+
 			//! @brief Will create a tree and return its UID
 			//! @param _creatorUid The UID of the creator
 			//! @throw ak::Exception if failed to create
@@ -334,8 +341,16 @@ namespace ak {
 			//! @param _uiManagerUid The UID of the UI manager the tab toolbar is located at
 			//! @param _vis If true, the tab toolBar will be visible
 			void obj_setTabToolBarVisible(
-				ak::UID									_uiManagerUid,
-				bool												_vis = true
+				ak::UID											_uiManagerUid,
+				bool											_vis = true
+			);
+
+			//! @brief Will set the tab location of the provided object
+			//! @param _location The tab location to set
+			//! @throw ak::Exception if the provided object UID is invalid
+			void obj_setTabLocation(
+				ak::UID											_objectUid,
+				ak::ui::core::tabLocation						_location
 			);
 
 			//! @brief Will add a new object with the value type Boolean to the property Grid
@@ -344,7 +359,7 @@ namespace ak {
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if a object creation failed
 			void obj_addProperty(
-				ak::UID								_objectUid,
+				ak::UID											_objectUid,
 				const QString &									_itemName,
 				bool											_value,
 				bool											_isMultipleValues = false
@@ -573,6 +588,31 @@ namespace ak {
 			void obj_deleteItems(
 				ak::UID												_objectUid,
 				const std::vector<ak::ID> &							_items
+			);
+
+			//! @brief Will call the start function of the provided object with the given value
+			//! @param _objectUid The UID of the object
+			//! @param _value The value to set to the object
+			//! @throw ak::Exception if the provided object UID is invalid
+			void obj_start(
+				ak::UID												_objectUid,
+				int													_value
+			);
+
+			//! @brief Will call the stop function of the provided object
+			//! @param _objectUid The UID of the object
+			//! @throw ak::Exception if the provided object UID is invalid
+			void obj_stop(
+				ak::UID												_objectUid
+			);
+
+			//! @brief Will call the shoot function of the provided object
+			//! @param _objectUid The UID of the object
+			//! @param _value The value to set to the object
+			//! @throw ak::Exception if the provided object UID is invalid
+			void obj_shoot(
+				ak::UID												_objectUid,
+				int													_value
 			);
 
 			// ###############################################################################################################################################

@@ -729,6 +729,19 @@ ak::UID ak::uiAPI::createTextEdit(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTextEdit(QString)"); }
 }
 
+ak::UID ak::uiAPI::createTimer(
+	ak::UID													_creatorUid
+) {
+	try {
+		// Get manager
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->createTimer(_creatorUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createTimer()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createTimer()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTimer()"); }
+}
+
 ak::UID ak::uiAPI::createTree(
 	ak::UID												_creatorUid
 ) {
@@ -994,7 +1007,6 @@ void ak::uiAPI::obj::setReadOnly(
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		ak::ui::iconManager * iM = my_apiManager.iconManager();
 		oM->obj_setReadOnly(_objectUid, _readOnly);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setReadOnly()"); }
@@ -1013,6 +1025,19 @@ void ak::uiAPI::obj::setTabToolBarVisible(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setTabToolBarVisible()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setTabToolBarVisible()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setTabToolBarVisible()"); }
+}
+
+void ak::uiAPI::obj::setTabLocation(
+	ak::UID											_objectUid,
+	ak::ui::core::tabLocation						_location
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->obj_setTabLocation(_objectUid, _location);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setTabLocation()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setTabLocation()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setTabLocation()"); }
 }
 
 void ak::uiAPI::obj::appendText(
@@ -1441,6 +1466,44 @@ void ak::uiAPI::obj::deleteItems(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::deleteItems()"); }
 }
 
+void ak::uiAPI::obj::start(
+	ak::UID												_objectUid,
+	int													_value
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_start(_objectUid, _value);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::start()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::start()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::start()"); }
+}
+
+void ak::uiAPI::obj::stop(
+	ak::UID												_objectUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_stop(_objectUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::stop()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::stop()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::stop()"); }
+}
+
+void ak::uiAPI::obj::shoot(
+	ak::UID												_objectUid,
+	int													_value
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_shoot(_objectUid, _value);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::shoot()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::shoot()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::shoot()"); }
+}
+
 // ###############################################################################################################################################
 
 // Object getter
@@ -1731,7 +1794,7 @@ QString ak::uiAPI::toString(
 	ak::core::eventType									_type
 ) {
 	try {
-		QString v = ak::core::toQString(_type); return v;
+		return ak::core::toQString(_type);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(eventType)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(eventType)"); }
@@ -1742,7 +1805,7 @@ QString ak::uiAPI::toString(
 	ak::core::messageType								_type
 ) {
 	try {
-		QString v = ak::core::toQString(_type); return v;
+		return ak::core::toQString(_type);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(messageType)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(messageType)"); }
@@ -1753,7 +1816,7 @@ QString ak::uiAPI::toString(
 	ak::core::valueType									_type
 ) {
 	try {
-		QString v = ak::core::toQString(_type); return v;
+		return ak::core::toQString(_type);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(valueType)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(valueType)"); }
@@ -1764,7 +1827,7 @@ QString ak::uiAPI::toString(
 	ak::ui::core::textAlignment							_type
 ) {
 	try {
-		QString v = ak::ui::core::toQString(_type); return v;
+		return ak::ui::core::toQString(_type);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(textAlignment)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(textAlignment)"); }
@@ -1775,7 +1838,7 @@ QString ak::uiAPI::toString(
 	ak::ui::core::dockLocation							_dockLocation
 ) {
 	try {
-		QString v = ak::ui::core::toQString(_dockLocation); return v;
+		return ak::ui::core::toQString(_dockLocation);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(dockLocation)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(dockLocation)"); }
@@ -1783,10 +1846,21 @@ QString ak::uiAPI::toString(
 }
 
 QString ak::uiAPI::toString(
+	ak::ui::core::tabLocation							_tabLocation
+) {
+	try {
+		return ak::ui::core::toQString(_tabLocation);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(tabLocation)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(tabLocation)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(tabLocation)"); }
+}
+
+QString ak::uiAPI::toString(
 	ak::ui::core::keyType								_type
 ) {
 	try {
-		QString v = ak::ui::core::toQString(_type); return v;
+		return ak::ui::core::toQString(_type);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(keyType)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(keyType)"); }
@@ -1797,7 +1871,7 @@ QString ak::uiAPI::toString(
 	ak::ui::core::objectType							_type
 ) {
 	try {
-		QString v = ak::ui::core::toQString(_type); return v;
+		return ak::ui::core::toQString(_type);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(objectType)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(objectType)"); }
