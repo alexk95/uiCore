@@ -80,6 +80,10 @@ namespace ak {
 
 			private:
 				bool							my_autoScrollToBottom;		//! If true, the textbox will automatically scroll down on text change
+
+				textEdit(const textEdit &) = delete;
+				textEdit & operator = (const textEdit &) = delete;
+
 			};
 		}
 	}

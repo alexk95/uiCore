@@ -13,9 +13,9 @@
 #include <qscrollbar.h>
 
 ak::ui::qt::textEdit::textEdit(QWidget * _parent)
-: QTextEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(true) {}
+: QTextEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(false) {}
 ak::ui::qt::textEdit::textEdit(const QString & _text, QWidget * _parent)
-: QTextEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(true) {}
+: QTextEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(false) {}
 
 ak::ui::qt::textEdit::~textEdit() {}
 

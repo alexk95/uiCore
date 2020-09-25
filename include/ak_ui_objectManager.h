@@ -687,6 +687,13 @@ namespace ak {
 				ak::UID									_objectUid
 			);
 
+			//! @brief Will return the ID of the item at this object with the specified text
+			//! Returns invalidID if the item does not exist
+			ak::ID obj_getItem(
+				ak::UID									_objectUid,
+				const QString &							_text
+			);
+
 			// ###############################################################################################################################################
 
 			// Item setter

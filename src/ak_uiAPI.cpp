@@ -1580,6 +1580,19 @@ bool ak::uiAPI::obj::getAutoScrollToBottomEnabled(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getAutoScrollToBottomEnabled()"); }
 }
 
+ak::ID ak::uiAPI::obj::getItem(
+	ak::UID												_objectUid,
+	const QString &										_text
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_getItem(_objectUid, _text);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getItem()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getItem()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getItem()"); }
+}
+
 // ###############################################################################################################################################
 
 // Item setter

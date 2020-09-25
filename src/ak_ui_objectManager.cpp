@@ -2262,6 +2262,37 @@ bool ak::ui::objectManager::obj_getEnabled(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getEnabled()"); }
 }
 
+ak::ID ak::ui::objectManager::obj_getItem(
+	ak::UID									_objectUid,
+	const QString &							_text
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oTabView:
+		{
+			// Cast object
+			ak::ui::widget::tabView * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::tabView *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tab view"); }
+			std::vector<QString> titles = obj->tabTitles();
+			for (int i = 0; i < titles.size(); i++) {
+				if (titles.at(i) == _text) { return i; }
+			}
+			return ak::invalidID;
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getItem()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getItem()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getItem()"); }
+}
+
 // ###############################################################################################################################################
 
 // Item setter
@@ -2439,6 +2470,17 @@ QString ak::ui::objectManager::itm_getText(
 			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
 			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
 			return obj->getPropertyName(_itemId);
+		}
+		break;
+		case ak::ui::core::objectType::oTabView:
+		{
+			// Cast object
+			ak::ui::widget::tabView * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::tabView *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tab view"); }
+			std::vector<QString> titles = obj->tabTitles();
+			if (_itemId < 0 || _itemId >= titles.size()) { throw ak::Exception("Invalid item ID", "Check item ID"); }
+			return titles.at(_itemId);
 		}
 		break;
 		default: throw ak::Exception("Invalid object type", "Check object type");
