@@ -235,6 +235,9 @@ namespace ak {
 				//! @brief Will return the enabled state of this tree
 				bool enabled() const;
 
+				//! @brief Will return the count of items in this tree
+				int itemCount(void) const;
+
 				// ###########################################################################################################################################
 
 				// Events

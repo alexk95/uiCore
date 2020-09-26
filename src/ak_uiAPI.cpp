@@ -1052,6 +1052,19 @@ void ak::uiAPI::obj::setTabLocation(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setTabLocation()"); }
 }
 
+void ak::uiAPI::obj::setTabFocused(
+	ak::UID											_objectUid,
+	ak::ID											_tab
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->obj_setTabFocused(_objectUid, _tab);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setTabFocused()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setTabFocused()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setTabFocused()"); }
+}
+
 void ak::uiAPI::obj::appendText(
 	ak::UID												_objectUid,
 	const char *										_text
@@ -1591,6 +1604,30 @@ ak::ID ak::uiAPI::obj::getItem(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getItem()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getItem()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getItem()"); }
+}
+
+int ak::uiAPI::obj::getItemCount(
+	ak::UID									_objectUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_getItemCount(_objectUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getItemCount()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getItemCount()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getItemCount()"); }
+}
+
+int ak::uiAPI::obj::getFocusedTab(
+	ak::UID									_objectUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_getFocusedTab(_objectUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getFocusedTab()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getFocusedTab()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getFocusedTab()"); }
 }
 
 // ###############################################################################################################################################
@@ -2262,7 +2299,7 @@ void ak::uiAPI::addIconSearchPath(
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
 		manager->addDirectory(QString(_path));
 		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
-		cS->setDirectories(manager->searchDirectories());
+		if (cS != nullptr) { cS->setDirectories(manager->searchDirectories()); }
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addIconSearchPath(char *)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addIconSearchPath(char *)"); }
@@ -2276,7 +2313,7 @@ void ak::uiAPI::addIconSearchPath(
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
 		manager->addDirectory(_path);
 		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
-		cS->setDirectories(manager->searchDirectories());
+		if (cS != nullptr) { cS->setDirectories(manager->searchDirectories()); }
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addIconSearchPath(QString)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addIconSearchPath(QString)"); }

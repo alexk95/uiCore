@@ -77,79 +77,79 @@ namespace ak {
 				// ############################################################################################################
 				// Add object
 
-				//! @brief Will add a new object with the value type Boolean to the property Grid
+				//! @brief Will create a new item with the value type Boolean at the property Grid
 				//! @param _itemName The name of the property
 				//! @param _value The value of the property
 				//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 				//! @throw ak::Exception if a object creation failed
-				void addObject(
+				void createItem(
 					const QString &									_itemName,
 					bool											_value,
 					bool											_isMultipleValues = false
 				);
 
-				//! @brief Will add a new object with the value type Integer to the property Grid
+				//! @brief Will create a new item with the value type Integer at the property Grid
 				//! @param _itemName The name of the property
 				//! @param _value The value of the property
 				//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 				//! @throw ak::Exception if a object creation failed
-				void addObject(
+				void createItem(
 					const QString &									_itemName,
 					int												_value,
 					bool											_isMultipleValues = false
 				);
 
-				//! @brief Will add a new object with the value type Double to the property Grid
+				//! @brief Will create a new item with the value type Double at the property Grid
 				//! @param _itemName The name of the property
 				//! @param _value The value of the property
 				//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 				//! @throw ak::Exception if a object creation failed
-				void addObject(
+				void createItem(
 					const QString &									_itemName,
 					double											_value,
 					bool											_isMultipleValues = false
 				);
 
-				//! @brief Will add a new object with the value type String to the property Grid
+				//! @brief Will create a new item with the value type String at the property Grid
 				//! @param _itemName The name of the property
 				//! @param _value The value of the property
 				//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 				//! @throw ak::Exception if a object creation failed
-				void addObject(
+				void createItem(
 					const QString &									_itemName,
 					const char *									_value,
 					bool											_isMultipleValues = false
 				);
 
-				//! @brief Will add a new object with the value type String to the property Grid
+				//! @brief Will create a new item with the value type String at the property Grid
 				//! @param _itemName The name of the property
 				//! @param _value The value of the property
 				//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 				//! @throw ak::Exception if a object creation failed
-				void addObject(
+				void createItem(
 					const QString &									_itemName,
 					const QString &									_value,
 					bool											_isMultipleValues = false
 				);
 
-				//! @brief Will add a new object with the value type Color to the property Grid
+				//! @brief Will create a new item with the value type Color at the property Grid
 				//! @param _itemName The name of the property
 				//! @param _value The value of the property
 				//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 				//! @throw ak::Exception if a object creation failed
-				void addObject(
+				void createItem(
 					const QString &									_itemName,
 					const ak::ui::color &								_value,
 					bool											_isMultipleValues = false
 				);
 
-				//! @brief Will add a new object with the value type Selection to the property Grid
+				//! @brief Will create a new item with the value type Selection at the property Grid
 				//! @param _itemName The name of the property
 				//! @param _selection The possible selection values
 				//! @param _selectedValues The currently selected value
 				//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 				//! @throw ak::Exception if a object creation failed
-				void addObject(
+				void createItem(
 					const QString &									_itemName,
 					const std::vector<ak::ui::qt::comboButtonItem> &	_selection,
 					const QString &									_selectedValue,
@@ -190,10 +190,10 @@ namespace ak {
 				// Getter
 
 				//! @brief Returns the ammount of items in the propertyGrid
-				int getObjectCount(void) const;
+				int itemCount(void) const;
 
 				//! @brief Returns true if the showMessageboxOnSytaxError option is on
-				bool getShowMessageboxOnSyntaxError(void) const;
+				bool showMessageboxOnSyntaxError(void) const;
 
 				//! @brief Returns the value type at the specified row
 				//! @param _row The row index

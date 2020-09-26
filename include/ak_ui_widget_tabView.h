@@ -96,6 +96,13 @@ namespace ak {
 					ak::ui::core::tabLocation			_location
 				);
 
+				//! @brief Will set the current focus on the specified tab
+				//! @param _tab The tab to focus
+				//! @throw ak::Exception if the tab is invalid
+				void focusTab(
+					ak::ID								_tab
+				);
+
 				// #######################################################################################################
 
 				// Getter
@@ -105,6 +112,9 @@ namespace ak {
 
 				//! @brief Will return the titles of all tabs in this tabView
 				std::vector<QString> tabTitles(void) const;
+
+				//! @brief Will return the currently focused tab
+				ak::ID focusedTab(void) const;
 
 			private:
 

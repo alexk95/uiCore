@@ -1151,7 +1151,7 @@ void ak::ui::objectManager::obj_setTabLocation(
 			// Cast object
 			ak::ui::widget::tabView * obj = nullptr;
 			obj = dynamic_cast<ak::ui::widget::tabView *>(itm->second);
-			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast text edit"); }
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tab view"); }
 			obj->setTabLocation(_location);
 		}
 		break;
@@ -1162,6 +1162,33 @@ void ak::ui::objectManager::obj_setTabLocation(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_setTabLocation()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_setTabLocation()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_setTabLocation()"); }
+}
+
+void ak::ui::objectManager::obj_setTabFocused(
+	ak::UID											_objectUid,
+	ak::ID											_tab
+) {
+	try {
+		// Find ui manager
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oTabView:
+		{
+			// Cast object
+			ak::ui::widget::tabView * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::tabView *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tab view"); }
+			obj->focusTab(_tab);
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_setTabFocused()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_setTabFocused()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_setTabFocused()"); }
 }
 
 void ak::ui::objectManager::obj_addProperty(
@@ -1182,7 +1209,7 @@ void ak::ui::objectManager::obj_addProperty(
 		p = dynamic_cast<ak::ui::widget::propertyGrid *>(obj->second);
 		if (p == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
 		// Add property
-		p->addObject(_itemName, _value, _isMultipleValues);
+		p->createItem(_itemName, _value, _isMultipleValues);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addProperty(bool)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addProperty(bool)"); }
@@ -1207,7 +1234,7 @@ void ak::ui::objectManager::obj_addProperty(
 		p = dynamic_cast<ak::ui::widget::propertyGrid *>(obj->second);
 		if (p == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
 		// Add property
-		p->addObject(_itemName, _value, _isMultipleValues);
+		p->createItem(_itemName, _value, _isMultipleValues);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addProperty(int)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addProperty(int)"); }
@@ -1232,7 +1259,7 @@ void ak::ui::objectManager::obj_addProperty(
 		p = dynamic_cast<ak::ui::widget::propertyGrid *>(obj->second);
 		if (p == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
 		// Add property
-		p->addObject(_itemName, _value, _isMultipleValues);
+		p->createItem(_itemName, _value, _isMultipleValues);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addProperty(double)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addProperty(double)"); }
@@ -1257,7 +1284,7 @@ void ak::ui::objectManager::obj_addProperty(
 		p = dynamic_cast<ak::ui::widget::propertyGrid *>(obj->second);
 		if (p == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
 		// Add property
-		p->addObject(_itemName, _value, _isMultipleValues);
+		p->createItem(_itemName, _value, _isMultipleValues);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addProperty(char *)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addProperty(char *)"); }
@@ -1282,7 +1309,7 @@ void ak::ui::objectManager::obj_addProperty(
 		p = dynamic_cast<ak::ui::widget::propertyGrid *>(obj->second);
 		if (p == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
 		// Add property
-		p->addObject(_itemName, _value, _isMultipleValues);
+		p->createItem(_itemName, _value, _isMultipleValues);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addProperty(QString)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addProperty(QString)"); }
@@ -1307,7 +1334,7 @@ void ak::ui::objectManager::obj_addProperty(
 		p = dynamic_cast<ak::ui::widget::propertyGrid *>(obj->second);
 		if (p == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
 		// Add property
-		p->addObject(_itemName, _value, _isMultipleValues);
+		p->createItem(_itemName, _value, _isMultipleValues);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addProperty(color)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addProperty(color)"); }
@@ -1334,7 +1361,7 @@ void ak::ui::objectManager::obj_addProperty(
 		p = dynamic_cast<ak::ui::widget::propertyGrid *>(obj->second);
 		if (p == nullptr) { throw ak::Exception("Cast failed", "Cast property grid"); }
 		// Add property
-		p->addObject(_itemName, _selection, _selectedValue, _isMultipleValues);
+		p->createItem(_itemName, _selection, _selectedValue, _isMultipleValues);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addProperty(comboButtonItem)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addProperty(comboButtonItem)"); }
@@ -2291,6 +2318,76 @@ ak::ID ak::ui::objectManager::obj_getItem(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getItem()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getItem()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getItem()"); }
+}
+
+int ak::ui::objectManager::obj_getItemCount(
+	ak::UID									_objectUid
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oTabView:
+		{
+			// Cast object
+			ak::ui::widget::tabView * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::tabView *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tab view"); }
+			return obj->tabCount();
+		}
+		break;
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast object
+			ak::ui::widget::tree * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::tree *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+			return obj->itemCount();
+		}
+		break;
+		case ak::ui::core::objectType::oPropertyGrid:
+		{
+			// Cast object
+			ak::ui::widget::propertyGrid * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::propertyGrid *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tab view"); }
+			return obj->itemCount();
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getItemCount()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getItemCount()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getItemCount()"); }
+}
+
+int ak::ui::objectManager::obj_getFocusedTab(
+	ak::UID									_objectUid
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oTabView:
+		{
+			// Cast object
+			ak::ui::widget::tabView * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::tabView *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tab view"); }
+			return obj->focusedTab();
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getFocusedTab()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getFocusedTab()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getFocusedTab()"); }
 }
 
 // ###############################################################################################################################################

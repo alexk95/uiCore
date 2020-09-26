@@ -410,6 +410,8 @@ QString ak::ui::widget::tree::getItemText(
 
 bool ak::ui::widget::tree::enabled() const { return my_tree->isEnabled(); }
 
+int ak::ui::widget::tree::itemCount(void) const { return my_items.size(); }
+
 // ###########################################################################################################################
 
 // Events

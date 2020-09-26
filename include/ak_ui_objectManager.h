@@ -353,6 +353,15 @@ namespace ak {
 				ak::ui::core::tabLocation						_location
 			);
 
+			//! @brief Will focus the tab at the specified object
+			//! @param _objectUid The UID of the object to focus the tab at
+			//! @param _tab The tab to focus
+			//! @throw ak::Exception if the object UID is invalid or the tab is invalid
+			void obj_setTabFocused(
+				ak::UID											_objectUid,
+				ak::ID											_tab
+			);
+
 			//! @brief Will add a new object with the value type Boolean to the property Grid
 			//! @param _itemName The name of the property
 			//! @param _value The value of the property
@@ -692,6 +701,20 @@ namespace ak {
 			ak::ID obj_getItem(
 				ak::UID									_objectUid,
 				const QString &							_text
+			);
+
+			//! @brief Will return the count of items at the specified object
+			//! @param _objectUid The UID of the requested object
+			//! @throw ak::Exception if the provided UID is invalid or the object type is invalid
+			int obj_getItemCount(
+				ak::UID									_objectUid
+			);
+
+			//! @brief Will return the currently focused tab at the specified object
+			//! @param _objectUid The UID of the requested object
+			//! @throw ak::Exception if the provided UID is invalid
+			int obj_getFocusedTab(
+				ak::UID									_objectUid
 			);
 
 			// ###############################################################################################################################################

@@ -696,6 +696,15 @@ namespace ak {
 				ak::ui::core::tabLocation						_location
 			);
 
+			//! @brief Will focus the tab at the specified object
+			//! @param _objectUid The UID of the object to focus the tab at
+			//! @param _tab The tab to focus
+			//! @throw ak::Exception if the object UID is invalid or the tab is invalid
+			__declspec(dllexport) void setTabFocused(
+				ak::UID											_objectUid,
+				ak::ID											_tab
+			);
+
 			//! @brief Will append the provided text to the provided object
 			//! @param _objectUid The UID of the object to append the text at
 			//! @param _text The text to append
@@ -1119,6 +1128,20 @@ namespace ak {
 			__declspec(dllexport) ak::ID getItem(
 				ak::UID									_objectUid,
 				const QString &							_text
+			);
+
+			//! @brief Will return the count of items at the specified object
+			//! @param _objectUid The UID of the requested object
+			//! @throw ak::Exception if the provided UID is invalid or the object type is invalid
+			__declspec(dllexport) int getItemCount(
+				ak::UID									_objectUid
+			);
+
+			//! @brief Will return the currently focused tab at the specified object
+			//! @param _objectUid The UID of the requested object
+			//! @throw ak::Exception if the provided UID is invalid
+			__declspec(dllexport) int getFocusedTab(
+				ak::UID									_objectUid
 			);
 
 		} // namespace obj

@@ -106,7 +106,7 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 
 // ###########################################################################################################################
 
-void ak::ui::widget::propertyGrid::addObject(
+void ak::ui::widget::propertyGrid::createItem(
 	const QString &									_itemName,
 	bool											_value,
 	bool											_isMultipleValues
@@ -143,19 +143,19 @@ void ak::ui::widget::propertyGrid::addObject(
 	}
 	catch (const ak::Exception & e) { 
 		my_internalNotifier->enable(); 
-		throw ak::Exception(e, "ak::ui::widget::propertyGrid::addObject(bool)");
+		throw ak::Exception(e, "ak::ui::widget::propertyGrid::createItem(bool)");
 	}
 	catch (const std::exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::addObject(bool)");
+		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::createItem(bool)");
 	}
 	catch (...) {
 		my_internalNotifier->enable(); 
-		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::addObject(bool)");
+		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::createItem(bool)");
 	}
 }
 
-void ak::ui::widget::propertyGrid::addObject(
+void ak::ui::widget::propertyGrid::createItem(
 	const QString &									_itemName,
 	int												_value,
 	bool											_isMultipleValues
@@ -185,19 +185,19 @@ void ak::ui::widget::propertyGrid::addObject(
 	}
 	catch (const ak::Exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e, "ak::ui::widget::propertyGrid::addObject(int)");
+		throw ak::Exception(e, "ak::ui::widget::propertyGrid::createItem(int)");
 	}
 	catch (const std::exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::addObject(int)");
+		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::createItem(int)");
 	}
 	catch (...) {
 		my_internalNotifier->enable();
-		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::addObject(int)");
+		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::createItem(int)");
 	}
 }
 
-void ak::ui::widget::propertyGrid::addObject(
+void ak::ui::widget::propertyGrid::createItem(
 	const QString &									_itemName,
 	double											_value,
 	bool											_isMultipleValues
@@ -227,19 +227,19 @@ void ak::ui::widget::propertyGrid::addObject(
 	}
 	catch (const ak::Exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e, "ak::ui::widget::propertyGrid::addObject(double)");
+		throw ak::Exception(e, "ak::ui::widget::propertyGrid::createItem(double)");
 	}
 	catch (const std::exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::addObject(double)");
+		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::createItem(double)");
 	}
 	catch (...) {
 		my_internalNotifier->enable();
-		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::addObject(double)");
+		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::createItem(double)");
 	}
 }
 
-void ak::ui::widget::propertyGrid::addObject(
+void ak::ui::widget::propertyGrid::createItem(
 	const QString &									_itemName,
 	const char *									_value,
 	bool											_isMultipleValues
@@ -269,19 +269,19 @@ void ak::ui::widget::propertyGrid::addObject(
 	}
 	catch (const ak::Exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e, "ak::ui::widget::propertyGrid::addObject(string)");
+		throw ak::Exception(e, "ak::ui::widget::propertyGrid::createItem(string)");
 	}
 	catch (const std::exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::addObject(string)");
+		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::createItem(string)");
 	}
 	catch (...) {
 		my_internalNotifier->enable();
-		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::addObject(string)");
+		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::createItem(string)");
 	}
 }
 
-void ak::ui::widget::propertyGrid::addObject(
+void ak::ui::widget::propertyGrid::createItem(
 	const QString &									_itemName,
 	const QString &									_value,
 	bool											_isMultipleValues
@@ -311,19 +311,19 @@ void ak::ui::widget::propertyGrid::addObject(
 	}
 	catch (const ak::Exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e, "ak::ui::widget::propertyGrid::addObject(string)");
+		throw ak::Exception(e, "ak::ui::widget::propertyGrid::createItem(string)");
 	}
 	catch (const std::exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::addObject(string)");
+		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::createItem(string)");
 	}
 	catch (...) {
 		my_internalNotifier->enable();
-		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::addObject(string)");
+		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::createItem(string)");
 	}
 }
 
-void ak::ui::widget::propertyGrid::addObject(
+void ak::ui::widget::propertyGrid::createItem(
 	const QString &									_itemName,
 	const ak::ui::color &								_value,
 	bool											_isMultipleValues
@@ -368,19 +368,19 @@ void ak::ui::widget::propertyGrid::addObject(
 	}
 	catch (const ak::Exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e, "ak::ui::widget::propertyGrid::addObject(color)");
+		throw ak::Exception(e, "ak::ui::widget::propertyGrid::createItem(color)");
 	}
 	catch (const std::exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::addObject(color)");
+		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::createItem(color)");
 	}
 	catch (...) {
 		my_internalNotifier->enable();
-		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::addObject(color)");
+		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::createItem(color)");
 	}
 }
 
-void ak::ui::widget::propertyGrid::addObject(
+void ak::ui::widget::propertyGrid::createItem(
 	const QString &										_itemName,
 	const std::vector<ak::ui::qt::comboButtonItem> &	_selection,
 	const QString &										_selectedValue,
@@ -424,15 +424,15 @@ void ak::ui::widget::propertyGrid::addObject(
 	}
 	catch (const ak::Exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e, "ak::ui::widget::propertyGrid::addObject(color)");
+		throw ak::Exception(e, "ak::ui::widget::propertyGrid::createItem(color)");
 	}
 	catch (const std::exception & e) {
 		my_internalNotifier->enable();
-		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::addObject(color)");
+		throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::createItem(color)");
 	}
 	catch (...) {
 		my_internalNotifier->enable();
-		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::addObject(color)");
+		throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::createItem(color)");
 	}
 }
 
@@ -510,9 +510,9 @@ void ak::ui::widget::propertyGrid::setSyntaxError(int _row, const QString & _mes
 	}
 }
 
-int ak::ui::widget::propertyGrid::getObjectCount(void) const { return my_table->rowCount(); }
+int ak::ui::widget::propertyGrid::itemCount(void) const { return my_table->rowCount(); }
 
-bool ak::ui::widget::propertyGrid::getShowMessageboxOnSyntaxError(void) const { return my_showMessageboxOnSyntaxError; }
+bool ak::ui::widget::propertyGrid::showMessageboxOnSyntaxError(void) const { return my_showMessageboxOnSyntaxError; }
 
 ak::core::valueType ak::ui::widget::propertyGrid::getValueType(
 	ak::ID											_itemID
