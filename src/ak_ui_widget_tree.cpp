@@ -30,7 +30,7 @@ ak::ui::widget::tree::tree(
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTree, _iconManager,  _messenger, _uidManager, nullptr, _colorStyle),
 	my_tree(nullptr), my_filter(nullptr), my_layout(nullptr), my_multiWidget(nullptr), my_treeSignalLinker(nullptr), my_filterSignalLinker(nullptr),
 	my_notifierFilter(nullptr), my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0), 
-	my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false)
+	my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false), my_expandSelectedItems(true)
 {
 	try {
 		// Set my UID
@@ -230,9 +230,9 @@ void ak::ui::widget::tree::setItemSelected(
 		my_treeSignalLinker->enable();
 		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eSelectionChanged);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::select()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::select()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::select()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setItemSelected()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setItemSelected()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setItemSelected()"); }
 }
 
 void ak::ui::widget::tree::setSingleItemSelected(
@@ -243,9 +243,9 @@ void ak::ui::widget::tree::setSingleItemSelected(
 		deselectAllItems();
 		setItemSelected(_itemId, _selected);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::select()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::select()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::select()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setSingleItemSelected()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setSingleItemSelected()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setSingleItemSelected()"); }
 }
 
 void ak::ui::widget::tree::toggleItemSelection(
@@ -261,9 +261,9 @@ void ak::ui::widget::tree::toggleItemSelection(
 		my_treeSignalLinker->enable();
 		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eSelectionChanged);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::select()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::select()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::select()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::toggleItemSelection()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::toggleItemSelection()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::toggleItemSelection()"); }
 }
 
 void ak::ui::widget::tree::deselectAllItems(void) {
@@ -276,6 +276,17 @@ void ak::ui::widget::tree::deselectAllItems(void) {
 void ak::ui::widget::tree::setEnabled(
 	bool							_enabled
 ) { my_tree->setEnabled(_enabled); }
+
+void ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled(
+	bool							_autoExpand
+) {
+	try {
+		my_expandSelectedItems = _autoExpand;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled()"); }
+}
 
 // ###########################################################################################################################################
 

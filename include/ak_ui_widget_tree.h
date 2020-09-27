@@ -143,6 +143,12 @@ namespace ak {
 					bool							_enabled = true
 				);
 
+				//! @brief Will set the auto expand selected items enabled option
+				//! @param _autoExpand If true, all parent items of a selected item will be expanded so the selected item will be visible
+				void setAutoExpandSelectedItemsEnabled(
+					bool							_autoExpand = true
+				);
+
 				// ###########################################################################################################################################
 
 				// Filter
@@ -321,6 +327,7 @@ namespace ak {
 
 
 				bool										my_selectAndDeselectChildren;
+				bool										my_expandSelectedItems;
 
 				void showMessage(const ak::Exception &);
 
