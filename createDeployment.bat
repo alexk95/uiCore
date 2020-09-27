@@ -119,3 +119,4 @@ COPY "%UI_CORE_ROOT%\x64\Release\qt.conf" "%UI_CORE_ROOT%\Deployment"
 ECHO [Paths] > "%UI_CORE_ROOT%\Deployment\qt.conf"
 ECHO Plugins = .\\plugins >> "%UI_CORE_ROOT%\Deployment\qt.conf"
 
+:END
