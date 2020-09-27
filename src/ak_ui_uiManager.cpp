@@ -245,6 +245,7 @@ void ak::ui::uiManager::tabifyDock(
 		
 		// tabify dock
 		my_window->tabifyDockWidget(dock1, dock2);
+		dock1->setFocus();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::tabifyDock()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::tabifyDock()"); }
@@ -476,6 +477,7 @@ ak::ui::ttb::page * ak::ui::uiManager::createTabToolbarSubContainer(
 	try {
 		tt::Page * page = my_tabToolBar->AddPage(_text);
 		ak::ui::ttb::page * p = new ak::ui::ttb::page(my_messenger, my_uidManager, page, _text);
+		if (my_colorStyle != nullptr) { p->setColorStyle(my_colorStyle); }
 		return p;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::createTabToolbarSubContainer()"); }

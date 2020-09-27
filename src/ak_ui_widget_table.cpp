@@ -341,7 +341,7 @@ void ak::ui::widget::table::clear(void) {
 		// Create the signal linker again
 		my_signalLinker = new ak::ui::signalLinker(my_messenger, my_uidManager);
 		if (my_signalLinker == nullptr) { throw ak::Exception("Failed to create", "Create signal linker"); }
-		my_signalLinker->addLink(my_table, my_uid);
+		my_signalLinker->addLink(my_table, my_table->uid());
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::table::clear()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::table::clear()"); }

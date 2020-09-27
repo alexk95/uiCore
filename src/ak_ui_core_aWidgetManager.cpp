@@ -51,8 +51,8 @@ ak::ui::core::aWidgetManager::~aWidgetManager() {
 }
 
 void ak::ui::core::aWidgetManager::memFree(void) {
-	try { if (my_messengerCreated && my_messenger != nullptr) { delete my_messenger; my_messenger = nullptr; my_messengerCreated = false; } } catch (...) {}
-	try { if (my_uidManagerCreated && my_uidManager != nullptr) { delete my_uidManager; my_uidManager = nullptr; my_uidManagerCreated = false; } } catch (...) {}
-	try { if (my_objectManagerCreated && my_objectManager != nullptr) { delete my_objectManager; my_objectManager = nullptr; my_objectManagerCreated = false; } } catch (...) {}
-	try { if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; } } catch(...) {}
+	try { if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; } } catch (...) { assert(0); /*ERROR*/ }
+	try { if (my_messengerCreated && my_messenger != nullptr) { delete my_messenger; my_messenger = nullptr; my_messengerCreated = false; } } catch (...) { assert(0); /*ERROR*/ }
+	try { if (my_uidManagerCreated && my_uidManager != nullptr) { delete my_uidManager; my_uidManager = nullptr; my_uidManagerCreated = false; } } catch (...) { assert(0); /*ERROR*/ }
+	try { if (my_objectManagerCreated && my_objectManager != nullptr) { delete my_objectManager; my_objectManager = nullptr; my_objectManagerCreated = false; } } catch (...) { assert(0); /*ERROR*/ }
 }

@@ -3247,7 +3247,9 @@ void ak::ui::objectManager::setColorStyle(
 
 void ak::ui::objectManager::destroyAll(void) {
 	try {
-		return;
+
+		if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
+		my_signalLinker = new ak::ui::signalLinker(my_messenger, my_uidManager);
 
 		my_mapObjectsIterator itm = my_mapObjects.begin();
 
@@ -3269,6 +3271,8 @@ void ak::ui::objectManager::destroyAll(void) {
 			ak::ui::core::aObject * obj = itm->second;
 			if (obj != nullptr) { delete obj; }
 		}
+		my_mapCreators.clear();
+		my_mapObjects.clear();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::destroyAll()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::destroyAll()"); }

@@ -52,7 +52,8 @@ namespace ak {
 				sTextEdit,
 				sToolBar,
 				sToolButton,
-				sTree
+				sTree,
+				sWidget
 			};
 
 			//! @brief Will return the name of this styleSheet

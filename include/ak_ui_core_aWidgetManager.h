@@ -63,14 +63,14 @@ namespace ak {
 				ak::ui::objectManager *			my_objectManager;			//! The object manager this widget manager is using
 				ak::ui::signalLinker *			my_signalLinker;			//! The signal linker this widget manager is using
 
+				//! @brief Will remove all objects created by this widget manager
+				void memFree(void);
+
 			private:
 
 				bool							my_messengerCreated;		//! If true, then the messenger was created by this widget manager
 				bool							my_uidManagerCreated;		//! If true, then the UID manager was created by this widget manager
 				bool							my_objectManagerCreated;	//! If true, then the objectManager was created by this widget manager
-
-				//! @brief Will remove all objects created by this widget manager
-				void memFree(void);
 
 				// Block default constructor
 				aWidgetManager() = delete;

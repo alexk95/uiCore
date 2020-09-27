@@ -583,8 +583,17 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 				");}\n");
 
 		}
-			break;
+		break;
+		// ######################################################################################################
 
+		// Widget
+		case ak::ui::colorStyle::styleableObject::sWidget:
+		{
+			out.append("QWidget {"
+				_fore _backWindow
+				"}\n");
+		}
+		break;
 		default: assert(0); // Not implemented yet
 		}
 		return out;

@@ -271,7 +271,7 @@ namespace ak {
 			QTimer *													my_timerLabelHide;				//! The timer used to hide the status label delayed
 			QTimer *													my_timerShowMainWindow;			//! The timer used to show the main window upon creation
 
-			std::map<ak::UID, ak::ui::core::ttbContainer *> my_mapTabToolBarContainer;
+			std::map<ak::UID, ak::ui::core::ttbContainer *>				my_mapTabToolBarContainer;
 			typedef std::map<ak::UID,
 				ak::ui::core::ttbContainer *>::iterator					my_mapTabToolBarContainerIterator;
 		};

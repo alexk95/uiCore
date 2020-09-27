@@ -203,6 +203,11 @@ ak::ID ak::ui::widget::tree::add(
 
 //! @brief Will clear all tree items, receivers will get a destroyed message for each item
 void ak::ui::widget::tree::clear(void) {
+	if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
+	my_signalLinker = new ak::ui::signalLinker(my_internalMessenger, my_internalUidManager);
+	if (my_treeSignalLinker != nullptr) { delete my_treeSignalLinker; my_treeSignalLinker = nullptr; }
+	my_treeSignalLinker = new ak::ui::treeSignalLinker(this, my_tree);
+
 	my_tree->clear();
 	for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
 		ak::ui::qt::treeItem * item = itm->second;
@@ -235,12 +240,8 @@ void ak::ui::widget::tree::setSingleItemSelected(
 	bool							_selected
 ) {
 	try {
-		my_itemsIterator itm = my_items.find(_itemId);
-		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
-		my_treeSignalLinker->disable();
-		itm->second->setSelected(_selected);
-		my_treeSignalLinker->enable();
-		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eSelectionChanged);
+		deselectAllItems();
+		setItemSelected(_itemId, _selected);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::select()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::select()"); }

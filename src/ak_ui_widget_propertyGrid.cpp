@@ -18,6 +18,7 @@
 #include "ak_ui_objectManager.h"			// object manager
 #include "ak_messenger.h"					// messenger
 #include "ak_uidMangager.h"					// UID manager
+#include <ak_ui_signalLinker.h>
 
 // Qt header
 #include <qcolordialog.h>					// QColorDialog
@@ -441,15 +442,19 @@ void ak::ui::widget::propertyGrid::createItem(
 // Manipulate existing
 
 void ak::ui::widget::propertyGrid::clear(void) { 
+	// Disconnect all items
+	if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
+	my_signalLinker = new ak::ui::signalLinker(my_messenger, my_uidManager);
+
+	// delete all items created
+	my_objectManager->destroyAll();
+	
 	// Clear up all entries
-	for (int i = 0; i < my_items.size(); i++) {
-		ak::ui::widget::propertyGridItem * itm = my_items.at(i);
-		delete itm;
-	}
-	my_items.clear();
 	my_UIDmap.clear();
 	my_messenger->clearAll();
 	my_table->clear();
+	my_items.clear();
+	
 	my_table->setColumnHeader(0, "Property");
 	my_table->setColumnHeader(1, "Value");
 	my_uidManager->setLatestUid(my_table->uid() + 1);

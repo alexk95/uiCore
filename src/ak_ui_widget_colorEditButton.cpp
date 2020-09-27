@@ -96,6 +96,8 @@ ak::ui::widget::colorEditButton::colorEditButton(
 }
 
 ak::ui::widget::colorEditButton::~colorEditButton() {
+	aWidgetManager::memFree();
+
 	if (my_button != nullptr) { delete my_button; my_button = nullptr; }
 	if (my_layout != nullptr) { delete my_layout; my_layout = nullptr; }
 	if (my_notifier != nullptr) { delete my_notifier; my_notifier = nullptr; }
