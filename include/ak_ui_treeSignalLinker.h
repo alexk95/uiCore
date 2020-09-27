@@ -19,6 +19,9 @@
 
 // Forward declaration
 class QTreeWidgetItem;
+class QMouseEvent;
+class QKeyEvent;
+class QEvent;
 
 namespace ak {
 	namespace ui {
@@ -65,7 +68,12 @@ namespace ak {
 			void treeItemExpanded(QTreeWidgetItem *item);
 			void treeItemSelectionChanged();
 
+			void mouseMove(QMouseEvent *);
+			void treeLeave(QEvent *);
+
+
 		private:
+			ak::ID							my_treeFocusedItem;
 			ak::ui::widget::tree *			my_treeManager;						//! The tree manager using this signal linker
 			ak::ui::qt::tree *				my_tree;							//! The tree the signals are connected to
 			bool							my_enabled;							//! If true the signal linker is enabled

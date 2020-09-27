@@ -142,7 +142,7 @@ Example::Example()
 		catch (const std::exception & e) { throw ak::Exception(e.what(), "Example::Example()"); }
 		catch (...) { throw ak::Exception("Unknown error", "Example::Example()"); }
 	}
-	catch (const std::exception & e) { ak::uiAPI::showMessageBox(my_ui.mainWindow, e.what(), "Error"); }
+	catch (const std::exception & e) { ak::uiAPI::special::showMessageBox(my_ui.mainWindow, e.what(), "Error"); }
 }
 
 Example::~Example() {}

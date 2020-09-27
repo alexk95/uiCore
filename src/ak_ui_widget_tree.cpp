@@ -9,18 +9,18 @@
 
 // AK header
 #include "ak_ui_widget_tree.h"				// corresponding class
-#include "ak_exception.h"					// error handling
 #include "ak_messenger.h"					// messenger
 #include "ak_ui_signalLinker.h"				// filter signal to messaging system connection
 #include "ak_ui_treeSignalLinker.h"			// tree signal to messaging system connection
 #include "ak_ui_qt_textedit.h"				// textEdit for the filter
 #include "ak_ui_qt_tree.h"					// object this tree widget is managing
 #include "ak_ui_qt_treeItem.h"				// treeItem
-#include "ak_ui_colorStyle.h"				// colorStyle
+#include "ak_ui_colorStyle.h"				// colorStyle 
 #include "ak_ui_color.h"					// color
 #include "ak_notifierTreeFilter.h"			// notify the tree that the filter has changed
 #include "ak_ui_core.h"						// objectType, convet textAlignment
 #include "ak_uidMangager.h"					// UID manager
+#include <qmessagebox.h>
 
 ak::ui::widget::tree::tree(
 	ak::messenger *			_messenger,
@@ -488,6 +488,13 @@ void ak::ui::widget::tree::raiseItemEvent(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::raiseItemEvent()"); }
 }
 
+void ak::ui::widget::tree::raiseLeaveEvent(void) {
+	try { my_messenger->sendMessage(my_uid, ak::core::mEvent, ak::core::eFocusLeft, 0, 0); }
+	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::raiseLeaveEvent()"); }
+	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::raiseLeaveEvent()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::raiseLeaveEvent()"); }
+}
+
 void ak::ui::widget::tree::selectionChangedEvent(void) {
 	try {
 		if (my_selectAndDeselectChildren) {
@@ -579,3 +586,10 @@ void ak::ui::widget::tree::clearItem(
 }
 
 // ###########################################################################################################################################
+
+void ak::ui::widget::tree::showMessage(const ak::Exception & _e) {
+	QMessageBox msg;
+	msg.setText(_e.what());
+	msg.setWindowTitle("Error");
+	msg.exec();
+}

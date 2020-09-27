@@ -18,7 +18,7 @@ QString ak::core::toQString(
 	case ak::core::mEvent: return QString("Event");
 	case ak::core::mNotification: return QString("Notification");
 	case ak::core::mText: return QString("Text");
-	case ak::core::mUnknownMessageType:  return QString("Unknown message type");
+	case ak::core::mUnknownMessageType:  return QString("UnknownMessageType");
 	default: assert(0); // Not implemented yet
 	}
 	return QString("");
@@ -29,29 +29,30 @@ QString ak::core::toQString(
 ) {
 	switch (_eventType)
 	{
-	case ak::core::eUnknownEvent: return QString("Unknown event");
+	case ak::core::eUnknownEvent: return QString("UnknownEvent");
 	case ak::core::eActivated: return QString("Activated");
 	case ak::core::eChanged: return QString("Changed");
 	case ak::core::eCleared: return QString("Cleared");
 	case ak::core::eClicked: return QString("Clicked");
 	case ak::core::eClosing: return QString("Closing");
 	case ak::core::eCollpased: return QString("Collapsed");
-	case ak::core::eCursorPosotionChanged: return QString("Cursor position changed");
+	case ak::core::eCursorPosotionChanged: return QString("CursorPositionChanged");
 	case ak::core::eDestroyed: return QString("Destroyed");
-	case ak::core::eDoubleClicked: return QString("Double clicked");
+	case ak::core::eDoubleClicked: return QString("DoubleClicked");
 	case ak::core::eExpanded: return QString("Expanded");
 	case ak::core::eFocused: return QString("Focused");
-	case ak::core::eIndexChanged: return QString("Index changed");
-	case ak::core::eInvalidEntry: return QString("Invalid entry");
-	case ak::core::eKeyPressed: return QString("Key pressed");
-	case ak::core::eLocationChanged: return QString("Location changed");
+	case ak::core::eFocusLeft: return QString("FocusLeft");
+	case ak::core::eIndexChanged: return QString("IndexChanged");
+	case ak::core::eInvalidEntry: return QString("InvalidEntry");
+	case ak::core::eKeyPressed: return QString("KeyPressed");
+	case ak::core::eLocationChanged: return QString("LocationChanged");
 	case ak::core::eReleased: return QString("Released");
-	case ak::core::eSelectionChanged: return QString("Selection changed");
-	case ak::core::eStateChanged: return QString("State changed");
-	case ak::core::eTextChanged: return QString("Text changed");
+	case ak::core::eSelectionChanged: return QString("SelectionChanged");
+	case ak::core::eStateChanged: return QString("StateChanged");
+	case ak::core::eTextChanged: return QString("TextChanged");
 	case ak::core::eTimeout: return QString("Timeout");
-	case ak::core::eToggeledChecked: return QString("Toggeled to checked");
-	case ak::core::eToggeledUnchecked: return QString("Toggeled to unchecked");
+	case ak::core::eToggeledChecked: return QString("ToggeledToChecked");
+	case ak::core::eToggeledUnchecked: return QString("ToggeledToUnchecked");
 	default: assert(0); // not implemented yet
 	}
 	return QString("");
@@ -68,16 +69,16 @@ QString ak::core::toQString(
 	case ak::core::valueType::vDouble: return QString("Double"); break;
 	case ak::core::valueType::vFloat: return QString("Float"); break;
 	case ak::core::valueType::vInt: return QString("Integer"); break;
-	case ak::core::valueType::vInt64: return QString("64bit integer"); break;
-	case ak::core::valueType::vLosslessDouble: return QString("Lossless Double"); break;
-	case ak::core::valueType::vLosslessFloat: return QString("Lossless Float"); break;
+	case ak::core::valueType::vInt64: return QString("64bitInteger"); break;
+	case ak::core::valueType::vLosslessDouble: return QString("LosslessDouble"); break;
+	case ak::core::valueType::vLosslessFloat: return QString("LosslessFloat"); break;
 	case ak::core::valueType::vNull: return QString("Null"); break;
 	case ak::core::valueType::vNumber: return QString("Number"); break;
 	case ak::core::valueType::vObject: return QString("Object"); break;
 	case ak::core::valueType::vSelection: return QString("Selection"); break;
 	case ak::core::valueType::vString: return QString("String"); break;
-	case ak::core::valueType::vUint: return QString("Unsigned integer"); break;
-	case ak::core::valueType::vUint64: return QString("Unsigned 64bit integer"); break;
+	case ak::core::valueType::vUint: return QString("UnsignedInteger"); break;
+	case ak::core::valueType::vUint64: return QString("Unsigned64bitInteger"); break;
 	default: assert(0); // not implemented yet
 	}
 	return QString("");

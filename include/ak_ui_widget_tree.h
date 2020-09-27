@@ -20,6 +20,7 @@
 
 // AK header
 #include "ak_ui_core_aWidgetManager.h"		// base class
+#include "ak_exception.h"					// error handling
 #include "ak_globalDataTypes.h"				// UID and ID type
 #include "ak_core.h"						// eventType
 
@@ -265,6 +266,9 @@ namespace ak {
 					int								_info2 = 0
 				);
 
+				//! @brief Will perform the leave event
+				void raiseLeaveEvent(void);
+
 				//! @brief Will perform the selection changed event
 				void selectionChangedEvent(void);
 
@@ -317,6 +321,8 @@ namespace ak {
 
 
 				bool										my_selectAndDeselectChildren;
+
+				void showMessage(const ak::Exception &);
 
 			};
 

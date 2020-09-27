@@ -17,12 +17,12 @@
 
 // Qt header
 #include <qtreewidget.h>				// QTreeWidget
-#include <qevent.h>
+#include <qevent.h>						// QEvent, QMouseEvent, QKeyEvent
 
 ak::ui::treeSignalLinker::treeSignalLinker(
 	ak::ui::widget::tree *				_treeManager,
 	ak::ui::qt::tree *					_tree
-) : my_enabled(true), my_tree(nullptr), my_treeManager(nullptr)
+) : my_enabled(true), my_tree(nullptr), my_treeManager(nullptr), my_treeFocusedItem(ak::invalidID)
 {
 	try {
 		if (_tree == nullptr) { throw ak::Exception("Is nullptr", "Check tree"); }
@@ -36,10 +36,12 @@ ak::ui::treeSignalLinker::treeSignalLinker(
 		connect(my_tree, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(treeItemClicked(QTreeWidgetItem *, int)));
 		connect(my_tree, SIGNAL(itemCollapsed(QTreeWidgetItem *)), this, SLOT(treeItemCollapsed(QTreeWidgetItem *)));
 		connect(my_tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(treeItemDoubleClicked(QTreeWidgetItem *, int)));
-		connect(my_tree, SIGNAL(itemEntered(QTreeWidgetItem *, int)), this, SLOT(treeItemEntered(QTreeWidgetItem *, int)));
+		//connect(my_tree, SIGNAL(itemEntered(QTreeWidgetItem *, int)), this, SLOT(treeItemEntered(QTreeWidgetItem *, int)));
 		connect(my_tree, SIGNAL(itemExpanded(QTreeWidgetItem *)), this, SLOT(treeItemExpanded(QTreeWidgetItem *)));
 		connect(my_tree, SIGNAL(itemSelectionChanged()), this, SLOT(treeItemSelectionChanged()));
 		connect(my_tree, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(treeKeyPressed(QKeyEvent *)));
+		connect(my_tree, SIGNAL(mouseMove(QMouseEvent *)), this, SLOT(mouseMove(QMouseEvent *)));
+		connect(my_tree, SIGNAL(leave(QEvent *)), this, SLOT(treeLeave(QEvent *)));
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::treeSignalLinker::treeSignalLinker()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::treeSignalLinker::treeSignalLinker()");}
@@ -53,11 +55,13 @@ ak::ui::treeSignalLinker::~treeSignalLinker() {
 	disconnect(my_tree, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(treeItemClicked(QTreeWidgetItem *, int)));
 	disconnect(my_tree, SIGNAL(itemCollapsed(QTreeWidgetItem *)), this, SLOT(treeItemCollapsed(QTreeWidgetItem *)));
 	disconnect(my_tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(treeItemDoubleClicked(QTreeWidgetItem *, int)));
-	disconnect(my_tree, SIGNAL(itemEntered(QTreeWidgetItem *, int)), this, SLOT(treeItemEntered(QTreeWidgetItem *, int)));
+	//disconnect(my_tree, SIGNAL(itemEntered(QTreeWidgetItem *, int)), this, SLOT(treeItemEntered(QTreeWidgetItem *, int)));
 	disconnect(my_tree, SIGNAL(itemExpanded(QTreeWidgetItem *)), this, SLOT(treeItemExpanded(QTreeWidgetItem *)));
 	disconnect(my_tree, SIGNAL(itemPressed(QTreeWidgetItem *, int)), this, SLOT(treeItemPressed(QTreeWidgetItem *, int)));
 	disconnect(my_tree, SIGNAL(itemSelectionChanged()), this, SLOT(treeItemSelectionChanged()));
 	disconnect(my_tree, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(treeKeyPressed(QKeyEvent *)));
+	disconnect(my_tree, SIGNAL(mouseMove(QMouseEvent *)), this, SLOT(mouseMove(QMouseEvent *)));
+	disconnect(my_tree, SIGNAL(leave(QEvent *)), this, SLOT(treeLeave(QEvent *)));
 }
 
 void ak::ui::treeSignalLinker::enable(void) { my_enabled = true; }
@@ -108,4 +112,30 @@ void ak::ui::treeSignalLinker::treeItemExpanded(QTreeWidgetItem *item) {
 
 void ak::ui::treeSignalLinker::treeItemSelectionChanged() {
 	if (my_enabled) { my_treeManager->selectionChangedEvent(); }
+}
+
+void ak::ui::treeSignalLinker::mouseMove(QMouseEvent * _event) {
+	QPoint mousePoint = _event->pos();
+	QTreeWidgetItem *item = my_tree->itemAt(mousePoint);
+	if (item == nullptr) {
+		if (my_treeFocusedItem != ak::invalidID) {
+			my_treeFocusedItem = ak::invalidID;
+			my_treeManager->raiseLeaveEvent();
+		}
+	}
+	else {
+		ak::ui::qt::treeItem * itm = nullptr;
+		itm = dynamic_cast<ak::ui::qt::treeItem *>(item);
+		assert(itm != nullptr); // Cast failed
+		if (itm->id() == my_treeFocusedItem) { return; }
+		my_treeFocusedItem = itm->id();
+		my_treeManager->raiseItemEvent(my_treeFocusedItem, ak::core::eFocused, 0);
+	}
+}
+
+void ak::ui::treeSignalLinker::treeLeave(QEvent * _event) {
+	if (my_treeFocusedItem != ak::invalidID) {
+		my_treeFocusedItem = ak::invalidID;
+		my_treeManager->raiseLeaveEvent();
+	}
 }

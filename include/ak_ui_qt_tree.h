@@ -20,7 +20,9 @@
 #include "ak_ui_core_aWidget.h"				// base class
 #include "ak_globalDataTypes.h"				// UID and ID types
 
+class QMouseEvent;
 class QKeyEvent;
+class QEvent;
 
 namespace ak {
 	namespace ui {
@@ -49,6 +51,12 @@ namespace ak {
 
 				//! @brief Emits a returnPressed signal if the return key is pressed
 				virtual void keyPressEvent(QKeyEvent * _event) override;
+
+				//! @brief Emits a mouse move event
+				virtual void mouseMoveEvent(QMouseEvent *event) override;
+
+				//! @brief Emits a FocusLeft event
+				virtual void leaveEvent(QEvent *event) override;
 
 				// #######################################################################################################
 
@@ -94,6 +102,8 @@ namespace ak {
 
 			signals:
 				void keyPressed(QKeyEvent *);
+				void mouseMove(QMouseEvent *);
+				void leave(QEvent *);
 
 			private:
 				std::map<ak::ID,treeItem *>			my_topLevelItems;

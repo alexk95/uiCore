@@ -33,6 +33,16 @@ void ak::ui::qt::tree::keyPressEvent(QKeyEvent *_event)
 	emit keyPressed(_event);
 }
 
+void ak::ui::qt::tree::mouseMoveEvent(QMouseEvent * _event) {
+	QTreeWidget::mouseMoveEvent(_event);
+	emit mouseMove(_event);
+}
+
+void ak::ui::qt::tree::leaveEvent(QEvent *_event) {
+	QTreeWidget::leaveEvent(_event);
+	emit leave(_event);
+}
+
 // #######################################################################################################
 
 QWidget * ak::ui::qt::tree::widget(void) { return this; }
