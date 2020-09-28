@@ -2483,6 +2483,45 @@ void ak::ui::objectManager::itm_toggleSelection(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_toggleSelection()"); }
 }
 
+void ak::ui::objectManager::itm_setText(
+	ak::UID											_objectUid,
+	ak::ID											_itemId,
+	const QString &									_text
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast tree
+			ak::ui::widget::tree * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
+			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+
+			t->setItemText(_itemId, _text);
+		}
+		break;
+		case ak::ui::core::objectType::oTabView:
+		{
+			// Cast tree
+			ak::ui::widget::tabView * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tabView *>(obj->second);
+			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tab view"); }
+			t->setTabText(_itemId, _text);
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_setText()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_setText()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_setText()"); }
+}
+
 // ###############################################################################################################################################
 
 // Item getter
@@ -2575,9 +2614,7 @@ QString ak::ui::objectManager::itm_getText(
 			ak::ui::widget::tabView * obj = nullptr;
 			obj = dynamic_cast<ak::ui::widget::tabView *>(itm->second);
 			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast tab view"); }
-			std::vector<QString> titles = obj->tabTitles();
-			if (_itemId < 0 || _itemId >= titles.size()) { throw ak::Exception("Invalid item ID", "Check item ID"); }
-			return titles.at(_itemId);
+			return obj->tabText(_itemId);
 		}
 		break;
 		default: throw ak::Exception("Invalid object type", "Check object type");

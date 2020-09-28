@@ -21,6 +21,7 @@
 #include <ak_ui_uiManager.h>				// uiManager
 #include <ak_uidMangager.h>					// UID manager
 #include <ak_singletonAllowedMessages.h>	// allowed messages
+#include <ak_file.h>						// file
 
 // Qt header
 #include <qapplication.h>					// QApplication
@@ -44,8 +45,12 @@ ak::uiAPI::apiManager::apiManager()
 	my_isInitialized(false),
 	my_app(nullptr),
 	my_appIsRunning(false),
-	my_defaultSurfaceFormat(nullptr)
-{ ak::singletonAllowedMessages::instance(); }
+	my_defaultSurfaceFormat(nullptr),
+	my_fileUidManager(nullptr)
+{
+	ak::singletonAllowedMessages::instance();
+	my_fileUidManager = new ak::uidManager();
+}
 
 ak::uiAPI::apiManager::~apiManager() {
 	// iconManager
@@ -262,6 +267,63 @@ QSurfaceFormat * ak::uiAPI::apiManager::getDefaultSurfaceFormat(void) {
 	return my_defaultSurfaceFormat;
 }
 
+ak::file * ak::uiAPI::apiManager::getFile(
+	ak::UID												_fileUid
+) {
+	try {
+		if (_fileUid == ak::invalidUID) {
+			ak::file * f = new ak::file();
+			f->setUid(my_fileUidManager->getId());
+			my_mapFiles.insert_or_assign(f->uid(), f);
+			return f;
+		}
+		else {
+			my_mapFilesIterator itm = my_mapFiles.find(_fileUid);
+			if (itm == my_mapFiles.end()) { throw ak::Exception("Invalid file UID", "Check file UID"); }
+			ak::file * f = itm->second;
+			return f;
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::getFile()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::getFile()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::getFile()"); }
+}
+
+ak::file * ak::uiAPI::apiManager::getExistingFile(
+	ak::UID												_fileUid
+) {
+	try {
+		my_mapFilesIterator itm = my_mapFiles.find(_fileUid);
+		if (itm == my_mapFiles.end()) { throw ak::Exception("Invalid file UID", "Check file UID"); }
+		ak::file * f = itm->second;
+		return f;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::getFile()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::getFile()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::getFile()"); }
+}
+
+void ak::uiAPI::apiManager::deleteFile(
+	ak::UID												_fileUid
+) {
+	try {
+		my_mapFilesIterator itm = my_mapFiles.find(_fileUid);
+		if (itm == my_mapFiles.end()) { throw ak::Exception("Invalid file UID", "Check file UID"); }
+		ak::file * f = itm->second;
+		delete f;
+		my_mapFiles.erase(_fileUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::deleteFile()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::deleteFile()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::deleteFile()"); }
+}
+
+void ak::uiAPI::apiManager::deleteAllFiles() {
+	for (my_mapFilesIterator itm = my_mapFiles.begin(); itm != my_mapFiles.end(); itm++) {
+		ak::file * f = itm->second; delete f;
+	}
+	my_mapFiles.clear();
+}
 
 // ###############################################################################################################################################
 
@@ -1040,8 +1102,8 @@ void ak::uiAPI::obj::setTabToolBarVisible(
 }
 
 void ak::uiAPI::obj::setTabLocation(
-	ak::UID											_objectUid,
-	ak::ui::core::tabLocation						_location
+	ak::UID												_objectUid,
+	ak::ui::core::tabLocation							_location
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1053,8 +1115,8 @@ void ak::uiAPI::obj::setTabLocation(
 }
 
 void ak::uiAPI::obj::setTabFocused(
-	ak::UID											_objectUid,
-	ak::ID											_tab
+	ak::UID												_objectUid,
+	ak::ID												_tab
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1607,7 +1669,7 @@ ak::ID ak::uiAPI::obj::getItem(
 }
 
 int ak::uiAPI::obj::getItemCount(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1619,7 +1681,7 @@ int ak::uiAPI::obj::getItemCount(
 }
 
 int ak::uiAPI::obj::getFocusedTab(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1675,6 +1737,20 @@ void ak::uiAPI::itm::toggleSelection(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::toggleSelection()"); }
 }
 
+void ak::uiAPI::itm::setText(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	const QString &										_text
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_setText(_objectUid, _itemId, _text);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setText()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setText()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setText()"); }
+}
+
 // ###############################################################################################################################################
 
 // Item getter
@@ -1720,8 +1796,8 @@ QString ak::uiAPI::itm::getText(
 }
 
 ak::core::valueType ak::uiAPI::itm::getValueType(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1747,8 +1823,8 @@ ak::ID ak::uiAPI::itm::getID(
 }
 
 bool ak::uiAPI::itm::getValueBoolean(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1760,8 +1836,8 @@ bool ak::uiAPI::itm::getValueBoolean(
 }
 
 ak::ui::color ak::uiAPI::itm::getValueColor(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1773,8 +1849,8 @@ ak::ui::color ak::uiAPI::itm::getValueColor(
 }
 
 double ak::uiAPI::itm::getValueDouble(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1786,8 +1862,8 @@ double ak::uiAPI::itm::getValueDouble(
 }
 
 int ak::uiAPI::itm::getValueInteger(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1799,8 +1875,8 @@ int ak::uiAPI::itm::getValueInteger(
 }
 
 std::vector<QString> ak::uiAPI::itm::getValuePossibleSelection(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1812,8 +1888,8 @@ std::vector<QString> ak::uiAPI::itm::getValuePossibleSelection(
 }
 
 QString ak::uiAPI::itm::getValueSelection(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1825,8 +1901,8 @@ QString ak::uiAPI::itm::getValueSelection(
 }
 
 QString ak::uiAPI::itm::getValueString(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1838,8 +1914,8 @@ QString ak::uiAPI::itm::getValueString(
 }
 
 bool ak::uiAPI::itm::getValueIsMultivalued(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1892,12 +1968,12 @@ void ak::uiAPI::special::showMessageBox(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::showMessageBox(QString)"); }
 }
 
-QString ak::uiAPI::special::openFile(
-	ak::UID									_uiManagerUid,
-	const QString &							_caption,
-	const QString &							_initialDir,
-	const QString &							_filter,
-	QString *								_selectedFilter
+QString ak::uiAPI::special::openFileDialog(
+	ak::UID												_uiManagerUid,
+	const QString &										_caption,
+	const QString &										_initialDir,
+	const QString &										_filter,
+	QString *											_selectedFilter
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1910,17 +1986,17 @@ QString ak::uiAPI::special::openFile(
 		return QFileDialog::getOpenFileName(nullptr, _caption, _initialDir, _filter, _selectedFilter);
 		
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::special::openFile()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::special::openFile()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::special::openFile()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::special::openFileDialog()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::special::openFileDialog()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::special::openFileDialog()"); }
 }
 
-QString ak::uiAPI::special::saveFile(
-	ak::UID									_uiManagerUid,
-	const QString &							_caption,
-	const QString &							_initialDir,
-	const QString &							_filter,
-	QString *								_selectedFilter
+QString ak::uiAPI::special::saveFileDialog(
+	ak::UID												_uiManagerUid,
+	const QString &										_caption,
+	const QString &										_initialDir,
+	const QString &										_filter,
+	QString *											_selectedFilter
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1933,33 +2009,225 @@ QString ak::uiAPI::special::saveFile(
 		return QFileDialog::getSaveFileName(nullptr, _caption, _initialDir, _filter, _selectedFilter);
 
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::special::saveFile()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::special::saveFile()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::special::saveFile()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::special::saveFileDialog()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::special::saveFileDialog()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::special::saveFileDialog()"); }
 }
 
-QStringList ak::uiAPI::special::importFile(
-	const QString &										_fileName,
-	bool												_includeEmptyLines
+QString ak::uiAPI::special::createEventText(
+	ak::UID												_sender,
+	ak::core::eventType									_event,
+	int													_info1,
+	int													_info2
+) {
+	QString str("Event{Sender=\"");
+	str.append(QString::number(_sender));
+	str.append("\";EventType=\"");
+	str.append(ak::uiAPI::toString(_event));
+	str.append("\";Info1=\"");
+	str.append(QString::number(_info1));
+	str.append("\";Info2=\"");
+	if (_event == ak::core::eKeyPressed) { str.append(ak::uiAPI::toString((ak::ui::core::keyType)_info2)); }
+	else { str.append(QString::number(_info2)); }
+	str.append("\"}");
+	return str;
+}
+
+// ###############################################################################################################################################
+
+// File setter
+
+ak::UID ak::uiAPI::file::load(
+	const QString &										_filePath
 ) {
 	try {
-		QFile file(_fileName);
-		if (!file.exists()) { throw ak::Exception("The provided file deos not exist", "Check file"); }
-		
-		if (!file.open(QIODevice::ReadOnly)) {
-			throw ak::Exception("Failed to open file for reading", "Open file");
-		}
-		QStringList ret;
-		while (!file.atEnd()) {
-			QString line = file.readLine();
-			if (line.length() > 0 || _includeEmptyLines) { ret.push_back(line); }
-		}
-		file.close();
-		return ret;
+		ak::file * f = my_apiManager.getFile(ak::invalidUID);
+		f->load(_filePath);
+		return f->uid();
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::special::importFile()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::special::importFile()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::special::importFile()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::load()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::load()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::load()"); }
+}
+
+void ak::uiAPI::file::load(
+	ak::UID												_fileUid,
+	const QString &										_filePath
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		f->load(_filePath);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::load(file)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::load(file)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::load(file)"); }
+}
+
+void ak::uiAPI::file::save(
+	ak::UID												_fileUid,
+	bool												_append
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		f->save(_append);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::save()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::save()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::save()"); }
+}
+
+void ak::uiAPI::file::save(
+	ak::UID												_fileUid,
+	const QString &										_filePath,
+	bool												_append
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		f->save(_filePath, _append);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::save(filePath)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::save(filePath)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::save(filePath)"); }
+}
+
+void ak::uiAPI::file::setPath(
+	ak::UID												_fileUid,
+	const QString &										_path
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		f->setPath(_path);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::setPath()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::setPath()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::setPath()"); }
+}
+
+void ak::uiAPI::file::setLines(
+	ak::UID												_fileUid,
+	const QStringList &									_lines
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		f->setLines(_lines);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::setLines(QStringList)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::setLines(QStringList)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::setLines(QStringList)"); }
+}
+
+void ak::uiAPI::file::addLine(
+	ak::UID												_fileUid,
+	const QString &										_line
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		f->addLine(_line);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::addLine(QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::addLine(QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::addLine(QString)"); }
+}
+
+void ak::uiAPI::file::addLine(
+	ak::UID												_fileUid,
+	const QStringList &									_lines
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		f->addLine(_lines);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::addLine(QStringList)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::addLine(QStringList)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::addLine(QStringList)"); }
+}
+
+// ###############################################################################################################################################
+
+// File Getter
+
+ak::UID ak::uiAPI::file::uid(
+	ak::UID												_fileUid
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		return f->uid();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::uid()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::uid()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::uid()"); }
+}
+
+QString ak::uiAPI::file::name(
+	ak::UID												_fileUid
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		return f->name();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::name()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::name()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::name()"); }
+}
+
+QString ak::uiAPI::file::path(
+	ak::UID												_fileUid
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		return f->path();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::path()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::path()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::path()"); }
+}
+
+QString ak::uiAPI::file::extension(
+	ak::UID												_fileUid
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		return f->extension();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::extension()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::extension()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::extension()"); }
+}
+
+QStringList ak::uiAPI::file::lines(
+	ak::UID												_fileUid
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		return f->lines();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::lines()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::lines()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::lines()"); }
+}
+
+int ak::uiAPI::file::linesCount(
+	ak::UID												_fileUid
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		return f->linesCount();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::linesCount()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::linesCount()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::linesCount()"); }
+}
+
+bool ak::uiAPI::file::hasChanged(
+	ak::UID												_fileUid
+) {
+	try {
+		ak::file * f = my_apiManager.getExistingFile(_fileUid);
+		return f->hasChanged();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::hasChanged()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::hasChanged()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::hasChanged()"); }
 }
 
 // ###############################################################################################################################################
@@ -2391,7 +2659,7 @@ int ak::uiAPI::exec(void) {
 }
 
 std::vector<ak::ui::qt::comboButtonItem> ak::uiAPI::toComboButtonItem(
-	const std::vector<QString> &							_items
+	const std::vector<QString> &						_items
 ) {
 	std::vector<ak::ui::qt::comboButtonItem> ret;
 	if (_items.size() > 0) {

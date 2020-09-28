@@ -142,6 +142,14 @@ void ak::ui::widget::tabView::focusTab(
 	my_tabView->setCurrentIndex(_tab);
 }
 
+void ak::ui::widget::tabView::setTabText(
+	ak::ID								_tab,
+	const QString &						_text
+) {
+	if (_tab < 0 || _tab >= my_tabView->count()) { throw ak::Exception("Tab index out of range", "ak::ui::widget::tabView::focusTab()"); }
+	my_tabView->setTabText(_tab, _text);
+}
+
 // #######################################################################################################
 
 // Getter
@@ -155,3 +163,10 @@ std::vector<QString> ak::ui::widget::tabView::tabTitles(void) const {
 }
 
 ak::ID ak::ui::widget::tabView::focusedTab(void) const { return my_tabView->currentIndex(); }
+
+QString ak::ui::widget::tabView::tabText(
+	ak::ID								_tab
+) const {
+	if (_tab < 0 || _tab >= my_tabView->count()) { throw ak::Exception("Tab index out of range", "ak::ui::widget::tabView::focusTab()"); }
+	return my_tabView->tabText(_tab);
+}

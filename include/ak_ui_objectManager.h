@@ -756,6 +756,17 @@ namespace ak {
 				ak::ID											_itemId
 			);
 
+			//! @brief Will set the text of the specified item
+			//! @param _objectUid The UID of the object
+			//! @param _tab The item to set the text at
+			//! @param _text The text to set
+			//! @throw ak::Exception if the specified UID or ID is invalid
+			void itm_setText(
+				ak::UID											_objectUid,
+				ak::ID											_itemId,
+				const QString &									_text
+			);
+
 			// ###############################################################################################################################################
 
 			// Item getter

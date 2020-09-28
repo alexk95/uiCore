@@ -103,6 +103,15 @@ namespace ak {
 					ak::ID								_tab
 				);
 
+				//! @brief Will set the text of the specified tab
+				//! @param _tab The tab to set the text at
+				//! @param _text The text to set
+				//! @throw ak::Exception if the specified tab is invalid
+				void setTabText(
+					ak::ID								_tab,
+					const QString &						_text
+				);
+
 				// #######################################################################################################
 
 				// Getter
@@ -115,6 +124,14 @@ namespace ak {
 
 				//! @brief Will return the currently focused tab
 				ak::ID focusedTab(void) const;
+
+				//! @brief Will get the text of the specified tab
+				//! @param _tab The tab to get the text from
+				//! @param _text The text to set
+				//! @throw ak::Exception if the specified tab is invalid
+				QString tabText(
+					ak::ID								_tab
+				) const;
 
 			private:
 

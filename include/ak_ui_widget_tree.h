@@ -149,6 +149,15 @@ namespace ak {
 					bool							_autoExpand = true
 				);
 
+				//! @brief Will set the item text of the specified item
+				//! @param _itemId The ID of the item to set the text at
+				//! @param _text The text to set
+				//! @throw ak::Exception if the item does not exist
+				void setItemText(
+					ak::ID							_itemId,
+					const QString &					_text
+				);
+
 				// ###########################################################################################################################################
 
 				// Filter

@@ -288,6 +288,15 @@ void ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled()"); }
 }
 
+void ak::ui::widget::tree::setItemText(
+	ak::ID							_itemId,
+	const QString &					_text
+) {
+	my_itemsIterator itm = my_items.find(_itemId);
+	if (itm == my_items.end()) { throw ak::Exception("Item index is invalid", "ak::ui::widget::tree::setItemText()"); }
+	itm->second->setText(0, _text);
+}
+
 // ###########################################################################################################################################
 
 // Filter

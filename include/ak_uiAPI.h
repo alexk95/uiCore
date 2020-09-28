@@ -11,6 +11,7 @@
 
 // C++ header
 #include <vector>						// vector<>
+#include <map>							// map<>
 
 // Qt header
 #include <qstring.h>					// QString
@@ -34,6 +35,7 @@ namespace ak {
 	class messenger;
 	class notifier;
 	class uidManager;
+	class file;
 	namespace ui {
 		class objectManager;
 		class colorStyle;
@@ -105,6 +107,27 @@ namespace ak {
 			//! @breif Will return the default surface format
 			QSurfaceFormat * getDefaultSurfaceFormat(void);
 
+			//! @brief Will return the file with the provided UID
+			//! @param _fileUid The UID of the file to get, if the provided UID is invalid a new one will be created
+			ak::file * getFile(
+				ak::UID						_fileUid = ak::invalidUID
+			);
+
+			//! @brief Will return the file with the provided UID
+			//! @param _fileUid The UID of the file to get
+			ak::file * getExistingFile(
+				ak::UID						_fileUid
+			);
+
+			//! @brief Will delete the provided file
+			//! @param _fileUid The UID of the file to delete
+			void deleteFile(
+				ak::UID						_fileUid
+			);
+
+			//! @brief Will delete all files created
+			void deleteAllFiles();
+
 		protected:
 			QApplication *				my_app;							//! The core application
 			bool						my_appIsRunning;				//! True if the core application is already running
@@ -121,6 +144,16 @@ namespace ak {
 			ak::ui::colorStyle *		my_colorStyle;					//! The color style used in this API
 			bool						my_colorStyleIsExtern;			//! If true, then the color style was created externally
 			bool						my_isInitialized;				//! If true, then the API was initialized
+
+			ak::uidManager *			my_fileUidManager;				//! The UID manager used for files in this API
+			std::map<ak::UID,
+				ak::file *>				my_mapFiles;					//! Map containing all files created in this API
+			typedef std::map<ak::UID,
+				ak::file *>::iterator	my_mapFilesIterator;			//! Iterator used to iterate trough the files
+
+		private:
+			apiManager(const apiManager &) = delete;
+			apiManager & operator = (const apiManager &) = delete;
 		};
 
 		// ###############################################################################################################################################
@@ -1187,6 +1220,16 @@ namespace ak {
 				ak::ID											_itemId
 			);
 
+			//! @brief Will set the text of the specified tab
+			//! @param _tab The tab to set the text at
+			//! @param _text The text to set
+			//! @throw ak::Exception if the specified tab is invalid
+			__declspec(dllexport) void setText(
+				ak::UID											_objectUid,
+				ak::ID											_itemId,
+				const QString &									_text
+			);
+
 			// ###############################################################################################################################################
 
 			// Item getter
@@ -1343,7 +1386,7 @@ namespace ak {
 			//! @param _initialDir The initial search directory
 			//! @param _filter The filter of the open file dialog
 			//! @param _selectedFilter The selected filter
-			__declspec(dllexport) QString openFile(
+			__declspec(dllexport) QString openFileDialog(
 				ak::UID												_uiManagerUid,
 				const QString &										_caption,
 				const QString &										_initialDir = QString(""),
@@ -1357,7 +1400,7 @@ namespace ak {
 			//! @param _initialDir The initial search directory
 			//! @param _filter The filter of the open file dialog
 			//! @param _selectedFilter The selected filter
-			__declspec(dllexport) QString saveFile(
+			__declspec(dllexport) QString saveFileDialog(
 				ak::UID												_uiManagerUid,
 				const QString &										_caption,
 				const QString &										_initialDir = QString(""),
@@ -1365,15 +1408,134 @@ namespace ak {
 				QString *											_selectedFilter = nullptr
 			);
 
-			//! @brief Will import all information from the file and return it (line by line) as a string list
-			//! @param _fileName The name of the file
-			//! @param _includeEmptyLines If true empty lines will also be added to the list
-			__declspec(dllexport) QStringList importFile(
-				const QString &										_fileName,
-				bool												_includeEmptyLines = true
+			//! @brief Will create a text representation of the event send
+			__declspec(dllexport) QString createEventText(
+				ak::UID												_sender,
+				ak::core::eventType									_event,
+				int													_info1,
+				int													_info2
 			);
 
 		}
+
+		// ###############################################################################################################################################
+
+		// File
+
+		namespace file {
+
+			// File setter
+
+			//! @brief Will load informations from the specifiied file
+			__declspec(dllexport) ak::UID load(
+				const QString &										_filePath
+			);
+
+			//! @brief Will load informations from the specified file
+			//! @param _fileUid The UID of the file
+			//! @param _filePath If provided this path will be set as current file path
+			__declspec(dllexport) void load(
+				ak::UID												_fileUid,
+				const QString &										_filePath = QString("")
+			);
+
+			//! @brief Will save the current set lines to the current set file path
+			//! @param _fileUid The UID of the file
+			//! @param _append If true, the file will be opened on append mode
+			__declspec(dllexport) void save(
+				ak::UID												_fileUid,
+				bool												_append = false
+			);
+
+			//! @brief Will save the current set lines to the provided file path
+			//! @param _fileUid The UID of the file
+			//! @param _filePath The fule path to set as current file
+			//! @param _append If true, the file will be opened on append mode
+			__declspec(dllexport) void save(
+				ak::UID												_fileUid,
+				const QString &										_filePath,
+				bool												_append = false
+			);
+
+			//! @brief Will set the current path for the file
+			//! @param _fileUid The UID of the file
+			//! @param _path The file path to set
+			__declspec(dllexport) void setPath(
+				ak::UID												_fileUid,
+				const QString &										_path
+			);
+
+			//! @brief Will set the current lines for the file
+			//! @param _fileUid The UID of the file
+			//! @param _lines The lines to set
+			__declspec(dllexport) void setLines(
+				ak::UID												_fileUid,
+				const QStringList &									_lines
+			);
+
+			//! @brief Will append the provided line to the current lines
+			//! @param _fileUid The UID of the file
+			//! @param _line The line to add
+			__declspec(dllexport) void addLine(
+				ak::UID												_fileUid,
+				const QString &										_line
+			);
+
+			//! @brief Will append the provided lines to the current lines
+			//! @param _fileUid The UID of the file
+			//! @param _lines The lines to add
+			__declspec(dllexport) void addLine(
+				ak::UID												_fileUid,
+				const QStringList &									_lines
+			);
+
+			// #######################################################################################################
+
+			// File Getter
+
+			//! @brief Will return the files UID
+			//! @param _fileUid The UID of the file
+			__declspec(dllexport) ak::UID uid(
+				ak::UID												_fileUid
+			);
+
+			//! @brief Will return the files name
+			//! @param _fileUid The UID of the file
+			__declspec(dllexport) QString name(
+				ak::UID												_fileUid
+			);
+
+			//! @brief Will return the files path
+			//! @param _fileUid The UID of the file
+			__declspec(dllexport) QString path(
+				ak::UID												_fileUid
+			);
+
+			//! @brief Will return the files extension
+			//! @param _fileUid The UID of the file
+			__declspec(dllexport) QString extension(
+				ak::UID												_fileUid
+			);
+
+			//! @brief Will return the lines in this file
+			//! @param _fileUid The UID of the file
+			__declspec(dllexport) QStringList lines(
+				ak::UID												_fileUid
+			);
+
+			//! @brief Will return the count of the lines in this file
+			//! @param _fileUid The UID of the file
+			__declspec(dllexport) int linesCount(
+				ak::UID												_fileUid
+			);
+
+			//! @brief Will return true if the file has changed after it was loaded or saved the last time
+			//! @param _fileUid The UID of the file
+			__declspec(dllexport) bool hasChanged(
+				ak::UID												_fileUid
+			);
+
+		} // namespace file
 
 		// ###############################################################################################################################################
 

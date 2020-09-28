@@ -109,6 +109,7 @@
   <ItemGroup>
     <ClInclude Include="include\ak_core.h" />
     <ClInclude Include="include\ak_exception.h" />
+    <ClInclude Include="include\ak_file.h" />
     <ClInclude Include="include\ak_globalDataTypes.h" />
     <ClInclude Include="include\ak_messenger.h" />
     <ClInclude Include="include\ak_notifier.h" />
@@ -164,6 +165,7 @@
   <ItemGroup>
     <ClCompile Include="src\ak_core.cpp" />
     <ClCompile Include="src\ak_exception.cpp" />
+    <ClCompile Include="src\ak_file.cpp" />
     <ClCompile Include="src\ak_messenger.cpp" />
     <ClCompile Include="src\ak_notifier.cpp" />
     <ClCompile Include="src\ak_notifierColorEditButton.cpp" />
