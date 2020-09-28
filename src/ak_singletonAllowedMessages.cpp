@@ -97,9 +97,9 @@ void ak::singletonAllowedMessages::setFlag(ak::core::eventType		_type) {
 	if (_type & ak::core::eStateChanged) {
 		my_stateChanged = true;
 	}
-	if (_type & ak::core::eTextChanged) {
+	/*if (_type & ak::core::eTextChanged) {
 		my_textChanged = true;
-	}
+	}*/
 	if (_type & ak::core::eToggeledChecked) {
 		my_toggeledChecked = true;
 	}
@@ -165,9 +165,9 @@ void ak::singletonAllowedMessages::removeFlag(
 	if (_type & ak::core::eStateChanged) {
 		my_stateChanged = false;
 	}
-	if (_type & ak::core::eTextChanged) {
+	/*if (_type & ak::core::eTextChanged) {
 		my_textChanged = false;
-	}
+	}*/
 	if (_type & ak::core::eToggeledChecked) {
 		my_toggeledChecked = false;
 	}
@@ -195,7 +195,7 @@ std::vector<ak::core::eventType> ak::singletonAllowedMessages::enabledMessages(v
 	if (my_released) { ret.push_back(ak::core::eventType::eReleased); }
 	if (my_selectionChanged) { ret.push_back(ak::core::eventType::eSelectionChanged); }
 	if (my_stateChanged) { ret.push_back(ak::core::eventType::eStateChanged); }
-	if (my_textChanged) { ret.push_back(ak::core::eventType::eTextChanged); }
+	//if (my_textChanged) { ret.push_back(ak::core::eventType::eTextChanged); }
 	if (my_toggeledChecked) { ret.push_back(ak::core::eventType::eToggeledChecked); }
 	if (my_toggeledUnchecked) { ret.push_back(ak::core::eventType::eToggeledUnchecked); }
 	if (my_unknownEvent) { ret.push_back(ak::core::eventType::eUnknownEvent); }
@@ -221,7 +221,7 @@ std::vector<ak::core::eventType> ak::singletonAllowedMessages::disabledMessages(
 	if (!my_released) { ret.push_back(ak::core::eventType::eReleased); }
 	if (!my_selectionChanged) { ret.push_back(ak::core::eventType::eSelectionChanged); }
 	if (!my_stateChanged) { ret.push_back(ak::core::eventType::eStateChanged); }
-	if (!my_textChanged) { ret.push_back(ak::core::eventType::eTextChanged); }
+	//if (!my_textChanged) { ret.push_back(ak::core::eventType::eTextChanged); }
 	if (!my_toggeledChecked) { ret.push_back(ak::core::eventType::eToggeledChecked); }
 	if (!my_toggeledUnchecked) { ret.push_back(ak::core::eventType::eToggeledUnchecked); }
 	if (!my_unknownEvent) { ret.push_back(ak::core::eventType::eUnknownEvent); }

@@ -95,7 +95,7 @@ ak::ui::signalLinker::~signalLinker()
 		case ak::ui::core::objectType::oTextEdit:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oTimer:
@@ -276,7 +276,7 @@ ak::UID ak::ui::signalLinker::addLink(
 		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTextEdit });
 		_object->connect(_object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
 		_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-		_object->connect(_object, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+		_object->connect(_object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 		return _objectUid;
 	}
@@ -292,7 +292,19 @@ ak::UID ak::ui::signalLinker::addLink(
 
 void ak::ui::signalLinker::slotChanged() {
 	if (!ak::singletonAllowedMessages::instance()->changedEvent()) { return; }
-	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eChanged, 0, 0);
+	// Cast object
+	ak::ui::core::aObject * obj = nullptr;
+	obj = dynamic_cast<ak::ui::core::aObject *>(sender());
+	assert(obj != nullptr); // Cast failed
+	raiseEventProtected(obj->uid(), ak::core::eventType::eChanged, 0, 0);
+	if (obj->objectType() == ak::ui::core::objectType::oTextEdit) {
+		// Cast text edit
+		ak::ui::qt::textEdit * txt = nullptr;
+		txt = dynamic_cast<ak::ui::qt::textEdit *>(obj);
+		assert(txt != nullptr); // Cast failed
+		// Perform action
+		txt->performAutoScrollToBottom();
+	}
 }
 
 void ak::ui::signalLinker::slotClicked() {
@@ -339,23 +351,6 @@ void ak::ui::signalLinker::slotSelectionChanged() {
 void ak::ui::signalLinker::slotStateChanged(int _state) {
 	if (!ak::singletonAllowedMessages::instance()->stateChangedEvent()) { return; }
 	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eStateChanged, _state, 0);
-}
-
-void ak::ui::signalLinker::slotTextChanged() {
-	if (!ak::singletonAllowedMessages::instance()->textChangedEvent()) { return; }
-	// Cast object
-	ak::ui::core::aObject * obj = nullptr;
-	obj = dynamic_cast<ak::ui::core::aObject *>(sender());
-	assert(obj != nullptr); // Cast failed
-	raiseEventProtected(obj->uid(), ak::core::eventType::eTextChanged, 0, 0);
-	if (obj->objectType() == ak::ui::core::objectType::oTextEdit) {
-		// Cast text edit
-		ak::ui::qt::textEdit * txt = nullptr;
-		txt = dynamic_cast<ak::ui::qt::textEdit *>(obj);
-		assert(txt != nullptr); // Cast failed
-		// Perform action
-		txt->performAutoScrollToBottom();
-	}
 }
 
 void ak::ui::signalLinker::slotToggled(bool _checked)

@@ -160,7 +160,7 @@ namespace ak {
 			void slotKeyPressed(QKeyEvent *);
 			void slotSelectionChanged();
 			void slotStateChanged(int);
-			void slotTextChanged();
+			//void slotTextChanged();
 			void slotToggled(bool);
 			void slotTimeout(void);
 
