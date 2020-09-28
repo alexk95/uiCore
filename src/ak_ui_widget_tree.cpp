@@ -84,7 +84,7 @@ ak::ui::widget::tree::tree(
 		my_tree->setMouseTracking(true);
 		my_tree->setHeaderHidden(true);
 
-		my_internalMessenger->registerReceiver(my_filter->uid(), ak::core::messageType::mEvent, my_notifierFilter);
+		my_internalMessenger->registerUidReceiver(my_filter->uid(), my_notifierFilter);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::tree()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::tree()"); }
@@ -228,7 +228,7 @@ void ak::ui::widget::tree::setItemSelected(
 		itm->second->setSelected(_selected);
 		if (my_selectAndDeselectChildren) { itm->second->setChildsSelected(_selected); }
 		my_treeSignalLinker->enable();
-		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eSelectionChanged);
+		selectionChangedEvent(true);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setItemSelected()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setItemSelected()"); }
@@ -240,7 +240,7 @@ void ak::ui::widget::tree::setSingleItemSelected(
 	bool							_selected
 ) {
 	try {
-		deselectAllItems();
+		deselectAllItems(false);
 		setItemSelected(_itemId, _selected);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setSingleItemSelected()"); }
@@ -259,18 +259,20 @@ void ak::ui::widget::tree::toggleItemSelection(
 		itm->second->setSelected(!state);
 		if (my_selectAndDeselectChildren) { itm->second->setChildsSelected(!state); }
 		my_treeSignalLinker->enable();
-		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eSelectionChanged);
+		selectionChangedEvent(true);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::toggleItemSelection()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::toggleItemSelection()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::toggleItemSelection()"); }
 }
 
-void ak::ui::widget::tree::deselectAllItems(void) {
+void ak::ui::widget::tree::deselectAllItems(
+	bool							_sendMessage
+) {
 	my_treeSignalLinker->disable();
 	for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) { itm->second->setSelected(false); }
 	my_treeSignalLinker->enable();
-	my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eSelectionChanged);
+	if (_sendMessage) { my_messenger->sendMessage(my_uid, ak::core::eventType::eSelectionChanged); }
 }
 
 void ak::ui::widget::tree::setEnabled(
@@ -282,6 +284,7 @@ void ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled(
 ) {
 	try {
 		my_expandSelectedItems = _autoExpand;
+		if (my_expandSelectedItems) { selectionChangedEvent(false); }
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled()"); }
@@ -433,6 +436,8 @@ bool ak::ui::widget::tree::enabled() const { return my_tree->isEnabled(); }
 
 int ak::ui::widget::tree::itemCount(void) const { return my_items.size(); }
 
+bool ak::ui::widget::tree::autoExpandSelectedItemsEnabled(void) const { return my_expandSelectedItems; }
+
 // ###########################################################################################################################
 
 // Events
@@ -441,7 +446,7 @@ void ak::ui::widget::tree::raiseKeyPressedEvent(
 	ui::core::keyType						_key
 ) { 
 	try {
-		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eKeyPressed, 0, _key);
+		my_messenger->sendMessage(my_uid, ak::core::eventType::eKeyPressed, 0, _key);
 	}
 	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::raiseKeyPressedEvent()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::raiseKeyPressedEvent()"); }
@@ -487,7 +492,7 @@ void ak::ui::widget::tree::raiseItemEvent(
 	try {
 		switch (_eventType)
 		{
-		case ak::core::eventType::eDestroyed: my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eDestroyed, 0, 0); return;
+		case ak::core::eventType::eDestroyed: my_messenger->sendMessage(my_uid, ak::core::eventType::eDestroyed, 0, 0); return;
 		case ak::core::eventType::eActivated: break;
 		case ak::core::eventType::eChanged: break;
 		case ak::core::eventType::eClicked: break;
@@ -501,7 +506,13 @@ void ak::ui::widget::tree::raiseItemEvent(
 
 		// Check item id (id only not required for destroyed message)
 
-		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, _eventType, _itemId, _info2);
+		if (_eventType == ak::core::eCollpased) {
+			my_itemsIterator itm = my_items.find(_itemId);
+			assert(itm != my_items.end());
+			itm->second->collapse();
+		}
+
+		my_messenger->sendMessage(my_uid, _eventType, _itemId, _info2);
 		return;
 	}
 	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::raiseItemEvent()"); }
@@ -510,15 +521,32 @@ void ak::ui::widget::tree::raiseItemEvent(
 }
 
 void ak::ui::widget::tree::raiseLeaveEvent(void) {
-	try { my_messenger->sendMessage(my_uid, ak::core::mEvent, ak::core::eFocusLeft, 0, 0); }
+	try { my_messenger->sendMessage(my_uid, ak::core::eFocusLeft, 0, 0); }
 	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::raiseLeaveEvent()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::raiseLeaveEvent()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::raiseLeaveEvent()"); }
 }
 
-void ak::ui::widget::tree::selectionChangedEvent(void) {
+void ak::ui::widget::tree::selectionChangedEvent(
+	bool							_sendMessage
+) {
 	try {
 		if (my_selectAndDeselectChildren) {
+			my_treeSignalLinker->disable();
+			// Get selected items
+			QList<QTreeWidgetItem *> selected = my_tree->selectedItems();
+			// Select childs of selected items
+			for (QTreeWidgetItem * itm : selected) {
+				// Cast item
+				ak::ui::qt::treeItem * i = nullptr;
+				i = dynamic_cast<ak::ui::qt::treeItem *>(itm);
+				assert(i != nullptr); // Cast failed
+				i->setChildsSelected(true);
+				if (my_expandSelectedItems) { i->expandAllParents(false); }
+			}
+			my_treeSignalLinker->enable();
+		}
+		else if (my_expandSelectedItems) {
 			my_treeSignalLinker->disable();
 			// Get selected items
 			QList<QTreeWidgetItem *> selected = my_tree->selectedItems();
@@ -527,12 +555,11 @@ void ak::ui::widget::tree::selectionChangedEvent(void) {
 				ak::ui::qt::treeItem * i = nullptr;
 				i = dynamic_cast<ak::ui::qt::treeItem *>(itm);
 				assert(i != nullptr); // Cast failed
-				bool state = i->isSelected();
-				i->setChildsSelected(state);
+				i->expandAllParents(false);
 			}
 			my_treeSignalLinker->enable();
 		}
-		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eSelectionChanged);
+		if (_sendMessage) { my_messenger->sendMessage(my_uid, ak::core::eventType::eSelectionChanged); }
 	}
 	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::selectionChangedEvent()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::selectionChangedEvent()"); }

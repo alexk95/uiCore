@@ -136,7 +136,10 @@ namespace ak {
 				);
 
 				//! @brief Will deselect all items
-				void deselectAllItems(void);
+				//! @param _sendMessage If true a selection changed event will be send
+				void deselectAllItems(
+					bool							_sendMessage
+				);
 
 				//! @brief Will set the enabled state of this tree
 				void setEnabled(
@@ -254,6 +257,9 @@ namespace ak {
 				//! @brief Will return the count of items in this tree
 				int itemCount(void) const;
 
+				//! @brief Will return the current auto expand selected items option
+				bool autoExpandSelectedItemsEnabled(void) const;
+
 				// ###########################################################################################################################################
 
 				// Events
@@ -285,7 +291,10 @@ namespace ak {
 				void raiseLeaveEvent(void);
 
 				//! @brief Will perform the selection changed event
-				void selectionChangedEvent(void);
+				//! @param _sendMessage If true a selection changed event will be send
+				void selectionChangedEvent(
+					bool							_sendMessage = true
+				);
 
 			private:
 

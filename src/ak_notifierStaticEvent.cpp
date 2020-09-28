@@ -19,14 +19,13 @@ ak::notifierStaticEvent::notifierStaticEvent(
 
 void ak::notifierStaticEvent::notify(
 	ak::UID							_senderId,
-	ak::core::messageType			_messageType,
-	int								_message,
+	ak::core::eventType				_event,
 	int								_info1,
 	int								_info2
 ) {
 	try {
 		if (my_isEnabled == true) {
-			if (_messageType == ak::core::messageType::mEvent) { my_callback(_senderId, _message, _info1, _info2); }
+			my_callback(_senderId, _event, _info1, _info2);
 		}
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::notifierStaticEvent::notify()"); }

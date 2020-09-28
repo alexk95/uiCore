@@ -26,16 +26,6 @@ namespace ak {
 
 	namespace core {
 
-		//! Describes the type of a message
-		enum messageType {
-			mCommand,
-			mError,
-			mEvent,
-			mNotification,
-			mText,
-			mUnknownMessageType
-		};
-		
 		enum valueType {
 			vArray,
 			vBool,
@@ -92,12 +82,6 @@ namespace ak {
 		enum commandType {
 			cClearCreatedObjects
 		};
-
-		//! @brief Create a string representation of the provided ak::core::messageType
-		//! @param _messageType The message type to be converted
-		QString toQString(
-			messageType								_messageType
-		);
 
 		//! @brief Create a string representation of the provided ak::core::eventType
 		//! @param _eventType The event type to be converted

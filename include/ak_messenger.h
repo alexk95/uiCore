@@ -14,7 +14,7 @@
 #include <vector>					// Notifiers collection in the map
 
 // AK header
-#include "ak_core.h"				// messageType
+#include "ak_core.h"				// eventType
 #include "ak_globalDataTypes.h"		// UID and ID type
 
 namespace ak {
@@ -50,8 +50,7 @@ namespace ak {
 		//! @param _info2 The message info 2
 		void sendMessage(
 			ak::UID							_senderId,
-			ak::core::messageType			_messageType,
-			int								_message,				
+			ak::core::eventType				_event,
 			int								_info1 = 0,
 			int								_info2 = 0
 		);
@@ -60,25 +59,40 @@ namespace ak {
 		// ####################################################################################################
 		// Sender/receiver organisation
 
-		//!@brief Will register a receiver for a specific type of message from the specified sender
-		//!
-		//! If a message is received by this object, only receivers with the matching sender id and message type are going to be notified
-		//!
+		//! @brief Will register a receiver for a the specified sender
+		//! If a message is received by this object, only receivers with the matching sender UID
 		//! @param _senderId The id of the sender the notifier wants to receive the message from
 		//! @param _messageType The type of the message which the notifier wants to receive
 		//! @param _notifier The notifier which is receiving the message
-		void registerReceiver(
+		ak::UID registerUidReceiver(
 			ak::UID							_senderId,
-			ak::core::messageType			_messageType,
 			ak::notifier *					_notifier
 		);
 
-		//!@brief Will return the count of registered notifiers for a specific message type of a specific sender
-		//!@param _senderId The sender id
-		//!@param _messageType The message type
-		int notifierCount(
-			ak::UID							_senderId,
-			ak::core::messageType			_messageType
+		//! @brief Will register a receiver for a specified sender
+		//! @param _eventType The event type for what to register this receiver
+		//! @param _notifier The notifier to register
+		ak::UID registerEventTypeReceiver(
+			ak::core::eventType				_eventType,
+			ak::notifier *					_notifier
+		);
+
+		//! @brief Will register a receiver for every single message send
+		//! @param _notifier The notifier to register
+		ak::UID registerNotifierForAllMessages(
+			ak::notifier *					_notifier
+		);
+
+		//!@brief Will return the count of registered notifiers for a specific sender
+		//!@param _senderId The sender UID
+		int uidNotifierCount(
+			ak::UID							_senderUID
+		);
+
+		//!@brief Will return the count of registered notifiers for a specific sender
+		//!@param _event The event type
+		int eventNotifierCount(
+			ak::core::eventType				_event
 		);
 
 		// ####################################################################################################
@@ -92,24 +106,25 @@ namespace ak {
 
 		std::map<
 			ak::UID,
-			std::map<
-				ak::core::messageType,				
-				std::vector<ak::notifier *> *
-			> *
-		>										my_receivers;						//! Map contains all registered receivers
+			std::vector<ak::notifier *> *
+		>										my_uidReceivers;					//! Map contains all registered receivers
 
 		typedef std::map<
 			ak::UID,
-			std::map<
-				ak::core::messageType,
-				std::vector<ak::notifier *> *
-			> *
-		>::iterator								my_receiversIterator;				//! Iterator used to iterate through the receivers
+			std::vector<ak::notifier *> *
+		>::iterator								my_uidReceiversIterator;			//! Iterator used to iterate through the receivers
+
+		std::map<
+			ak::core::eventType,
+			std::vector<ak::notifier *> *
+		>										my_eventReceivers;					//! Map contains all registered event type receivers
 
 		typedef std::map<
-			ak::core::messageType,
+			ak::core::eventType,
 			std::vector<ak::notifier *> *
-		>::iterator								my_receiversMessageTypeIterator;	//! Iterator ised to iterate through the messageTypes in a recievers objects
+		>::iterator								my_eventReceiversIterator;			//! Iterator used to iterate through the UID receivers
+
+		std::vector<ak::notifier *>				my_allMessageReceivers;
 
 		// Block copy constructor
 		messenger(const messenger & other) = delete;

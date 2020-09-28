@@ -24,15 +24,13 @@ namespace ak {
 
 		//! @brief Will notify this receiver that a message was received by a sender.
 		//! @param _senderId The id of the sender the message was sent from
-		//! @param _messageType The type of the message
-		//! @param _message The message
+		//! @param _event The event message
 		//! @param _info1 Message addition 1
 		//! @param _info2 Message addition 2
 		//! @throw std::exception on any error occuring during the execution
 		virtual void notify(
 			ak::UID							_senderId,
-			ak::core::messageType			_messageType,
-			int								_message,
+			ak::core::eventType				_event,
 			int								_info1,
 			int								_info2
 		) = 0;

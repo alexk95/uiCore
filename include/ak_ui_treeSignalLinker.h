@@ -64,7 +64,6 @@ namespace ak {
 			void treeItemClicked(QTreeWidgetItem *item, int column);
 			void treeItemCollapsed(QTreeWidgetItem *item);
 			void treeItemDoubleClicked(QTreeWidgetItem *item, int column);
-			void treeItemEntered(QTreeWidgetItem *item, int column);
 			void treeItemExpanded(QTreeWidgetItem *item);
 			void treeItemSelectionChanged();
 

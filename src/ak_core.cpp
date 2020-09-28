@@ -10,21 +10,6 @@
 #include "ak_core.h"		// corresponding class
 
 QString ak::core::toQString(
-	messageType				_messageType
-) {
-	switch (_messageType)
-	{
-	case ak::core::mError: return QString("Error");
-	case ak::core::mEvent: return QString("Event");
-	case ak::core::mNotification: return QString("Notification");
-	case ak::core::mText: return QString("Text");
-	case ak::core::mUnknownMessageType:  return QString("UnknownMessageType");
-	default: assert(0); // Not implemented yet
-	}
-	return QString("");
-}
-
-QString ak::core::toQString(
 	eventType				_eventType
 ) {
 	switch (_eventType)

@@ -71,6 +71,15 @@ namespace ak {
 					bool							_selected
 				);
 
+				//! @brief Will expand all parent items of this item.
+				//! @param _expandThis If true this item will be expanded aswell
+				void expandAllParents(
+					bool							_expandThis
+				);
+
+				//! @brief Will collapse this item and all of its childs
+				void collapse(void);
+
 				// ##############################################################################################
 
 				// Getter

@@ -27,23 +27,20 @@ ak::notifierTreeFilter::~notifierTreeFilter() {}
 
 void ak::notifierTreeFilter::notify(
 	ak::UID						_senderId,
-	ak::core::messageType		_messageType,
-	int							_message,
+	ak::core::eventType			_event,
 	int							_info1,
 	int							_info2
 ) {
 	try {
-		// Check if the message is an event message
-		if (_messageType == ak::core::messageType::mEvent) {
-			// Check the event type
-			switch (_message)
-			{
-			case ak::core::eventType::eChanged: my_tree->performFilterTextChanged(); break;
-			case ak::core::eventType::eKeyPressed:
-				if ((ui::core::keyType) _info2 == ui::core::key_Return) { my_tree->performFilterEnterPressed(); } break;
-			default: break;
-			}
+		// Check the event type
+		switch (_event)
+		{
+		case ak::core::eventType::eChanged: my_tree->performFilterTextChanged(); break;
+		case ak::core::eventType::eKeyPressed:
+			if ((ui::core::keyType) _info2 == ui::core::key_Return) { my_tree->performFilterEnterPressed(); } break;
+		default: break;
 		}
+
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::notifierTreeFilter::notify()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::notifierTreeFilter::notify()"); }

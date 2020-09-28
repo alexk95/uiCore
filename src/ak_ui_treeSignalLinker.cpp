@@ -36,7 +36,6 @@ ak::ui::treeSignalLinker::treeSignalLinker(
 		connect(my_tree, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(treeItemClicked(QTreeWidgetItem *, int)));
 		connect(my_tree, SIGNAL(itemCollapsed(QTreeWidgetItem *)), this, SLOT(treeItemCollapsed(QTreeWidgetItem *)));
 		connect(my_tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(treeItemDoubleClicked(QTreeWidgetItem *, int)));
-		//connect(my_tree, SIGNAL(itemEntered(QTreeWidgetItem *, int)), this, SLOT(treeItemEntered(QTreeWidgetItem *, int)));
 		connect(my_tree, SIGNAL(itemExpanded(QTreeWidgetItem *)), this, SLOT(treeItemExpanded(QTreeWidgetItem *)));
 		connect(my_tree, SIGNAL(itemSelectionChanged()), this, SLOT(treeItemSelectionChanged()));
 		connect(my_tree, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(treeKeyPressed(QKeyEvent *)));
@@ -55,7 +54,6 @@ ak::ui::treeSignalLinker::~treeSignalLinker() {
 	disconnect(my_tree, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(treeItemClicked(QTreeWidgetItem *, int)));
 	disconnect(my_tree, SIGNAL(itemCollapsed(QTreeWidgetItem *)), this, SLOT(treeItemCollapsed(QTreeWidgetItem *)));
 	disconnect(my_tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(treeItemDoubleClicked(QTreeWidgetItem *, int)));
-	//disconnect(my_tree, SIGNAL(itemEntered(QTreeWidgetItem *, int)), this, SLOT(treeItemEntered(QTreeWidgetItem *, int)));
 	disconnect(my_tree, SIGNAL(itemExpanded(QTreeWidgetItem *)), this, SLOT(treeItemExpanded(QTreeWidgetItem *)));
 	disconnect(my_tree, SIGNAL(itemSelectionChanged()), this, SLOT(treeItemSelectionChanged()));
 	disconnect(my_tree, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(treeKeyPressed(QKeyEvent *)));
@@ -101,16 +99,12 @@ void ak::ui::treeSignalLinker::treeItemDoubleClicked(QTreeWidgetItem *item, int 
 	if (my_enabled) { my_treeManager->raiseItemEvent(ak::ui::qt::tree::getItemId(item), ak::core::eventType::eDoubleClicked, column); }
 }
 
-void ak::ui::treeSignalLinker::treeItemEntered(QTreeWidgetItem *item, int column) {
-	if (my_enabled) { my_treeManager->raiseItemEvent(ak::ui::qt::tree::getItemId(item), ak::core::eventType::eFocused, column); }
-}
-
 void ak::ui::treeSignalLinker::treeItemExpanded(QTreeWidgetItem *item) {
 	if (my_enabled) { my_treeManager->raiseItemEvent(ak::ui::qt::tree::getItemId(item), ak::core::eventType::eExpanded, 0); }
 }
 
 void ak::ui::treeSignalLinker::treeItemSelectionChanged() {
-	if (my_enabled) { my_treeManager->selectionChangedEvent(); }
+	if (my_enabled) { my_treeManager->selectionChangedEvent(true); }
 }
 
 void ak::ui::treeSignalLinker::mouseMove(QMouseEvent * _event) {

@@ -1478,6 +1478,35 @@ void ak::ui::objectManager::obj_setAutoSelectAndDeselectChildrenEnabled(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_setAutoSelectAndDeselectChildrenEnabled()"); }
 }
 
+void ak::ui::objectManager::obj_setAutoExpandSelectedItems(
+	ak::UID											_objectUid,
+	bool											_enabled
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast tree
+			ak::ui::widget::tree * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
+			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+
+			t->setAutoExpandSelectedItemsEnabled(_enabled);
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_setAutoExpandSelectedItems()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_setAutoExpandSelectedItems()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_setAutoExpandSelectedItems()"); }
+}
+
 void ak::ui::objectManager::obj_expandAllItems(
 	ak::UID											_objectUid
 ) {
@@ -1550,7 +1579,7 @@ void ak::ui::objectManager::obj_deselectAllItems(
 			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
 			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
 
-			t->deselectAllItems();
+			t->deselectAllItems(true);
 		}
 		break;
 		default:
@@ -2388,6 +2417,34 @@ int ak::ui::objectManager::obj_getFocusedTab(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getFocusedTab()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getFocusedTab()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getFocusedTab()"); }
+}
+
+bool ak::ui::objectManager::obj_getAutoExpandSelectedItems(
+	ak::UID											_objectUid
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast tree
+			ak::ui::widget::tree * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
+			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+
+			return t->autoExpandSelectedItemsEnabled();
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getAutoExpandSelectedItems()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getAutoExpandSelectedItems()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getAutoExpandSelectedItems()"); }
 }
 
 // ###############################################################################################################################################

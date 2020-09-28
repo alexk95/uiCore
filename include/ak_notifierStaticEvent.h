@@ -18,7 +18,7 @@ namespace ak {
 
 	class notifierStaticEvent : public notifier {
 	public:
-		__declspec(dllexport) typedef void eventCallback(ak::UID, int, int, int);
+		__declspec(dllexport) typedef void eventCallback(ak::UID, ak::core::eventType, int, int);
 
 		notifierStaticEvent(
 			eventCallback *	callback
@@ -26,8 +26,7 @@ namespace ak {
 
 		virtual void notify(
 			ak::UID							_senderId,
-			ak::core::messageType			_messageType,
-			int								_message,
+			ak::core::eventType				_event,
 			int								_info1,
 			int								_info2
 		);

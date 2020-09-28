@@ -69,7 +69,7 @@ ak::ui::widget::table::table(
 		}
 
 		my_messageForwarder = new ak::notifierForwardMessage(my_messenger, my_uid);
-		my_messenger->registerReceiver(my_table->uid(), ak::core::messageType::mEvent, my_messageForwarder);
+		my_messenger->registerUidReceiver(my_table->uid(), my_messageForwarder);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::table::table()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::table::table()"); }
@@ -355,11 +355,11 @@ void ak::ui::widget::table::clear(void) {
 void ak::ui::widget::table::raiseCellEvent(
 	int									_row,
 	int									_column,
-	ak::core::eventType					_event_type
+	ak::core::eventType					_event
 ) {
 	try {
 		assert(my_messenger != nullptr); // Messanger is nullptr
-		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, _event_type, _row, _column);
+		my_messenger->sendMessage(my_uid, _event, _row, _column);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::table::raiseCellEvent()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::table::raiseCellEvent()"); }

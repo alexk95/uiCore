@@ -206,16 +206,35 @@ namespace ak {
 		
 		// message functions
 
-		//! @brief Will register the notifier in the messenger
+		//! @brief Will register the notifier at the messenger
 		//! The provided notifier will get a new uid if not done so before.
 		//! Returns the UID of the notifier
-		//! @param _senderUid For messages of which sender this notifier should be registered
-		//! @param _messagType For which message type this notifier should be registered
+		//! @param _senderUid The sender UID for which to register the provided notifier
+		//! @param _notifier The notifier which to register
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID registerNotifier(
+		__declspec(dllexport) ak::UID registerUidNotifier(
 			ak::UID													_senderUid,
-			ak::notifier *											_notifier,
-			ak::core::messageType									_messageType = ak::core::messageType::mEvent
+			ak::notifier *											_notifier
+		);
+
+		//! @brief Will register the notifier at the messenger
+		//! The provided notifier will get a new uid if not done so before.
+		//! Returns the UID of the notifier
+		//! @param _event The event type for which to register the provided notifier
+		//! @param _notifier The notifier which to register
+		//! @throw ak::Exception if the API is not initialized
+		__declspec(dllexport) ak::UID registerEventTypeNotifier(
+			ak::core::eventType										_event,
+			ak::notifier *											_notifier
+		);
+
+		//! @brief Will register the notifier for all messages send at the global messenger
+		//! The provided notifier will get a new uid if not done so before.
+		//! Returns the UID of the notifier
+		//! @param _notifier The notifier which to register
+		//! @throw ak::Exception if the API is not initialized
+		__declspec(dllexport) ak::UID registerAllMessagesNotifier(
+			ak::notifier *											_notifier
 		);
 
 		//! @brief Will send a message to the messanger
@@ -228,8 +247,7 @@ namespace ak {
 		//! @throw ak::Exception At any kind of error that may occur in any subroutine call when calling the receivers
 		__declspec(dllexport) void sendMessage(
 			ak::UID													_senderUid,
-			ak::core::messageType									_messageType,
-			int														_message,
+			ak::core::eventType										_event,
 			int														_info1 = 0,
 			int														_info2 = 0
 		);
@@ -1069,6 +1087,15 @@ namespace ak {
 				bool											_enabled = true
 			);
 
+			//! @brief Will set the auto expand selected items option for the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _enabled If true the option is enabled
+			//! @throw ak::Exception if the specified object is invalid
+			__declspec(dllexport) void setAutoExpandSelectedItems(
+				ak::UID											_objectUid,
+				bool											_enabled = true
+			);
+
 			//! @brief Enables or disables the provided object
 			//! @param _objectUid The UID of the object
 			//! @param _enabled if true, the object will be enabled
@@ -1174,6 +1201,13 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @throw ak::Exception if the provided UID is invalid
 			__declspec(dllexport) int getFocusedTab(
+				ak::UID									_objectUid
+			);
+
+			//! @brief Will get the auto expand selected items option for the specified object
+			//! @param _objectUid The UID of the object
+			//! @throw ak::Exception if the specified object is invalid
+			__declspec(dllexport) bool getAutoExpandSelectedItems(
 				ak::UID									_objectUid
 			);
 
@@ -1545,12 +1579,6 @@ namespace ak {
 			ak::core::eventType									_type
 		);
 
-		//! @brief Will return a string representation of the provided messageType
-		//! @param _type The message type that should be represented
-		__declspec(dllexport) QString toString(
-			ak::core::messageType								_type
-		);
-
 		//! @brief Will return a string representation of the provided valueType
 		//! @param _type The value type that should be represented
 		__declspec(dllexport) QString toString(
@@ -1597,10 +1625,13 @@ namespace ak {
 		);
 
 		//! @brief Will set the current color style used in this API
-			//! @param _colorStyle The color style to set
+		//! @param _colorStyle The color style to set
 		__declspec(dllexport) void setColorStyle(
 			ak::ui::colorStyle *		_colorStyle
 		);
+
+		//! @brief Will return the current color style
+		__declspec(dllexport) ak::ui::colorStyle * getColorStyle(void);
 
 		//! @brief Will set the current color style to the default dark color style
 		__declspec(dllexport) void setDefaultDarkColorStyle(void);

@@ -54,7 +54,7 @@ ak::ui::widget::tabView::tabView(
 }
 
 ak::ui::widget::tabView::~tabView() {
-	my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eDestroyed);
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eDestroyed);
 	if (my_tabView != nullptr) { delete my_tabView; my_tabView = nullptr; }
 }
 
@@ -88,13 +88,13 @@ void ak::ui::widget::tabView::tabEvent(
 		switch (_eventType)
 		{
 		case tabViewSignalLinker::tabEventType::teClicked:
-			my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eClicked, _index, 0); break;
+			my_messenger->sendMessage(my_uid, ak::core::eventType::eClicked, _index, 0); break;
 		case tabViewSignalLinker::tabEventType::teCloseRequested:
-			my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eClosing, _index, 0); break;
+			my_messenger->sendMessage(my_uid, ak::core::eventType::eClosing, _index, 0); break;
 		case tabViewSignalLinker::tabEventType::teCurrentChanged:
-			my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged, _index, 0); break;
+			my_messenger->sendMessage(my_uid, ak::core::eventType::eChanged, _index, 0); break;
 		case tabViewSignalLinker::tabEventType::teDoubleClicked:
-			my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eDoubleClicked, _index, 0); break;
+			my_messenger->sendMessage(my_uid, ak::core::eventType::eDoubleClicked, _index, 0); break;
 		default:
 			assert(0); // Not implemented yet
 			break;

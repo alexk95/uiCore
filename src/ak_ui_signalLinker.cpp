@@ -416,7 +416,7 @@ void ak::ui::signalLinker::raiseEvent(
 ) {
 	try {
 		if (my_messanger == nullptr) { throw ak::Exception("Is nullptr", "Check messanger"); }
-		my_messanger->sendMessage(_senderUid, ak::core::messageType::mEvent, _eventType, _info1, _info2);
+		my_messanger->sendMessage(_senderUid, _eventType, _info1, _info2);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::raiseEvent()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::raiseEvent()"); }

@@ -32,8 +32,7 @@ ak::notifierForwardMessage::~notifierForwardMessage(void) {}
 
 void ak::notifierForwardMessage::notify(
 	ak::UID									_senderId,
-	ak::core::messageType					_messageType,
-	int										_message,
+	ak::core::eventType						_event,
 	int										_info1,
 	int										_info2
 ) {
@@ -42,7 +41,7 @@ void ak::notifierForwardMessage::notify(
 		// Check for possible loop (if enabled)
 		if (_senderId == my_uid && my_loopProtectionEnabled) { throw ak::Exception("Sender id is equal to the forwarding id", "Infinite loop protection"); }
 		// Forward the message with a new UID
-		my_messenger->sendMessage(my_uid, _messageType, _message, _info1, _info2);
+		my_messenger->sendMessage(my_uid, _event, _info1, _info2);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::notifierForwardMessage::notify()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::notifierForwardMessage::notify()"); }

@@ -377,32 +377,56 @@ std::vector<ak::core::eventType> ak::uiAPI::disabledEventTypes(void) { return ak
 
 // ###############################################################################################################################################
 
-ak::UID ak::uiAPI::registerNotifier(
+ak::UID ak::uiAPI::registerUidNotifier(
 	ak::UID												_senderUid,
-	ak::notifier *										_notifier,
-	ak::core::messageType								_messageType
+	ak::notifier *										_notifier
 ) {
 	try
 	{
 		// Check UID status
-		my_apiManager.messenger()->registerReceiver(_senderUid, _messageType, _notifier);
-		return _notifier->uid();
+		return my_apiManager.messenger()->registerUidReceiver(_senderUid, _notifier);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::registerNotifier()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::registerNotifier()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::registerNotifier()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::registerUidNotifier()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::registerUidNotifier()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::registerUidNotifier()"); }
+}
+
+ak::UID ak::uiAPI::registerEventTypeNotifier(
+	ak::core::eventType										_event,
+	ak::notifier *											_notifier
+) {
+	try
+	{
+		// Check UID status
+		return my_apiManager.messenger()->registerEventTypeReceiver(_event, _notifier);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::registerEventTypeNotifier()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::registerEventTypeNotifier()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::registerEventTypeNotifier()"); }
+}
+
+ak::UID ak::uiAPI::registerAllMessagesNotifier(
+	ak::notifier *											_notifier
+) {
+	try
+	{
+		// Check UID status
+		return my_apiManager.messenger()->registerNotifierForAllMessages(_notifier);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::registerAllMessagesNotifier()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::registerAllMessagesNotifier()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::registerAllMessagesNotifier()"); }
 }
 
 void ak::uiAPI::sendMessage(
 	ak::UID												_senderUid,
-	ak::core::messageType								_messageType,
-	int													_message,
+	ak::core::eventType									_event,
 	int													_info1,
 	int													_info2
 ) {
 	try {
 		ak::messenger * m = my_apiManager.messenger();
-		m->sendMessage(_senderUid, _messageType, _message, _info1, _info2);
+		m->sendMessage(_senderUid, _event, _info1, _info2);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::sendMessage()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::sendMessage()"); }
@@ -1512,6 +1536,19 @@ void ak::uiAPI::obj::setAutoSelectAndDeselectChildrenEnabled(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
 }
 
+void ak::uiAPI::obj::setAutoExpandSelectedItems(
+	ak::UID												_objectUid,
+	bool												_enabled
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_setAutoExpandSelectedItems(_objectUid, _enabled);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
+}
+
 void ak::uiAPI::obj::setEnabled(
 	ak::UID												_objectUid,
 	bool												_enabled
@@ -1690,6 +1727,18 @@ int ak::uiAPI::obj::getFocusedTab(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getFocusedTab()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getFocusedTab()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getFocusedTab()"); }
+}
+
+bool ak::uiAPI::obj::getAutoExpandSelectedItems(
+	ak::UID									_objectUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_getAutoExpandSelectedItems(_objectUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getAutoExpandSelectedItems()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getAutoExpandSelectedItems()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getAutoExpandSelectedItems()"); }
 }
 
 // ###############################################################################################################################################
@@ -2250,17 +2299,6 @@ QString ak::uiAPI::toString(
 }
 
 QString ak::uiAPI::toString(
-	ak::core::messageType								_type
-) {
-	try {
-		return ak::core::toQString(_type);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(messageType)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(messageType)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(messageType)"); }
-}
-
-QString ak::uiAPI::toString(
 	ak::core::valueType									_type
 ) {
 	try {
@@ -2349,6 +2387,13 @@ void ak::uiAPI::setColorStyle(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setColorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setColorStyle()"); }
+}
+
+ak::ui::colorStyle *  ak::uiAPI::getColorStyle(void) {
+	try { return my_apiManager.colorStyle(); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getColorStyle()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getColorStyle()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getColorStyle()"); }
 }
 
 void ak::uiAPI::setDefaultDarkColorStyle() {

@@ -87,7 +87,7 @@ ak::ui::widget::colorEditButton::colorEditButton(
 		if (_textOverride.length() > 0) { overrideText(_textOverride); }
 
 		// Register receiver for the button
-		my_messenger->registerReceiver(my_button->uid(), ak::core::messageType::mEvent, my_notifier);
+		my_messenger->registerUidReceiver(my_button->uid(), my_notifier);
 
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::colorEditButton::colorEditButton()"); }
@@ -105,7 +105,7 @@ ak::ui::widget::colorEditButton::~colorEditButton() {
 	if (my_widget != nullptr) { delete my_widget; my_widget = nullptr; }
 
 	if (my_messenger != nullptr) {
-		my_messenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eDestroyed);
+		my_messenger->sendMessage(my_uid, ak::core::eventType::eDestroyed);
 	}
 }
 
@@ -180,7 +180,7 @@ void ak::ui::widget::colorEditButton::widgetEvent(
 				if (newColor != my_color) {
 					setColor(my_color);
 					// Send changed message
-					my_externalMessenger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged);
+					my_externalMessenger->sendMessage(my_uid, ak::core::eventType::eChanged);
 				}
 			}
 			else {

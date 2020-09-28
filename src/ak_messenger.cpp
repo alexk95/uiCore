@@ -28,35 +28,32 @@ ak::messenger::~messenger() {}
 // ####################################################################################################
 
 void ak::messenger::sendMessage(
-	ak::UID						_senderId,
-	ak::core::messageType					_messageType,
-	int										_message,
-	int										_info1,
-	int										_info2
+	ak::UID					_senderId,
+	ak::core::eventType		_event,
+	int						_info1,
+	int						_info2
 ) {
 	try {
 		// Find recievers for the senders UID
-		my_receiversIterator key = my_receivers.find(_senderId);
-		if (key != my_receivers.end()) {
-			// Find receivers for this message type
-			my_receiversMessageTypeIterator messageType = key->second->find(_messageType);
-			if (messageType != key->second->end()) {
-				// Get notifiers
-				if (messageType->second != nullptr) {
-					ak::notifier * current_notifer;
-					// Go trough all notifiers
-					for (int i = 0; i < messageType->second->size(); i++) {
-						current_notifer = messageType->second->at(i);
-						// Check if notifier exists and is active
-						if (current_notifer != nullptr) {
-							if (current_notifer->isEnabled()) {
-								current_notifer->notify(_senderId, _messageType, _message, _info1, _info2);
-							}
-						}
-					}
-				}
+		my_uidReceiversIterator uidItem = my_uidReceivers.find(_senderId);
+		if (uidItem != my_uidReceivers.end()) {
+			// Go trough all notifiers
+			for (auto n : *uidItem->second) {
+				if (n->isEnabled()) { n->notify(_senderId, _event, _info1, _info2); }
 			}
 		}
+
+		// Find receivers for the send event type
+		my_eventReceiversIterator eventItem = my_eventReceivers.find(_event);
+		if (eventItem != my_eventReceivers.end()) {
+			// Go trough all notifiers
+			for (auto n : *eventItem->second) {
+				if (n->isEnabled()) { n->notify(_senderId, _event, _info1, _info2); }
+			}
+		}
+
+		for (auto r : my_allMessageReceivers) { if (r->isEnabled()) { r->notify(_senderId, _event, _info1, _info2); } }
+
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::messenger::sendMessage()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::messenger::sendMessage()"); }
@@ -66,10 +63,9 @@ void ak::messenger::sendMessage(
 // #############################################################################
 // id management
 
-void ak::messenger::registerReceiver(
-	ak::UID						_senderId,
-	ak::core::messageType					_messageType,
-	ak::notifier *							_notifier
+ak::UID ak::messenger::registerUidReceiver(
+	ak::UID					_senderId,
+	ak::notifier *			_notifier
 ) {
 	try {
 
@@ -78,61 +74,84 @@ void ak::messenger::registerReceiver(
 			_notifier->setUid(my_uidManager->getId());
 		}
 
-		my_receiversIterator key = my_receivers.find(_senderId);
+		my_uidReceiversIterator itm = my_uidReceivers.find(_senderId);
 
-		if (key == my_receivers.end()) {
+		if (itm == my_uidReceivers.end()) {
 			// Create new vector to store the notifier classes
-			std::vector<ak::notifier *> *		collection = nullptr;
-			collection = new (std::nothrow) std::vector<ak::notifier *>;
+			std::vector<ak::notifier *> * collection = nullptr;
+			collection = new (std::nothrow) std::vector<ak::notifier *>();
 			if (collection == nullptr) { throw ak::Exception("Memory allocation failed", "Allocate collection at ID does not exist"); }
-			// Create new map for the specified id
-			std::map<ak::core::messageType, std::vector<ak::notifier *> *> * new_map = nullptr;
-			new_map = new (std::nothrow) std::map<ak::core::messageType, std::vector<ak::notifier *> *>;
-			if (new_map == nullptr) {
-				delete collection;
-				throw ak::Exception("Memory allocation failed", "Allocate map at ID does not exist");
-			}
-			// Add new item
 			collection->push_back(_notifier);
-			new_map->insert_or_assign(_messageType, collection);
-			my_receivers.insert_or_assign(_senderId, new_map);
+			my_uidReceivers.insert_or_assign(_senderId, collection);
 		} else {
-			my_receiversMessageTypeIterator messageType = key->second->find(_messageType);
-			if (messageType == key->second->end()) {
-				// Create new vector to store the notifier classes
-				std::vector<ak::notifier *> *		collection = nullptr;
-				collection = new (std::nothrow) std::vector<ak::notifier *>;
-				if (collection == nullptr) { throw ak::Exception("Memory allocation failed", "Allocate collection at ID does not exist"); }
-				// Add new item
-				collection->push_back(_notifier);
-				key->second->insert_or_assign(_messageType, collection);
-			} else {
-				messageType->second->push_back(_notifier);
-			}
+			itm->second->push_back(_notifier);
 		}
+		return _notifier->uid();
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::messenger::registerReceiver()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::messenger::registerReceiver()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::messenger::registerReceiver()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::messenger::registerUidReceiver()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::messenger::registerUidReceiver()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::messenger::registerUidReceiver()"); }
 }
 
-int ak::messenger::notifierCount(
-	ak::UID						_senderId,
-	ak::core::messageType					_messageType
+ak::UID ak::messenger::registerEventTypeReceiver(
+	ak::core::eventType				_eventType,
+	ak::notifier *					_notifier
+) {
+	try {
+
+		if (_notifier == nullptr) { throw ak::Exception("Is nullptr", "Check notifier"); }
+		if (_notifier->uid() == ak::invalidUID) {
+			_notifier->setUid(my_uidManager->getId());
+		}
+
+		my_eventReceiversIterator itm = my_eventReceivers.find(_eventType);
+
+		if (itm == my_eventReceivers.end()) {
+			// Create new vector to store the notifier classes
+			std::vector<ak::notifier *> * collection = nullptr;
+			collection = new (std::nothrow) std::vector<ak::notifier *>();
+			if (collection == nullptr) { throw ak::Exception("Memory allocation failed", "Allocate collection at ID does not exist"); }
+			collection->push_back(_notifier);
+			my_eventReceivers.insert_or_assign(_eventType, collection);
+		}
+		else { itm->second->push_back(_notifier); }
+		return _notifier->uid();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::messenger::registerEventTypeReceiver()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::messenger::registerEventTypeReceiver()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::messenger::registerEventTypeReceiver()"); }
+}
+
+ak::UID ak::messenger::registerNotifierForAllMessages(
+	ak::notifier *					_notifier
+) {
+	try {
+		if (_notifier == nullptr) { throw ak::Exception("Is nullptr", "Check notifier"); }
+		if (_notifier->uid() == ak::invalidUID) { _notifier->setUid(my_uidManager->getId()); }
+		my_allMessageReceivers.push_back(_notifier);
+		return _notifier->uid();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::messenger::registerNotifierForAllMessages()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::messenger::registerNotifierForAllMessages()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::messenger::registerNotifierForAllMessages()"); }
+}
+
+int ak::messenger::uidNotifierCount(
+	ak::UID					_senderId
 ) {
 	int v = 0;
-	my_receiversIterator key = my_receivers.find(_senderId);
-	if (key != my_receivers.end()) {
-		my_receiversMessageTypeIterator messageType = key->second->find(_messageType);
-		if (messageType != key->second->end()) { v = messageType->second->size(); }
-	}
+	my_uidReceiversIterator key = my_uidReceivers.find(_senderId);
+	if (key != my_uidReceivers.end()) { v = key->second->size(); }
 	return v;
 }
 
-void ak::messenger::clearAll(void) {
-	for (my_receiversIterator itm = my_receivers.begin(); itm != my_receivers.end(); itm++) {
-		itm->second->clear();
-		delete itm->second;
-	}
-	my_receivers.clear();
+int ak::messenger::eventNotifierCount(
+	ak::core::eventType				_event
+) {
+	int v = 0;
+	my_eventReceiversIterator key = my_eventReceivers.find(_event);
+	if (key != my_eventReceivers.end()) { v = key->second->size(); }
+	return v;
 }
+
+void ak::messenger::clearAll(void) { my_uidReceivers.clear(); my_eventReceivers.clear(); }

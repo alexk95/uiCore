@@ -519,6 +519,15 @@ namespace ak {
 				bool											_enabled = true
 			);
 
+			//! @brief Will set the auto expand selected items option for the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _enabled If true the option is enabled
+			//! @throw ak::Exception if the specified object is invalid
+			void obj_setAutoExpandSelectedItems(
+				ak::UID											_objectUid,
+				bool											_enabled = true
+			);
+
 			//! @brief Will deselect all items
 			//! @param _objectUid The UID of the object
 			void obj_deselectAllItems(
@@ -714,6 +723,13 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @throw ak::Exception if the provided UID is invalid
 			int obj_getFocusedTab(
+				ak::UID									_objectUid
+			);
+
+			//! @brief Will get the auto expand selected items option for the specified object
+			//! @param _objectUid The UID of the object
+			//! @throw ak::Exception if the specified object is invalid
+			bool obj_getAutoExpandSelectedItems(
 				ak::UID									_objectUid
 			);
 

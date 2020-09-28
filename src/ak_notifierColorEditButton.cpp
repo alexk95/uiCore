@@ -28,16 +28,13 @@ ak::notifierColorEditButton::~notifierColorEditButton(void) {}
 
 void ak::notifierColorEditButton::notify(
 	ak::UID									_senderId,
-	ak::core::messageType					_messageType,
-	int										_message,
+	ak::core::eventType						_event,
 	int										_info1,
 	int										_info2
 ) {
 	try {
 		if (isEnabled()) {
-			if (_messageType == ak::core::messageType::mEvent) {
-				my_button->widgetEvent(_senderId, (ak::core::eventType)_message, _info1, _info2);
-			}
+			my_button->widgetEvent(_senderId, _event, _info1, _info2);
 		}
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::notifierColorEditButton::notify()"); }

@@ -68,7 +68,7 @@ ak::ui::widget::propertyGrid::propertyGrid(
 		if (my_internalNotifier == nullptr) { throw ak::Exception("Failed to create", "Create internal notifier"); }
 
 		// Register notifier
-		my_messenger->registerReceiver(my_table->uid(), ak::core::messageType::mEvent, my_internalNotifier);
+		my_messenger->registerUidReceiver(my_table->uid(), my_internalNotifier);
 
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::propertyGrid::propertyGrid()"); }
@@ -83,7 +83,7 @@ ak::ui::widget::propertyGrid::~propertyGrid() {
 	}
 	delete my_internalNotifier;
 	if (my_externalMessanger != nullptr) {
-		try { my_externalMessanger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eDestroyed); } catch (...) {}
+		try { my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eDestroyed); } catch (...) {}
 	}
 }
 
@@ -132,7 +132,7 @@ void ak::ui::widget::propertyGrid::createItem(
 		my_table->setCellWidget(newUID, my_table->rowCount() - 1, 1);
 		if (_isMultipleValues) { my_objectManager->obj_setTristate(newUID, true); }
 		else { my_objectManager->obj_setChecked(newUID, _value); }
-		my_messenger->registerReceiver(newUID, ak::core::messageType::mEvent, my_internalNotifier);
+		my_messenger->registerUidReceiver(newUID, my_internalNotifier);
 
 		// Store UID information
 		pItm->setWidgetUid(newUID);
@@ -354,7 +354,7 @@ void ak::ui::widget::propertyGrid::createItem(
 		if (_isMultipleValues) { newUID = my_objectManager->createColorEditButton(my_uid, _value, "..."); }
 		else { newUID = my_objectManager->createColorEditButton(my_uid, _value); }
 		my_table->setCellWidget(newUID, my_table->rowCount() -1, 1);
-		my_messenger->registerReceiver(newUID, ak::core::messageType::mEvent, my_internalNotifier);
+		my_messenger->registerUidReceiver(newUID, my_internalNotifier);
 
 		// Store UID information
 		pItm->setWidgetUid(newUID);
@@ -413,7 +413,7 @@ void ak::ui::widget::propertyGrid::createItem(
 		ak::UID newUID;
 		if (_isMultipleValues) { newUID = my_objectManager->createComboButton(my_uid, "...", _selection); }
 		else { newUID = my_objectManager->createComboButton(my_uid, _selectedValue, _selection); }
-		my_messenger->registerReceiver(newUID, ak::core::messageType::mEvent, my_internalNotifier);
+		my_messenger->registerUidReceiver(newUID, my_internalNotifier);
 		my_table->setCellWidget(newUID, my_table->rowCount() - 1, 1);
 
 		// Store UID information
@@ -458,7 +458,7 @@ void ak::ui::widget::propertyGrid::clear(void) {
 	my_table->setColumnHeader(0, "Property");
 	my_table->setColumnHeader(1, "Value");
 	my_uidManager->setLatestUid(my_table->uid() + 1);
-	my_messenger->registerReceiver(my_table->uid(), ak::core::messageType::mEvent, my_internalNotifier);
+	my_messenger->registerUidReceiver(my_table->uid(), my_internalNotifier);
 }
 
 // ############################################################################################################
@@ -640,16 +640,16 @@ ak::ui::color ak::ui::widget::propertyGrid::getColor(ak::ID _row) const {
 
 void ak::ui::widget::propertyGrid::raiseCellEvent(
 	int									_row,
-	ak::core::eventType						_eventType,
+	ak::core::eventType						_event,
 	bool								_forceMessage
 ) const {
 	try {
 		if (_forceMessage) {
-			my_externalMessanger->sendMessage(my_uid, ak::core::messageType::mEvent, _eventType, _row, 0);
+			my_externalMessanger->sendMessage(my_uid, _event, _row, 0);
 		}
 		else {
 			// Check if the message is a changed message
-			if (_eventType == ak::core::eventType::eChanged) {
+			if (_event == ak::core::eventType::eChanged) {
 				
 				assert(_row >= 0 && _row < my_items.size());
 
@@ -684,7 +684,7 @@ void ak::ui::widget::propertyGrid::raiseCellEvent(
 					if (my_items.at(_row)->getDouble() != v) {
 						my_items.at(_row)->setDouble(v);
 						my_table->setCellText(_row, 1, QString::number(v));	
-						my_externalMessanger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged, _row, 0);
+						my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, _row, 0);
 					}
 					else {
 						my_table->setCellText(_row, 1, QString::number(v));
@@ -716,7 +716,7 @@ void ak::ui::widget::propertyGrid::raiseCellEvent(
 					if (my_items.at(_row)->getInt() != v) {
 						my_items.at(_row)->setInt(v);
 						my_table->setCellText(_row, 1, QString::number(v));
-						my_externalMessanger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged, _row, 0);
+						my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, _row, 0);
 					}
 					else {
 						my_table->setCellText(_row, 1, QString::number(v));
@@ -727,7 +727,7 @@ void ak::ui::widget::propertyGrid::raiseCellEvent(
 				{
 					QString txt = my_table->cellText(_row, 1);
 					my_items.at(_row)->setString(txt);
-					my_externalMessanger->sendMessage(my_uid, ak::core::messageType::mEvent, _eventType, _row, 0); 
+					my_externalMessanger->sendMessage(my_uid,_event, _row, 0); 
 					break;
 				}
 				default:
@@ -763,13 +763,13 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 						my_items.at(itm->second)->setIsMultivalued(false);
 						my_objectManager->obj_setTristate(_widgetUid, false);
 						my_items.at(itm->second)->setBool(my_objectManager->obj_getChecked(_widgetUid));
-						my_externalMessanger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged, itm->second);
+						my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 					}
 					else {
 						bool newState = my_objectManager->obj_getChecked(_widgetUid);
 						if (my_items.at(itm->second)->getBool() != newState) {
 							my_items.at(itm->second)->setBool(newState);
-							my_externalMessanger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged, itm->second);
+							my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 						}
 					}
 				}
@@ -786,7 +786,7 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 				// Store data
 				my_objectManager->obj_setColor(_widgetUid, ptItm->getColor());
 				// Send message
-				my_externalMessanger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged, itm->second);
+				my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 			}
 			break;
 			case ak::core::valueType::vSelection:
@@ -799,13 +799,13 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 					my_items.at(itm->second)->setIsMultivalued(false);
 					// Check procedure
 					my_items.at(itm->second)->setSelection(my_objectManager->obj_getText(_widgetUid));
-					my_externalMessanger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged, itm->second);
+					my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 				}
 				else {
 					QString newState = my_objectManager->obj_getText(_widgetUid);
 					if (my_items.at(itm->second)->getSelection() != newState) {
 						my_items.at(itm->second)->setSelection(newState);
-						my_externalMessanger->sendMessage(my_uid, ak::core::messageType::mEvent, ak::core::eventType::eChanged, itm->second);
+						my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 					}
 				}
 			}
@@ -826,7 +826,7 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 void ak::ui::widget::propertyGrid::keyPressedEvent(
 	ak::ui::core::keyType							_key
 ) {
-	try { my_messenger->sendMessage(my_uid, ak::core::mEvent, ak::core::eKeyPressed, 0, _key); }
+	try { my_messenger->sendMessage(my_uid, ak::core::eKeyPressed, 0, _key); }
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::propertyGrid::keyPressedEvent()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::keyPressedEvent()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::keyPressedEvent()"); }

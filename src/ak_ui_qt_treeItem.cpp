@@ -73,6 +73,18 @@ void ak::ui::qt::treeItem::setChildsSelected(
 	}
 }
 
+void ak::ui::qt::treeItem::expandAllParents(
+	bool							_expandThis
+) {
+	if (_expandThis) { setExpanded(true); }
+	if (my_parent != nullptr) { my_parent->expandAllParents(true); }
+}
+
+void ak::ui::qt::treeItem::collapse(void) {
+	if (isExpanded()) { setExpanded(false); }
+	for (auto itm : my_childs) { itm->collapse(); }
+}
+
 // ##############################################################################################
 
 // Getter

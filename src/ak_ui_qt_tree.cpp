@@ -83,6 +83,7 @@ ak::ui::qt::treeItem * ak::ui::qt::tree::topLevelItem(
 ) {
 	try {
 		for (my_topLevelItemsIterator itm = my_topLevelItems.begin(); itm != my_topLevelItems.end(); itm++) {
+			assert(itm->second != nullptr); // That should not happen..
 			if (itm->second->text(0) == _text) { return itm->second; }
 		}
 		return nullptr;
