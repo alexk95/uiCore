@@ -49,6 +49,8 @@ namespace ak {
 				//! @brief Emits a returnPressed signal if the return key is pressed
 				virtual void keyPressEvent(QKeyEvent * _event) override;
 
+				virtual void keyReleaseEvent(QKeyEvent *event) override;
+
 				// #######################################################################################################
 			
 				// Base class functions
@@ -77,6 +79,7 @@ namespace ak {
 
 			signals:
 				void keyPressed(QKeyEvent *);
+				void keyReleased(QKeyEvent *);
 
 			private:
 				bool							my_autoScrollToBottom;		//! If true, the textbox will automatically scroll down on text change

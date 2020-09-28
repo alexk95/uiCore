@@ -45,11 +45,11 @@ QString ak::core::toQString(
 	case ak::core::eIndexChanged: return QString("IndexChanged");
 	case ak::core::eInvalidEntry: return QString("InvalidEntry");
 	case ak::core::eKeyPressed: return QString("KeyPressed");
+	case ak::core::eKeyReleased: return QString("KeyReleased");
 	case ak::core::eLocationChanged: return QString("LocationChanged");
 	case ak::core::eReleased: return QString("Released");
 	case ak::core::eSelectionChanged: return QString("SelectionChanged");
 	case ak::core::eStateChanged: return QString("StateChanged");
-	//case ak::core::eTextChanged: return QString("TextChanged");
 	case ak::core::eTimeout: return QString("Timeout");
 	case ak::core::eToggeledChecked: return QString("ToggeledToChecked");
 	case ak::core::eToggeledUnchecked: return QString("ToggeledToUnchecked");

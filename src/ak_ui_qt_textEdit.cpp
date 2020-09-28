@@ -24,8 +24,11 @@ ak::ui::qt::textEdit::~textEdit() {}
 
 void ak::ui::qt::textEdit::keyPressEvent(QKeyEvent *_event)
 {
-	QTextEdit::keyPressEvent(_event);
-	emit keyPressed(_event);
+	QTextEdit::keyPressEvent(_event); emit keyPressed(_event);
+}
+
+void ak::ui::qt::textEdit::keyReleaseEvent(QKeyEvent *_event) {
+	QTextEdit::keyReleaseEvent(_event); emit keyReleased(_event);
 }
 
 // #######################################################################################################

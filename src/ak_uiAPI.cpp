@@ -2026,10 +2026,15 @@ QString ak::uiAPI::special::createEventText(
 	str.append(ak::uiAPI::toString(_event));
 	str.append("\";Info1=\"");
 	str.append(QString::number(_info1));
-	str.append("\";Info2=\"");
-	if (_event == ak::core::eKeyPressed) { str.append(ak::uiAPI::toString((ak::ui::core::keyType)_info2)); }
-	else { str.append(QString::number(_info2)); }
-	str.append("\"}");
+	if (_event == ak::core::eKeyPressed || _event == ak::core::eKeyReleased) {
+		str.append("\";Info2=Key{KeyName=\"");
+		str.append(ak::uiAPI::toString((ak::ui::core::keyType)_info2));
+		str.append("\"}}");
+	} else {
+		str.append("\";Info2=\"");
+		str.append(QString::number(_info2));
+		str.append("\"}");
+	}
 	return str;
 }
 
@@ -2122,7 +2127,8 @@ void ak::uiAPI::file::addLine(
 ) {
 	try {
 		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		f->addLine(_line);
+		QStringList lst = _line.split("\n");
+		for (QString str : lst) { str.append('\n'); f->addLine(str); }
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::addLine(QString)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::addLine(QString)"); }

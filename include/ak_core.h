@@ -73,14 +73,14 @@ namespace ak {
 			eInvalidEntry				= 1 << 13,
 			eIndexChanged				= 1 << 14,
 			eKeyPressed					= 1 << 15,
-			eLocationChanged			= 1 << 16,
-			eReleased					= 1 << 17,
-			eSelectionChanged			= 1 << 18,
-			eStateChanged				= 1 << 19,
-			//eTextChanged				= 1 << 20,
-			eTimeout					= 1 << 20,
-			eToggeledChecked			= 1 << 21,
-			eToggeledUnchecked			= 1 << 22
+			eKeyReleased				= 1 << 16,
+			eLocationChanged			= 1 << 17,
+			eReleased					= 1 << 18,
+			eSelectionChanged			= 1 << 19,
+			eStateChanged				= 1 << 20,
+			eTimeout					= 1 << 21,
+			eToggeledChecked			= 1 << 22,
+			eToggeledUnchecked			= 1 << 23
 		};
 
 		inline eventType operator | (eventType a, eventType b)

@@ -97,6 +97,7 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oTimer:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(timeout()), this, SLOT(slotTimeout()));
@@ -278,6 +279,7 @@ ak::UID ak::ui::signalLinker::addLink(
 		_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 		_object->connect(_object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 		return _objectUid;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::textEdit)"); }
@@ -341,6 +343,12 @@ void ak::ui::signalLinker::slotKeyPressed(QKeyEvent * _key) {
 	if (!ak::singletonAllowedMessages::instance()->keyPressedEvent()) { return; }
 	ui::core::keyType k = ui::core::getKey(_key);
 	if (k != ui::core::key_Unknown) { raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eKeyPressed, 0, k); }
+}
+
+void ak::ui::signalLinker::slotKeyReleased(QKeyEvent * _key) {
+	if (!ak::singletonAllowedMessages::instance()->keyPressedEvent()) { return; }
+	ui::core::keyType k = ui::core::getKey(_key);
+	if (k != ui::core::key_Unknown) { raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eKeyReleased, 0, k); }
 }
 
 void ak::ui::signalLinker::slotSelectionChanged() {

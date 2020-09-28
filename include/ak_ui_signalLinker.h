@@ -153,14 +153,12 @@ namespace ak {
 			void slotClicked();
 			void slotCursorPositionChanged();
 			void slotFocused();
-			//void slotHovered();
 			void slotIndexChanged(int);
-			//void slotPressed();
 			void slotReleased();
 			void slotKeyPressed(QKeyEvent *);
+			void slotKeyReleased(QKeyEvent *);
 			void slotSelectionChanged();
 			void slotStateChanged(int);
-			//void slotTextChanged();
 			void slotToggled(bool);
 			void slotTimeout(void);
 
