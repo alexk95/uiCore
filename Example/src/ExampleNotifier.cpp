@@ -25,16 +25,11 @@ ExampleNotifier::~ExampleNotifier(void) {}
 
 void ExampleNotifier::notify(
 	ak::UID					_senderId,
-	ak::core::messageType	_messageType,
-	int						_message,
+	ak::core::eventType		_event,
 	int						_info1,
 	int						_info2
 ) {
-	try {
-		if (_messageType == ak::core::messageType::mEvent) {
-			my_callbackClass->eventCallback(_senderId, (ak::core::eventType)_message, _info1, _info2);
-		}
-	}
+	try { my_callbackClass->eventCallback(_senderId, _event, _info1, _info2); }
 	// Just forward the error message. A message box will be displayed automatically when an exception is thrown inside a notify function.
 	// The error message will contain the error message and a "callStack"
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ExampleNotifier::notify()"); }

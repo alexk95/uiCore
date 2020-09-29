@@ -154,4 +154,5 @@ int ak::messenger::eventNotifierCount(
 	return v;
 }
 
-void ak::messenger::clearAll(void) { my_uidReceivers.clear(); my_eventReceivers.clear(); }
+void ak::messenger::clearAll(void) { my_uidReceivers.clear();
+	my_eventReceivers.clear(); my_allMessageReceivers.clear(); }

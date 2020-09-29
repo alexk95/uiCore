@@ -259,8 +259,7 @@ namespace ak {
 			private:
 				ak::ui::qt::table *													my_table;							//! The table this object is managing
 				std::vector<std::vector<bool *> *> *								my_cellsWithWidget;
-				ak::notifierForwardMessage *										my_messageForwarder;
-
+				
 				//! @brief will throw an exception if the row or column index is out of range
 				//! @param _row The row index to check
 				//! @param _column The column index to check

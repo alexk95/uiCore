@@ -40,7 +40,7 @@ void ak::notifierPropertyGrid::notify(
 			if (_senderId == my_tableUid) {
 				// Check if the message comes from the second column of the table
 				if (_info2 == 1) {
-					my_propertyGrid->raiseCellEvent(_info1, _event);
+					my_propertyGrid->raiseCellEvent(_info1, _event, false);
 				}
 				else if (_info2 == 0) {
 					if (_senderId == my_tableUid) {

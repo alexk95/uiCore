@@ -39,8 +39,7 @@ public:
 	//! @throw ak::Exception to forward exceptions coming from the application core class
 	virtual void notify(
 		ak::UID					_senderId,
-		ak::core::messageType	_messageType,
-		int						_message,
+		ak::core::eventType		_event,
 		int						_info1,
 		int						_info2
 	) override;

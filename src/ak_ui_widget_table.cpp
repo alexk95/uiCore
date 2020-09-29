@@ -32,7 +32,6 @@ ak::ui::widget::table::table(
 	int																_columns
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTable, _iconManager, _messenger, _uidManager, _objectManager, _colorStyle),
 	my_table(nullptr),
-	my_messageForwarder(nullptr),
 	my_cellsWithWidget(nullptr)
 {
 	try
@@ -47,7 +46,7 @@ ak::ui::widget::table::table(
 		if (_rows > 0) { my_table->setRowCount(_rows); }
 		if (_columns > 0) { my_table->setColumnCount(_columns); }
 		my_signalLinker->addLink(my_table);
-		my_uid = my_uidManager->getId();
+		my_uid = my_table->uid();
 
 		// Create information storage for the cell widgets
 		my_cellsWithWidget = new std::vector<std::vector<bool *> * >();
@@ -67,9 +66,6 @@ ak::ui::widget::table::table(
 				}
 			}
 		}
-
-		my_messageForwarder = new ak::notifierForwardMessage(my_messenger, my_uid);
-		my_messenger->registerUidReceiver(my_table->uid(), my_messageForwarder);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::table::table()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::table::table()"); }
@@ -80,12 +76,9 @@ ak::ui::widget::table::~table() {
 	// The clear is disconnecting all cell widgets and deletes them
 	clear();
 
-	my_messageForwarder->disable();
-
 	// The signal linker must be deleted because the clear function creates a new one
 	if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
 	if (my_table != nullptr) { delete my_table; my_table = nullptr; }
-	if (my_messageForwarder != nullptr) { delete my_messageForwarder; my_messageForwarder = nullptr; }
 
 	// Destroy widget information
 	for (int x = 0; x < my_cellsWithWidget->size(); x++) {
@@ -341,7 +334,7 @@ void ak::ui::widget::table::clear(void) {
 		// Create the signal linker again
 		my_signalLinker = new ak::ui::signalLinker(my_messenger, my_uidManager);
 		if (my_signalLinker == nullptr) { throw ak::Exception("Failed to create", "Create signal linker"); }
-		my_signalLinker->addLink(my_table, my_table->uid());
+		my_signalLinker->addLink(my_table, my_uid);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::table::clear()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::table::clear()"); }

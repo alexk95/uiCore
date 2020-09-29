@@ -119,14 +119,14 @@ Example::Example()
 			my_notifier = new ExampleNotifier(this);
 
 			// Register notifier
-			ak::uiAPI::registerNotifier(my_ui.propertiesWidget, my_notifier, ak::core::messageType::mEvent);
-			ak::uiAPI::registerNotifier(my_ui.table1, my_notifier, ak::core::messageType::mEvent);
-			ak::uiAPI::registerNotifier(my_ui.table2, my_notifier, ak::core::messageType::mEvent);
-			ak::uiAPI::registerNotifier(my_ui.treeWidget, my_notifier, ak::core::messageType::mEvent);
-			ak::uiAPI::registerNotifier(my_ui.ttb_aExit, my_notifier, ak::core::messageType::mEvent);
-			ak::uiAPI::registerNotifier(my_ui.ttb_aColorStyle, my_notifier, ak::core::messageType::mEvent);
-			ak::uiAPI::registerNotifier(my_ui.tester, my_notifier);
-			ak::uiAPI::registerNotifier(my_ui.ttb_aDelete, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.propertiesWidget, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.table1, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.table2, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.treeWidget, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.ttb_aExit, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.ttb_aColorStyle, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.tester, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.ttb_aDelete, my_notifier);
 
 			// Create default data
 			defaultData();

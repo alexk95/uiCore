@@ -363,9 +363,6 @@ void ak::ui::widget::propertyGrid::createItem(
 		// Enable the notifier again
 		my_internalNotifier->enable();
 
-		// Enable the notifier again
-		my_internalNotifier->enable();
-
 	}
 	catch (const ak::Exception & e) {
 		my_internalNotifier->enable();
@@ -443,6 +440,7 @@ void ak::ui::widget::propertyGrid::createItem(
 
 void ak::ui::widget::propertyGrid::clear(void) { 
 	// Disconnect all items
+	my_internalNotifier->disable();
 	if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
 	my_signalLinker = new ak::ui::signalLinker(my_messenger, my_uidManager);
 
@@ -459,6 +457,7 @@ void ak::ui::widget::propertyGrid::clear(void) {
 	my_table->setColumnHeader(1, "Value");
 	my_uidManager->setLatestUid(my_table->uid() + 1);
 	my_messenger->registerUidReceiver(my_table->uid(), my_internalNotifier);
+	my_internalNotifier->enable();
 }
 
 // ############################################################################################################
@@ -750,6 +749,7 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 		if (_eventType == ak::core::eventType::eChanged || _eventType == ak::core::eventType::eToggeledChecked ||
 			_eventType == ak::core::eventType::eToggeledUnchecked || _eventType == ak::core::eventType::eStateChanged ||
 			_eventType == ak::core::eventType::eClicked || _eventType == ak::core::eventType::eIndexChanged) {
+			
 			my_UIDmapIterator itm = my_UIDmap.find(_widgetUid);
 			if (itm == my_UIDmap.end()) { throw ak::Exception("Invalid UID", "Check widget UID"); }
 			assert(itm->second >= 0 && itm->second < my_items.size()); // Invalid index stored
