@@ -372,7 +372,7 @@ std::vector<ak::ID> ak::ui::widget::tree::selectedItems(void) {
 }
 
 std::vector<QString> ak::ui::widget::tree::getItemPath(
-	ak::ID									_itemId
+	ak::ID							_itemId
 ) {
 	try {
 		my_itemsIterator itm = my_items.find(_itemId);
@@ -385,8 +385,8 @@ std::vector<QString> ak::ui::widget::tree::getItemPath(
 }
 
 QString ak::ui::widget::tree::getItemPathString(
-	ak::ID									_itemId,
-	char									_delimiter
+	ak::ID							_itemId,
+	char							_delimiter
 ) {
 	try {
 		my_itemsIterator itm = my_items.find(_itemId);
@@ -399,8 +399,8 @@ QString ak::ui::widget::tree::getItemPathString(
 }
 
 ak::ID ak::ui::widget::tree::getItemID(
-	const QString &							_itemPath,
-	char									_delimiter
+	const QString &					_itemPath,
+	char							_delimiter
 ) {
 	try {
 		if (_itemPath.length() == 0) { throw ak::Exception("No item path provided", "Check item path"); }
@@ -420,7 +420,7 @@ ak::ID ak::ui::widget::tree::getItemID(
 }
 
 QString ak::ui::widget::tree::getItemText(
-	ak::ID									_itemId
+	ak::ID							_itemId
 ) {
 	try {
 		my_itemsIterator itm = my_items.find(_itemId);
@@ -442,11 +442,13 @@ bool ak::ui::widget::tree::autoExpandSelectedItemsEnabled(void) const { return m
 
 // Events
 
-void ak::ui::widget::tree::raiseKeyPressedEvent(
-	ui::core::keyType						_key
+void ak::ui::widget::tree::raiseKeyEvent(
+	ui::core::keyType				_key,
+	bool							_keyDown
 ) { 
 	try {
-		my_messenger->sendMessage(my_uid, ak::core::eventType::eKeyPressed, 0, _key);
+		if (_keyDown) { my_messenger->sendMessage(my_uid, ak::core::eventType::eKeyPressed, 0, _key); }
+		else { my_messenger->sendMessage(my_uid, ak::core::eventType::eKeyReleased, 0, _key); }
 	}
 	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::raiseKeyPressedEvent()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::raiseKeyPressedEvent()"); }

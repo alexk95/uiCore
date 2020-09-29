@@ -39,29 +39,22 @@ void ak::notifierPropertyGrid::notify(
 			// Check if the sender is the table
 			if (_senderId == my_tableUid) {
 				// Check if the message comes from the second column of the table
-				if (_info2 == 1) {
-					my_propertyGrid->raiseCellEvent(_info1, _event, false);
-				}
+				if (_info2 == 1) { my_propertyGrid->raiseCellEvent(_info1, _event, false); }
 				else if (_info2 == 0) {
 					if (_senderId == my_tableUid) {
 						// Check if the event was a clicked event
 						if (_event == ak::core::eventType::eClicked || _event == ak::core::eventType::eDoubleClicked ||
-							_event == ak::core::eventType::eActivated) {
-							my_propertyGrid->focusRow(_info1);
-						}
+							_event == ak::core::eventType::eActivated) { my_propertyGrid->focusRow(_info1); }
 					}
-					else {
-						// Forward the event to the property grid event handler (raise widget event function)
-						my_propertyGrid->raiseWidgetEvent(_senderId, _event);
-					}
+					// Forward the event to the property grid event handler (raise widget event function)
+					else { my_propertyGrid->raiseWidgetEvent(_senderId, _event); }
 				}
-				else if (_event == ak::core::eKeyPressed) { my_propertyGrid->keyPressedEvent((ak::ui::core::keyType) _info2); }
+				else if (_event == ak::core::eKeyPressed) { my_propertyGrid->keyEvent((ak::ui::core::keyType) _info2, true); }
+				else if (_event == ak::core::eKeyReleased) { my_propertyGrid->keyEvent((ak::ui::core::keyType) _info2, false); }
 				else { assert(0); } // Invalid column (table is expected to have only two columns
 			}
-			else {
-				// Forward the event to the property grid event handler (raise widget event function)
-				my_propertyGrid->raiseWidgetEvent(_senderId, _event);
-			}
+			// Forward the event to the property grid event handler (raise widget event function)
+			else { my_propertyGrid->raiseWidgetEvent(_senderId, _event); }
 
 
 		}

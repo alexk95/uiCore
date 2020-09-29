@@ -285,10 +285,12 @@ namespace ak {
 					ak::core::eventType								_eventType
 				);
 
-				//! @brief Will send a key pressed event message with the provided key
-				//! @param _key The key that was pressed
-				void keyPressedEvent(
-					ak::ui::core::keyType							_key
+				//! @brief Will send a key event message with the provided key
+				//! @param _key The key that was pressed/released
+				//! @param _keyDown If true a key pressed event will be send, othwise released
+				void keyEvent(
+					ak::ui::core::keyType							_key,
+					bool											_keyDown
 				);
 
 			protected:

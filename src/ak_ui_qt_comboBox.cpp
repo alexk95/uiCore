@@ -26,6 +26,11 @@ void ak::ui::qt::comboBox::keyPressEvent(QKeyEvent *_event)
 	emit keyPressed(_event);
 }
 
+void ak::ui::qt::comboBox::keyReleaseEvent(QKeyEvent * _event) {
+	QComboBox::keyReleaseEvent(_event);
+	emit keyReleased(_event);
+}
+
 // #######################################################################################################
 
 QWidget * ak::ui::qt::comboBox::widget(void) { return this; }

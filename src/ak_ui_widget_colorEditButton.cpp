@@ -104,9 +104,7 @@ ak::ui::widget::colorEditButton::~colorEditButton() {
 	if (my_view != nullptr) { delete my_view; my_view = nullptr; }
 	if (my_widget != nullptr) { delete my_widget; my_widget = nullptr; }
 
-	if (my_messenger != nullptr) {
-		my_messenger->sendMessage(my_uid, ak::core::eventType::eDestroyed);
-	}
+	if (my_messenger != nullptr) { my_messenger->sendMessage(my_uid, ak::core::eventType::eDestroyed); }
 }
 
 QWidget * ak::ui::widget::colorEditButton::widget(void) { return my_widget; }
@@ -131,7 +129,6 @@ void ak::ui::widget::colorEditButton::setColor(
 ) {
 	try {
 		my_notifier->disable();
-
 		// Apply new color
 		my_color = _color;
 		my_view->setStyleSheet(my_color.toHexString(false, "background-color:#"));
@@ -178,14 +175,12 @@ void ak::ui::widget::colorEditButton::widgetEvent(
 				QColor c = QColorDialog::getColor(my_color.toQColor());
 				ak::ui::color newColor(c);
 				if (newColor != my_color) {
-					setColor(my_color);
+					setColor(newColor);
 					// Send changed message
 					my_externalMessenger->sendMessage(my_uid, ak::core::eventType::eChanged);
 				}
-			}
-			else {
-				int r = 1;
-
+			} else if (_eventType == ak::core::eKeyPressed || _eventType == ak::core::eKeyReleased) {
+				my_externalMessenger->sendMessage(my_uid, _eventType, _info1, _info2);
 			}
 		}
 	}

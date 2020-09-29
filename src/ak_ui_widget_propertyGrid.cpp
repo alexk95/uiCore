@@ -758,17 +758,18 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 			{
 			case ak::core::valueType::vBool:
 			{
+				ak::ui::widget::propertyGridItem * ptItm = my_items.at(itm->second);
 				if (_eventType != ak::core::eventType::eClicked) {
-					if (my_items.at(itm->second)->isMultivalued()) {
-						my_items.at(itm->second)->setIsMultivalued(false);
+					if (ptItm->isMultivalued()) {
+						ptItm->setIsMultivalued(false);
 						my_objectManager->obj_setTristate(_widgetUid, false);
-						my_items.at(itm->second)->setBool(my_objectManager->obj_getChecked(_widgetUid));
+						ptItm->setBool(my_objectManager->obj_getChecked(_widgetUid));
 						my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 					}
 					else {
 						bool newState = my_objectManager->obj_getChecked(_widgetUid);
-						if (my_items.at(itm->second)->getBool() != newState) {
-							my_items.at(itm->second)->setBool(newState);
+						if (ptItm->getBool() != newState) {
+							ptItm->setBool(newState);
 							my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 						}
 					}
@@ -780,11 +781,8 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 				// Get item
 				ak::ui::widget::propertyGridItem * ptItm = my_items.at(itm->second);
 				assert(ptItm != nullptr); // nullptr stored
-				// Color dialog
-				QColor c = QColorDialog::getColor(ptItm->getColor().toQColor());
-				ptItm->setColor(ak::ui::color(c.red(), c.green(), c.blue(), c.alpha()));
-				// Store data
-				my_objectManager->obj_setColor(_widgetUid, ptItm->getColor());
+				if (ptItm->isMultivalued()) { ptItm->setIsMultivalued(false); }
+				ptItm->setColor(my_objectManager->obj_getColor(_widgetUid));
 				// Send message
 				my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 			}
@@ -794,7 +792,6 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 				// Get item
 				ak::ui::widget::propertyGridItem * ptItm = my_items.at(itm->second);
 				assert(ptItm != nullptr); // nullptr stored
-
 				if (my_items.at(itm->second)->isMultivalued()) {
 					my_items.at(itm->second)->setIsMultivalued(false);
 					// Check procedure
@@ -823,10 +820,14 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::raiseWidgetEvent()"); }
 }
 
-void ak::ui::widget::propertyGrid::keyPressedEvent(
-	ak::ui::core::keyType							_key
+void ak::ui::widget::propertyGrid::keyEvent(
+	ak::ui::core::keyType							_key,
+	bool											_keyDown
 ) {
-	try { my_messenger->sendMessage(my_uid, ak::core::eKeyPressed, 0, _key); }
+	try {
+		if (_keyDown) { my_messenger->sendMessage(my_uid, ak::core::eKeyPressed, 0, _key); }
+		else { my_messenger->sendMessage(my_uid, ak::core::eKeyReleased, 0, _key); }
+	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::propertyGrid::keyPressedEvent()"); }
 	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::propertyGrid::keyPressedEvent()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::propertyGrid::keyPressedEvent()"); }

@@ -55,8 +55,11 @@ namespace ak {
 				// #######################################################################################################
 				// Event handling
 
-				//! @brief Emits a returnPressed signal if the return key is pressed
+				//! @brief Emits a key pressend signal a key is pressed
 				virtual void keyPressEvent(QKeyEvent * _event) override;
+
+				//! @brief Emits a key released signal a key is released
+				virtual void keyReleaseEvent(QKeyEvent * _event) override;
 
 				// #######################################################################################################
 
@@ -95,6 +98,7 @@ namespace ak {
 
 			signals:
 				void keyPressed(QKeyEvent *);
+				void keyReleased(QKeyEvent *);
 				void changed(void);
 
 			private slots:

@@ -22,6 +22,7 @@
 #define ICO_Dark "Moon"
 
 Example::Example()
+	: my_settingColor(255,255,0)
 {
 	// Create own UID
 	my_uid = ak::uiAPI::createUid();
@@ -194,6 +195,10 @@ void Example::eventCallback(
 				my_notifier->enable();
 			}
 			else if (_sender == my_ui.ttb_aDelete) {
+				ak::uiAPI::obj::clear(my_ui.treeWidget);
+				ak::uiAPI::obj::clear(my_ui.propertiesWidget);
+				defaultData();
+				return;
 				std::vector<ak::ID> v;
 				if (ak::uiAPI::itm::getID(my_ui.treeWidget, "B") == ak::invalidID) {
 					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A"));
@@ -222,7 +227,8 @@ void Example::eventCallback(
 				break;
 			case ak::core::valueType::vColor:
 				msg.append("Color\"; Value=\"");
-				msg.append(ak::uiAPI::itm::getValueColor(my_ui.propertiesWidget, _info1).toRGBString(":"));
+				my_settingColor = ak::uiAPI::itm::getValueColor(my_ui.propertiesWidget, _info1);
+				msg.append(my_settingColor.toRGBString(":"));
 				break;
 			case ak::core::valueType::vDouble:
 				msg.append("Double\"; Value=\"");
@@ -311,12 +317,12 @@ void Example::defaultData(void) {
 	ak::uiAPI::obj::addProperty(my_ui.propertiesWidget, "Test int", 13);
 	ak::uiAPI::obj::addProperty(my_ui.propertiesWidget, "Test string", "Some text");
 	ak::uiAPI::obj::addProperty(my_ui.propertiesWidget, "Test double", 10.0);
-	ak::uiAPI::obj::addProperty(my_ui.propertiesWidget, "Test bool", true);
-	
+	ak::uiAPI::obj::addProperty(my_ui.propertiesWidget, "Test bool", true);	
 	std::vector<QString> v;
 	v.push_back("Test");
 	v.push_back("Some other item");
 	v.push_back("And another setting");
 	ak::uiAPI::obj::addProperty(my_ui.propertiesWidget, "Test selection", v, "Test");
+	ak::uiAPI::obj::addProperty(my_ui.propertiesWidget, "Test color", my_settingColor);
 	
 }

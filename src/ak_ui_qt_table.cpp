@@ -27,6 +27,11 @@ void ak::ui::qt::table::keyPressEvent(QKeyEvent *_event)
 	emit keyPressed(_event);
 }
 
+void ak::ui::qt::table::keyReleaseEvent(QKeyEvent * _event) {
+	QTableWidget::keyReleaseEvent(_event);
+	emit keyReleased(_event);
+}
+
 // #######################################################################################################
 
 QWidget * ak::ui::qt::table::widget(void) { return this; }

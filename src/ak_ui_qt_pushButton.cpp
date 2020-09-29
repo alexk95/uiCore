@@ -30,6 +30,11 @@ void ak::ui::qt::pushButton::keyPressEvent(QKeyEvent *_event)
 	emit keyPressed(_event);
 }
 
+void ak::ui::qt::pushButton::keyReleaseEvent(QKeyEvent * _event) {
+	QPushButton::keyReleaseEvent(_event);
+	emit keyReleased(_event);
+}
+
 // #######################################################################################################
 
 QWidget * ak::ui::qt::pushButton::widget(void) { return this; }

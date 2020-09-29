@@ -57,6 +57,7 @@ ak::ui::treeSignalLinker::~treeSignalLinker() {
 	disconnect(my_tree, SIGNAL(itemExpanded(QTreeWidgetItem *)), this, SLOT(treeItemExpanded(QTreeWidgetItem *)));
 	disconnect(my_tree, SIGNAL(itemSelectionChanged()), this, SLOT(treeItemSelectionChanged()));
 	disconnect(my_tree, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(treeKeyPressed(QKeyEvent *)));
+	disconnect(my_tree, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(treeKeyReleased(QKeyEvent *)));
 	disconnect(my_tree, SIGNAL(mouseMove(QMouseEvent *)), this, SLOT(mouseMove(QMouseEvent *)));
 	disconnect(my_tree, SIGNAL(leave(QEvent *)), this, SLOT(treeLeave(QEvent *)));
 }
@@ -72,7 +73,11 @@ bool ak::ui::treeSignalLinker::enabled(void) const { return my_enabled; }
 // Slots
 
 void ak::ui::treeSignalLinker::treeKeyPressed(QKeyEvent * _key) {
-	if (my_enabled) { my_treeManager->raiseKeyPressedEvent(ui::core::getKey(_key)); }
+	if (my_enabled) { my_treeManager->raiseKeyEvent(ui::core::getKey(_key), true); }
+}
+
+void ak::ui::treeSignalLinker::treeKeyReleased(QKeyEvent * _key) {
+	if (my_enabled) { my_treeManager->raiseKeyEvent(ui::core::getKey(_key), false); }
 }
 
 void ak::ui::treeSignalLinker::treeDestroyed() {

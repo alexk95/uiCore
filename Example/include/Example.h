@@ -11,6 +11,7 @@
 
 #include <ak_globalDataTypes.h>			// ID and UID types
 #include <ak_core.h>					// eventType type
+#include <ak_ui_color.h>
 
 // Forward declaration
 class ExampleNotifier;
@@ -65,4 +66,5 @@ private:
 	structUi					my_ui;			//! Contains all UIDs of the UI
 	ak::UID						my_uid;			//! The UID of this application
 	ExampleNotifier *			my_notifier;	//! The notifier that receives the callback messages
+	ak::ui::color				my_settingColor;
 };

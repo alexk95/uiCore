@@ -685,6 +685,12 @@ namespace ak {
 				ak::UID									_objectUid
 			);
 
+			//! @brief Will return the current objects color
+			//! @param _objectUid The object to return the color from
+			ak::ui::color obj_getColor(
+				ak::UID									_objectUid
+			);
+
 			//! @brief Will return all selected objects of the specified object
 			//! @param _objectUid The object to return the slection from
 			std::vector<ak::ID> obj_getSelectedItems(

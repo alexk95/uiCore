@@ -264,10 +264,12 @@ namespace ak {
 
 				// Events
 
-				//! @brief Will perform the key pressed event
-				//! @param _key The key to perfom its pressed event
-				void raiseKeyPressedEvent(
-					ui::core::keyType				_key
+				//! @brief Will perform the key event
+				//! @param _key The key
+				//! @param _keyDown If true, the key pressed event will be send, otherwise released
+				void raiseKeyEvent(
+					ui::core::keyType				_key,
+					bool							_keyDown
 				);
 
 				//! @brief Will perform actions on the filter text changed event

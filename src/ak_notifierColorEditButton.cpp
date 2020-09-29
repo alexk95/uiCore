@@ -13,8 +13,7 @@
 
 ak::notifierColorEditButton::notifierColorEditButton(
 	ak::ui::widget::colorEditButton *		_btn
-)
-	: my_button(_btn)
+) : my_button(_btn)
 {
 	try {
 		if (_btn == nullptr) { throw ak::Exception("Is nullptr", "Check button"); }
@@ -33,9 +32,7 @@ void ak::notifierColorEditButton::notify(
 	int										_info2
 ) {
 	try {
-		if (isEnabled()) {
-			my_button->widgetEvent(_senderId, _event, _info1, _info2);
-		}
+		if (isEnabled()) { my_button->widgetEvent(_senderId, _event, _info1, _info2); }
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::notifierColorEditButton::notify()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::notifierColorEditButton::notify()"); }

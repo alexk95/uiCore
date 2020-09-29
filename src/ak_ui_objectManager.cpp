@@ -2177,6 +2177,32 @@ bool ak::ui::objectManager::obj_getChecked(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getChecked()"); }
 }
 
+ak::ui::color ak::ui::objectManager::obj_getColor(
+	ak::UID									_objectUid
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oColorEditButton:
+		{
+			// Cast object
+			ak::ui::widget::colorEditButton * obj = nullptr;
+			obj = dynamic_cast<ak::ui::widget::colorEditButton *>(itm->second);
+			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast color edit button"); }
+			return obj->color();
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getColor()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getColor()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getColor()"); }
+}
+
 std::vector<ak::ID> ak::ui::objectManager::obj_getSelectedItems(
 	ak::UID									_objectUid
 ) {

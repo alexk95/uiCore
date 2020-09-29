@@ -65,17 +65,20 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oComboBox:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(activated(int)), this, SLOT(slotIndexActivated(int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged(int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oComboButton:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(changed()), this, SLOT(slotChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oDock:
 			break;
@@ -83,6 +86,7 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oTable:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cellActivated(int, int)), this, SLOT(tableCellActivated(int, int)));
@@ -91,6 +95,7 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(tableCellDoubleClicked(int, int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cellEntered(int, int)), this, SLOT(tableCellEntered(int, int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oTextEdit:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
@@ -146,6 +151,7 @@ ak::UID ak::ui::signalLinker::addLink(
 		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 		_object->connect(_object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
 		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 		return _objectUid;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::checkBox)"); }
@@ -165,6 +171,7 @@ ak::UID ak::ui::signalLinker::addLink(
 		_object->connect(_object, SIGNAL(activated(int)), this, SLOT(slotIndexActivated(int)));
 		_object->connect(_object, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged(int)));
 		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 		return _objectUid;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboBox)"); }
@@ -185,6 +192,7 @@ ak::UID ak::ui::signalLinker::addLink(
 		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 		_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
 		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 		return _objectUid;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
@@ -220,6 +228,7 @@ ak::UID ak::ui::signalLinker::addLink(
 		_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
 		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 		return _objectUid;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::pushButton)"); }
@@ -259,6 +268,7 @@ ak::UID ak::ui::signalLinker::addLink(
 		_object->connect(_object, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(tableCellDoubleClicked(int, int)));
 		_object->connect(_object, SIGNAL(cellEntered(int, int)), this, SLOT(tableCellEntered(int, int)));
 		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 		return _objectUid;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::table)"); }

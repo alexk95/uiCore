@@ -28,20 +28,16 @@ ak::ui::qt::tree::~tree() {}
 // Event handling
 
 void ak::ui::qt::tree::keyPressEvent(QKeyEvent *_event)
-{
-	QTreeWidget::keyPressEvent(_event);
-	emit keyPressed(_event);
-}
+{ QTreeWidget::keyPressEvent(_event); emit keyPressed(_event); }
 
-void ak::ui::qt::tree::mouseMoveEvent(QMouseEvent * _event) {
-	QTreeWidget::mouseMoveEvent(_event);
-	emit mouseMove(_event);
-}
+void ak::ui::qt::tree::keyReleaseEvent(QKeyEvent * _event)
+{ QTreeWidget::keyReleaseEvent(_event); emit keyReleased(_event); }
 
-void ak::ui::qt::tree::leaveEvent(QEvent *_event) {
-	QTreeWidget::leaveEvent(_event);
-	emit leave(_event);
-}
+void ak::ui::qt::tree::mouseMoveEvent(QMouseEvent * _event)
+{ QTreeWidget::mouseMoveEvent(_event); emit mouseMove(_event); }
+
+void ak::ui::qt::tree::leaveEvent(QEvent *_event)
+{ QTreeWidget::leaveEvent(_event); emit leave(_event); }
 
 // #######################################################################################################
 

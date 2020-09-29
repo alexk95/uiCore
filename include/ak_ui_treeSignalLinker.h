@@ -59,6 +59,7 @@ namespace ak {
 			// ##### Tree
 			void treeDestroyed();
 			void treeKeyPressed(QKeyEvent *);
+			void treeKeyReleased(QKeyEvent *);
 			void treeItemActivated(QTreeWidgetItem *item, int column);
 			void treeItemChanged(QTreeWidgetItem *item, int column);
 			void treeItemClicked(QTreeWidgetItem *item, int column);

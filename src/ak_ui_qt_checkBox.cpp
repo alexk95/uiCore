@@ -40,3 +40,8 @@ void ak::ui::qt::checkBox::keyPressEvent(QKeyEvent * _event) {
 	QCheckBox::keyPressEvent(_event);
 	emit keyPressed(_event);
 }
+
+void ak::ui::qt::checkBox::keyReleaseEvent(QKeyEvent * _event) {
+	QCheckBox::keyReleaseEvent(_event);
+	emit keyReleased(_event);
+}

@@ -50,6 +50,11 @@ void ak::ui::qt::comboButton::keyPressEvent(QKeyEvent *_event)
 	emit keyPressed(_event);
 }
 
+void ak::ui::qt::comboButton::keyReleaseEvent(QKeyEvent * _event) {
+	QPushButton::keyReleaseEvent(_event);
+	emit keyReleased(_event);
+}
+
 // #######################################################################################################
 
 void ak::ui::qt::comboButton::clearItems(void) {
