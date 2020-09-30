@@ -200,6 +200,14 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		// Main window
 		case ak::ui::colorStyle::styleableObject::sMainWindow:
 		
+			out.append("QWidget{"
+				_fore _backWindow
+				"}\n");
+
+			out.append("QWidget *{"
+				_fore _backWindow
+				"}\n");
+
 			out.append("QMainWindow{"
 				_fore _backWindow _alternateBackWindow _selectionFore _selectionBack
 				"}\n");
@@ -381,7 +389,15 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		
 		// Tabbar
 		case ak::ui::colorStyle::styleableObject::sTabBar:
-			
+
+			out.append("QWidget{"
+				_fore _backWindow
+				"}\n");
+
+			out.append("QWidget *{"
+				_fore _backWindow
+				"}\n");
+
 			out.append("QTabBar{"
 				_backWindow
 				"}\n");
@@ -426,12 +442,21 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		
 		// Tab widget
 		case ak::ui::colorStyle::styleableObject::sTabWidget:
+			
+			out.append("QWidget{"
+				_fore _backWindow
+				"}\n");
+
+			out.append("QWidget *{"
+				_fore _backWindow
+				"}\n");
+
 			out.append("QTabWidget{"
 				_fore _backWindow
 				"}\n");
 
 			out.append("QTabWidget::pane{"
-				_borderDefaultTabWidget
+				_fore _backWindow _borderDefaultTabWidget
 				"}\n");
 
 			out.append("QTabWidget::tab-bar{"
@@ -445,6 +470,14 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		// Tab widget page
 		case ak::ui::colorStyle::styleableObject::sTabWidgetPage:
 			
+			out.append("QWidget{"
+				_fore _backWindow
+				"}\n");
+
+			out.append("QWidget *{"
+				_fore _backWindow
+				"}\n");
+
 			out.append("QTabWidget{"
 				_borderDefaultControl
 				"}\n");
@@ -481,16 +514,24 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		// Toolbar
 		case ak::ui::colorStyle::styleableObject::sToolBar:
 			
+			out.append("QWidget{"
+				_fore _backWindow
+				"}\n");
+
+			out.append("QWidget *{"
+				_fore _backWindow
+				"}\n");
+
 			out.append("*{"
-				_backWindow
+				_fore _backWindow
 				"}\n");
 
 			out.append("QToolBar{"
-				_backWindow "border: none;"
+				_fore _backWindow "border: none;"
 				"}\n");
 
 			out.append("QToolBar QToolBar *{"
-				_backWindow "border: none;"
+				_fore _backWindow "border: none;"
 				"}\n");
 
 			break;

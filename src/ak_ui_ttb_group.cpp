@@ -113,6 +113,7 @@ void ak::ui::ttb::group::setColorStyle(
 	try {
 		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check colorStyle"); }
 		my_colorStyle = _colorStyle;
+		my_group->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sWidget));
 		for (int i = 0; i < my_subgroups.size(); i++) {
 			ak::ui::ttb::subGroup * obj = my_subgroups.at(i);
 			obj->setColorStyle(my_colorStyle);

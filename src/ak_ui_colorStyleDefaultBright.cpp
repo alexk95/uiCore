@@ -197,6 +197,14 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 		// Main window
 		case ak::ui::colorStyle::styleableObject::sMainWindow:
 
+			out.append("QWidget{"
+				_fore _backWindow
+				"}\n");
+
+			out.append("QWidget *{"
+				_fore _backWindow
+				"}\n");
+
 			out.append("QMainWindow{"
 				_fore _backWindow _alternateBackWindow _selectionFore _selectionBack
 				"}\n");
@@ -412,6 +420,15 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 		// ######################################################################################################
 		// Tab widget
 		case ak::ui::colorStyle::styleableObject::sTabWidget:
+			
+			out.append("QWidget{"
+				_fore _backWindow
+				"}\n");
+
+			out.append("QWidget *{"
+				_fore _backWindow
+				"}\n");
+
 			out.append("QTabWidget{"
 				_fore _backWindow
 				"}\n");
@@ -429,6 +446,14 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 		// ######################################################################################################
 		// Tab widget page
 		case ak::ui::colorStyle::styleableObject::sTabWidgetPage:
+
+			out.append("QWidget{"
+				_fore _backWindow
+				"}\n");
+
+			out.append("QWidget *{"
+				_fore _backWindow
+				"}\n");
 
 			out.append("QTabWidget{"
 				_borderDefaultControl
@@ -463,6 +488,14 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 		// ######################################################################################################
 		// Toolbar
 		case ak::ui::colorStyle::styleableObject::sToolBar:
+
+			out.append("QWidget{"
+				_fore _backWindow
+				"}\n");
+
+			out.append("QWidget *{"
+				_fore _backWindow
+				"}\n");
 
 			out.append("*{"
 				_backWindow
@@ -566,7 +599,16 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 
 		}
 		break;
+		// ######################################################################################################
 
+		// Widget
+		case ak::ui::colorStyle::styleableObject::sWidget:
+		{
+			out.append("QWidget {"
+				_fore _backWindow
+				"}\n");
+		}
+		break;
 		default: assert(0); // Not implemented yet
 		}
 		return out;
