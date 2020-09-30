@@ -23,7 +23,7 @@ ak::ui::colorStyleDefaultBright::~colorStyleDefaultBright() {}
 
 QString ak::ui::colorStyleDefaultBright::getColorStyleName(void) const { return QString("Default_Dark"); }
 
-#define _backWindow "background-color:#f0f0f0;"
+#define _backWindow "background-color:#ffffff;"
 #define _backTitle "background-color:qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 #c0c0c0, stop : 1 #e0e0e0);"
 #define _backTab "background-color:qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 #c0c0c0, stop : 1 #e0e0e0);"
 #define _backControl "background-color:#b8b8b8;"
