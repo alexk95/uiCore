@@ -7,13 +7,12 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_core_aObject.h"			// corresponding header
-#include "ak_exception.h"				// error handling
+// AK header
+#include <ak_ui_core_aObject.h>			// corresponding header
+#include <ak_exception.h>				// error handling
 
 ak::ui::core::aObject::aObject(ak::ui::core::objectType _type, ak::UID _uid, int _references)
-:	my_uid(_uid),
-	my_references(0),
-	my_objectType(_type)
+:	my_uid(_uid), my_references(0), my_objectType(_type)
 {
 	try { setReferences(_references); }
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::core::aObject::aObject()"); }

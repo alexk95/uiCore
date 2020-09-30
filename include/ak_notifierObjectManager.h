@@ -10,9 +10,9 @@
 #pragma once
 
 // AK header
-#include "ak_notifier.h"			// base class
-#include "ak_globalDataTypes.h"		// UID and ID type
-#include "ak_core.h"				// messageType
+#include <ak_notifier.h>			// base class
+#include <ak_globalDataTypes.h>		// UID and ID type
+#include <ak_core.h>				// messageType
 
 namespace ak {
 
@@ -49,7 +49,6 @@ namespace ak {
 
 	private:
 		ak::ui::objectManager *						my_manager;			//! The manager used in this class
-
 	};
 
 } // namespace ak

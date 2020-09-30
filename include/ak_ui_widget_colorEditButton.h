@@ -9,12 +9,15 @@
 
 #pragma once
 
+// Qt header
+#include <qstring.h>
+
 // AK header
-#include "ak_ui_core_aWidgetManager.h"		// base class
-#include "ak_core.h"						// eventType
-#include "ak_ui_core.h"						// objectType
-#include "ak_globalDataTypes.h"				// UID and ID type
-#include "ak_ui_color.h"					// color
+#include <ak_ui_core_aWidgetManager.h>		// base class
+#include <ak_core.h>						// eventType
+#include <ak_ui_core.h>						// objectType
+#include <ak_globalDataTypes.h>				// UID and ID type
+#include <ak_ui_color.h>					// color
 
 // Forward declaration
 class QHBoxLayout;

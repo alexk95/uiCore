@@ -7,6 +7,7 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
+// AK header
 #include <ak_ui_qt_dock.h>			// corresponding class
 #include <ak_exception.h>			// error handling
 #include <ak_ui_colorStyle.h>		// colorStyle

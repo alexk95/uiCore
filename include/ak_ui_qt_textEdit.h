@@ -16,6 +16,7 @@
 #include <ak_ui_core.h>				// Key type
 #include <ak_ui_core_aWidget.h>		// base class
 
+// Forward declaration
 class QKeyEvent;
 
 namespace ak {

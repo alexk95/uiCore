@@ -10,8 +10,11 @@
 #pragma once
 
 // C++ header
-#include <exception>		// Base class
-#include <string>			// std::string
+#include <exception>			// Base class
+#include <string>				// std::string
+
+// AK header
+#include <ak_globalDataTypes.h>	// UICORE_API
 
 namespace ak {
 
@@ -25,7 +28,7 @@ namespace ak {
 	//!			@ Inner function
 	//!			@ Outter function
 	//!			@ Initial calling function
-	class __declspec(dllexport) Exception : public std::exception {
+	class UICORE_API Exception : public std::exception {
 	public:
 
 		//! Used to determine the type of the exception

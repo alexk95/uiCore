@@ -16,7 +16,7 @@
 #include <qtoolbutton.h>				// ToolButtonPopupMode
 
 // AK header
-#include "ak_ui_core_aObject.h"			// base class
+#include <ak_ui_core_aObject.h>			// base class
 
 namespace ak {
 	namespace ui {

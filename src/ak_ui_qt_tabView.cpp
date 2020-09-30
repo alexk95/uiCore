@@ -7,10 +7,13 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
+// AK header
 #include <ak_ui_qt_tabView.h>		// Corresponding header
-#include <qwidget.h>				// QWidget
 #include <ak_exception.h>			// Error handling
 #include <ak_ui_colorStyle.h>
+
+// Qt header
+#include <qwidget.h>				// QWidget
 
 ak::ui::qt::tabView::tabView(
 	colorStyle *			_colorStyle,

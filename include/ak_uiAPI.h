@@ -19,12 +19,12 @@
 #include <qstringlist.h>				// QStringList
 
 // AK header
-#include "ak_core.h"					// message type
-#include "ak_ui_core.h"					// object type
-#include "ak_ui_color.h"				// color
+#include <ak_core.h>					// message type
+#include <ak_ui_core.h>					// object type
+#include <ak_ui_color.h>				// color
 
-#include "ak_globalDataTypes.h"				// UID and ID type
-#include "ak_ui_qt_comboButtonItem.h"			// comboButtonItem
+#include <ak_globalDataTypes.h>			// UID and ID type
+#include <ak_ui_qt_comboButtonItem.h>	// comboButtonItem
 
 // Forward declaration
 class QSurfaceFormat;
@@ -165,7 +165,7 @@ namespace ak {
 		//! @param _objectManager The object manager that will be used in the aplication, if nullptr a new one will be created
 		//! @throw ak::Exception if failed to create a object
 		//! @throw ak::Exception if the API was already initialized
-		__declspec(dllexport) void ini(
+		UICORE_API void ini(
 			bool													_createQApplication,
 			int														_argc = 0,
 			char **													_argv = nullptr,
@@ -177,30 +177,30 @@ namespace ak {
 		);
 
 		//! @brief Will destroy all objects created by this API
-		__declspec(dllexport) void destroy(void);
+		UICORE_API void destroy(void);
 
 		//! @brief Will destroy the provided object
-		__declspec(dllexport) void destroyObject(
+		UICORE_API void destroyObject(
 			ak::UID													_objectUid
 		);
 
 		//! @brief Will enable the provided event types to be send
 		//! @param _types The types to allow
-		__declspec(dllexport) void enableEventTypes(
+		UICORE_API void enableEventTypes(
 			ak::core::eventType										_types
 		);
 
 		//! @brief Will disable the provided event types to be send
 		//! @param _types The types to disable
-		__declspec(dllexport) void disableEventTypes(
+		UICORE_API void disableEventTypes(
 			ak::core::eventType										_types
 		);
 
 		//! @brief Will return the enabled event types that will be send
-		__declspec(dllexport) std::vector<ak::core::eventType> enabledEventTypes(void);
+		UICORE_API std::vector<ak::core::eventType> enabledEventTypes(void);
 
 		//! @brief Will return the disabled event types that will be send
-		__declspec(dllexport) std::vector<ak::core::eventType> disabledEventTypes(void);
+		UICORE_API std::vector<ak::core::eventType> disabledEventTypes(void);
 
 		// ###############################################################################################################################################
 		
@@ -212,7 +212,7 @@ namespace ak {
 		//! @param _senderUid The sender UID for which to register the provided notifier
 		//! @param _notifier The notifier which to register
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID registerUidNotifier(
+		UICORE_API ak::UID registerUidNotifier(
 			ak::UID													_senderUid,
 			ak::notifier *											_notifier
 		);
@@ -223,7 +223,7 @@ namespace ak {
 		//! @param _event The event type for which to register the provided notifier
 		//! @param _notifier The notifier which to register
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID registerEventTypeNotifier(
+		UICORE_API ak::UID registerEventTypeNotifier(
 			ak::core::eventType										_event,
 			ak::notifier *											_notifier
 		);
@@ -233,7 +233,7 @@ namespace ak {
 		//! Returns the UID of the notifier
 		//! @param _notifier The notifier which to register
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID registerAllMessagesNotifier(
+		UICORE_API ak::UID registerAllMessagesNotifier(
 			ak::notifier *											_notifier
 		);
 
@@ -245,7 +245,7 @@ namespace ak {
 		//! @param _info2 Additional information 2
 		//! @throw ak::Exception if the API is not initialized
 		//! @throw ak::Exception At any kind of error that may occur in any subroutine call when calling the receivers
-		__declspec(dllexport) void sendMessage(
+		UICORE_API void sendMessage(
 			ak::UID													_senderUid,
 			ak::core::eventType										_event,
 			int														_info1 = 0,
@@ -254,7 +254,7 @@ namespace ak {
 
 		//! @brief Will set the samples count for the default surface formt
 		//! @param _count The count of samples
-		__declspec(dllexport) void setSurfaceFormatDefaultSamplesCount(
+		UICORE_API void setSurfaceFormatDefaultSamplesCount(
 			int														_count
 		);
 
@@ -268,7 +268,7 @@ namespace ak {
 		//! @param _iconSize The size of the icon to display in the action (requires also the icon name to be provided)
 		//! @param _iconName The name of the icon to display in the action (requires also the icon size to be provided)
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createAction(
+		UICORE_API ak::UID createAction(
 			ak::UID													_creatorUid,
 			const char *											_text,
 			const char *											_iconName = nullptr,
@@ -281,7 +281,7 @@ namespace ak {
 		//! @param _iconSize The size of the icon to display in the action (requires also the icon name to be provided)
 		//! @param _iconName The name of the icon to display in the action (requires also the icon size to be provided)
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createAction(
+		UICORE_API ak::UID createAction(
 			ak::UID													_creatorUid,
 			const QString &											_text,
 			const QString &											_iconName = QString(""),
@@ -293,7 +293,7 @@ namespace ak {
 		//! @param _text The text of the action
 		//! @param _icon The icon of the action
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createAction(
+		UICORE_API ak::UID createAction(
 			ak::UID													_craetorUid,
 			const QString &											_text,
 			const QIcon &											_icon
@@ -304,7 +304,7 @@ namespace ak {
 		//! @param _text The initial text of the CheckBox
 		//! @param _checked The initial checked state of the checkbox
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createCheckbox(
+		UICORE_API ak::UID createCheckbox(
 			ak::UID													_creatorUid,
 			const char *											_text,
 			bool													_checked = false
@@ -315,7 +315,7 @@ namespace ak {
 		//! @param _text The initial text of the CheckBox
 		//! @param _checked The initial checked state of the checkbox
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createCheckbox(
+		UICORE_API ak::UID createCheckbox(
 			ak::UID													_creatorUid,
 			const QString &											_text,
 			bool													_checked = false
@@ -329,7 +329,7 @@ namespace ak {
 		//! @param _a The Alpha-Channel value of the ColorEditButton color
 		//! @param _textOverride If provided the RGB-text representation of the provided color will be overwritten by the text provided
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createColorEditButton(
+		UICORE_API ak::UID createColorEditButton(
 			ak::UID													_creatorUid,
 			int														_r,
 			int														_g,
@@ -346,7 +346,7 @@ namespace ak {
 		//! @param _a The Alpha-Channel value of the ColorEditButton color
 		//! @param _textOverride If provided the RGB-text representation of the provided color will be overwritten by the text provided
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createColorEditButton(
+		UICORE_API ak::UID createColorEditButton(
 			ak::UID													_creatorUid,
 			int														_r,
 			int														_g,
@@ -360,7 +360,7 @@ namespace ak {
 		//! @param _color The color of the ColorEditButton
 		//! @param _textOverride If provided the RGB-text representation of the provided color will be overwritten by the text provided
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createColorEditButton(
+		UICORE_API ak::UID createColorEditButton(
 			ak::UID													_creatorUid,
 			const ak::ui::color &									_color,
 			const QString &											_textOverride = QString("")
@@ -369,7 +369,7 @@ namespace ak {
 		//! @brief Will create a new ComboBox and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createComboBox(
+		UICORE_API ak::UID createComboBox(
 			ak::UID													_creatorUid
 		);
 
@@ -378,7 +378,7 @@ namespace ak {
 		//! @param _text The initial text of the ComboButton
 		//! @param _possibleSelection The items the ComboButton will display when showing the drop-down menu
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createComboButton(
+		UICORE_API ak::UID createComboButton(
 			ak::UID													_creatorUid,
 			const char *											_text,
 			const std::vector<ak::ui::qt::comboButtonItem> &		_possibleSelection = std::vector<ak::ui::qt::comboButtonItem>()
@@ -389,7 +389,7 @@ namespace ak {
 		//! @param _text The initial text of the ComboButton
 		//! @param _possibleSelection The items the ComboButton will display when showing the drop-down menu
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createComboButton(
+		UICORE_API ak::UID createComboButton(
 			ak::UID													_creatorUid,
 			const QString &											_text = QString(""),
 			const std::vector<ak::ui::qt::comboButtonItem> &		_possibleSelection = std::vector<ak::ui::qt::comboButtonItem>()
@@ -399,7 +399,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The text of the ComboButtonItem
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createComboButtonItem(
+		UICORE_API ak::UID createComboButtonItem(
 			ak::UID													_creatorUid,
 			const char *											_text
 		);
@@ -408,7 +408,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The text of the ComboButtonItem
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createComboButtonItem(
+		UICORE_API ak::UID createComboButtonItem(
 			ak::UID													_creatorUid,
 			const QString &											_text = QString("")
 		);
@@ -418,7 +418,7 @@ namespace ak {
 		//! @param _icon The icon of the ComboButtonItem
 		//! @param _text The text of the ComboButtonItem
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createComboButtonItem(
+		UICORE_API ak::UID createComboButtonItem(
 			ak::UID													_creatorUid,
 			const QIcon &											_icon,
 			const QString &											_text = QString("")
@@ -428,7 +428,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the Dock
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createDock(
+		UICORE_API ak::UID createDock(
 			ak::UID													_creatorUid,
 			const char *											_text
 		);
@@ -437,7 +437,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the Dock
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createDock(
+		UICORE_API ak::UID createDock(
 			ak::UID													_creatorUid,
 			const QString &											_text = QString("")
 		);
@@ -445,7 +445,7 @@ namespace ak {
 		//! @brief Will create a new PropertyGrid and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createPropertyGrid(
+		UICORE_API ak::UID createPropertyGrid(
 			ak::UID													_creatorUid
 		);
 
@@ -453,7 +453,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the PushButton
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createPushButton(
+		UICORE_API ak::UID createPushButton(
 			ak::UID													_creatorUid,
 			const char *											_text
 		);
@@ -462,7 +462,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the PushButton
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createPushButton(
+		UICORE_API ak::UID createPushButton(
 			ak::UID													_creatorUid,
 			const QString &											_text = QString("")
 		);
@@ -472,7 +472,7 @@ namespace ak {
 		//! @param _icon The icon of the PushButton
 		//! @param _text The initial text of the PushButton
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createPushButton(
+		UICORE_API ak::UID createPushButton(
 			ak::UID													_creatorUid,
 			const QIcon &											_icon,
 			const QString &											_text = QString("")
@@ -483,7 +483,7 @@ namespace ak {
 		//! @param _rows The initial row count of the Table
 		//! @param _columns The initial column count of the Table
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createTable(
+		UICORE_API ak::UID createTable(
 			ak::UID													_creatorUid,
 			int														_rows,
 			int														_columns
@@ -494,7 +494,7 @@ namespace ak {
 		//! @param _parentUid The UID of the parent TabToolBar object (may be a uiManager, TabToolBarPage or TabToolBarGroup)
 		//! @param _text The text of the SubContainer
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createTabToolBarSubContainer(
+		UICORE_API ak::UID createTabToolBarSubContainer(
 			ak::UID													_creatorUid,
 			ak::UID													_parentUid,
 			const char *											_text
@@ -505,7 +505,7 @@ namespace ak {
 		//! @param _parentUid The UID of the parent TabToolBar object (may be a uiManager, TabToolBarPage or TabToolBarGroup)
 		//! @param _text The text of the SubContainer
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createTabToolBarSubContainer(
+		UICORE_API ak::UID createTabToolBarSubContainer(
 			ak::UID													_creatorUid,
 			ak::UID													_parentUid,
 			const QString &											_text = QString("")
@@ -515,7 +515,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _initialText The initial text of the TextEdit
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createTextEdit(
+		UICORE_API ak::UID createTextEdit(
 			ak::UID													_creatorUid,
 			const char *											_initialText
 		);
@@ -524,35 +524,35 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _initialText The initial text of the TextEdit
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createTextEdit(
+		UICORE_API ak::UID createTextEdit(
 			ak::UID													_creatorUid,
 			const QString &											_initialText = QString("")
 		);
 
 		//! @brief Will create a new timer and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
-		__declspec(dllexport) ak::UID createTimer(
+		UICORE_API ak::UID createTimer(
 			ak::UID													_creatorUid
 		);
 
 		//! @brief Will create a new Tree and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createTree(
+		UICORE_API ak::UID createTree(
 			ak::UID													_creatorUid
 		);
 
 		//! @brief Will create a new UI manager and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createUiManager(
+		UICORE_API ak::UID createUiManager(
 			ak::UID													_creatorUid
 		);
 
 		//! @brief Will create a new tab view and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		__declspec(dllexport) ak::UID createTabView(
+		UICORE_API ak::UID createTabView(
 			ak::UID													_creatorUid
 		);
 
@@ -566,7 +566,7 @@ namespace ak {
 			//! @param _parentUid The container UID to add the object to
 			//! @param _objectUid The object UID to add to the container
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) void addObjectToContainer(
+			UICORE_API void addObjectToContainer(
 				ak::UID												_parentUid,
 				ak::UID												_objectUid
 			);
@@ -575,7 +575,7 @@ namespace ak {
 			//! @param _parentUid The parent object to set the object as central widget
 			//! @param _objectUid The UID of the object to set as central widget
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) void setCentralWidget(
+			UICORE_API void setCentralWidget(
 				ak::UID												_parentUid,
 				ak::UID												_objectUid
 			);
@@ -584,7 +584,7 @@ namespace ak {
 			//! @param _parentUid The parent object to set the object as central widget
 			//! @param _widget The widget to set as central widget
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) void setCentralWidget(
+			UICORE_API void setCentralWidget(
 				ak::UID												_parentUid,
 				QWidget *											_widget
 			);
@@ -593,7 +593,7 @@ namespace ak {
 			//! @param _objectUid The object to set the text at
 			//! @param _text The text to set
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) void setText(
+			UICORE_API void setText(
 				ak::UID												_objectUid,
 				const char *										_text
 			);
@@ -602,7 +602,7 @@ namespace ak {
 			//! @param _objectUid The object to set the text at
 			//! @param _text The text to set
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) void setText(
+			UICORE_API void setText(
 				ak::UID												_objectUid,
 				const QString &										_text
 			);
@@ -611,7 +611,7 @@ namespace ak {
 			//! @param _objectUid The object to set the checked state at
 			//! @param _checked The checked state to set
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) void setChecked(
+			UICORE_API void setChecked(
 				ak::UID												_objectUid,
 				bool												_checked
 			);
@@ -620,7 +620,7 @@ namespace ak {
 			//! @param _objectUid The object to set the tristate at
 			//! @param _isTristate The tristate to set
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) void setTristate(
+			UICORE_API void setTristate(
 				ak::UID												_objectUid,
 				bool												_isTristate
 			);
@@ -629,7 +629,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object the filters visible state should be set
 			//! @param _vis If true, then the filter of the object will be visible
 			//! @throw ak::Exception if the object UID is invalid
-			__declspec(dllexport) void setFilterVisible(
+			UICORE_API void setFilterVisible(
 				ak::UID												_objectUid,
 				bool												_vis = true
 			);
@@ -638,7 +638,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object the filters visible state should be set
 			//! @param _vis If true, then the filter of the object will be visible
 			//! @throw ak::Exception if the object UID is invalid
-			__declspec(dllexport) void setFilterCaseSensitive(
+			UICORE_API void setFilterCaseSensitive(
 				ak::UID												_objectUid,
 				bool												_caseSensitive,
 				bool												_refresh = true
@@ -648,7 +648,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object the filters visible state should be set
 			//! @param _vis If true, then the filter of the object will be visible
 			//! @throw ak::Exception if the object UID is invalid
-			__declspec(dllexport) void setFilterRefreshOnChange(
+			UICORE_API void setFilterRefreshOnChange(
 				ak::UID												_objectUid,
 				bool												_refreshOnChange
 			);
@@ -657,7 +657,7 @@ namespace ak {
 			//! @param _objectUid The object to set the items at
 			//! @param _items The items to set
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) void setItems(
+			UICORE_API void setItems(
 				ak::UID												_objectUid,
 				const std::vector<ak::ui::qt::comboButtonItem> &	_items
 			);
@@ -669,7 +669,7 @@ namespace ak {
 			//! @param _b The Blue-Channel value of the color to set
 			//! @param _a The Alpha-Channel value of the color to set
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) void setColor(
+			UICORE_API void setColor(
 				ak::UID												_objectUid,
 				int													_r,
 				int													_g,
@@ -681,7 +681,7 @@ namespace ak {
 			//! @param _objectUid The object to set to color at
 			//! @param _color The color to set
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) void setColor(
+			UICORE_API void setColor(
 				ak::UID												_objectUid,
 				const ak::ui::color &								_color
 			);
@@ -693,7 +693,7 @@ namespace ak {
 			//! @param _iconSize The size of the icon to set
 			//! @throw ak::Exception if the object UID is invalid
 			//! @throw ak::Exception if the icon does not exist
-			__declspec(dllexport) void setIcon(
+			UICORE_API void setIcon(
 				ak::UID												_objectUid,
 				const char *										_iconName,
 				const char *										_iconSize
@@ -706,7 +706,7 @@ namespace ak {
 			//! @param _iconSize The size of the icon to set
 			//! @throw ak::Exception if the object UID is invalid
 			//! @throw ak::Exception if the icon does not exist
-			__declspec(dllexport) void setIcon(
+			UICORE_API void setIcon(
 				ak::UID												_objectUid,
 				const QString &										_iconName,
 				const QString &										_iconSize
@@ -716,7 +716,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object to set the icon an
 			//! @param _icon The icon to set
 			//! @throw ak::Exception if the object UID is invalid
-			__declspec(dllexport) void setIcon(
+			UICORE_API void setIcon(
 				ak::UID												_objectUid,
 				const QIcon &										_icon
 			);
@@ -725,7 +725,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object to set the option at
 			//! @param _readOnly If true, the object will be read only
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void setReadOnly(
+			UICORE_API void setReadOnly(
 				ak::UID												_objectUid,
 				bool												_readOnly = true
 			);
@@ -734,7 +734,7 @@ namespace ak {
 			//! @param _uiManagerUid The UID of the UI manager the tab toolbar is located at
 			//! @param _vis If true, the tab toolBar will be visible
 			//! @throw ak::Exception if the uiManager UID is invalid
-			__declspec(dllexport) void setTabToolBarVisible(
+			UICORE_API void setTabToolBarVisible(
 				ak::UID												_uiManagerUid,
 				bool												_vis = true
 			);
@@ -742,7 +742,7 @@ namespace ak {
 			//! @brief Will set the tab location of the provided object
 			//! @param _location The tab location to set
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void setTabLocation(
+			UICORE_API void setTabLocation(
 				ak::UID											_objectUid,
 				ak::ui::core::tabLocation						_location
 			);
@@ -751,7 +751,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object to focus the tab at
 			//! @param _tab The tab to focus
 			//! @throw ak::Exception if the object UID is invalid or the tab is invalid
-			__declspec(dllexport) void setTabFocused(
+			UICORE_API void setTabFocused(
 				ak::UID											_objectUid,
 				ak::ID											_tab
 			);
@@ -760,7 +760,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object to append the text at
 			//! @param _text The text to append
 			//! @throw ak::Exception if the object UID is invalid
-			__declspec(dllexport) void appendText(
+			UICORE_API void appendText(
 				ak::UID												_objectUid,
 				const char *										_text
 			);
@@ -769,7 +769,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object to append the text at
 			//! @param _text The text to append
 			//! @throw ak::Exception if the object UID is invalid
-			__declspec(dllexport) void appendText(
+			UICORE_API void appendText(
 				ak::UID												_objectUid,
 				const QString &										_text
 			);
@@ -778,7 +778,7 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @param _enabled If true, the auto scroll option for the object will be enabled
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void setAutoScrollToBottomEnabled(
+			UICORE_API void setAutoScrollToBottomEnabled(
 				ak::UID												_objectUid,
 				bool												_enabled = true
 			);
@@ -788,7 +788,7 @@ namespace ak {
 			//! @param _value The value of the property
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const char *										_itemName,
 				bool												_value,
@@ -800,7 +800,7 @@ namespace ak {
 			//! @param _value The value of the property
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const QString &										_itemName,
 				bool												_value,
@@ -812,7 +812,7 @@ namespace ak {
 			//! @param _value The value of the property
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const char *										_itemName,
 				int													_value,
@@ -824,7 +824,7 @@ namespace ak {
 			//! @param _value The value of the property
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const QString &										_itemName,
 				int													_value,
@@ -836,7 +836,7 @@ namespace ak {
 			//! @param _value The value of the property
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const char *										_itemName,
 				double												_value,
@@ -848,7 +848,7 @@ namespace ak {
 			//! @param _value The value of the property
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const QString &										_itemName,
 				double												_value,
@@ -860,7 +860,7 @@ namespace ak {
 			//! @param _value The value of the property
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const char *										_itemName,
 				const char *										_value,
@@ -872,7 +872,7 @@ namespace ak {
 			//! @param _value The value of the property
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const QString &										_itemName,
 				const QString &										_value,
@@ -884,7 +884,7 @@ namespace ak {
 			//! @param _value The value of the property
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const char *										_itemName,
 				const ak::ui::color &								_value,
@@ -896,7 +896,7 @@ namespace ak {
 			//! @param _value The value of the property
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const QString &										_itemName,
 				const ak::ui::color &								_value,
@@ -910,7 +910,7 @@ namespace ak {
 			//! @param _selectedValues The currently selected value
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const char *										_itemName,
 				const std::vector<QString> &						_selection,
@@ -925,7 +925,7 @@ namespace ak {
 			//! @param _selectedValues The currently selected value
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void addProperty(
+			UICORE_API void addProperty(
 				ak::UID												_objectUid,
 				const QString &										_itemName,
 				const std::vector<QString> &						_selection,
@@ -940,7 +940,7 @@ namespace ak {
 			//! @param _textAlignment The text alignment of the very last child
 			//! @param _icon The icon to add to the very last child
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) ak::ID createItem(
+			UICORE_API ak::ID createItem(
 				ak::UID												_objectUid,
 				ak::ID												_parentItemId,
 				const QString &										_text = QString(""),
@@ -956,7 +956,7 @@ namespace ak {
 			//! @param _text The text of the object to add
 			//! @param _textAlignment The text alignment of the very last child
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) ak::ID createItem(
+			UICORE_API ak::ID createItem(
 				ak::UID												_objectUid,
 				ak::ID												_parentItemId,
 				const QString &										_iconName,
@@ -981,7 +981,7 @@ namespace ak {
 			//! @param _delimiter The delimiter used in the command which seperates the items
 			//! @param _textAlignment The text alignment of the very last child
 			//! @param _icon The icon to add to the very last child
-			__declspec(dllexport) ak::ID createItem(
+			UICORE_API ak::ID createItem(
 				ak::UID											_objectUid,
 				const QString &									_cmd,
 				char											_delimiter = '|',
@@ -1006,7 +1006,7 @@ namespace ak {
 			//! @param _iconSize The size of the icon to add to the very last child
 			//! @param _delimiter The delimiter used in the command which seperates the items
 			//! @param _textAlignment The text alignment of the very last child
-			__declspec(dllexport) ak::ID createItem(
+			UICORE_API ak::ID createItem(
 				ak::UID											_objectUid,
 				const QString &									_cmd,
 				const QString &									_iconName,
@@ -1017,7 +1017,7 @@ namespace ak {
 
 			//! @brief Will deselect all items
 			//! @param _objectUid The UID of the object
-			__declspec(dllexport) void deselectAllItems(
+			UICORE_API void deselectAllItems(
 				ak::UID											_objectUid
 			);
 
@@ -1026,7 +1026,7 @@ namespace ak {
 			//! @param _widgetUid The UID of the widget to set as a central widget
 			//! @param _title The title of the tab
 			//! @param _icon The icon of the tab
-			__declspec(dllexport) ak::ID addTab(
+			UICORE_API ak::ID addTab(
 				ak::UID											_objectUid,
 				ak::UID											_widgetUid,
 				const QString &									_title,
@@ -1038,7 +1038,7 @@ namespace ak {
 			//! @param _widget The widget to set as the central widget
 			//! @param _title The title of the tab
 			//! @param _icon The icon of the tab
-			__declspec(dllexport) ak::ID addTab(
+			UICORE_API ak::ID addTab(
 				ak::UID											_objectUid,
 				QWidget *										_widget,
 				const QString &									_title,
@@ -1050,7 +1050,7 @@ namespace ak {
 			//! @param _widgetUid The UID of the widget to set as a central widget
 			//! @param _title The title of the tab
 			//! @param _icon The icon of the tab
-			__declspec(dllexport) ak::ID addTab(
+			UICORE_API ak::ID addTab(
 				ak::UID											_objectUid,
 				ak::UID											_widgetUid,
 				const QString &									_title,
@@ -1063,7 +1063,7 @@ namespace ak {
 			//! @param _widget The widget to set as the central widget
 			//! @param _title The title of the tab
 			//! @param _icon The icon of the tab
-			__declspec(dllexport) ak::ID addTab(
+			UICORE_API ak::ID addTab(
 				ak::UID											_objectUid,
 				QWidget *										_widget,
 				const QString &									_title,
@@ -1074,7 +1074,7 @@ namespace ak {
 			//! @brief Enables or disables the ability to select multiple items
 				//! @param _objectUid The UID of the object
 				//! @param _multiSelection Specify whether multiple items can be selected
-			__declspec(dllexport) void setMultiSelectionEnabled(
+			UICORE_API void setMultiSelectionEnabled(
 				ak::UID											_objectUid,
 				bool											_multiSelection = true
 			);
@@ -1082,7 +1082,7 @@ namespace ak {
 			//! @brief Enables or disables the ability to automatically select/deselect the childrens of an item
 			//! @param _objectUid The UID of the object
 			//! @param _enabled if true, the childs of an item will be selected/deselected automatically
-			__declspec(dllexport) void setAutoSelectAndDeselectChildrenEnabled(
+			UICORE_API void setAutoSelectAndDeselectChildrenEnabled(
 				ak::UID											_objectUid,
 				bool											_enabled = true
 			);
@@ -1091,7 +1091,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object
 			//! @param _enabled If true the option is enabled
 			//! @throw ak::Exception if the specified object is invalid
-			__declspec(dllexport) void setAutoExpandSelectedItems(
+			UICORE_API void setAutoExpandSelectedItems(
 				ak::UID											_objectUid,
 				bool											_enabled = true
 			);
@@ -1099,7 +1099,7 @@ namespace ak {
 			//! @brief Enables or disables the provided object
 			//! @param _objectUid The UID of the object
 			//! @param _enabled if true, the object will be enabled
-			__declspec(dllexport) void setEnabled(
+			UICORE_API void setEnabled(
 				ak::UID											_objectUid,
 				bool											_enabled = true
 			);
@@ -1107,7 +1107,7 @@ namespace ak {
 			//! @brief Will clear the items of the provided object
 			//! @param _objectUid The UID of the object to clear its items
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void clear(
+			UICORE_API void clear(
 				ak::UID											_objectUid
 			);
 
@@ -1115,7 +1115,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object to delete the items from
 			//! @param _items The items to delete
 			//! @throw ak::Exception if the provided object UID or any item ID is invalid
-			__declspec(dllexport) void deleteItems(
+			UICORE_API void deleteItems(
 				ak::UID											_objectUid,
 				const std::vector<ak::ID> &						_items
 			);
@@ -1124,7 +1124,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object
 			//! @param _value The value to set to the object
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void start(
+			UICORE_API void start(
 				ak::UID												_objectUid,
 				int													_value
 			);
@@ -1132,7 +1132,7 @@ namespace ak {
 			//! @brief Will call the stop function of the provided object
 			//! @param _objectUid The UID of the object
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void stop(
+			UICORE_API void stop(
 				ak::UID												_objectUid
 			);
 
@@ -1140,7 +1140,7 @@ namespace ak {
 			//! @param _objectUid The UID of the object
 			//! @param _value The value to set to the object
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) void shoot(
+			UICORE_API void shoot(
 				ak::UID												_objectUid,
 				int													_value
 			);
@@ -1152,40 +1152,40 @@ namespace ak {
 			//! @brief Will return the object text of the specified object
 			//! @param _objectUid The UID of the object
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) QString getText(
+			UICORE_API QString getText(
 				ak::UID									_objectUid
 			);
 
 			//! @brief Will return the object tristate of the specified object
 			//! @param _objectUid The UID of the object
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) bool getTristate(
+			UICORE_API bool getTristate(
 				ak::UID									_objectUid
 			);
 
 			//! @brief Will return the object checked state of the specified object
 			//! @param _objectUid The UID of the object
 			//! @throw ak::Exception if the API is not initialized
-			__declspec(dllexport) bool getChecked(
+			UICORE_API bool getChecked(
 				ak::UID									_objectUid
 			);
 
 			//! @brief Will return all selected objects of the specified object
 			//! @param _objectUid The object to return the slection from
-			__declspec(dllexport) std::vector<ak::ID> getSelectedItems(
+			UICORE_API std::vector<ak::ID> getSelectedItems(
 				ak::UID									_objectUid
 			);
 
 			//! @brief Will return the auto scroll option for the provided object
 			//! @param _objectUid The UID of the requested object
 			//! @throw ak::Exception if the provided object UID is invalid
-			__declspec(dllexport) bool getAutoScrollToBottomEnabled(
+			UICORE_API bool getAutoScrollToBottomEnabled(
 				ak::UID									_objectUid
 			);
 
 			//! @brief Will return the ID of the item at this object with the specified text
 			//! Returns invalidID if the item does not exist
-			__declspec(dllexport) ak::ID getItem(
+			UICORE_API ak::ID getItem(
 				ak::UID									_objectUid,
 				const QString &							_text
 			);
@@ -1193,21 +1193,21 @@ namespace ak {
 			//! @brief Will return the count of items at the specified object
 			//! @param _objectUid The UID of the requested object
 			//! @throw ak::Exception if the provided UID is invalid or the object type is invalid
-			__declspec(dllexport) int getItemCount(
+			UICORE_API int getItemCount(
 				ak::UID									_objectUid
 			);
 
 			//! @brief Will return the currently focused tab at the specified object
 			//! @param _objectUid The UID of the requested object
 			//! @throw ak::Exception if the provided UID is invalid
-			__declspec(dllexport) int getFocusedTab(
+			UICORE_API int getFocusedTab(
 				ak::UID									_objectUid
 			);
 
 			//! @brief Will get the auto expand selected items option for the specified object
 			//! @param _objectUid The UID of the object
 			//! @throw ak::Exception if the specified object is invalid
-			__declspec(dllexport) bool getAutoExpandSelectedItems(
+			UICORE_API bool getAutoExpandSelectedItems(
 				ak::UID									_objectUid
 			);
 
@@ -1225,7 +1225,7 @@ namespace ak {
 			//! @param _itemId The ID of the item
 			//! @param _selected The selected state of the item
 			//! @throw ak::Exception if the ID is invalid
-			__declspec(dllexport) void setSelected(
+			UICORE_API void setSelected(
 				ak::UID											_objectUid,
 				ak::ID											_itemId,
 				bool											_selected = true
@@ -1237,7 +1237,7 @@ namespace ak {
 			//! @param _itemId The ID of the item
 			//! @param _selected The selected state of the item
 			//! @throw ak::Exception if the ID is invalid
-			__declspec(dllexport) void setSingleSelected(
+			UICORE_API void setSingleSelected(
 				ak::UID											_objectUid,
 				ak::ID											_itemId,
 				bool											_selected = true
@@ -1249,7 +1249,7 @@ namespace ak {
 			//! @param _itemId The ID of the item
 			//! @param _selected The selected state of the item
 			//! @throw ak::Exception if the ID is invalid
-			__declspec(dllexport) void toggleSelection(
+			UICORE_API void toggleSelection(
 				ak::UID											_objectUid,
 				ak::ID											_itemId
 			);
@@ -1258,7 +1258,7 @@ namespace ak {
 			//! @param _tab The tab to set the text at
 			//! @param _text The text to set
 			//! @throw ak::Exception if the specified tab is invalid
-			__declspec(dllexport) void setText(
+			UICORE_API void setText(
 				ak::UID											_objectUid,
 				ak::ID											_itemId,
 				const QString &									_text
@@ -1273,7 +1273,7 @@ namespace ak {
 			//! @param _itemId The ID of the requested item
 			//! @throw ak::Exception if the provided object UID is invalid
 			//! @throw ak::Exception if the provided item ID is invalid
-			__declspec(dllexport) std::vector<QString> getPath(
+			UICORE_API std::vector<QString> getPath(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1284,7 +1284,7 @@ namespace ak {
 			//! @param _delimiter The delimiter between the items
 			//! @throw ak::Exception if the provided object UID is invalid
 			//! @throw ak::Exception if the provided item ID is invalid
-			__declspec(dllexport) QString getPathString(
+			UICORE_API QString getPathString(
 				ak::UID									_objectUid,
 				ak::ID									_itemId,
 				char									_delimiter = '|'
@@ -1293,7 +1293,7 @@ namespace ak {
 			//! @brief Will return the text of the specified item at the specified object
 			//! @param _objectUid The UID of the object
 			//! @param _itemId The ID of the item to get the text of
-			__declspec(dllexport) QString getText(
+			UICORE_API QString getText(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1301,7 +1301,7 @@ namespace ak {
 			//! @brief Will return the value type of the specified item at the specified object
 			//! @param _objectUid The UID of the object
 			//! @param _itemId The ID of the item to get the text of
-			__declspec(dllexport) ak::core::valueType getValueType(
+			UICORE_API ak::core::valueType getValueType(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1310,7 +1310,7 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @param _itemPath The path of the requested item
 			//! @param _delimiter The delimiter of the path string
-			__declspec(dllexport) ak::ID getID(
+			UICORE_API ak::ID getID(
 				ak::UID									_objectUid,
 				const QString &							_itemPath,
 				char									_delimiter = '|'
@@ -1320,7 +1320,7 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
-			__declspec(dllexport) bool getValueBoolean(
+			UICORE_API bool getValueBoolean(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1329,7 +1329,7 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
-			__declspec(dllexport) ui::color getValueColor(
+			UICORE_API ui::color getValueColor(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1338,7 +1338,7 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
-			__declspec(dllexport) double getValueDouble(
+			UICORE_API double getValueDouble(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1347,7 +1347,7 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
-			__declspec(dllexport) int getValueInteger(
+			UICORE_API int getValueInteger(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1356,7 +1356,7 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
-			__declspec(dllexport) std::vector<QString> getValuePossibleSelection(
+			UICORE_API std::vector<QString> getValuePossibleSelection(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1365,7 +1365,7 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
-			__declspec(dllexport) QString getValueSelection(
+			UICORE_API QString getValueSelection(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1374,7 +1374,7 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
-			__declspec(dllexport) QString getValueString(
+			UICORE_API QString getValueString(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1383,7 +1383,7 @@ namespace ak {
 			//! @param _objectUid The UID of the requested object
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
-			__declspec(dllexport) bool getValueIsMultivalued(
+			UICORE_API bool getValueIsMultivalued(
 				ak::UID									_objectUid,
 				ak::ID									_itemId
 			);
@@ -1398,7 +1398,7 @@ namespace ak {
 			//! @param _uiManagerUid The UI manager that will be the parent for the message box
 			//! @param _messega The message to display
 			//! @param _title The title of the message box
-			__declspec(dllexport) void showMessageBox(
+			UICORE_API void showMessageBox(
 				ak::UID									_uiManagerUid,
 				const char *										_message,
 				const char *										_title
@@ -1408,7 +1408,7 @@ namespace ak {
 			//! @param _uiManagerUid The UI manager that will be the parent for the message box
 			//! @param _messega The message to display
 			//! @param _title The title of the message box
-			__declspec(dllexport) void showMessageBox(
+			UICORE_API void showMessageBox(
 				ak::UID									_uiManagerUid,
 				const QString &										_message,
 				const QString &										_title
@@ -1420,7 +1420,7 @@ namespace ak {
 			//! @param _initialDir The initial search directory
 			//! @param _filter The filter of the open file dialog
 			//! @param _selectedFilter The selected filter
-			__declspec(dllexport) QString openFileDialog(
+			UICORE_API QString openFileDialog(
 				ak::UID												_uiManagerUid,
 				const QString &										_caption,
 				const QString &										_initialDir = QString(""),
@@ -1434,7 +1434,7 @@ namespace ak {
 			//! @param _initialDir The initial search directory
 			//! @param _filter The filter of the open file dialog
 			//! @param _selectedFilter The selected filter
-			__declspec(dllexport) QString saveFileDialog(
+			UICORE_API QString saveFileDialog(
 				ak::UID												_uiManagerUid,
 				const QString &										_caption,
 				const QString &										_initialDir = QString(""),
@@ -1443,7 +1443,7 @@ namespace ak {
 			);
 
 			//! @brief Will create a text representation of the event send
-			__declspec(dllexport) QString createEventText(
+			UICORE_API QString createEventText(
 				ak::UID												_sender,
 				ak::core::eventType									_event,
 				int													_info1,
@@ -1461,14 +1461,14 @@ namespace ak {
 			// File setter
 
 			//! @brief Will load informations from the specifiied file
-			__declspec(dllexport) ak::UID load(
+			UICORE_API ak::UID load(
 				const QString &										_filePath
 			);
 
 			//! @brief Will load informations from the specified file
 			//! @param _fileUid The UID of the file
 			//! @param _filePath If provided this path will be set as current file path
-			__declspec(dllexport) void load(
+			UICORE_API void load(
 				ak::UID												_fileUid,
 				const QString &										_filePath = QString("")
 			);
@@ -1476,7 +1476,7 @@ namespace ak {
 			//! @brief Will save the current set lines to the current set file path
 			//! @param _fileUid The UID of the file
 			//! @param _append If true, the file will be opened on append mode
-			__declspec(dllexport) void save(
+			UICORE_API void save(
 				ak::UID												_fileUid,
 				bool												_append = false
 			);
@@ -1485,7 +1485,7 @@ namespace ak {
 			//! @param _fileUid The UID of the file
 			//! @param _filePath The fule path to set as current file
 			//! @param _append If true, the file will be opened on append mode
-			__declspec(dllexport) void save(
+			UICORE_API void save(
 				ak::UID												_fileUid,
 				const QString &										_filePath,
 				bool												_append = false
@@ -1494,7 +1494,7 @@ namespace ak {
 			//! @brief Will set the current path for the file
 			//! @param _fileUid The UID of the file
 			//! @param _path The file path to set
-			__declspec(dllexport) void setPath(
+			UICORE_API void setPath(
 				ak::UID												_fileUid,
 				const QString &										_path
 			);
@@ -1502,7 +1502,7 @@ namespace ak {
 			//! @brief Will set the current lines for the file
 			//! @param _fileUid The UID of the file
 			//! @param _lines The lines to set
-			__declspec(dllexport) void setLines(
+			UICORE_API void setLines(
 				ak::UID												_fileUid,
 				const QStringList &									_lines
 			);
@@ -1510,7 +1510,7 @@ namespace ak {
 			//! @brief Will append the provided line to the current lines
 			//! @param _fileUid The UID of the file
 			//! @param _line The line to add
-			__declspec(dllexport) void addLine(
+			UICORE_API void addLine(
 				ak::UID												_fileUid,
 				const QString &										_line
 			);
@@ -1518,7 +1518,7 @@ namespace ak {
 			//! @brief Will append the provided lines to the current lines
 			//! @param _fileUid The UID of the file
 			//! @param _lines The lines to add
-			__declspec(dllexport) void addLine(
+			UICORE_API void addLine(
 				ak::UID												_fileUid,
 				const QStringList &									_lines
 			);
@@ -1529,43 +1529,43 @@ namespace ak {
 
 			//! @brief Will return the files UID
 			//! @param _fileUid The UID of the file
-			__declspec(dllexport) ak::UID uid(
+			UICORE_API ak::UID uid(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return the files name
 			//! @param _fileUid The UID of the file
-			__declspec(dllexport) QString name(
+			UICORE_API QString name(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return the files path
 			//! @param _fileUid The UID of the file
-			__declspec(dllexport) QString path(
+			UICORE_API QString path(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return the files extension
 			//! @param _fileUid The UID of the file
-			__declspec(dllexport) QString extension(
+			UICORE_API QString extension(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return the lines in this file
 			//! @param _fileUid The UID of the file
-			__declspec(dllexport) QStringList lines(
+			UICORE_API QStringList lines(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return the count of the lines in this file
 			//! @param _fileUid The UID of the file
-			__declspec(dllexport) int linesCount(
+			UICORE_API int linesCount(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return true if the file has changed after it was loaded or saved the last time
 			//! @param _fileUid The UID of the file
-			__declspec(dllexport) bool hasChanged(
+			UICORE_API bool hasChanged(
 				ak::UID												_fileUid
 			);
 
@@ -1575,43 +1575,43 @@ namespace ak {
 
 		//! @brief Will return a string representation of the provided eventType
 		//! @param _type The event type that should be represented
-		__declspec(dllexport) QString toString(
+		UICORE_API QString toString(
 			ak::core::eventType									_type
 		);
 
 		//! @brief Will return a string representation of the provided valueType
 		//! @param _type The value type that should be represented
-		__declspec(dllexport) QString toString(
+		UICORE_API QString toString(
 			ak::core::valueType									_type
 		);
 
 		//! @brief Will return a string representation of the provided valtextAlignmentueType
 		//! @param _type The text alignment that should be represented
-		__declspec(dllexport) QString toString(
+		UICORE_API QString toString(
 			ak::ui::core::textAlignment							_type
 		);
 
 		//! @brief Will return a string representation of the provided dockLocation
 		//! @param _type The dock location that should be represented
-		__declspec(dllexport) QString toString(
+		UICORE_API QString toString(
 			ak::ui::core::dockLocation							_dockLocation
 		);
 
 		//! @brief Will return a string representation of the provided tab location
 		//! @param _type The tab location that should be represented
-		__declspec(dllexport) QString toString(
+		UICORE_API QString toString(
 			ak::ui::core::tabLocation							_tabLocation
 		);
 
 		//! @brief Will return a string representation of the provided keyType
 		//! @param _type The key type that should be represented
-		__declspec(dllexport) QString toString(
+		UICORE_API QString toString(
 			ak::ui::core::keyType								_type
 		);
 
 		//! @brief Will return a string representation of the provided objectType
 		//! @param _type The object type that should be represented
-		__declspec(dllexport) QString toString(
+		UICORE_API QString toString(
 			ak::ui::core::objectType							_type
 		);
 
@@ -1620,29 +1620,29 @@ namespace ak {
 		//! @brief Will destroy all objects created by this creator
 		//! @param _creatorUid The UID of the creator
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void creatorDestroyed(
+		UICORE_API void creatorDestroyed(
 			ak::UID									_creatorUid
 		);
 
 		//! @brief Will set the current color style used in this API
 		//! @param _colorStyle The color style to set
-		__declspec(dllexport) void setColorStyle(
+		UICORE_API void setColorStyle(
 			ak::ui::colorStyle *		_colorStyle
 		);
 
 		//! @brief Will return the current color style
-		__declspec(dllexport) ak::ui::colorStyle * getColorStyle(void);
+		UICORE_API ak::ui::colorStyle * getColorStyle(void);
 
 		//! @brief Will set the current color style to the default dark color style
-		__declspec(dllexport) void setDefaultDarkColorStyle(void);
+		UICORE_API void setDefaultDarkColorStyle(void);
 
 		//! @brief Will set the current color style to the default bright color style
-		__declspec(dllexport) void setDefaultBrightColorStyle(void);
+		UICORE_API void setDefaultBrightColorStyle(void);
 
 		//! @brief Will close the provided uiManager
 		//! @param _uiManagerUid The UID of the uiManager to close
 		//! @throw ak::Exception if the provided UID is invalid
-		__declspec(dllexport) void close(
+		UICORE_API void close(
 			ak::UID												_uiManagerUid
 		);
 
@@ -1650,7 +1650,7 @@ namespace ak {
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @param _visible If true the status label will be visible
 		//! @throw ak::Exception if the provided UI manager UID is invalid
-		__declspec(dllexport) void setStatusLabelVisible(
+		UICORE_API void setStatusLabelVisible(
 			ak::UID									_uiManagerUid,
 			bool									_visible = true
 		);
@@ -1659,7 +1659,7 @@ namespace ak {
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @param _visible If true the status progress bar will be visible
 		//! @throw ak::Exception if the provided UI manager UID is invalid
-		__declspec(dllexport) void setStatusProgressVisible(
+		UICORE_API void setStatusProgressVisible(
 			ak::UID									_uiManagerUid,
 			bool									_visible = true
 		);
@@ -1668,7 +1668,7 @@ namespace ak {
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @param _text The text to set
 		//! @throw ak::Exception if the provided UI manager UID is invalid
-		__declspec(dllexport) void setStatusLabelText(
+		UICORE_API void setStatusLabelText(
 			ak::UID									_uiManagerUid,
 			const QString &							_text
 		);
@@ -1677,7 +1677,7 @@ namespace ak {
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @param _value The value to set (0 - 100)
 		//! @throw ak::Exception if the provided UI manager UID is invalid or the provided value is out of range
-		__declspec(dllexport) void setStatusProgressValue(
+		UICORE_API void setStatusProgressValue(
 			ak::UID									_uiManagerUid,
 			int										_value
 		);
@@ -1686,7 +1686,7 @@ namespace ak {
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @param _continuous If true the status progress bar will be displayed as a continuous bar
 		//! @throw ak::Exception if the provided UI manager UID is invalid
-		__declspec(dllexport) void setStatusProgressContinuous(
+		UICORE_API void setStatusProgressContinuous(
 			ak::UID									_uiManagerUid,
 			bool									_continuous = true
 		);
@@ -1694,35 +1694,35 @@ namespace ak {
 		//! @brief Will return true if the status label is visible at the provided uiManager
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @throw ak::Exception if the provided UI manager UID is invalid
-		__declspec(dllexport) bool getStatusLabelVisible(
+		UICORE_API bool getStatusLabelVisible(
 			ak::UID									_uiManagerUid
 		);
 
 		//! @brief Will return true if the status progress bar is visible at the provided uiManager
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @throw ak::Exception if the provided UI manager UID is invalid
-		__declspec(dllexport) bool getStatusProgressVisible(
+		UICORE_API bool getStatusProgressVisible(
 			ak::UID									_uiManagerUid
 		);
 
 		//! @brief Will return the status label text at the provided uiManager
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @throw ak::Exception if the provided UI manager UID is invalid
-		__declspec(dllexport) QString getStatusLabelText(
+		UICORE_API QString getStatusLabelText(
 			ak::UID									_uiManagerUid
 		);
 
 		//! @brief Will return the status progress bar value at the provided uiManager
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @throw ak::Exception if the provided UI manager UID is invalid
-		__declspec(dllexport) int getStatusProgressValue(
+		UICORE_API int getStatusProgressValue(
 			ak::UID									_uiManagerUid
 		);
 
 		//! @brief Will return the continuous option of the status progress bar at the provided uiManager
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @throw ak::Exception if the provided UI manager UID is invalid
-		__declspec(dllexport) bool getStatusProgressContinuous(
+		UICORE_API bool getStatusProgressContinuous(
 			ak::UID									_uiManagerUid
 		);
 
@@ -1734,7 +1734,7 @@ namespace ak {
 			//! @param _uiManagerUid The UID of the UI manager to add the dock at
 			//! @param _dockUid The UID of the existing dock to add to the UI manager
 			//! @param _dockLocation The location where to put the dock at
-		__declspec(dllexport) void addDock(
+		UICORE_API void addDock(
 			ak::UID									_uiManagerUid,
 			ak::UID									_dockUid,
 			ak::ui::core::dockLocation							_dockLocation
@@ -1743,7 +1743,7 @@ namespace ak {
 		//! @brief Will add the dock as a tab to the parent dock
 		//! @param _parentUid The UID of the parent dock
 		//! @param _dockUid The UID of the dock to tabify
-		__declspec(dllexport) void tabifyDock(
+		UICORE_API void tabifyDock(
 			ak::UID									_uiManagerUid,
 			ak::UID									_parentUid,
 			ak::UID									_dockUid
@@ -1754,7 +1754,7 @@ namespace ak {
 			//! @param _uiManagerUid The UID of the UI manager
 			//! @param _dockLocation The dock location to set the priority for (allowed dockBottom and dockLeft)
 			//! @throw ak::Exception if the uiManager UID or the dock location is invalid
-		__declspec(dllexport) void setDockBottomLeftPriority(
+		UICORE_API void setDockBottomLeftPriority(
 			ak::UID									_uiManagerUid,
 			ak::ui::core::dockLocation				_dockLocation
 		);
@@ -1764,7 +1764,7 @@ namespace ak {
 		//! @param _uiManagerUid The UID of the UI manager
 		//! @param _dockLocation The dock location to set the priority for (allowed dockBottom and dockRight)
 		//! @throw ak::Exception if the uiManager UID or the dock location is invalid
-		__declspec(dllexport) void setDockBottomRightPriority(
+		UICORE_API void setDockBottomRightPriority(
 			ak::UID									_uiManagerUid,
 			ak::ui::core::dockLocation				_dockLocation
 		);
@@ -1776,42 +1776,42 @@ namespace ak {
 		//! @brief Will add the provided search path to the icon manager
 		//! @param _path The search path to add
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void addIconSearchPath(
+		UICORE_API void addIconSearchPath(
 			const char *											_path
 		);
 
 		//! @brief Will add the provided search path to the icon manager
 		//! @param _path The search path to add
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void addIconSearchPath(
+		UICORE_API void addIconSearchPath(
 			const QString &											_path
 		);
 
 		//! @brief Will remove the provided search path from the icon manager
 		//! @param _path The existing search path to remove
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void removeIconSearchPath(
+		UICORE_API void removeIconSearchPath(
 			const char *											_path
 		);
 
 		//! @brief Will remove the provided search path from the icon manager
 		//! @param _path The existing search path to remove
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) void removeIconSearchPath(
+		UICORE_API void removeIconSearchPath(
 			const QString &											_path
 		);
 
 		//! @brief Will generate a new UID and return it
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::UID createUid(void);
+		UICORE_API ak::UID createUid(void);
 
 		//! @brief Will return the messenger
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::messenger * getMessenger(void);
+		UICORE_API ak::messenger * getMessenger(void);
 
 		//! @brief WIll return the icon manager
 		//! @throw ak::Exception if the API is not initialized
-		__declspec(dllexport) ak::ui::iconManager * getIconManager(void);
+		UICORE_API ak::ui::iconManager * getIconManager(void);
 
 		// ###############################################################################################################################################
 
@@ -1819,7 +1819,7 @@ namespace ak {
 
 		//! @brief Will run a QApplication to start the event callback routine
 		//! The return value will be returned as soon as the application is closing
-		__declspec(dllexport) int exec(void);
+		UICORE_API int exec(void);
 
 		std::vector<ak::ui::qt::comboButtonItem> toComboButtonItem(
 			const std::vector<QString> &							_items

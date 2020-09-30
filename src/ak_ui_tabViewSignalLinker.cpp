@@ -7,6 +7,7 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
+// AK header
 #include <ak_ui_tabViewSignalLinker.h>		// Corresponding header
 #include <ak_ui_qt_tabView.h>				// widget
 #include <ak_ui_widget_tabView.h>			// manager

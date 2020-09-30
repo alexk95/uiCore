@@ -9,13 +9,13 @@
 
 #pragma once
 
-// Qt header
+// C++ header
 #include <vector>
 
 // AK header
-#include "ak_ui_core_aPaintable.h"	// base class
-#include "ak_globalDataTypes.h"		// UID and ID type
-#include "ak_ui_core.h"				// objectType
+#include <ak_ui_core_aPaintable.h>	// base class
+#include <ak_globalDataTypes.h>		// UID and ID type
+#include <ak_ui_core.h>				// objectType
 
 namespace ak {
 
@@ -82,7 +82,6 @@ namespace ak {
 
 				// Block assignment operator
 				ttbContainer & operator = (const ttbContainer & _other) = delete;
-
 			};
 		} // namespace core
 	} // namespace ui

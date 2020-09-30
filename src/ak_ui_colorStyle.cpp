@@ -7,7 +7,10 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_colorStyle.h"		// corresponding class
+// AK header
+#include <ak_ui_colorStyle.h>		// corresponding class
+
+// Qt header
 #include <qdir.h>					// QDir
 #include <qfile.h>					// QFile
 

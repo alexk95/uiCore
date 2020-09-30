@@ -7,12 +7,14 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
+// AK header
 #include <ak_ui_qt_tree.h>			// corresponding header
 #include <ak_exception.h>			// error handling
 #include <ak_ui_qt_treeItem.h>		// treeItem
 #include <ak_ui_core.h>				// objectType
 #include <ak_ui_colorStyle.h>		// colorStyle
 
+// Qt header
 #include <qheaderview.h>
 
 ak::ui::qt::tree::tree(

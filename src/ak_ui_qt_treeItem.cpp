@@ -7,11 +7,13 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_qt_treeItem.h"			// corresponding header
-#include "ak_exception.h"				// error handling
-#include "ak_ui_qt_tree.h"				// tree
-#include "ak_ui_core.h"					// object type
+// AK header
+#include <ak_ui_qt_treeItem.h>			// corresponding header
+#include <ak_exception.h>				// error handling
+#include <ak_ui_qt_tree.h>				// tree
+#include <ak_ui_core.h>					// object type
 
+// Qt header
 #include <qstring.h>
 #include <qstringlist.h>
 

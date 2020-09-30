@@ -7,7 +7,10 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_core.h"			// corresponding header
+// AK header
+#include <ak_ui_core.h>			// corresponding header
+
+// Qt header
 #include <qevent.h>				// QKeyEvent
 
 QString ak::ui::core::toQString(

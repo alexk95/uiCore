@@ -13,11 +13,11 @@
 #include <qstring.h>						// QString
 
 // AK header
-#include "ak_ui_core_aWidgetManager.h"		// base class
-#include "ak_core.h"						// eventType
-#include "ak_globalDataTypes.h"				// UID and ID type
-#include "ak_ui_qt_comboButtonItem.h"		// comboButtonItem
-#include "ak_ui_color.h"					// color
+#include <ak_ui_core_aWidgetManager.h>		// base class
+#include <ak_core.h>						// eventType
+#include <ak_globalDataTypes.h>				// UID and ID type
+#include <ak_ui_qt_comboButtonItem.h>		// comboButtonItem
+#include <ak_ui_color.h>					// color
 
 namespace ak {
 	

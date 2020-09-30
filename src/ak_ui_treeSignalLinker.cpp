@@ -8,12 +8,12 @@
  */
 
  // AK header
-#include "ak_ui_treeSignalLinker.h"		// corresponding class
-#include "ak_ui_qt_tree.h"				// qt tree
-#include "ak_ui_qt_treeItem.h"			// treeItem
-#include "ak_ui_widget_tree.h"			// widget tree
-#include "ak_exception.h"				// error handling
-#include "ak_core.h"					// eventType
+#include <ak_ui_treeSignalLinker.h>		// corresponding class
+#include <ak_ui_qt_tree.h>				// qt tree
+#include <ak_ui_qt_treeItem.h>			// treeItem
+#include <ak_ui_widget_tree.h>			// widget tree
+#include <ak_exception.h>				// error handling
+#include <ak_core.h>					// eventType
 
 // Qt header
 #include <qtreewidget.h>				// QTreeWidget

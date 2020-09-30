@@ -8,8 +8,8 @@
  */
 
 // AK header
-#include "ak_ui_core_aWidget.h"		// corresponding header
-#include "ak_ui_colorStyle.h"		// colorStyle
+#include <ak_ui_core_aWidget.h>		// corresponding header
+#include <ak_ui_colorStyle.h>		// colorStyle
 
 ak::ui::core::aWidget::aWidget(
 	ak::ui::core::objectType	_type,

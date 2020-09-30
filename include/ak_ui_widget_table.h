@@ -15,10 +15,10 @@
 #include <qheaderview.h>				// QHeaderView
 
 // AK header
-#include "ak_ui_core_aWidgetManager.h"	// base class
-#include "ak_globalDataTypes.h"			// UID and ID type
-#include "ak_core.h"					// eventType
-#include "ak_ui_core.h"					// objectType
+#include <ak_ui_core_aWidgetManager.h>	// base class
+#include <ak_globalDataTypes.h>			// UID and ID type
+#include <ak_core.h>					// eventType
+#include <ak_ui_core.h>					// objectType
 
 // Forward declaration
 class QWidget;

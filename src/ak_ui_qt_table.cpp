@@ -7,9 +7,10 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_qt_table.h"			// Corresponding class
-#include "ak_ui_colorStyle.h"		// colorStyle
-#include "ak_exception.h"			// error handling
+// AK header
+#include <ak_ui_qt_table.h>			// Corresponding class
+#include <ak_ui_colorStyle.h>		// colorStyle
+#include <ak_exception.h>			// error handling
 
 ak::ui::qt::table::table(QWidget * _parent)
 : QTableWidget(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTable) {}

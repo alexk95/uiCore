@@ -8,9 +8,9 @@
  */
 
 // AK header
-#include "ak_ui_uiManagerTimerSignalLinker.h"	// corresponding class
-#include "ak_exception.h"						// Error handling
-#include "ak_ui_uiManager.h"					// uiManager
+#include <ak_ui_uiManagerTimerSignalLinker.h>	// corresponding class
+#include <ak_exception.h>						// Error handling
+#include <ak_ui_uiManager.h>					// uiManager
 
 // Qt header
 #include <qtimer.h>								// QTimer

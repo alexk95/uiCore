@@ -7,14 +7,15 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_core_aWidgetManager.h"		// corresponding header
-#include "ak_exception.h"					// error handling
-#include "ak_ui_colorStyle.h"				// colorStyle
-#include "ak_messenger.h"					// messenger
-#include "ak_ui_iconManager.h"				// iconManager
-#include "ak_ui_signalLinker.h"				// signalLinker
-#include "ak_ui_objectManager.h"			// objectManager
-#include "ak_uidMangager.h"					// uidManager
+// AK header
+#include <ak_ui_core_aWidgetManager.h>		// corresponding header
+#include <ak_exception.h>					// error handling
+#include <ak_ui_colorStyle.h>				// colorStyle
+#include <ak_messenger.h>					// messenger
+#include <ak_ui_iconManager.h>				// iconManager
+#include <ak_ui_signalLinker.h>				// signalLinker
+#include <ak_ui_objectManager.h>			// objectManager
+#include <ak_uidMangager.h>					// uidManager
 
 ak::ui::core::aWidgetManager::aWidgetManager(
 	ak::ui::core::objectType		_type,

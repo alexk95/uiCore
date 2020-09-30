@@ -8,9 +8,9 @@
  */
 
 // AK header
-#include "ak_ui_qt_checkBox.h"	// corresponding header
-#include "ak_ui_colorStyle.h"	// colorStyle
-#include "ak_exception.h"		// error handling
+#include <ak_ui_qt_checkBox.h>	// corresponding header
+#include <ak_ui_colorStyle.h>	// colorStyle
+#include <ak_exception.h>		// error handling
 
 #include <qevent.h>				// QKeyEvent
 

@@ -8,16 +8,16 @@
  */
 
 // AK header
-#include "ak_ui_widget_table.h"				// corresponding class
-#include "ak_exception.h"					// error handling
-#include "ak_messenger.h"					// messenger
-#include "ak_ui_signalLinker.h"				// signalLinker
-#include "ak_notifierForwardMessage.h"		// notifierForwardMessage
-#include "ak_ui_colorStyle.h"				// colorStyle
-#include "ak_ui_objectManager.h"			// objectManager
-#include "ak_ui_iconManager.h"				// iconManager
-#include "ak_ui_qt_table.h"					// qt::table
-#include "ak_uidMangager.h"					// UID manager
+#include <ak_ui_widget_table.h>				// corresponding class
+#include <ak_exception.h>					// error handling
+#include <ak_messenger.h>					// messenger
+#include <ak_ui_signalLinker.h>				// signalLinker
+#include <ak_notifierForwardMessage.h>		// notifierForwardMessage
+#include <ak_ui_colorStyle.h>				// colorStyle
+#include <ak_ui_objectManager.h>			// objectManager
+#include <ak_ui_iconManager.h>				// iconManager
+#include <ak_ui_qt_table.h>					// qt::table
+#include <ak_uidMangager.h>					// UID manager
 
 // Qt header
 #include <qtablewidget.h>

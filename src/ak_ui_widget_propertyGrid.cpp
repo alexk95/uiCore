@@ -8,16 +8,16 @@
  */
 
 // AK header
-#include "ak_ui_widget_propertyGrid.h"		// corresponding class
-#include "ak_exception.h"					// error handling
-#include "ak_notifierPropertyGrid.h"		// notifierPropertyGrid
-#include "ak_ui_colorStyle.h"				// colorStyle
-#include "ak_ui_core.h"						// objectType
-#include "ak_ui_widget_propertyGridItem.h"	// propertyGridItem
-#include "ak_ui_widget_table.h"				// table
-#include "ak_ui_objectManager.h"			// object manager
-#include "ak_messenger.h"					// messenger
-#include "ak_uidMangager.h"					// UID manager
+#include <ak_ui_widget_propertyGrid.h>		// corresponding class
+#include <ak_exception.h>					// error handling
+#include <ak_notifierPropertyGrid.h>		// notifierPropertyGrid
+#include <ak_ui_colorStyle.h>				// colorStyle
+#include <ak_ui_core.h>						// objectType
+#include <ak_ui_widget_propertyGridItem.h>	// propertyGridItem
+#include <ak_ui_widget_table.h>				// table
+#include <ak_ui_objectManager.h>			// object manager
+#include <ak_messenger.h>					// messenger
+#include <ak_uidMangager.h>					// UID manager
 #include <ak_ui_signalLinker.h>
 
 // Qt header

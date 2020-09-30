@@ -17,9 +17,10 @@
 #include <qtreewidget.h>					// base class
 
 // AK header
-#include "ak_ui_core_aWidget.h"				// base class
-#include "ak_globalDataTypes.h"				// UID and ID types
+#include <ak_ui_core_aWidget.h>				// base class
+#include <ak_globalDataTypes.h>				// UID and ID types
 
+// Forward declaration
 class QMouseEvent;
 class QKeyEvent;
 class QEvent;

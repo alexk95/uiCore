@@ -7,7 +7,8 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_uidMangager.h"			// corresponding class
+// AK header
+#include <ak_uidMangager.h>			// corresponding class
 
 ak::uidManager::uidManager() : my_currentId(1) {}
 

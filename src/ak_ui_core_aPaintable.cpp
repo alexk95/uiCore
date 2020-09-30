@@ -7,8 +7,9 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_core_aPaintable.h"		// corresponding header
-#include "ak_ui_colorStyle.h"			// color Style
+// AK header
+#include <ak_ui_core_aPaintable.h>		// corresponding header
+#include <ak_ui_colorStyle.h>			// color Style
 
 ak::ui::core::aPaintable::aPaintable(
 	ak::ui::core::objectType		_type,

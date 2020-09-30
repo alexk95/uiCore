@@ -8,9 +8,9 @@
  */
 
 // AK header
-#include "ak_ui_qt_comboBox.h"	// corresponding class
-#include "ak_exception.h"		// error handling
-#include "ak_ui_colorStyle.h"	// color style
+#include <ak_ui_qt_comboBox.h>	// corresponding class
+#include <ak_exception.h>		// error handling
+#include <ak_ui_colorStyle.h>	// color style
 
 ak::ui::qt::comboBox::comboBox(QWidget * _parent)
 	: QComboBox(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oComboBox) {}

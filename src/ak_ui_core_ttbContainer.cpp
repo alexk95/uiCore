@@ -7,11 +7,12 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_core_ttbContainer.h"	// corresponding header
-#include "ak_exception.h"				// error handling
-#include "ak_messenger.h"				// messenger
-#include "ak_ui_colorStyle.h"			// colorStyle
-#include "ak_uidMangager.h"				// uidManager
+// AK header
+#include <ak_ui_core_ttbContainer.h>	// corresponding header
+#include <ak_exception.h>				// error handling
+#include <ak_messenger.h>				// messenger
+#include <ak_ui_colorStyle.h>			// colorStyle
+#include <ak_uidMangager.h>				// uidManager
 
 ak::ui::core::ttbContainer::ttbContainer(
 	ak::messenger *				_messenger,

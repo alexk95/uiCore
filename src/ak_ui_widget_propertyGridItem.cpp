@@ -7,9 +7,10 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_widget_propertyGridItem.h"	// corresponding header
-#include "ak_exception.h"					// error handling
-#include "ak_ui_core.h"						// objectType
+// AK header
+#include <ak_ui_widget_propertyGridItem.h>	// corresponding header
+#include <ak_exception.h>					// error handling
+#include <ak_ui_core.h>						// objectType
 
 ak::ui::widget::propertyGridItem::propertyGridItem(
 	ak::ID				_index,

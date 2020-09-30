@@ -11,11 +11,12 @@
  *	The changes to the library are listed in the documentation.
  */
 
-#include "ak_ui_ttb_subGroup.h"			// corresponding header
-#include "ak_messenger.h"				// messenger
-#include "ak_uidMangager.h"				// UID manager
-#include "ak_exception.h"				// error handling
-#include "ak_ui_core_aWidget.h"			// aWidget
+// AK header
+#include <ak_ui_ttb_subGroup.h>			// corresponding header
+#include <ak_messenger.h>				// messenger
+#include <ak_uidMangager.h>				// UID manager
+#include <ak_exception.h>				// error handling
+#include <ak_ui_core_aWidget.h>			// aWidget
 
  // TTB header (TabToolbar library)
 #include <TabToolbar/SubGroup.h>		// tt::Subgroup

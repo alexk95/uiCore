@@ -2,7 +2,7 @@
  * ak_notifer.h
  *
  *  Created on: February 06, 2020
- *	Last modified on: September 07, 2020
+ *	Last modified on: September 30, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
  */
@@ -10,14 +10,14 @@
 #pragma once
 
 // AK header
-#include "ak_core.h"					// messageType
-#include "ak_globalDataTypes.h"			// UID and ID type
-#include "ak_ui_core_aObject.h"			// Base class
+#include <ak_core.h>					// messageType
+#include <ak_globalDataTypes.h>			// UID and ID type
+#include <ak_ui_core_aObject.h>			// Base class
 
 namespace ak {
 	
 	//! This abstract class is used to provide the receiver functionallity used in the messaging class.
-	class __declspec(dllexport) notifier : public ak::ui::core::aObject {
+	class UICORE_API notifier : public ak::ui::core::aObject {
 	public:
 		//! @brief Will initialize the notifier
 		notifier();

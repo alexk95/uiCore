@@ -7,11 +7,10 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_notifier.h"
+// AK header
+#include <ak_notifier.h>	// Corresponding header
 
-ak::notifier::notifier()
-	: ak::ui::core::aObject(ak::ui::core::objectType::oNone), my_isEnabled(true)
-{}
+ak::notifier::notifier() : ak::ui::core::aObject(ak::ui::core::objectType::oNone), my_isEnabled(true) {}
 
 void ak::notifier::enable(void) { my_isEnabled = true; }
 

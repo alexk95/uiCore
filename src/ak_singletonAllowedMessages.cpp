@@ -7,7 +7,8 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_singletonAllowedMessages.h"
+// AK header
+#include <ak_singletonAllowedMessages.h>
 
 ak::singletonAllowedMessages * ak::singletonAllowedMessages::my_singleton = nullptr;;
 

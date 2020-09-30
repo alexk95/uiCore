@@ -1059,7 +1059,7 @@ namespace ak {
 		private:
 
 			objectManager() = delete;
-			objectManager(const ak::ui::objectManager & _other) = delete;
+			objectManager(const ak::ui::objectManager &) = delete;
 
 			// ###############################################################################################################################################
 

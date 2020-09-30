@@ -16,10 +16,9 @@
 #include <qstring.h>					// QString
 
 // AK header
-//#include "ak_core.h"
-#include "ak_ui_core_aPaintable.h"		// base class
-#include "ak_globalDataTypes.h"			// UID and ID type
-#include "ak_ui_core.h"					// dockLocation
+#include <ak_ui_core_aPaintable.h>		// base class
+#include <ak_globalDataTypes.h>			// UID and ID type
+#include <ak_ui_core.h>					// dockLocation
 
 // Forward declaration
 class QWidget;

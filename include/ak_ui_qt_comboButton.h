@@ -14,11 +14,11 @@
 #include <qstring.h>					// QString
 
 // AK header
-#include "ak_ui_core_aWidget.h"			// base class
-#include "ak_ui_core.h"					// objectType
-#include "ak_globalDataTypes.h"			// UID and ID type
-#include "ak_ui_qt_comboButtonItem.h"	// comboButtonItem
-#include "ak_uidMangager.h"				// uidManager
+#include <ak_ui_core_aWidget.h>			// base class
+#include <ak_ui_core.h>					// objectType
+#include <ak_globalDataTypes.h>			// UID and ID type
+#include <ak_ui_qt_comboButtonItem.h>	// comboButtonItem
+#include <ak_uidMangager.h>				// uidManager
 
 // Forward declaration
 class QMenu;

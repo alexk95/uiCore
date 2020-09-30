@@ -7,8 +7,9 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_qt_comboButtonItem.h"		// corresponding class
-#include "ak_ui_core.h"						// objectType
+// AK header
+#include <ak_ui_qt_comboButtonItem.h>		// corresponding class
+#include <ak_ui_core.h>						// objectType
 
 ak::ui::qt::comboButtonItem::comboButtonItem(
 	QObject * _parent

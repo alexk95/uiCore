@@ -14,8 +14,8 @@
 #include <vector>					// Notifiers collection in the map
 
 // AK header
-#include "ak_core.h"				// eventType
-#include "ak_globalDataTypes.h"		// UID and ID type
+#include <ak_core.h>				// eventType
+#include <ak_globalDataTypes.h>		// UID and ID type
 
 namespace ak {
 
@@ -27,7 +27,7 @@ namespace ak {
 	//! This class is used to forward a message to receivers.
 	//! A message will only be forwared to registered receivers.
 	//! Receivers will only get messages from the senders and message types they want to be notified
-	class __declspec(dllexport) messenger {
+	class UICORE_API messenger {
 	public:
 
 		//! @brief Default constructor

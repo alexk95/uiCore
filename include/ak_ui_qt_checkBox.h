@@ -14,8 +14,9 @@
 #include <qstring.h>				// QString
 
 // AK header
-#include "ak_ui_core_aWidget.h"		// base class
+#include <ak_ui_core_aWidget.h>		// base class
 
+// Forward declaration
 class QKeyEvent;
 
 namespace ak {

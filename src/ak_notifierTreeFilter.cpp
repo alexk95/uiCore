@@ -7,9 +7,10 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_notifierTreeFilter.h"		// corresponding class
-#include "ak_exception.h"				// error handling
-#include "ak_ui_widget_tree.h"			// tree
+// AK header
+#include <ak_notifierTreeFilter.h>		// corresponding class
+#include <ak_exception.h>				// error handling
+#include <ak_ui_widget_tree.h>			// tree
 
 ak::notifierTreeFilter::notifierTreeFilter(
 	ak::ui::widget::tree *				_tree

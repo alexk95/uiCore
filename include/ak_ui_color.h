@@ -10,14 +10,17 @@
 #pragma once
 
 // Qt header
-#include <qstring.h>		// QString
-#include <qcolor.h>			// QColor
+#include <qstring.h>				// QString
+#include <qcolor.h>					// QColor
+
+// AK header
+#include <ak_globalDataTypes.h>		// UICORE_API
 
 namespace ak {
 	namespace ui {
 
 		//! This class is used to discribe a color
-		class __declspec(dllexport) color {
+		class UICORE_API color {
 		public:
 
 			//! @brief Default constructor

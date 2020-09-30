@@ -8,9 +8,10 @@
  */
 
 // AK header
-#include <ak_ui_signalLinker.h>		// corresponding class
-#include <ak_exception.h>			// error handling
-#include <ak_messenger.h>			// messenger
+#include <ak_ui_signalLinker.h>				// corresponding class
+#include <ak_exception.h>					// error handling
+#include <ak_messenger.h>					// messenger
+#include <ak_singletonAllowedMessages.h>	// allowed messages
 
 // AK qt header
 #include <ak_ui_qt_action.h>
@@ -23,7 +24,6 @@
 #include <ak_ui_qt_comboButton.h>
 #include <ak_ui_qt_timer.h>
 #include <ak_ui_qt_tree.h>
-#include <ak_singletonAllowedMessages.h>
 
 // Qt header
 #include <qmessagebox.h>			// QMessageBox

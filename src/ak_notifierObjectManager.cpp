@@ -7,9 +7,10 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_notifierObjectManager.h"	// corresponding header
-#include "ak_exception.h"				// error handling
-#include "ak_ui_objectManager.h"		// objectManager
+// AK header
+#include <ak_notifierObjectManager.h>	// corresponding header
+#include <ak_exception.h>				// error handling
+#include <ak_ui_objectManager.h>		// objectManager
 
 ak::notifierObjectManager::notifierObjectManager(
 	ak::ui::objectManager *					_manager

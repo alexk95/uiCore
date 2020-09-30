@@ -7,8 +7,9 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_notifierStaticEvent.h"		// corresponding header
-#include "ak_exception.h"				// error handling
+// AK header
+#include <ak_notifierStaticEvent.h>		// corresponding header
+#include <ak_exception.h>				// error handling
 
 ak::notifierStaticEvent::notifierStaticEvent(
 	eventCallback *	_callback

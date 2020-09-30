@@ -8,9 +8,9 @@
  */
 
 // AK header
-#include "ak_ui_qt_comboButton.h"	// corresponding class
-#include "ak_ui_colorStyle.h"		// colorStyle
-#include "ak_exception.h"			// error handling
+#include <ak_ui_qt_comboButton.h>	// corresponding class
+#include <ak_ui_colorStyle.h>		// colorStyle
+#include <ak_exception.h>			// error handling
 
 // Qt header
 #include <qmenu.h>					// dropDownMenu

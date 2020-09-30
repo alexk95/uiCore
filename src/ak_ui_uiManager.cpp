@@ -8,17 +8,17 @@
  */
 
 // AK header
-#include "ak_ui_uiManager.h"					// corresponding class
-#include "ak_ui_uiManagerTimerSignalLinker.h"	// uiManagerTimerSignalLinker
-#include "ak_exception.h"						// error handling
-#include "ak_messenger.h"						// messenger
-#include "ak_ui_objectManager.h"				// object manager
-#include "ak_ui_colorStyle.h"					// colorStyle
-#include "ak_ui_iconManager.h"					// iconManager
-#include "ak_ui_qt_dock.h"						// dock
-#include "ak_ui_core_ttbContainer.h"			// ttbContainer
-#include "ak_ui_ttb_page.h"						// page
-#include "ak_uidMangager.h"						// UID manager
+#include <ak_ui_uiManager.h>					// corresponding class
+#include <ak_ui_uiManagerTimerSignalLinker.h>	// uiManagerTimerSignalLinker
+#include <ak_exception.h>						// error handling
+#include <ak_messenger.h>						// messenger
+#include <ak_ui_objectManager.h>				// object manager
+#include <ak_ui_colorStyle.h>					// colorStyle
+#include <ak_ui_iconManager.h>					// iconManager
+#include <ak_ui_qt_dock.h>						// dock
+#include <ak_ui_core_ttbContainer.h>			// ttbContainer
+#include <ak_ui_ttb_page.h>						// page
+#include <ak_uidMangager.h>						// UID manager
 
 // TabToolBar header
 #include <TabToolbar/TabToolbar.h>				// tt::TabToolbar

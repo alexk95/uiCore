@@ -7,17 +7,16 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_notifierColorEditButton.h"			// corresponding header
-#include "ak_ui_widget_colorEditButton.h"		// colorEditButton
-#include "ak_exception.h"						// error handling
+// AK header
+#include <ak_notifierColorEditButton.h>			// corresponding header
+#include <ak_ui_widget_colorEditButton.h>		// colorEditButton
+#include <ak_exception.h>						// error handling
 
 ak::notifierColorEditButton::notifierColorEditButton(
 	ak::ui::widget::colorEditButton *		_btn
 ) : my_button(_btn)
 {
-	try {
-		if (_btn == nullptr) { throw ak::Exception("Is nullptr", "Check button"); }
-	}
+	try { if (_btn == nullptr) { throw ak::Exception("Is nullptr", "Check button"); } }
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::notifierColorEditButton::notifierColorEditButton()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::notifierColorEditButton::notifierColorEditButton()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::notifierColorEditButton::notifierColorEditButton()"); }
@@ -31,9 +30,7 @@ void ak::notifierColorEditButton::notify(
 	int										_info1,
 	int										_info2
 ) {
-	try {
-		if (isEnabled()) { my_button->widgetEvent(_senderId, _event, _info1, _info2); }
-	}
+	try { if (isEnabled()) { my_button->widgetEvent(_senderId, _event, _info1, _info2); } }
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::notifierColorEditButton::notify()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::notifierColorEditButton::notify()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::notifierColorEditButton::notify()"); }

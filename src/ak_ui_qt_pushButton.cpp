@@ -7,9 +7,11 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_qt_pushButton.h"		// corresponding class
-#include "ak_ui_colorStyle.h"			// colorStyle
+// AK header
+#include <ak_ui_qt_pushButton.h>		// corresponding class
+#include <ak_ui_colorStyle.h>			// colorStyle
 
+// Qt header
 #include <qevent.h>
 
 ak::ui::qt::pushButton::pushButton(QWidget * _parent)

@@ -10,9 +10,9 @@
 #pragma once
 
 // AK header
-#include "ak_ui_core_aObject.h"		// base class
-#include "ak_globalDataTypes.h"		// UID and ID type
-#include "ak_ui_core.h"				// objectType
+#include <ak_ui_core_aObject.h>		// base class
+#include <ak_globalDataTypes.h>		// UID and ID type
+#include <ak_ui_core.h>				// objectType
 
 namespace ak {
 	namespace ui {
@@ -24,7 +24,7 @@ namespace ak {
 
 			//! This class represents a object that can be painted.
 			//! More specific a object where the color style may be applied to, either by using a stylesheet or simply by using setBack- or setForeColor
-			class __declspec(dllexport) aPaintable : public ak::ui::core::aObject {
+			class UICORE_API aPaintable : public ak::ui::core::aObject {
 			public:
 
 				//! @brief Constructor
@@ -63,7 +63,6 @@ namespace ak {
 
 				// Block assignment operator
 				aPaintable & operator = (const aPaintable & _other) = delete;
-
 			};
 		} // namespace core
 	} // namespace ui

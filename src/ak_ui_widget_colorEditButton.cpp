@@ -8,15 +8,15 @@
  */
 
 // AK header
-#include "ak_ui_widget_colorEditButton.h"	// corresponding class
-#include "ak_exception.h"					// error handling
-#include "ak_messenger.h"					// messenger
-#include "ak_ui_signalLinker.h"				// signalLinker
-#include "ak_ui_objectManager.h"			// objectManager
-#include "ak_notifierColorEditButton.h"		// notifierColorEditButton
-#include "ak_ui_colorStyle.h"				// colorStyle
-#include "ak_ui_qt_pushButton.h"			// pushButton
-#include "ak_uidMangager.h"					// UID manager
+#include <ak_ui_widget_colorEditButton.h>	// corresponding class
+#include <ak_exception.h>					// error handling
+#include <ak_messenger.h>					// messenger
+#include <ak_ui_signalLinker.h>				// signalLinker
+#include <ak_ui_objectManager.h>			// objectManager
+#include <ak_notifierColorEditButton.h>		// notifierColorEditButton
+#include <ak_ui_colorStyle.h>				// colorStyle
+#include <ak_ui_qt_pushButton.h>			// pushButton
+#include <ak_uidMangager.h>					// UID manager
 
 // Qt header
 #include <qlayout.h>						// QHBoxLayout

@@ -16,9 +16,9 @@
 #include <qstring.h>
 
 // AK header
-#include "ak_core.h"			// value type
-#include "ak_ui_color.h"		// color
-#include "ak_globalDataTypes.h"	// UID and ID type
+#include <ak_core.h>			// value type
+#include <ak_ui_color.h>		// color
+#include <ak_globalDataTypes.h>	// UID and ID type
 
 namespace ak {
 	namespace ui {

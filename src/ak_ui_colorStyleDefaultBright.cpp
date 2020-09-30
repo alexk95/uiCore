@@ -7,8 +7,9 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_colorStyleDefaultBright.h"		// corresponding header
-#include "ak_exception.h"						// error handling
+// AK header
+#include <ak_ui_colorStyleDefaultBright.h>		// corresponding header
+#include <ak_exception.h>						// error handling
 
 ak::ui::colorStyleDefaultBright::colorStyleDefaultBright() {
 	setControlsMainBackcolor(ak::ui::color(80, 80, 80));

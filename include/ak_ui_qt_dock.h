@@ -14,10 +14,11 @@
 #include <qstring.h>				// QString
 
 // AK header
-#include "ak_ui_core_aWidget.h"		// base class
-#include "ak_ui_core.h"				// objectType and keyType
-#include "ak_globalDataTypes.h"		// UID and ID type
+#include <ak_ui_core_aWidget.h>		// base class
+#include <ak_ui_core.h>				// objectType and keyType
+#include <ak_globalDataTypes.h>		// UID and ID type
 
+// Forward declaration
 class QKeyEvent;
 
 namespace ak {

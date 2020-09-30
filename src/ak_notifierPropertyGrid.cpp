@@ -7,9 +7,10 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_notifierPropertyGrid.h"	// corresponding header
-#include "ak_exception.h"				// error handling
-#include "ak_ui_widget_propertyGrid.h"	// propertyGrid
+// AK header
+#include <ak_notifierPropertyGrid.h>	// corresponding header
+#include <ak_exception.h>				// error handling
+#include <ak_ui_widget_propertyGrid.h>	// propertyGrid
 
 ak::notifierPropertyGrid::notifierPropertyGrid(
 	ak::ui::widget::propertyGrid *			_propertyGrid,

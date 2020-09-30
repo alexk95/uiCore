@@ -12,6 +12,7 @@
 // Qt header
 #include <qstring.h>		// QString
 
+// Forward declaration
 class QKeyEvent;
 
 namespace ak {

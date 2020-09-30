@@ -7,10 +7,11 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_messenger.h"		// Corresponding class
-#include "ak_exception.h"		// Error handling
-#include "ak_notifier.h"		// Notifier class
-#include "ak_uidMangager.h"		// UID manager
+// AK header
+#include <ak_messenger.h>		// Corresponding class
+#include <ak_exception.h>		// Error handling
+#include <ak_notifier.h>		// Notifier class
+#include <ak_uidMangager.h>		// UID manager
 
 ak::messenger::messenger() {
 	try {

@@ -10,9 +10,9 @@
 #pragma once
 
 // AK header
-#include "ak_notifier.h"			// base class
-#include "ak_globalDataTypes.h"		// UID and ID type
-#include "ak_core.h"				// message type
+#include <ak_notifier.h>			// base class
+#include <ak_globalDataTypes.h>		// UID and ID type
+#include <ak_core.h>				// message type
 
 namespace ak {
 

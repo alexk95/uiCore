@@ -10,9 +10,9 @@
 #pragma once
 
 // AK header
-#include "ak_core.h"				// messageType
-#include "ak_uidMangager.h"			// UID type
-#include "ak_notifier.h"			// base class
+#include <ak_core.h>				// messageType
+#include <ak_uidMangager.h>			// UID type
+#include <ak_notifier.h>			// base class
 
 namespace ak {
 
@@ -47,7 +47,6 @@ namespace ak {
 
 	private:
 		ak::ui::widget::tree *			my_tree;			//! The tree which is using this notifier
-
 	};
 
 

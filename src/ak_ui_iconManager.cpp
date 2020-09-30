@@ -8,8 +8,8 @@
  */
 
 // AK header
-#include "ak_ui_iconManager.h"		// corresponding class
-#include "ak_exception.h"			// Error handling
+#include <ak_ui_iconManager.h>		// corresponding class
+#include <ak_exception.h>			// Error handling
 
 // Qt header
 #include <qicon.h>					// QIcon

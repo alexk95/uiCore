@@ -12,13 +12,15 @@
 
 #pragma once
 
- // Qt header
+ // C++ header
 #include <vector>						// vector<>
+
+// Qt header
 #include <qstring.h>					// QString
 
 // AK header
-#include "ak_ui_core_ttbContainer.h"	// base class
-#include "ak_ui_core.h"					// objectType
+#include <ak_ui_core_ttbContainer.h>	// base class
+#include <ak_ui_core.h>					// objectType
 
 // Forward declaration
 namespace tt { class Group; }

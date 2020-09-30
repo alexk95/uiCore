@@ -10,9 +10,9 @@
 #pragma once
 
 // AK header
-#include "ak_ui_core_aPaintable.h"	// base class
-#include "ak_globalDataTypes.h"		// UID and ID type
-#include "ak_ui_core.h"				// objectType
+#include <ak_ui_core_aPaintable.h>	// base class
+#include <ak_globalDataTypes.h>		// UID and ID type
+#include <ak_ui_core.h>				// objectType
 
 // Forward declaration
 class QWidget;
@@ -27,7 +27,7 @@ namespace ak {
 
 			//! This class provides a interface that represents a widget.
 			//! Every class derived from this class must be able to provide a QWidget that is representing it
-			class __declspec(dllexport) aWidget : public ak::ui::core::aPaintable {
+			class UICORE_API aWidget : public ak::ui::core::aPaintable {
 			public:
 
 				//! @brief Constructor
@@ -52,14 +52,13 @@ namespace ak {
 
 			private:
 				// Block default constructor
-				aWidget() : aPaintable(ak::ui::core::objectType::oNone) {}
+				aWidget() = delete;
 
 				// Block copy constructor
-				aWidget(const aWidget & _other) : aPaintable(ak::ui::core::objectType::oNone) {}
+				aWidget(const aWidget & _other) = delete;
 
 				// Block assignment operator
-				aWidget & operator = (const aWidget & _other) { return *this; }
-
+				aWidget & operator = (const aWidget & _other) = delete;
 			};
 		} // namespace core
 	} // namespace ui

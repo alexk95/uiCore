@@ -13,7 +13,7 @@
 #include <qstring.h>			// QString
 
 // AK header
-#include "ak_ui_colorStyle.h"	// base class and stylableObject type
+#include <ak_ui_colorStyle.h>	// base class and stylableObject type
 
 namespace ak {
 	namespace ui {
@@ -25,7 +25,7 @@ namespace ak {
 			colorStyleDefaultDark();
 			
 			//! @brief Deconstructor
-			~colorStyleDefaultDark();
+			virtual ~colorStyleDefaultDark();
 
 			// ##############################################################
 			// Getter

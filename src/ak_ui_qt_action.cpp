@@ -7,7 +7,8 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_qt_action.h"			// corresponding header
+// AK header
+#include <ak_ui_qt_action.h>			// corresponding header
 
 ak::ui::qt::action::action(QToolButton::ToolButtonPopupMode _popupMode, QObject * _parent)
 	: QAction(_parent), my_popupMode(_popupMode), ak::ui::core::aObject(ak::ui::core::objectType::oAction) {}

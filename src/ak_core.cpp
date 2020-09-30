@@ -7,7 +7,8 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_core.h"		// corresponding class
+// AK header
+#include <ak_core.h>		// corresponding class
 
 QString ak::core::toQString(
 	eventType				_eventType
@@ -141,99 +142,6 @@ bool ak::core::numbers::isNumericOnly(const std::string &str) {
 bool ak::core::numbers::isNumericOnly(const QString &str) {
 	return isNumericOnly(str.toStdString());
 }
-
-// ########################################################################################
-// Graphics
-
-// point 2d
-
-template <class T, class U> ak::core::graphics::point2d<T, U>::point2d(T _x, U _y) { my_x = _x; my_y = _y; }
-
-template <class T, class U> ak::core::graphics::point2d<T, U>::point2d(const point2d & _other) { my_x = _other.x(); my_y = _other.y(); }
-
-template <class T, class U> ak::core::graphics::point2d<T, U> & ak::core::graphics::point2d<T,U>::operator = (const point2d<T, U> & _other) {
-	my_x = _other.x(); my_y = _other.y();
-	return *this;
-}
-template <class T, class U> ak::core::graphics::point2d<T, U> & ak::core::graphics::point2d<T,U>::operator + (const point2d<T, U> & _other) {
-	point2d<T,U> ret(my_x, my_y);
-	ret.addX(_other.x());
-	ret.addY(_other.y());
-	return ret;
-	
-}
-template <class T, class U> bool ak::core::graphics::point2d<T, U>::operator == (const point2d & _other) {
-	if (my_x != _other.x()) { return false; }
-	if (my_y != _other.y()) { return false; }
-	return true;
-}
-template <class T, class U> bool ak::core::graphics::point2d<T, U>::operator != (const point2d & _other) { return !(*this == _other); }
-
-template <class T, class U> T ak::core::graphics::point2d<T, U>::x(void) const { return my_x; }
-
-template <class T, class U> U ak::core::graphics::point2d<T, U>::y(void) const { return my_y; }
-
-template <class T, class U> void ak::core::graphics::point2d<T, U>::setX(T _x) { my_x = _x; }
-
-template <class T, class U> void ak::core::graphics::point2d<T, U>::setY(U _y) { my_y = _y; }
-
-template <class T, class U> T ak::core::graphics::point2d<T, U>::addX(T _v) { my_x = my_x + v; return my_x; }
-
-template <class T, class U> U ak::core::graphics::point2d<T, U>::addY(U _v) { my_y = my_y + v; return my_y; }
-
-template <class T, class U> T ak::core::graphics::point2d<T, U>::subX(T _v) { my_x = my_x - _v; return my_x; }
-
-template <class T, class U> U ak::core::graphics::point2d<T, U>::subY(U _v) { my_y = my_y - _v; return my_y; }
-
-// point 3d
-
-template <class T, class U, class V> ak::core::graphics::point3d<T, U, V>::point3d(T _x, U _y, V _z) { my_x = _x; my_y = _y; my_z = _z; }
-
-template <class T, class U, class V> ak::core::graphics::point3d<T, U, V>::point3d(const point3d & _other) { my_x = _other.x(); my_y = _other.y(); my_z = _other.z(); }
-
-template <class T, class U, class V> ak::core::graphics::point3d<T, U, V> & ak::core::graphics::point3d<T, U, V>::operator = (const point3d<T, U, V> & _other) {
-	my_x = _other.x(); my_y = _other.y(); my_z = _other.z();
-	return *this;
-}
-template <class T, class U, class V> ak::core::graphics::point3d<T, U, V> & ak::core::graphics::point3d<T, U, V>::operator + (const point3d<T, U, V> & _other) {
-	point3d<T, U, V> ret(my_x, my_y, my_z);
-	ret.addX(_other.x());
-	ret.addY(_other.y());
-	ret.addZ(_other.z());
-	return ret;
-
-}
-template <class T, class U, class V> bool ak::core::graphics::point3d<T, U, V>::operator == (const point3d & _other) {
-	if (my_x != _other.x()) { return false; }
-	if (my_y != _other.y()) { return false; }
-	if (my_z != _other.z()) { return false; }
-	return true;
-}
-template <class T, class U, class V> bool ak::core::graphics::point3d<T, U, V>::operator != (const point3d & _other) { return !(*this == _other); }
-
-template <class T, class U, class V> T ak::core::graphics::point3d<T, U, V>::x(void) const { return my_x; }
-
-template <class T, class U, class V> U ak::core::graphics::point3d<T, U, V>::y(void) const { return my_y; }
-
-template <class T, class U, class V> V ak::core::graphics::point3d<T, U, V>::z(void) const { return my_z; }
-
-template <class T, class U, class V> void ak::core::graphics::point3d<T, U, V>::setX(T _x) { my_x = _x; }
-
-template <class T, class U, class V> void ak::core::graphics::point3d<T, U, V>::setY(U _y) { my_y = _y; }
-
-template <class T, class U, class V> void ak::core::graphics::point3d<T, U, V>::setZ(V _z) { my_z = _z; }
-
-template <class T, class U, class V> T ak::core::graphics::point3d<T, U, V>::addX(T _v) { my_x = my_x + v; return my_x; }
-
-template <class T, class U, class V> U ak::core::graphics::point3d<T, U, V>::addY(U _v) { my_y = my_y + v; return my_y; }
-
-template <class T, class U, class V> V ak::core::graphics::point3d<T, U, V>::addZ(V _v) { my_z = my_z + v; return my_z; }
-
-template <class T, class U, class V> T ak::core::graphics::point3d<T, U, V>::subX(T _v) { my_x = my_x - _v; return my_x; }
-
-template <class T, class U, class V> U ak::core::graphics::point3d<T, U, V>::subY(U _v) { my_y = my_y - _v; return my_y; }
-
-template <class T, class U, class V> V ak::core::graphics::point3d<T, U, V>::subZ(V _z) { my_z = my_z - _v; return my_z; }
 
 // ########################################################################################
 // String

@@ -10,8 +10,8 @@
 #pragma once
 
 // AK header
-#include "ak_globalDataTypes.h"		// UID and ID type
-#include "ak_ui_core.h"				// objectType
+#include <ak_globalDataTypes.h>		// UID and ID type
+#include <ak_ui_core.h>				// objectType
 
 namespace ak {
 	namespace ui {
@@ -19,7 +19,7 @@ namespace ak {
 
 			//! This class is used to store the main information of any object used
 			//! Information contained is the UID and the reference counter
-			class __declspec(dllexport) aObject {
+			class UICORE_API aObject {
 			public:
 
 				//! @brief Constructor

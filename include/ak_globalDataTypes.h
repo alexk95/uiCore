@@ -9,6 +9,13 @@
 
 #pragma once
 
+#if  defined(_WIN32) || defined (_WIN64)
+#define OS_WINDOWS 1
+#define UICORE_API __declspec(dllexport)
+#elif defined(__unix__) || defined (unix) || defined(__unix)
+#define OS_UNIX 1
+#endif
+
 namespace ak {
 
 	//! @brief The UID datatype used for objects

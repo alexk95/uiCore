@@ -12,12 +12,12 @@
  */
 
 // AK header
-#include "ak_ui_ttb_page.h"				// corresponding header
-#include "ak_ui_ttb_group.h"			// group
-#include "ak_exception.h"				// error handling
-#include "ak_messenger.h"				// messenger
-#include "ak_uidMangager.h"				// UID manager
-#include "ak_ui_colorStyle.h"			// colorStyle
+#include <ak_ui_ttb_page.h>				// corresponding header
+#include <ak_ui_ttb_group.h>			// group
+#include <ak_exception.h>				// error handling
+#include <ak_messenger.h>				// messenger
+#include <ak_uidMangager.h>				// UID manager
+#include <ak_ui_colorStyle.h>			// colorStyle
 
 // TTB header (TabToolbar library)
 #include <TabToolbar/Page.h>			// tt::Page

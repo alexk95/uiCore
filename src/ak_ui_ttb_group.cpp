@@ -11,13 +11,13 @@
  */
 
 // AK header
-#include "ak_ui_ttb_group.h"			// corresponding class
-#include "ak_ui_ttb_subgroup.h"			// subgroup
-#include "ak_exception.h"				// Error handling
-#include "ak_messenger.h"				// messenger
-#include "ak_uidMangager.h"				// UID manager
-#include "ak_ui_colorStyle.h"			// colorStyle
-#include "ak_ui_core_aWidget.h"			// aWidget
+#include <ak_ui_ttb_group.h>			// corresponding class
+#include <ak_ui_ttb_subgroup.h>			// subgroup
+#include <ak_exception.h>				// Error handling
+#include <ak_messenger.h>				// messenger
+#include <ak_uidMangager.h>				// UID manager
+#include <ak_ui_colorStyle.h>			// colorStyle
+#include <ak_ui_core_aWidget.h>			// aWidget
 
  // TTB header (TabToolbar library)
 #include <TabToolbar/Group.h>			// tt::Group

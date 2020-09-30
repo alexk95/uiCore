@@ -9,11 +9,14 @@
 
 #pragma once
 
+// C++ header
 #include <list>						// vector<>
 
+// Qt header
 #include <qtreewidget.h>			// Base class
 #include <qstring.h>				// QString
 
+// AK header
 #include <ak_ui_core_aObject.h>		// Base class
 #include <ak_globalDataTypes.h>		// UID and ID type
 

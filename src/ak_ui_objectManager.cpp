@@ -29,8 +29,6 @@
 #include <ak_ui_qt_textEdit.h>				// textEdit
 #include <ak_ui_qt_timer.h>
 
-//#include <ak_ui_qt_tree.h>					
-
 // AK widget objects
 #include <ak_ui_widget_propertyGrid.h>		// propertyGrid
 #include <ak_ui_widget_colorEditButton.h>	// colorEditButton
@@ -40,9 +38,9 @@
 #include <ak_ui_widget_tree.h>				// tree
 
 // AK ttb objects
-#include "ak_ui_ttb_group.h"
-#include "ak_ui_ttb_page.h"
-#include "ak_ui_ttb_subgroup.h"
+#include <ak_ui_ttb_group.h>				// ttb Group
+#include <ak_ui_ttb_page.h>					// ttb Page
+#include <ak_ui_ttb_subgroup.h>				// ttb Subroup
 
 ak::ui::objectManager::objectManager(
 	ak::messenger *								_messenger,

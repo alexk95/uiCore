@@ -16,8 +16,8 @@
 #include <qstring.h>			// QString
 
 // AK header
-#include "ak_ui_color.h"		// color
-#include "ak_exception.h"		// error handling
+#include <ak_ui_color.h>		// color
+#include <ak_exception.h>		// error handling
 
 namespace ak {
 	namespace ui {
@@ -25,7 +25,7 @@ namespace ak {
 		//! @brief This class is used for storing color information used to paint the UI
 		//! This class is an abstract class. It defines the main functions used by the UI_manager and all its childs
 		//! This object provides the main foreground color and background color for the window and the controls
-		class __declspec(dllexport) colorStyle {
+		class UICORE_API colorStyle {
 		public:
 
 			//! Contains all item types paintable with a colorStyle which can be created with the ui_manager

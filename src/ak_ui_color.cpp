@@ -7,8 +7,11 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_color.h"		// corresponding class
-#include "ak_exception.h"		// error handling
+// AK header
+#include <ak_ui_color.h>		// corresponding class
+#include <ak_exception.h>		// error handling
+
+// C++ header
 #include <string>				// C++ string
 #include <sstream>				// string stream
 

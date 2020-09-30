@@ -7,9 +7,10 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_notifierForwardMessage.h"	// corresponding header
-#include "ak_exception.h"				// error handling
-#include "ak_messenger.h"				// messenger
+// AK header
+#include <ak_notifierForwardMessage.h>	// corresponding header
+#include <ak_exception.h>				// error handling
+#include <ak_messenger.h>				// messenger
 
 ak::notifierForwardMessage::notifierForwardMessage(
 	ak::messenger *					_messenger,

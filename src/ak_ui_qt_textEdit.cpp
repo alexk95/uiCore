@@ -7,9 +7,12 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_ui_qt_textEdit.h"	// corresponding class
-#include "ak_exception.h"		// error handling
-#include "ak_ui_colorStyle.h"	// colorStyle
+// AK header
+#include <ak_ui_qt_textEdit.h>	// corresponding class
+#include <ak_exception.h>		// error handling
+#include <ak_ui_colorStyle.h>	// colorStyle
+
+// Qt header
 #include <qscrollbar.h>
 
 ak::ui::qt::textEdit::textEdit(QWidget * _parent)

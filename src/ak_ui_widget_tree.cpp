@@ -8,18 +8,20 @@
  */
 
 // AK header
-#include "ak_ui_widget_tree.h"				// corresponding class
-#include "ak_messenger.h"					// messenger
-#include "ak_ui_signalLinker.h"				// filter signal to messaging system connection
-#include "ak_ui_treeSignalLinker.h"			// tree signal to messaging system connection
-#include "ak_ui_qt_textedit.h"				// textEdit for the filter
-#include "ak_ui_qt_tree.h"					// object this tree widget is managing
-#include "ak_ui_qt_treeItem.h"				// treeItem
-#include "ak_ui_colorStyle.h"				// colorStyle 
-#include "ak_ui_color.h"					// color
-#include "ak_notifierTreeFilter.h"			// notify the tree that the filter has changed
-#include "ak_ui_core.h"						// objectType, convet textAlignment
-#include "ak_uidMangager.h"					// UID manager
+#include <ak_ui_widget_tree.h>				// corresponding class
+#include <ak_messenger.h>					// messenger
+#include <ak_ui_signalLinker.h>				// filter signal to messaging system connection
+#include <ak_ui_treeSignalLinker.h>			// tree signal to messaging system connection
+#include <ak_ui_qt_textedit.h>				// textEdit for the filter
+#include <ak_ui_qt_tree.h>					// object this tree widget is managing
+#include <ak_ui_qt_treeItem.h>				// treeItem
+#include <ak_ui_colorStyle.h>				// colorStyle 
+#include <ak_ui_color.h>					// color
+#include <ak_notifierTreeFilter.h>			// notify the tree that the filter has changed
+#include <ak_ui_core.h>						// objectType, convet textAlignment
+#include <ak_uidMangager.h>					// UID manager
+
+// Qt header
 #include <qmessagebox.h>
 
 ak::ui::widget::tree::tree(

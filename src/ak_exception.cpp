@@ -7,7 +7,8 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
-#include "ak_exception.h"		// Corresponding class
+// AK header
+#include <ak_exception.h>		// Corresponding class
 
 ak::Exception::Exception()
 {

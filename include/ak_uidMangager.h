@@ -13,13 +13,13 @@
 #include <mutex>					// mutex
 
 // AK header
-#include "ak_globalDataTypes.h"		// UID and ID type
+#include <ak_globalDataTypes.h>		// UID and ID type
 
 namespace ak {
 
 	//! This class is used to manage UIDs.
 	//! This UID manager is incrementing the UID on each getId call.
-	class __declspec(dllexport) uidManager {
+	class UICORE_API uidManager {
 	public:
 
 		//! @brief Default construcor. Initialize the first id with 1
