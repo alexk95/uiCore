@@ -7,6 +7,9 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
+// C++ header
+#include <string>
+
  // AK header
 #include <ak_ui_objectManager.h>			// corresponding header
 #include <ak_messenger.h>					// messenger
@@ -18,6 +21,7 @@
 #include <ak_ui_iconManager.h>				// icon manager
 #include <ak_ui_core_aWidget.h>
 #include <ak_ui_core_aObject.h>
+#include <ak_ui_core_aRestorable.h>
 
 // AK Qt objects
 #include <ak_ui_qt_action.h>				// action
@@ -41,6 +45,11 @@
 #include <ak_ui_ttb_group.h>				// ttb Group
 #include <ak_ui_ttb_page.h>					// ttb Page
 #include <ak_ui_ttb_subgroup.h>				// ttb Subroup
+
+// Rapid JSON header
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/stringbuffer.h>
 
 ak::ui::objectManager::objectManager(
 	ak::messenger *								_messenger,
@@ -529,7 +538,27 @@ void ak::ui::objectManager::obj_setAlias(
 		// Find parent object
 		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
 		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
-		obj->second->setAlias(_alias);
+		ak::ui::core::aRestorable * restorable = nullptr;
+		restorable = dynamic_cast<ak::ui::core::aRestorable *>(obj->second);
+		if (restorable == nullptr) { throw ak::Exception("Invalid object type, expected: Restorable", "Check object type"); }
+
+		// Check for duplicate alias
+		my_mapAliasesIterator alias = my_mapAliases.find(_alias);
+		if (alias != my_mapAliases.end()) {
+			if (alias->second == _objectUid) { return; }
+			throw ak::Exception("Alias already registered for another object", "Check for alias duplicate");
+		}
+		else {
+			// Check if alias was registered before
+			if (restorable->alias().length() > 0) {
+				my_mapAliases.erase(restorable->alias());
+			}
+		}
+		// Add new alias if provided
+		if (_alias.length() > 0) {
+			restorable->setAlias(_alias);
+			my_mapAliases.insert_or_assign(_alias, _objectUid);
+		}
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_setAlias()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_setAlias()"); }
@@ -1973,7 +2002,10 @@ QString ak::ui::objectManager::obj_getAlias(
 		// Get object
 		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
 		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
-		return obj->second->alias();
+		ak::ui::core::aRestorable * restorable = nullptr;
+		restorable = dynamic_cast<ak::ui::core::aRestorable *>(obj->second);
+		if (restorable == nullptr) { throw ak::Exception("Invalid object type, expected: Restorable", "Check object type"); }
+		return restorable->alias();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getAlias()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getAlias()"); }
@@ -3424,6 +3456,42 @@ void ak::ui::objectManager::destroyAll(void) {
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::destroyAll()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::destroyAll()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::destroyAll()"); }
+}
+
+std::string ak::ui::objectManager::getSettingsJSON(void) {
+	try {
+		// Prepare document
+		rapidjson::Document doc;
+		doc.SetObject();
+		rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+		// Create array value
+		rapidjson::Value items(rapidjson::kArrayType);
+
+		for (my_mapAliasesIterator itm = my_mapAliases.begin(); itm != my_mapAliases.end(); itm++) {
+			my_mapObjectsIterator obj = my_mapObjects.find(itm->second);
+			ak::ui::core::aRestorable * restorable = nullptr;
+			restorable = dynamic_cast<ak::ui::core::aRestorable *>(obj->second);
+			assert(restorable != nullptr); // Upps
+			restorable->addObjectSettingsToValue(items, allocator);
+		}
+
+		// Create JSON string
+		doc.AddMember("UI.Settings", items, allocator);
+
+		rapidjson::StringBuffer buffer;
+		buffer.Clear();
+
+		rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+		doc.Accept(writer);
+
+		char * json = strdup(buffer.GetString());
+		std::string info(json);
+		return info;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::getSettingsJSON()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::getSettingsJSON()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::getSettingsJSON()"); }
 }
 
 // ###############################################################################################################################################

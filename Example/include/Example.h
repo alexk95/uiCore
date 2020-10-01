@@ -61,7 +61,7 @@ private:
 		ak::UID				table2;				//! The UID of the table on the second page at the tabView
 		ak::UID				dockTester;			//! The UID of the test dock
 		ak::UID				tester;				//! The UId of the tester
-		ak::UID				ttb_aDelete;
+		ak::UID				ttb_aTest;
 	};
 	structUi					my_ui;			//! Contains all UIDs of the UI
 	ak::UID						my_uid;			//! The UID of this application

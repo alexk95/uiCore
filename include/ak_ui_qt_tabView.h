@@ -54,7 +54,7 @@ namespace ak {
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
 				) override;
-
+				
 			private:
 				
 			};

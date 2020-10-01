@@ -60,16 +60,20 @@ Example::Example()
 			my_ui.ttb_gNONE = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.ttb_pFile, "");
 			my_ui.ttb_aExit = ak::uiAPI::createAction(my_uid, "Exit", "ExitAppBlue", "32");
 			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
-			my_ui.ttb_aDelete = ak::uiAPI::createAction(my_uid, "Delete", "Delete", "32");
+			my_ui.ttb_aTest = ak::uiAPI::createAction(my_uid, "Test", "Test", "32");
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aExit);
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aColorStyle);
-			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aDelete);
+			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aTest);
 
 			// Create docks
 			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
 			my_ui.dockProperties = ak::uiAPI::createDock(my_uid, "Properties");
 			my_ui.dockTree = ak::uiAPI::createDock(my_uid, "Tree");
 			my_ui.dockTester = ak::uiAPI::createDock(my_uid, "Tester");
+			ak::uiAPI::obj::setAlias(my_ui.dockOutput, "Dock.Output");
+			ak::uiAPI::obj::setAlias(my_ui.dockProperties, "Dock.Properties");
+			ak::uiAPI::obj::setAlias(my_ui.dockTree, "Dock.Tree");
+			ak::uiAPI::obj::setAlias(my_ui.dockTester, "Dock.Tester");
 
 			// Create widgets
 			my_ui.treeWidget = ak::uiAPI::createTree(my_uid);
@@ -131,7 +135,7 @@ Example::Example()
 			ak::uiAPI::registerUidNotifier(my_ui.ttb_aExit, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.ttb_aColorStyle, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.tester, my_notifier);
-			ak::uiAPI::registerUidNotifier(my_ui.ttb_aDelete, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.ttb_aTest, my_notifier);
 
 			// Create default data
 			defaultData();
@@ -198,98 +202,11 @@ void Example::eventCallback(
 				// Enable the notifier again
 				my_notifier->enable();
 			}
-			else if (_sender == my_ui.ttb_aDelete) {
+			else if (_sender == my_ui.ttb_aTest) {
 
-				rapidjson::Document doc;
-				doc.SetObject();
+				std::string json = ak::uiAPI::getSettingsJSON();
 
-				rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
-
-				rapidjson::Value items(rapidjson::kArrayType);
-
-				rapidjson::Value i1;
-				i1.SetObject();
-				i1.AddMember("Alias", "DockOutput", allocator);
-				i1.AddMember("Type", "Dock", allocator);
-
-				rapidjson::Value s1;
-				s1.SetObject();
-				s1.AddMember("PositionX", 50, allocator);
-				s1.AddMember("PositionY", 120, allocator);
-				s1.AddMember("Location", "Down", allocator);
-				i1.AddMember("Settings", s1, allocator);
-
-				rapidjson::Value i2;
-				i2.SetObject();
-				i2.AddMember("Alias", "DockProperties", allocator);
-				i2.AddMember("Type", "Dock", allocator);
-
-				rapidjson::Value s2;
-				s2.SetObject();
-				s2.AddMember("PositionX", 60, allocator);
-				s2.AddMember("PositionY", 110, allocator);
-				s2.AddMember("Location", "Left", allocator);
-				i2.AddMember("Settings", s2, allocator);
-
-				items.PushBack(i1, allocator);
-				items.PushBack(i2, allocator);
-				doc.AddMember("WindowSettings", items, allocator);
-
-				rapidjson::StringBuffer buffer;
-
-				buffer.Clear();
-
-				rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-				doc.Accept(writer);
-
-				char * info = strdup(buffer.GetString());
-				QString msg(info);
-
-				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, msg, "");
-
-				return;
-
-				/*
-
-				ak::jsonCreator c;
-
-				ak::jsonCreator settings;
-				ak::jsonCreator item1;
-				settings.add("Location", "Left");
-				settings.add("Width", 60);
-				settings.add("Height", 120);
-
-				item1.add("Type", "Dock");
-				item1.add("Settings", settings.toString());
-
-				c.add("DockOutput", item1.toString());
-
-				std::string outString(c.toString());
-
-				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, outString.c_str(), "JSON");
-
-				// #############################################################################
-
-				rapidjson::Document doc;
-				doc.Parse(outString.c_str());
-
-				*/
-
-				return;
-
-				ak::uiAPI::obj::clear(my_ui.treeWidget);
-				ak::uiAPI::obj::clear(my_ui.propertiesWidget);
-				defaultData();
-				return;
-				std::vector<ak::ID> v;
-				if (ak::uiAPI::itm::getID(my_ui.treeWidget, "B") == ak::invalidID) {
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A"));
-				}
-				else {
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1B"));
-					v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "B"));
-				}
-				ak::uiAPI::obj::deleteItems(my_ui.treeWidget, v);
+				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, json.c_str(), "JSON");
 			}
 		}
 		else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {

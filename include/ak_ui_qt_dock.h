@@ -15,8 +15,12 @@
 
 // AK header
 #include <ak_ui_core_aWidget.h>		// base class
+#include <ak_ui_core_aRestorable.h>	// base class
 #include <ak_ui_core.h>				// objectType and keyType
 #include <ak_globalDataTypes.h>		// UID and ID type
+
+// Rapid JSON header
+#include <rapidjson/document.h>		// RJSON document
 
 // Forward declaration
 class QKeyEvent;
@@ -29,7 +33,8 @@ namespace ak {
 
 		namespace qt {
 
-			class dock : public QDockWidget, public ak::ui::core::aWidget {
+			class dock : public QDockWidget, public ak::ui::core::aWidget, public ak::ui::core::aRestorable
+			{
 				Q_OBJECT
 			public:
 				dock(
@@ -53,7 +58,21 @@ namespace ak {
 					ak::ui::colorStyle *			_colorStyle
 				) override;
 			
+				//! @brief Will create a rapidjson::Value representing this objects current state
+				//! The value looks like this:
+				//!	     { "Alias":"[ObjectAlias]","Type":"[ObjectType]","Settings":{...} }
+				virtual void addObjectSettingsToValue(
+					rapidjson::Value &						_array,
+					rapidjson::Document::AllocatorType &	_allocator
+				) override;
+
+			private slots:
+				void slotDockLocationChanged(Qt::DockWidgetArea _area);
+
 			private:
+
+				ak::ui::core::dockLocation		my_location;
+
 				// Block default constructor
 				dock() = delete;
 

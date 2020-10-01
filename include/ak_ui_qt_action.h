@@ -18,6 +18,8 @@
 // AK header
 #include <ak_ui_core_aObject.h>			// base class
 
+#include <ak_globalDataTypes.h>
+
 namespace ak {
 	namespace ui {
 		namespace qt {

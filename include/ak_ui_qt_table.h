@@ -66,7 +66,7 @@ namespace ak {
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
 				) override;
-
+				
 			signals:
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);

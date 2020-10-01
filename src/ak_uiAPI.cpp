@@ -375,6 +375,16 @@ std::vector<ak::core::eventType> ak::uiAPI::enabledEventTypes(void) { return ak:
 
 std::vector<ak::core::eventType> ak::uiAPI::disabledEventTypes(void) { return ak::singletonAllowedMessages::instance()->disabledMessages(); }
 
+std::string ak::uiAPI::getSettingsJSON(void) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->getSettingsJSON();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getSettingsJSON()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getSettingsJSON()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getSettingsJSON()"); }
+}
+
 // ###############################################################################################################################################
 
 ak::UID ak::uiAPI::registerUidNotifier(

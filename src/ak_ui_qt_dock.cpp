@@ -8,10 +8,15 @@
  */
 
 // AK header
-#include <ak_ui_qt_dock.h>			// corresponding class
-#include <ak_exception.h>			// error handling
-#include <ak_ui_colorStyle.h>		// colorStyle
-#include <qevent.h>					// QKeyEvent
+#include <ak_ui_qt_dock.h>						// corresponding class
+#include <ak_exception.h>						// error handling
+#include <ak_ui_colorStyle.h>					// colorStyle
+
+// Qt header
+#include <qevent.h>								// QKeyEvent
+
+// C++ header
+#include <string>								// string
 
 ak::ui::qt::dock::dock(
 	const QString &				_title,
@@ -21,9 +26,13 @@ ak::ui::qt::dock::dock(
 ) 
 	: ak::ui::core::aWidget(ak::ui::core::objectType::oDock, _colorStyle),
 	QDockWidget(_title, _parent, _flags)
-{}
+{
+	connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
+}
 
-ak::ui::qt::dock::~dock() {}
+ak::ui::qt::dock::~dock() {
+	disconnect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
+}
 
 // #######################################################################################################
 
@@ -40,4 +49,53 @@ void ak::ui::qt::dock::setColorStyle(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::qt::dock::setColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::qt::dock::setColorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::dock::setColorStyle()"); }
+}
+
+void ak::ui::qt::dock::addObjectSettingsToValue(
+	rapidjson::Value &						_array,
+	rapidjson::Document::AllocatorType &	_allocator
+) {
+	assert(_array.GetType() == rapidjson::Type::kArrayType); // Value is not an array type
+
+	// Initialize object
+	rapidjson::Value root;
+	root.SetObject();
+
+	// Add alias
+	std::string str(my_alias.toStdString());
+	rapidjson::Document::StringRefType nAlias(str.c_str());
+	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
+
+	// Add object type
+	QString objType = ak::ui::core::toQString(my_objectType);
+	std::string str2(objType.toStdString());
+	rapidjson::Document::StringRefType nType(str2.c_str());
+	root.AddMember(RESTORABLE_NAME_TYPE, nType, _allocator);
+
+	// Create settings
+	rapidjson::Value settings;
+	settings.SetObject();
+
+	settings.AddMember("Size.Width", width(), _allocator);
+	settings.AddMember("Size.Height", height(), _allocator);
+	
+	std::string loc = ak::ui::core::toQString(my_location).toStdString();
+	rapidjson::Document::StringRefType location(loc.c_str());
+	settings.AddMember("DockLocation", location, _allocator);
+
+	// Add settings
+	root.AddMember(RESTORABLE_NAME_SETTINGS, settings, _allocator);
+	_array.PushBack(root, _allocator);
+}
+
+void ak::ui::qt::dock::slotDockLocationChanged(Qt::DockWidgetArea _area) {
+	switch (_area)
+	{
+	case Qt::DockWidgetArea::BottomDockWidgetArea: my_location = ui::core::dock_dockBottom; break;
+	case Qt::DockWidgetArea::LeftDockWidgetArea: my_location = ui::core::dock_dockLeft; break;
+	case Qt::DockWidgetArea::RightDockWidgetArea: my_location = ui::core::dock_dockRight; break;
+	default:
+		assert(0); // Can't happen?
+		break;
+	}
 }

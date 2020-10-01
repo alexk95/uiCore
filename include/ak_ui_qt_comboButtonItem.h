@@ -60,6 +60,7 @@ namespace ak {
 
 				//! @brief Deconstructor
 				virtual ~comboButtonItem();
+
 			};
 		}
 	}

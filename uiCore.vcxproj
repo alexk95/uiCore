@@ -129,6 +129,7 @@
     <ClInclude Include="include\ak_ui_core.h" />
     <ClInclude Include="include\ak_ui_core_aObject.h" />
     <ClInclude Include="include\ak_ui_core_aPaintable.h" />
+    <ClInclude Include="include\ak_ui_core_aRestorable.h" />
     <ClInclude Include="include\ak_ui_core_aWidget.h" />
     <ClInclude Include="include\ak_ui_core_aWidgetManager.h" />
     <ClInclude Include="include\ak_ui_core_ttbContainer.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="src\ak_ui_core.cpp" />
     <ClCompile Include="src\ak_ui_core_aObject.cpp" />
     <ClCompile Include="src\ak_ui_core_aPaintable.cpp" />
+    <ClCompile Include="src\ak_ui_core_aRestorable.cpp" />
     <ClCompile Include="src\ak_ui_core_aWidget.cpp" />
     <ClCompile Include="src\ak_ui_core_aWidgetManager.cpp" />
     <ClCompile Include="src\ak_ui_core_ttbContainer.cpp" />

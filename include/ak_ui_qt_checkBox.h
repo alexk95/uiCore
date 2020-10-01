@@ -15,6 +15,11 @@
 
 // AK header
 #include <ak_ui_core_aWidget.h>		// base class
+#include <ak_ui_core_aRestorable.h>	// base class
+
+#include <rapidjson/document.h>		// RJSON document
+
+#include <ak_globalDataTypes.h>
 
 // Forward declaration
 class QKeyEvent;
@@ -28,7 +33,7 @@ namespace ak {
 		namespace qt {
 
 			//! @brief This class combines the functionallity of a QCheckBox and a ak::object
-			class checkBox : public QCheckBox, public ak::ui::core::aWidget
+			class checkBox : public QCheckBox, public ak::ui::core::aWidget, public ak::ui::core::aRestorable
 			{
 				Q_OBJECT
 			public:
@@ -64,6 +69,14 @@ namespace ak {
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
+				) override;
+
+				//! @brief Will create a rapidjson::Value representing this objects current state
+				//! The value looks like this:
+				//!	     { "Alias":"[ObjectAlias]","Type":"[ObjectType]","Settings":{...} }
+				virtual void addObjectSettingsToValue(
+					rapidjson::Value &						_array,
+					rapidjson::Document::AllocatorType &	_allocator
 				) override;
 
 			signals:

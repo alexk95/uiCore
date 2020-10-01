@@ -202,6 +202,9 @@ namespace ak {
 		//! @brief Will return the disabled event types that will be send
 		UICORE_API std::vector<ak::core::eventType> disabledEventTypes(void);
 
+		//! @brief Will create and return a JSON string representing the UI
+		UICORE_API std::string getSettingsJSON(void);
+
 		// ###############################################################################################################################################
 		
 		// message functions
@@ -563,6 +566,7 @@ namespace ak {
 		namespace obj {
 
 			//! @brief Will set the alias for the specified object
+			//! If a empty alias will be provided the old one will be erased (if exists)
 			//! @param _objectUid The UID of the object
 			//! @param _alias The alias to set
 			//! @throw ak::Exception if the API is not initialized or the object UID is invalid

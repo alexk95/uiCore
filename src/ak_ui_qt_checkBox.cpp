@@ -8,11 +8,15 @@
  */
 
 // AK header
-#include <ak_ui_qt_checkBox.h>	// corresponding header
-#include <ak_ui_colorStyle.h>	// colorStyle
-#include <ak_exception.h>		// error handling
+#include <ak_ui_qt_checkBox.h>					// corresponding header
+#include <ak_ui_colorStyle.h>					// colorStyle
+#include <ak_exception.h>						// error handling
 
-#include <qevent.h>				// QKeyEvent
+// Qt header
+#include <qevent.h>								// QKeyEvent
+
+// C++ header
+#include <string>
 
 ak::ui::qt::checkBox::checkBox(QWidget * _parent)
 : QCheckBox(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oCheckBox) {}
@@ -44,4 +48,35 @@ void ak::ui::qt::checkBox::keyPressEvent(QKeyEvent * _event) {
 void ak::ui::qt::checkBox::keyReleaseEvent(QKeyEvent * _event) {
 	QCheckBox::keyReleaseEvent(_event);
 	emit keyReleased(_event);
+}
+
+void ak::ui::qt::checkBox::addObjectSettingsToValue(
+	rapidjson::Value &						_array,
+	rapidjson::Document::AllocatorType &	_allocator
+) {
+	assert(_array.GetType() == rapidjson::Type::kArrayType); // Value is not an array type
+
+	// Initialize object
+	rapidjson::Value root;
+	root.SetObject();
+
+	// Add alias
+	std::string str(my_alias.toStdString());
+	rapidjson::Document::StringRefType nAlias(str.c_str());
+	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
+
+	// Add object type
+	str = ak::ui::core::toQString(my_objectType).toStdString();
+	rapidjson::Document::StringRefType nType(str.c_str());
+	root.AddMember(RESTORABLE_NAME_TYPE, nType, _allocator);
+
+	// Create settings
+	rapidjson::Value settings;
+	settings.SetObject();
+	
+	settings.AddMember("Checked", isChecked(), _allocator);
+
+	// Add settings
+	root.AddMember(RESTORABLE_NAME_SETTINGS, settings, _allocator);
+	_array.PushBack(root, _allocator);
 }

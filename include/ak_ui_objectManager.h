@@ -250,6 +250,7 @@ namespace ak {
 			// Object setter
 
 			//! @brief Will set the alias for the specified object
+			//! If a empty alias will be provided the old one will be erased (if exists)
 			//! @param _objectUid The UID of the object
 			//! @param _alias The alias to set
 			void obj_setAlias(
@@ -1071,6 +1072,9 @@ namespace ak {
 			//! @brief Will destroy all objects
 			void destroyAll(void);
 
+			//! @brief Will return the JSON settings string of all objects that have an alias set
+			std::string getSettingsJSON(void);
+
 		private:
 
 			objectManager() = delete;
@@ -1094,14 +1098,17 @@ namespace ak {
 			// ###############################################################################################################################################
 			// Object storing
 
-			std::map<ak::UID, ak::ui::core::aObject *>	my_mapObjects;
+			std::map<ak::UID, ak::ui::core::aObject *>		my_mapObjects;
 			typedef std::map<ak::UID,
-				ak::ui::core::aObject *>::iterator					my_mapObjectsIterator;
+				ak::ui::core::aObject *>::iterator			my_mapObjectsIterator;
 
 			std::map<ak::UID,
-				std::vector<ak::UID> *>					my_mapCreators;
+				std::vector<ak::UID> *>						my_mapCreators;				//! Contains all creators
 			typedef std::map<ak::UID,
-				std::vector<ak::UID> *>::iterator		my_mapCreatorsIterator;
+				std::vector<ak::UID> *>::iterator			my_mapCreatorsIterator;		//! Iterator used to iterate trough the creators
+
+			std::map<QString, ak::UID>						my_mapAliases;				//! Contains the UIDs for a specified alias
+			typedef std::map<QString, ak::UID>::iterator	my_mapAliasesIterator;		//! Iterator used to iterate trough the aliases
 
 			// ###############################################################################################################################################
 
