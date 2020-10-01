@@ -562,6 +562,15 @@ namespace ak {
 
 		namespace obj {
 
+			//! @brief Will set the alias for the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _alias The alias to set
+			//! @throw ak::Exception if the API is not initialized or the object UID is invalid
+			UICORE_API void setAlias(
+				ak::UID												_objectUid,
+				const QString &										_alias
+			);
+
 			//! @brief Will add the specified object to the specified container
 			//! @param _parentUid The container UID to add the object to
 			//! @param _objectUid The object UID to add to the container
@@ -1148,6 +1157,13 @@ namespace ak {
 			// ###############################################################################################################################################
 
 			// Object getter
+
+			//! @brief Will return the alias of the specified object
+			//! @param _objectUid The UID of the object
+			//! @throw ak::Exception if the API is not initialized or the object UID is invalid
+			UICORE_API QString getAlias(
+				ak::UID									_objectUid
+			);
 
 			//! @brief Will return the object text of the specified object
 			//! @param _objectUid The UID of the object

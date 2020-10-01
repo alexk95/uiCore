@@ -883,6 +883,19 @@ ak::UID ak::uiAPI::createTabView(
 
 // object setter
 
+void ak::uiAPI::obj::setAlias(
+	ak::UID												_objectUid,
+	const QString &										_alias
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->obj_setAlias(_objectUid, _alias);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setAlias()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setAlias()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setAlias()"); }
+}
+
 void ak::uiAPI::obj::addObjectToContainer(
 	ak::UID												_parentUid,
 	ak::UID												_objectUid
@@ -1631,6 +1644,18 @@ void ak::uiAPI::obj::shoot(
 // ###############################################################################################################################################
 
 // Object getter
+
+QString ak::uiAPI::obj::getAlias(
+	ak::UID												_objectUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_getAlias(_objectUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getAlias()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getAlias()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getAlias()"); }
+}
 
 QString ak::uiAPI::obj::getText(
 	ak::UID												_objectUid

@@ -21,8 +21,6 @@
 #define ICO_Bright "Sun"
 #define ICO_Dark "Moon"
 
-#include <ak_jsonCreator.h>
-
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>			// Writer
 #include <rapidjson/stringbuffer.h>		// String buffer

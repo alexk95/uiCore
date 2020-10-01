@@ -63,6 +63,15 @@ int ak::ui::core::aObject::decrReferences(void) {
 
 ak::ui::core::objectType ak::ui::core::aObject::objectType(void) const { return my_objectType; }
 
+void ak::ui::core::aObject::setAlias(
+	const QString &					_alias
+) {
+	if (_alias.length() == 0) { throw ak::Exception("Alias length is 0", "ak::ui::core::aObject::setAlias()"); }
+	my_alias = _alias;
+}
+
+QString ak::ui::core::aObject::alias(void) const { return my_alias; }
+
 bool ak::ui::core::aObject::isPaintableType(void) const { return false; }
 
 bool ak::ui::core::aObject::isWidgetType(void) const { return false; }

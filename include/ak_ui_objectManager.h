@@ -249,6 +249,14 @@ namespace ak {
 			
 			// Object setter
 
+			//! @brief Will set the alias for the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _alias The alias to set
+			void obj_setAlias(
+				ak::UID												_objectUid,
+				const QString &										_alias
+			);
+
 			//! @brief Will add the provided object to the provided container
 			//! @param _
 			//! @throw ak::Exception If one of the provided UIDs is invalid
@@ -633,14 +641,21 @@ namespace ak {
 				int													_value
 			);
 
-			// ###############################################################################################################################################
-
-			// Object getter
-
 			//! @brief Will delete the specified object
 			//! @param _objectUid The UID of the object to delete
 			//! @throw ak::Exception if the provieded UID is invalid
 			void obj_delete(
+				ak::UID												_objectUid
+			);
+
+			// ###############################################################################################################################################
+
+			// Object getter
+
+			//! @brief Will return the alias of the specified object
+			//! @param _objectUid The UID of the object
+			//! @throw ak::Exception if the UID is invalid
+			QString obj_getAlias(
 				ak::UID												_objectUid
 			);
 

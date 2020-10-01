@@ -521,6 +521,21 @@ ak::UID ak::ui::objectManager::createTabToolBarPage(
 
 // Object setter
 
+void ak::ui::objectManager::obj_setAlias(
+	ak::UID												_objectUid,
+	const QString &										_alias
+) {
+	try {
+		// Find parent object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		obj->second->setAlias(_alias);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_setAlias()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_setAlias()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_setAlias()"); }
+}
+
 void ak::ui::objectManager::obj_addObjectToContainer(
 	ak::UID								_parentUid,
 	ak::UID								_objectUid
@@ -1924,10 +1939,6 @@ void ak::ui::objectManager::obj_shoot(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_shoot()"); }
 }
 
-// ###############################################################################################################################################
-
-// Object getter
-
 void ak::ui::objectManager::obj_delete(
 	ak::UID									_objectUid
 ) {
@@ -1949,6 +1960,24 @@ void ak::ui::objectManager::obj_delete(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_delete()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_delete()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_delete()"); }
+}
+
+// ###############################################################################################################################################
+
+// Object getter
+
+QString ak::ui::objectManager::obj_getAlias(
+	ak::UID												_objectUid
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		return obj->second->alias();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_getAlias()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_getAlias()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_getAlias()"); }
 }
 
 ak::ui::core::aObject * ak::ui::objectManager::obj_get(
