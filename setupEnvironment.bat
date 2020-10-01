@@ -33,6 +33,9 @@ SET QDIR=%QTDIR%
 REM Set Tab Toolbar Root Directory
 SET QT_TT_ROOT=%UI_CORE_ROOT%\Third_Party_Libraries\QtTabToolbar
 
+REM Set Rapid JSON Directory
+SET R_JSON_ROOT=%UI_CORE_ROOT%\Third_Party_Libraries\rapidjson
+
 ECHO Environment was set up successfully.
 
 :END

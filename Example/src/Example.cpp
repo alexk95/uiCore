@@ -21,6 +21,12 @@
 #define ICO_Bright "Sun"
 #define ICO_Dark "Moon"
 
+#include <ak_jsonCreator.h>
+
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>			// Writer
+#include <rapidjson/stringbuffer.h>		// String buffer
+
 Example::Example()
 	: my_settingColor(255,255,0)
 {
@@ -195,6 +201,84 @@ void Example::eventCallback(
 				my_notifier->enable();
 			}
 			else if (_sender == my_ui.ttb_aDelete) {
+
+				rapidjson::Document doc;
+				doc.SetObject();
+
+				rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+				rapidjson::Value items(rapidjson::kArrayType);
+
+				rapidjson::Value i1;
+				i1.SetObject();
+				i1.AddMember("Alias", "DockOutput", allocator);
+				i1.AddMember("Type", "Dock", allocator);
+
+				rapidjson::Value s1;
+				s1.SetObject();
+				s1.AddMember("PositionX", 50, allocator);
+				s1.AddMember("PositionY", 120, allocator);
+				s1.AddMember("Location", "Down", allocator);
+				i1.AddMember("Settings", s1, allocator);
+
+				rapidjson::Value i2;
+				i2.SetObject();
+				i2.AddMember("Alias", "DockProperties", allocator);
+				i2.AddMember("Type", "Dock", allocator);
+
+				rapidjson::Value s2;
+				s2.SetObject();
+				s2.AddMember("PositionX", 60, allocator);
+				s2.AddMember("PositionY", 110, allocator);
+				s2.AddMember("Location", "Left", allocator);
+				i2.AddMember("Settings", s2, allocator);
+
+				items.PushBack(i1, allocator);
+				items.PushBack(i2, allocator);
+				doc.AddMember("WindowSettings", items, allocator);
+
+				rapidjson::StringBuffer buffer;
+
+				buffer.Clear();
+
+				rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+				doc.Accept(writer);
+
+				char * info = strdup(buffer.GetString());
+				QString msg(info);
+
+				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, msg, "");
+
+				return;
+
+				/*
+
+				ak::jsonCreator c;
+
+				ak::jsonCreator settings;
+				ak::jsonCreator item1;
+				settings.add("Location", "Left");
+				settings.add("Width", 60);
+				settings.add("Height", 120);
+
+				item1.add("Type", "Dock");
+				item1.add("Settings", settings.toString());
+
+				c.add("DockOutput", item1.toString());
+
+				std::string outString(c.toString());
+
+				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, outString.c_str(), "JSON");
+
+				// #############################################################################
+
+				rapidjson::Document doc;
+				doc.Parse(outString.c_str());
+
+				*/
+
+				return;
+
 				ak::uiAPI::obj::clear(my_ui.treeWidget);
 				ak::uiAPI::obj::clear(my_ui.propertiesWidget);
 				defaultData();

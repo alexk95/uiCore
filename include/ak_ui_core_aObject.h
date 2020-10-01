@@ -2,7 +2,7 @@
  * ak_ui_core_aObject.h
  *
  *  Created on: July 26, 2020
- *	Last modified on: September 07, 2020
+ *	Last modified on: October 01, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
  */
@@ -12,6 +12,9 @@
 // AK header
 #include <ak_globalDataTypes.h>		// UID and ID type
 #include <ak_ui_core.h>				// objectType
+
+// Rapid JSON header
+#include <rapidjson/document.h>		// rapidjson::Value
 
 namespace ak {
 	namespace ui {
@@ -46,6 +49,8 @@ namespace ak {
 				//! @brief Deconstructor
 				virtual ~aObject();
 
+				// ################################################################################
+
 				//! @brief Will set the objects UID
 				void setUid(
 					ak::UID							_UID
@@ -76,6 +81,11 @@ namespace ak {
 
 				//! @brief Returns true if the object is an object derived from aWidget
 				virtual bool isWidgetType(void) const;
+
+				//! @brief Will create a rapidjson::Value representing this object
+				//! The value should look like this:
+				//!	     { "Type":"
+				//virtual rapidjson::Value createSettingsValue(void) const = 0;
 
 			protected:
 				ak::UID								my_uid;				//! The objects UID
