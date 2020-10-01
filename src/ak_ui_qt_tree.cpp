@@ -113,6 +113,15 @@ std::vector<QString> ak::ui::qt::tree::topLevelItemsText(void) {
 	return r;
 }
 
+void ak::ui::qt::tree::Clear(void) {
+	my_topLevelItems.clear();
+	clear();
+}
+
+void ak::ui::qt::tree::removeTopLevelItem(
+	ak::ID							_id
+) { my_topLevelItems.erase(_id); }
+
 // ####################################################################################################################################
 
 ak::ID ak::ui::qt::tree::getItemId(

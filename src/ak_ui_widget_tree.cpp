@@ -203,14 +203,13 @@ ak::ID ak::ui::widget::tree::add(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::add(command)"); }
 }
 
-//! @brief Will clear all tree items, receivers will get a destroyed message for each item
 void ak::ui::widget::tree::clear(void) {
 	if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
 	my_signalLinker = new ak::ui::signalLinker(my_internalMessenger, my_internalUidManager);
 	if (my_treeSignalLinker != nullptr) { delete my_treeSignalLinker; my_treeSignalLinker = nullptr; }
 	my_treeSignalLinker = new ak::ui::treeSignalLinker(this, my_tree);
 
-	my_tree->clear();
+	my_tree->Clear();
 	for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
 		ak::ui::qt::treeItem * item = itm->second;
 		if (item == nullptr) { delete item; }
@@ -351,6 +350,9 @@ void ak::ui::widget::tree::deleteItems(
 			if (itm != my_items.end()) {
 				qt::treeItem * item = itm->second;
 				for (auto cId : item->allChildsIDs()) { my_items.erase(cId); }
+				if (item->parentId() == ak::invalidID) {
+					my_tree->removeTopLevelItem(item->id());
+				}
 				delete item;
 				my_items.erase(id);
 			}

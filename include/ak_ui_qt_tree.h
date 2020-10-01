@@ -65,14 +65,14 @@ namespace ak {
 				// #######################################################################################################
 
 				//! @brief Will return the widgets widget to display it
-				virtual QWidget * widget(void);
+				virtual QWidget * widget(void) override;
 
 				//! @brief Will set the objects color style
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
-				);
+				) override;
 
 				// ####################################################################################################################################
 				
@@ -96,6 +96,16 @@ namespace ak {
 
 				//! @brief Will return the names of all top level items
 				std::vector<QString> topLevelItemsText(void);
+				
+				//! @brief Will clear the tree
+				void Clear(void);
+
+				//! @brief Will remove the topLevelItem with the provided ID
+				//! Will not destroy the item
+				//! @throw ak::Exception if the provided ID is invalid
+				void removeTopLevelItem(
+					ak::ID							_id
+				);
 
 				// ####################################################################################################################################
 
