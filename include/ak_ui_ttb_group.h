@@ -56,23 +56,23 @@ namespace ak {
 				//! @param _child The child to add
 				virtual void addChild(
 					ak::ui::core::aObject *		_child
-				);
+				) override;
 
 				//! @brief Will add a new sub container to this container
 				//! @param _text The initial text of the container
 				virtual ttbContainer * createSubContainer(
 					const QString &				_text = QString("")
-				);
+				) override;
 
 				//! @brief Will destry all sub container created by this container
-				virtual void destroyAllSubContainer(void);
+				virtual void destroyAllSubContainer(void) override;
 
 				//! @brief Will set the objects color style
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
-				);
+				) override;
 
 			private:
 				tt::Group *								my_group;

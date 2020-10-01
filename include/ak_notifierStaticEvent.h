@@ -29,7 +29,7 @@ namespace ak {
 			ak::core::eventType				_event,
 			int								_info1,
 			int								_info2
-		);
+		) override;
 
 	private:
 

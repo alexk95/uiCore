@@ -44,14 +44,14 @@ namespace ak {
 				// #######################################################################################################
 
 				//! @brief Will return the widgets widget to display it
-				virtual QWidget * widget(void);
+				virtual QWidget * widget(void) override;
 
 				//! @brief Will set the objects color style
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
-				);
+				) override;
 			
 			private:
 				// Block default constructor

@@ -48,7 +48,7 @@ namespace ak {
 				virtual QWidget * widget(void) = 0;
 
 				//! @brief Returns true the object is derived from aWidget
-				virtual bool isWidgetType(void) const;
+				virtual bool isWidgetType(void) const override;
 
 			private:
 				// Block default constructor

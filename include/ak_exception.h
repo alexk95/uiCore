@@ -107,7 +107,7 @@ namespace ak {
 		virtual ~Exception() throw();
 
 		//!	@brief Will return the exception and location text
-		virtual const char * what() const throw();
+		virtual const char * what() const throw() override;
 
 		//!	@brief Returns a copy of the what message which represents the exception text
 		std::string getWhat(void) const;

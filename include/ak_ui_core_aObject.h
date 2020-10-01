@@ -91,7 +91,7 @@ namespace ak {
 
 				//! @brief Will return true if a settings value is creatable
 				//! A settings value is createable if a alias is provided and the object is suitable to be rebuild later (chek documentation)
-				//virtual bool settingsValueCreatable(void) const = 0
+			//	virtual bool settingsValueCreatable(void) const = 0;
 
 				//! @brief Returns true if the object is an object derived from aPaintable
 				virtual bool isPaintableType(void) const;
@@ -99,10 +99,10 @@ namespace ak {
 				//! @brief Returns true if the object is an object derived from aWidget
 				virtual bool isWidgetType(void) const;
 
-				//! @brief Will create a rapidjson::Value representing this object
+				//! @brief Will create a rapidjson::Value representing this objects current state
 				//! The value looks like this:
 				//!	     { "Alias":"[ObjectAlias]","Type":"[ObjectType]","Settings":{...} }
-				//virtual rapidjson::Value createSettingsValue(void) const = 0;
+			//	virtual rapidjson::Value createSettingsValue(void) const = 0;
 
 			protected:
 				ak::UID								my_uid;				//! The objects UID

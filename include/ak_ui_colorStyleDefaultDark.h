@@ -31,21 +31,21 @@ namespace ak {
 			// Getter
 
 			//! @brief Will return the name of this styleSheet
-			virtual QString getColorStyleName(void) const;
+			virtual QString getColorStyleName(void) const override;
 
 			//! @brief Creates an returns a QStylesheet for all provided objects
 			//! @param _items The items to create a stylesheet string for
 			//! @throw ak::Exception if one of the image files needed does not exist
 			virtual QString getStylesheet(
 				const std::vector<styleableObject>	_items
-			) const;
+			) const override;
 
 			//! @brief Creates an returns a QStylesheet for the provided object
 			//! @param _object The object to create a stylesheet string for
 			//! @throw ak::Exception if one of the image files needed does not exist
 			virtual QString getStylesheet(
 				styleableObject					_object
-			) const;
+			) const override;
 		};
 	} // namespace ui
 } // namespace ak

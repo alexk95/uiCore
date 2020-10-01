@@ -49,7 +49,7 @@ namespace ak {
 				) = 0;
 
 				//! @brief Returns true because the object is derived from a aPaintable
-				virtual bool isPaintableType(void) const;
+				virtual bool isPaintableType(void) const override;
 
 			protected:
 				ak::ui::colorStyle *				my_colorStyle;			//! The current objects color style
