@@ -62,20 +62,20 @@ void ak::ui::qt::checkBox::addObjectSettingsToValue(
 
 	// Add alias
 	std::string str(my_alias.toStdString());
-	rapidjson::Document::StringRefType nAlias(str.c_str());
+	rapidjson::Value nAlias(str.c_str(), _allocator);
 	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
 
 	// Add object type
 	str = ak::ui::core::toQString(my_objectType).toStdString();
-	rapidjson::Document::StringRefType nType(str.c_str());
+	rapidjson::Value nType(str.c_str(), _allocator);
 	root.AddMember(RESTORABLE_NAME_TYPE, nType, _allocator);
 
 	// Create settings
 	rapidjson::Value settings;
 	settings.SetObject();
-	
-	settings.AddMember("Checked", isChecked(), _allocator);
 
+	settings.AddMember("Checked", isChecked(), _allocator);
+	
 	// Add settings
 	root.AddMember(RESTORABLE_NAME_SETTINGS, settings, _allocator);
 	_array.PushBack(root, _allocator);

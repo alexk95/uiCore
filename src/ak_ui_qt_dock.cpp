@@ -63,13 +63,12 @@ void ak::ui::qt::dock::addObjectSettingsToValue(
 
 	// Add alias
 	std::string str(my_alias.toStdString());
-	rapidjson::Document::StringRefType nAlias(str.c_str());
+	rapidjson::Value nAlias(str.c_str(), _allocator);
 	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
 
 	// Add object type
-	QString objType = ak::ui::core::toQString(my_objectType);
-	std::string str2(objType.toStdString());
-	rapidjson::Document::StringRefType nType(str2.c_str());
+	str = ak::ui::core::toQString(my_objectType).toStdString();
+	rapidjson::Value nType(str.c_str(), _allocator);
 	root.AddMember(RESTORABLE_NAME_TYPE, nType, _allocator);
 
 	// Create settings
@@ -80,8 +79,8 @@ void ak::ui::qt::dock::addObjectSettingsToValue(
 	settings.AddMember("Size.Height", height(), _allocator);
 	
 	std::string loc = ak::ui::core::toQString(my_location).toStdString();
-	rapidjson::Document::StringRefType location(loc.c_str());
-	settings.AddMember("DockLocation", location, _allocator);
+	rapidjson::Value nLocation(loc.c_str(), _allocator);
+	settings.AddMember("DockLocation", nLocation, _allocator);
 
 	// Add settings
 	root.AddMember(RESTORABLE_NAME_SETTINGS, settings, _allocator);
