@@ -385,6 +385,18 @@ std::string ak::uiAPI::getSettingsJSON(void) {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getSettingsJSON()"); }
 }
 
+void ak::uiAPI::setupSettings(
+	const char *											_json
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->setupSettings(_json);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setupSettings()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setupSettings()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setupSettings()"); }
+}
+
 // ###############################################################################################################################################
 
 ak::UID ak::uiAPI::registerUidNotifier(

@@ -205,6 +205,13 @@ namespace ak {
 		//! @brief Will create and return a JSON string representing the UI
 		UICORE_API std::string getSettingsJSON(void);
 
+		//! @brief Will setup the UI with the settings provided in the settings JSON string
+		//! @param _json The JSON string containing the settings
+		//! @throw ak::Exception on syntax mismatch
+		UICORE_API void setupSettings(
+			const char *											_json
+		);
+
 		// ###############################################################################################################################################
 		
 		// message functions

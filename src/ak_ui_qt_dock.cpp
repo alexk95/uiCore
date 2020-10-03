@@ -75,8 +75,8 @@ void ak::ui::qt::dock::addObjectSettingsToValue(
 	rapidjson::Value settings;
 	settings.SetObject();
 
-	settings.AddMember("Size.Width", width(), _allocator);
-	settings.AddMember("Size.Height", height(), _allocator);
+	settings.AddMember(RESTORABLE_CFG_SIZE_X, size().width(), _allocator);
+	settings.AddMember(RESTORABLE_CFG_SIZE_Y, size().height(), _allocator);
 	
 	std::string loc = ak::ui::core::toQString(my_location).toStdString();
 	rapidjson::Value nLocation(loc.c_str(), _allocator);

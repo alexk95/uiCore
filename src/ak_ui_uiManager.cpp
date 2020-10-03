@@ -218,6 +218,7 @@ void ak::ui::uiManager::addDock(
 			assert(0); // Not implemented yet
 			break;
 		}
+		//my_window->resizeDocks({ _dock }, { 0 }, Qt::Horizontal);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::addDock()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::addDock()"); }
@@ -234,17 +235,18 @@ void ak::ui::uiManager::tabifyDock(
 		if (d1->objectType() != ak::ui::core::objectType::oDock) { throw ak::Exception("Invalid object type, expected dock", "Check object type"); }
 		ak::ui::qt::dock * dock1 = nullptr;
 		dock1 = dynamic_cast<ak::ui::qt::dock *>(d1);
-		if (dock1 == nullptr) { throw ak::Exception("Cast failed", "Cast dock 1"); }
+		assert(dock1 != nullptr); // Cast failed
 
 		// Get and cast dock 2
 		ak::ui::core::aObject * d2 = my_objectManager->obj_get(_secondDockUid);
 		if (d2->objectType() != ak::ui::core::objectType::oDock) { throw ak::Exception("Invalid object type, expected dock", "Check object type"); }
 		ak::ui::qt::dock * dock2 = nullptr;
 		dock2 = dynamic_cast<ak::ui::qt::dock *>(d2);
-		if (dock2 == nullptr) { throw ak::Exception("Cast failed", "Cast dock 2"); }
+		assert(dock2 != nullptr); // Cast failed
 		
 		// tabify dock
 		my_window->tabifyDockWidget(dock1, dock2);
+		//my_window->resizeDocks({ dock2 }, { 0 }, Qt::Horizontal);
 		dock1->setFocus();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::tabifyDock()"); }

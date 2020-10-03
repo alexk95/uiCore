@@ -14,6 +14,7 @@
 #include <ak_ui_core.h>			// dockLocation type
 
 #include <qstring.h>
+
 #include <vector>
 
 #define TXT_Bright "Bright mode"
@@ -61,9 +62,11 @@ Example::Example()
 			my_ui.ttb_aExit = ak::uiAPI::createAction(my_uid, "Exit", "ExitAppBlue", "32");
 			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
 			my_ui.ttb_aTest = ak::uiAPI::createAction(my_uid, "Test", "Test", "32");
+			my_ui.ttb_aTest2 = ak::uiAPI::createAction(my_uid, "Test 2", "Test", "32");
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aExit);
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aColorStyle);
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aTest);
+			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aTest2);
 
 			// Create docks
 			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
@@ -83,6 +86,10 @@ Example::Example()
 			my_ui.tester = ak::uiAPI::createTextEdit(my_uid);
 			my_ui.table1 = ak::uiAPI::createTable(my_uid, 2, 2);
 			my_ui.table2 = ak::uiAPI::createTable(my_uid, 3, 3);
+			//ak::uiAPI::obj::setAlias(my_ui.treeWidget, "Widget.Tree");
+			//ak::uiAPI::obj::setAlias(my_ui.propertiesWidget, "Widget.Properties");
+			//ak::uiAPI::obj::setAlias(my_ui.outputWidget, "Widget.Output");
+			//ak::uiAPI::obj::setAlias(my_ui.tester, "Widget.Tester");
 
 			// Setup widgets
 			ak::uiAPI::obj::setAutoSelectAndDeselectChildrenEnabled(my_ui.treeWidget, true);
@@ -91,6 +98,7 @@ Example::Example()
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
 			ak::uiAPI::obj::setTabLocation(my_ui.tabViewWidget, ak::ui::core::tabLocation::tab_locationDown);
+			ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, false);
 
 			// Set widgets to docks
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockOutput, my_ui.outputWidget);
@@ -136,6 +144,7 @@ Example::Example()
 			ak::uiAPI::registerUidNotifier(my_ui.ttb_aColorStyle, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.tester, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.ttb_aTest, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.ttb_aTest2, my_notifier);
 
 			// Create default data
 			defaultData();
@@ -203,10 +212,12 @@ void Example::eventCallback(
 				my_notifier->enable();
 			}
 			else if (_sender == my_ui.ttb_aTest) {
-
-				std::string json = ak::uiAPI::getSettingsJSON();
-
-				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, json.c_str(), "JSON");
+				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);
+				my_jSON = ak::uiAPI::getSettingsJSON();
+				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, my_jSON.c_str(), "JSON");
+			}
+			else if (_sender == my_ui.ttb_aTest2) {
+				ak::uiAPI::setupSettings(my_jSON.c_str());
 			}
 		}
 		else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {

@@ -13,6 +13,8 @@
 #include <ak_core.h>					// eventType type
 #include <ak_ui_color.h>
 
+#include <string>
+
 // Forward declaration
 class ExampleNotifier;
 
@@ -62,9 +64,11 @@ private:
 		ak::UID				dockTester;			//! The UID of the test dock
 		ak::UID				tester;				//! The UId of the tester
 		ak::UID				ttb_aTest;
+		ak::UID				ttb_aTest2;
 	};
 	structUi					my_ui;			//! Contains all UIDs of the UI
 	ak::UID						my_uid;			//! The UID of this application
 	ExampleNotifier *			my_notifier;	//! The notifier that receives the callback messages
 	ak::ui::color				my_settingColor;
+	std::string					my_jSON;
 };

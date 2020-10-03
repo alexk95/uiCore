@@ -22,6 +22,7 @@ namespace ak {
 
 		// Forward declaration
 		class colorStyle;
+		namespace qt { class dock; }
 
 		namespace core {
 
@@ -50,7 +51,19 @@ namespace ak {
 				//! @brief Returns true the object is derived from aWidget
 				virtual bool isWidgetType(void) const override;
 
+				//! @brief Will set the dock this widget is displayed in
+				void setParentDock(
+					ak::ui::qt::dock *						_dock
+				);
+
+				//! @brief Will return the parent dock this widget is displayed in
+				ak::ui::qt::dock * parentDock(void) const;
+
+			protected:
+				ak::ui::qt::dock *				my_parentDock;
+
 			private:
+
 				// Block default constructor
 				aWidget() = delete;
 

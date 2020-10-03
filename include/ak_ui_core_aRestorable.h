@@ -21,6 +21,11 @@
 #define RESTORABLE_NAME_ALIAS "Alias"
 #define RESTORABLE_NAME_TYPE "ObjectType"
 #define RESTORABLE_NAME_SETTINGS "Settings"
+#define RESTORABLE_UI_SETTINGS "UI.Settings"
+
+#define RESTORABLE_CFG_SIZE_X "Size.Width"
+#define RESTORABLE_CFG_SIZE_Y "Size.Height"
+
 
 namespace ak {
 	namespace ui {

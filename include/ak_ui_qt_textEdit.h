@@ -15,6 +15,7 @@
 // AK header
 #include <ak_ui_core.h>				// Key type
 #include <ak_ui_core_aWidget.h>		// base class
+#include <ak_ui_core_aRestorable.h>	// base class
 
 // Forward declaration
 class QKeyEvent;
@@ -27,8 +28,11 @@ namespace ak {
 
 		namespace qt {
 
+			// Forward declaration
+			class dock;
+
 			//! @brief This class combines the functionallity of a QTextEdit and a ak::ui::core::aWidget
-			class textEdit : public QTextEdit, public ak::ui::core::aWidget
+			class textEdit : public QTextEdit, public ak::ui::core::aWidget, public ak::ui::core::aRestorable
 			{
 				Q_OBJECT
 			public:
@@ -66,6 +70,16 @@ namespace ak {
 					ak::ui::colorStyle *			_colorStyle
 				) override;
 
+				//! @brief Will create a rapidjson::Value representing this objects current state
+				//! The value looks like this:
+				//!	     { "Alias":"[ObjectAlias]","Type":"[ObjectType]","Settings":{...} }
+				virtual void addObjectSettingsToValue(
+					rapidjson::Value &						_array,
+					rapidjson::Document::AllocatorType &	_allocator
+				) override;
+
+				// #######################################################################################################
+
 				//! @brief Will set the auto scroll to bottom option.
 				//! @param _autoScroll If true, the object will automatically scroll to the bottom on change
 				void setAutoScrollToBottom(
@@ -84,7 +98,7 @@ namespace ak {
 
 			private:
 				bool							my_autoScrollToBottom;		//! If true, the textbox will automatically scroll down on text change
-
+				
 				textEdit(const textEdit &) = delete;
 				textEdit & operator = (const textEdit &) = delete;
 

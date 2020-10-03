@@ -624,6 +624,7 @@ void ak::ui::objectManager::obj_setCentralWidget(
 			obj = dynamic_cast<ak::ui::qt::dock *>(itm->second);
 			if (obj == nullptr) { throw ak::Exception("Cast failed", "Cast dock"); }
 			obj->setWidget(widget->widget());
+			widget->setParentDock(obj);
 		}
 		break;
 		case ak::ui::core::objectType::oMainWindow:
@@ -3066,6 +3067,7 @@ void ak::ui::objectManager::addDock(
 
 		// Add dock
 		ui->addDock(d, _dockLocation);
+		
 
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::addDock()"); }
@@ -3477,7 +3479,7 @@ std::string ak::ui::objectManager::getSettingsJSON(void) {
 		}
 
 		// Create JSON string
-		doc.AddMember("UI.Settings", items, allocator);
+		doc.AddMember(RESTORABLE_UI_SETTINGS, items, allocator);
 
 		rapidjson::StringBuffer buffer;
 		buffer.Clear();
@@ -3492,6 +3494,133 @@ std::string ak::ui::objectManager::getSettingsJSON(void) {
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::getSettingsJSON()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::getSettingsJSON()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::getSettingsJSON()"); }
+}
+
+void ak::ui::objectManager::setupSettings(
+	const char *										_json
+) {
+	try {
+		rapidjson::Document doc;
+		doc.Parse(_json);
+		
+		// Check document
+		if (!doc.HasMember(RESTORABLE_UI_SETTINGS)) {
+			throw ak::Exception("JSON does not contain UI settings", "Check document settings");
+		}
+		if (!doc[RESTORABLE_UI_SETTINGS].IsArray()) {
+			throw ak::Exception("UI settings are not an array type", "Check document settings");
+		}
+		rapidjson::Value UIsettings = doc[RESTORABLE_UI_SETTINGS].GetArray();
+
+		// Go trough all items in the array
+		for (rapidjson::Value::ConstValueIterator itm = UIsettings.Begin(); itm != UIsettings.End(); itm++) {
+			const rapidjson::Value & obj = *itm;
+			assert(obj.IsObject());								// Stored item is not an object
+			assert(obj.HasMember(RESTORABLE_NAME_ALIAS));			// Does not contain name
+			assert(obj.HasMember(RESTORABLE_NAME_TYPE));			// Does not contain type
+			assert(obj.HasMember(RESTORABLE_NAME_SETTINGS));		// Does not contain settings
+			assert(obj[RESTORABLE_NAME_ALIAS].IsString());			// Alias is not a string
+			assert(obj[RESTORABLE_NAME_TYPE].IsString());			// Type is not a string
+			assert(obj[RESTORABLE_NAME_SETTINGS].IsObject());		// Settins is not an object
+
+			QString objAlias = QString(obj[RESTORABLE_NAME_ALIAS].GetString());
+			QString objType = QString(obj[RESTORABLE_NAME_TYPE].GetString());
+
+			// Check if an object with the provided alias exist
+			my_mapAliasesIterator oAlias = my_mapAliases.find(objAlias);
+			if (oAlias == my_mapAliases.end()) {
+				QString msg("An object with the alias \"");
+				msg.append(objAlias);
+				msg.append("\" does not exist");
+				throw ak::Exception(msg.toStdString(), "Check object alias");
+			}
+			
+			// Get the object
+			my_mapObjectsIterator object = my_mapObjects.find(oAlias->second);
+			assert(object != my_mapObjects.end()); // Registered alias is not stored
+			
+			// Check the object type
+			if (ak::ui::core::toQString(object->second->objectType()) != objType) {
+				QString msg("The type of the object with the alias \"");
+				msg.append(objAlias);
+				msg.append("\" does not match the type provided in the settings string");
+				throw ak::Exception(msg.toStdString(), "Check object type");
+			}
+			
+			auto settings = obj[RESTORABLE_NAME_SETTINGS].GetObject();
+			
+			// ###########################################################################################
+
+			// Filter the type
+
+			// Dock
+			if (objType == ak::ui::core::toQString(ak::ui::core::oDock)) {
+				ak::ui::qt::dock * actualObject = nullptr;
+				actualObject = dynamic_cast<ak::ui::qt::dock *>(object->second);
+				assert(actualObject != nullptr); // Cast failed
+					
+				if (settings.HasMember(RESTORABLE_CFG_SIZE_X)) {
+					if (!settings.HasMember(RESTORABLE_CFG_SIZE_Y)) {
+						QString msg("The size setting for the object with the alias \"");
+						msg.append(objAlias);
+						msg.append("\" does only contain one dimension");
+						throw ak::Exception(msg.toStdString(), "Check size setting");
+					}
+					assert(settings[RESTORABLE_CFG_SIZE_X].IsInt());	// Value type mismatch
+					assert(settings[RESTORABLE_CFG_SIZE_Y].IsInt());	// Value type mismatch
+					actualObject->resize(QSize(settings[RESTORABLE_CFG_SIZE_X].GetInt(), settings[RESTORABLE_CFG_SIZE_Y].GetInt()));
+				}
+				else if (settings.HasMember(RESTORABLE_CFG_SIZE_Y)) {
+					QString msg("The size setting for the object with the alias \"");
+					msg.append(objAlias);
+					msg.append("\" does only contain one dimension");
+					throw ak::Exception(msg.toStdString(), "Check size setting");
+				}
+			}
+			// CheckBox
+			else if (objType == ak::ui::core::toQString(ak::ui::core::oCheckBox)) {
+				ak::ui::qt::checkBox * actualObject = nullptr;
+				actualObject = dynamic_cast<ak::ui::qt::checkBox *>(object->second);
+				assert(actualObject != nullptr); // Cast failed
+
+			}
+			// Text edit
+			else if (objType == ak::ui::core::toQString(ak::ui::core::oTextEdit)) {
+				ak::ui::qt::textEdit * actualObject = nullptr;
+				actualObject = dynamic_cast<ak::ui::qt::textEdit *>(object->second);
+				assert(actualObject != nullptr); // Cast failed
+				
+				if (settings.HasMember(RESTORABLE_CFG_SIZE_X)) {
+					if (!settings.HasMember(RESTORABLE_CFG_SIZE_Y)) {
+						QString msg("The size setting for the object with the alias \"");
+						msg.append(objAlias);
+						msg.append("\" does only contain one dimension");
+						throw ak::Exception(msg.toStdString(), "Check size setting");
+					}
+					assert(settings[RESTORABLE_CFG_SIZE_X].IsInt());	// Value type mismatch
+					assert(settings[RESTORABLE_CFG_SIZE_Y].IsInt());	// Value type mismatch
+					actualObject->resize(QSize(settings[RESTORABLE_CFG_SIZE_X].GetInt(), settings[RESTORABLE_CFG_SIZE_Y].GetInt()));
+					ak::ui::qt::dock * parentDock = actualObject->parentDock();
+					if (parentDock != nullptr) { parentDock->adjustSize(); }
+				}
+				else if (settings.HasMember(RESTORABLE_CFG_SIZE_Y)) {
+					QString msg("The size setting for the object with the alias \"");
+					msg.append(objAlias);
+					msg.append("\" does only contain one dimension");
+					throw ak::Exception(msg.toStdString(), "Check size setting");
+				}
+			}
+			else {
+				assert(0); // Not implemented loading function
+			}
+
+		}
+		
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setupSettings()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setupSettings()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setupSettings()"); }
 }
 
 // ###############################################################################################################################################

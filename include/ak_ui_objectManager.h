@@ -1075,6 +1075,13 @@ namespace ak {
 			//! @brief Will return the JSON settings string of all objects that have an alias set
 			std::string getSettingsJSON(void);
 
+			//! @brief Will setup the UI with the settings provided in the settings JSON string
+			//! @param _json The JSON string containing the settings
+			//! @throw ak::Exception on syntax mismatch
+			void setupSettings(
+				const char *										_json
+			);
+
 		private:
 
 			objectManager() = delete;
