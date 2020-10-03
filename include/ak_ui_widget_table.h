@@ -186,6 +186,18 @@ namespace ak {
 				//! @brief clear all cell content and delete all rows and columns
 				void clear(void);
 
+				//! @brief Will set the enabled state of this table
+				//! @param _enabled If true it will be enabled
+				void setEnabled(
+					bool															_enabled
+				);
+
+				//! @brief Will set the visible state of this table
+				//! @param _enabled If true it will be visible
+				void setVisible(
+					bool															_visible
+				);
+
 				// ##############################################################################################################
 				// Information
 
@@ -255,6 +267,12 @@ namespace ak {
 					int																_row,
 					int																_column
 				);
+
+				//! @brief Will return the enabled state of this table
+				bool enabled(void);
+
+				//! @brief Will return the visible state of this table
+				bool visible(void);
 
 			private:
 				ak::ui::qt::table *													my_table;							//! The table this object is managing

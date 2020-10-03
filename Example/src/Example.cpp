@@ -212,6 +212,20 @@ void Example::eventCallback(
 				my_notifier->enable();
 			}
 			else if (_sender == my_ui.ttb_aTest) {
+
+				std::vector<ak::ID> v;
+
+				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1A"));
+				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1B"));
+				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1"));
+				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A3"));
+				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A3|A3B"));
+
+				ak::uiAPI::obj::deleteItems(my_ui.treeWidget, v);
+				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, false);
+
+				return;
+
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);
 				my_jSON = ak::uiAPI::getSettingsJSON();
 				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, my_jSON.c_str(), "JSON");

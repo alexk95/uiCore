@@ -601,6 +601,11 @@ namespace ak {
 				bool											_enabled = true
 			);
 
+			void obj_setVisible(
+				ak::UID											_objectUid,
+				bool											_visible = true
+			);
+
 			//! @brief Will clear the items of the provided object
 			//! @param _objectUid The UID of the object to clear its items
 			//! @throw ak::Exception if the provided object UID is invalid

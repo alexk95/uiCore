@@ -1124,6 +1124,14 @@ namespace ak {
 				bool											_enabled = true
 			);
 
+			//! @brief Shows or hides the provided object
+			//! @param _objectUid The UID of the object
+			//! @param _visible if true, the object will be visible
+			UICORE_API void setVisible(
+				ak::UID											_objectUid,
+				bool											_visible = true
+			);
+
 			//! @brief Will clear the items of the provided object
 			//! @param _objectUid The UID of the object to clear its items
 			//! @throw ak::Exception if the provided object UID is invalid

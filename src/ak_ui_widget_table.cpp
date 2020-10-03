@@ -341,6 +341,14 @@ void ak::ui::widget::table::clear(void) {
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::table::clear()"); }
 }
 
+void ak::ui::widget::table::setEnabled(
+	bool															_enabled
+) { my_table->setEnabled(_enabled); }
+
+void ak::ui::widget::table::setVisible(
+	bool															_visible
+) { my_table->setVisible(_visible); }
+
 // ##############################################################################################################
 
 // Information
@@ -495,3 +503,7 @@ void ak::ui::widget::table::setCellWidget(
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::table::setCellWidget()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::table::setCellWidget()"); }
 }
+
+bool ak::ui::widget::table::enabled(void) { return my_table->isEnabled(); }
+
+bool ak::ui::widget::table::visible(void) { return my_table->isVisible(); }

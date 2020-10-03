@@ -112,6 +112,18 @@ namespace ak {
 					const QString &						_text
 				);
 
+				//! @brief Will set the enabled state of this tabView
+				//! @param _enabled If true it will be enabled
+				void setEnabled(
+					bool															_enabled
+				);
+
+				//! @brief Will set the visible state of this tabView
+				//! @param _enabled If true it will be visible
+				void setVisible(
+					bool															_visible
+				);
+
 				// #######################################################################################################
 
 				// Getter

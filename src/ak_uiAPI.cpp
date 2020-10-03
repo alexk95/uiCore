@@ -1597,6 +1597,19 @@ void ak::uiAPI::obj::setEnabled(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setEnabled()"); }
 }
 
+void ak::uiAPI::obj::setVisible(
+	ak::UID												_objectUid,
+	bool												_visible
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_setVisible(_objectUid, _visible);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setVisible()"); }
+}
+
 void ak::uiAPI::obj::clear(
 	ak::UID												_objectUid
 ) {

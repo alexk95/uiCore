@@ -81,6 +81,11 @@ namespace ak {
 					bool						_enabled = true
 				);
 
+				//! @brief Will set the visible state of this colorEditButton
+				void setVisible(
+					bool						_visible = true
+				);
+
 				//! @brief Will return the enabled state of this colorEditButton
 				bool enabled() const;
 

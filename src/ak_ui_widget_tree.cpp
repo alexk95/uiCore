@@ -280,6 +280,10 @@ void ak::ui::widget::tree::setEnabled(
 	bool							_enabled
 ) { my_tree->setEnabled(_enabled); }
 
+void ak::ui::widget::tree::setVisible(
+	bool							_visible
+) { my_tree->setVisible(_visible); }
+
 void ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled(
 	bool							_autoExpand
 ) {
@@ -345,22 +349,26 @@ void ak::ui::widget::tree::deleteItems(
 	const std::vector<ak::ID> &				_items
 ) {
 	try {
-		for (auto id : _items) {
-			my_itemsIterator itm = my_items.find(id);
-			if (itm != my_items.end()) {
-				qt::treeItem * item = itm->second;
-				for (auto cId : item->allChildsIDs()) { my_items.erase(cId); }
-				if (item->parentId() == ak::invalidID) {
-					my_tree->removeTopLevelItem(item->id());
+		try {
+			my_treeSignalLinker->disable();
+			for (auto id : _items) {
+				my_itemsIterator itm = my_items.find(id);
+				if (itm != my_items.end()) {
+					qt::treeItem * item = itm->second;
+					for (auto cId : item->allChildsIDs()) { my_items.erase(cId); }
+					if (item->parentId() == ak::invalidID) {
+						my_tree->removeTopLevelItem(item->id());
+					}
+					delete item;
+					my_items.erase(id);
 				}
-				delete item;
-				my_items.erase(id);
 			}
+			selectionChangedEvent(true);
 		}
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::deleteItems()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::deleteItems()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::deleteItems()"); }
+		catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::deleteItems()"); }
+		catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::deleteItems()"); }
+		catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::deleteItems()"); }
+	} catch (const ak::Exception & e) { my_treeSignalLinker->enable(); throw e; }
 }
 
 // ###########################################################################################################################

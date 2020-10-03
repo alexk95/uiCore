@@ -146,6 +146,11 @@ namespace ak {
 					bool							_enabled = true
 				);
 
+				//! @brief Will set the visible state of this tree
+				void setVisible(
+					bool							_visible = true
+				);
+
 				//! @brief Will set the auto expand selected items enabled option
 				//! @param _autoExpand If true, all parent items of a selected item will be expanded so the selected item will be visible
 				void setAutoExpandSelectedItemsEnabled(

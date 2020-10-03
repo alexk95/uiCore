@@ -193,7 +193,7 @@ std::list<QString> ak::ui::qt::treeItem::getItemPath() {
 QString ak::ui::qt::treeItem::getItemPathString(
 	char									_delimiter
 ) {
-	if (my_parent == nullptr) {
+	if (my_parent != nullptr) {
 		QString ret(my_parent->getItemPathString(_delimiter));
 		ret.append(_delimiter);
 		ret.append(text(0));

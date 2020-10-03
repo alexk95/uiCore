@@ -145,6 +145,10 @@ void ak::ui::widget::colorEditButton::setEnabled(
 	bool											_enabled
 ) { my_button->setEnabled(_enabled); }
 
+void ak::ui::widget::colorEditButton::setVisible(
+	bool											_visible
+) { my_button->setVisible(_visible); }
+
 bool ak::ui::widget::colorEditButton::enabled() const { return my_button->isEnabled(); }
 
 ak::ui::color ak::ui::widget::colorEditButton::color(void) const { return my_color; }

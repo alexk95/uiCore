@@ -150,6 +150,14 @@ void ak::ui::widget::tabView::setTabText(
 	my_tabView->setTabText(_tab, _text);
 }
 
+void ak::ui::widget::tabView::setEnabled(
+	bool															_enabled
+) { my_tabView->setEnabled(_enabled); }
+
+void ak::ui::widget::tabView::setVisible(
+	bool															_visible
+) { my_tabView->setVisible(_visible); }
+
 // #######################################################################################################
 
 // Getter
