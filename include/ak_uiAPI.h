@@ -1299,6 +1299,28 @@ namespace ak {
 				const QString &									_text
 			);
 
+			//! @brief Will set the enabled state of the specified item at the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item
+			//! @param _enabled The enabld state
+			//! @throw ak::Exception if the specified UID or ID is invalid
+			UICORE_API void setEnabled(
+				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				bool												_enabled = true
+			);
+
+			//! @brief Will set the enabled state of the specified item at the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item
+			//! @param _visible The enabld state
+			//! @throw ak::Exception if the specified UID or ID is invalid
+			UICORE_API void setVisible(
+				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				bool												_visible = true
+			);
+
 			// ###############################################################################################################################################
 
 			// Item getter

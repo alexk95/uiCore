@@ -70,8 +70,8 @@ Example::Example()
 
 			// Create docks
 			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
-			my_ui.dockProperties = ak::uiAPI::createDock(my_uid, "Properties");
 			my_ui.dockTree = ak::uiAPI::createDock(my_uid, "Tree");
+			my_ui.dockProperties = ak::uiAPI::createDock(my_uid, "Properties");
 			my_ui.dockTester = ak::uiAPI::createDock(my_uid, "Tester");
 			ak::uiAPI::obj::setAlias(my_ui.dockOutput, "Dock.Output");
 			ak::uiAPI::obj::setAlias(my_ui.dockProperties, "Dock.Properties");
@@ -122,14 +122,14 @@ Example::Example()
 			);
 			ak::uiAPI::addDock(
 				my_ui.mainWindow,
-				my_ui.dockProperties,
-				ak::ui::core::dock_dockLeft
-			);
-
-			ak::uiAPI::addDock(
-				my_ui.mainWindow,
 				my_ui.dockTester,
 				ak::ui::core::dock_dockRight
+			);
+
+			ak::uiAPI::tabifyDock(
+				my_ui.mainWindow,
+				my_ui.dockTree,
+				my_ui.dockProperties
 			);
 			
 			// Create my notifier

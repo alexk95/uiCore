@@ -386,7 +386,7 @@ std::string ak::uiAPI::getSettingsJSON(void) {
 }
 
 void ak::uiAPI::setupSettings(
-	const char *											_json
+	const char *										_json
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -414,8 +414,8 @@ ak::UID ak::uiAPI::registerUidNotifier(
 }
 
 ak::UID ak::uiAPI::registerEventTypeNotifier(
-	ak::core::eventType										_event,
-	ak::notifier *											_notifier
+	ak::core::eventType									_event,
+	ak::notifier *										_notifier
 ) {
 	try
 	{
@@ -428,7 +428,7 @@ ak::UID ak::uiAPI::registerEventTypeNotifier(
 }
 
 ak::UID ak::uiAPI::registerAllMessagesNotifier(
-	ak::notifier *											_notifier
+	ak::notifier *										_notifier
 ) {
 	try
 	{
@@ -456,7 +456,7 @@ void ak::uiAPI::sendMessage(
 }
 
 void ak::uiAPI::setSurfaceFormatDefaultSamplesCount(
-	int														_count
+	int													_count
 ) {
 	QSurfaceFormat * format = my_apiManager.getDefaultSurfaceFormat();
 	format->setSamples(_count);
@@ -850,7 +850,7 @@ ak::UID ak::uiAPI::createTextEdit(
 }
 
 ak::UID ak::uiAPI::createTimer(
-	ak::UID													_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		// Get manager
@@ -1790,7 +1790,7 @@ int ak::uiAPI::obj::getFocusedTab(
 }
 
 bool ak::uiAPI::obj::getAutoExpandSelectedItems(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
@@ -1858,6 +1858,34 @@ void ak::uiAPI::itm::setText(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setText()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setText()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setText()"); }
+}
+
+void ak::uiAPI::itm::setEnabled(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	bool												_enabled
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_setEnabled(_objectUid, _itemId, _enabled);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setEnabled()"); }
+}
+
+void ak::uiAPI::itm::setVisible(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	bool												_visible
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_setVisible(_objectUid, _itemId, _visible);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setVisible()"); }
 }
 
 // ###############################################################################################################################################

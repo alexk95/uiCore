@@ -247,7 +247,7 @@ void ak::ui::uiManager::tabifyDock(
 		// tabify dock
 		my_window->tabifyDockWidget(dock1, dock2);
 		//my_window->resizeDocks({ dock2 }, { 0 }, Qt::Horizontal);
-		dock1->setFocus();
+		dock1->raise();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::tabifyDock()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::tabifyDock()"); }

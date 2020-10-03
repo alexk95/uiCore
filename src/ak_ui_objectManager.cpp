@@ -52,10 +52,10 @@
 #include <rapidjson/stringbuffer.h>
 
 ak::ui::objectManager::objectManager(
-	ak::messenger *								_messenger,
-	ak::uidManager *							_uidManager,
-	ak::ui::iconManager *						_iconManager,
-	ak::ui::colorStyle *						_colorStyle
+	ak::messenger *										_messenger,
+	ak::uidManager *									_uidManager,
+	ak::ui::iconManager *								_iconManager,
+	ak::ui::colorStyle *								_colorStyle
 )
 	: my_colorStyle(nullptr),
 	my_messenger(nullptr),
@@ -133,8 +133,8 @@ ak::UID ak::ui::objectManager::createAction(
 }
 
 ak::UID ak::ui::objectManager::createCheckBox(
-	ak::UID								_creatorUid,
-	const QString &									_text
+	ak::UID												_creatorUid,
+	const QString &										_text
 ) {
 	try {
 		// Create object
@@ -154,7 +154,7 @@ ak::UID ak::ui::objectManager::createCheckBox(
 }
 
 ak::UID ak::ui::objectManager::createColorEditButton(
-	ak::UID									_creatorUid,
+	ak::UID												_creatorUid,
 	const ak::ui::color &								_color,
 	const QString &										_textOverride
 ) {
@@ -175,7 +175,7 @@ ak::UID ak::ui::objectManager::createColorEditButton(
 }
 
 ak::UID ak::ui::objectManager::createComboBox(
-	ak::UID									_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		// Create object
@@ -195,7 +195,7 @@ ak::UID ak::ui::objectManager::createComboBox(
 }
 
 ak::UID ak::ui::objectManager::createComboButton(
-	ak::UID									_creatorUid,
+	ak::UID												_creatorUid,
 	const QString &										_initialText,
 	const std::vector<ak::ui::qt::comboButtonItem> &	_possibleSelection
 ) {
@@ -218,8 +218,8 @@ ak::UID ak::ui::objectManager::createComboButton(
 }
 
 ak::UID ak::ui::objectManager::createComboButtonItem(
-	ak::UID								_creatorUid,
-	const QString &									_text
+	ak::UID												_creatorUid,
+	const QString &										_text
 ) {
 	try {
 		// Create object
@@ -238,9 +238,9 @@ ak::UID ak::ui::objectManager::createComboButtonItem(
 }
 
 ak::UID ak::ui::objectManager::createComboButtonItem(
-	ak::UID								_creatorUid,
-	const QIcon &									_icon,
-	const QString &									_text
+	ak::UID												_creatorUid,
+	const QIcon &										_icon,
+	const QString &										_text
 ) {
 	try {
 		// Create object
@@ -259,8 +259,8 @@ ak::UID ak::ui::objectManager::createComboButtonItem(
 }
 
 ak::UID ak::ui::objectManager::createDock(
-	ak::UID								_creatorUid,
-	const QString &									_text
+	ak::UID												_creatorUid,
+	const QString &										_text
 ) {
 	try {
 		// Create object
@@ -280,7 +280,7 @@ ak::UID ak::ui::objectManager::createDock(
 }
 
 ak::UID ak::ui::objectManager::createPropertyGrid(
-	ak::UID									_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		// Create object
@@ -299,8 +299,8 @@ ak::UID ak::ui::objectManager::createPropertyGrid(
 }
 
 ak::UID ak::ui::objectManager::createPushButton(
-	ak::UID								_creatorUid,
-	const QString &									_text
+	ak::UID												_creatorUid,
+	const QString &										_text
 ) {
 	try {
 		// Create object
@@ -320,9 +320,9 @@ ak::UID ak::ui::objectManager::createPushButton(
 }
 
 ak::UID ak::ui::objectManager::createPushButton(
-	ak::UID								_creatorUid,
-	const QIcon &									_icon,
-	const QString &									_text
+	ak::UID												_creatorUid,
+	const QIcon &										_icon,
+	const QString &										_text
 ) {
 	try {
 		// Create object
@@ -342,9 +342,9 @@ ak::UID ak::ui::objectManager::createPushButton(
 }
 
 ak::UID ak::ui::objectManager::createTable(
-	ak::UID								_creatorUid,
-	int												_rows,
-	int												_columns
+	ak::UID												_creatorUid,
+	int													_rows,
+	int													_columns
 ) {
 	try {
 		// Create object
@@ -363,8 +363,8 @@ ak::UID ak::ui::objectManager::createTable(
 }
 
 ak::UID ak::ui::objectManager::createTextEdit(
-	ak::UID								_creatorUid,
-	const QString &									_initialText
+	ak::UID												_creatorUid,
+	const QString &										_initialText
 ) {
 	try {
 		// Create object
@@ -403,7 +403,7 @@ ak::UID ak::ui::objectManager::createTimer(
 }
 
 ak::UID ak::ui::objectManager::createTree(
-	ak::UID									_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		// Create object
@@ -422,7 +422,7 @@ ak::UID ak::ui::objectManager::createTree(
 }
 
 ak::UID ak::ui::objectManager::createUiManager(
-	ak::UID								_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		// Create new ui manager
@@ -457,9 +457,9 @@ ak::UID ak::ui::objectManager::createTabView(
 }
 
 ak::UID ak::ui::objectManager::createTabToolBarSubContainer(
-	ak::UID								_creatorUid,
-	ak::UID								_parentUid,
-	const QString &									_text
+	ak::UID												_creatorUid,
+	ak::UID												_parentUid,
+	const QString &										_text
 ) {
 	try {
 		// Find parent object
@@ -496,9 +496,9 @@ ak::UID ak::ui::objectManager::createTabToolBarSubContainer(
 }
 
 ak::UID ak::ui::objectManager::createTabToolBarPage(
-	ak::UID								_creatorUid,
-	ak::UID								_uiManagerUid,
-	const QString &									_text
+	ak::UID												_creatorUid,
+	ak::UID												_uiManagerUid,
+	const QString &										_text
 ) {
 	try {
 		// Find object
@@ -566,8 +566,8 @@ void ak::ui::objectManager::obj_setAlias(
 }
 
 void ak::ui::objectManager::obj_addObjectToContainer(
-	ak::UID								_parentUid,
-	ak::UID								_objectUid
+	ak::UID												_parentUid,
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find parent object
@@ -602,8 +602,8 @@ void ak::ui::objectManager::obj_addObjectToContainer(
 }
 
 void ak::ui::objectManager::obj_setCentralWidget(
-	ak::UID								_parentUid,
-	ak::UID								_objectUid
+	ak::UID												_parentUid,
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find parent object
@@ -646,8 +646,8 @@ void ak::ui::objectManager::obj_setCentralWidget(
 }
 
 void ak::ui::objectManager::obj_setCentralWidget(
-	ak::UID									_parentUid,
-	QWidget *								_widget
+	ak::UID												_parentUid,
+	QWidget *											_widget
 ) {
 	try {
 		// Find parent object
@@ -684,7 +684,7 @@ void ak::ui::objectManager::obj_setCentralWidget(
 }
 
 void ak::ui::objectManager::obj_setText(
-	ak::UID									_objectUid,
+	ak::UID												_objectUid,
 	const QString &										_text
 ) {
 	try {
@@ -783,7 +783,7 @@ void ak::ui::objectManager::obj_setText(
 }
 
 void ak::ui::objectManager::obj_setChecked(
-	ak::UID									_objectUid,
+	ak::UID												_objectUid,
 	bool												_checked
 ) {
 	try {
@@ -810,7 +810,7 @@ void ak::ui::objectManager::obj_setChecked(
 }
 
 void ak::ui::objectManager::obj_setTristate(
-	ak::UID									_objectUid,
+	ak::UID												_objectUid,
 	bool												_isTristate
 ) {
 	try {
@@ -837,7 +837,7 @@ void ak::ui::objectManager::obj_setTristate(
 }
 
 void ak::ui::objectManager::obj_setFilterVisible(
-	ak::UID									_objectUid,
+	ak::UID												_objectUid,
 	bool												_vis
 ) {
 	try {
@@ -919,7 +919,7 @@ void ak::ui::objectManager::obj_setFilterRefreshOnChange(
 }
 
 void ak::ui::objectManager::obj_setItems(
-	ak::UID									_objectUid,
+	ak::UID												_objectUid,
 	const std::vector<ak::ui::qt::comboButtonItem> &	_items
 ) {
 	try {
@@ -947,7 +947,7 @@ void ak::ui::objectManager::obj_setItems(
 }
 
 void ak::ui::objectManager::obj_setColor(
-	ak::UID									_objectUid,
+	ak::UID												_objectUid,
 	const ak::ui::color &								_color
 ) {
 	try {
@@ -975,7 +975,7 @@ void ak::ui::objectManager::obj_setColor(
 }
 
 void ak::ui::objectManager::obj_setIcon(
-	ak::UID									_objectUid,
+	ak::UID												_objectUid,
 	const QIcon &										_icon
 ) {
 	try {
@@ -1012,8 +1012,8 @@ void ak::ui::objectManager::obj_setIcon(
 }
 
 void ak::ui::objectManager::obj_setReadOnly(
-	ak::UID									_objectUid,
-	bool									_readOnly
+	ak::UID												_objectUid,
+	bool												_readOnly
 ) {
 	try {
 		// Find object
@@ -1040,7 +1040,7 @@ void ak::ui::objectManager::obj_setReadOnly(
 }
 
 void ak::ui::objectManager::obj_appendText(
-	ak::UID									_objectUid,
+	ak::UID												_objectUid,
 	const QString &										_text
 ) {
 	try {
@@ -1131,8 +1131,8 @@ void ak::ui::objectManager::obj_appendText(
 }
 
 void ak::ui::objectManager::obj_setAutoScrollToBottomEnabled(
-	ak::UID									_objectUid,
-	bool									_enabled
+	ak::UID												_objectUid,
+	bool												_enabled
 ) {
 	try {
 		// Find object
@@ -1158,7 +1158,7 @@ void ak::ui::objectManager::obj_setAutoScrollToBottomEnabled(
 }
 
 void ak::ui::objectManager::obj_setTabToolBarVisible(
-	ak::UID									_uiManagerUid,
+	ak::UID												_uiManagerUid,
 	bool												_vis
 ) {
 	try {
@@ -1181,8 +1181,8 @@ void ak::ui::objectManager::obj_setTabToolBarVisible(
 }
 
 void ak::ui::objectManager::obj_setTabLocation(
-	ak::UID											_objectUid,
-	ak::ui::core::tabLocation						_location
+	ak::UID												_objectUid,
+	ak::ui::core::tabLocation							_location
 ) {
 	try {
 		// Find ui manager
@@ -1208,8 +1208,8 @@ void ak::ui::objectManager::obj_setTabLocation(
 }
 
 void ak::ui::objectManager::obj_setTabFocused(
-	ak::UID											_objectUid,
-	ak::ID											_tab
+	ak::UID												_objectUid,
+	ak::ID												_tab
 ) {
 	try {
 		// Find ui manager
@@ -1235,10 +1235,10 @@ void ak::ui::objectManager::obj_setTabFocused(
 }
 
 void ak::ui::objectManager::obj_addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
-	bool											_value,
-	bool											_isMultipleValues
+	ak::UID												_objectUid,
+	const QString &										_itemName,
+	bool												_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		// Get object
@@ -1260,10 +1260,10 @@ void ak::ui::objectManager::obj_addProperty(
 }
 
 void ak::ui::objectManager::obj_addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
-	int												_value,
-	bool											_isMultipleValues
+	ak::UID												_objectUid,
+	const QString &										_itemName,
+	int													_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		// Get object
@@ -1285,10 +1285,10 @@ void ak::ui::objectManager::obj_addProperty(
 }
 
 void ak::ui::objectManager::obj_addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
-	double											_value,
-	bool											_isMultipleValues
+	ak::UID												_objectUid,
+	const QString &										_itemName,
+	double												_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		// Get object
@@ -1310,10 +1310,10 @@ void ak::ui::objectManager::obj_addProperty(
 }
 
 void ak::ui::objectManager::obj_addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
-	const char *									_value,
-	bool											_isMultipleValues
+	ak::UID												_objectUid,
+	const QString &										_itemName,
+	const char *										_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		// Get object
@@ -1335,10 +1335,10 @@ void ak::ui::objectManager::obj_addProperty(
 }
 
 void ak::ui::objectManager::obj_addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
-	const QString &									_value,
-	bool											_isMultipleValues
+	ak::UID												_objectUid,
+	const QString &										_itemName,
+	const QString &										_value,
+	bool												_isMultipleValues
 ) {
 	try {
 		// Get object
@@ -1360,10 +1360,10 @@ void ak::ui::objectManager::obj_addProperty(
 }
 
 void ak::ui::objectManager::obj_addProperty(
-	ak::UID								_objectUid,
-	const QString &									_itemName,
+	ak::UID												_objectUid,
+	const QString &										_itemName,
 	const ak::ui::color &								_value,
-	bool											_isMultipleValues
+	bool												_isMultipleValues
 ) {
 	try {
 		// Get object
@@ -1412,11 +1412,11 @@ void ak::ui::objectManager::obj_addProperty(
 }
 
 ak::ID ak::ui::objectManager::obj_createItem(
-	ak::UID											_objectUid,
-	ak::ID											_parentId,
-	const QString &									_text,
-	ak::ui::core::textAlignment						_textAlignment,
-	QIcon											_icon
+	ak::UID												_objectUid,
+	ak::ID												_parentId,
+	const QString &										_text,
+	ak::ui::core::textAlignment							_textAlignment,
+	QIcon												_icon
 ) {
 	try {
 		// Get object
@@ -1438,11 +1438,11 @@ ak::ID ak::ui::objectManager::obj_createItem(
 }
 
 ak::ID ak::ui::objectManager::obj_createItem(
-	ak::UID											_objectUid,
-	const QString &									_cmd,
-	char											_delimiter,
-	ak::ui::core::textAlignment						_textAlignment,
-	const QIcon  &									_icon
+	ak::UID												_objectUid,
+	const QString &										_cmd,
+	char												_delimiter,
+	ak::ui::core::textAlignment							_textAlignment,
+	const QIcon  &										_icon
 ) {
 	try {
 		// Get object
@@ -1464,8 +1464,8 @@ ak::ID ak::ui::objectManager::obj_createItem(
 }
 
 void ak::ui::objectManager::obj_setMultiSelectionEnabled(
-	ak::UID											_objectUid,
-	bool											_multiSelection
+	ak::UID												_objectUid,
+	bool												_multiSelection
 ) {
 	try {
 		// Get object
@@ -1493,8 +1493,8 @@ void ak::ui::objectManager::obj_setMultiSelectionEnabled(
 }
 
 void ak::ui::objectManager::obj_setAutoSelectAndDeselectChildrenEnabled(
-	ak::UID											_objectUid,
-	bool											_enabled
+	ak::UID												_objectUid,
+	bool												_enabled
 ) {
 	try {
 		// Get object
@@ -1522,8 +1522,8 @@ void ak::ui::objectManager::obj_setAutoSelectAndDeselectChildrenEnabled(
 }
 
 void ak::ui::objectManager::obj_setAutoExpandSelectedItems(
-	ak::UID											_objectUid,
-	bool											_enabled
+	ak::UID												_objectUid,
+	bool												_enabled
 ) {
 	try {
 		// Get object
@@ -1551,7 +1551,7 @@ void ak::ui::objectManager::obj_setAutoExpandSelectedItems(
 }
 
 void ak::ui::objectManager::obj_expandAllItems(
-	ak::UID											_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Get object
@@ -1579,7 +1579,7 @@ void ak::ui::objectManager::obj_expandAllItems(
 }
 
 void ak::ui::objectManager::obj_collapseAllItems(
-	ak::UID											_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Get object
@@ -1607,7 +1607,7 @@ void ak::ui::objectManager::obj_collapseAllItems(
 }
 
 void ak::ui::objectManager::obj_deselectAllItems(
-	ak::UID											_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Get object
@@ -1635,10 +1635,10 @@ void ak::ui::objectManager::obj_deselectAllItems(
 }
 
 ak::ID ak::ui::objectManager::obj_addTab(
-	ak::UID											_objectUid,
-	ak::UID											_widgetUid,
-	const QString &									_title,
-	const QIcon &									_icon
+	ak::UID												_objectUid,
+	ak::UID												_widgetUid,
+	const QString &										_title,
+	const QIcon &										_icon
 ) {
 	try {
 		QWidget * Widget = castToWidget(_widgetUid);
@@ -1650,10 +1650,10 @@ ak::ID ak::ui::objectManager::obj_addTab(
 }
 
 ak::ID ak::ui::objectManager::obj_addTab(
-	ak::UID											_objectUid,
-	QWidget *										_widget,
-	const QString &									_title,
-	const QIcon &									_icon
+	ak::UID												_objectUid,
+	QWidget *											_widget,
+	const QString &										_title,
+	const QIcon &										_icon
 ) {
 	try {
 		// Get object
@@ -1683,11 +1683,11 @@ ak::ID ak::ui::objectManager::obj_addTab(
 }
 
 ak::ID ak::ui::objectManager::obj_addTab(
-	ak::UID											_objectUid,
-	ak::UID											_widgetUid,
-	const QString &									_title,
-	const QString &									_iconName,
-	const QString &									_iconSize
+	ak::UID												_objectUid,
+	ak::UID												_widgetUid,
+	const QString &										_title,
+	const QString &										_iconName,
+	const QString &										_iconSize
 ) {
 	try {
 		return obj_addTab(_objectUid, _widgetUid, _title, *my_iconManager->icon(_iconName, _iconSize));
@@ -1698,11 +1698,11 @@ ak::ID ak::ui::objectManager::obj_addTab(
 }
 
 ak::ID ak::ui::objectManager::obj_addTab(
-	ak::UID											_objectUid,
-	QWidget *										_widget,
-	const QString &									_title,
-	const QString &									_iconName,
-	const QString &									_iconSize
+	ak::UID												_objectUid,
+	QWidget *											_widget,
+	const QString &										_title,
+	const QString &										_iconName,
+	const QString &										_iconSize
 ) {
 	try {
 		return obj_addTab(_objectUid, _widget, _title, *my_iconManager->icon(_iconName, _iconSize));
@@ -1713,8 +1713,8 @@ ak::ID ak::ui::objectManager::obj_addTab(
 }
 
 void ak::ui::objectManager::obj_setEnabled(
-	ak::UID											_objectUid,
-	bool											_enabled
+	ak::UID												_objectUid,
+	bool												_enabled
 ) {
 	try {
 		// Find object
@@ -1839,8 +1839,8 @@ void ak::ui::objectManager::obj_setEnabled(
 }
 
 void ak::ui::objectManager::obj_setVisible(
-	ak::UID											_objectUid,
-	bool											_visible
+	ak::UID												_objectUid,
+	bool												_visible
 ) {
 	try {
 		// Find object
@@ -1965,7 +1965,7 @@ void ak::ui::objectManager::obj_setVisible(
 }
 
 void ak::ui::objectManager::obj_clear(
-	ak::UID											_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Get object
@@ -2132,7 +2132,7 @@ void ak::ui::objectManager::obj_shoot(
 }
 
 void ak::ui::objectManager::obj_delete(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Get object
@@ -2176,7 +2176,7 @@ QString ak::ui::objectManager::obj_getAlias(
 }
 
 ak::ui::core::aObject * ak::ui::objectManager::obj_get(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Get object
@@ -2190,7 +2190,7 @@ ak::ui::core::aObject * ak::ui::objectManager::obj_get(
 }
 
 QWidget * ak::ui::objectManager::obj_getWidget(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Get object
@@ -2215,7 +2215,7 @@ QWidget * ak::ui::objectManager::obj_getWidget(
 }
 
 QAction * ak::ui::objectManager::obj_getAction(
-	ak::UID									_actionUid
+	ak::UID												_actionUid
 ) {
 	try {
 		// Get object
@@ -2235,7 +2235,7 @@ QAction * ak::ui::objectManager::obj_getAction(
 }
 
 ak::ui::core::objectType ak::ui::objectManager::obj_getType(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Get object
@@ -2249,7 +2249,7 @@ ak::ui::core::objectType ak::ui::objectManager::obj_getType(
 }
 
 QString ak::ui::objectManager::obj_getText(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find object
@@ -2347,7 +2347,7 @@ QString ak::ui::objectManager::obj_getText(
 }
 
 bool ak::ui::objectManager::obj_getTristate(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find object
@@ -2374,7 +2374,7 @@ bool ak::ui::objectManager::obj_getTristate(
 }
 
 bool ak::ui::objectManager::obj_getChecked(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find object
@@ -2400,7 +2400,7 @@ bool ak::ui::objectManager::obj_getChecked(
 }
 
 ak::ui::color ak::ui::objectManager::obj_getColor(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find object
@@ -2426,7 +2426,7 @@ ak::ui::color ak::ui::objectManager::obj_getColor(
 }
 
 std::vector<ak::ID> ak::ui::objectManager::obj_getSelectedItems(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find object
@@ -2452,7 +2452,7 @@ std::vector<ak::ID> ak::ui::objectManager::obj_getSelectedItems(
 }
 
 bool ak::ui::objectManager::obj_getAutoScrollToBottomEnabled(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find object
@@ -2478,7 +2478,7 @@ bool ak::ui::objectManager::obj_getAutoScrollToBottomEnabled(
 }
 
 bool ak::ui::objectManager::obj_getEnabled(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find object
@@ -2567,8 +2567,8 @@ bool ak::ui::objectManager::obj_getEnabled(
 }
 
 ak::ID ak::ui::objectManager::obj_getItem(
-	ak::UID									_objectUid,
-	const QString &							_text
+	ak::UID												_objectUid,
+	const QString &										_text
 ) {
 	try {
 		// Find object
@@ -2598,7 +2598,7 @@ ak::ID ak::ui::objectManager::obj_getItem(
 }
 
 int ak::ui::objectManager::obj_getItemCount(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find object
@@ -2642,7 +2642,7 @@ int ak::ui::objectManager::obj_getItemCount(
 }
 
 int ak::ui::objectManager::obj_getFocusedTab(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Find object
@@ -2668,7 +2668,7 @@ int ak::ui::objectManager::obj_getFocusedTab(
 }
 
 bool ak::ui::objectManager::obj_getAutoExpandSelectedItems(
-	ak::UID											_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Get object
@@ -2700,9 +2700,9 @@ bool ak::ui::objectManager::obj_getAutoExpandSelectedItems(
 // Item setter
 
 void ak::ui::objectManager::itm_setSelected(
-	ak::UID											_objectUid,
-	ak::ID											_itemId,
-	bool											_selected
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	bool												_selected
 ) {
 	try {
 		// Get object
@@ -2730,9 +2730,9 @@ void ak::ui::objectManager::itm_setSelected(
 }
 
 void ak::ui::objectManager::itm_setSingleSelected(
-	ak::UID											_objectUid,
-	ak::ID											_itemId,
-	bool											_selected
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	bool												_selected
 ) {
 	try {
 		// Get object
@@ -2760,8 +2760,8 @@ void ak::ui::objectManager::itm_setSingleSelected(
 }
 
 void ak::ui::objectManager::itm_toggleSelection(
-	ak::UID											_objectUid,
-	ak::ID											_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Get object
@@ -2789,9 +2789,9 @@ void ak::ui::objectManager::itm_toggleSelection(
 }
 
 void ak::ui::objectManager::itm_setText(
-	ak::UID											_objectUid,
-	ak::ID											_itemId,
-	const QString &									_text
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	const QString &										_text
 ) {
 	try {
 		// Get object
@@ -2827,13 +2827,71 @@ void ak::ui::objectManager::itm_setText(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_setText()"); }
 }
 
+void ak::ui::objectManager::itm_setEnabled(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	bool												_enabled
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast tree
+			ak::ui::widget::tree * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
+			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+			t->setItemEnabled(_itemId, _enabled);
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_setEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_setEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_setEnabled()"); }
+}
+
+void ak::ui::objectManager::itm_setVisible(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	bool												_visible
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast tree
+			ak::ui::widget::tree * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
+			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
+			t->setItemVisible(_itemId, _visible);
+		}
+		break;
+		default:
+			throw ak::Exception("Invalid object type", "Check object type");
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_setVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_setVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_setVisible()"); }
+}
+
 // ###############################################################################################################################################
 
 // Item getter
 
 std::vector<QString> ak::ui::objectManager::itm_getPath(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -2859,9 +2917,9 @@ std::vector<QString> ak::ui::objectManager::itm_getPath(
 }
 
 QString ak::ui::objectManager::itm_getPathString(
-	ak::UID									_objectUid,
-	ak::ID									_itemId,
-	char									_delimiter
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	char												_delimiter
 ) {
 	try {
 		// Find object
@@ -2887,8 +2945,8 @@ QString ak::ui::objectManager::itm_getPathString(
 }
 
 QString ak::ui::objectManager::itm_getText(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -2932,8 +2990,8 @@ QString ak::ui::objectManager::itm_getText(
 }
 
 ak::core::valueType ak::ui::objectManager::itm_getValueType(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -2959,9 +3017,9 @@ ak::core::valueType ak::ui::objectManager::itm_getValueType(
 }
 
 ak::ID ak::ui::objectManager::itm_getID(
-	ak::UID									_objectUid,
-	const QString &							_itemPath,
-	char									_delimiter
+	ak::UID												_objectUid,
+	const QString &										_itemPath,
+	char												_delimiter
 ) {
 	try {
 		// Find object
@@ -2987,8 +3045,8 @@ ak::ID ak::ui::objectManager::itm_getID(
 }
 
 bool ak::ui::objectManager::itm_getValueBoolean(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -3014,8 +3072,8 @@ bool ak::ui::objectManager::itm_getValueBoolean(
 }
 
 ak::ui::color ak::ui::objectManager::itm_getValueColor(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -3041,8 +3099,8 @@ ak::ui::color ak::ui::objectManager::itm_getValueColor(
 }
 
 double ak::ui::objectManager::itm_getValueDouble(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -3068,8 +3126,8 @@ double ak::ui::objectManager::itm_getValueDouble(
 }
 
 int ak::ui::objectManager::itm_getValueInteger(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -3095,8 +3153,8 @@ int ak::ui::objectManager::itm_getValueInteger(
 }
 
 std::vector<QString> ak::ui::objectManager::itm_getValuePossibleSelection(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -3122,8 +3180,8 @@ std::vector<QString> ak::ui::objectManager::itm_getValuePossibleSelection(
 }
 
 QString ak::ui::objectManager::itm_getValueSelection(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -3149,8 +3207,8 @@ QString ak::ui::objectManager::itm_getValueSelection(
 }
 
 QString ak::ui::objectManager::itm_getValueString(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -3176,8 +3234,8 @@ QString ak::ui::objectManager::itm_getValueString(
 }
 
 bool ak::ui::objectManager::itm_getValueIsMultivalued(
-	ak::UID									_objectUid,
-	ak::ID									_itemId
+	ak::UID												_objectUid,
+	ak::ID												_itemId
 ) {
 	try {
 		// Find object
@@ -3205,9 +3263,9 @@ bool ak::ui::objectManager::itm_getValueIsMultivalued(
 // ###############################################################################################################################################
 
 void ak::ui::objectManager::addDock(
-	ak::UID									_uiManagerUid,
-	ak::UID									_dockUid,
-	ak::ui::core::dockLocation				_dockLocation
+	ak::UID												_uiManagerUid,
+	ak::UID												_dockUid,
+	ak::ui::core::dockLocation							_dockLocation
 ) {
 	try {
 		// Find ui manager
@@ -3238,9 +3296,9 @@ void ak::ui::objectManager::addDock(
 }
 
 void ak::ui::objectManager::tabifyDock(
-	ak::UID									_uiManagerUid,
-	ak::UID									_parentUid,
-	ak::UID									_dockUid
+	ak::UID												_uiManagerUid,
+	ak::UID												_parentUid,
+	ak::UID												_dockUid
 ) {
 	try {
 		// Find ui manager
@@ -3260,8 +3318,8 @@ void ak::ui::objectManager::tabifyDock(
 }
 
 void ak::ui::objectManager::setDockBottomLeftPriority(
-	ak::UID									_uiManagerUid,
-	ak::ui::core::dockLocation				_dockLocation
+	ak::UID												_uiManagerUid,
+	ak::ui::core::dockLocation							_dockLocation
 ) {
 	try {
 		// Find ui manager
@@ -3281,8 +3339,8 @@ void ak::ui::objectManager::setDockBottomLeftPriority(
 }
 
 void ak::ui::objectManager::setDockBottomRightPriority(
-	ak::UID									_uiManagerUid,
-	ak::ui::core::dockLocation				_dockLocation
+	ak::UID												_uiManagerUid,
+	ak::ui::core::dockLocation							_dockLocation
 ) {
 	try {
 		// Find ui manager
@@ -3302,8 +3360,8 @@ void ak::ui::objectManager::setDockBottomRightPriority(
 }
 
 void ak::ui::objectManager::setStatusLabelVisible(
-	ak::UID									_uiManagerUid,
-	bool									_visible
+	ak::UID												_uiManagerUid,
+	bool												_visible
 ) {
 	try {
 		// Find ui manager
@@ -3323,8 +3381,8 @@ void ak::ui::objectManager::setStatusLabelVisible(
 }
 
 void ak::ui::objectManager::setStatusProgressVisible(
-	ak::UID									_uiManagerUid,
-	bool									_visible
+	ak::UID												_uiManagerUid,
+	bool												_visible
 ) {
 	try {
 		// Find ui manager
@@ -3344,8 +3402,8 @@ void ak::ui::objectManager::setStatusProgressVisible(
 }
 
 void ak::ui::objectManager::setStatusLabelText(
-	ak::UID									_uiManagerUid,
-	const QString &							_text
+	ak::UID												_uiManagerUid,
+	const QString &										_text
 ) {
 	try {
 		// Find ui manager
@@ -3365,8 +3423,8 @@ void ak::ui::objectManager::setStatusLabelText(
 }
 
 void ak::ui::objectManager::setStatusProgressValue(
-	ak::UID									_uiManagerUid,
-	int										_value
+	ak::UID												_uiManagerUid,
+	int													_value
 ) {
 	try {
 		// Find ui manager
@@ -3386,8 +3444,8 @@ void ak::ui::objectManager::setStatusProgressValue(
 }
 
 void ak::ui::objectManager::setStatusProgressContinuous(
-	ak::UID									_uiManagerUid,
-	bool									_continuous
+	ak::UID												_uiManagerUid,
+	bool												_continuous
 ) {
 	try {
 		// Find ui manager
@@ -3407,7 +3465,7 @@ void ak::ui::objectManager::setStatusProgressContinuous(
 }
 
 bool ak::ui::objectManager::getStatusLabelVisible(
-	ak::UID									_uiManagerUid
+	ak::UID												_uiManagerUid
 ) {
 	try {
 		// Find ui manager
@@ -3427,7 +3485,7 @@ bool ak::ui::objectManager::getStatusLabelVisible(
 }
 
 bool ak::ui::objectManager::getStatusProgressVisible(
-	ak::UID									_uiManagerUid
+	ak::UID												_uiManagerUid
 ) {
 	try {
 		// Find ui manager
@@ -3447,7 +3505,7 @@ bool ak::ui::objectManager::getStatusProgressVisible(
 }
 
 QString ak::ui::objectManager::getStatusLabelText(
-	ak::UID									_uiManagerUid
+	ak::UID												_uiManagerUid
 ) {
 	try {
 		// Find ui manager
@@ -3467,7 +3525,7 @@ QString ak::ui::objectManager::getStatusLabelText(
 }
 
 int ak::ui::objectManager::getStatusProgressValue(
-	ak::UID									_uiManagerUid
+	ak::UID												_uiManagerUid
 ) {
 	try {
 		// Find ui manager
@@ -3487,7 +3545,7 @@ int ak::ui::objectManager::getStatusProgressValue(
 }
 
 bool ak::ui::objectManager::getStatusProgressContinuous(
-	ak::UID									_uiManagerUid
+	ak::UID												_uiManagerUid
 ) {
 	try {
 		// Find ui manager
@@ -3529,7 +3587,7 @@ void ak::ui::objectManager::close(
 // ###############################################################################################################################################
 
 void ak::ui::objectManager::creatorDestroyed(
-	ak::UID									_creatorUid
+	ak::UID												_creatorUid
 ) {
 	try {
 		try {
@@ -3788,8 +3846,8 @@ void ak::ui::objectManager::setupSettings(
 // ###############################################################################################################################################
 
 void ak::ui::objectManager::addCreatedUid(
-	ak::UID									_creatorUid,
-	ak::UID									_createdUid
+	ak::UID												_creatorUid,
+	ak::UID												_createdUid
 ) {
 	try {
 		my_mapCreatorsIterator itm = my_mapCreators.find(_creatorUid);
@@ -3820,7 +3878,7 @@ void ak::ui::objectManager::addCreatedUid(
 }
 
 QWidget * ak::ui::objectManager::castToWidget(
-	ak::UID									_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		// Get widget

@@ -218,6 +218,23 @@ void ak::ui::widget::tree::clear(void) {
 	my_currentId = 0;
 }
 
+void ak::ui::widget::tree::setItemEnabled(
+	ak::ID							_itemId,
+	bool							_enabled
+) {
+	try {
+		my_itemsIterator itm = my_items.find(_itemId);
+		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
+		my_treeSignalLinker->disable();
+		itm->second->setDisabled(!_enabled);
+		if (my_selectAndDeselectChildren) { itm->second->setChildsEnabled(_enabled); }
+		my_treeSignalLinker->enable();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setItemEnabled()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setItemEnabled()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setItemEnabled()"); }
+}
+
 void ak::ui::widget::tree::setItemSelected(
 	ak::ID							_itemId,
 	bool							_selected
@@ -234,6 +251,22 @@ void ak::ui::widget::tree::setItemSelected(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setItemSelected()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setItemSelected()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setItemSelected()"); }
+}
+
+void ak::ui::widget::tree::setItemVisible(
+	ak::ID							_itemId,
+	bool							_visible
+) {
+	try {
+		my_itemsIterator itm = my_items.find(_itemId);
+		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
+		my_treeSignalLinker->disable();
+		itm->second->setVisible(_visible);
+		if (my_selectAndDeselectChildren) { itm->second->setChildsVisible(_visible); }
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setItemVisible()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setItemVisible()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setItemVisible()"); }
 }
 
 void ak::ui::widget::tree::setSingleItemSelected(

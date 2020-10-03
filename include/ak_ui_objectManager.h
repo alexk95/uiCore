@@ -262,32 +262,32 @@ namespace ak {
 			//! @param _
 			//! @throw ak::Exception If one of the provided UIDs is invalid
 			void obj_addObjectToContainer(
-				ak::UID									_parentUid,
-				ak::UID									_objectUid
+				ak::UID												_parentUid,
+				ak::UID												_objectUid
 			);
 
 			void obj_setCentralWidget(
-				ak::UID									_parentUid,
-				ak::UID									_objectUid
+				ak::UID												_parentUid,
+				ak::UID												_objectUid
 			);
 
 			void obj_setCentralWidget(
-				ak::UID									_parentUid,
-				QWidget *								_widget
+				ak::UID												_parentUid,
+				QWidget *											_widget
 			);
 
 			void obj_setText(
-				ak::UID									_objectUid,
+				ak::UID												_objectUid,
 				const QString &										_text
 			);
 
 			void obj_setChecked(
-				ak::UID									_objectUid,
+				ak::UID												_objectUid,
 				bool												_checked
 			);
 
 			void obj_setTristate(
-				ak::UID									_objectUid,
+				ak::UID												_objectUid,
 				bool												_isTristate
 			);
 
@@ -308,17 +308,17 @@ namespace ak {
 			);
 
 			void obj_setItems(
-				ak::UID									_objectUid,
+				ak::UID												_objectUid,
 				const std::vector<ak::ui::qt::comboButtonItem> &	_items
 			);
 
 			void obj_setColor(
-				ak::UID									_objectUid,
+				ak::UID												_objectUid,
 				const ak::ui::color &								_color
 			);
 
 			void obj_setIcon(
-				ak::UID									_objectUid,
+				ak::UID												_objectUid,
 				const QIcon &										_icon
 			);
 
@@ -327,13 +327,13 @@ namespace ak {
 			//! @param _readOnly If true, the object will be read only
 			//! @throw ak::Exception if the provided object UID is invalid
 			void obj_setReadOnly(
-				ak::UID									_objectUid,
-				bool									_readOnly = true
+				ak::UID												_objectUid,
+				bool												_readOnly = true
 			);
 
 			//! @brief Will append the text to the provided object
 			void obj_appendText(
-				ak::UID									_objectUid,
+				ak::UID												_objectUid,
 				const QString &										_text
 			);
 
@@ -342,24 +342,24 @@ namespace ak {
 			//! @param _enabled If true, the auto scroll option for the object will be enabled
 			//! @throw ak::Exception if the provided object UID is invalid
 			void obj_setAutoScrollToBottomEnabled(
-				ak::UID									_objectUid,
-				bool									_enabled = true
+				ak::UID												_objectUid,
+				bool												_enabled = true
 			);
 
 			//! @brief Will set the visible status of the tabToolbar
 			//! @param _uiManagerUid The UID of the UI manager the tab toolbar is located at
 			//! @param _vis If true, the tab toolBar will be visible
 			void obj_setTabToolBarVisible(
-				ak::UID											_uiManagerUid,
-				bool											_vis = true
+				ak::UID												_uiManagerUid,
+				bool												_vis = true
 			);
 
 			//! @brief Will set the tab location of the provided object
 			//! @param _location The tab location to set
 			//! @throw ak::Exception if the provided object UID is invalid
 			void obj_setTabLocation(
-				ak::UID											_objectUid,
-				ak::ui::core::tabLocation						_location
+				ak::UID												_objectUid,
+				ak::ui::core::tabLocation							_location
 			);
 
 			//! @brief Will focus the tab at the specified object
@@ -367,8 +367,8 @@ namespace ak {
 			//! @param _tab The tab to focus
 			//! @throw ak::Exception if the object UID is invalid or the tab is invalid
 			void obj_setTabFocused(
-				ak::UID											_objectUid,
-				ak::ID											_tab
+				ak::UID												_objectUid,
+				ak::ID												_tab
 			);
 
 			//! @brief Will add a new object with the value type Boolean to the property Grid
@@ -377,10 +377,10 @@ namespace ak {
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if a object creation failed
 			void obj_addProperty(
-				ak::UID											_objectUid,
-				const QString &									_itemName,
-				bool											_value,
-				bool											_isMultipleValues = false
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				bool												_value,
+				bool												_isMultipleValues = false
 			);
 
 			//! @brief Will add a new object with the value type Integer to the property Grid
@@ -389,10 +389,10 @@ namespace ak {
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if a object creation failed
 			void obj_addProperty(
-				ak::UID								_objectUid,
-				const QString &									_itemName,
-				int												_value,
-				bool											_isMultipleValues = false
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				int													_value,
+				bool												_isMultipleValues = false
 			);
 
 			//! @brief Will add a new object with the value type Double to the property Grid
@@ -401,10 +401,10 @@ namespace ak {
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if a object creation failed
 			void obj_addProperty(
-				ak::UID								_objectUid,
-				const QString &									_itemName,
-				double											_value,
-				bool											_isMultipleValues = false
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				double												_value,
+				bool												_isMultipleValues = false
 			);
 
 			//! @brief Will add a new object with the value type String to the property Grid
@@ -413,10 +413,10 @@ namespace ak {
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if a object creation failed
 			void obj_addProperty(
-				ak::UID								_objectUid,
-				const QString &									_itemName,
-				const char *									_value,
-				bool											_isMultipleValues = false
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				const char *										_value,
+				bool												_isMultipleValues = false
 			);
 
 			//! @brief Will add a new object with the value type String to the property Grid
@@ -425,10 +425,10 @@ namespace ak {
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if a object creation failed
 			void obj_addProperty(
-				ak::UID								_objectUid,
-				const QString &									_itemName,
-				const QString &									_value,
-				bool											_isMultipleValues = false
+				ak::UID												_objectUid,
+				const QString &										_itemName,
+				const QString &										_value,
+				bool												_isMultipleValues = false
 			);
 
 			//! @brief Will add a new object with the value type Color to the property Grid
@@ -437,10 +437,10 @@ namespace ak {
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if a object creation failed
 			void obj_addProperty(
-				ak::UID								_objectUid,
-				const QString &									_itemName,
+				ak::UID												_objectUid,
+				const QString &										_itemName,
 				const ak::ui::color &								_value,
-				bool											_isMultipleValues = false
+				bool												_isMultipleValues = false
 			);
 
 			//! @brief Will add a new object with the value type Selection to the property Grid
@@ -451,11 +451,11 @@ namespace ak {
 			//! @param _isMultipleValues If true, the setting will be displayed as a multiple values entry for the corresponding type
 			//! @throw ak::Exception if a object creation failed
 			void obj_addProperty(
-				ak::UID								_objectUid,
-				const QString &									_itemName,
+				ak::UID												_objectUid,
+				const QString &										_itemName,
 				const std::vector<ak::ui::qt::comboButtonItem> &	_selection,
-				const QString &									_selectedValue,
-				bool											_isMultipleValues = false
+				const QString &										_selectedValue,
+				bool												_isMultipleValues = false
 			);
 
 			//! @brief Will add a new item to the tree widget
@@ -467,11 +467,11 @@ namespace ak {
 			//! @param _backColor The background color of the very last child
 			//! @param _icon The icon to add to the very last child
 			ak::ID obj_createItem(
-				ak::UID											_objectUid,
-				ak::ID											_parentId,
-				const QString &									_text = QString(""),
-				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::align_alignLeft,
-				QIcon											_icon = QIcon()
+				ak::UID												_objectUid,
+				ak::ID												_parentId,
+				const QString &										_text = QString(""),
+				ak::ui::core::textAlignment							_textAlignment = ak::ui::core::textAlignment::align_alignLeft,
+				QIcon												_icon = QIcon()
 			);
 
 			//! @brief Will add new items to the tree according to the provided command
@@ -493,39 +493,39 @@ namespace ak {
 			//! @param _backColor The background color of the very last child
 			//! @param _icon The icon to add to the very last child
 			ak::ID obj_createItem(
-				ak::UID											_objectUid,
-				const QString &									_cmd,
-				char											_delimiter = '|',
-				ak::ui::core::textAlignment						_textAlignment = ak::ui::core::textAlignment::align_alignLeft,
-				const QIcon  &									_icon = QIcon()
+				ak::UID												_objectUid,
+				const QString &										_cmd,
+				char												_delimiter = '|',
+				ak::ui::core::textAlignment							_textAlignment = ak::ui::core::textAlignment::align_alignLeft,
+				const QIcon  &										_icon = QIcon()
 			);
 
 			//! @brief Will expand all items of the provided object
 			//! @param _objectUid The UID of the object
 			void obj_expandAllItems(
-				ak::UID											_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Will collapse all items of the provided object
 			//! @param _objectUid The UID of the object
 			void obj_collapseAllItems(
-				ak::UID											_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Enables or disables the ability to select multiple items
 			//! @param _objectUid The UID of the object
 			//! @param _multiSelection Specify whether multiple items can be selected
 			void obj_setMultiSelectionEnabled(
-				ak::UID											_objectUid,
-				bool											_multiSelection = true
+				ak::UID												_objectUid,
+				bool												_multiSelection = true
 			);
 
 			//! @brief Enables or disables the ability to automatically select/deselect the childrens of an item
 			//! @param _objectUid The UID of the object
 			//! @param _enabled if true, the childs of an item will be selected/deselected automatically
 			void obj_setAutoSelectAndDeselectChildrenEnabled(
-				ak::UID											_objectUid,
-				bool											_enabled = true
+				ak::UID												_objectUid,
+				bool												_enabled = true
 			);
 
 			//! @brief Will set the auto expand selected items option for the specified object
@@ -533,14 +533,14 @@ namespace ak {
 			//! @param _enabled If true the option is enabled
 			//! @throw ak::Exception if the specified object is invalid
 			void obj_setAutoExpandSelectedItems(
-				ak::UID											_objectUid,
-				bool											_enabled = true
+				ak::UID												_objectUid,
+				bool												_enabled = true
 			);
 
 			//! @brief Will deselect all items
 			//! @param _objectUid The UID of the object
 			void obj_deselectAllItems(
-				ak::UID											_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Will create a new tab at the provided object
@@ -549,10 +549,10 @@ namespace ak {
 			//! @param _title The title of the tab
 			//! @param _icon The icon of the tab
 			ak::ID obj_addTab(
-				ak::UID											_objectUid,
-				ak::UID											_widgetUid,
-				const QString &									_title,
-				const QIcon &									_icon = QIcon()
+				ak::UID												_objectUid,
+				ak::UID												_widgetUid,
+				const QString &										_title,
+				const QIcon &										_icon = QIcon()
 			);
 			
 			//! @brief Will create a new tab at the provided object
@@ -561,10 +561,10 @@ namespace ak {
 			//! @param _title The title of the tab
 			//! @param _icon The icon of the tab
 			ak::ID obj_addTab(
-				ak::UID											_objectUid,
-				QWidget *										_widget,
-				const QString &									_title,
-				const QIcon &									_icon = QIcon()
+				ak::UID												_objectUid,
+				QWidget *											_widget,
+				const QString &										_title,
+				const QIcon &										_icon = QIcon()
 			);
 
 			//! @brief Will create a new tab at the provided object
@@ -573,11 +573,11 @@ namespace ak {
 			//! @param _title The title of the tab
 			//! @param _icon The icon of the tab
 			ak::ID obj_addTab(
-				ak::UID											_objectUid,
-				ak::UID											_widgetUid,
-				const QString &									_title,
-				const QString &									_iconName,
-				const QString &									_iconSize
+				ak::UID												_objectUid,
+				ak::UID												_widgetUid,
+				const QString &										_title,
+				const QString &										_iconName,
+				const QString &										_iconSize
 			);
 
 			//! @brief Will create a new tab at the provided object
@@ -586,31 +586,31 @@ namespace ak {
 			//! @param _title The title of the tab
 			//! @param _icon The icon of the tab
 			ak::ID obj_addTab(
-				ak::UID											_objectUid,
-				QWidget *										_widget,
-				const QString &									_title,
-				const QString &									_iconName,
-				const QString &									_iconSize
+				ak::UID												_objectUid,
+				QWidget *											_widget,
+				const QString &										_title,
+				const QString &										_iconName,
+				const QString &										_iconSize
 			);
 
 			//! @brief Enables or disables the provided object
 			//! @param _objectUid The UID of the object
 			//! @param _enabled if true, the object will be enabled
 			void obj_setEnabled(
-				ak::UID											_objectUid,
-				bool											_enabled = true
+				ak::UID												_objectUid,
+				bool												_enabled = true
 			);
 
 			void obj_setVisible(
-				ak::UID											_objectUid,
-				bool											_visible = true
+				ak::UID												_objectUid,
+				bool												_visible = true
 			);
 
 			//! @brief Will clear the items of the provided object
 			//! @param _objectUid The UID of the object to clear its items
 			//! @throw ak::Exception if the provided object UID is invalid
 			void obj_clear(
-				ak::UID											_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Will delete all provided items from the provided object
@@ -695,69 +695,69 @@ namespace ak {
 			);
 
 			QString obj_getText(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			bool obj_getTristate(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			bool obj_getChecked(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Will return the current objects color
 			//! @param _objectUid The object to return the color from
 			ak::ui::color obj_getColor(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Will return all selected objects of the specified object
 			//! @param _objectUid The object to return the slection from
 			std::vector<ak::ID> obj_getSelectedItems(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Will return the auto scroll option for the provided object
 			//! @param _objectUid The UID of the requested object
 			//! @throw ak::Exception if the provided object UID is invalid
 			bool obj_getAutoScrollToBottomEnabled(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Will return the enabled state of the provided object
 			//! @param _objectUid The UID of the requested object
 			//! @throw ak::Exception if the provided object UID is invalid
 			bool obj_getEnabled(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Will return the ID of the item at this object with the specified text
 			//! Returns invalidID if the item does not exist
 			ak::ID obj_getItem(
-				ak::UID									_objectUid,
-				const QString &							_text
+				ak::UID												_objectUid,
+				const QString &										_text
 			);
 
 			//! @brief Will return the count of items at the specified object
 			//! @param _objectUid The UID of the requested object
 			//! @throw ak::Exception if the provided UID is invalid or the object type is invalid
 			int obj_getItemCount(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Will return the currently focused tab at the specified object
 			//! @param _objectUid The UID of the requested object
 			//! @throw ak::Exception if the provided UID is invalid
 			int obj_getFocusedTab(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			//! @brief Will get the auto expand selected items option for the specified object
 			//! @param _objectUid The UID of the object
 			//! @throw ak::Exception if the specified object is invalid
 			bool obj_getAutoExpandSelectedItems(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			// ###############################################################################################################################################
@@ -771,9 +771,9 @@ namespace ak {
 			//! @param _selected The selected state of the item
 			//! @throw ak::Exception if the ID is invalid
 			void itm_setSelected(
-				ak::UID											_objectUid,
-				ak::ID											_itemId,
-				bool											_selected = true
+				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				bool												_selected = true
 			);
 
 			//! @brief Will set the selected state of the provided item.
@@ -783,9 +783,9 @@ namespace ak {
 			//! @param _selected The selected state of the item
 			//! @throw ak::Exception if the ID is invalid
 			void itm_setSingleSelected(
-				ak::UID											_objectUid,
-				ak::ID											_itemId,
-				bool											_selected = true
+				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				bool												_selected = true
 			);
 
 			//! @brief Will toggle the selected state of the provided item.
@@ -795,8 +795,8 @@ namespace ak {
 			//! @param _selected The selected state of the item
 			//! @throw ak::Exception if the ID is invalid
 			void itm_toggleSelection(
-				ak::UID											_objectUid,
-				ak::ID											_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will set the text of the specified item
@@ -805,9 +805,31 @@ namespace ak {
 			//! @param _text The text to set
 			//! @throw ak::Exception if the specified UID or ID is invalid
 			void itm_setText(
-				ak::UID											_objectUid,
-				ak::ID											_itemId,
-				const QString &									_text
+				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				const QString &										_text
+			);
+
+			//! @brief Will set the enabled state of the specified item at the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item
+			//! @param _enabled The enabld state
+			//! @throw ak::Exception if the specified UID or ID is invalid
+			void itm_setEnabled(
+				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				bool												_enabled = true
+			);
+
+			//! @brief Will set the enabled state of the specified item at the specified object
+			//! @param _objectUid The UID of the object
+			//! @param _itemId The ID of the item
+			//! @param _visible The enabld state
+			//! @throw ak::Exception if the specified UID or ID is invalid
+			void itm_setVisible(
+				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				bool												_visible = true
 			);
 
 			// ###############################################################################################################################################
@@ -820,8 +842,8 @@ namespace ak {
 			//! @throw ak::Exception if the provided object UID is invalid
 			//! @throw ak::Exception if the provided item ID is invalid
 			std::vector<QString> itm_getPath(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will return all items from root to specified item as a string seperated with the provided delimiter where the first item is the root item
@@ -831,25 +853,25 @@ namespace ak {
 			//! @throw ak::Exception if the provided object UID is invalid
 			//! @throw ak::Exception if the provided item ID is invalid
 			QString itm_getPathString(
-				ak::UID									_objectUid,
-				ak::ID									_itemId,
-				char									_delimiter = '|'
+				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				char												_delimiter = '|'
 			);
 
 			//! @brief Will return the text of the specified item at the specified object
 			//! @param _objectUid The UID of the object
 			//! @param _itemId The ID of the item to get the text of
 			QString itm_getText(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will return the value type of the specified item at the specified object
 			//! @param _objectUid The UID of the object
 			//! @param _itemId The ID of the item to get the text of
 			ak::core::valueType itm_getValueType(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will return the ID of the specified item in the specified object
@@ -857,9 +879,9 @@ namespace ak {
 			//! @param _itemPath The path of the item
 			//! @param _delimiter The of the item path
 			ak::ID itm_getID(
-				ak::UID									_objectUid,
-				const QString &							_itemPath,
-				char									_delimiter = '|'
+				ak::UID												_objectUid,
+				const QString &										_itemPath,
+				char												_delimiter = '|'
 			);
 
 			//! @brief Will return the boolean value of the specified item
@@ -867,8 +889,8 @@ namespace ak {
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
 			bool itm_getValueBoolean(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will return the color value of the specified item
@@ -876,8 +898,8 @@ namespace ak {
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
 			ui::color itm_getValueColor(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will return the double value of the specified item
@@ -885,8 +907,8 @@ namespace ak {
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
 			double itm_getValueDouble(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will return the integer value of the specified item
@@ -894,8 +916,8 @@ namespace ak {
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
 			int itm_getValueInteger(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will return the boolean value of the specified item
@@ -903,8 +925,8 @@ namespace ak {
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
 			std::vector<QString> itm_getValuePossibleSelection(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will return the selected value of the specified item
@@ -912,8 +934,8 @@ namespace ak {
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
 			QString itm_getValueSelection(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will return the string value of the specified item
@@ -921,8 +943,8 @@ namespace ak {
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
 			QString itm_getValueString(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			//! @brief Will return the boolean value of the specified item
@@ -930,8 +952,8 @@ namespace ak {
 			//! @param _itemId The ID of the item to get its value from
 			//! @throw ak::Exception if the API is not initialized, the UID is invalid or the ID is invalid
 			bool itm_getValueIsMultivalued(
-				ak::UID									_objectUid,
-				ak::ID									_itemId
+				ak::UID												_objectUid,
+				ak::ID												_itemId
 			);
 
 			// ###############################################################################################################################################
@@ -941,18 +963,18 @@ namespace ak {
 			//! @param _dockUid The UID of the existing dock to add to the UI manager
 			//! @param _dockLocation The location where to put the dock at
 			void addDock(
-				ak::UID									_uiManagerUid,
-				ak::UID									_dockUid,
-				ak::ui::core::dockLocation				_dockLocation
+				ak::UID												_uiManagerUid,
+				ak::UID												_dockUid,
+				ak::ui::core::dockLocation							_dockLocation
 			);
 
 			//! @brief Will add the dock as a tab to the parent dock
 			//! @param _parentUid The UID of the parent dock
 			//! @param _dockUid The UID of the dock to tabify
 			void tabifyDock(
-				ak::UID									_uiManagerUid,
-				ak::UID									_parentUid,
-				ak::UID									_dockUid
+				ak::UID												_uiManagerUid,
+				ak::UID												_parentUid,
+				ak::UID												_dockUid
 			);
 
 			//! @brief Will set the dock priority on the bottom left corner.
@@ -961,8 +983,8 @@ namespace ak {
 			//! @param _dockLocation The dock location to set the priority for (allowed dockBottom and dockLeft)
 			//! @throw ak::Exception if the uiManager UID or the dock location is invalid
 			void setDockBottomLeftPriority(
-				ak::UID									_uiManagerUid,
-				ak::ui::core::dockLocation				_dockLocation
+				ak::UID												_uiManagerUid,
+				ak::ui::core::dockLocation							_dockLocation
 			);
 
 			//! @brief Will set the dock priority on the bottom left corner.
@@ -971,8 +993,8 @@ namespace ak {
 			//! @param _dockLocation The dock location to set the priority for (allowed dockBottom and dockRight)
 			//! @throw ak::Exception if the uiManager UID or the dock location is invalid
 			void setDockBottomRightPriority(
-				ak::UID									_uiManagerUid,
-				ak::ui::core::dockLocation				_dockLocation
+				ak::UID												_uiManagerUid,
+				ak::ui::core::dockLocation							_dockLocation
 			);
 
 			//! @brief Will set the visible state of the status label of the provided uiManager.
@@ -980,8 +1002,8 @@ namespace ak {
 			//! @param _visible If true the status label will be visible
 			//! @throw ak::Exception if the provided UI manager UID is invalid
 			void setStatusLabelVisible(
-				ak::UID									_uiManagerUid,
-				bool									_visible
+				ak::UID												_uiManagerUid,
+				bool												_visible
 			);
 
 			//! @brief Will set the visible state of the status progress bar of the provided uiManager.
@@ -989,8 +1011,8 @@ namespace ak {
 			//! @param _visible If true the status progress bar will be visible
 			//! @throw ak::Exception if the provided UI manager UID is invalid
 			void setStatusProgressVisible(
-				ak::UID									_uiManagerUid,
-				bool									_visible
+				ak::UID												_uiManagerUid,
+				bool												_visible
 			);
 
 			//! @brief Will set the status label text at the provided uiManager
@@ -998,8 +1020,8 @@ namespace ak {
 			//! @param _text The text to set
 			//! @throw ak::Exception if the provided UI manager UID is invalid
 			void setStatusLabelText(
-				ak::UID									_uiManagerUid,
-				const QString &							_text
+				ak::UID												_uiManagerUid,
+				const QString &										_text
 			);
 
 			//! @brief Will set the value of the status progress bar at the provided uiManager
@@ -1007,8 +1029,8 @@ namespace ak {
 			//! @param _value The value to set (0 - 100)
 			//! @throw ak::Exception if the provided UI manager UID is invalid or the provided value is out of range
 			void setStatusProgressValue(
-				ak::UID									_uiManagerUid,
-				int										_value
+				ak::UID												_uiManagerUid,
+				int													_value
 			);
 
 			//! @brief Will set the continuous option of the status progress bar at the provided uiManager
@@ -1016,43 +1038,43 @@ namespace ak {
 			//! @param _continuous If true the status progress bar will be displayed as a continuous bar
 			//! @throw ak::Exception if the provided UI manager UID is invalid
 			void setStatusProgressContinuous(
-				ak::UID									_uiManagerUid,
-				bool									_continuous
+				ak::UID												_uiManagerUid,
+				bool												_continuous
 			);
 
 			//! @brief Will return true if the status label is visible at the provided uiManager
 			//! @param _uiManagerUid The UID of the UI manager
 			//! @throw ak::Exception if the provided UI manager UID is invalid
 			bool getStatusLabelVisible(
-				ak::UID									_uiManagerUid
+				ak::UID												_uiManagerUid
 			);
 
 			//! @brief Will return true if the status progress bar is visible at the provided uiManager
 			//! @param _uiManagerUid The UID of the UI manager
 			//! @throw ak::Exception if the provided UI manager UID is invalid
 			bool getStatusProgressVisible(
-				ak::UID									_uiManagerUid
+				ak::UID												_uiManagerUid
 			);
 
 			//! @brief Will return the status label text at the provided uiManager
 			//! @param _uiManagerUid The UID of the UI manager
 			//! @throw ak::Exception if the provided UI manager UID is invalid
 			QString getStatusLabelText(
-				ak::UID									_uiManagerUid
+				ak::UID												_uiManagerUid
 			);
 
 			//! @brief Will return the status progress bar value at the provided uiManager
 			//! @param _uiManagerUid The UID of the UI manager
 			//! @throw ak::Exception if the provided UI manager UID is invalid
 			int getStatusProgressValue(
-				ak::UID									_uiManagerUid
+				ak::UID												_uiManagerUid
 			);
 
 			//! @brief Will return the continuous option of the status progress bar at the provided uiManager
 			//! @param _uiManagerUid The UID of the UI manager
 			//! @throw ak::Exception if the provided UI manager UID is invalid
 			bool getStatusProgressContinuous(
-				ak::UID									_uiManagerUid
+				ak::UID												_uiManagerUid
 			);
 
 			//! @brief Will close the provided uiManager
@@ -1067,7 +1089,7 @@ namespace ak {
 			//! @brief Will destroy all objects created by this creator
 			//! @param _creatorUid The UID of the creator
 			void creatorDestroyed(
-				ak::UID									_creatorUid
+				ak::UID												_creatorUid
 			);
 
 			void setColorStyle(
@@ -1098,13 +1120,13 @@ namespace ak {
 			//! @param _creatorUid The UID of the creator
 			//! @param _createdUid THe UID of the created object
 			void addCreatedUid(
-				ak::UID									_creatorUid,
-				ak::UID									_createdUid
+				ak::UID												_creatorUid,
+				ak::UID												_createdUid
 			);
 			
 			//! @brief Will cast and return the object to a QWidget
 			QWidget * castToWidget(
-				ak::UID									_objectUid
+				ak::UID												_objectUid
 			);
 
 			// ###############################################################################################################################################

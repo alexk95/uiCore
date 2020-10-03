@@ -66,12 +66,30 @@ void ak::ui::qt::treeItem::setParentItem(
 	treeItem *						_parent
 ) { my_parent = _parent; }
 
+void ak::ui::qt::treeItem::setChildsEnabled(
+	bool							_enabled
+) {
+	for (auto itm : my_childs) {
+		itm->setDisabled(!_enabled);
+		itm->setChildsEnabled(_enabled);
+	}
+}
+
 void ak::ui::qt::treeItem::setChildsSelected(
 	bool							_selected
 ) {
 	for (auto itm : my_childs) {
 		itm->setSelected(_selected);
 		itm->setChildsSelected(_selected);
+	}
+}
+
+void ak::ui::qt::treeItem::setChildsVisible(
+	bool							_visible
+) {
+	for (auto itm : my_childs) {
+		itm->setVisible(_visible);
+		itm->setChildsVisible(_visible);
 	}
 }
 

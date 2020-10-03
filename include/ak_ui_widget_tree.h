@@ -106,6 +106,15 @@ namespace ak {
 				//! @brief Will clear all tree items, receivers will get a destroyed message for each item
 				void clear(void);
 
+				//! @brief Will set enabled state of the provided item
+				//! @param _itemId The ID of the item
+				//! @param _enabled The enabled state of the item
+				//! @throw ak::Exception if the ID is invalid
+				void setItemEnabled(
+					ak::ID							_itemId,
+					bool							_enabled
+				);
+
 				//! @brief Will set the selected state of the provided item.
 				//! Will also set the selected state of the items childs if the selectAndDeselectChilds option is true
 				//! @param _itemId The ID of the item
@@ -114,6 +123,15 @@ namespace ak {
 				void setItemSelected(
 					ak::ID							_itemId,
 					bool							_selected
+				);
+
+				//! @brief Will set enabled state of the provided item
+				//! @param _itemId The ID of the item
+				//! @param _enabled The enabled state of the item
+				//! @throw ak::Exception if the ID is invalid
+				void setItemVisible(
+					ak::ID							_itemId,
+					bool							_visible
 				);
 
 				//! @brief Will set the selected state of the provided item.

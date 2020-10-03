@@ -68,10 +68,22 @@ namespace ak {
 					treeItem *						_parent
 				);
 
+				//! @brief Will set the enabled state for every child of this item
+				//! @param _enabled If true all childs of this item will be enabled
+				void setChildsEnabled(
+					bool							_enabled
+				);
+
 				//! @brief Will select/deselect the childs of this item
 				//! @param _selected If true all childs of this item will be selected
 				void setChildsSelected(
 					bool							_selected
+				);
+
+				//! @brief Will set the visible state for every child of this item
+				//! @param _visible If true all childs of this item will be visible
+				void setChildsVisible(
+					bool							_visible
 				);
 
 				//! @brief Will expand all parent items of this item.
