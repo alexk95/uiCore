@@ -24,6 +24,7 @@ QString ak::ui::core::toQString(
 	case ak::ui::core::oComboButton: return QString("ComboButton");
 	case ak::ui::core::oCheckBox: return QString("CheckBox");
 	case ak::ui::core::oDock: return QString("Dock");
+	case ak::ui::core::oMainWindow: return QString("Window");
 	case ak::ui::core::oPictureBox: return QString("PictureBox");
 	case ak::ui::core::oPropertyGrid: return QString("PropertyGrid");
 	case ak::ui::core::oPushButton: return QString("PushButton");

@@ -25,6 +25,8 @@
 
 #define RESTORABLE_CFG_SIZE_X "Size.Width"
 #define RESTORABLE_CFG_SIZE_Y "Size.Height"
+#define RESTORABLE_CFG_CHECKED "Checked"
+#define RESTORABLE_CFG_STATE "State"
 
 
 namespace ak {
@@ -55,12 +57,20 @@ namespace ak {
 					rapidjson::Document::AllocatorType &	_allocator
 				) = 0;
 
+				//! @brief Will restore the settings from the provided JSON value which must have an object type
+				//! The value looks like this:
+				//!	     { { "[SettingsName]":"[SettingsValue]",... } }
+				//! @param _settings The settings to restore
+				virtual void restoreSettings(
+					const rapidjson::Value &				_settings
+				) = 0;
+
 				//! @brief Will set the alias for this object
 				//! @param _alias The alias to set
 				//! @throw ak::Exception if the provided alias length is 0
-				void setAlias(
+				virtual void setAlias(
 					const QString &							_alias
-				);
+				) = 0;
 
 				//! @brief Will return the alias of this object
 				QString alias(void) const;

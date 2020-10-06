@@ -51,38 +51,6 @@ void ak::ui::qt::textEdit::setColorStyle(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::textEdit::setColorStyle()"); }
 }
 
-void ak::ui::qt::textEdit::addObjectSettingsToValue(
-	rapidjson::Value &						_array,
-	rapidjson::Document::AllocatorType &	_allocator
-) {
-	assert(_array.GetType() == rapidjson::Type::kArrayType); // Value is not an array type
-
-	// Initialize object
-	rapidjson::Value root;
-	root.SetObject();
-
-	// Add alias
-	std::string str(my_alias.toStdString());
-	rapidjson::Value nAlias(str.c_str(), _allocator);
-	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
-
-	// Add object type
-	str = ak::ui::core::toQString(my_objectType).toStdString();
-	rapidjson::Value nType(str.c_str(), _allocator);
-	root.AddMember(RESTORABLE_NAME_TYPE, nType, _allocator);
-
-	// Create settings
-	rapidjson::Value settings;
-	settings.SetObject();
-
-	settings.AddMember(RESTORABLE_CFG_SIZE_X, width(), _allocator);
-	settings.AddMember(RESTORABLE_CFG_SIZE_Y, height(), _allocator);
-
-	// Add settings
-	root.AddMember(RESTORABLE_NAME_SETTINGS, settings, _allocator);
-	_array.PushBack(root, _allocator);
-}
-
 // #######################################################################################################
 
 void ak::ui::qt::textEdit::setAutoScrollToBottom(

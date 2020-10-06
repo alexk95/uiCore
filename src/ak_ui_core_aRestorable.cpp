@@ -18,8 +18,4 @@ ak::ui::core::aRestorable::aRestorable(
 
 ak::ui::core::aRestorable::~aRestorable() {}
 
-void ak::ui::core::aRestorable::setAlias(
-	const QString &							_alias
-) { my_alias = _alias; }
-
 QString ak::ui::core::aRestorable::alias(void) const { return my_alias; }

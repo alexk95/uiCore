@@ -17,6 +17,7 @@
 
 // AK header
 #include <ak_ui_core_aPaintable.h>		// base class
+#include <ak_ui_core_aRestorable.h>		// base class
 #include <ak_globalDataTypes.h>			// UID and ID type
 #include <ak_ui_core.h>					// dockLocation
 
@@ -48,7 +49,7 @@ namespace ak {
 		//! @brief This class is used to manage a QMainWindow
 		//! It provides several functions to create and manipulate the UI
 		//! Also it will connect all created objects to the messaging system and will manage the UIDs of those objects.
-		class uiManager : public ak::ui::core::aPaintable {
+		class uiManager : public ui::core::aPaintable, public ui::core::aRestorable {
 		public:
 			// #############################################################################################################
 			// Constructors
@@ -72,6 +73,29 @@ namespace ak {
 			//! @param _colorStyle The color style to set
 			virtual void setColorStyle(
 				ak::ui::colorStyle *									_colorStyle
+			) override;
+
+			//! @brief Will set the alias for this object
+			//! @param _alias The alias to set
+			//! @throw ak::Exception if the provided alias length is 0
+			virtual void setAlias(
+				const QString &							_alias
+			) override;
+
+			//! @brief Will create a rapidjson::Value representing this objects current state
+			//! The value looks like this:
+			//!	     { "Alias":"[ObjectAlias]","Type":"[ObjectType]","Settings":{...} }
+			virtual void addObjectSettingsToValue(
+				rapidjson::Value &						_array,
+				rapidjson::Document::AllocatorType &	_allocator
+			) override;
+
+			//! @brief Will restore the settings from the provided JSON value which must have an object type
+			//! The value looks like this:
+			//!	     { { "[SettingsName]":"[SettingsValue]",... } }
+			//! @param _settings The settings to restore
+			virtual void restoreSettings(
+				const rapidjson::Value &				_settings
 			) override;
 
 			// #############################################################################################################

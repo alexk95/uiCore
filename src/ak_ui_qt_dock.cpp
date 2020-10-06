@@ -19,10 +19,10 @@
 #include <string>								// string
 
 ak::ui::qt::dock::dock(
-	const QString &				_title,
-	ak::ui::colorStyle *		_colorStyle,
-	QWidget *					_parent,
-	Qt::WindowFlags				_flags
+	const QString &							_title,
+	ak::ui::colorStyle *					_colorStyle,
+	QWidget *								_parent,
+	Qt::WindowFlags							_flags
 ) 
 	: ak::ui::core::aWidget(ak::ui::core::objectType::oDock, _colorStyle),
 	QDockWidget(_title, _parent, _flags)
@@ -39,7 +39,7 @@ ak::ui::qt::dock::~dock() {
 QWidget * ak::ui::qt::dock::widget(void) { return this; }
 
 void ak::ui::qt::dock::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	ak::ui::colorStyle *					_colorStyle
 ) {
 	try {
 		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check color style"); }
@@ -51,43 +51,30 @@ void ak::ui::qt::dock::setColorStyle(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::dock::setColorStyle()"); }
 }
 
+void ak::ui::qt::dock::setAlias(
+	const QString &							_alias
+) {
+	my_alias = _alias;
+	setObjectName(_alias);
+}
+
 void ak::ui::qt::dock::addObjectSettingsToValue(
 	rapidjson::Value &						_array,
 	rapidjson::Document::AllocatorType &	_allocator
 ) {
 	assert(_array.GetType() == rapidjson::Type::kArrayType); // Value is not an array type
-
-	// Initialize object
-	rapidjson::Value root;
-	root.SetObject();
-
-	// Add alias
-	std::string str(my_alias.toStdString());
-	rapidjson::Value nAlias(str.c_str(), _allocator);
-	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
-
-	// Add object type
-	str = ak::ui::core::toQString(my_objectType).toStdString();
-	rapidjson::Value nType(str.c_str(), _allocator);
-	root.AddMember(RESTORABLE_NAME_TYPE, nType, _allocator);
-
-	// Create settings
-	rapidjson::Value settings;
-	settings.SetObject();
-
-	settings.AddMember(RESTORABLE_CFG_SIZE_X, size().width(), _allocator);
-	settings.AddMember(RESTORABLE_CFG_SIZE_Y, size().height(), _allocator);
-	
-	std::string loc = ak::ui::core::toQString(my_location).toStdString();
-	rapidjson::Value nLocation(loc.c_str(), _allocator);
-	settings.AddMember("DockLocation", nLocation, _allocator);
-
-	// Add settings
-	root.AddMember(RESTORABLE_NAME_SETTINGS, settings, _allocator);
-	_array.PushBack(root, _allocator);
 }
 
-void ak::ui::qt::dock::slotDockLocationChanged(Qt::DockWidgetArea _area) {
+void ak::ui::qt::dock::restoreSettings(
+	const rapidjson::Value &				_settings
+) {
+	assert(_settings.IsObject()); // Value is not an object
+
+}
+
+void ak::ui::qt::dock::slotDockLocationChanged(
+	Qt::DockWidgetArea						_area
+) {
 	switch (_area)
 	{
 	case Qt::DockWidgetArea::BottomDockWidgetArea: my_location = ui::core::dock_dockBottom; break;

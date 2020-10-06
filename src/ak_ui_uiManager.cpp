@@ -25,13 +25,15 @@
 #include <TabToolbar/Page.h>					// tt::Page
 
 // Qt header
-#include <qwidget.h>
+
+#include <qwidget.h>							// QWidget
 #include <qmainwindow.h>						// QMainWindow
 #include <qprogressbar.h>						// QProgressBar
 #include <qstatusbar.h>							// QStatusBar
 #include <qlabel.h>								// QLabel
 #include <qtimer.h>								// QTimer
 #include <qmessagebox.h>						// QMessageBox
+#include <qbytearray.h>							// QByteArray
 
 // my_window->resizeDocks({ dock }, { 0 }, Qt::Horizontal); // This is the hack
 
@@ -179,6 +181,67 @@ void ak::ui::uiManager::setColorStyle(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::setColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::setColorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::setColorStyle()"); }
+}
+
+void ak::ui::uiManager::setAlias(
+	const QString &							_alias
+) { my_alias = _alias; }
+
+void ak::ui::uiManager::addObjectSettingsToValue(
+	rapidjson::Value &						_array,
+	rapidjson::Document::AllocatorType &	_allocator
+) {
+	assert(_array.GetType() == rapidjson::Type::kArrayType); // Value is not an array type
+
+	// Initialize object
+	rapidjson::Value root;
+	root.SetObject();
+
+	// Add alias
+	std::string str(my_alias.toStdString());
+	rapidjson::Value nAlias(str.c_str(), _allocator);
+	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
+
+	// Add object type
+	str = ak::ui::core::toQString(my_objectType).toStdString();
+	rapidjson::Value nType(str.c_str(), _allocator);
+	root.AddMember(RESTORABLE_NAME_TYPE, nType, _allocator);
+
+	// Create settings
+	rapidjson::Value settings;
+	settings.SetObject();
+
+	QByteArray lastConfig(my_window->saveState());
+	rapidjson::Value state(rapidjson::kArrayType);
+	for (auto itm : lastConfig) {
+		rapidjson::Value nV(itm);
+		state.PushBack(nV, _allocator);
+	}
+	settings.AddMember(RESTORABLE_CFG_STATE, state, _allocator);
+
+	// Add settings
+	root.AddMember(RESTORABLE_NAME_SETTINGS, settings, _allocator);
+	_array.PushBack(root, _allocator);
+}
+
+void ak::ui::uiManager::restoreSettings(
+	const rapidjson::Value &				_settings
+) {
+	assert(_settings.IsObject()); // Value is not an object
+
+	if (_settings.HasMember(RESTORABLE_CFG_STATE)) {
+		assert(_settings[RESTORABLE_CFG_STATE].IsArray());	// State setting is not an array type
+		auto state = _settings[RESTORABLE_CFG_STATE].GetArray();
+
+		// Create 
+		QByteArray actualState;
+		for (auto itm = state.Begin(); itm != state.End(); itm++) {
+			assert(itm->IsInt());	// Array contains a non integer value
+			actualState.push_back(itm->GetInt());
+		}
+
+		my_window->restoreState(actualState);
+	}
 }
 
 void ak::ui::uiManager::setCentralWidget(

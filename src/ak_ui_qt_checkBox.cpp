@@ -18,17 +18,40 @@
 // C++ header
 #include <string>
 
-ak::ui::qt::checkBox::checkBox(QWidget * _parent)
-: QCheckBox(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oCheckBox) {}
-ak::ui::qt::checkBox::checkBox(const QString & _text, QWidget * _parent)
-: QCheckBox(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oCheckBox) {}
+ak::ui::qt::checkBox::checkBox(
+	QWidget *								_parent
+) : QCheckBox(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oCheckBox) {}
+ak::ui::qt::checkBox::checkBox(
+	const QString &							_text,
+	QWidget *								_parent
+) : QCheckBox(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oCheckBox) {}
 
 ak::ui::qt::checkBox::~checkBox() {}
+
+// #######################################################################################################
+
+// Event handling
+
+void ak::ui::qt::checkBox::keyPressEvent(
+	QKeyEvent *								_event
+) {
+	QCheckBox::keyPressEvent(_event);
+	emit keyPressed(_event);
+}
+
+void ak::ui::qt::checkBox::keyReleaseEvent(
+	QKeyEvent *								_event
+) {
+	QCheckBox::keyReleaseEvent(_event);
+	emit keyReleased(_event);
+}
+
+// #######################################################################################################
 
 QWidget * ak::ui::qt::checkBox::widget(void) { return this; }
 
 void ak::ui::qt::checkBox::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	ak::ui::colorStyle *					_colorStyle
 ) {
 	try { 
 		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check color style", ak::Exception::exceptionType::Nullptr); }
@@ -40,15 +63,9 @@ void ak::ui::qt::checkBox::setColorStyle(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::checkBox::setColorStyle()"); }
 }
 
-void ak::ui::qt::checkBox::keyPressEvent(QKeyEvent * _event) {
-	QCheckBox::keyPressEvent(_event);
-	emit keyPressed(_event);
-}
-
-void ak::ui::qt::checkBox::keyReleaseEvent(QKeyEvent * _event) {
-	QCheckBox::keyReleaseEvent(_event);
-	emit keyReleased(_event);
-}
+void ak::ui::qt::checkBox::setAlias(
+	const QString &							_alias
+) { my_alias = _alias; setObjectName(_alias); }
 
 void ak::ui::qt::checkBox::addObjectSettingsToValue(
 	rapidjson::Value &						_array,
@@ -74,9 +91,20 @@ void ak::ui::qt::checkBox::addObjectSettingsToValue(
 	rapidjson::Value settings;
 	settings.SetObject();
 
-	settings.AddMember("Checked", isChecked(), _allocator);
+	settings.AddMember(RESTORABLE_CFG_CHECKED, isChecked(), _allocator);
 	
 	// Add settings
 	root.AddMember(RESTORABLE_NAME_SETTINGS, settings, _allocator);
 	_array.PushBack(root, _allocator);
+}
+
+void ak::ui::qt::checkBox::restoreSettings(
+	const rapidjson::Value &				_settings
+) {
+	assert(_settings.IsObject()); // Value is not an object
+
+	if (_settings.HasMember(RESTORABLE_CFG_CHECKED)) {
+		assert(_settings[RESTORABLE_CFG_CHECKED].IsBool());		// Not a boolean value stored
+		setChecked(_settings[RESTORABLE_CFG_CHECKED].GetBool());
+	}
 }

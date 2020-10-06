@@ -46,7 +46,7 @@ Example::Example()
 	ak::uiAPI::setDefaultDarkColorStyle();
 
 	// Create default UI
-	my_ui.mainWindow = ak::uiAPI::createUiManager(my_uid);
+	my_ui.mainWindow = ak::uiAPI::createUiManager(my_uid);	
 
 	// From this point on exceptions can be displayed in a message box since the UI is created
 	try {
@@ -68,16 +68,6 @@ Example::Example()
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aTest);
 			ak::uiAPI::obj::addObjectToContainer(my_ui.ttb_gNONE, my_ui.ttb_aTest2);
 
-			// Create docks
-			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
-			my_ui.dockTree = ak::uiAPI::createDock(my_uid, "Tree");
-			my_ui.dockProperties = ak::uiAPI::createDock(my_uid, "Properties");
-			my_ui.dockTester = ak::uiAPI::createDock(my_uid, "Tester");
-			ak::uiAPI::obj::setAlias(my_ui.dockOutput, "Dock.Output");
-			ak::uiAPI::obj::setAlias(my_ui.dockProperties, "Dock.Properties");
-			ak::uiAPI::obj::setAlias(my_ui.dockTree, "Dock.Tree");
-			ak::uiAPI::obj::setAlias(my_ui.dockTester, "Dock.Tester");
-
 			// Create widgets
 			my_ui.treeWidget = ak::uiAPI::createTree(my_uid);
 			my_ui.propertiesWidget = ak::uiAPI::createPropertyGrid(my_uid);
@@ -86,10 +76,24 @@ Example::Example()
 			my_ui.tester = ak::uiAPI::createTextEdit(my_uid);
 			my_ui.table1 = ak::uiAPI::createTable(my_uid, 2, 2);
 			my_ui.table2 = ak::uiAPI::createTable(my_uid, 3, 3);
-			//ak::uiAPI::obj::setAlias(my_ui.treeWidget, "Widget.Tree");
-			//ak::uiAPI::obj::setAlias(my_ui.propertiesWidget, "Widget.Properties");
-			//ak::uiAPI::obj::setAlias(my_ui.outputWidget, "Widget.Output");
-			//ak::uiAPI::obj::setAlias(my_ui.tester, "Widget.Tester");
+
+			// Create docks
+			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
+			my_ui.dockProperties = ak::uiAPI::createDock(my_uid, "Properties");
+			my_ui.dockTester = ak::uiAPI::createDock(my_uid, "Tester");
+			my_ui.dockTree = ak::uiAPI::createDock(my_uid, "Tree");
+
+			// Set widgets to docks
+			ak::uiAPI::obj::setCentralWidget(my_ui.dockOutput, my_ui.outputWidget);
+			ak::uiAPI::obj::setCentralWidget(my_ui.dockProperties, my_ui.propertiesWidget);
+			ak::uiAPI::obj::setCentralWidget(my_ui.dockTester, my_ui.tester);
+			ak::uiAPI::obj::setCentralWidget(my_ui.dockTree, my_ui.treeWidget);
+
+			// Display docks
+			ak::uiAPI::addDock(my_ui.mainWindow, my_ui.dockOutput, ak::ui::core::dock_dockBottom);
+			ak::uiAPI::addDock(my_ui.mainWindow, my_ui.dockTree, ak::ui::core::dock_dockLeft);
+			ak::uiAPI::addDock(my_ui.mainWindow, my_ui.dockProperties, ak::ui::core::dock_dockLeft);
+			ak::uiAPI::tabifyDock(my_ui.mainWindow, my_ui.dockOutput, my_ui.dockTester);
 
 			// Setup widgets
 			ak::uiAPI::obj::setAutoSelectAndDeselectChildrenEnabled(my_ui.treeWidget, true);
@@ -100,37 +104,15 @@ Example::Example()
 			ak::uiAPI::obj::setTabLocation(my_ui.tabViewWidget, ak::ui::core::tabLocation::tab_locationDown);
 			ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, false);
 
-			// Set widgets to docks
-			ak::uiAPI::obj::setCentralWidget(my_ui.dockOutput, my_ui.outputWidget);
-			ak::uiAPI::obj::setCentralWidget(my_ui.dockProperties, my_ui.propertiesWidget);
-			ak::uiAPI::obj::setCentralWidget(my_ui.dockTree, my_ui.treeWidget);
-			ak::uiAPI::obj::setCentralWidget(my_ui.dockTester, my_ui.tester);
+			// Setup aliases
+			ak::uiAPI::obj::setAlias(my_ui.dockOutput, "Dock_Output");
+			ak::uiAPI::obj::setAlias(my_ui.dockProperties, "Dock_Properties");
+			ak::uiAPI::obj::setAlias(my_ui.dockTester, "Dock_Tester");
+			ak::uiAPI::obj::setAlias(my_ui.dockTree, "Dock_Tree");
+			ak::uiAPI::obj::setAlias(my_ui.mainWindow, "Window_Main");
 
 			// Set central widget
 			ak::uiAPI::obj::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
-
-			// Display docks
-			ak::uiAPI::addDock(
-				my_ui.mainWindow,
-				my_ui.dockOutput,
-				ak::ui::core::dock_dockBottom
-			);
-			ak::uiAPI::addDock(
-				my_ui.mainWindow,
-				my_ui.dockTree,
-				ak::ui::core::dock_dockLeft
-			);
-			ak::uiAPI::addDock(
-				my_ui.mainWindow,
-				my_ui.dockTester,
-				ak::ui::core::dock_dockRight
-			);
-
-			ak::uiAPI::tabifyDock(
-				my_ui.mainWindow,
-				my_ui.dockTree,
-				my_ui.dockProperties
-			);
 			
 			// Create my notifier
 			my_notifier = new ExampleNotifier(this);
@@ -213,25 +195,12 @@ void Example::eventCallback(
 			}
 			else if (_sender == my_ui.ttb_aTest) {
 
-				std::vector<ak::ID> v;
-
-				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1A"));
-				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1|A1B"));
-				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A1"));
-				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A3"));
-				v.push_back(ak::uiAPI::itm::getID(my_ui.treeWidget, "A|A3|A3B"));
-
-				ak::uiAPI::obj::deleteItems(my_ui.treeWidget, v);
-				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, false);
-
-				return;
-
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);
-				my_jSON = ak::uiAPI::getSettingsJSON();
-				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, my_jSON.c_str(), "JSON");
+				my_JSONSettingsString = ak::uiAPI::getSettingsJSON();
+				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, my_JSONSettingsString.c_str(), "JSON");
 			}
 			else if (_sender == my_ui.ttb_aTest2) {
-				ak::uiAPI::setupSettings(my_jSON.c_str());
+				ak::uiAPI::setupSettings(my_JSONSettingsString.c_str());
 			}
 		}
 		else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {

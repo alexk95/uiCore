@@ -70,5 +70,5 @@ private:
 	ak::UID						my_uid;			//! The UID of this application
 	ExampleNotifier *			my_notifier;	//! The notifier that receives the callback messages
 	ak::ui::color				my_settingColor;
-	std::string					my_jSON;
+	std::string					my_JSONSettingsString;
 };

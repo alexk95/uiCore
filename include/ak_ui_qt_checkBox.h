@@ -39,26 +39,37 @@ namespace ak {
 			public:
 				//! @brief Constructor
 				//! @param _parent The parent QWidget for this CheckBox
-				checkBox(QWidget * _parent = (QWidget *) nullptr);
+				checkBox(
+					QWidget *								_parent = (QWidget *) nullptr
+				);
 
 				//! @brief Constructor
 				//! @param _text The initial text of the CheckBox
 				//! @param _parent The parent QWidget for this CheckBox
-				checkBox(const QString & _text, QWidget * _parent = (QWidget *) nullptr);
+				checkBox(
+					const QString &							_text,
+					QWidget *								_parent = (QWidget *) nullptr
+				);
 
 				//! @brief Deconstructor
 				virtual ~checkBox();
 
 				// #######################################################################################################
+				
 				// Event handling
 
 				//! @brief Emits a key pressend signal a key is pressed
-				virtual void keyPressEvent(QKeyEvent * _event) override;
+				virtual void keyPressEvent(
+					QKeyEvent *								_event
+				) override;
 
 				//! @brief Emits a key released signal a key is released
-				virtual void keyReleaseEvent(QKeyEvent * _event) override;
+				virtual void keyReleaseEvent(
+					QKeyEvent *								_event
+				) override;
 
 				// #######################################################################################################
+				
 				// Base class functions
 
 				//! @brief Will return the widgets widget to display it
@@ -68,7 +79,14 @@ namespace ak {
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
-					ak::ui::colorStyle *			_colorStyle
+					ak::ui::colorStyle *					_colorStyle
+				) override;
+
+				//! @brief Will set the alias for this object
+				//! @param _alias The alias to set
+				//! @throw ak::Exception if the provided alias length is 0
+				virtual void setAlias(
+					const QString &							_alias
 				) override;
 
 				//! @brief Will create a rapidjson::Value representing this objects current state
@@ -77,6 +95,14 @@ namespace ak {
 				virtual void addObjectSettingsToValue(
 					rapidjson::Value &						_array,
 					rapidjson::Document::AllocatorType &	_allocator
+				) override;
+
+				//! @brief Will restore the settings from the provided JSON value which must have an object type
+				//! The value looks like this:
+				//!	     { { "[SettingsName]":"[SettingsValue]",... } }
+				//! @param _settings The settings to restore
+				virtual void restoreSettings(
+					const rapidjson::Value &				_settings
 				) override;
 
 			signals:

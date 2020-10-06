@@ -32,7 +32,7 @@ namespace ak {
 			class dock;
 
 			//! @brief This class combines the functionallity of a QTextEdit and a ak::ui::core::aWidget
-			class textEdit : public QTextEdit, public ak::ui::core::aWidget, public ak::ui::core::aRestorable
+			class textEdit : public QTextEdit, public ak::ui::core::aWidget
 			{
 				Q_OBJECT
 			public:
@@ -68,14 +68,6 @@ namespace ak {
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
-				) override;
-
-				//! @brief Will create a rapidjson::Value representing this objects current state
-				//! The value looks like this:
-				//!	     { "Alias":"[ObjectAlias]","Type":"[ObjectType]","Settings":{...} }
-				virtual void addObjectSettingsToValue(
-					rapidjson::Value &						_array,
-					rapidjson::Document::AllocatorType &	_allocator
 				) override;
 
 				// #######################################################################################################

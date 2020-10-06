@@ -38,10 +38,10 @@ namespace ak {
 				Q_OBJECT
 			public:
 				dock(
-					const QString &				_title = QString(""),
-					ak::ui::colorStyle *		_colorStyle = nullptr,
-					QWidget *					_parent = nullptr,
-					Qt::WindowFlags				_flags = Qt::WindowFlags()
+					const QString &							_title = QString(""),
+					ak::ui::colorStyle *					_colorStyle = nullptr,
+					QWidget *								_parent = nullptr,
+					Qt::WindowFlags							_flags = Qt::WindowFlags()
 				);
 
 				virtual ~dock();
@@ -55,9 +55,16 @@ namespace ak {
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
-					ak::ui::colorStyle *			_colorStyle
+					ak::ui::colorStyle *					_colorStyle
 				) override;
 			
+				//! @brief Will set the alias for this object
+				//! @param _alias The alias to set
+				//! @throw ak::Exception if the provided alias length is 0
+				virtual void setAlias(
+					const QString &							_alias
+				) override;
+
 				//! @brief Will create a rapidjson::Value representing this objects current state
 				//! The value looks like this:
 				//!	     { "Alias":"[ObjectAlias]","Type":"[ObjectType]","Settings":{...} }
@@ -66,8 +73,18 @@ namespace ak {
 					rapidjson::Document::AllocatorType &	_allocator
 				) override;
 
+				//! @brief Will restore the settings from the provided JSON value which must have an object type
+				//! The value looks like this:
+				//!	     { { "[SettingsName]":"[SettingsValue]",... } }
+				//! @param _settings The settings to restore
+				virtual void restoreSettings(
+					const rapidjson::Value &				_settings
+				) override;
+
 			private slots:
-				void slotDockLocationChanged(Qt::DockWidgetArea _area);
+				void slotDockLocationChanged(
+					Qt::DockWidgetArea						_area
+				);
 
 			private:
 
