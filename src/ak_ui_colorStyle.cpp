@@ -26,33 +26,23 @@ ak::ui::color ak::ui::colorStyle::getControlsErrorForecolor(void) const { return
 
 void ak::ui::colorStyle::setWindowMainForecolor(
 	const ak::ui::color &		_color
-) {
-	my_windowMainForecolor = _color;
-}
+) { my_windowMainForecolor = _color; }
 
 void ak::ui::colorStyle::setWindowMainBackcolor(
 	const ak::ui::color &		_color
-) {
-	my_windowMainBackcolor = _color;
-}
+) { my_windowMainBackcolor = _color; }
 
 void ak::ui::colorStyle::setControlsMainForecolor(
 	const ak::ui::color &		_color
-) {
-	my_controlsMainForecolor = _color;
-}
+) { my_controlsMainForecolor = _color; }
 
 void ak::ui::colorStyle::setControlsMainBackcolor(
 	const ak::ui::color &		_color
-) {
-	my_controlsMainBackcolor = _color;
-}
+) { my_controlsMainBackcolor = _color; }
 
 void ak::ui::colorStyle::setControlsErrorForecolor(
 	const ak::ui::color &		_color
-) {
-	my_controlsErrorForecolor = _color;
-}
+) { my_controlsErrorForecolor = _color; }
 
 void ak::ui::colorStyle::addDirectory(
 	const QString &					_directory

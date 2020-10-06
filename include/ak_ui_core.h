@@ -51,6 +51,7 @@ namespace ak {
 				oComboButtonItem,
 				oCheckBox,
 				oDock,
+				oLogInDialog,
 				oMainWindow,
 				oMenu,
 				oPictureBox,
@@ -68,6 +69,15 @@ namespace ak {
 				oTree,
 				oTreeItem,
 				oWidget
+			};
+
+			//! Describes the dialog result
+			enum dialogResult {
+				resultYes,
+				resultNo,
+				resultOk,
+				resultCancel,
+				resultNone
 			};
 
 			enum keyType {
@@ -115,6 +125,12 @@ namespace ak {
 			//! @param _dockLocation The dock location to be converted
 			QString toQString(
 				dockLocation							_dockLocation
+			);
+
+			//! @brief Create a string representation of the provided dialog result
+			//! @param _dialogResult The dialog result to be converted
+			QString toQString(
+				dialogResult							_dialogResult
 			);
 
 			//! @brief Create a string representation of the provided keyType

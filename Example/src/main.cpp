@@ -21,8 +21,4 @@ int main(int argc, char *argv[])
 
 	// Create the main class that is managing the functions of the UI
 	Example e;
-
-	// Will call the execute funtion of the API.
-	// This function will activate the event handling and display every object created earlier (in the Example object).
-	return uiAPI::exec();
 }

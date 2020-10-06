@@ -23,6 +23,9 @@
 #include <ak_ui_core_aObject.h>
 #include <ak_ui_core_aRestorable.h>
 
+// AK dialogs
+#include <ak_ui_dialog_logIn.h>
+
 // AK Qt objects
 #include <ak_ui_qt_action.h>				// action
 #include <ak_ui_qt_checkBox.h>				// checkBox
@@ -277,6 +280,31 @@ ak::UID ak::ui::objectManager::createDock(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::createDock()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::createDock()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::createDock()"); }
+}
+
+ak::UID ak::ui::objectManager::createLogInDialog(
+	ak::UID												_creatorUid,
+	bool												_showSavePasswordCheckbox,
+	const QString &										_username,
+	const QString &										_password
+) {
+	try {
+		// Create object
+		ak::ui::dialog::logIn * obj = new ak::ui::dialog::logIn();
+		//ak::ui::dialog::logIn * obj = new ak::ui::dialog::logIn;
+		assert(obj != nullptr);
+		
+		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		obj->setUid(my_uidManager->getId());
+
+		// Store data
+		my_mapObjects.insert_or_assign(obj->uid(), obj);
+		addCreatedUid(_creatorUid, obj->uid());
+		return obj->uid();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::createLogInDialog()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::createLogInDialog()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::createLogInDialog()"); }
 }
 
 ak::UID ak::ui::objectManager::createPropertyGrid(
@@ -2145,11 +2173,12 @@ void ak::ui::objectManager::obj_delete(
 		if (obj->second->objectType() == ak::ui::core::objectType::oMainWindow) {
 			ak::ui::uiManager * ui = nullptr;
 			ui = dynamic_cast<ak::ui::uiManager *>(obj->second);
-			if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
+			assert(0); // Cast failed
 			ui->close();
 		}
 		// Destroy object
 		ak::ui::core::aObject * o = obj->second;
+		my_mapObjects.erase(_objectUid);
 		delete o;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_delete()"); }
@@ -3261,6 +3290,115 @@ bool ak::ui::objectManager::itm_getValueIsMultivalued(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_getValueIsMultivalued()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_getValueIsMultivalued()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_getValueIsMultivalued()"); }
+}
+
+// ###############################################################################################################################################
+
+// Dialog
+
+ak::ui::core::dialogResult ak::ui::objectManager::dialog_show(
+	ak::UID												_dialogUid
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_dialogUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oLogInDialog:
+		{
+			// Cast object
+			ak::ui::dialog::logIn * obj = nullptr;
+			obj = dynamic_cast<ak::ui::dialog::logIn *>(itm->second);
+			assert(obj != nullptr); // Cast failed
+			return obj->showDialog();
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::dialog_show()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::dialog_show()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::dialog_show()"); }
+}
+
+ak::ui::core::dialogResult ak::ui::objectManager::dialog_result(
+	ak::UID												_dialogUid
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_dialogUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oLogInDialog:
+		{
+			// Cast object
+			ak::ui::dialog::logIn * obj = nullptr;
+			obj = dynamic_cast<ak::ui::dialog::logIn *>(itm->second);
+			assert(obj != nullptr); // Cast failed
+			return obj->result();
+		}
+		break;
+		default: assert(0); // Invalid object type
+			return ui::core::resultNone;
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::dialog_show()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::dialog_show()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::dialog_show()"); }
+}
+
+QString ak::ui::objectManager::dialog_username(
+	ak::UID												_dialogUid
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_dialogUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oLogInDialog:
+		{
+			// Cast object
+			ak::ui::dialog::logIn * obj = nullptr;
+			obj = dynamic_cast<ak::ui::dialog::logIn *>(itm->second);
+			assert(obj != nullptr); // Cast failed
+			return obj->username();
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::dialog_username()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::dialog_username()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::dialog_username()"); }
+}
+
+QString ak::ui::objectManager::dialog_password(
+	ak::UID												_dialogUid
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_dialogUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oLogInDialog:
+		{
+			// Cast object
+			ak::ui::dialog::logIn * obj = nullptr;
+			obj = dynamic_cast<ak::ui::dialog::logIn *>(itm->second);
+			assert(obj != nullptr); // Cast failed
+			return obj->password();
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::dialog_password()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::dialog_password()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::dialog_password()"); }
 }
 
 // ###############################################################################################################################################

@@ -351,18 +351,6 @@ void ak::uiAPI::destroy(void) {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::destroy()"); }
 }
 
-void ak::uiAPI::destroyObject(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_delete(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::destroyObject()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::destroyObject()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::destroyObject()"); }
-}
-
 void ak::uiAPI::enableEventTypes(
 	ak::core::eventType									_types
 ) { ak::singletonAllowedMessages::instance()->setFlag(_types); }
@@ -718,6 +706,22 @@ ak::UID ak::uiAPI::createDock(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createDock(QString)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createDock(QString)"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createDock(QString)"); }
+}
+
+ak::UID ak::uiAPI::createLogInDialog(
+	ak::UID												_creatorUid,
+	bool												_showSavePasswordCheckbox,
+	const QString &										_username,
+	const QString &										_password
+) {
+	try {
+		// Get manager
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->createLogInDialog(_creatorUid, _showSavePasswordCheckbox, _username, _password);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createLogInDialog(QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createLogInDialog(QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createLogInDialog(QString)"); }
 }
 
 ak::UID ak::uiAPI::createPropertyGrid(
@@ -1676,6 +1680,18 @@ void ak::uiAPI::obj::shoot(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::shoot()"); }
 }
 
+void ak::uiAPI::obj::destroy(
+	ak::UID												_objectUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->obj_delete(_objectUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::destroy()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::destroy()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::destroy()"); }
+}
+
 // ###############################################################################################################################################
 
 // Object getter
@@ -2375,6 +2391,58 @@ bool ak::uiAPI::file::hasChanged(
 
 // ###############################################################################################################################################
 
+// Dialogs
+
+ak::ui::core::dialogResult ak::uiAPI::dialog::show(
+	ak::UID												_dialogUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->dialog_show(_dialogUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::show()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::show()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::show()"); }
+}
+
+ak::ui::core::dialogResult ak::uiAPI::dialog::result(
+	ak::UID												_dialogUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->dialog_result(_dialogUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::result()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::result()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::result()"); }
+}
+
+QString ak::uiAPI::dialog::username(
+	ak::UID												_dialogUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->dialog_username(_dialogUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::username()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::username()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::username()"); }
+}
+
+QString ak::uiAPI::dialog::password(
+	ak::UID												_dialogUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->dialog_password(_dialogUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::password()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::password()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::password()"); }
+}
+
+// ###############################################################################################################################################
+
 QString ak::uiAPI::toString(
 	ak::core::eventType									_type
 ) {
@@ -2428,6 +2496,15 @@ QString ak::uiAPI::toString(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(tabLocation)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(tabLocation)"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(tabLocation)"); }
+}
+
+QString ak::uiAPI::toQString(
+	ak::ui::core::dialogResult							_dialogResult
+) {
+	try { return ak::ui::core::toQString(_dialogResult); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(dialogResult)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(dialogResult)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(dialogResult)"); }
 }
 
 QString ak::uiAPI::toString(
@@ -2812,4 +2889,8 @@ std::vector<ak::ui::qt::comboButtonItem> ak::uiAPI::toComboButtonItem(
 	}
 	assert(ret.size() == _items.size());
 	return ret;
+}
+
+void ak::uiAPI::testCall(void) {
+	assert(0); // No functionallity
 }

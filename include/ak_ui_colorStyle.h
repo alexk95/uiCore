@@ -35,6 +35,7 @@ namespace ak {
 				sComboButton,
 				sDock,
 				sLabel,
+				sLineEdit,
 				sMainWindow,
 				sMdiArea,
 				sMdiSubArea,

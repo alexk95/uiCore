@@ -145,7 +145,19 @@ namespace ak {
 			//! @throw ak::Exception if failed to create
 			ak::UID createDock(
 				ak::UID												_creatorUid,
-				const QString &										_text = QString("")
+				const QString &										_text = QString()
+			);
+
+			//! @brief Will create a log in dialog and return its UID
+			//! @param _creatorUid The UID of the creator
+			//! @param _showSavePasswordCheckbox If true, a savePassword checkbox will be displayed
+			//! @param _username The initial displayed username
+			//! @param _password The initial password
+			ak::UID createLogInDialog(
+				ak::UID												_creatorUid,
+				bool												_showSavePasswordCheckbox,
+				const QString &										_username = QString(),
+				const QString &										_password = QString()
 			);
 
 			//! @brief Will create a push button and return its UID
@@ -954,6 +966,38 @@ namespace ak {
 			bool itm_getValueIsMultivalued(
 				ak::UID												_objectUid,
 				ak::ID												_itemId
+			);
+
+			// ###############################################################################################################################################
+
+			//! @brief Will show the dialog with the provided UID and return the dialog result
+			//! @param _dialogUid The UID of the dialog to show
+			//! @throw ak::Exception if the provided UID is invalid
+			ak::ui::core::dialogResult dialog_show(
+				ak::UID												_dialogUid
+			);
+
+			//! @brief Will return the result of the specified dialog
+			//! @param _dialogUid The UID of the dialog to show
+			//! @throw ak::Exception if the provided UID is invalid
+			ak::ui::core::dialogResult dialog_result(
+				ak::UID												_dialogUid
+			);
+
+			//! @brief Will return the username of the specified dialog
+			//! Allowerd dialogs: logIn
+			//! @param _dialogUid The UID of the dialog to return the username from
+			//! @throw ak::Exception if the provided UID is invalid
+			QString dialog_username(
+				ak::UID												_dialogUid
+			);
+
+			//! @brief Will return the password of the specified dialog
+			//! Allowerd dialogs: logIn
+			//! @param _dialogUid The UID of the dialog to return the password from
+			//! @throw ak::Exception if the provided UID is invalid
+			QString dialog_password(
+				ak::UID												_dialogUid
 			);
 
 			// ###############################################################################################################################################

@@ -24,6 +24,7 @@ QString ak::ui::core::toQString(
 	case ak::ui::core::oComboButton: return QString("ComboButton");
 	case ak::ui::core::oCheckBox: return QString("CheckBox");
 	case ak::ui::core::oDock: return QString("Dock");
+	case ak::ui::core::oLogInDialog: return QString("LogInDialog");
 	case ak::ui::core::oMainWindow: return QString("Window");
 	case ak::ui::core::oPictureBox: return QString("PictureBox");
 	case ak::ui::core::oPropertyGrid: return QString("PropertyGrid");
@@ -82,6 +83,22 @@ QString ak::ui::core::toQString(
 	default: assert(0); // Not implemented yet
 	}
 	return QString("");
+}
+
+QString ak::ui::core::toQString(
+	dialogResult							_dialogResult
+) {
+	switch (_dialogResult)
+	{
+	case ak::ui::core::resultYes: return QString("Result.Yes");
+	case ak::ui::core::resultNo: return QString("Result.No");
+	case ak::ui::core::resultOk: return QString("Result.Ok");
+	case ak::ui::core::resultCancel: return QString("Result.None");
+	case ak::ui::core::resultNone: return QString("Result.None");
+	default:
+		assert(0);
+		return QString();
+	}
 }
 
 QString ak::ui::core::toQString(

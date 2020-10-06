@@ -64,6 +64,12 @@
     <Filter Include="Source Files\ak\notifier">
       <UniqueIdentifier>{c4f561c8-c068-40c8-bd57-c48c5dcdf289}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ak\ui\dialog">
+      <UniqueIdentifier>{238db49a-f816-4b79-a7a5-76d4fe7c5d9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ak\ui\dialog">
+      <UniqueIdentifier>{3a664e3f-b0ee-41b1-916e-a2df39157180}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ak_core.h">
@@ -233,6 +239,12 @@
     <QtMoc Include="include\ak_ui_qt_dock.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
+    <QtMoc Include="include\ak_ui_dialog_logIn.h">
+      <Filter>Header Files\ak\ui\dialog</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_core_aDialog.h">
+      <Filter>Header Files\ak\ui\core</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -398,6 +410,12 @@
       <Filter>Source Files\ak</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_ui_core_aRestorable.cpp">
+      <Filter>Source Files\ak\ui\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_dialog_logIn.cpp">
+      <Filter>Source Files\ak\ui\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_core_aDialog.cpp">
       <Filter>Source Files\ak\ui\core</Filter>
     </ClCompile>
   </ItemGroup>

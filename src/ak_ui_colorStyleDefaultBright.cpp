@@ -195,6 +195,12 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 			break;
 
 		// ######################################################################################################
+		// Line edit
+		case ak::ui::colorStyle::styleableObject::sLineEdit:
+			out.append("QLineEdit{" _fore _backControl "}\n");
+			break;
+
+		// ######################################################################################################
 		// Main window
 		case ak::ui::colorStyle::styleableObject::sMainWindow:
 

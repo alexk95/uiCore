@@ -179,11 +179,6 @@ namespace ak {
 		//! @brief Will destroy all objects created by this API
 		UICORE_API void destroy(void);
 
-		//! @brief Will destroy the provided object
-		UICORE_API void destroyObject(
-			ak::UID													_objectUid
-		);
-
 		//! @brief Will enable the provided event types to be send
 		//! @param _types The types to allow
 		UICORE_API void enableEventTypes(
@@ -450,6 +445,18 @@ namespace ak {
 		UICORE_API ak::UID createDock(
 			ak::UID													_creatorUid,
 			const QString &											_text = QString("")
+		);
+
+		//! @brief Will create a log in dialog and return its UID
+		//! @param _creatorUid The UID of the creator
+		//! @param _showSavePasswordCheckbox If true, a savePassword checkbox will be displayed
+		//! @param _username The initial displayed username
+		//! @param _password The initial password
+		UICORE_API ak::UID createLogInDialog(
+			ak::UID												_creatorUid,
+			bool												_showSavePasswordCheckbox,
+			const QString &										_username = QString(),
+			const QString &										_password = QString()
 		);
 
 		//! @brief Will create a new PropertyGrid and return its UID
@@ -1173,6 +1180,11 @@ namespace ak {
 				int													_value
 			);
 
+			//! @brief Will destroy the provided object
+			UICORE_API void destroy(
+				ak::UID												_objectUid
+			);
+
 			// ###############################################################################################################################################
 
 			// Object getter
@@ -1630,6 +1642,44 @@ namespace ak {
 
 		// ###############################################################################################################################################
 
+		// Dialogs
+
+		namespace dialog {
+
+			//! @brief Will show the dialog with the provided UID
+			//! @param _dialogUid The UID of the dialog
+			//! @throw ak::Exception if the provided UID is invalid
+			UICORE_API ak::ui::core::dialogResult show(
+				ak::UID												_dialogUid
+			);
+
+			//! @brief Will return the result of the specified dialog
+			//! @param _dialogUid The UID of the dialog to show
+			//! @throw ak::Exception if the provided UID is invalid
+			UICORE_API ak::ui::core::dialogResult result(
+				ak::UID												_dialogUid
+			);
+
+			//! @brief Will return the username of the specified dialog
+			//! Allowerd dialogs: logIn
+			//! @param _dialogUid The UID of the dialog to return the username from
+			//! @throw ak::Exception if the provided UID is invalid
+			UICORE_API QString username(
+				ak::UID												_dialogUid
+			);
+
+			//! @brief Will return the password of the specified dialog
+			//! Allowerd dialogs: logIn
+			//! @param _dialogUid The UID of the dialog to return the password from
+			//! @throw ak::Exception if the provided UID is invalid
+			UICORE_API QString password(
+				ak::UID												_dialogUid
+			);
+
+		} // namespace dialog
+
+		// ###############################################################################################################################################
+
 		//! @brief Will return a string representation of the provided eventType
 		//! @param _type The event type that should be represented
 		UICORE_API QString toString(
@@ -1658,6 +1708,12 @@ namespace ak {
 		//! @param _type The tab location that should be represented
 		UICORE_API QString toString(
 			ak::ui::core::tabLocation							_tabLocation
+		);
+
+		//! @brief Create a string representation of the provided dialog result
+		//! @param _dialogResult The dialog result to be converted
+		UICORE_API QString toQString(
+			ak::ui::core::dialogResult							_dialogResult
 		);
 
 		//! @brief Will return a string representation of the provided keyType
@@ -1881,6 +1937,9 @@ namespace ak {
 		std::vector<ak::ui::qt::comboButtonItem> toComboButtonItem(
 			const std::vector<QString> &							_items
 		);
+
+		//! @brief Used only for debug purporse (no functionallity)
+		UICORE_API void testCall(void);
 
 	} // namespace uiAPI
 } // namespace ak

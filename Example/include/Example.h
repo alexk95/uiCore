@@ -43,6 +43,8 @@ public:
 
 private:
   
+	void setupUi(void);
+
 	//! @brief Will fill the widgets with default information
 	void defaultData(void);
 
