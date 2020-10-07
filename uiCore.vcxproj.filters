@@ -245,6 +245,9 @@
     <QtMoc Include="include\ak_ui_core_aDialog.h">
       <Filter>Header Files\ak\ui\core</Filter>
     </QtMoc>
+    <QtMoc Include="include\ak_ui_dialog_prompt.h">
+      <Filter>Header Files\ak\ui\dialog</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -417,6 +420,9 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_core_aDialog.cpp">
       <Filter>Source Files\ak\ui\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_dialog_prompt.cpp">
+      <Filter>Source Files\ak\ui\dialog</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

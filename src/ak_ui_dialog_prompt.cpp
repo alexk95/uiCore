@@ -1,8 +1,8 @@
 /*
- * ak_ui_qt_timer.cpp
+ * ak_ui_dialog_prompt.cpp
  *
- *  Created on: September 19, 2020
- *	Last modified on: September 30, 2020
+ *  Created on: October 07, 2020
+ *	Last modified on: October 07, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
  *	This file is part of the uiCore project.
@@ -12,10 +12,4 @@
  */
 
 // AK header
-#include <ak_ui_qt_timer.h>		// Corresponding header
-
-ak::ui::qt::timer::timer()
-	: QTimer(), ak::ui::core::aObject(ak::ui::core::objectType::oTimer)
-{}
-
-ak::ui::qt::timer::~timer() {}
+#include <ak_ui_dialog_prompt.h>		// Corresponding header

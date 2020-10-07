@@ -5,6 +5,10 @@
  *	Last modified on: August 20, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
+ *	This file is part of the uiCore project.
+ *	This file is subject to the terms and conditions defined in
+ *	file 'LICENSE', which is part of this source code package.
+ *	See license at: https://github.com/alexk95/uiCore
  */
 
 #pragma once
@@ -77,7 +81,17 @@ namespace ak {
 				resultNo,
 				resultOk,
 				resultCancel,
+				resultRetry,
 				resultNone
+			};
+
+			//! Describes the promt type
+			enum promptType {
+				promptOk,
+				promptYesNo,
+				promptYesNoCancel,
+				promptOkCancel,
+				promptRetryCancel
 			};
 
 			enum keyType {
@@ -131,6 +145,12 @@ namespace ak {
 			//! @param _dialogResult The dialog result to be converted
 			QString toQString(
 				dialogResult							_dialogResult
+			);
+
+			//! @brief Create a string representation of the provided prompt type
+			//! @param _promptType The prompt type to be converted
+			QString toQString(
+				promptType								_promptType
 			);
 
 			//! @brief Create a string representation of the provided keyType

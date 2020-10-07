@@ -5,6 +5,10 @@
  *	Last modified on: August 20, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
+ *	This file is part of the uiCore project.
+ *	This file is subject to the terms and conditions defined in
+ *	file 'LICENSE', which is part of this source code package.
+ *	See license at: https://github.com/alexk95/uiCore
  */
 
 // AK header
@@ -99,6 +103,13 @@ QString ak::ui::core::toQString(
 		assert(0);
 		return QString();
 	}
+}
+
+QString ak::ui::core::toQString(
+	promptType								_promptType
+) {
+	assert(0); //
+	return "";
 }
 
 QString ak::ui::core::toQString(

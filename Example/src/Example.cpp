@@ -56,6 +56,9 @@ Example::Example()
 	ak::UID dia = ak::uiAPI::createLogInDialog(my_uid, combinations, true, "", "", 3);
 	ak::ui::core::dialogResult result = ak::uiAPI::dialog::show(dia);
 	
+	ak::uiAPI::dialog::username(dia);
+	ak::uiAPI::dialog::password(dia);
+
 	if (result == ak::ui::core::resultOk) {
 		setupUi();
 	}
