@@ -25,6 +25,7 @@ class QLineEdit;
 class QPushButton;
 class QHBoxLayout;
 class QVBoxLayout;
+class QGridLayout;
 class QToolTip;
 
 namespace ak {
@@ -92,22 +93,18 @@ namespace ak {
 				std::vector<std::array<QString, 2>>		my_validLogIns;				//! Contains all valid log in combinations
 				QToolTip *								my_toolTip;
 
-				struct structEntry {
-					QWidget *		widget;
-					QHBoxLayout *	layout;
+				struct structInput
+				{
 					QLabel *		label;
-					QLineEdit *		lineEdit;
+					QLineEdit *		edit;
 				};
 
-				struct structSavePassword {
-					QWidget *		widget;
-					QHBoxLayout *	layout;
-					QCheckBox *		checkbox;
-				};
+				QGridLayout *		my_gridLayout;
+				QWidget *			my_gridWidget;
 
-				structSavePassword	my_savePassword;
-				structEntry			my_username;
-				structEntry			my_password;
+				QCheckBox *			my_savePassword;
+				structInput			my_inputUsername;
+				structInput			my_inputPassword;
 				QPushButton *		my_buttonLogIn;
 				QVBoxLayout *		my_layout;
 
