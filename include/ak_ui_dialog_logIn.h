@@ -33,6 +33,9 @@ class QGridLayout;
 class QToolTip;
 
 namespace ak {
+
+	class messenger;
+
 	namespace ui {
 		namespace dialog {
 
@@ -42,20 +45,16 @@ namespace ak {
 
 			public:
 				//! @brief Constructor
-				//! @param _validLogIns The valid possible combinations of username and password (Must provide at least one entry)
+				//! @param _messenger The external messenger used to send event messages
 				//! @param _showSavePassword if true the save password checkbox will be displayed
 				//! @param _username The initial username
 				//! @param _password The initial password
-				//! @param _maxLogInAttempts If a value greater than 0 is provided, this value will represent the maximum possible log in attempts before the dialog will close automatically
-				//! @param _usernameCaseSensitive If true the username awill be checked case sensitive
 				//! @param _parent The parent widget
 				logIn(
-					const std::vector<std::array<QString, 2>> &	_validLogIns,
+					ak::messenger *								_messenger,
 					bool										_showSavePassword,
-					const QString &								_username,
-					const QString &								_password,
-					int											_maxLogInAttempts = 0,
-					bool										_usernameCaseSensitive = false,
+					const QString &								_username = QString(),
+					const QString &								_password = QString(),
 					QWidget *									_parent = nullptr
 				);
 
@@ -91,17 +90,13 @@ namespace ak {
 					const QString &			_text
 				) const;
 
-				int										my_logInAttempt;			//! The current log in attempt
-				int										my_maxLogInAttempts;		//! The maximum ammount of log in attempts
-				bool									my_usernameCaseSensitive;	//! If true the username will be checked case sensitive
-				std::vector<std::array<QString, 2>>		my_validLogIns;				//! Contains all valid log in combinations
-				QToolTip *								my_toolTip;
-
 				struct structInput
 				{
 					QLabel *		label;
 					QLineEdit *		edit;
 				};
+
+				ak::messenger *		my_messenger;
 
 				QGridLayout *		my_gridLayout;
 				QWidget *			my_gridWidget;

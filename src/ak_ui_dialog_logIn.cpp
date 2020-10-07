@@ -15,6 +15,7 @@
 #include <ak_ui_dialog_logIn.h>		// corresponding header
 #include <ak_ui_colorStyle.h>
 #include <ak_ui_core.h>
+#include <ak_messenger.h>			// messenger
 
 // Qt header
 #include <qwidget.h>
@@ -29,18 +30,15 @@
 
 
 ak::ui::dialog::logIn::logIn(
-	const std::vector<std::array<QString, 2>> &	_validLogIns,
+	ak::messenger *								_messenger,
 	bool										_showSavePassword,
 	const QString &								_username,
 	const QString &								_password,
-	int											_maxLogInAttempts,
-	bool										_usernameCaseSensitive,
 	QWidget *									_parent
 )	: ui::core::aDialog(_parent), ak::ui::core::aPaintable(ui::core::objectType::oLogInDialog),
-	my_buttonLogIn(nullptr), my_layout(nullptr), my_validLogIns(_validLogIns), my_maxLogInAttempts(_maxLogInAttempts),
-	my_logInAttempt(0), my_usernameCaseSensitive(_usernameCaseSensitive), my_gridLayout(nullptr), my_savePassword(nullptr)
+	my_buttonLogIn(nullptr), my_layout(nullptr), my_gridLayout(nullptr), my_savePassword(nullptr), my_messenger(_messenger)
 {
-	assert(my_validLogIns.size() > 0); // No valid log in provided
+	assert(my_messenger != nullptr);
 
 	// Initialize entries
 	my_inputPassword.label = nullptr;
@@ -89,6 +87,7 @@ ak::ui::dialog::logIn::logIn(
 	
 	setLayout(my_layout);
 
+	setWindowTitle("Welcome");
 	// Hide info button
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -158,34 +157,13 @@ void ak::ui::dialog::logIn::slotClicked(void) {
 		createToolTip(my_inputUsername.edit, "Please enter a username");
 		return;
 	}
-
 	if (pw.length() == 0) {
 		createToolTip(my_inputPassword.edit, "Please enter a password");
 		return;
 	}
 
-	my_logInAttempt++;
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eClicked);
 
-	// Check combination
-	for (auto itm : my_validLogIns) {
-		if (my_usernameCaseSensitive) {
-			if (itm[0] == user) {
-				if (itm[1] == pw) { my_result = ak::ui::core::resultOk; close(); return; }
-			}
-		}
-		else {
-			if (itm[0].toLower() == user.toLower()) {
-				if (itm[1] == pw) { my_result = ak::ui::core::resultOk; close(); return; }
-			}
-		}
-	}
-
-	if (my_logInAttempt >= my_maxLogInAttempts && my_maxLogInAttempts > 0) {
-		my_result = ak::ui::core::resultCancel; close();
-	}
-	else {
-		createToolTip(my_inputPassword.edit, "Username and password combination does not exist");
-	}
 }
 
 void ak::ui::dialog::logIn::createToolTip(

@@ -67,6 +67,7 @@ private:
 		ak::UID				tester;				//! The UId of the tester
 		ak::UID				ttb_aTest;
 		ak::UID				ttb_aTest2;
+		ak::UID				logInDialog;
 	};
 	structUi					my_ui;			//! Contains all UIDs of the UI
 	ak::UID						my_uid;			//! The UID of this application

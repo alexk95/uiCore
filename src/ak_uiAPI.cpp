@@ -714,17 +714,14 @@ ak::UID ak::uiAPI::createDock(
 
 ak::UID ak::uiAPI::createLogInDialog(
 	ak::UID												_creatorUid,
-	const std::vector<std::array<QString, 2>> &			_validLogIns,
 	bool												_showSavePassword,
 	const QString &										_username,
-	const QString &										_password,
-	int													_maxLogInAttempts,
-	bool												_usernameCaseSensitive
+	const QString &										_password
 ) {
 	try {
 		// Get manager
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createLogInDialog(_creatorUid, _validLogIns, _showSavePassword, _username, _password, _maxLogInAttempts, _usernameCaseSensitive);
+		return oM->createLogInDialog(_creatorUid, _showSavePassword, _username, _password);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createLogInDialog(QString)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createLogInDialog(QString)"); }
@@ -2460,6 +2457,19 @@ bool ak::uiAPI::dialog::savePassword(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::savePassword()"); }
 }
 
+void ak::uiAPI::dialog::close(
+	ak::UID												_dialogUid,
+	ak::ui::core::dialogResult							_result
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->dialog_close(_dialogUid, _result);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::close()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::close()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::close()"); }
+}
+
 // ###############################################################################################################################################
 
 QString ak::uiAPI::toString(
@@ -2781,16 +2791,16 @@ void ak::uiAPI::setDockBottomRightPriority(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setDockBottomRightPriority()"); }
 }
 
-void ak::uiAPI::close(
+void ak::uiAPI::closeWindow(
 	ak::UID												_uiManagerUid
 ) {
 	try {
 		ak::ui::objectManager * obj = my_apiManager.objectManager();
 		obj->close(_uiManagerUid);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::close()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::close()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::close()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::closeWindow()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::closeWindow()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::closeWindow()"); }
 }
 
 // ###############################################################################################################################################

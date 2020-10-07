@@ -453,20 +453,14 @@ namespace ak {
 
 		//! @brief Will create a log in dialog and return its UID
 		//! @param _creatorUid The UID of the creator
-		//! @param _validLogIns The valid possible combinations of username and password (Must provide at least one entry)
 		//! @param _showSavePassword if true the save password checkbox will be displayed
 		//! @param _username The initial username
 		//! @param _password The initial password
-		//! @param _maxLogInAttempts If a value greater than 0 is provided, this value will represent the maximum possible log in attempts before the dialog will close automatically
-		//! @param _usernameCaseSensitive If true the username awill be checked case sensitive
 		UICORE_API ak::UID createLogInDialog(
-			ak::UID												_creatorUid,
-			const std::vector<std::array<QString, 2>> &			_validLogIns,
-			bool												_showSavePassword,
-			const QString &										_username = QString(),
-			const QString &										_password = QString(),
-			int													_maxLogInAttempts = 0,
-			bool												_usernameCaseSensitive = false
+			ak::UID													_creatorUid,
+			bool													_showSavePassword,
+			const QString &											_username = QString(),
+			const QString &											_password = QString()
 		);
 
 		//! @brief Will create a new PropertyGrid and return its UID
@@ -1694,6 +1688,15 @@ namespace ak {
 				ak::UID												_dialogUid
 			);
 
+			//! @brief Will close the specified dialog
+			//! @param _dialogUid The UID of the dialog
+			//! @param _result The dialog result to set to the dialog before closing
+			//! @throw ak::Exception if the provided UID is invalid
+			UICORE_API void close(
+				ak::UID												_dialogUid,
+				ak::ui::core::dialogResult							_result = ui::core::resultNone
+			);
+
 		} // namespace dialog
 
 		// ###############################################################################################################################################
@@ -1773,7 +1776,7 @@ namespace ak {
 		//! @brief Will close the provided uiManager
 		//! @param _uiManagerUid The UID of the uiManager to close
 		//! @throw ak::Exception if the provided UID is invalid
-		UICORE_API void close(
+		UICORE_API void closeWindow(
 			ak::UID												_uiManagerUid
 		);
 

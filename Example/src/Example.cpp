@@ -33,6 +33,8 @@ Example::Example()
 	// Create own UID
 	my_uid = ak::uiAPI::createUid();
 	
+	my_ui.mainWindow = ak::invalidUID;
+
 	// Setup icon manager
 
 	// App dir
@@ -46,28 +48,19 @@ Example::Example()
 	// Set default dark color style
 	ak::uiAPI::setDefaultDarkColorStyle();
 
-	std::vector<std::array<QString, 2>> combinations;
-	std::array<QString, 2> possible1;
-	possible1[0] = "Test";
-	possible1[1] = "Test";
-	combinations.push_back(possible1);
+	my_ui.logInDialog = ak::uiAPI::createLogInDialog(my_uid, true);
 
+	// Create my notifier
+	my_notifier = new ExampleNotifier(this);
+	ak::uiAPI::registerUidNotifier(my_ui.logInDialog, my_notifier);
 
-	ak::UID dia = ak::uiAPI::createLogInDialog(my_uid, combinations, true, "", "", 3);
-	ak::ui::core::dialogResult result = ak::uiAPI::dialog::show(dia);
-	
-	ak::uiAPI::dialog::username(dia);
-	ak::uiAPI::dialog::password(dia);
+	ak::ui::core::dialogResult result = ak::uiAPI::dialog::show(my_ui.logInDialog);
+	ak::uiAPI::obj::destroy(my_ui.logInDialog);
 
 	if (result == ak::ui::core::resultOk) {
 		setupUi();
+		ak::uiAPI::exec();
 	}
-	else {
-		int x = 0;
-	}
-
-	ak::uiAPI::obj::destroy(dia);
-
 }
 
 Example::~Example() {}
@@ -79,22 +72,31 @@ void Example::eventCallback(
 	int						_info2
 ) {
 	try {
-		QString str("Event { Sender=\"");
-		str.append(QString::number(_sender));
-		str.append("\"; EventType = \"");
-		str.append(ak::uiAPI::toString(_eventType));
-		str.append("\"; Info1=\"");
-		str.append(QString::number(_info1));
-		str.append("\"; Info2=\"");
-		if (_eventType == ak::core::eKeyPressed) { str.append(ak::uiAPI::toString((ak::ui::core::keyType)_info2)); }
-		else { str.append(QString::number(_info2)); }
-		str.append("\"; }");
-		ak::uiAPI::obj::appendText(my_ui.outputWidget, str);
-
+		if (my_ui.mainWindow != ak::invalidUID) {
+			QString str("Event { Sender=\"");
+			str.append(QString::number(_sender));
+			str.append("\"; EventType = \"");
+			str.append(ak::uiAPI::toString(_eventType));
+			str.append("\"; Info1=\"");
+			str.append(QString::number(_info1));
+			str.append("\"; Info2=\"");
+			if (_eventType == ak::core::eKeyPressed) { str.append(ak::uiAPI::toString((ak::ui::core::keyType)_info2)); }
+			else { str.append(QString::number(_info2)); }
+			str.append("\"; }");
+			ak::uiAPI::obj::appendText(my_ui.outputWidget, str);
+		}
 		if (_eventType == ak::core::eventType::eClicked) {
-			if (_sender == my_ui.ttb_aExit) {
+			if (_sender == my_ui.logInDialog) {
+				// Validate logic
+
+				// ...
+
+				// Show main UI and close dialog
+				ak::uiAPI::dialog::close(my_ui.logInDialog, ak::ui::core::resultOk);
+			}
+			else if (_sender == my_ui.ttb_aExit) {
 				// Close the main window
-				ak::uiAPI::close(my_ui.mainWindow);
+				ak::uiAPI::closeWindow(my_ui.mainWindow);
 			}
 			else  if (_sender == my_ui.ttb_aColorStyle) {
 
@@ -249,9 +251,6 @@ void Example::setupUi(void) {
 			// Set central widget
 			ak::uiAPI::obj::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
 
-			// Create my notifier
-			my_notifier = new ExampleNotifier(this);
-
 			// Register notifier
 			ak::uiAPI::registerUidNotifier(my_ui.propertiesWidget, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.table1, my_notifier);
@@ -271,9 +270,6 @@ void Example::setupUi(void) {
 			ak::uiAPI::setStatusLabelVisible(my_ui.mainWindow, true);
 			ak::uiAPI::setStatusProgressVisible(my_ui.mainWindow, true);
 			ak::uiAPI::setStatusLabelVisible(my_ui.mainWindow, false);
-
-			ak::uiAPI::exec();
-
 		}
 		catch (const ak::Exception & e) { throw ak::Exception(e, "Example::Example()"); }
 		catch (const std::exception & e) { throw ak::Exception(e.what(), "Example::Example()"); }

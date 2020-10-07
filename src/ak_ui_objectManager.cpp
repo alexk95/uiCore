@@ -26,6 +26,7 @@
 #include <ak_ui_core_aWidget.h>
 #include <ak_ui_core_aObject.h>
 #include <ak_ui_core_aRestorable.h>
+#include <ak_ui_core_aDialog.h>
 
 // AK dialogs
 #include <ak_ui_dialog_logIn.h>
@@ -288,17 +289,13 @@ ak::UID ak::ui::objectManager::createDock(
 
 ak::UID ak::ui::objectManager::createLogInDialog(
 	ak::UID												_creatorUid,
-	const std::vector<std::array<QString, 2>> &			_validLogIns,
 	bool												_showSavePassword,
 	const QString &										_username,
-	const QString &										_password,
-	int													_maxLogInAttempts,
-	bool												_usernameCaseSensitive
+	const QString &										_password
 ) {
 	try {
 		// Create object
-		ak::ui::dialog::logIn * obj = new ak::ui::dialog::logIn(_validLogIns, _showSavePassword, _username,_password, _maxLogInAttempts, _usernameCaseSensitive);
-		//ak::ui::dialog::logIn * obj = new ak::ui::dialog::logIn;
+		ak::ui::dialog::logIn * obj = new ak::ui::dialog::logIn(my_messenger, _showSavePassword, _username, _password);
 		assert(obj != nullptr);
 		
 		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
@@ -3428,6 +3425,25 @@ bool ak::ui::objectManager::dialog_savePassword(
 		default: throw ak::Exception("Invalid object type", "Check object type");
 		}
 
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::dialog_savePassword()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::dialog_savePassword()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::dialog_savePassword()"); }
+}
+
+void ak::ui::objectManager::dialog_close(
+	ak::UID												_dialogUid,
+	ak::ui::core::dialogResult							_result
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_dialogUid);
+		assert(itm != my_mapObjects.end()); // Invalid UID
+		ak::ui::core::aDialog * dia = nullptr;
+		dia = dynamic_cast<ak::ui::core::aDialog *>(itm->second);
+		assert(dia != nullptr); // Wrong object type
+		dia->setResult(_result);
+		dia->close();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::dialog_savePassword()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::dialog_savePassword()"); }
