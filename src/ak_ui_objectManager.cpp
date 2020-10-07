@@ -284,13 +284,16 @@ ak::UID ak::ui::objectManager::createDock(
 
 ak::UID ak::ui::objectManager::createLogInDialog(
 	ak::UID												_creatorUid,
-	bool												_showSavePasswordCheckbox,
+	const std::vector<std::array<QString, 2>> &			_validLogIns,
+	bool												_showSavePassword,
 	const QString &										_username,
-	const QString &										_password
+	const QString &										_password,
+	int													_maxLogInAttempts,
+	bool												_usernameCaseSensitive
 ) {
 	try {
 		// Create object
-		ak::ui::dialog::logIn * obj = new ak::ui::dialog::logIn();
+		ak::ui::dialog::logIn * obj = new ak::ui::dialog::logIn(_validLogIns, _showSavePassword, _username,_password, _maxLogInAttempts, _usernameCaseSensitive);
 		//ak::ui::dialog::logIn * obj = new ak::ui::dialog::logIn;
 		assert(obj != nullptr);
 		
@@ -3399,6 +3402,32 @@ QString ak::ui::objectManager::dialog_password(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::dialog_password()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::dialog_password()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::dialog_password()"); }
+}
+
+bool ak::ui::objectManager::dialog_savePassword(
+	ak::UID												_dialogUid
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_dialogUid);
+		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oLogInDialog:
+		{
+			// Cast object
+			ak::ui::dialog::logIn * obj = nullptr;
+			obj = dynamic_cast<ak::ui::dialog::logIn *>(itm->second);
+			assert(obj != nullptr); // Cast failed
+			return obj->savePassword();
+		}
+		break;
+		default: throw ak::Exception("Invalid object type", "Check object type");
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::dialog_savePassword()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::dialog_savePassword()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::dialog_savePassword()"); }
 }
 
 // ###############################################################################################################################################

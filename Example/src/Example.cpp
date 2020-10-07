@@ -16,6 +16,7 @@
 #include <qstring.h>
 
 #include <vector>
+#include <array>
 
 #define TXT_Bright "Bright mode"
 #define TXT_Dark "Dark mode"
@@ -45,11 +46,21 @@ Example::Example()
 	// Set default dark color style
 	ak::uiAPI::setDefaultDarkColorStyle();
 
-	ak::UID dia = ak::uiAPI::createLogInDialog(my_uid, false);
+	std::vector<std::array<QString, 2>> combinations;
+	std::array<QString, 2> possible1;
+	possible1[0] = "Test";
+	possible1[1] = "Test";
+	combinations.push_back(possible1);
+
+
+	ak::UID dia = ak::uiAPI::createLogInDialog(my_uid, combinations, true, "", "", 3);
 	ak::ui::core::dialogResult result = ak::uiAPI::dialog::show(dia);
 	
 	if (result == ak::ui::core::resultOk) {
 		setupUi();
+	}
+	else {
+		int x = 0;
 	}
 
 	ak::uiAPI::obj::destroy(dia);

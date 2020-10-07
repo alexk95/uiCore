@@ -710,14 +710,17 @@ ak::UID ak::uiAPI::createDock(
 
 ak::UID ak::uiAPI::createLogInDialog(
 	ak::UID												_creatorUid,
-	bool												_showSavePasswordCheckbox,
+	const std::vector<std::array<QString, 2>> &			_validLogIns,
+	bool												_showSavePassword,
 	const QString &										_username,
-	const QString &										_password
+	const QString &										_password,
+	int													_maxLogInAttempts,
+	bool												_usernameCaseSensitive
 ) {
 	try {
 		// Get manager
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createLogInDialog(_creatorUid, _showSavePasswordCheckbox, _username, _password);
+		return oM->createLogInDialog(_creatorUid, _validLogIns, _showSavePassword, _username, _password, _maxLogInAttempts, _usernameCaseSensitive);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createLogInDialog(QString)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createLogInDialog(QString)"); }
@@ -2439,6 +2442,18 @@ QString ak::uiAPI::dialog::password(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::password()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::password()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::password()"); }
+}
+
+bool ak::uiAPI::dialog::savePassword(
+	ak::UID												_dialogUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->dialog_savePassword(_dialogUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::savePassword()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::savePassword()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::savePassword()"); }
 }
 
 // ###############################################################################################################################################
