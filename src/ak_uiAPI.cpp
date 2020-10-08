@@ -26,6 +26,7 @@
 #include <ak_uidMangager.h>					// UID manager
 #include <ak_singletonAllowedMessages.h>	// allowed messages
 #include <ak_file.h>						// file
+#include <ak_ui_dialog_prompt.h>			// prompt dialog
 
 // Qt header
 #include <qapplication.h>					// QApplication
@@ -2457,6 +2458,18 @@ bool ak::uiAPI::dialog::savePassword(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::savePassword()"); }
 }
 
+void ak::uiAPI::dialog::showInvalidLogIn(
+	ak::UID												_dialogUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->dialog_showInvalidLogIn(_dialogUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::showInvalidLogIn()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::showInvalidLogIn()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::showInvalidLogIn()"); }
+}
+
 void ak::uiAPI::dialog::close(
 	ak::UID												_dialogUid,
 	ak::ui::core::dialogResult							_result
@@ -2468,6 +2481,22 @@ void ak::uiAPI::dialog::close(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::close()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::close()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::close()"); }
+}
+
+ak::ui::core::dialogResult ak::uiAPI::dialog::showPrompt(
+	const QString &										_message,
+	const QString &										_title,
+	ak::ui::core::promptType							_type
+) {
+	try {
+		ui::dialog::prompt dia(_message, _title, _type);
+		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
+		if (cS != nullptr) { dia.setColorStyle(cS); }
+		return dia.showDialog();
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::showPrompt()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::showPrompt()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::showPrompt()"); }
 }
 
 // ###############################################################################################################################################

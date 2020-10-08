@@ -17,6 +17,9 @@
 #include <vector>
 #include <array>
 
+// Qt header
+#include <qstring.h>
+
 // AK header
 #include <ak_ui_core_aPaintable.h>
 #include <ak_ui_core_aDialog.h>
@@ -79,9 +82,15 @@ namespace ak {
 				//! @brief Returns the save password state
 				bool savePassword(void) const;
 
+				//! @brief Will display a invalid log in popup message at this dialog
+				void showInvalidLogIn(void);
+
 			private slots:
 				//! @brief Callback for the log in button
 				void slotClicked(void);
+
+				void slotUsernameChanged(const QString & _text);
+				void slotPasswordChanged(const QString & _text);
 
 			private:
 
@@ -95,6 +104,8 @@ namespace ak {
 					QLabel *		label;
 					QLineEdit *		edit;
 				};
+
+				QString				my_hashedPw;
 
 				ak::messenger *		my_messenger;
 

@@ -1012,6 +1012,14 @@ namespace ak {
 				ak::UID												_dialogUid
 			);
 
+			//! @brief Will display a invalid log-in popup message at the specified dialog
+			//! Allowed dialogs: logIn
+			//! @param _dialogUid The UID of the dialog to return the save password option from
+			//! @throw ak::Exception if the provided UID is invalid
+			void dialog_showInvalidLogIn(
+				ak::UID												_dialogUid
+			);
+
 			//! @brief Will close the specified dialog
 			//! @param _dialogUid The UID of the dialog
 			//! @param _result The dialog result to set to the dialog before closing

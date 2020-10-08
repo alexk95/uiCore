@@ -48,7 +48,7 @@ Example::Example()
 	// Set default dark color style
 	ak::uiAPI::setDefaultDarkColorStyle();
 
-	my_ui.logInDialog = ak::uiAPI::createLogInDialog(my_uid, true);
+	my_ui.logInDialog = ak::uiAPI::createLogInDialog(my_uid, true, "Username");
 
 	// Create my notifier
 	my_notifier = new ExampleNotifier(this);
@@ -57,10 +57,7 @@ Example::Example()
 	ak::ui::core::dialogResult result = ak::uiAPI::dialog::show(my_ui.logInDialog);
 	ak::uiAPI::obj::destroy(my_ui.logInDialog);
 
-	if (result == ak::ui::core::resultOk) {
-		setupUi();
-		ak::uiAPI::exec();
-	}
+	if (result == ak::ui::core::resultOk) { setupUi(); ak::uiAPI::exec(); }
 }
 
 Example::~Example() {}
@@ -90,6 +87,10 @@ void Example::eventCallback(
 				// Validate logic
 
 				// ...
+
+				QString str1 = ak::uiAPI::dialog::username(my_ui.logInDialog);
+				QString str2 = ak::uiAPI::dialog::password(my_ui.logInDialog);
+				bool d = ak::uiAPI::dialog::savePassword(my_ui.logInDialog);
 
 				// Show main UI and close dialog
 				ak::uiAPI::dialog::close(my_ui.logInDialog, ak::ui::core::resultOk);
@@ -121,7 +122,12 @@ void Example::eventCallback(
 				my_notifier->enable();
 			}
 			else if (_sender == my_ui.ttb_aTest) {
-				ak::uiAPI::testCall();
+
+				ak::ui::core::dialogResult result = ak::uiAPI::dialog::showPrompt("Test uiasfhg slkjf s rfslöef höilshfsöfhös s "
+					"shfösa öa öa föiocah ö aöd haödad a höa höa höa öhaö öa fnsfhpitghoreiuzg ifhspigp sefgnirgh", "The Title", ak::ui::core::promptType::promptIgnoreRetryCancel);
+
+				int x = 0;
+
 				return;
 
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);

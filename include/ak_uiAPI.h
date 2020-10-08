@@ -1688,6 +1688,14 @@ namespace ak {
 				ak::UID												_dialogUid
 			);
 
+			//! @brief Will display a invalid log-in popup message at the specified dialog
+			//! Allowed dialogs: logIn
+			//! @param _dialogUid The UID of the dialog to return the save password option from
+			//! @throw ak::Exception if the provided UID is invalid
+			UICORE_API void showInvalidLogIn(
+				ak::UID												_dialogUid
+			);
+
 			//! @brief Will close the specified dialog
 			//! @param _dialogUid The UID of the dialog
 			//! @param _result The dialog result to set to the dialog before closing
@@ -1695,6 +1703,16 @@ namespace ak {
 			UICORE_API void close(
 				ak::UID												_dialogUid,
 				ak::ui::core::dialogResult							_result = ui::core::resultNone
+			);
+
+			//! @brief Will show a prompt dialog
+			//! @param _message The message to display
+			//! @param _title The title of the prompt
+			//! @param _type The type of the prompt
+			UICORE_API ui::core::dialogResult showPrompt(
+				const QString &										_message,
+				const QString &										_title,
+				ak::ui::core::promptType							_type
 			);
 
 		} // namespace dialog

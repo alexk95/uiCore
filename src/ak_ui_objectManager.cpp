@@ -3422,13 +3422,40 @@ bool ak::ui::objectManager::dialog_savePassword(
 			return obj->savePassword();
 		}
 		break;
-		default: throw ak::Exception("Invalid object type", "Check object type");
+		default: assert(0); // Invalid object type
+			return false;
 		}
 
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::dialog_savePassword()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::dialog_savePassword()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::dialog_savePassword()"); }
+}
+
+void ak::ui::objectManager::dialog_showInvalidLogIn(
+	ak::UID												_dialogUid
+) {
+	try {
+		// Find object
+		my_mapObjectsIterator itm = my_mapObjects.find(_dialogUid);
+		assert(itm != my_mapObjects.end()); // Invalid UID
+		switch (itm->second->objectType()) {
+		case ak::ui::core::objectType::oLogInDialog:
+		{
+			// Cast object
+			ak::ui::dialog::logIn * obj = nullptr;
+			obj = dynamic_cast<ak::ui::dialog::logIn *>(itm->second);
+			assert(obj != nullptr); // Cast failed
+			obj->showInvalidLogIn();
+		}
+		break;
+		default: assert(0); // Invalid object type
+		}
+
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::dialog_showInvalidLogIn()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::dialog_showInvalidLogIn()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::dialog_showInvalidLogIn()"); }
 }
 
 void ak::ui::objectManager::dialog_close(

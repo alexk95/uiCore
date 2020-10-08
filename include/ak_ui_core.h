@@ -59,6 +59,7 @@ namespace ak {
 				oMainWindow,
 				oMenu,
 				oPictureBox,
+				oPrompt,
 				oPropertyGrid,
 				oPropertyGridItem,
 				oPushButton,
@@ -82,6 +83,7 @@ namespace ak {
 				resultOk,
 				resultCancel,
 				resultRetry,
+				resultIgnore,
 				resultNone
 			};
 
@@ -91,7 +93,8 @@ namespace ak {
 				promptYesNo,
 				promptYesNoCancel,
 				promptOkCancel,
-				promptRetryCancel
+				promptRetryCancel,
+				promptIgnoreRetryCancel
 			};
 
 			enum keyType {

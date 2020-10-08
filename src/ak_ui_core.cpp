@@ -31,6 +31,7 @@ QString ak::ui::core::toQString(
 	case ak::ui::core::oLogInDialog: return QString("LogInDialog");
 	case ak::ui::core::oMainWindow: return QString("Window");
 	case ak::ui::core::oPictureBox: return QString("PictureBox");
+	case ak::ui::core::oPrompt: return QString("Prompt");
 	case ak::ui::core::oPropertyGrid: return QString("PropertyGrid");
 	case ak::ui::core::oPushButton: return QString("PushButton");
 	case ak::ui::core::oTable: return QString("Table");
@@ -97,7 +98,9 @@ QString ak::ui::core::toQString(
 	case ak::ui::core::resultYes: return QString("Result.Yes");
 	case ak::ui::core::resultNo: return QString("Result.No");
 	case ak::ui::core::resultOk: return QString("Result.Ok");
-	case ak::ui::core::resultCancel: return QString("Result.None");
+	case ak::ui::core::resultCancel: return QString("Result.Cancel");
+	case ak::ui::core::resultIgnore: return QString("Result.Ignore");
+	case ak::ui::core::resultRetry: return QString("Result.Retry");
 	case ak::ui::core::resultNone: return QString("Result.None");
 	default:
 		assert(0);
@@ -108,8 +111,18 @@ QString ak::ui::core::toQString(
 QString ak::ui::core::toQString(
 	promptType								_promptType
 ) {
-	assert(0); //
-	return "";
+	switch (_promptType)
+	{
+	case ak::ui::core::promptOk: return QString("Prompt.Ok");
+	case ak::ui::core::promptYesNo: return QString("Prompt.YesNo");
+	case ak::ui::core::promptYesNoCancel: return QString("Prompt.YesNoCancel");
+	case ak::ui::core::promptOkCancel: return QString("Prompt.OkCancel");
+	case ak::ui::core::promptRetryCancel: return QString("Prompt.RetryCancel");
+	case ak::ui::core::promptIgnoreRetryCancel: return QString("Prompt.IgnoreRetryCancel");
+	default:
+		assert(0); // Unknown type
+		return QString();
+	}
 }
 
 QString ak::ui::core::toQString(
