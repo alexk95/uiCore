@@ -31,23 +31,25 @@ ak::ui::widget::colorEditButton::colorEditButton(
 	ak::messenger *								_messenger,
 	ak::uidManager *							_uidManager,
 	const ak::ui::color &						_color,
-	ak::ui::iconManager *						_iconManager,
 	const QString &								_textOverride,
 	ak::ui::colorStyle *						_colorStyle
 )
-	: ak::ui::core::aWidgetManager(ak::ui::core::objectType::oColorEditButton, _iconManager),
+	: ak::ui::core::aWidgetManager(ak::ui::core::objectType::oColorEditButton),
 	my_button(nullptr),
 	my_layout(nullptr),
 	my_externalMessenger(nullptr),
 	my_notifier(nullptr),
 	my_externalUidManager(nullptr),
 	my_view(nullptr),
-	my_widget(nullptr)
+	my_widget(nullptr),
+	my_signalLinker(nullptr)
 {
 	try {
+		my_signalLinker = new ui::signalLinker(my_messenger, my_uidManager);
+
 		// Check arguments
-		if (_messenger == nullptr) { throw ak::Exception("Is nullptr", "Check messenger", ak::Exception::exceptionType::Nullptr); }
-		if (_uidManager == nullptr) { throw ak::Exception("Is nullptr", "Check UID manager", ak::Exception::exceptionType::Nullptr); }
+		assert(_messenger != nullptr); // Is nullptr
+		assert(_uidManager != nullptr); // Is nullptr
 
 		// Apply arguments
 		my_externalMessenger = _messenger;
@@ -69,10 +71,11 @@ ak::ui::widget::colorEditButton::colorEditButton(
 
 		my_signalLinker->addLink(my_button);
 
-		if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
-		
+		// Create main widget
+		my_widget = new QWidget();
+
 		// Create layout
-		my_layout = new QHBoxLayout();
+		my_layout = new QHBoxLayout(my_widget);
 		my_layout->setSpacing(0);
 		my_layout->setContentsMargins(QMargins(1, 1, 1, 1));
 		my_layout->addWidget(my_view, 20);
@@ -80,15 +83,13 @@ ak::ui::widget::colorEditButton::colorEditButton(
 		my_layout->setStretch(0, 2);
 		my_layout->setStretch(1, 8);
 
-		// Create main widget
-		my_widget = new QWidget();
-		my_widget->setLayout(my_layout);
-
 		// Set the current color
 		setColor(_color);
 
 		// Override the color text if required
 		if (_textOverride.length() > 0) { overrideText(_textOverride); }
+
+		if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
 
 		// Register receiver for the button
 		my_messenger->registerUidReceiver(my_button->uid(), my_notifier);

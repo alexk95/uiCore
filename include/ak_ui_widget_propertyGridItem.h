@@ -26,6 +26,10 @@
 
 namespace ak {
 	namespace ui {
+
+		// Forward declaration
+		namespace core { class aWidget; }
+
 		namespace widget {
 
 
@@ -46,8 +50,8 @@ namespace ak {
 					ak::ID									_index,
 					const QString &							_propertyName,
 					ak::core::valueType						_valueType,
-					ak::UID									_itemsUid = ak::invalidUID,
-					bool									_isMultivalued = false
+					bool									_isMultivalued = false,
+					ak::ui::core::aWidget *					_widget = nullptr
 				);
 
 				//! @brief Copy constructor
@@ -72,9 +76,10 @@ namespace ak {
 					ak::ID												_index
 				);
 
-				//! @brief Will set the UID of the properties widget
-				void setWidgetUid(
-					ak::UID												_widgetUid
+				//! @brief Will set the widget of this property grid item
+				//! @param _widget The widget to set
+				void setWidget(
+					ak::ui::core::aWidget *								_widget
 				);
 
 				//! @brief Will set the property name of this item
@@ -164,8 +169,11 @@ namespace ak {
 				//! @brief Returns the currently set index of this item
 				ak::ID index(void) const;
 
+				//! @brief Returns the current widget
+				ak::ui::core::aWidget * widget(void) const;
+
 				//! @brief Returns the UID of the items widget
-				ak::UID getWidgetUid(void) const;
+				ak::UID widgetUid(void) const;
 
 				//! @brief Returns the value type of this item
 				ak::core::valueType valueType(void) const;
@@ -234,7 +242,7 @@ namespace ak {
 				QString									my_propertyName;		//! The property name of this object
 				QString									my_lastText;			//! The last text of this object
 				bool									my_isMultivalued;		//! If true, this item is assumed to be multivalued
-				ak::UID									my_widgetUid;
+				ui::core::aWidget *						my_widget;				//! The widget of this property grid item
 
 				bool									my_bool;				//! The Boolean value
 				int										my_int;					//! The Integer value

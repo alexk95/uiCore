@@ -61,8 +61,6 @@ namespace ak {
 				table(
 					ak::messenger *													_messanger,
 					ak::uidManager *												_uidManager,
-					ak::ui::objectManager *											_objectManager,
-					ak::ui::iconManager *											_iconManager,
 					ak::ui::colorStyle *											_colorStyle = nullptr,
 					int																_rows = 0,
 					int																_columns = 0
@@ -267,7 +265,7 @@ namespace ak {
 				) const;
 
 				void setCellWidget(
-					ak::UID															_widgetUid,
+					QWidget *														_widget,
 					int																_row,
 					int																_column
 				);
@@ -281,7 +279,8 @@ namespace ak {
 			private:
 				ak::ui::qt::table *													my_table;							//! The table this object is managing
 				std::vector<std::vector<bool *> *> *								my_cellsWithWidget;
-				
+				ui::signalLinker *													my_signalLinker;
+
 				//! @brief will throw an exception if the row or column index is out of range
 				//! @param _row The row index to check
 				//! @param _column The column index to check

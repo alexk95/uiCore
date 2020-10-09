@@ -19,10 +19,15 @@
 #include <ak_ui_core.h>						// objectType
 #include <ak_ui_widget_propertyGridItem.h>	// propertyGridItem
 #include <ak_ui_widget_table.h>				// table
-#include <ak_ui_objectManager.h>			// object manager
 #include <ak_messenger.h>					// messenger
 #include <ak_uidMangager.h>					// UID manager
 #include <ak_ui_signalLinker.h>
+
+// Widgets and qt items
+#include <ak_ui_qt_checkBox.h>
+#include <ak_ui_qt_comboButton.h>
+
+#include <ak_ui_widget_colorEditButton.h>
 
 // Qt header
 #include <qcolordialog.h>					// QColorDialog
@@ -32,19 +37,18 @@
 ak::ui::widget::propertyGrid::propertyGrid(
 	ak::messenger *						_messenger,
 	ak::uidManager *					_uidManager,
-	ak::ui::iconManager *				_iconManager,
 	ak::ui::colorStyle *				_colorStyle
-) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oPropertyGrid, _iconManager, nullptr, nullptr, nullptr, _colorStyle),
-	my_externalMessanger(nullptr),
-	my_table(nullptr),
-	my_externalUidManager(nullptr),
-	my_showMessageboxOnSyntaxError(true)
+) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oPropertyGrid, nullptr, nullptr, _colorStyle),
+	my_externalMessanger(nullptr), my_table(nullptr), my_externalUidManager(nullptr),
+	my_showMessageboxOnSyntaxError(true), my_signalLinker(nullptr)
 {
 	try {
 		
 		// Check arguments
 		if (_messenger == nullptr) { throw ak::Exception("Is nullptr", "Check messenger"); }
 		if (_uidManager == nullptr) { throw ak::Exception("Is nullptr", "Check UID manager"); }
+
+		my_signalLinker = new ui::signalLinker(my_messenger, my_uidManager);
 
 		// Set variables
 		my_externalMessanger = _messenger;
@@ -53,7 +57,7 @@ ak::ui::widget::propertyGrid::propertyGrid(
 		my_colorStyle = _colorStyle;
 
 		// Create new table
-		my_table = new ak::ui::widget::table(my_messenger, my_uidManager, my_objectManager, my_iconManager, my_colorStyle, 0, 2);
+		my_table = new ak::ui::widget::table(my_messenger, my_uidManager, my_colorStyle, 0, 2);
 		if (my_table == nullptr) { throw ak::Exception("Failed to create", "Create table"); }
 	
 		// Set colorstyle
@@ -97,12 +101,15 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 	ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check colorStyle"); }
+		assert(_colorStyle != nullptr); // No color style provided
 		my_colorStyle = _colorStyle;
 		my_table->setColorStyle(my_colorStyle);
 		my_colorNormal = my_colorStyle->getControlsMainForecolor();
 		my_colorInvalidInput = my_colorStyle->getControlsErrorForecolor();
-		my_objectManager->setColorStyle(my_colorStyle);
+		for (auto itm : my_items) {
+			ak::ui::core::aWidget * wid = itm->widget();
+			if (wid != nullptr) { wid->setColorStyle(my_colorStyle); }
+		}
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::colorEditButton::setColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::colorEditButton::setColorStyle()"); }
@@ -119,7 +126,7 @@ void ak::ui::widget::propertyGrid::createItem(
 	try {
 		// Store data
 		ak::ui::widget::propertyGridItem * pItm = nullptr;
-		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount(), _itemName, ak::core::valueType::vBool,ak::invalidUID, _isMultipleValues);
+		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount(), _itemName, ak::core::valueType::vBool,_isMultipleValues);
 		if (pItm == nullptr) { throw ak::Exception("Failed to create", "Create new ak::ui::proprtyGridItem"); }
 		pItm->setBool(_value);
 		my_items.push_back(pItm);
@@ -132,15 +139,22 @@ void ak::ui::widget::propertyGrid::createItem(
 		my_table->setCellText(my_table->rowCount() - 1, 0, _itemName);
 		my_table->setCellEditable(my_table->rowCount() - 1, 0, false);
 		my_table->setCellSelectable(my_table->rowCount() - 1, 0, false);
-		ak::UID newUID = my_objectManager->createCheckBox(my_uid);
-		my_table->setCellWidget(newUID, my_table->rowCount() - 1, 1);
-		if (_isMultipleValues) { my_objectManager->obj_setTristate(newUID, true); }
-		else { my_objectManager->obj_setChecked(newUID, _value); }
-		my_messenger->registerUidReceiver(newUID, my_internalNotifier);
+
+		// Create checkbox
+		ak::ui::qt::checkBox * nObj = new ak::ui::qt::checkBox;
+		pItm->setWidget(nObj);
+
+		// Setup checkbox
+		if (_isMultipleValues) { nObj->setTristate(true); }
+		else { nObj->setChecked(_value); }
+
+		// Finalize checkbox
+		my_signalLinker->addLink(nObj);
+		my_table->setCellWidget(nObj, my_table->rowCount() - 1, 1);
+		my_messenger->registerUidReceiver(nObj->uid(), my_internalNotifier);
 
 		// Store UID information
-		pItm->setWidgetUid(newUID);
-		my_UIDmap.insert_or_assign(newUID, my_items.size() - 1);
+		my_UIDmap.insert_or_assign(nObj->uid(), my_items.size() - 1);
 
 		// Enable the notifier again
 		my_internalNotifier->enable();
@@ -168,7 +182,7 @@ void ak::ui::widget::propertyGrid::createItem(
 	try {
 		// Store data
 		ak::ui::widget::propertyGridItem * pItm = nullptr;
-		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount(), _itemName, ak::core::valueType::vInt, ak::invalidUID, _isMultipleValues);
+		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount(), _itemName, ak::core::valueType::vInt, _isMultipleValues);
 		if (pItm == nullptr) { throw ak::Exception("Failed to create", "Create new ak::ui::proprtyGridItem"); }
 		pItm->setInt(_value);
 		my_items.push_back(pItm);
@@ -210,7 +224,7 @@ void ak::ui::widget::propertyGrid::createItem(
 	try {
 		// Store data
 		ak::ui::widget::propertyGridItem * pItm = nullptr;
-		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount(), _itemName, ak::core::valueType::vDouble, ak::invalidUID, _isMultipleValues);
+		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount(), _itemName, ak::core::valueType::vDouble, _isMultipleValues);
 		if (pItm == nullptr) { throw ak::Exception("Failed to create", "Create new ak::ui::proprtyGridItem"); }
 		pItm->setDouble(_value);
 		my_items.push_back(pItm);
@@ -252,7 +266,7 @@ void ak::ui::widget::propertyGrid::createItem(
 	try {
 		// Store data
 		ak::ui::widget::propertyGridItem * pItm = nullptr;
-		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount(), _itemName, ak::core::valueType::vString, ak::invalidUID, _isMultipleValues);
+		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount(), _itemName, ak::core::valueType::vString, _isMultipleValues);
 		if (pItm == nullptr) { throw ak::Exception("Failed to create", "Create new ak::ui::proprtyGridItem"); }
 		pItm->setString(QString(_value));
 		my_items.push_back(pItm);
@@ -294,7 +308,7 @@ void ak::ui::widget::propertyGrid::createItem(
 	try {
 		// Store data
 		ak::ui::widget::propertyGridItem * pItm = nullptr;
-		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount() - 1, _itemName, ak::core::valueType::vString, ak::invalidUID, _isMultipleValues);
+		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount() - 1, _itemName, ak::core::valueType::vString, _isMultipleValues);
 		if (pItm == nullptr) { throw ak::Exception("Failed to create", "Create new ak::ui::proprtyGridItem"); }
 		pItm->setString(_value);
 		my_items.push_back(pItm);
@@ -336,8 +350,7 @@ void ak::ui::widget::propertyGrid::createItem(
 	try {
 		// Store data
 		ak::ui::widget::propertyGridItem * pItm = nullptr;
-		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount() - 1, _itemName, ak::core::valueType::vColor, ak::invalidUID, _isMultipleValues);
-		if (pItm == nullptr) { throw ak::Exception("Failed to create", "Create new ak::ui::proprtyGridItem"); }
+		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount() - 1, _itemName, ak::core::valueType::vColor, _isMultipleValues);
 		if (_isMultipleValues) { pItm->setColor(ak::ui::color(210, 210, 210, 0)); }
 		else { pItm->setColor(_value); }
 		my_items.push_back(pItm);
@@ -354,15 +367,16 @@ void ak::ui::widget::propertyGrid::createItem(
 		my_table->setCellSelectable(my_table->rowCount() - 1, 1, false);
 
 		// Add item
-		ak::UID newUID;
-		if (_isMultipleValues) { newUID = my_objectManager->createColorEditButton(my_uid, _value, "..."); }
-		else { newUID = my_objectManager->createColorEditButton(my_uid, _value); }
-		my_table->setCellWidget(newUID, my_table->rowCount() -1, 1);
-		my_messenger->registerUidReceiver(newUID, my_internalNotifier);
+		ui::widget::colorEditButton * nObj = nullptr;
+		if (_isMultipleValues) { nObj = new ui::widget::colorEditButton(my_messenger, my_uidManager, _value, "..."); }
+		else { nObj = new ui::widget::colorEditButton(my_messenger, my_uidManager, _value); }
+		nObj->setUid(my_uidManager->getId());
+		my_table->setCellWidget(nObj->widget(), my_table->rowCount() -1, 1);
+		my_messenger->registerUidReceiver(nObj->uid(), my_internalNotifier);	
 
 		// Store UID information
-		pItm->setWidgetUid(newUID);
-		my_UIDmap.insert_or_assign(newUID, my_items.size() - 1);
+		pItm->setWidget(nObj);
+		my_UIDmap.insert_or_assign(nObj->uid(), my_items.size() - 1);
 
 		// Enable the notifier again
 		my_internalNotifier->enable();
@@ -391,7 +405,7 @@ void ak::ui::widget::propertyGrid::createItem(
 	try {
 		// Store data
 		ak::ui::widget::propertyGridItem * pItm = nullptr;
-		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount() - 1, _itemName, ak::core::valueType::vSelection, ak::invalidUID, _isMultipleValues);
+		pItm = new ak::ui::widget::propertyGridItem(my_table->rowCount() - 1, _itemName, ak::core::valueType::vSelection, _isMultipleValues);
 		if (pItm == nullptr) { throw ak::Exception("Failed to create", "Create new ak::ui::proprtyGridItem"); }
 		std::vector<QString> nItms;
 		for (int c = 0; c < _selection.size(); c++) { nItms.push_back(_selection.at(c).text()); }
@@ -411,15 +425,18 @@ void ak::ui::widget::propertyGrid::createItem(
 		my_table->setCellSelectable(my_table->rowCount() - 1, 1, false);
 
 		// Add item
-		ak::UID newUID;
-		if (_isMultipleValues) { newUID = my_objectManager->createComboButton(my_uid, "...", _selection); }
-		else { newUID = my_objectManager->createComboButton(my_uid, _selectedValue, _selection); }
-		my_messenger->registerUidReceiver(newUID, my_internalNotifier);
-		my_table->setCellWidget(newUID, my_table->rowCount() - 1, 1);
+		ak::ui::qt::comboButton * nObj = nullptr;
+		if (_isMultipleValues) { nObj = new ui::qt::comboButton("...", my_colorStyle); }
+		else { nObj = new ui::qt::comboButton(_selectedValue, my_colorStyle); }
+		nObj->setItems(_selection);
+		my_signalLinker->addLink(nObj);
+
+		my_messenger->registerUidReceiver(nObj->uid(), my_internalNotifier);
+		my_table->setCellWidget(nObj, my_table->rowCount() - 1, 1);
 
 		// Store UID information
-		pItm->setWidgetUid(newUID);
-		my_UIDmap.insert_or_assign(newUID, my_items.size() - 1);
+		pItm->setWidget(nObj);
+		my_UIDmap.insert_or_assign(nObj->uid(), my_items.size() - 1);
 
 		// Enable the notifier again
 		my_internalNotifier->enable();
@@ -449,7 +466,11 @@ void ak::ui::widget::propertyGrid::clear(void) {
 	my_signalLinker = new ak::ui::signalLinker(my_messenger, my_uidManager);
 
 	// delete all items created
-	my_objectManager->destroyAll();
+	for (auto itm : my_items) {
+		ak::ui::widget::propertyGridItem * item = itm;
+		ak::ui::core::aWidget * widget = item->widget();
+		delete item; delete widget;
+	}
 	
 	// Clear up all entries
 	my_UIDmap.clear();
@@ -758,20 +779,31 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 			if (itm == my_UIDmap.end()) { throw ak::Exception("Invalid UID", "Check widget UID"); }
 			assert(itm->second >= 0 && itm->second < my_items.size()); // Invalid index stored
 
+			ak::ui::widget::propertyGridItem * ptItm = my_items.at(itm->second);
+			assert(ptItm != nullptr);
+
 			switch (my_items.at(itm->second)->valueType())
 			{
 			case ak::core::valueType::vBool:
 			{
-				ak::ui::widget::propertyGridItem * ptItm = my_items.at(itm->second);
 				if (_eventType != ak::core::eventType::eClicked) {
+					
+					// Cast actual object
+					ak::ui::qt::checkBox * actualObject = nullptr;
+					actualObject = dynamic_cast<ak::ui::qt::checkBox *>(ptItm->widget());
+					assert(actualObject != nullptr); // Cast failed
+
+					// Check if was multivalued
 					if (ptItm->isMultivalued()) {
+						// Update data
 						ptItm->setIsMultivalued(false);
-						my_objectManager->obj_setTristate(_widgetUid, false);
-						ptItm->setBool(my_objectManager->obj_getChecked(_widgetUid));
+						actualObject->setTristate(false);
+						ptItm->setBool(actualObject->isChecked());
+						// Send message
 						my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 					}
 					else {
-						bool newState = my_objectManager->obj_getChecked(_widgetUid);
+						bool newState = actualObject->isChecked();
 						if (ptItm->getBool() != newState) {
 							ptItm->setBool(newState);
 							my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
@@ -783,35 +815,44 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 			case ak::core::valueType::vColor:
 			{
 				// Get item
-				ak::ui::widget::propertyGridItem * ptItm = my_items.at(itm->second);
-				assert(ptItm != nullptr); // nullptr stored
 				if (ptItm->isMultivalued()) { ptItm->setIsMultivalued(false); }
-				ptItm->setColor(my_objectManager->obj_getColor(_widgetUid));
+
+				// Cast actual object
+				ak::ui::widget::colorEditButton * actualObject = nullptr;
+				actualObject = dynamic_cast<ak::ui::widget::colorEditButton *>(ptItm->widget());
+				assert(actualObject != nullptr);
+
+				// Save changes
+				ptItm->setColor(actualObject->color());
 				// Send message
 				my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 			}
 			break;
 			case ak::core::valueType::vSelection:
 			{
+				// Cast actual object
+				ak::ui::qt::comboButton * actualObject = nullptr;
+				actualObject = dynamic_cast<ak::ui::qt::comboButton *>(ptItm->widget());
+				assert(actualObject != nullptr); // Cast failed
+
 				// Get item
-				ak::ui::widget::propertyGridItem * ptItm = my_items.at(itm->second);
-				assert(ptItm != nullptr); // nullptr stored
-				if (my_items.at(itm->second)->isMultivalued()) {
-					my_items.at(itm->second)->setIsMultivalued(false);
+				if (ptItm->isMultivalued()) {
+					ptItm->setIsMultivalued(false);
 					// Check procedure
-					my_items.at(itm->second)->setSelection(my_objectManager->obj_getText(_widgetUid));
+					my_items.at(itm->second)->setSelection(actualObject->text());
 					my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 				}
 				else {
-					QString newState = my_objectManager->obj_getText(_widgetUid);
-					if (my_items.at(itm->second)->getSelection() != newState) {
-						my_items.at(itm->second)->setSelection(newState);
+					QString newState = actualObject->text();
+					if (ptItm->getSelection() != newState) {
+						ptItm->setSelection(newState);
 						my_externalMessanger->sendMessage(my_uid, ak::core::eventType::eChanged, itm->second);
 					}
 				}
 			}
 			break;
 			default:
+				assert(0); // Check why?
 				break;
 			}
 		}

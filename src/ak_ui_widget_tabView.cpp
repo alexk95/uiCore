@@ -33,8 +33,8 @@ ak::ui::widget::tabView::tabView(
 	uidManager *				_uidManager,
 	objectManager *				_objectManager,
 	colorStyle *				_colorStyle
-) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTabView, _iconManager, _messenger, _uidManager,
-	_objectManager, _colorStyle), my_tabView(nullptr), my_tabViewSignalLinker(nullptr)
+) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTabView, _messenger, _uidManager, _colorStyle),
+	my_tabView(nullptr), my_tabViewSignalLinker(nullptr)
 {
 	try {
 		// Creatte the tabView

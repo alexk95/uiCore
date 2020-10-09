@@ -27,10 +27,10 @@ namespace ak {
 	namespace ui {
 
 		// Forward declaration
-		class iconManager;
-		class objectManager;
+		//class iconManager;
+		//class objectManager;
 		class colorStyle;
-		class signalLinker;
+		//class signalLinker;
 
 		namespace core {
 
@@ -49,10 +49,10 @@ namespace ak {
 				//! @param _colorStyle The initial color style used in this paintable
 				aWidgetManager(
 					ak::ui::core::objectType	_type,
-					ak::ui::iconManager *		_iconManager,
+					//ak::ui::iconManager *		_iconManager,
 					ak::messenger *				_messenger = nullptr,
 					ak::uidManager *			_uidManager = nullptr,
-					ak::ui::objectManager *		_objectManager = nullptr,
+					//ak::ui::objectManager *		_objectManager = nullptr,
 					ak::ui::colorStyle *		_colorStyle = nullptr,
 					ak::UID						 _UID = ak::invalidUID,
 					int							_references = 1
@@ -63,9 +63,9 @@ namespace ak {
 			protected:
 				ak::messenger *					my_messenger;				//! The messenger this widget manager is using
 				ak::uidManager *				my_uidManager;				//! The UID manager this widget manager is using
-				ak::ui::iconManager *			my_iconManager;				//! The icon manager this widget manager is using
-				ak::ui::objectManager *			my_objectManager;			//! The object manager this widget manager is using
-				ak::ui::signalLinker *			my_signalLinker;			//! The signal linker this widget manager is using
+				//ak::ui::iconManager *			my_iconManager;				//! The icon manager this widget manager is using
+				//ak::ui::objectManager *			my_objectManager;			//! The object manager this widget manager is using
+				//ak::ui::signalLinker *			my_signalLinker;			//! The signal linker this widget manager is using
 
 				//! @brief Will remove all objects created by this widget manager
 				void memFree(void);

@@ -58,7 +58,6 @@ namespace ak {
 				propertyGrid(
 					ak::messenger *									_messenger,
 					ak::uidManager *								_uidManager,
-					ak::ui::iconManager *							_iconManager,
 					ak::ui::colorStyle *							_colorStyle = nullptr
 				);
 
@@ -324,6 +323,7 @@ namespace ak {
 				ak::uidManager *											my_externalUidManager;					//! The globally used UID manager
 				ak::notifierPropertyGrid *									my_internalNotifier;					//! The internally used notifier
 				ak::ui::colorStyle *										my_colorStyle;							//! The currently set color style
+				ui::signalLinker *											my_signalLinker;
 
 				bool														my_showMessageboxOnSyntaxError;			//! If true, a message box will be displayed on case of any syntax error
 

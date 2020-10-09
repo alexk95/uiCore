@@ -11,10 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\ak_ui_widget_defaultWelcomeScreen.h" />
     <ClInclude Include="include\Example.h" />
     <ClInclude Include="include\ExampleNotifier.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ak_ui_widget_defaultWelcomeScreen.cpp" />
     <ClCompile Include="src\Example.cpp" />
     <ClCompile Include="src\ExampleNotifier.cpp" />
     <ClCompile Include="src\main.cpp" />

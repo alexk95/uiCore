@@ -244,7 +244,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::obj::setReadOnly(my_ui.outputWidget);
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
-			ak::uiAPI::obj::setTabLocation(my_ui.tabViewWidget, ak::ui::core::tabLocation::tab_locationDown);
+			//ak::uiAPI::obj::addTab(my_ui.tabViewWidget, new QWidget, "Test 3");
 			ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, false);
 
 			// Setup aliases

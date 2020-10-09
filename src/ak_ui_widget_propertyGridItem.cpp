@@ -15,16 +15,17 @@
 #include <ak_ui_widget_propertyGridItem.h>	// corresponding header
 #include <ak_exception.h>					// error handling
 #include <ak_ui_core.h>						// objectType
+#include <ak_ui_core_aWidget.h>
 
 ak::ui::widget::propertyGridItem::propertyGridItem(
-	ak::ID				_index,
-	const QString &		_propertyName,
-	ak::core::valueType	_valueType,
-	ak::UID				_itemsUid,
-	bool				_isMultivalued
+	ak::ID						_index,
+	const QString &				_propertyName,
+	ak::core::valueType			_valueType,
+	bool						_isMultivalued,
+	ak::ui::core::aWidget *		_widget
 ) : my_bool(false),
 	my_index(_index),
-	my_widgetUid(ak::invalidUID),
+	my_widget(_widget),
 	my_lastText(QString()),
 	my_int(0),
 	my_double(0.0),
@@ -41,8 +42,7 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	case ak::core::valueType::vInt: my_valueType = _valueType; break;
 	case ak::core::valueType::vString: my_valueType = _valueType; break;
 	case ak::core::valueType::vSelection: my_valueType = _valueType; break;
-	default: throw ak::Exception("Invalid value type provided! Allowed: bool, int, double, string, color, selection", "ak::ui::widget::propertyGridItem::propertyGridItem()");
-		break;
+	default: assert(0); //Invalid value type provided!Allowed: bool, int, double, string, color, selection
 	}
 }
 
@@ -50,13 +50,13 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	const ak::ui::widget::propertyGridItem &		_other
 ) :	my_bool(false),
 	my_index(0),
-	my_widgetUid(ak::invalidUID),
 	my_int(0),
 	my_double(0.0),
 	my_string(QString()),
 	my_color(ak::ui::color()),
 	my_isMultivalued(_other.isMultivalued())
 {
+	my_widget = _other.widget();
 	my_valueType = _other.valueType();
 	my_index = _other.index();
 	my_bool = _other.getBool(false);
@@ -69,12 +69,12 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 ak::ui::widget::propertyGridItem & ak::ui::widget::propertyGridItem::operator = (const ak::ui::widget::propertyGridItem & _other) {
 	my_valueType = _other.valueType();
 	my_index = _other.index();
-	my_widgetUid = _other.getWidgetUid();
 	my_bool = _other.getBool(false);
 	my_color = _other.getColor(false);
 	my_double = _other.getDouble(false);
 	my_int = _other.getInt(false);
 	my_string = _other.getString(false);
+	my_widget = _other.widget();
 	return * this;
 }
 
@@ -87,9 +87,9 @@ void ak::ui::widget::propertyGridItem::setIndex(
 	ak::ID									_index
 ) { my_index = _index; }
 
-void ak::ui::widget::propertyGridItem::setWidgetUid(
-	ak::UID									_widgetUid
-) { my_widgetUid = _widgetUid; }
+void ak::ui::widget::propertyGridItem::setWidget(
+	ak::ui::core::aWidget *					_widget
+) { my_widget = _widget; }
 
 void ak::ui::widget::propertyGridItem::setPropertyName(
 	const QString &							_propertyName
@@ -167,7 +167,12 @@ void ak::ui::widget::propertyGridItem::setPossibleSelection(
 
 ak::ID ak::ui::widget::propertyGridItem::index(void) const { return my_index; }
 
-ak::UID ak::ui::widget::propertyGridItem::getWidgetUid(void) const { return my_widgetUid; }
+ak::ui::core::aWidget * ak::ui::widget::propertyGridItem::widget(void) const { return my_widget; }
+
+ak::UID ak::ui::widget::propertyGridItem::widgetUid(void) const {
+	if (my_widget == nullptr) { return ak::invalidUID; }
+	else { return my_widget->uid(); }
+}
 
 ak::core::valueType ak::ui::widget::propertyGridItem::valueType(void) const { return my_valueType; }
 

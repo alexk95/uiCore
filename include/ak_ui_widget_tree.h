@@ -57,7 +57,6 @@ namespace ak {
 				tree(
 					ak::messenger *					_messenger,
 					ak::uidManager *				_uidManager,
-					ak::ui::iconManager *			_iconManager,
 					ak::ui::colorStyle *			_colorStyle = nullptr
 				);
 

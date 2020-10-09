@@ -31,9 +31,8 @@
 ak::ui::widget::tree::tree(
 	ak::messenger *			_messenger,
 	ak::uidManager *		_uidManager,
-	ak::ui::iconManager *	_iconManager,
 	ak::ui::colorStyle *	_colorStyle
-) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTree, _iconManager,  _messenger, _uidManager, nullptr, _colorStyle),
+) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTree, _messenger, _uidManager, _colorStyle),
 	my_tree(nullptr), my_filter(nullptr), my_layout(nullptr), my_multiWidget(nullptr), my_treeSignalLinker(nullptr), my_filterSignalLinker(nullptr),
 	my_notifierFilter(nullptr), my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0), 
 	my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false), my_expandSelectedItems(true)
@@ -208,8 +207,6 @@ ak::ID ak::ui::widget::tree::add(
 }
 
 void ak::ui::widget::tree::clear(void) {
-	if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
-	my_signalLinker = new ak::ui::signalLinker(my_internalMessenger, my_internalUidManager);
 	if (my_treeSignalLinker != nullptr) { delete my_treeSignalLinker; my_treeSignalLinker = nullptr; }
 	my_treeSignalLinker = new ak::ui::treeSignalLinker(this, my_tree);
 

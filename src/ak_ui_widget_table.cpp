@@ -18,8 +18,6 @@
 #include <ak_ui_signalLinker.h>				// signalLinker
 #include <ak_notifierForwardMessage.h>		// notifierForwardMessage
 #include <ak_ui_colorStyle.h>				// colorStyle
-#include <ak_ui_objectManager.h>			// objectManager
-#include <ak_ui_iconManager.h>				// iconManager
 #include <ak_ui_qt_table.h>					// qt::table
 #include <ak_uidMangager.h>					// UID manager
 
@@ -29,19 +27,18 @@
 ak::ui::widget::table::table(
 	ak::messenger *													_messenger,
 	ak::uidManager *												_uidManager,
-	ak::ui::objectManager *											_objectManager,
-	ak::ui::iconManager *											_iconManager,
 	ak::ui::colorStyle *											_colorStyle,
 	int																_rows,
 	int																_columns
-) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTable, _iconManager, _messenger, _uidManager, _objectManager, _colorStyle),
+) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTable, _messenger, _uidManager, _colorStyle),
 	my_table(nullptr),
-	my_cellsWithWidget(nullptr)
+	my_cellsWithWidget(nullptr), my_signalLinker(nullptr)
 {
 	try
 	{
 		// Create new table
 		my_table = new ak::ui::qt::table();
+		my_signalLinker = new ui::signalLinker(my_messenger, my_uidManager);
 
 		// Setup table
 		my_table->setAlternatingRowColors(true);
@@ -494,13 +491,13 @@ bool ak::ui::widget::table::hasCellWidget(
 }
 
 void ak::ui::widget::table::setCellWidget(
-	ak::UID															_widgetUid,
+	QWidget *														_widget,
 	int																_row,
 	int																_column
 ) {
 	try {
 		checkIndex(_row, _column);
-		my_table->setCellWidget(_row, _column, my_objectManager->obj_getWidget(_widgetUid));
+		my_table->setCellWidget(_row, _column, _widget);
 		*my_cellsWithWidget->at(_column)->at(_row) = true;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::table::setCellWidget()"); }

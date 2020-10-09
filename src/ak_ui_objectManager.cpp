@@ -168,7 +168,7 @@ ak::UID ak::ui::objectManager::createColorEditButton(
 ) {
 	try {
 		// Create object
-		ak::ui::widget::colorEditButton * obj = new ak::ui::widget::colorEditButton(my_messenger, my_uidManager, _color, my_iconManager, _textOverride);
+		ak::ui::widget::colorEditButton * obj = new ak::ui::widget::colorEditButton(my_messenger, my_uidManager, _color, _textOverride);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create action"); }
 		// Set parameter
 		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
@@ -316,7 +316,7 @@ ak::UID ak::ui::objectManager::createPropertyGrid(
 ) {
 	try {
 		// Create object
-		ak::ui::widget::propertyGrid * obj = new ak::ui::widget::propertyGrid(my_messenger, my_uidManager, my_iconManager, my_colorStyle);
+		ak::ui::widget::propertyGrid * obj = new ak::ui::widget::propertyGrid(my_messenger, my_uidManager, my_colorStyle);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create property grid"); }
 		// Set parameter
 		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
@@ -380,7 +380,7 @@ ak::UID ak::ui::objectManager::createTable(
 ) {
 	try {
 		// Create object
-		ak::ui::widget::table * obj = new ak::ui::widget::table(my_messenger, my_uidManager, this, my_iconManager, my_colorStyle, _rows, _columns);
+		ak::ui::widget::table * obj = new ak::ui::widget::table(my_messenger, my_uidManager, my_colorStyle, _rows, _columns);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create table"); }
 		// Set parameter
 		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
@@ -439,7 +439,7 @@ ak::UID ak::ui::objectManager::createTree(
 ) {
 	try {
 		// Create object
-		ak::ui::widget::tree * obj = new ak::ui::widget::tree(my_messenger, my_uidManager, my_iconManager, my_colorStyle);
+		ak::ui::widget::tree * obj = new ak::ui::widget::tree(my_messenger, my_uidManager, my_colorStyle);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create action"); }
 		// Set parameter
 		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }

@@ -33,12 +33,18 @@
     <ClCompile Include="src\ExampleNotifier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ak_ui_widget_defaultWelcomeScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Example.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ExampleNotifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_widget_defaultWelcomeScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

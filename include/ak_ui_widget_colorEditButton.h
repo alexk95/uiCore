@@ -53,7 +53,6 @@ namespace ak {
 					ak::messenger *				_messenger,
 					ak::uidManager *			_uidManager,
 					const ak::ui::color &		_color,
-					ak::ui::iconManager *		_iconManager,
 					const QString &				_textOverride = QString(""),
 					ak::ui::colorStyle *		_colorStyle = nullptr
 				);
@@ -125,6 +124,7 @@ namespace ak {
 				ak::uidManager *				my_externalUidManager;		//! The external UID manager
 				ak::notifierColorEditButton *	my_notifier;				//! The notifier used for the internal messaging system
 				ak::ui::color					my_color;					//! The currently set color
+				ui::signalLinker *				my_signalLinker;			//! Signal linker used to conenct the pushbutton callback
 
 				//! Block default constructor
 				colorEditButton() = delete;
