@@ -40,6 +40,7 @@ namespace ak {
 				sDock,
 				sLabel,
 				sLineEdit,
+				sList,
 				sMainWindow,
 				sMdiArea,
 				sMdiSubArea,

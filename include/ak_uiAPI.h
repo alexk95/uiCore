@@ -433,6 +433,12 @@ namespace ak {
 			const QString &											_text = QString("")
 		);
 
+		//! @brief Will create a defaultWelcomeScreen and return its UID
+		//! @param _creatorUid The UID of the creator
+		UICORE_API ak::UID createDefaultWelcomeScreen(
+			ak::UID												_creatorUid
+		);
+
 		//! @brief Will create a new Dock and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the Dock
@@ -600,6 +606,24 @@ namespace ak {
 			UICORE_API void addObjectToContainer(
 				ak::UID												_parentUid,
 				ak::UID												_objectUid
+			);
+
+			UICORE_API ak::ID addRecentsItem(
+				ak::UID												_objectUid,
+				const QString &										_text
+			);
+
+			UICORE_API ak::ID addRecentsItem(
+				ak::UID												_objectUid,
+				const QString &										_text,
+				const QIcon &										_icon
+			);
+
+			UICORE_API ak::ID addRecentsItem(
+				ak::UID												_objectUid,
+				const QString &										_text,
+				const QString &										_iconName,
+				const QString &										_iconSize
 			);
 
 			//! @brief Will set the specified object as the central widget of the parent object
@@ -1961,9 +1985,12 @@ namespace ak {
 		//! @throw ak::Exception if the API is not initialized
 		UICORE_API ak::messenger * getMessenger(void);
 
-		//! @brief WIll return the icon manager
+		//! @brief WIll return the icon with the specified name and path
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::ui::iconManager * getIconManager(void);
+		UICORE_API const QIcon & getIcon(
+			const QString &											_name,
+			const QString &											_size
+		);
 
 		// ###############################################################################################################################################
 

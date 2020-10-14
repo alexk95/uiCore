@@ -127,7 +127,6 @@ namespace ak {
 			//! @brief Will create a combo button item and return its UID
 			//! @param _creatorUid The UID of the creator
 			//! @param _text The text of the combo button item
-			//! @throw ak::Exception if failed to create
 			ak::UID createComboButtonItem(
 				ak::UID												_creatorUid,
 				const QString &										_text = QString("")
@@ -136,11 +135,16 @@ namespace ak {
 			//! @brief Will create a combo button item and return its UID
 			//! @param _creatorUid The UID of the creator
 			//! @param _icon The icon of the combo button item
-			//! @throw ak::Exception if failed to create
 			ak::UID createComboButtonItem(
 				ak::UID												_creatorUid,
 				const QIcon &										_icon,
 				const QString &										_text = QString("")
+			);
+
+			//! @brief Will create a defaultWelcomeScreen and return its UID
+			//! @param _creatorUid The UID of the creator
+			ak::UID createDefaultWelcomeScreen(
+				ak::UID												_creatorUid
 			);
 
 			//! @brief Will create a dock and return its UID
@@ -285,6 +289,24 @@ namespace ak {
 			void obj_setCentralWidget(
 				ak::UID												_parentUid,
 				ak::UID												_objectUid
+			);
+
+			ak::ID obj_addRecentsItem(
+				ak::UID												_objectUid,
+				const QString &										_text
+			);
+
+			ak::ID obj_addRecentsItem(
+				ak::UID												_objectUid,
+				const QString &										_text,
+				const QIcon &										_icon
+			);
+
+			ak::ID obj_addRecentsItem(
+				ak::UID												_objectUid,
+				const QString &										_text,
+				const QString &										_iconName,
+				const QString &										_iconSize
 			);
 
 			void obj_setCentralWidget(

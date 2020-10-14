@@ -27,7 +27,9 @@ QString ak::ui::core::toQString(
 	case ak::ui::core::oComboBox: return QString("ComboBox");
 	case ak::ui::core::oComboButton: return QString("ComboButton");
 	case ak::ui::core::oCheckBox: return QString("CheckBox");
+	case ak::ui::core::oDefaultWelcomeScreen: return ("DefaultWelcomeScreen");
 	case ak::ui::core::oDock: return QString("Dock");
+	case ak::ui::core::oList: return QString("List");
 	case ak::ui::core::oLogInDialog: return QString("LogInDialog");
 	case ak::ui::core::oMainWindow: return QString("Window");
 	case ak::ui::core::oPictureBox: return QString("PictureBox");

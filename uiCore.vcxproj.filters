@@ -195,6 +195,9 @@
     <ClInclude Include="include\ak_ui_core_aRestorable.h">
       <Filter>Header Files\ak\ui\core</Filter>
     </ClInclude>
+    <ClInclude Include="include\ak_ui_qt_list.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\ak_ui_signalLinker.h">
@@ -247,6 +250,9 @@
     </QtMoc>
     <QtMoc Include="include\ak_ui_dialog_prompt.h">
       <Filter>Header Files\ak\ui\dialog</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_widget_defaultWelcomeScreen.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -423,6 +429,12 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_dialog_prompt.cpp">
       <Filter>Source Files\ak\ui\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_widget_defaultWelcomeScreen.cpp">
+      <Filter>Source Files\ak\ui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_list.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

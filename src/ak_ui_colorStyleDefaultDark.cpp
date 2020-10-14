@@ -208,6 +208,14 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 
 		// ######################################################################################################
 
+		// List
+
+		case ak::ui::colorStyle::styleableObject::sList:
+			out.append("QListWidget{" _fore _backControl "}\n");
+			break;
+
+		// ######################################################################################################
+
 		// Main window
 		case ak::ui::colorStyle::styleableObject::sMainWindow:
 		

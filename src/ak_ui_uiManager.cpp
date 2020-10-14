@@ -139,7 +139,9 @@ ak::ui::uiManager::uiManager(
 		if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
 
 		// Show main window
-		my_timerShowMainWindow->start();
+		//my_timerShowMainWindow->start();
+		my_window->resize(800, 600);
+		my_window->showMaximized();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::uiManager()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::uiManager()"); }
@@ -285,7 +287,8 @@ void ak::ui::uiManager::addDock(
 			assert(0); // Not implemented yet
 			break;
 		}
-		//my_window->resizeDocks({ _dock }, { 0 }, Qt::Horizontal);
+		//_dock->resize(200, 200);
+		my_window->resizeDocks({ _dock }, { 0 }, Qt::Orientation::Vertical);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::addDock()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::addDock()"); }
@@ -313,7 +316,7 @@ void ak::ui::uiManager::tabifyDock(
 		
 		// tabify dock
 		my_window->tabifyDockWidget(dock1, dock2);
-		//my_window->resizeDocks({ dock2 }, { 0 }, Qt::Horizontal);
+		my_window->resizeDocks({ dock2 }, { 0 }, Qt::Horizontal);
 		dock1->raise();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::tabifyDock()"); }

@@ -122,14 +122,6 @@ void Example::eventCallback(
 				my_notifier->enable();
 			}
 			else if (_sender == my_ui.ttb_aTest) {
-
-				ak::ui::core::dialogResult result = ak::uiAPI::dialog::showPrompt("Test uiasfhg slkjf s rfslöef höilshfsöfhös s "
-					"shfösa öa öa föiocah ö aöd haödad a höa höa höa öhaö öa fnsfhpitghoreiuzg ifhspigp sefgnirgh", "The Title", ak::ui::core::promptType::promptIgnoreRetryCancel);
-
-				int x = 0;
-
-				return;
-
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);
 				my_JSONSettingsString = ak::uiAPI::getSettingsJSON();
 				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, my_JSONSettingsString.c_str(), "JSON");
@@ -201,6 +193,9 @@ void Example::setupUi(void) {
 			// Setup tab toolbar
 			ak::uiAPI::obj::setTabToolBarVisible(my_ui.mainWindow);
 			my_ui.ttb_pFile = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "File");
+			ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester1");
+			ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester2");
+			ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester3");
 			my_ui.ttb_gNONE = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.ttb_pFile, "");
 			my_ui.ttb_aExit = ak::uiAPI::createAction(my_uid, "Exit", "ExitAppBlue", "32");
 			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
@@ -236,15 +231,29 @@ void Example::setupUi(void) {
 			ak::uiAPI::addDock(my_ui.mainWindow, my_ui.dockOutput, ak::ui::core::dock_dockBottom);
 			ak::uiAPI::addDock(my_ui.mainWindow, my_ui.dockTree, ak::ui::core::dock_dockLeft);
 			ak::uiAPI::addDock(my_ui.mainWindow, my_ui.dockProperties, ak::ui::core::dock_dockLeft);
-			ak::uiAPI::tabifyDock(my_ui.mainWindow, my_ui.dockOutput, my_ui.dockTester);
+			//ak::uiAPI::tabifyDock(my_ui.mainWindow, my_ui.dockOutput, my_ui.dockTester);
 
 			// Setup widgets
 			ak::uiAPI::obj::setAutoSelectAndDeselectChildrenEnabled(my_ui.treeWidget, true);
 			ak::uiAPI::obj::setMultiSelectionEnabled(my_ui.treeWidget, true);
 			ak::uiAPI::obj::setReadOnly(my_ui.outputWidget);
+			
+			
+			ak::UID dd = ak::uiAPI::createDefaultWelcomeScreen(my_uid);
+
+			for (int fill = 0; fill < 30; fill++) {
+				QString txt("Test ");
+				if (fill > 0) {
+					txt.append(QString::number(fill));
+				}
+				ak::uiAPI::obj::addRecentsItem(dd, txt, "Test", "32");
+			}
+		
+			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, dd, "Test 3");
+			
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
-			//ak::uiAPI::obj::addTab(my_ui.tabViewWidget, new QWidget, "Test 3");
+			
 			ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, false);
 
 			// Setup aliases

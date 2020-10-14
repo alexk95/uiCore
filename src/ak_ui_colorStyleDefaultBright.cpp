@@ -193,18 +193,29 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 		break;
 
 		// ######################################################################################################
+		
 		// Label
 		case ak::ui::colorStyle::styleableObject::sLabel:
 			out.append("QLabel{" _fore _backTransparent "}\n");
 			break;
 
 		// ######################################################################################################
+		
 		// Line edit
 		case ak::ui::colorStyle::styleableObject::sLineEdit:
 			out.append("QLineEdit{" _fore _backControl "}\n");
 			break;
 
 		// ######################################################################################################
+		
+		// Line edit
+
+		case ak::ui::colorStyle::styleableObject::sList:
+			out.append("QListWidget{" _fore _backControl "}\n");
+			break;
+
+		// ######################################################################################################
+		
 		// Main window
 		case ak::ui::colorStyle::styleableObject::sMainWindow:
 

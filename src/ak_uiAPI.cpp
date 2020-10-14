@@ -685,6 +685,19 @@ ak::UID ak::uiAPI::createComboButtonItem(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createComboButtonItem(QIcon)"); }
 }
 
+ak::UID ak::uiAPI::createDefaultWelcomeScreen(
+	ak::UID												_creatorUid
+) {
+	try {
+		// Get manager
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->createDefaultWelcomeScreen(_creatorUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createDefaultWelcomeScreen()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createDefaultWelcomeScreen()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createDefaultWelcomeScreen()"); }
+}
+
 ak::UID ak::uiAPI::createDock(
 	ak::UID												_creatorUid,
 	const char *										_text
@@ -938,6 +951,48 @@ void ak::uiAPI::obj::addObjectToContainer(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addObjectToContainer()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addObjectToContainer()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addObjectToContainer()"); }
+}
+
+ak::ID ak::uiAPI::obj::addRecentsItem(
+	ak::UID												_objectUid,
+	const QString &										_text
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_addRecentsItem(_objectUid, _text);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addRecentsItem(QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addRecentsItem(QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addRecentsItem(QString)"); }
+}
+
+ak::ID ak::uiAPI::obj::addRecentsItem(
+	ak::UID												_objectUid,
+	const QString &										_text,
+	const QIcon &										_icon
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_addRecentsItem(_objectUid, _text, _icon);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addRecentsItem(QString, QIcon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addRecentsItem(QString, QIcon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addRecentsItem(QString, QIcon)"); }
+}
+
+ak::ID ak::uiAPI::obj::addRecentsItem(
+	ak::UID												_objectUid,
+	const QString &										_text,
+	const QString &										_iconName,
+	const QString &										_iconSize
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_addRecentsItem(_objectUid, _text, _iconName, _iconSize);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addRecentsItem(QString, QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addRecentsItem(QString, QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addRecentsItem(QString, QString)"); }
 }
 
 void ak::uiAPI::obj::setCentralWidget(
@@ -2908,14 +2963,17 @@ ak::messenger *ak::uiAPI::getMessenger(void) {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getMessenger()"); }
 }
 
-ak::ui::iconManager * ak::uiAPI::getIconManager(void) {
+const QIcon & ak::uiAPI::getIcon(
+	const QString &											_name,
+	const QString &											_size
+) {
 	try {
 		// Return icon manager
-		return my_apiManager.iconManager();
+		return *my_apiManager.iconManager()->icon(_name, _size);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getIconManager()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getIconManager()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getIconManager()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getIcon()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getIcon()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getIcon()"); }
 }
 
 // ###############################################################################################################################################
