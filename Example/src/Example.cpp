@@ -46,9 +46,9 @@ Example::Example()
 	catch (...) {}
 
 	// Set default dark color style
-	ak::uiAPI::setDefaultDarkColorStyle();
+	//ak::uiAPI::setDefaultDarkColorStyle();
 
-	my_ui.logInDialog = ak::uiAPI::createLogInDialog(my_uid, true, "Username");
+	my_ui.logInDialog = ak::uiAPI::createLogInDialog(my_uid, true, "OpenTwin", "Username");
 
 	// Create my notifier
 	my_notifier = new ExampleNotifier(this);
@@ -249,6 +249,8 @@ void Example::setupUi(void) {
 				ak::uiAPI::obj::addRecentsItem(dd, txt, "Test", "32");
 			}
 		
+			ak::uiAPI::obj::addOpenItem(dd, "Test", "Test", "32");
+
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, dd, "Test 3");
 			
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");

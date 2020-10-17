@@ -19,25 +19,75 @@
 
 // Qt header
 #include <qwidget.h>							// QWidget
+#include <qlabel.h>
 #include <qlayout.h>							// QHBoxLayout, QVBoxLayout
+#include <qpixmap.h>
+#include <qbitmap.h>
 
 ak::ui::widget::defaultWelcomeScreen::defaultWelcomeScreen(
 	messenger *				_messenger,
 	uidManager *			_uidManager,
 	ak::ui::colorStyle *	_colorStyle
 )
-	: aWidgetManager(ak::ui::core::oDefaultWelcomeScreen, _messenger, _uidManager, _colorStyle),
-	my_centralLayout(nullptr), my_centralWidget(nullptr), my_listRecents(nullptr)
+	: aWidgetManager(ak::ui::core::oDefaultWelcomeScreen, _messenger, _uidManager, _colorStyle)
 {
-	// Create central widget
-	my_centralWidget = new QWidget;
-	my_centralLayout = new QVBoxLayout(my_centralWidget);
-	
-	// Create recents list
-	my_listRecents = new ui::qt::list;
-	my_listRecents->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+	my_new.List = nullptr;
+	my_new.Label = nullptr;
+	my_open.List = nullptr;
+	my_open.Label = nullptr;
+	my_recents.List = nullptr;
+	my_recents.Label = nullptr;
 
-	my_centralLayout->addWidget(my_listRecents);
+
+	// Initialize screen data
+	my_screen.Central = toLayoutWidgetCombo(nullptr, nullptr);
+	my_screen.New = toLayoutWidgetCombo(nullptr, nullptr);
+	my_screen.Open = toLayoutWidgetCombo(nullptr, nullptr);
+	my_screen.OpenNewCentral = toLayoutWidgetCombo(nullptr, nullptr);
+	my_screen.Recents = toLayoutWidgetCombo(nullptr, nullptr);
+
+	// Create central widget
+	my_screen.Central = toLayoutWidgetCombo(new QHBoxLayout, new QWidget);
+	
+	// Create recents object
+	my_screen.Recents = toLayoutWidgetCombo(new QVBoxLayout, new QWidget);
+	my_screen.Central.layout->addWidget(my_screen.Recents.widget);
+	
+	my_recents.List = new ui::qt::list;
+	my_recents.List->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+	my_recents.Label = new QLabel("Recent");
+	my_recents.Label->setBuddy(my_recents.List);
+
+	my_screen.Recents.layout->addWidget(my_recents.Label);
+	my_screen.Recents.layout->addWidget(my_recents.List);
+
+	// Create open new 
+	my_screen.OpenNewCentral = toLayoutWidgetCombo(new QVBoxLayout, new QWidget);
+	my_screen.Central.layout->addWidget(my_screen.OpenNewCentral.widget);
+
+	// Create open
+	my_screen.Open = toLayoutWidgetCombo(new QVBoxLayout, new QWidget);
+	my_screen.OpenNewCentral.layout->addWidget(my_screen.Open.widget);
+
+	my_open.List = new ui::qt::list;
+	my_open.List->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+	my_open.Label = new QLabel("Open");
+	my_open.Label->setBuddy(my_open.List);
+
+	my_screen.Open.layout->addWidget(my_open.Label);
+	my_screen.Open.layout->addWidget(my_open.List);
+
+	// Create new
+	my_screen.New = toLayoutWidgetCombo(new QVBoxLayout, new QWidget);
+	my_screen.OpenNewCentral.layout->addWidget(my_screen.New.widget);
+
+	my_new.List = new ui::qt::list;
+	my_new.List->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+	my_new.Label = new QLabel("New");
+	my_new.Label->setBuddy(my_new.List);
+
+	my_screen.New.layout->addWidget(my_new.Label);
+	my_screen.New.layout->addWidget(my_new.List);
 
 	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
 
@@ -45,25 +95,46 @@ ak::ui::widget::defaultWelcomeScreen::defaultWelcomeScreen(
 
 ak::ui::widget::defaultWelcomeScreen::~defaultWelcomeScreen() { memFree(); }
 
-QWidget * ak::ui::widget::defaultWelcomeScreen::widget(void) { return my_centralWidget; }
+QWidget * ak::ui::widget::defaultWelcomeScreen::widget(void) { return my_screen.Central.widget; }
 
 void ak::ui::widget::defaultWelcomeScreen::setColorStyle(
 	ak::ui::colorStyle *			_colorStyle
 ) {
+
 	assert(_colorStyle != nullptr); // Nullptr provided
 
-	my_centralWidget->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sWidget));
+	QString sheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sWidget));
+	if (my_screen.Central.widget != nullptr) { my_screen.Central.widget->setStyleSheet(sheet); }
+	if (my_screen.New.widget != nullptr) { my_screen.New.widget->setStyleSheet(sheet); }
+	if (my_screen.Open.widget != nullptr) { my_screen.Open.widget->setStyleSheet(sheet); }
+	if (my_screen.OpenNewCentral.widget != nullptr) { my_screen.OpenNewCentral.widget->setStyleSheet(sheet); }
+	if (my_screen.Recents.widget != nullptr) { my_screen.Recents.widget->setStyleSheet(sheet); }
+
+	sheet = my_colorStyle->getStylesheet(colorStyle::styleableObject::sList);
+	if (my_new.List != nullptr) { my_new.List->setStyleSheet(sheet); }
+	if (my_open.List != nullptr) { my_new.List->setStyleSheet(sheet); }
+	if (my_recents.List != nullptr) { my_new.List->setStyleSheet(sheet); }
+
+	sheet = my_colorStyle->getStylesheet(colorStyle::styleableObject::sLabel);
+	if (my_new.Label != nullptr) { my_new.Label->setStyleSheet(sheet); }
+	if (my_open.Label != nullptr) { my_new.Label->setStyleSheet(sheet); }
+	if (my_recents.Label != nullptr) { my_new.Label->setStyleSheet(sheet); }
 
 }
 
 ak::ID ak::ui::widget::defaultWelcomeScreen::addRecent(
 	const QString &					_text
-) { return my_listRecents->AddItem(_text); }
+) { return my_recents.List->AddItem(_text); }
 
 ak::ID ak::ui::widget::defaultWelcomeScreen::addRecent(
 	const QIcon &					_icon,
 	const QString &					_text
-) { return my_listRecents->AddItem(_icon, _text); }
+) { return my_recents.List->AddItem(_icon, _text); }
+
+ak::ID ak::ui::widget::defaultWelcomeScreen::addOpen(
+	const QIcon &					_icon,
+	const QString &					_text
+) { return my_open.List->AddItem(_icon, _text); }
 
 // #############################################################################################################
 
@@ -81,13 +152,40 @@ void ak::ui::widget::defaultWelcomeScreen::handleEventRecents(
 
 void ak::ui::widget::defaultWelcomeScreen::memFree(void) {
 
-	if (my_listRecents != nullptr) {
-		my_listRecents->Clear();
-		delete my_listRecents; my_listRecents = nullptr;
-	}
+	memFree(my_new);
+	memFree(my_open);
+	memFree(my_recents);
 
-	if (my_centralLayout != nullptr) { delete my_centralLayout; my_centralLayout = nullptr; }
-	if (my_centralWidget != nullptr) { delete my_centralWidget; my_centralWidget = nullptr; }
+	memFree(my_screen.Central);
+	memFree(my_screen.New);
+	memFree(my_screen.Open);
+	memFree(my_screen.OpenNewCentral);
+	memFree(my_screen.Recents);
+}
+
+void ak::ui::widget::defaultWelcomeScreen::memFree(
+	structLayoutWidget &		_layoutWidget
+) {
+	if (_layoutWidget.layout != nullptr) { delete _layoutWidget.layout; _layoutWidget.layout = nullptr; }
+	if (_layoutWidget.widget != nullptr) { delete _layoutWidget.widget; _layoutWidget.widget = nullptr; }
+}
+
+void ak::ui::widget::defaultWelcomeScreen::memFree(
+	structEntries &				_entry
+) {
+	if (_entry.List != nullptr) { _entry.List->Clear(); delete _entry.List; _entry.List = nullptr; }
+	if (_entry.Label != nullptr) { delete _entry.Label; _entry.Label = nullptr; }
+}
+
+ak::ui::widget::defaultWelcomeScreen::structLayoutWidget ak::ui::widget::defaultWelcomeScreen::toLayoutWidgetCombo(
+	QLayout *					_layout,
+	QWidget *					_widget
+) {
+	structLayoutWidget ret;
+	ret.layout = _layout;
+	ret.widget = _widget;
+	_widget->setLayout(_layout);
+	return ret;
 }
 
 // ########################################################################################

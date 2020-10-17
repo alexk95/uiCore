@@ -729,13 +729,14 @@ ak::UID ak::uiAPI::createDock(
 ak::UID ak::uiAPI::createLogInDialog(
 	ak::UID												_creatorUid,
 	bool												_showSavePassword,
+	const QString &										_imageName,
 	const QString &										_username,
 	const QString &										_password
 ) {
 	try {
 		// Get manager
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createLogInDialog(_creatorUid, _showSavePassword, _username, _password);
+		return oM->createLogInDialog(_creatorUid, _showSavePassword, _imageName, _username, _password);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createLogInDialog(QString)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createLogInDialog(QString)"); }
@@ -993,6 +994,21 @@ ak::ID ak::uiAPI::obj::addRecentsItem(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addRecentsItem(QString, QString)"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addRecentsItem(QString, QString)"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addRecentsItem(QString, QString)"); }
+}
+
+ak::ID ak::uiAPI::obj::addOpenItem(
+	ak::UID												_objectUid,
+	const QString &										_text,
+	const QString &										_iconName,
+	const QString &										_iconSize
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->obj_addOpenItem(_objectUid, _text, _iconName, _iconSize);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addOpenItem(QString, QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addOpenItem(QString, QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addOpenItem(QString, QString)"); }
 }
 
 void ak::uiAPI::obj::setCentralWidget(

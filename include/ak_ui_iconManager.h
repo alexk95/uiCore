@@ -22,6 +22,7 @@
 
 // Forward declaration
 class QIcon;
+class QPixmap;
 namespace std { class mutex; }
 
 namespace ak {
@@ -68,6 +69,13 @@ namespace ak {
 				const QString &									_iconSize
 			);
 
+			//! @brief Will return the pixmap loaded from the files location
+			//! @param _imageName The name of the image (without extension)
+			//! @throw ak::Exception if the map creation failed
+			const QPixmap * pixmap(
+				const QString &									_imageName
+			);
+
 			//! @brief Will set the file extension for the files
 			//! @param _extension The filename extension (must contain the separator (i.e. ".png"))
 			void setFileExtension(
@@ -88,6 +96,9 @@ namespace ak {
 			>::iterator											my_iconsIterator;			//! Iterator used to iterate through the icon map
 			typedef std::map<QString, QIcon * >::iterator		my_iconsSizeIterator;       //! Iterator used to iterate through the icons of a specific icon size in the icon map
 
+			std::map<QString, QPixmap *>						my_pixmaps;
+			typedef std::map<QString, QPixmap *>::iterator		my_pixmapsIterator;
+
 			std::vector<QString>								my_directories;				//! Contains all set directories
 			QString												my_fileExtension;			//! The currently set file extension
 
@@ -101,6 +112,14 @@ namespace ak {
 			QIcon * createIcon(
 				const QString &									_iconName,
 				const QString &									_iconSize
+			);
+
+			//! @brief Imports an pixmap according to its name and size
+			//! Mutex will not be locked. Caller must take care of it
+			//! @param _imageName The name of the requested icon (Without extension)
+			//! @throw ak::Exception if the icon creation failed
+			QPixmap * createPixmap(
+				const QString &									_imageName
 			);
 
 		};

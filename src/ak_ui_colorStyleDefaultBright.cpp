@@ -208,10 +208,25 @@ QString ak::ui::colorStyleDefaultBright::getStylesheet(
 
 		// ######################################################################################################
 		
-		// Line edit
+		// List
 
 		case ak::ui::colorStyle::styleableObject::sList:
-			out.append("QListWidget{" _fore _backControl "}\n");
+			out.append("QListWidget{"
+				_fore _backControl
+				"}\n");
+
+			out.append("QListWidget::item:alternate{"
+				_alternateBackWindow
+				"}\n");
+
+			out.append("QListWidget::item:selected{"
+				_selectedFore _selectedBack
+				"}\n");
+
+			out.append("QListWidget::item:hover:!selected{"
+				_focusFore _focusBack
+				"}\n");
+
 			break;
 
 		// ######################################################################################################

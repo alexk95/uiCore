@@ -25,8 +25,8 @@
 
 // Forward declaration
 class QWidget;
-class QHBoxLayout;
-class QVBoxLayout;
+class QLabel;
+class QLayout;
 class QListWidget;
 class QListWidgetItem;
 
@@ -76,6 +76,11 @@ namespace ak {
 					const QString &					_text
 				);
 
+				ak::ID addOpen(
+					const QIcon &					_icon,
+					const QString &					_text
+				);
+
 				// #############################################################################################################
 
 				// Event handling
@@ -89,9 +94,43 @@ namespace ak {
 
 				void memFree(void);
 
-				QVBoxLayout *						my_centralLayout;
-				QWidget *							my_centralWidget;
-				ui::qt::list *						my_listRecents;
+				struct structLayoutWidget {
+					QLayout *					layout;
+					QWidget *					widget;
+				};
+
+				struct structLayout
+				{
+					structLayoutWidget			Central;
+					structLayoutWidget			Recents;
+					structLayoutWidget			OpenNewCentral;
+					structLayoutWidget			Open;
+					structLayoutWidget			New;
+				};
+
+				struct structEntries {
+					QLabel *					Label;
+					ui::qt::list *				List;
+				};
+
+				void memFree(
+					structLayoutWidget &		_layoutWidget
+				);
+
+				void memFree(
+					structEntries &				_entry
+				);
+
+				static structLayoutWidget toLayoutWidgetCombo(
+					QLayout *					_layout,
+					QWidget *					_widget
+				);
+
+				structLayout						my_screen;
+
+				structEntries						my_recents;
+				structEntries						my_open;
+				structEntries						my_new;
 
 				defaultWelcomeScreenSignalLinker *	my_signalLinker;
 

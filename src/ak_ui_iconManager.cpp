@@ -19,9 +19,12 @@
 #include <qicon.h>					// QIcon
 #include <qdir.h>					// Check directories
 #include <qfile.h>					// Check file
+#include <qpixmap.h>
 
 // C++ header
 #include <mutex>					// Thread protection
+
+#define PATH_PIXMAPS "Images/"
 
 ak::ui::iconManager::iconManager(
 	const QString &					_mainDirectory
@@ -56,6 +59,10 @@ ak::ui::iconManager::~iconManager() {
 			}
 			delete icon->second; icon->second = nullptr;
 		}
+	}
+
+	for (my_pixmapsIterator pix = my_pixmaps.begin(); pix != my_pixmaps.end(); pix++) {
+		delete pix->second;
 	}
 }
 
@@ -147,6 +154,23 @@ const QIcon * ak::ui::iconManager::icon(
 	catch (...) { my_mutex->unlock(); throw ak::Exception("Unknown error", "ak::ui::iconManager::icon()"); }
 }
 
+const QPixmap * ak::ui::iconManager::pixmap(
+	const QString &									_imageName
+) {
+	try {
+		my_mutex->lock();
+		my_pixmapsIterator itm = my_pixmaps.find(_imageName);
+		if (itm != my_pixmaps.end()) { return itm->second; }
+		QPixmap * pix = createPixmap(_imageName);
+		my_pixmaps.insert_or_assign(_imageName, pix);
+		my_mutex->unlock();
+		return pix;
+	}
+	catch (const ak::Exception & e) { my_mutex->unlock(); throw ak::Exception(e, "ak::ui::iconManager::icon()"); }
+	catch (const std::exception & e) { my_mutex->unlock(); throw ak::Exception(e.what(), "ak::ui::iconManager::icon()"); }
+	catch (...) { my_mutex->unlock(); throw ak::Exception("Unknown error", "ak::ui::iconManager::icon()"); }
+}
+
 void ak::ui::iconManager::setFileExtension(
 	const QString &									_extension
 ) { 
@@ -184,6 +208,28 @@ QIcon * ak::ui::iconManager::createIcon(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::iconManager::createIcon()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::iconManager::createIcon()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::iconManager::createIcon()"); }
+}
+
+QPixmap * ak::ui::iconManager::createPixmap(
+	const QString &									_imageName
+) {
+	// Mutex not required, caller must take care of the mutex
+	try {
+		for (int i = 0; i < my_directories.size(); i++) {
+			QFile file(my_directories.at(i) + PATH_PIXMAPS + _imageName + my_fileExtension);
+			// Check if the file exist
+			if (file.exists()) {
+				QPixmap * ico = nullptr;
+				ico = new (std::nothrow) QPixmap(file.fileName());
+				if (ico == nullptr) { throw ak::Exception("Failed to create", "Create icon"); }
+				return ico;
+			}
+		}
+		throw ak::Exception("Image does not exist", "Check status");
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::iconManager::createPixmap()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::iconManager::createPixmap()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::iconManager::createPixmap()"); }
 }
 
 std::vector<QString> ak::ui::iconManager::searchDirectories(void) const { return my_directories; }

@@ -164,6 +164,7 @@ namespace ak {
 			ak::UID createLogInDialog(
 				ak::UID												_creatorUid,
 				bool												_showSavePassword,
+				const QString &										_imageName,
 				const QString &										_username = QString(),
 				const QString &										_password = QString()
 			);
@@ -303,6 +304,13 @@ namespace ak {
 			);
 
 			ak::ID obj_addRecentsItem(
+				ak::UID												_objectUid,
+				const QString &										_text,
+				const QString &										_iconName,
+				const QString &										_iconSize
+			);
+
+			ak::ID obj_addOpenItem(
 				ak::UID												_objectUid,
 				const QString &										_text,
 				const QString &										_iconName,

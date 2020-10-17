@@ -211,7 +211,23 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		// List
 
 		case ak::ui::colorStyle::styleableObject::sList:
-			out.append("QListWidget{" _fore _backControl "}\n");
+			out.append("QListWidget{"
+				_fore _backControl
+				"}\n");
+
+			/* out.append("QListWidget::item:alternate{"
+				_alternateBackWindow
+				"}\n");
+				*/
+
+			out.append("QListWidget::item:selected{"
+				_selectedFore _selectedBack
+				"}\n");
+
+			out.append("QListWidget::item:hover:!selected{"
+				_focusFore _focusBack
+				"}\n");
+
 			break;
 
 		// ######################################################################################################
@@ -482,6 +498,18 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 				_fore _backWindow
 				"}\n");
 
+			out.append("QTabWidget QToolButton{"
+				_fore _backWindow _alternateBackWindow
+				"}\n");
+
+			out.append("QTabWidget QToolButton:hover:!pressed{"
+				_focusFore _focusBack
+				"}\n");
+
+			out.append("QTabWidget QToolButton:pressed{"
+				_selectedFore _selectedBack
+				"}\n");
+
 			break;
 
 		// ######################################################################################################
@@ -514,6 +542,18 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 				"}\n");
 
 			out.append("QTabWidget QToolButton:pressed{"
+				_selectedFore _selectedBack
+				"}\n");
+
+			out.append("QToolButton{"
+				_fore _backWindow _alternateBackWindow
+				"}\n");
+
+			out.append("QToolButton:hover:!pressed{"
+				_focusFore _focusBack
+				"}\n");
+
+			out.append("QToolButton:pressed{"
 				_selectedFore _selectedBack
 				"}\n");
 
@@ -551,6 +591,18 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 
 			out.append("QToolBar QToolBar *{"
 				_fore _backWindow "border: none;"
+				"}\n");
+
+			out.append("QToolBar QToolButton{"
+				_fore _backWindow _alternateBackWindow
+				"}\n");
+
+			out.append("QToolBar QToolButton:hover:!pressed{"
+				_focusFore _focusBack
+				"}\n");
+
+			out.append("QToolBar QToolButton:pressed{"
+				_selectedFore _selectedBack
 				"}\n");
 
 			break;
@@ -649,7 +701,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		// Widget
 		case ak::ui::colorStyle::styleableObject::sWidget:
 		{
-			out.append("QWidget {"
+			out.append("QWidget{"
 				_fore _backWindow
 				"}\n");
 		}

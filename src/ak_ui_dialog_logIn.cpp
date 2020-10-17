@@ -27,10 +27,12 @@
 #include <qcheckbox.h>
 #include <qtooltip.h>
 
+#include <qpainter.h>
 
 ak::ui::dialog::logIn::logIn(
 	ak::messenger *								_messenger,
 	bool										_showSavePassword,
+	const QPixmap &								_backgroundImage,
 	const QString &								_username,
 	const QString &								_hashedPassword,
 	QWidget *									_parent
@@ -89,9 +91,11 @@ ak::ui::dialog::logIn::logIn(
 
 	my_layout->addWidget(my_gridWidget);
 	my_layout->addWidget(my_buttonLogIn);
-	
-	setLayout(my_layout);
 
+	my_bgImage = new QPixmap(_backgroundImage);
+
+	setLayout(my_layout);
+	
 	setWindowTitle("Welcome");
 	// Hide info button
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -135,6 +139,16 @@ void ak::ui::dialog::logIn::setColorStyle(
 	my_inputPassword.label->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sLabel));
 	my_inputPassword.edit->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sLineEdit));
 
+}
+
+void ak::ui::dialog::logIn::paintEvent(QPaintEvent *pe)
+{
+	QPainter paint(this);
+	my_currentImage = my_bgImage->scaled(width(), height(), Qt::KeepAspectRatioByExpanding);
+	QPoint centerOfWidget = rect().center();
+	QRect rectOfPixmap = my_currentImage.rect();
+	rectOfPixmap.moveCenter(centerOfWidget);
+	paint.drawPixmap(rectOfPixmap.topLeft(), my_currentImage);
 }
 
 // ####################################################################

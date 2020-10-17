@@ -19,6 +19,7 @@
 
 // Qt header
 #include <qstring.h>
+#include <qpixmap.h>
 
 // AK header
 #include <ak_ui_core_aPaintable.h>
@@ -34,6 +35,8 @@ class QHBoxLayout;
 class QVBoxLayout;
 class QGridLayout;
 class QToolTip;
+class QPaintEvent;
+class QPixmap;
 
 namespace ak {
 
@@ -53,9 +56,25 @@ namespace ak {
 				//! @param _username The initial username
 				//! @param _password The initial password
 				//! @param _parent The parent widget
+				/*logIn(
+					ak::messenger *								_messenger,
+					bool										_showSavePassword,
+					const QString &								_username = QString(),
+					const QString &								_password = QString(),
+					QWidget *									_parent = nullptr
+				);
+				*/
+
+				//! @brief Constructor
+				//! @param _messenger The external messenger used to send event messages
+				//! @param _showSavePassword if true the save password checkbox will be displayed
+				//! @param _username The initial username
+				//! @param _password The initial password
+				//! @param _parent The parent widget
 				logIn(
 					ak::messenger *								_messenger,
 					bool										_showSavePassword,
+					const QPixmap &								_backgroundImage,
 					const QString &								_username = QString(),
 					const QString &								_password = QString(),
 					QWidget *									_parent = nullptr
@@ -68,6 +87,8 @@ namespace ak {
 				virtual void setColorStyle(
 					ak::ui::colorStyle *			_colorStyle
 				) override;
+
+				virtual void paintEvent(QPaintEvent *pe) override;
 
 				// ####################################################################
 
@@ -108,6 +129,9 @@ namespace ak {
 				QString				my_hashedPw;
 
 				ak::messenger *		my_messenger;
+
+				QPixmap *			my_bgImage;
+				QPixmap				my_currentImage;
 
 				QGridLayout *		my_gridLayout;
 				QWidget *			my_gridWidget;

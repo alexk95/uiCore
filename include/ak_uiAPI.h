@@ -465,6 +465,7 @@ namespace ak {
 		UICORE_API ak::UID createLogInDialog(
 			ak::UID													_creatorUid,
 			bool													_showSavePassword,
+			const QString &											_imageName,
 			const QString &											_username = QString(),
 			const QString &											_password = QString()
 		);
@@ -620,6 +621,13 @@ namespace ak {
 			);
 
 			UICORE_API ak::ID addRecentsItem(
+				ak::UID												_objectUid,
+				const QString &										_text,
+				const QString &										_iconName,
+				const QString &										_iconSize
+			);
+
+			UICORE_API ak::ID addOpenItem(
 				ak::UID												_objectUid,
 				const QString &										_text,
 				const QString &										_iconName,
