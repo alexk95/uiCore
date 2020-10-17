@@ -45,13 +45,16 @@ ak::ui::widget::defaultWelcomeScreen::defaultWelcomeScreen(
 	my_screen.Open = toLayoutWidgetCombo(nullptr, nullptr);
 	my_screen.OpenNewCentral = toLayoutWidgetCombo(nullptr, nullptr);
 	my_screen.Recents = toLayoutWidgetCombo(nullptr, nullptr);
+	my_screen.RecentsCentralDummy = toLayoutWidgetCombo(nullptr, nullptr);
 
 	// Create central widget
 	my_screen.Central = toLayoutWidgetCombo(new QHBoxLayout, new QWidget);
 	
 	// Create recents object
+	my_screen.RecentsCentralDummy = toLayoutWidgetCombo(new QHBoxLayout, new QWidget);
+	my_screen.Central.layout->addWidget(my_screen.RecentsCentralDummy.widget);
 	my_screen.Recents = toLayoutWidgetCombo(new QVBoxLayout, new QWidget);
-	my_screen.Central.layout->addWidget(my_screen.Recents.widget);
+	my_screen.RecentsCentralDummy.layout->addWidget(my_screen.Recents.widget);
 	
 	my_recents.List = new ui::qt::list;
 	my_recents.List->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);

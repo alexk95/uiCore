@@ -14,6 +14,7 @@
 #include <ak_ui_core.h>			// dockLocation type
 
 #include <qstring.h>
+#include <qsettings.h>
 
 #include <vector>
 #include <array>
@@ -57,7 +58,17 @@ Example::Example()
 	ak::ui::core::dialogResult result = ak::uiAPI::dialog::show(my_ui.logInDialog);
 	ak::uiAPI::obj::destroy(my_ui.logInDialog);
 
-	if (result == ak::ui::core::resultOk) { setupUi(); ak::uiAPI::exec(); }
+	if (result == ak::ui::core::resultOk) {
+		setupUi();
+		
+		my_tester = ak::uiAPI::createTimer(my_uid);
+		ak::uiAPI::registerUidNotifier(my_tester, my_notifier);
+		ak::uiAPI::obj::shoot(my_tester, 0);
+		
+		ak::uiAPI::obj::showMaximized(my_ui.mainWindow);
+		
+		ak::uiAPI::exec();
+	}
 }
 
 Example::~Example() {}
@@ -97,6 +108,9 @@ void Example::eventCallback(
 			}
 			else if (_sender == my_ui.ttb_aExit) {
 				// Close the main window
+				QSettings settings("AK", "uiCoreExample");
+				QString cfg = ak::uiAPI::getSettingsJSON().c_str();
+				settings.setValue("UI.Config", cfg);
 				ak::uiAPI::closeWindow(my_ui.mainWindow);
 			}
 			else  if (_sender == my_ui.ttb_aColorStyle) {
@@ -122,6 +136,16 @@ void Example::eventCallback(
 				my_notifier->enable();
 			}
 			else if (_sender == my_ui.ttb_aTest) {
+
+				// Load last settings
+				QSettings settings("AK", "uiCoreExample");
+				QString lastConfigString = settings.value("UI.Config", "").toString();
+				if (lastConfigString.length() > 0) {
+					std::string s(lastConfigString.toStdString());
+					ak::uiAPI::setupSettings(s.c_str());
+				}
+				return;
+
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);
 				my_JSONSettingsString = ak::uiAPI::getSettingsJSON();
 				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, my_JSONSettingsString.c_str(), "JSON");
@@ -173,6 +197,15 @@ void Example::eventCallback(
 			msg.append("\"; }");
 			ak::uiAPI::obj::appendText(my_ui.outputWidget, msg);
 		}
+		else if (_sender == my_tester) {
+			// Load last settings
+			QSettings settings("AK", "uiCoreExample");
+			QString lastConfigString = settings.value("UI.Config", "").toString();
+			if (lastConfigString.length() > 0) {
+				std::string s(lastConfigString.toStdString());
+				ak::uiAPI::setupSettings(s.c_str());
+			}
+		}
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "Example::eventCallback()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "Example::eventCallback()"); }
@@ -182,6 +215,7 @@ void Example::eventCallback(
 void Example::setupUi(void) {
 	// Create default UI
 	my_ui.mainWindow = ak::uiAPI::createUiManager(my_uid);
+	ak::uiAPI::obj::setAlias(my_ui.mainWindow, "MainWindow");
 
 	// From this point on exceptions can be displayed in a message box since the UI is created
 	try {
@@ -221,6 +255,11 @@ void Example::setupUi(void) {
 			my_ui.dockTester = ak::uiAPI::createDock(my_uid, "Tester");
 			my_ui.dockTree = ak::uiAPI::createDock(my_uid, "Tree");
 
+			ak::uiAPI::obj::setAlias(my_ui.dockOutput, "Dock.Output");
+			ak::uiAPI::obj::setAlias(my_ui.dockProperties, "Dock.Properties");
+			ak::uiAPI::obj::setAlias(my_ui.dockTester, "Dock.Tester");
+			ak::uiAPI::obj::setAlias(my_ui.dockTree, "Dock.Tree");
+			
 			// Set widgets to docks
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockOutput, my_ui.outputWidget);
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockProperties, my_ui.propertiesWidget);

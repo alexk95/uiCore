@@ -69,6 +69,9 @@ private:
 		ak::UID				ttb_aTest2;
 		ak::UID				logInDialog;
 	};
+
+	ak::UID						my_tester;
+
 	structUi					my_ui;			//! Contains all UIDs of the UI
 	ak::UID						my_uid;			//! The UID of this application
 	ExampleNotifier *			my_notifier;	//! The notifier that receives the callback messages

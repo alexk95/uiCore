@@ -2338,6 +2338,34 @@ void ak::ui::objectManager::obj_delete(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_delete()"); }
 }
 
+void ak::ui::objectManager::obj_showMaximized(
+	ak::UID												_objectUid
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oMainWindow:
+		{
+			ak::ui::uiManager * ui = nullptr;
+			ui = dynamic_cast<ak::ui::uiManager *>(obj->second);
+			assert(ui != nullptr); // Cast failed
+			ui->maximizeWindow();
+		}
+		break;
+		default:
+			assert(0);
+			break;
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_showMaximized()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_showMaximized()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_showMaximized()"); }
+}
+
 // ###############################################################################################################################################
 
 // Object getter

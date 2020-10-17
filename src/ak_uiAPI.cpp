@@ -1768,6 +1768,18 @@ void ak::uiAPI::obj::destroy(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::destroy()"); }
 }
 
+void ak::uiAPI::obj::showMaximized(
+	ak::UID												_objectUid
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		oM->obj_showMaximized(_objectUid);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::showMaximized()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::showMaximized()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::showMaximized()"); }
+}
+
 // ###############################################################################################################################################
 
 // Object getter

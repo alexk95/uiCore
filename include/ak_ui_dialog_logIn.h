@@ -37,6 +37,7 @@ class QGridLayout;
 class QToolTip;
 class QPaintEvent;
 class QPixmap;
+class QSpacerItem;
 
 namespace ak {
 
@@ -133,14 +134,22 @@ namespace ak {
 				QPixmap *			my_bgImage;
 				QPixmap				my_currentImage;
 
+				QVBoxLayout *		my_mainLayout;
+				QSpacerItem *		my_spacer;
+
+
 				QGridLayout *		my_gridLayout;
 				QWidget *			my_gridWidget;
+
+				QHBoxLayout *		my_layout;
+				QWidget *			my_layoutWidget;
 
 				QCheckBox *			my_savePassword;
 				structInput			my_inputUsername;
 				structInput			my_inputPassword;
 				QPushButton *		my_buttonLogIn;
-				QVBoxLayout *		my_layout;
+				QVBoxLayout *		my_controlLayout;
+				QWidget *			my_controlLayoutWidget;
 
 				logIn(const logIn &) = delete;
 				logIn & operator = (const logIn &) = delete;

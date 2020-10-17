@@ -147,7 +147,7 @@
     <ClInclude Include="include\ak_ui_ttb_group.h" />
     <ClInclude Include="include\ak_ui_ttb_page.h" />
     <ClInclude Include="include\ak_ui_ttb_subgroup.h" />
-    <ClInclude Include="include\ak_ui_uiManager.h" />
+    <QtMoc Include="include\ak_ui_uiManager.h" />
     <ClInclude Include="include\ak_ui_widget_colorEditButton.h" />
     <QtMoc Include="include\ak_ui_widget_defaultWelcomeScreen.h" />
     <ClInclude Include="include\ak_ui_widget_propertyGrid.h" />

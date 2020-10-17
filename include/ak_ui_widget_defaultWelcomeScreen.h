@@ -103,6 +103,7 @@ namespace ak {
 				{
 					structLayoutWidget			Central;
 					structLayoutWidget			Recents;
+					structLayoutWidget			RecentsCentralDummy;
 					structLayoutWidget			OpenNewCentral;
 					structLayoutWidget			Open;
 					structLayoutWidget			New;

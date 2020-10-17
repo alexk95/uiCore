@@ -37,7 +37,8 @@ ak::ui::dialog::logIn::logIn(
 	const QString &								_hashedPassword,
 	QWidget *									_parent
 )	: ui::core::aDialog(_parent), ak::ui::core::aPaintable(ui::core::objectType::oLogInDialog), my_hashedPw(_hashedPassword),
-	my_buttonLogIn(nullptr), my_layout(nullptr), my_gridLayout(nullptr), my_savePassword(nullptr), my_messenger(_messenger)
+	my_buttonLogIn(nullptr), my_layout(nullptr), my_spacer(nullptr), my_layoutWidget(nullptr), my_gridLayout(nullptr), my_savePassword(nullptr),
+	my_messenger(_messenger), my_mainLayout(nullptr), my_controlLayout(nullptr), my_controlLayoutWidget(nullptr)
 {
 	assert(my_messenger != nullptr);
 
@@ -87,19 +88,43 @@ ak::ui::dialog::logIn::logIn(
 	connect(my_inputUsername.edit, SIGNAL(textChanged(const QString &)), this, SLOT(slotUsernameChanged(const QString &)));
 
 	// Create main layout and display data
-	my_layout = new QVBoxLayout(this);
+	my_controlLayout = new QVBoxLayout(this);
 
-	my_layout->addWidget(my_gridWidget);
-	my_layout->addWidget(my_buttonLogIn);
+	my_controlLayout->addWidget(my_gridWidget);
+	my_controlLayout->addWidget(my_buttonLogIn);
 
+	my_controlLayoutWidget = new QWidget();
+	my_controlLayoutWidget->setLayout(my_controlLayout);
+	my_controlLayoutWidget->setObjectName("ABC");
+	my_controlLayoutWidget->setStyleSheet("#ABC{"
+		"background-color:#90000000;"
+		"border-radius:10px;"
+
+		"}\n"
+		"QLabel{color:#FFFFFF}\n"
+		"QCheckBox{color:#FFFFFF}\n");
 	my_bgImage = new QPixmap(_backgroundImage);
 
-	setLayout(my_layout);
+	
+	// Create layout
+	my_layoutWidget = new QWidget();
+	my_layout = new QHBoxLayout(my_layoutWidget);
+	my_layout->addStretch(1);
+	my_layout->addWidget(my_controlLayoutWidget, 0, Qt::AlignmentFlag::AlignCenter);
+	my_layout->addStretch(1);
+
+	// Create spacer
+	my_mainLayout = new QVBoxLayout();
+	my_mainLayout->addStretch(1);
+	my_mainLayout->addWidget(my_layoutWidget, 0, Qt::AlignmentFlag::AlignBottom);
+
+	setLayout(my_mainLayout);
 	
 	setWindowTitle("Welcome");
 	// Hide info button
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+	resize(my_bgImage->size());
 }
 
 ak::ui::dialog::logIn::~logIn() {
@@ -119,7 +144,7 @@ ak::ui::dialog::logIn::~logIn() {
 	if (my_gridLayout != nullptr) { delete my_gridLayout; }
 	if (my_gridWidget != nullptr) { delete my_gridWidget; }
 
-	if (my_layout != nullptr) { delete my_layout; }
+	if (my_controlLayoutWidget != nullptr) { delete my_controlLayoutWidget; }
 
 }
 

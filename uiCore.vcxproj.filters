@@ -111,9 +111,6 @@
     <ClInclude Include="include\ak_ui_objectManager.h">
       <Filter>Header Files\ak\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_ui_uiManager.h">
-      <Filter>Header Files\ak\ui</Filter>
-    </ClInclude>
     <ClInclude Include="include\ak_notifier.h">
       <Filter>Header Files\ak\notifier</Filter>
     </ClInclude>
@@ -253,6 +250,9 @@
     </QtMoc>
     <QtMoc Include="include\ak_ui_widget_defaultWelcomeScreen.h">
       <Filter>Header Files\ak\ui\widget</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_uiManager.h">
+      <Filter>Header Files\ak\ui</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

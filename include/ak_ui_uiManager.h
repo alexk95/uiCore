@@ -17,7 +17,9 @@
 #include <map>
 
 // Qt header
+#include <qobject.h>
 #include <qstring.h>					// QString
+#include <qbytearray.h>
 
 // AK header
 #include <ak_ui_core_aPaintable.h>		// base class
@@ -53,7 +55,8 @@ namespace ak {
 		//! @brief This class is used to manage a QMainWindow
 		//! It provides several functions to create and manipulate the UI
 		//! Also it will connect all created objects to the messaging system and will manage the UIDs of those objects.
-		class uiManager : public ui::core::aPaintable, public ui::core::aRestorable {
+		class uiManager : public QObject, public ui::core::aPaintable, public ui::core::aRestorable {
+			Q_OBJECT
 		public:
 			// #############################################################################################################
 			// Constructors
@@ -273,6 +276,9 @@ namespace ak {
 			void deleteObject(
 				ak::UID										_obejctUid
 			);
+
+		private slots:
+			void slotRestoreSetting(const QByteArray &);
 
 		private:
 			// Variables

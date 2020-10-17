@@ -141,7 +141,7 @@ ak::ui::uiManager::uiManager(
 		// Show main window
 		//my_timerShowMainWindow->start();
 		my_window->resize(800, 600);
-		my_window->showMaximized();
+	//	my_window->showMaximized();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::uiManager()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::uiManager()"); }
@@ -246,7 +246,7 @@ void ak::ui::uiManager::restoreSettings(
 			actualState.push_back(itm->GetInt());
 		}
 
-		my_window->restoreState(actualState);
+		QMetaObject::invokeMethod(this, "slotRestoreSetting", Qt::ConnectionType::QueuedConnection, Q_ARG(QByteArray, actualState));
 	}
 }
 
@@ -289,6 +289,7 @@ void ak::ui::uiManager::addDock(
 		}
 		//_dock->resize(200, 200);
 		my_window->resizeDocks({ _dock }, { 0 }, Qt::Orientation::Vertical);
+		my_window->resizeDocks({ _dock }, { 0 }, Qt::Orientation::Horizontal);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::addDock()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::addDock()"); }
@@ -316,7 +317,8 @@ void ak::ui::uiManager::tabifyDock(
 		
 		// tabify dock
 		my_window->tabifyDockWidget(dock1, dock2);
-		my_window->resizeDocks({ dock2 }, { 0 }, Qt::Horizontal);
+		my_window->resizeDocks({ dock2 }, { 0 }, Qt::Orientation::Vertical);
+		my_window->resizeDocks({ dock2 }, { 0 }, Qt::Orientation::Horizontal);
 		dock1->raise();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::tabifyDock()"); }
@@ -581,4 +583,10 @@ void ak::ui::uiManager::setWindowTitle(
 
 QString ak::ui::uiManager::windowTitle(void) const {
 	return my_window->windowTitle();
+}
+
+void ak::ui::uiManager::slotRestoreSetting(
+	const QByteArray &					_actualState
+) {
+	my_window->restoreState(_actualState);
 }
