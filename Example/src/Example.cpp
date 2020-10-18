@@ -281,7 +281,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::obj::setAutoSelectAndDeselectChildrenEnabled(my_ui.treeWidget, true);
 			ak::uiAPI::obj::setMultiSelectionEnabled(my_ui.treeWidget, true);
 			ak::uiAPI::obj::setReadOnly(my_ui.outputWidget);
-			
+			ak::uiAPI::obj::setFilterVisible(my_ui.treeWidget);
 			
 			ak::UID dd = ak::uiAPI::createDefaultWelcomeScreen(my_uid);
 
