@@ -1,5 +1,5 @@
 /*
- * ak_ui_colorStyleDefaultBright.h
+ * ak_ui_colorStyleDefault.h
  *
  *  Created on: April 26, 2020
  *	Last modified on: August 26, 2020
@@ -23,13 +23,13 @@ namespace ak {
 	namespace ui {
 
 		//! @brief This class provides the default bright color style
-		class colorStyleDefaultBright : public ak::ui::colorStyle {
+		class colorStyleDefault : public ak::ui::colorStyle {
 		public:
 			//! @brief Constructor
-			colorStyleDefaultBright();
+			colorStyleDefault();
 
 			//! @brief Deconstructor
-			virtual ~colorStyleDefaultBright();
+			virtual ~colorStyleDefault();
 
 			// ##############################################################
 			// Getter

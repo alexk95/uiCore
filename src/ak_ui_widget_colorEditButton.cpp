@@ -115,10 +115,10 @@ ak::ui::widget::colorEditButton::~colorEditButton() {
 QWidget * ak::ui::widget::colorEditButton::widget(void) { return my_widget; }
 
 void ak::ui::widget::colorEditButton::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check colorStyle"); }
+		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;
 		my_button->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sPushButton));
 	} 

@@ -25,7 +25,7 @@ ak::ui::qt::list::~list() {
 QWidget * ak::ui::qt::list::widget(void) { return this; }
 
 void ak::ui::qt::list::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr);	// nullptr provided
 	my_colorStyle = _colorStyle;

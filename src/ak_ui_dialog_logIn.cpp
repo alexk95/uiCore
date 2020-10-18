@@ -149,7 +149,7 @@ ak::ui::dialog::logIn::~logIn() {
 }
 
 void ak::ui::dialog::logIn::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

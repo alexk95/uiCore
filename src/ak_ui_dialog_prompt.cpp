@@ -128,7 +128,7 @@ ak::ui::dialog::prompt::~prompt() {
 }
 
 void ak::ui::dialog::prompt::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr);
 	my_colorStyle = _colorStyle;

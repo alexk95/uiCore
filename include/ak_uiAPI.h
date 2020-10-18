@@ -88,7 +88,9 @@ namespace ak {
 			ak::ui::objectManager * objectManager(void) const;
 
 			//! @brief Will return the color style
-			ak::ui::colorStyle * colorStyle(void) const;
+			ak::ui::colorStyle * currentColorStyle(void) const;
+
+			QString currentColorStyleName(void) const;
 
 			//! @brief Will set the color style
 			//! @param _colorStyle The colorStyle to set
@@ -103,7 +105,7 @@ namespace ak {
 
 			//! @brief Will set the default dark colorStyle
 			//! @throw ak::Exception on any error
-			void setBrightColorStyle(void);
+			void setDefaultColorStyle(void);
 
 			//! @brief Will call the execute function of the QApplication
 			int exec(void);
@@ -145,8 +147,6 @@ namespace ak {
 			bool						my_uidManagerIsExtern;			//! If true, then the UID manager was created externally
 			ak::ui::iconManager *		my_iconManager;					//! The icon manager used in this API
 			bool						my_iconManagerIsExtern;			//! If true, then the icon manager was created externally
-			ak::ui::colorStyle *		my_colorStyle;					//! The color style used in this API
-			bool						my_colorStyleIsExtern;			//! If true, then the color style was created externally
 			bool						my_isInitialized;				//! If true, then the API was initialized
 
 			ak::uidManager *			my_fileUidManager;				//! The UID manager used for files in this API
@@ -1818,13 +1818,15 @@ namespace ak {
 		);
 
 		//! @brief Will return the current color style
-		UICORE_API ak::ui::colorStyle * getColorStyle(void);
+		UICORE_API const ak::ui::colorStyle * getCurrentColorStyle(void);
+
+		UICORE_API QString getCurrentColorStyleName(void);
 
 		//! @brief Will set the current color style to the default dark color style
 		UICORE_API void setDefaultDarkColorStyle(void);
 
 		//! @brief Will set the current color style to the default bright color style
-		UICORE_API void setDefaultBrightColorStyle(void);
+		UICORE_API void setDefaultColorStyle(void);
 
 		//! @brief Will close the provided uiManager
 		//! @param _uiManagerUid The UID of the uiManager to close

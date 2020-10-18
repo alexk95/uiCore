@@ -46,7 +46,7 @@ namespace ak {
 			public:
 				//! @brief Constructor
 				tree(
-					ak::ui::colorStyle *			_colorStyle = nullptr
+					const ak::ui::colorStyle *		_colorStyle = nullptr
 				);
 
 				virtual ~tree();
@@ -75,7 +75,7 @@ namespace ak {
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
-					ak::ui::colorStyle *			_colorStyle
+					const ak::ui::colorStyle *			_colorStyle
 				) override;
 
 				// ####################################################################################################################################

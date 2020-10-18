@@ -58,7 +58,7 @@ namespace ak {
 				propertyGrid(
 					ak::messenger *									_messenger,
 					ak::uidManager *								_uidManager,
-					ak::ui::colorStyle *							_colorStyle = nullptr
+					const ak::ui::colorStyle *						_colorStyle = nullptr
 				);
 
 				//! @brief Deconstructor
@@ -74,7 +74,7 @@ namespace ak {
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
-					ak::ui::colorStyle *			_colorStyle
+					const ak::ui::colorStyle *						_colorStyle
 				) override;
 
 				// ############################################################################################################
@@ -322,7 +322,6 @@ namespace ak {
 				ak::ui::widget::table *										my_table;								//! The table this property grid is managing
 				ak::uidManager *											my_externalUidManager;					//! The globally used UID manager
 				ak::notifierPropertyGrid *									my_internalNotifier;					//! The internally used notifier
-				ak::ui::colorStyle *										my_colorStyle;							//! The currently set color style
 				ui::signalLinker *											my_signalLinker;
 
 				bool														my_showMessageboxOnSyntaxError;			//! If true, a message box will be displayed on case of any syntax error

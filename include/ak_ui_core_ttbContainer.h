@@ -47,7 +47,7 @@ namespace ak {
 					ak::messenger *				_messenger,
 					ak::uidManager *			_uidManager,
 					ak::ui::core::objectType	_type,
-					ak::ui::colorStyle *		_colorStyle = nullptr,
+					const ak::ui::colorStyle *	_colorStyle = nullptr,
 					ak::UID						 _UID = ak::invalidUID,
 					int							_references = 1
 				);

@@ -47,7 +47,7 @@ namespace ak {
 
 				//! @brief Will set the current color style for this dialog
 				virtual void setColorStyle(
-					ak::ui::colorStyle *			_colorStyle
+					const ak::ui::colorStyle *	_colorStyle
 				) override;
 
 			private slots:

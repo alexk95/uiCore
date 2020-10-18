@@ -33,10 +33,10 @@ ak::ui::qt::tabView::~tabView() {}
 QWidget * ak::ui::qt::tabView::widget(void) { return this; }
 
 void ak::ui::qt::tabView::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check color style"); }
+		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;
 		setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTabWidget));
 	}

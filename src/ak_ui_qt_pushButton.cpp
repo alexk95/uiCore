@@ -46,10 +46,10 @@ void ak::ui::qt::pushButton::keyReleaseEvent(QKeyEvent * _event) {
 QWidget * ak::ui::qt::pushButton::widget(void) { return this; }
 
 void ak::ui::qt::pushButton::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check color style", ak::Exception::exceptionType::Nullptr); }
+		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;
 		this->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sPushButton));
 	}

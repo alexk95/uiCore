@@ -13,7 +13,7 @@
 
 // AK header
 #include <ak_uiAPI.h>						// corresponding header
-#include <ak_ui_colorStyleDefaultBright.h>	// colorStyleDefaultBright
+#include <ak_ui_colorStyleDefault.h>		// colorStyleDefault
 #include <ak_ui_colorStyleDefaultDark.h>	// colorStyleDefaultDark
 #include <ak_messenger.h>					// messenger
 #include <ak_ui_objectManager.h>			// objectManager
@@ -45,8 +45,6 @@ ak::uiAPI::apiManager::apiManager()
 	my_objManagerIsExtern(false),
 	my_uidManager(nullptr),
 	my_uidManagerIsExtern(false),
-	my_colorStyle(nullptr),
-	my_colorStyleIsExtern(false),
 	my_isInitialized(false),
 	my_app(nullptr),
 	my_appIsRunning(false),
@@ -129,7 +127,7 @@ void ak::uiAPI::apiManager::ini(
 
 		// object manager
 		if (_objectManager == nullptr) {
-			my_objManager = new ak::ui::objectManager(my_messenger, my_uidManager, my_iconManager, my_colorStyle);
+			my_objManager = new ak::ui::objectManager(my_messenger, my_uidManager, my_iconManager, nullptr);
 			if (my_objManager == nullptr) { throw ak::Exception("Failed to create", "Create object manager"); }
 		}
 		else {
@@ -150,20 +148,9 @@ bool ak::uiAPI::apiManager::isInitialized(void) const { return my_isInitialized;
 void ak::uiAPI::apiManager::setColorStyle(
 	ak::ui::colorStyle *								_colorStyle
 ) {
-	// Check if the same color style was provided
-	if (_colorStyle == my_colorStyle) { return; }
-	ak::ui::colorStyle * pointerBackup = nullptr;
-
 	try {
-		// Backup current color style to delete it after applying the new one
-		if (!my_colorStyleIsExtern) { pointerBackup = my_colorStyle; }
-		my_colorStyle = _colorStyle;
-		my_colorStyle->setDirectories(my_iconManager->searchDirectories());
-		my_colorStyleIsExtern = true;
-		my_objManager->setColorStyle(my_colorStyle);
-
-		// Free memory of the old color style if was internal created
-		if (pointerBackup != nullptr) { delete pointerBackup; pointerBackup = nullptr; }
+		assert(my_isInitialized); // Not initialized
+		my_objManager->setColorStyle(_colorStyle);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::setColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::setColorStyle()"); }
@@ -171,44 +158,28 @@ void ak::uiAPI::apiManager::setColorStyle(
 }
 
 void ak::uiAPI::apiManager::setDarkColorStyle(void) {
-	ak::ui::colorStyle * pointerBackup = nullptr;
 	try {
-		// Backup current color style to delete it after applying the new one
-		if (!my_colorStyleIsExtern) { pointerBackup = my_colorStyle; }
-		my_colorStyle = new ak::ui::colorStyleDefaultDark();
-		my_colorStyle->setDirectories(my_iconManager->searchDirectories());
-		my_colorStyleIsExtern = false;
-		my_objManager->setColorStyle(my_colorStyle);
-
-		// Free memory of the old color style if was internal created
-		if (pointerBackup != nullptr) { delete pointerBackup; pointerBackup = nullptr; }
+		assert(my_isInitialized); // Not initialized
+		my_objManager->setDefaultDarkColorStyle();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::setDarkColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::setDarkColorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::setDarkColorStyle()"); }
 }
 
-void ak::uiAPI::apiManager::setBrightColorStyle(void) {
-	ak::ui::colorStyle * pointerBackup = nullptr;
+void ak::uiAPI::apiManager::setDefaultColorStyle(void) {
 	try {
-		// Backup current color style to delete it after applying the new one
-		if (!my_colorStyleIsExtern) { pointerBackup = my_colorStyle; }
-		my_colorStyle = new ak::ui::colorStyleDefaultBright();
-		my_colorStyle->setDirectories(my_iconManager->searchDirectories());
-		my_colorStyleIsExtern = false;
-		my_objManager->setColorStyle(my_colorStyle);
-
-		// Free memory of the old color style if was internal created
-		if (pointerBackup != nullptr) { delete pointerBackup; pointerBackup = nullptr; }
+		assert(my_isInitialized); // Not initialized
+		my_objManager->setDefaultColorStyle();
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::setBrightColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::setBrightColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::setBrightColorStyle()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::setDefaultColorStyle()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::setDefaultColorStyle()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::setDefaultColorStyle()"); }
 }
 
 ak::messenger * ak::uiAPI::apiManager::messenger(void) const {
 	try {
-		if (!my_isInitialized) { throw ak::Exception("API is not initialized", "Check API status"); }
+		assert(my_isInitialized); // API is not initialized
 		return my_messenger;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::messenger()"); }
@@ -218,7 +189,7 @@ ak::messenger * ak::uiAPI::apiManager::messenger(void) const {
 
 ak::uidManager * ak::uiAPI::apiManager::uidManager(void) const {
 	try {
-		if (!my_isInitialized) { throw ak::Exception("API is not initialized", "Check API status"); }
+		assert(my_isInitialized); // API is not initialized
 		return my_uidManager;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::uidManager()"); }
@@ -228,7 +199,7 @@ ak::uidManager * ak::uiAPI::apiManager::uidManager(void) const {
 
 ak::ui::iconManager * ak::uiAPI::apiManager::iconManager(void) const {
 	try {
-		if (!my_isInitialized) { throw ak::Exception("API is not initialized", "Check API status"); }
+		assert(my_isInitialized); // API is not initialized
 		return my_iconManager;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::iconManager()"); }
@@ -238,7 +209,7 @@ ak::ui::iconManager * ak::uiAPI::apiManager::iconManager(void) const {
 
 ak::ui::objectManager * ak::uiAPI::apiManager::objectManager(void) const {
 	try {
-		if (!my_isInitialized) { throw ak::Exception("API is not initialized", "Check API status"); }
+		assert(my_isInitialized); // API is not initialized
 		return my_objManager;
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::objectManager()"); }
@@ -246,20 +217,25 @@ ak::ui::objectManager * ak::uiAPI::apiManager::objectManager(void) const {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::objectManager()"); }
 }
 
-ak::ui::colorStyle * ak::uiAPI::apiManager::colorStyle(void) const {
+ak::ui::colorStyle * ak::uiAPI::apiManager::currentColorStyle(void) const {
 	try {
-		if (!my_isInitialized) { throw ak::Exception("API is not initialized", "Check API status"); }
-		return my_colorStyle;
+		assert(my_isInitialized); // API is not initialized
+		return my_objManager->getCurrentColorStyle();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::colorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::colorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::colorStyle()"); }
 }
 
+QString ak::uiAPI::apiManager::currentColorStyleName(void) const {
+	assert(my_isInitialized); // API is not initialized
+	return my_objManager->getCurrentColorStyleName();
+}
+
 int ak::uiAPI::apiManager::exec(void) {
 	try {
-		if (my_app == nullptr) { throw ak::Exception("Application was not created on initialization", "Check application"); }
-		if (my_appIsRunning) { throw ak::Exception("Application is already running", "Check application"); }
+		assert(my_app != nullptr); // App not created on initialization
+		assert(!my_appIsRunning); // App is already running
 		return my_app->exec();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::exec()"); }
@@ -2573,7 +2549,7 @@ ak::ui::core::dialogResult ak::uiAPI::dialog::showPrompt(
 ) {
 	try {
 		ui::dialog::prompt dia(_message, _title, _type);
-		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
+		const const ak::ui::colorStyle * cS = my_apiManager.currentColorStyle();
 		if (cS != nullptr) { dia.setColorStyle(cS); }
 		return dia.showDialog();
 	}
@@ -2695,12 +2671,14 @@ void ak::uiAPI::setColorStyle(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setColorStyle()"); }
 }
 
-ak::ui::colorStyle *  ak::uiAPI::getColorStyle(void) {
-	try { return my_apiManager.colorStyle(); }
+const ak::ui::colorStyle *  ak::uiAPI::getCurrentColorStyle(void) {
+	try { return my_apiManager.currentColorStyle(); }
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getColorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getColorStyle()"); }
 }
+
+QString ak::uiAPI::getCurrentColorStyleName(void) { return my_apiManager.currentColorStyleName(); }
 
 void ak::uiAPI::setDefaultDarkColorStyle() {
 	try {
@@ -2711,9 +2689,9 @@ void ak::uiAPI::setDefaultDarkColorStyle() {
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setDefaultDarkColorStyle()"); }
 }
 
-void ak::uiAPI::setDefaultBrightColorStyle() {
+void ak::uiAPI::setDefaultColorStyle() {
 	try {
-		my_apiManager.setBrightColorStyle();
+		my_apiManager.setDefaultColorStyle();
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setDefaultBrightColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setDefaultBrightColorStyle()"); }
@@ -2923,7 +2901,7 @@ void ak::uiAPI::addIconSearchPath(
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
 		manager->addDirectory(QString(_path));
-		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
+		ak::ui::colorStyle * cS = my_apiManager.currentColorStyle();
 		if (cS != nullptr) { cS->setDirectories(manager->searchDirectories()); }
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addIconSearchPath(char *)"); }
@@ -2937,7 +2915,7 @@ void ak::uiAPI::addIconSearchPath(
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
 		manager->addDirectory(_path);
-		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
+		ak::ui::colorStyle * cS = my_apiManager.currentColorStyle();
 		if (cS != nullptr) { cS->setDirectories(manager->searchDirectories()); }
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addIconSearchPath(QString)"); }
@@ -2951,7 +2929,7 @@ void ak::uiAPI::removeIconSearchPath(
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
 		manager->removeDirectory(QString(_path));
-		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
+		ak::ui::colorStyle * cS = my_apiManager.currentColorStyle();
 		cS->setDirectories(manager->searchDirectories());
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::removeIconSearchPath(char *)"); }
@@ -2965,7 +2943,7 @@ void ak::uiAPI::removeIconSearchPath(
 	try {
 		ak::ui::iconManager * manager = my_apiManager.iconManager();
 		manager->removeDirectory(_path);
-		ak::ui::colorStyle * cS = my_apiManager.colorStyle();
+		ak::ui::colorStyle * cS = my_apiManager.currentColorStyle();
 		cS->setDirectories(manager->searchDirectories());
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::removeIconSearchPath(QString)"); }

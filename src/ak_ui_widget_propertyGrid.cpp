@@ -37,7 +37,7 @@
 ak::ui::widget::propertyGrid::propertyGrid(
 	ak::messenger *						_messenger,
 	ak::uidManager *					_uidManager,
-	ak::ui::colorStyle *				_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oPropertyGrid, nullptr, nullptr, _colorStyle),
 	my_externalMessanger(nullptr), my_table(nullptr), my_externalUidManager(nullptr),
 	my_showMessageboxOnSyntaxError(true), my_signalLinker(nullptr)
@@ -98,7 +98,7 @@ ak::ui::widget::propertyGrid::~propertyGrid() {
 QWidget * ak::ui::widget::propertyGrid::widget(void) { return my_table->widget(); }
 
 void ak::ui::widget::propertyGrid::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
 		assert(_colorStyle != nullptr); // No color style provided

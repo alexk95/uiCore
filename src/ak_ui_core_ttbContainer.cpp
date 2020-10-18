@@ -22,7 +22,7 @@ ak::ui::core::ttbContainer::ttbContainer(
 	ak::messenger *				_messenger,
 	ak::uidManager *			_uidManager,
 	ak::ui::core::objectType	_type,
-	ak::ui::colorStyle *		_colorStyle,
+	const ak::ui::colorStyle *	_colorStyle,
 	ak::UID						_uid,
 	int							_references
 ) : ak::ui::core::aPaintable(_type, _colorStyle, _uid, _references),

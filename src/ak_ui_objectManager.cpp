@@ -29,6 +29,8 @@
 #include <ak_ui_core_aObject.h>
 #include <ak_ui_core_aRestorable.h>
 #include <ak_ui_core_aDialog.h>
+#include <ak_ui_colorStyleDefault.h>
+#include <ak_ui_colorStyleDefaultDark.h>
 
 // AK dialogs
 #include <ak_ui_dialog_logIn.h>
@@ -4021,7 +4023,7 @@ void ak::ui::objectManager::setColorStyle(
 	ak::ui::colorStyle *								_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check colorStyle"); }
+		assert(_colorStyle != nullptr); // Nullptr provided
 		my_colorStyle = _colorStyle;
 
 		for (my_mapObjectsIterator obj = my_mapObjects.begin(); obj != my_mapObjects.end(); obj++) {
@@ -4029,7 +4031,7 @@ void ak::ui::objectManager::setColorStyle(
 				// Cast paintable
 				ak::ui::core::aPaintable * itm = nullptr;
 				itm = dynamic_cast<ak::ui::core::aPaintable *>(obj->second);
-				if (itm == nullptr) { throw ak::Exception("Cast failed", "Cast paintable"); }
+				assert(itm != nullptr); // Cast failed
 				itm->setColorStyle(my_colorStyle);
 			}
 		}
@@ -4037,6 +4039,41 @@ void ak::ui::objectManager::setColorStyle(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setColorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setColorStyle()"); }
+}
+
+void ak::ui::objectManager::setDefaultColorStyle(void) {
+	ui::colorStyle * pointerBackup = nullptr;
+	if (!my_colorStyleIsExtern) {
+		pointerBackup = my_colorStyle;
+	}
+	my_colorStyleIsExtern = true;
+	my_colorStyle = new colorStyleDefault;
+	if (my_iconManager != nullptr) {
+		my_colorStyle->setDirectories(my_iconManager->searchDirectories());
+	}
+	setColorStyle(my_colorStyle);
+	if (pointerBackup != nullptr) { delete pointerBackup; }
+}
+
+void ak::ui::objectManager::setDefaultDarkColorStyle(void) {
+	ui::colorStyle * pointerBackup = nullptr;
+	if (!my_colorStyleIsExtern) {
+		pointerBackup = my_colorStyle;
+	}
+	my_colorStyleIsExtern = true;
+	my_colorStyle = new colorStyleDefaultDark;
+	if (my_iconManager != nullptr) {
+		my_colorStyle->setDirectories(my_iconManager->searchDirectories());
+	}
+	setColorStyle(my_colorStyle);
+	if (pointerBackup != nullptr) { delete pointerBackup; }
+}
+
+ak::ui::colorStyle * ak::ui::objectManager::getCurrentColorStyle(void) const { return my_colorStyle; }
+
+QString ak::ui::objectManager::getCurrentColorStyleName(void) const {
+	if (my_colorStyle == nullptr) { return QString(); }
+	return my_colorStyle->getColorStyleName();
 }
 
 void ak::ui::objectManager::destroyAll(void) {
@@ -4083,6 +4120,15 @@ std::string ak::ui::objectManager::getSettingsJSON(void) {
 		// Create array value
 		rapidjson::Value items(rapidjson::kArrayType);
 
+		// Create current color style settings entry
+		rapidjson::Value colorSettings;
+		colorSettings.SetObject();
+		std::string currentColorStyleString = getCurrentColorStyleName().toStdString();
+		rapidjson::Value currentColorStyle(currentColorStyleString.c_str(), allocator);
+		colorSettings.AddMember(RESTORABLE_UI_COLORSTYLE, currentColorStyle, allocator);
+		items.PushBack(colorSettings, allocator);
+
+		// Collect data for objects that have to be restored
 		for (my_mapAliasesIterator itm = my_mapAliases.begin(); itm != my_mapAliases.end(); itm++) {
 			my_mapObjectsIterator obj = my_mapObjects.find(itm->second);
 			ak::ui::core::aRestorable * restorable = nullptr;
@@ -4130,47 +4176,62 @@ void ak::ui::objectManager::setupSettings(
 		// Go trough all items in the array
 		for (rapidjson::Value::ConstValueIterator itm = UIsettings.Begin(); itm != UIsettings.End(); itm++) {
 			const rapidjson::Value & obj = *itm;
-			assert(obj.IsObject());								// Stored item is not an object
-			assert(obj.HasMember(RESTORABLE_NAME_ALIAS));			// Does not contain name
-			assert(obj.HasMember(RESTORABLE_NAME_TYPE));			// Does not contain type
-			assert(obj.HasMember(RESTORABLE_NAME_SETTINGS));		// Does not contain settings
-			assert(obj[RESTORABLE_NAME_ALIAS].IsString());			// Alias is not a string
-			assert(obj[RESTORABLE_NAME_TYPE].IsString());			// Type is not a string
-			assert(obj[RESTORABLE_NAME_SETTINGS].IsObject());		// Settins is not an object
-
-			QString objAlias = QString(obj[RESTORABLE_NAME_ALIAS].GetString());
-			QString objType = QString(obj[RESTORABLE_NAME_TYPE].GetString());
-
-			// Check if an object with the provided alias exist
-			my_mapAliasesIterator oAlias = my_mapAliases.find(objAlias);
-			if (oAlias == my_mapAliases.end()) {
-				QString msg("An object with the alias \"");
-				msg.append(objAlias);
-				msg.append("\" does not exist");
-				throw ak::Exception(msg.toStdString(), "Check object alias");
+			assert(obj.IsObject());									// Stored item is not an object
+			if (obj.HasMember(RESTORABLE_UI_COLORSTYLE)) {
+				assert(obj[RESTORABLE_UI_COLORSTYLE].IsString());
+				QString colorStyle = obj[RESTORABLE_UI_COLORSTYLE].GetString();
+				if (colorStyle == "Default") {
+					setDefaultColorStyle();
+				}
+				else if (colorStyle == "Default_Dark") {
+					setDefaultDarkColorStyle();
+				}
+				else {
+					assert(0); // Not implemented color style
+				}
 			}
+			else {
+				assert(obj.HasMember(RESTORABLE_NAME_ALIAS));			// Does not contain name
+				assert(obj.HasMember(RESTORABLE_NAME_TYPE));			// Does not contain type
+				assert(obj.HasMember(RESTORABLE_NAME_SETTINGS));		// Does not contain settings
+				assert(obj[RESTORABLE_NAME_ALIAS].IsString());			// Alias is not a string
+				assert(obj[RESTORABLE_NAME_TYPE].IsString());			// Type is not a string
+				assert(obj[RESTORABLE_NAME_SETTINGS].IsObject());		// Settins is not an object
 
-			// Get the object
-			my_mapObjectsIterator object = my_mapObjects.find(oAlias->second);
-			assert(object != my_mapObjects.end()); // Registered alias is not stored
+				QString objAlias = QString(obj[RESTORABLE_NAME_ALIAS].GetString());
+				QString objType = QString(obj[RESTORABLE_NAME_TYPE].GetString());
 
-			// Check the object type
-			if (ak::ui::core::toQString(object->second->objectType()) != objType) {
-				QString msg("The type of the object with the alias \"");
-				msg.append(objAlias);
-				msg.append("\" does not match the type provided in the settings string");
-				throw ak::Exception(msg.toStdString(), "Check object type");
+				// Check if an object with the provided alias exist
+				my_mapAliasesIterator oAlias = my_mapAliases.find(objAlias);
+				if (oAlias == my_mapAliases.end()) {
+					QString msg("An object with the alias \"");
+					msg.append(objAlias);
+					msg.append("\" does not exist");
+					throw ak::Exception(msg.toStdString(), "Check object alias");
+				}
+
+				// Get the object
+				my_mapObjectsIterator object = my_mapObjects.find(oAlias->second);
+				assert(object != my_mapObjects.end()); // Registered alias is not stored
+
+				// Check the object type
+				if (ak::ui::core::toQString(object->second->objectType()) != objType) {
+					QString msg("The type of the object with the alias \"");
+					msg.append(objAlias);
+					msg.append("\" does not match the type provided in the settings string");
+					throw ak::Exception(msg.toStdString(), "Check object type");
+				}
+
+				// Check object
+				ak::ui::core::aRestorable * restorable = nullptr;
+				restorable = dynamic_cast<ak::ui::core::aRestorable *>(object->second);
+				assert(restorable != nullptr); // Cast failed
+
+				// Apply the settings
+				const rapidjson::Value & settings = obj[RESTORABLE_NAME_SETTINGS];
+				assert(settings.IsObject()); // Not a setting
+				restorable->restoreSettings(settings);
 			}
-
-			// Check object
-			ak::ui::core::aRestorable * restorable = nullptr;
-			restorable = dynamic_cast<ak::ui::core::aRestorable *>(object->second);
-			assert(restorable != nullptr); // Cast failed
-
-			// Apply the settings
-			const rapidjson::Value & settings = obj[RESTORABLE_NAME_SETTINGS];
-			assert(settings.IsObject()); // Not a setting
-			restorable->restoreSettings(settings);
 		}
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setupSettings()"); }

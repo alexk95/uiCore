@@ -229,6 +229,26 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 				"}\n");
 
 			break;
+			
+		case ak::ui::colorStyle::styleableObject::sListBorderless:
+			out.append("QListWidget{"
+				_fore _backControl
+				"border-color:#00000000;"
+				"}\n");
+
+			out.append("QListWidget::item:alternate{"
+				_alternateBackWindow
+				"}\n");
+
+			out.append("QListWidget::item:selected{"
+				_selectedFore _selectedBack
+				"}\n");
+
+			out.append("QListWidget::item:hover:!selected{"
+				_focusFore _focusBack
+				"}\n");
+
+			break;
 
 		// ######################################################################################################
 

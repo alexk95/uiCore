@@ -18,7 +18,7 @@
 
 ak::ui::core::aWidget::aWidget(
 	ak::ui::core::objectType	_type,
-	ak::ui::colorStyle *		_colorStyle,
+	const ak::ui::colorStyle *	_colorStyle,
 	ak::UID						_UID,
 	int							_references
 ) : ak::ui::core::aPaintable(_type, _colorStyle, _UID, _references), my_parentDock(nullptr) {}

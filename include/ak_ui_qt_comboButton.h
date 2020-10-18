@@ -49,7 +49,7 @@ namespace ak {
 				//! @throw ak::Exception if the creation of the menu failed
 				comboButton(
 					const QString &										_initialText = QString(""),
-					ak::ui::colorStyle *								_colorStyle = nullptr,
+					const ak::ui::colorStyle *							_colorStyle = nullptr,
 					QWidget *											_parent = (QWidget *) nullptr
 				);
 
@@ -97,7 +97,7 @@ namespace ak {
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
-					ak::ui::colorStyle *			_colorStyle
+					const ak::ui::colorStyle *			_colorStyle
 				) override;
 				
 			signals:

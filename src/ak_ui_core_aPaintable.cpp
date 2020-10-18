@@ -17,7 +17,7 @@
 
 ak::ui::core::aPaintable::aPaintable(
 	ak::ui::core::objectType		_type,
-	ak::ui::colorStyle *			_colorStyle,
+	const ak::ui::colorStyle *		_colorStyle,
 	ak::UID							_uid,
 	int								_references
 ) : ak::ui::core::aObject(_type, _uid, _references), my_colorStyle(_colorStyle) {}

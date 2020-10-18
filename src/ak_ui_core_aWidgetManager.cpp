@@ -23,11 +23,9 @@
 
 ak::ui::core::aWidgetManager::aWidgetManager(
 	ak::ui::core::objectType		_type,
-	//ak::ui::iconManager *			_iconManager,
 	ak::messenger *					_messenger,
 	ak::uidManager *				_uidManager,
-	//ak::ui::objectManager *			_objectManager,
-	ak::ui::colorStyle *			_colorStyle,
+	const ak::ui::colorStyle *		_colorStyle,
 	ak::UID							 _UID,
 	int								_references
 )

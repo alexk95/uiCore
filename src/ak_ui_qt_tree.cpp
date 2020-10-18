@@ -22,7 +22,7 @@
 #include <qheaderview.h>
 
 ak::ui::qt::tree::tree(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *		_colorStyle
 ) : QTreeWidget(),
 	ak::ui::core::aWidget(ak::ui::core::objectType::oTree, _colorStyle) {
 	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
@@ -50,10 +50,10 @@ void ak::ui::qt::tree::leaveEvent(QEvent *_event)
 QWidget * ak::ui::qt::tree::widget(void) { return this; }
 
 void ak::ui::qt::tree::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check colorStyle"); }
+		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;
 		setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTree));
 		header()->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sObjectHeader));

@@ -156,10 +156,10 @@ ak::ui::uiManager::~uiManager() {
 }
 
 void ak::ui::uiManager::setColorStyle(
-	ak::ui::colorStyle *												_colorStyle
+	const ak::ui::colorStyle *								_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check colorStyle"); }
+		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;
 
 		// Main window

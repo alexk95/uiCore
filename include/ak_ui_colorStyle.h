@@ -41,6 +41,7 @@ namespace ak {
 				sLabel,
 				sLineEdit,
 				sList,
+				sListBorderless,
 				sMainWindow,
 				sMdiArea,
 				sMdiSubArea,

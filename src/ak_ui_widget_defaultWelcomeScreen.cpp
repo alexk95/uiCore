@@ -93,6 +93,11 @@ ak::ui::widget::defaultWelcomeScreen::defaultWelcomeScreen(
 	my_screen.New.layout->addWidget(my_new.List);
 
 	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
+	else {
+		my_open.List->setStyleSheet("QListWidget{"
+			"border-color:#00000000;"
+			"}\n");
+	}
 
 }
 
@@ -101,10 +106,12 @@ ak::ui::widget::defaultWelcomeScreen::~defaultWelcomeScreen() { memFree(); }
 QWidget * ak::ui::widget::defaultWelcomeScreen::widget(void) { return my_screen.Central.widget; }
 
 void ak::ui::widget::defaultWelcomeScreen::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 
 	assert(_colorStyle != nullptr); // Nullptr provided
+
+	my_colorStyle = _colorStyle;
 
 	QString sheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sWidget));
 	if (my_screen.Central.widget != nullptr) { my_screen.Central.widget->setStyleSheet(sheet); }

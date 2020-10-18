@@ -96,9 +96,6 @@
     <ClInclude Include="include\ak_ui_colorStyle.h">
       <Filter>Header Files\ak\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_ui_colorStyleDefaultBright.h">
-      <Filter>Header Files\ak\ui</Filter>
-    </ClInclude>
     <ClInclude Include="include\ak_ui_colorStyleDefaultDark.h">
       <Filter>Header Files\ak\ui</Filter>
     </ClInclude>
@@ -195,6 +192,9 @@
     <ClInclude Include="include\ak_ui_qt_list.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </ClInclude>
+    <ClInclude Include="include\ak_ui_colorStyleDefault.h">
+      <Filter>Header Files\ak\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\ak_ui_signalLinker.h">
@@ -278,9 +278,6 @@
       <Filter>Source Files\ak\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_ui_colorStyle.cpp">
-      <Filter>Source Files\ak\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ak_ui_colorStyleDefaultBright.cpp">
       <Filter>Source Files\ak\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_ui_colorStyleDefaultDark.cpp">
@@ -435,6 +432,9 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_qt_list.cpp">
       <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_colorStyleDefault.cpp">
+      <Filter>Source Files\ak\ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

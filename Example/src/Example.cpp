@@ -73,6 +73,8 @@ Example::Example()
 
 Example::~Example() {}
 
+#include <qpushbutton.h>
+
 void Example::eventCallback(
 	ak::UID					_sender,
 	ak::core::eventType		_eventType,
@@ -121,7 +123,7 @@ void Example::eventCallback(
 				// Change color style
 				if (ak::uiAPI::obj::getText(my_ui.ttb_aColorStyle) == TXT_Bright) {
 					ak::uiAPI::obj::appendText(my_ui.outputWidget, "Set: ColorStyle { Style=\"DefaultBright\"; }");
-					ak::uiAPI::setDefaultBrightColorStyle();
+					ak::uiAPI::setDefaultColorStyle();
 					ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
 					ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Dark);
 				}
@@ -136,22 +138,14 @@ void Example::eventCallback(
 				my_notifier->enable();
 			}
 			else if (_sender == my_ui.ttb_aTest) {
-
-				// Load last settings
-				QSettings settings("AK", "uiCoreExample");
-				QString lastConfigString = settings.value("UI.Config", "").toString();
-				if (lastConfigString.length() > 0) {
-					std::string s(lastConfigString.toStdString());
-					ak::uiAPI::setupSettings(s.c_str());
-				}
-				return;
-
+				my_testButton->setStyleSheet("QPushButton{background-color:#000000;}\n");
+				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, false);
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);
-				my_JSONSettingsString = ak::uiAPI::getSettingsJSON();
-				ak::uiAPI::special::showMessageBox(my_ui.mainWindow, my_JSONSettingsString.c_str(), "JSON");
 			}
 			else if (_sender == my_ui.ttb_aTest2) {
-				ak::uiAPI::setupSettings(my_JSONSettingsString.c_str());
+				my_testButton->setStyleSheet("");
+				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, true);
+				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, false);
 			}
 		}
 		else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {
@@ -204,6 +198,17 @@ void Example::eventCallback(
 			if (lastConfigString.length() > 0) {
 				std::string s(lastConfigString.toStdString());
 				ak::uiAPI::setupSettings(s.c_str());
+
+				QString currentColorStyleName = ak::uiAPI::getCurrentColorStyleName();
+				if (currentColorStyleName == "Default" || currentColorStyleName == "") {
+					ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Dark);
+					ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
+				}
+				else {
+					ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Bright);
+					ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
+				}
+
 			}
 		}
 	}
@@ -292,6 +297,10 @@ void Example::setupUi(void) {
 
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, dd, "Test 3");
 			
+			my_testButton = new QPushButton("test");
+
+			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_testButton, "Test 4");
+
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
 			

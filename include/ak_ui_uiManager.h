@@ -79,7 +79,7 @@ namespace ak {
 			//! @brief Will set the provided color style as the current color style and apply the changes to all childs
 			//! @param _colorStyle The color style to set
 			virtual void setColorStyle(
-				ak::ui::colorStyle *									_colorStyle
+				const ak::ui::colorStyle *								_colorStyle
 			) override;
 
 			//! @brief Will set the alias for this object
@@ -293,7 +293,6 @@ namespace ak {
 			tt::TabToolbar *											my_tabToolBar;					//! The TabToolBar of this window
 			ak::ui::iconManager *										my_iconManager;					//! The icon manager used in this object
 			ak::ui::uiManagerTimerSignalLinker *						my_timerSignalLinker;			//! The signal linker used to link the timer singnals
-			ak::ui::colorStyle *										my_colorStyle;					//! The currently active color style
 			ak::ui::objectManager *										my_objectManager;				//! The object manager this window is using
 
 			bool														my_progressBarContinuous;		//! If true, the status bar ist currently continuous

@@ -37,7 +37,7 @@ namespace ak {
 				//! @param _colorStyle The initial color style used in this paintable
 				aPaintable(
 					ak::ui::core::objectType		_type,
-					ak::ui::colorStyle *			_colorStyle = nullptr,
+					const ak::ui::colorStyle *		_colorStyle = nullptr,
 					ak::UID							_UID = ak::invalidUID,
 					int								_references = 1
 				);
@@ -49,14 +49,14 @@ namespace ak {
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
-					ak::ui::colorStyle *			_colorStyle
+					const ak::ui::colorStyle *		_colorStyle
 				) = 0;
 
 				//! @brief Returns true because the object is derived from a aPaintable
 				virtual bool isPaintableType(void) const override;
 
 			protected:
-				ak::ui::colorStyle *				my_colorStyle;			//! The current objects color style
+				const ak::ui::colorStyle *			my_colorStyle;			//! The current objects color style
 
 			private:
 				// Block default constructor

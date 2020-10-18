@@ -43,10 +43,10 @@ ak::ui::qt::dock::~dock() {
 QWidget * ak::ui::qt::dock::widget(void) { return this; }
 
 void ak::ui::qt::dock::setColorStyle(
-	ak::ui::colorStyle *					_colorStyle
+	const ak::ui::colorStyle *					_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check color style"); }
+		assert(_colorStyle != nullptr); // Nullptr provided
 		my_colorStyle = _colorStyle;
 		setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sDock));
 	}

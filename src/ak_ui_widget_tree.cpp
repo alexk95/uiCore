@@ -31,7 +31,7 @@
 ak::ui::widget::tree::tree(
 	ak::messenger *			_messenger,
 	ak::uidManager *		_uidManager,
-	ak::ui::colorStyle *	_colorStyle
+	const ak::ui::colorStyle *	_colorStyle
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTree, _messenger, _uidManager, _colorStyle),
 	my_tree(nullptr), my_filter(nullptr), my_layout(nullptr), my_multiWidget(nullptr), my_treeSignalLinker(nullptr), my_filterSignalLinker(nullptr),
 	my_notifierFilter(nullptr), my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0), 
@@ -101,7 +101,7 @@ ak::ui::widget::tree::~tree() { memFree(); }
 QWidget * ak::ui::widget::tree::widget(void) { return my_multiWidget; }
 
 void ak::ui::widget::tree::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
 		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check colorStyle"); }

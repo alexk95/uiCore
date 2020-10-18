@@ -27,7 +27,7 @@
 ak::ui::widget::table::table(
 	ak::messenger *													_messenger,
 	ak::uidManager *												_uidManager,
-	ak::ui::colorStyle *											_colorStyle,
+	const ak::ui::colorStyle *										_colorStyle,
 	int																_rows,
 	int																_columns
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTable, _messenger, _uidManager, _colorStyle),
@@ -102,10 +102,10 @@ ak::ui::widget::table::~table() {
 QWidget * ak::ui::widget::table::widget(void) { return my_table; }
 
 void ak::ui::widget::table::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check color style", ak::Exception::exceptionType::Nullptr); }
+		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;
 		my_table->setColorStyle(_colorStyle);
 	}

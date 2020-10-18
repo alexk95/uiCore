@@ -112,10 +112,10 @@ void ak::ui::ttb::group::destroyAllSubContainer(void) {
 }
 
 void ak::ui::ttb::group::setColorStyle(
-	ak::ui::colorStyle *			_colorStyle
+	const ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check colorStyle"); }
+		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;
 		my_group->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sWidget));
 		for (int i = 0; i < my_subgroups.size(); i++) {

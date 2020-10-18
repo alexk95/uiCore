@@ -61,7 +61,7 @@ namespace ak {
 				table(
 					ak::messenger *													_messanger,
 					ak::uidManager *												_uidManager,
-					ak::ui::colorStyle *											_colorStyle = nullptr,
+					const ak::ui::colorStyle *										_colorStyle = nullptr,
 					int																_rows = 0,
 					int																_columns = 0
 				);
@@ -79,7 +79,7 @@ namespace ak {
 				//! @param _colorStyle The color style to set
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
-					ak::ui::colorStyle *			_colorStyle
+					const ak::ui::colorStyle *			_colorStyle
 				) override;
 
 				// ##############################################################################################################

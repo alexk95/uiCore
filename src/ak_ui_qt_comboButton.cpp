@@ -21,7 +21,7 @@
 
 ak::ui::qt::comboButton::comboButton(
 	const QString &				_initialText,
-	ak::ui::colorStyle *		_colorStyle,
+	const ak::ui::colorStyle *	_colorStyle,
 	QWidget *					_parent
 ) : QPushButton(_initialText, _parent),
 	ak::ui::core::aWidget(ak::ui::core::objectType::oComboButton, _colorStyle),
@@ -128,10 +128,10 @@ int ak::ui::qt::comboButton::addItem(
 int ak::ui::qt::comboButton::getItemCount(void) const { return my_items.size(); }
 
 void ak::ui::qt::comboButton::setColorStyle(
-	ak::ui::colorStyle *								_colorStyle
+	const ak::ui::colorStyle *								_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check color style"); }
+		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;
 		setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sPushButton));
 		my_menu->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sMenu));

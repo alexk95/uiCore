@@ -1203,6 +1203,14 @@ namespace ak {
 				ak::ui::colorStyle *								_colorStyle
 			);
 
+			void setDefaultColorStyle(void);
+
+			void setDefaultDarkColorStyle(void);
+
+			ui::colorStyle * getCurrentColorStyle(void) const;
+
+			QString getCurrentColorStyleName(void) const;
+
 			//! @brief Will destroy all objects
 			void destroyAll(void);
 
@@ -1257,6 +1265,7 @@ namespace ak {
 			ak::messenger *					my_messenger;									//! The globally used messaging system
 			ak::ui::signalLinker *			my_signalLinker;								//! The internal signal linker
 			ak::ui::colorStyle *			my_colorStyle;									//! The globally used color style
+			bool							my_colorStyleIsExtern;
 			ak::ui::iconManager *			my_iconManager;									//! The globally used icon manager
 			ak::notifierObjectManager *		my_notifier;									//! The notifier used to catch the destroyed messages
 
