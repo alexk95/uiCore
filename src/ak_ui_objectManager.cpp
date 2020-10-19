@@ -4054,7 +4054,7 @@ void ak::ui::objectManager::addColorStyle(
 		}
 	}
 	my_colorStyles.push_back(_colorStyle);
-	if (!_activate) { setColorStyle(_colorStyle); }
+	if (_activate) { setColorStyle(_colorStyle); }
 }
 
 void ak::ui::objectManager::setColorStyle(
@@ -4192,7 +4192,7 @@ void ak::ui::objectManager::setupSettings(
 				QString colorStyle = obj[RESTORABLE_UI_COLORSTYLE].GetString();
 				if (colorStyle == "Default") {
 					if (my_currentColorStyle == nullptr) {
-						setDefaultColorStyle();
+						my_currentColorStyle = new colorStyleDefault();
 					} else if (my_currentColorStyle->getColorStyleName() != "Default") { setDefaultColorStyle(); }
 				}
 				else if (colorStyle == "Default_Dark") {

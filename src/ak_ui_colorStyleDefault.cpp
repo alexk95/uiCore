@@ -19,7 +19,7 @@ ak::ui::colorStyleDefault::colorStyleDefault() {
 	setControlsMainBackcolor(ak::ui::color(80, 80, 80));
 	setControlsMainForecolor(ak::ui::color(0, 0, 0));
 	setControlsErrorForecolor(ak::ui::color(255, 0, 0));
-	setWindowMainBackcolor(ak::ui::color(240, 240, 240));
+	setWindowMainBackcolor(ak::ui::color(255, 255, 255));
 	setWindowMainForecolor(ak::ui::color(0, 0, 0));
 }
 

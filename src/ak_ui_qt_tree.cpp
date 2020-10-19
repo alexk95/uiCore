@@ -25,6 +25,7 @@ ak::ui::qt::tree::tree(
 	const ak::ui::colorStyle *		_colorStyle
 ) : QTreeWidget(),
 	ak::ui::core::aWidget(ak::ui::core::objectType::oTree, _colorStyle) {
+	setStyleSheet("");
 	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
 }
 
