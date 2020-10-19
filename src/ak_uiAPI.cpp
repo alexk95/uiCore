@@ -13,8 +13,6 @@
 
 // AK header
 #include <ak_uiAPI.h>						// corresponding header
-#include <ak_ui_colorStyleDefault.h>		// colorStyleDefault
-#include <ak_ui_colorStyleDefaultDark.h>	// colorStyleDefaultDark
 #include <ak_messenger.h>					// messenger
 #include <ak_ui_objectManager.h>			// objectManager
 #include <ak_notifierStaticEvent.h>			// notifierStaticEvent
@@ -96,43 +94,43 @@ void ak::uiAPI::apiManager::ini(
 	ak::ui::objectManager *								_objectManager
 ) {
 	try {
-		if (my_isInitialized) { throw ak::Exception("API is already initialized!", "Check API status"); }
+		assert(!my_isInitialized); // Is already initialized
 
 		// QApplication
 		if (_createQApplication) {
 			my_app = new QApplication(_argc, _argv);
-			if (my_app == nullptr) { throw ak::Exception("Failed to create", "Create Q Application"); }
+			assert(my_app != nullptr); // Failed to create
 		}
 
 		// messenger
 		if (_messenger == nullptr) {
 			my_messenger = new ak::messenger();
-			if (my_messenger == nullptr) { throw ak::Exception("Failed to create", "Create messenger"); }
+			assert(my_messenger != nullptr); // Failed to create
 		}
 		else { my_messenger = _messenger; my_messengerIsExtern = true; }
 
 		// uid manager
 		if (_uidManager == nullptr) {
 			my_uidManager = new ak::uidManager();
-			if (my_uidManager == nullptr) { throw ak::Exception("Failed to create", "Create uid manager"); }
+			assert(my_uidManager != nullptr); // Failed to create
 		}
 		else { my_uidManager = _uidManager; my_uidManagerIsExtern = true; }
 
 		// icon manager
 		if (_iconManager == nullptr) {
 			my_iconManager = new ak::ui::iconManager(QString(""));
-			if (my_iconManager == nullptr) { throw ak::Exception("Failed to create", "Create icon manager"); }
+			assert(my_iconManager != nullptr); // Failed to create
 		}
 		else { my_iconManager = _iconManager; my_iconManagerIsExtern = true; }
 
 		// object manager
 		if (_objectManager == nullptr) {
 			my_objManager = new ak::ui::objectManager(my_messenger, my_uidManager, my_iconManager);
-			if (my_objManager == nullptr) { throw ak::Exception("Failed to create", "Create object manager"); }
+			assert(my_objManager != nullptr); // Failed to create
 		}
 		else {
-			if (!my_messengerIsExtern) { throw ak::Exception("External object manager cannot be used when no external messenger was provided", "Check messenger"); }
-			if (!my_uidManager) { throw ak::Exception("External object manager cannot be used when no external uid manager was provided", "Check uidManager"); }
+			assert(my_messengerIsExtern);	// Internal messenger cannot be used with external objectManager
+			assert(my_uidManagerIsExtern);	// Internal uidManager cannot be used with external objectManager
 			my_objManager = _objectManager;
 		}
 

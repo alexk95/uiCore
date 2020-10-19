@@ -46,9 +46,6 @@ Example::Example()
 	try { ak::uiAPI::addIconSearchPath(QString(qgetenv("UI_CORE_ROOT") + "\\Icons\\")); }
 	catch (...) {}
 
-	// Set default dark color style
-	//ak::uiAPI::setDefaultDarkColorStyle();
-
 	my_ui.logInDialog = ak::uiAPI::createLogInDialog(my_uid, true, "OpenTwin", "Username");
 
 	// Create my notifier
@@ -191,12 +188,13 @@ void Example::eventCallback(
 			msg.append("\"; }");
 			ak::uiAPI::obj::appendText(my_ui.outputWidget, msg);
 		}
-		else if (_sender == my_tester) {
+		else if (_sender == my_tester && _eventType == ak::core::eventType::eTimeout) {
 			// Load last settings
 			QSettings settings("AK", "uiCoreExample");
 			QString lastConfigString = settings.value("UI.Config", "").toString();
 			if (lastConfigString.length() > 0) {
 				std::string s(lastConfigString.toStdString());
+				
 				ak::uiAPI::setupSettings(s.c_str());
 
 				QString currentColorStyleName = ak::uiAPI::getCurrentColorStyleName();

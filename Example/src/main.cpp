@@ -21,4 +21,6 @@ int main(int argc, char *argv[])
 
 	// Create the main class that is managing the functions of the UI
 	Example e;
+
+	return 0;
 }

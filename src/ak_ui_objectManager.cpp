@@ -78,9 +78,9 @@ ak::ui::objectManager::objectManager(
 {
 	try {
 		// Check parameter
-		if (_messenger == nullptr) { throw ak::Exception("Is nullptr", "Check messenger", ak::Exception::exceptionType::Nullptr); }
-		if (_uidManager == nullptr) { throw ak::Exception("Is nullptr", "Check UID manager", ak::Exception::exceptionType::Nullptr); }
-		if (_iconManager == nullptr) { throw ak::Exception("Is nullptr", "Check icon manager", ak::Exception::exceptionType::Nullptr); }
+		assert(_messenger != nullptr); // nullptr provided
+		assert(_uidManager != nullptr); // nullptr provided
+		assert(_iconManager != nullptr); // nullptr provided
 
 		// Apply settings
 		my_messenger = _messenger;
@@ -96,10 +96,12 @@ ak::ui::objectManager::objectManager(
 			my_notifier = new ak::notifierObjectManager(this);
 			if (my_notifier == nullptr) { throw ak::Exception("Failed to create", "Create notifier"); }
 
-			ui::colorStyle * cS = new ui::colorStyleDefault();
+			my_currentColorStyle = new ui::colorStyleDefault();
+			my_colorStyles.push_back(my_currentColorStyle);
+			my_currentColorStyle->setDirectories(my_iconManager->searchDirectories());
+			ui::colorStyle * cS = new ui::colorStyleDefaultDark();
 			my_colorStyles.push_back(cS);
-			cS = new ui::colorStyleDefaultDark();
-			my_colorStyles.push_back(cS);
+			cS->setDirectories(my_iconManager->searchDirectories());
 		}
 		catch (const ak::Exception & e) {
 			if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }

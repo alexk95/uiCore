@@ -16,7 +16,7 @@
 #include <ak_exception.h>						// error handling
 
 ak::ui::colorStyleDefault::colorStyleDefault() {
-	setControlsMainBackcolor(ak::ui::color(80, 80, 80));
+	setControlsMainBackcolor(ak::ui::color(255, 255, 255));
 	setControlsMainForecolor(ak::ui::color(0, 0, 0));
 	setControlsErrorForecolor(ak::ui::color(255, 0, 0));
 	setWindowMainBackcolor(ak::ui::color(255, 255, 255));

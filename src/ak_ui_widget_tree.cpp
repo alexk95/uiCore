@@ -108,6 +108,10 @@ void ak::ui::widget::tree::setColorStyle(
 		my_colorStyle = _colorStyle;
 		my_tree->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTree));
 		my_filter->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTextEdit));
+		//for (auto itm : my_items) {
+			//itm.second->setTextColor(0, my_colorStyle->getControlsMainForecolor().toQColor());
+			//itm.second->setBackgroundColor(0, my_colorStyle->getControlsMainBackcolor().toQColor());
+		//}
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setColorStyle()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setColorStyle()"); }
@@ -630,10 +634,10 @@ ak::ui::qt::treeItem * ak::ui::widget::tree::createItem(
 		itm->setTextAlignment(0, ak::ui::core::toQtAlignment(_textAlignment));
 		itm->setText(0, _text);
 		itm->setIcon(0, _icon);
-		if (my_colorStyle != nullptr) {
-			itm->setTextColor(0, my_colorStyle->getControlsMainForecolor().toQColor());
-			itm->setBackgroundColor(0, my_colorStyle->getControlsMainBackcolor().toQColor());
-		}
+		//if (my_colorStyle != nullptr) {
+			//itm->setTextColor(0, my_colorStyle->getControlsMainForecolor().toQColor());
+			//itm->setBackgroundColor(0, my_colorStyle->getControlsMainBackcolor().toQColor());
+		//}
 		my_currentId++;
 		return itm;
 	}
