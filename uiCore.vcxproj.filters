@@ -254,6 +254,9 @@
     <QtMoc Include="include\ak_ui_uiManager.h">
       <Filter>Header Files\ak\ui</Filter>
     </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_lineEdit.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -435,6 +438,9 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_colorStyleDefault.cpp">
       <Filter>Source Files\ak\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_lineEdit.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

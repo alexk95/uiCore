@@ -16,7 +16,7 @@
 #include <ak_messenger.h>					// messenger
 #include <ak_ui_signalLinker.h>				// filter signal to messaging system connection
 #include <ak_ui_treeSignalLinker.h>			// tree signal to messaging system connection
-#include <ak_ui_qt_textedit.h>				// textEdit for the filter
+#include <ak_ui_qt_lineEdit.h>				// textEdit for the filter
 #include <ak_ui_qt_tree.h>					// object this tree widget is managing
 #include <ak_ui_qt_treeItem.h>				// treeItem
 #include <ak_ui_colorStyle.h>				// colorStyle 
@@ -27,6 +27,7 @@
 
 // Qt header
 #include <qmessagebox.h>
+#include <qmargins.h>
 
 ak::ui::widget::tree::tree(
 	ak::messenger *			_messenger,
@@ -43,46 +44,57 @@ ak::ui::widget::tree::tree(
 
 		// Create tree
 		my_tree = new ak::ui::qt::tree(my_colorStyle);
-		if (my_tree == nullptr) { throw ak::Exception("Failed to create", "Create tree"); }
+		assert(my_tree != nullptr); // Failed to create
 		my_tree->setUid(1);
-		
-		// Create filter
-		my_filter = new ak::ui::qt::textEdit();
-		if (my_filter == nullptr) { throw ak::Exception("Failed to create", "Create filter"); }
-		my_filter->setMaximumSize(QSize(999, 24));
-		my_filter->setVisible(false);
+		QMargins treeMargins(my_tree->contentsMargins());
+		treeMargins.setLeft(0);
+		treeMargins.setRight(0);
+		treeMargins.setBottom(0);
+		//my_tree->setContentsMargins(treeMargins);
 
-		// Create layout
-		my_layout = new QVBoxLayout();
-		if (my_layout == nullptr) { throw ak::Exception("Failed to create", "Create layout"); }
-		my_layout->addWidget(my_filter);
-		my_layout->addWidget(my_tree);
+		// Create filter
+		my_filter = new ak::ui::qt::lineEdit();
+		assert(my_filter != nullptr); // Failed to create
+		my_filter->setVisible(false);
+		QMargins filterMargins(my_filter->contentsMargins());
+		filterMargins.setLeft(0);
+		filterMargins.setRight(0);
+		filterMargins.setBottom(0);
+		//my_filter->setContentsMargins(filterMargins);
 
 		// Create widget
 		my_multiWidget = new QWidget();
-		if (my_multiWidget == nullptr) { throw ak::Exception("Failed to create", "Create widget"); }
-		my_multiWidget->setLayout(my_layout);
+		assert(my_multiWidget != nullptr); // Failed to create
+		//my_multiWidget->setContentsMargins(QMargins(0, 0, 0, 0));
+		
+
+		// Create layout
+		my_layout = new QVBoxLayout(my_multiWidget);
+		assert(my_layout != nullptr); // Failed to create
+		my_layout->setContentsMargins(0, 0, 0, 0);
+		my_layout->addWidget(my_filter);
+		my_layout->addWidget(my_tree);
 
 		// Create tree signal linker
 		my_treeSignalLinker = new ak::ui::treeSignalLinker(this, my_tree);
-		if (my_treeSignalLinker == nullptr) { throw ak::Exception("Failed to create", "Create tree signal linker"); }
+		assert(my_treeSignalLinker != nullptr); // Failed to create
 
 		// Create internal UID manager
 		my_internalUidManager = new ak::uidManager();
-		if (my_internalUidManager == nullptr) { throw ak::Exception("Failed to create", "Create UID manager"); }
+		assert(my_internalUidManager != nullptr); // Failed to create
 
 		// Create internal messenger
 		my_internalMessenger = new ak::messenger();
-		if (my_internalMessenger == nullptr) { throw ak::Exception("Failed to create", "Create messenger"); }
+		assert(my_internalMessenger != nullptr); // Failed to create
 
 		// Create filter signal linker
 		my_filterSignalLinker = new ak::ui::signalLinker(my_internalMessenger, my_internalUidManager);
-		if (my_filterSignalLinker == nullptr) { throw ak::Exception("Failed to create", "Create filter singal linker"); }
+		assert(my_filterSignalLinker != nullptr); // Failed to create
 		my_filterSignalLinker->addLink(my_filter);
 
 		// Create notifier filter
 		my_notifierFilter = new ak::notifierTreeFilter(this);
-		if (my_notifierFilter == nullptr) { throw ak::Exception("Failed to create", "Create notifier filter"); }
+		assert(my_notifierFilter != nullptr); // Failed to create
 
 		my_tree->setHeaderLabel(QString(""));
 		
@@ -104,7 +116,7 @@ void ak::ui::widget::tree::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
-		if (_colorStyle == nullptr) { throw ak::Exception("Is nullptr", "Check colorStyle"); }
+		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;
 		my_tree->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTree));
 		my_filter->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTextEdit));
@@ -143,7 +155,7 @@ ak::ID ak::ui::widget::tree::add(
 		else {
 			// Find parent object
 			my_itemsIterator parent = my_items.find(_parentId);
-			if (parent == my_items.end()) { throw ak::Exception("Invalid ID", "Check parent ID"); }
+			assert(parent != my_items.end()); // Invalid ID provided
 			ak::ui::qt::treeItem * itm = parent->second->findChild(_text);
 			if (itm == nullptr) {
 				itm = createItem(_text, _textAlignment, _icon);
@@ -165,7 +177,7 @@ ak::ID ak::ui::widget::tree::add(
 	const QIcon  &					_icon
 ) {
 	try {
-		if (_cmd.length() == 0) { throw ak::Exception("Command is empty", "Check command"); }
+		assert(_cmd.length() > 0); // Provided command is empty
 		QStringList items = _cmd.split(_delimiter);
 
 		assert(items.count() != 0); // Split failed
@@ -229,7 +241,7 @@ void ak::ui::widget::tree::setItemEnabled(
 ) {
 	try {
 		my_itemsIterator itm = my_items.find(_itemId);
-		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
+		assert(itm != my_items.end()); // Invalid ID provided
 		my_treeSignalLinker->disable();
 		itm->second->setDisabled(!_enabled);
 		if (my_selectAndDeselectChildren) { itm->second->setChildsEnabled(_enabled); }
@@ -516,7 +528,7 @@ void ak::ui::widget::tree::performFilterTextChanged(void) {
 
 void ak::ui::widget::tree::performFilterEnterPressed(void) {
 	try {
-		QString filter = my_filter->toPlainText();
+		QString filter = my_filter->text();
 		if (filter.length() == 0) {
 			// Show all items
 			for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) { itm->second->setHidden(false); }

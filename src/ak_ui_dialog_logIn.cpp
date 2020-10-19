@@ -16,13 +16,13 @@
 #include <ak_ui_colorStyle.h>
 #include <ak_ui_core.h>
 #include <ak_messenger.h>			// messenger
+#include <ak_ui_qt_lineEdit.h>
 
 // Qt header
 #include <qcryptographichash.h>		// Hashing the password
 #include <qwidget.h>				// QWidget
 #include <qlabel.h>					// QLabel
 #include <qpushbutton.h>
-#include <qlineedit.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
@@ -56,12 +56,12 @@ ak::ui::dialog::logIn::logIn(
 
 	// Create username objects
 	my_inputUsername.label = new QLabel("Username:");
-	my_inputUsername.edit = new QLineEdit(_username);
+	my_inputUsername.edit = new ak::ui::qt::lineEdit(_username);
 	my_inputUsername.label->setBuddy(my_inputUsername.edit);
 
 	// Create password objects
 	my_inputPassword.label = new QLabel("Password:");
-	my_inputPassword.edit = new QLineEdit();
+	my_inputPassword.edit = new ak::ui::qt::lineEdit();
 	my_inputPassword.edit->setEchoMode(QLineEdit::EchoMode::Password);
 	if (_hashedPassword.length() > 0) { my_inputPassword.edit->setText("xxxxxxxxxx"); }
 	my_inputPassword.label->setBuddy(my_inputPassword.edit);
@@ -159,10 +159,10 @@ void ak::ui::dialog::logIn::setColorStyle(
 	my_gridWidget->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sWidget));
 
 	my_inputUsername.label->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sLabel));
-	my_inputUsername.edit->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sLineEdit));
+	my_inputUsername.edit->setColorStyle(my_colorStyle);
 
 	my_inputPassword.label->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sLabel));
-	my_inputPassword.edit->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sLineEdit));
+	my_inputPassword.edit->setColorStyle(my_colorStyle);
 
 }
 

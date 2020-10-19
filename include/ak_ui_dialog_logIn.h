@@ -29,7 +29,6 @@
 class QWidget;
 class QLabel;
 class QCheckBox;
-class QLineEdit;
 class QPushButton;
 class QHBoxLayout;
 class QVBoxLayout;
@@ -44,6 +43,9 @@ namespace ak {
 	class messenger;
 
 	namespace ui {
+
+		namespace qt { class lineEdit; }
+
 		namespace dialog {
 
 			class logIn : public ak::ui::core::aDialog, public ak::ui::core::aPaintable {
@@ -123,8 +125,8 @@ namespace ak {
 
 				struct structInput
 				{
-					QLabel *		label;
-					QLineEdit *		edit;
+					QLabel *				label;
+					ak::ui::qt::lineEdit *	edit;
 				};
 
 				QString				my_hashedPw;

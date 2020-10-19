@@ -56,6 +56,7 @@ namespace ak {
 				oCheckBox,
 				oDefaultWelcomeScreen,
 				oDock,
+				oLineEdit,
 				oList,
 				oLogInDialog,
 				oMainWindow,

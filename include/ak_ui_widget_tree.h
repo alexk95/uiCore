@@ -24,9 +24,9 @@
 
 // AK header
 #include <ak_ui_core_aWidgetManager.h>		// base class
-#include <ak_exception.h>					// error handling
 #include <ak_globalDataTypes.h>				// UID and ID type
 #include <ak_core.h>						// eventType
+#include <ak_exception.h>					// Error handling
 
 // Forward declaration
 class QTreeWidgetItem;
@@ -40,7 +40,7 @@ namespace ak {
 	namespace ui {
 
 		// Forward declaration
-		namespace qt { class tree; class treeItem; class textEdit; }
+		namespace qt { class tree; class treeItem; class lineEdit; }
 		class objectManager;
 		class signalLinker;
 		class treeSignalLinker;
@@ -349,7 +349,7 @@ namespace ak {
 				);
 
 				ak::ui::qt::tree *							my_tree;					//! The tree widget this class is managing
-				ak::ui::qt::textEdit *						my_filter;					//! The filter used in this tree
+				ak::ui::qt::lineEdit *						my_filter;					//! The filter used in this tree
 				QVBoxLayout *								my_layout;					//! The layout of the tree
 				QWidget *									my_multiWidget;				//! The widget used to apply the layout for the tree to
 				bool										my_filterCaseSensitive;		//! If true, the filter is case sensitive

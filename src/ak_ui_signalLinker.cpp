@@ -21,6 +21,7 @@
 #include <ak_ui_qt_action.h>
 #include <ak_ui_qt_checkBox.h>
 #include <ak_ui_qt_dock.h>
+#include <ak_ui_qt_lineEdit.h>
 #include <ak_ui_qt_pushButton.h>
 #include <ak_ui_qt_table.h>
 #include <ak_ui_qt_textEdit.h>
@@ -32,6 +33,7 @@
 // Qt header
 #include <qmessagebox.h>			// QMessageBox
 #include <qdockwidget.h>
+#include <qstring.h>
 
 ak::ui::signalLinker::signalLinker(
 	ak::messenger *								_messanger,
@@ -86,6 +88,13 @@ ak::ui::signalLinker::~signalLinker()
 			break;
 		case ak::ui::core::objectType::oDock:
 			break;
+		case ak::ui::core::objectType::oLineEdit:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+			break;
 		case ak::ui::core::objectType::oPushButton:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
@@ -124,7 +133,7 @@ ak::ui::signalLinker::~signalLinker()
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::action *								_object,
-	ak::UID										_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
@@ -144,7 +153,7 @@ ak::UID ak::ui::signalLinker::addLink(
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::checkBox *								_object,
-	ak::UID										_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
@@ -165,7 +174,7 @@ ak::UID ak::ui::signalLinker::addLink(
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::comboBox *								_object,
-	ak::UID										_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
@@ -185,7 +194,7 @@ ak::UID ak::ui::signalLinker::addLink(
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::comboButton *							_object,
-	ak::UID										_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
@@ -205,8 +214,29 @@ ak::UID ak::ui::signalLinker::addLink(
 }
 
 ak::UID ak::ui::signalLinker::addLink(
-	ak::ui::qt::dock *												_object,
-	ak::UID													_objectUid
+	ak::ui::qt::lineEdit *								_object,
+	ak::UID												_objectUid
+) {
+	try {
+		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
+		_object->setUid(_objectUid);
+		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oLineEdit });
+		_object->connect(_object, SIGNAL(cursorPositionChanged(int,int)), this, SLOT(slotCursorPositionChanged()));
+		_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+		_object->connect(_object, SIGNAL(textChanged(const QString &)), this, SLOT(slotChanged()));
+		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+		return _objectUid;
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::lineEdit)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::lineEdit)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::lineEdit)"); }
+}
+
+ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::dock *									_object,
+	ak::UID												_objectUid
 ) {
 	try {
 		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
@@ -222,7 +252,7 @@ ak::UID ak::ui::signalLinker::addLink(
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::pushButton *							_object,
-	ak::UID										_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
@@ -241,8 +271,8 @@ ak::UID ak::ui::signalLinker::addLink(
 }
 
 ak::UID ak::ui::signalLinker::addLink(
-	ak::ui::qt::timer *										_object,
-	ak::UID													_objectUid
+	ak::ui::qt::timer *									_object,
+	ak::UID												_objectUid
 ) {
 	try {
 		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
@@ -258,8 +288,8 @@ ak::UID ak::ui::signalLinker::addLink(
 }
 
 ak::UID ak::ui::signalLinker::addLink(
-	ak::ui::qt::table *								_object,
-	ak::UID										_objectUid
+	ak::ui::qt::table *									_object,
+	ak::UID												_objectUid
 ) {
 	try {
 		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
@@ -282,7 +312,7 @@ ak::UID ak::ui::signalLinker::addLink(
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::textEdit *								_object,
-	ak::UID										_objectUid
+	ak::UID												_objectUid
 ) {
 	try {
 		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
