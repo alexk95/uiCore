@@ -62,8 +62,7 @@ namespace ak {
 			objectManager(
 				ak::messenger *										_messenger,
 				ak::uidManager *									_uidManager,
-				ak::ui::iconManager *								_iconManager,
-				ak::ui::colorStyle *								_colorStyle = nullptr
+				ak::ui::iconManager *								_iconManager
 			);
 
 			//! @brief Deconstructor
@@ -1199,8 +1198,21 @@ namespace ak {
 				ak::UID												_creatorUid
 			);
 
+			void addIconSearchPath(
+				const QString &										_path
+			);
+
+			void removeIconSearchPath(
+				const QString &										_path
+			);
+
+			void addColorStyle(
+				ak::ui::colorStyle *								_colorStyle,
+				bool												_activate
+			);
+
 			void setColorStyle(
-				ak::ui::colorStyle *								_colorStyle
+				const QString &										_colorStyleName
 			);
 
 			void setDefaultColorStyle(void);
@@ -1225,6 +1237,10 @@ namespace ak {
 			);
 
 		private:
+
+			void setColorStyle(
+				ui::colorStyle *									_colorStyle
+			);
 
 			objectManager() = delete;
 			objectManager(const ak::ui::objectManager &) = delete;
@@ -1259,13 +1275,14 @@ namespace ak {
 			std::map<QString, ak::UID>						my_mapAliases;				//! Contains the UIDs for a specified alias
 			typedef std::map<QString, ak::UID>::iterator	my_mapAliasesIterator;		//! Iterator used to iterate trough the aliases
 
+			std::vector<ui::colorStyle *>					my_colorStyles;
+
 			// ###############################################################################################################################################
 
 			ak::uidManager *				my_uidManager;									//! The globally used uidManager
 			ak::messenger *					my_messenger;									//! The globally used messaging system
 			ak::ui::signalLinker *			my_signalLinker;								//! The internal signal linker
-			ak::ui::colorStyle *			my_colorStyle;									//! The globally used color style
-			bool							my_colorStyleIsExtern;
+			ak::ui::colorStyle *			my_currentColorStyle;							//! The globally used color style
 			ak::ui::iconManager *			my_iconManager;									//! The globally used icon manager
 			ak::notifierObjectManager *		my_notifier;									//! The notifier used to catch the destroyed messages
 

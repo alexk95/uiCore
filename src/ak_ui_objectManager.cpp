@@ -67,10 +67,9 @@
 ak::ui::objectManager::objectManager(
 	ak::messenger *										_messenger,
 	ak::uidManager *									_uidManager,
-	ak::ui::iconManager *								_iconManager,
-	ak::ui::colorStyle *								_colorStyle
+	ak::ui::iconManager *								_iconManager
 )
-	: my_colorStyle(nullptr),
+	: my_currentColorStyle(nullptr),
 	my_messenger(nullptr),
 	my_signalLinker(nullptr),
 	my_uidManager(nullptr),
@@ -86,7 +85,6 @@ ak::ui::objectManager::objectManager(
 		// Apply settings
 		my_messenger = _messenger;
 		my_uidManager = _uidManager;
-		my_colorStyle = _colorStyle;
 		my_iconManager = _iconManager;
 
 		try {
@@ -97,6 +95,11 @@ ak::ui::objectManager::objectManager(
 			// Create notifier
 			my_notifier = new ak::notifierObjectManager(this);
 			if (my_notifier == nullptr) { throw ak::Exception("Failed to create", "Create notifier"); }
+
+			ui::colorStyle * cS = new ui::colorStyleDefault();
+			my_colorStyles.push_back(cS);
+			cS = new ui::colorStyleDefaultDark();
+			my_colorStyles.push_back(cS);
 		}
 		catch (const ak::Exception & e) {
 			if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
@@ -155,7 +158,7 @@ ak::UID ak::ui::objectManager::createCheckBox(
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create action"); }
 		// Set parameter
 		my_signalLinker->addLink(obj);
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
 		addCreatedUid(_creatorUid, obj->uid());
@@ -176,7 +179,7 @@ ak::UID ak::ui::objectManager::createColorEditButton(
 		ak::ui::widget::colorEditButton * obj = new ak::ui::widget::colorEditButton(my_messenger, my_uidManager, _color, _textOverride);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create action"); }
 		// Set parameter
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
 		addCreatedUid(_creatorUid, obj->uid());
@@ -196,7 +199,7 @@ ak::UID ak::ui::objectManager::createComboBox(
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create action"); }
 		// Set parameter
 		my_signalLinker->addLink(obj);
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
 		addCreatedUid(_creatorUid, obj->uid());
@@ -214,11 +217,11 @@ ak::UID ak::ui::objectManager::createComboButton(
 ) {
 	try {
 		// Create object
-		ak::ui::qt::comboButton * obj = new ak::ui::qt::comboButton(_initialText, my_colorStyle);
+		ak::ui::qt::comboButton * obj = new ak::ui::qt::comboButton(_initialText, my_currentColorStyle);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create action"); }
 		// Set parameter
 		my_signalLinker->addLink(obj);
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		obj->setItems(_possibleSelection);
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
@@ -276,7 +279,7 @@ ak::UID ak::ui::objectManager::createDefaultWelcomeScreen(
 ) {
 	try {
 		// Create object
-		ak::ui::widget::defaultWelcomeScreen * obj = new ak::ui::widget::defaultWelcomeScreen(my_messenger, my_uidManager, my_colorStyle);
+		ak::ui::widget::defaultWelcomeScreen * obj = new ak::ui::widget::defaultWelcomeScreen(my_messenger, my_uidManager, my_currentColorStyle);
 		
 		// Set parameter
 		obj->setUid(my_uidManager->getId());
@@ -301,7 +304,7 @@ ak::UID ak::ui::objectManager::createDock(
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create dock"); }
 		// Set parameter
 		my_signalLinker->addLink(obj);
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
 		addCreatedUid(_creatorUid, obj->uid());
@@ -327,7 +330,7 @@ ak::UID ak::ui::objectManager::createLogInDialog(
 		ak::ui::dialog::logIn * obj = new ak::ui::dialog::logIn(my_messenger, _showSavePassword, *pix, _username, _password);
 		assert(obj != nullptr);
 		
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		obj->setUid(my_uidManager->getId());
 
 		// Store data
@@ -345,10 +348,10 @@ ak::UID ak::ui::objectManager::createPropertyGrid(
 ) {
 	try {
 		// Create object
-		ak::ui::widget::propertyGrid * obj = new ak::ui::widget::propertyGrid(my_messenger, my_uidManager, my_colorStyle);
+		ak::ui::widget::propertyGrid * obj = new ak::ui::widget::propertyGrid(my_messenger, my_uidManager, my_currentColorStyle);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create property grid"); }
 		// Set parameter
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
 		addCreatedUid(_creatorUid, obj->uid());
@@ -369,7 +372,7 @@ ak::UID ak::ui::objectManager::createPushButton(
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create push button"); }
 		// Set parameter
 		my_signalLinker->addLink(obj);
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
 		addCreatedUid(_creatorUid, obj->uid());
@@ -391,7 +394,7 @@ ak::UID ak::ui::objectManager::createPushButton(
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create push button"); }
 		// Set parameter
 		my_signalLinker->addLink(obj);
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
 		addCreatedUid(_creatorUid, obj->uid());
@@ -409,10 +412,10 @@ ak::UID ak::ui::objectManager::createTable(
 ) {
 	try {
 		// Create object
-		ak::ui::widget::table * obj = new ak::ui::widget::table(my_messenger, my_uidManager, my_colorStyle, _rows, _columns);
+		ak::ui::widget::table * obj = new ak::ui::widget::table(my_messenger, my_uidManager, my_currentColorStyle, _rows, _columns);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create table"); }
 		// Set parameter
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
 		addCreatedUid(_creatorUid, obj->uid());
@@ -433,7 +436,7 @@ ak::UID ak::ui::objectManager::createTextEdit(
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create text edit"); }
 		// Set parameter
 		my_signalLinker->addLink(obj);
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
 		addCreatedUid(_creatorUid, obj->uid());
@@ -468,10 +471,10 @@ ak::UID ak::ui::objectManager::createTree(
 ) {
 	try {
 		// Create object
-		ak::ui::widget::tree * obj = new ak::ui::widget::tree(my_messenger, my_uidManager, my_colorStyle);
+		ak::ui::widget::tree * obj = new ak::ui::widget::tree(my_messenger, my_uidManager, my_currentColorStyle);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create action"); }
 		// Set parameter
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
 		addCreatedUid(_creatorUid, obj->uid());
@@ -488,7 +491,7 @@ ak::UID ak::ui::objectManager::createUiManager(
 	try {
 		// Create new ui manager
 		ak::ui::uiManager * ui = nullptr;
-		ui = new ak::ui::uiManager(my_messenger, my_uidManager, my_iconManager, this, my_colorStyle);
+		ui = new ak::ui::uiManager(my_messenger, my_uidManager, my_iconManager, this, my_currentColorStyle);
 		if (ui == nullptr) { throw ak::Exception("Failed to create", "Create ui manager"); }
 		// Store data
 		my_mapObjects.insert_or_assign(ui->uid(), ui);
@@ -505,7 +508,7 @@ ak::UID ak::ui::objectManager::createTabView(
 ) {
 	try {
 		// Create object
-		ak::ui::widget::tabView * obj = new ak::ui::widget::tabView(my_iconManager, my_messenger, my_uidManager, this, my_colorStyle);
+		ak::ui::widget::tabView * obj = new ak::ui::widget::tabView(my_iconManager, my_messenger, my_uidManager, this, my_currentColorStyle);
 		if (obj == nullptr) { throw ak::Exception("Failed to create", "Create action"); }
 		// Store data
 		my_mapObjects.insert_or_assign(obj->uid(), obj);
@@ -546,7 +549,7 @@ ak::UID ak::ui::objectManager::createTabToolBarSubContainer(
 		ak::ui::core::ttbContainer * sub = cont->createSubContainer(_text);
 		assert(sub != nullptr); // Invalid information received
 		// Store data
-		if (my_colorStyle != nullptr) { sub->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { sub->setColorStyle(my_currentColorStyle); }
 		my_mapObjects.insert_or_assign(sub->uid(), sub);
 		addCreatedUid(_creatorUid, sub->uid());
 		return sub->uid();
@@ -577,7 +580,7 @@ ak::UID ak::ui::objectManager::createTabToolBarPage(
 		ak::ui::core::ttbContainer * cont = ui->createTabToolbarSubContainer(_text);
 		assert(cont != nullptr); // Invalid information received
 		// Store data
-		if (my_colorStyle != nullptr) { cont->setColorStyle(my_colorStyle); }
+		if (my_currentColorStyle != nullptr) { cont->setColorStyle(my_currentColorStyle); }
 		my_mapObjects.insert_or_assign(cont->uid(), cont);
 		addCreatedUid(_creatorUid, cont->uid());
 		return cont->uid();
@@ -4019,61 +4022,66 @@ void ak::ui::objectManager::creatorDestroyed(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::creatorDestroyed()"); }
 }
 
-void ak::ui::objectManager::setColorStyle(
-	ak::ui::colorStyle *								_colorStyle
+void ak::ui::objectManager::addIconSearchPath(
+	const QString &										_path
 ) {
-	try {
-		assert(_colorStyle != nullptr); // Nullptr provided
-		my_colorStyle = _colorStyle;
+	my_iconManager->addDirectory(_path);
+	for (auto itm : my_colorStyles) {
+		assert(itm != nullptr); // nullptr stored
+		itm->setDirectories(my_iconManager->searchDirectories());
+	}
+}
 
-		for (my_mapObjectsIterator obj = my_mapObjects.begin(); obj != my_mapObjects.end(); obj++) {
-			if (obj->second->isPaintableType()) {
-				// Cast paintable
-				ak::ui::core::aPaintable * itm = nullptr;
-				itm = dynamic_cast<ak::ui::core::aPaintable *>(obj->second);
-				assert(itm != nullptr); // Cast failed
-				itm->setColorStyle(my_colorStyle);
-			}
+void ak::ui::objectManager::removeIconSearchPath(
+	const QString &										_path
+) {
+	my_iconManager->removeDirectory(_path);
+	for (auto itm : my_colorStyles) {
+		assert(itm != nullptr); // nullptr stored
+		itm->setDirectories(my_iconManager->searchDirectories());
+	}
+}
+
+void ak::ui::objectManager::addColorStyle(
+	ak::ui::colorStyle *								_colorStyle,
+	bool												_activate
+) {
+	assert(_colorStyle != nullptr); // Nullptr provided
+	for (auto itm : my_colorStyles) {
+		if (itm->getColorStyleName() == _colorStyle->getColorStyleName()) {
+			assert(0); // ColorStyle with the specified name already exists
+			return;
 		}
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setColorStyle()"); }
+	my_colorStyles.push_back(_colorStyle);
+	if (!_activate) { setColorStyle(_colorStyle); }
+}
+
+void ak::ui::objectManager::setColorStyle(
+	const QString &										_colorStyleName
+) {
+	for (auto itm : my_colorStyles) {
+		assert(itm != nullptr); // nullptr stored
+		if (itm->getColorStyleName() == _colorStyleName) {
+			setColorStyle(itm);
+			return;
+		}
+	}
 }
 
 void ak::ui::objectManager::setDefaultColorStyle(void) {
-	ui::colorStyle * pointerBackup = nullptr;
-	if (!my_colorStyleIsExtern) {
-		pointerBackup = my_colorStyle;
-	}
-	my_colorStyleIsExtern = true;
-	my_colorStyle = new colorStyleDefault;
-	if (my_iconManager != nullptr) {
-		my_colorStyle->setDirectories(my_iconManager->searchDirectories());
-	}
-	setColorStyle(my_colorStyle);
-	if (pointerBackup != nullptr) { delete pointerBackup; }
+	setColorStyle(my_colorStyles[0]);
 }
 
 void ak::ui::objectManager::setDefaultDarkColorStyle(void) {
-	ui::colorStyle * pointerBackup = nullptr;
-	if (!my_colorStyleIsExtern) {
-		pointerBackup = my_colorStyle;
-	}
-	my_colorStyleIsExtern = true;
-	my_colorStyle = new colorStyleDefaultDark;
-	if (my_iconManager != nullptr) {
-		my_colorStyle->setDirectories(my_iconManager->searchDirectories());
-	}
-	setColorStyle(my_colorStyle);
-	if (pointerBackup != nullptr) { delete pointerBackup; }
+	setColorStyle(my_colorStyles[1]);
 }
 
-ak::ui::colorStyle * ak::ui::objectManager::getCurrentColorStyle(void) const { return my_colorStyle; }
+ak::ui::colorStyle * ak::ui::objectManager::getCurrentColorStyle(void) const { return my_currentColorStyle; }
 
 QString ak::ui::objectManager::getCurrentColorStyleName(void) const {
-	if (my_colorStyle == nullptr) { return QString(); }
-	return my_colorStyle->getColorStyleName();
+	if (my_currentColorStyle == nullptr) { return QString(); }
+	return my_currentColorStyle->getColorStyleName();
 }
 
 void ak::ui::objectManager::destroyAll(void) {
@@ -4121,12 +4129,14 @@ std::string ak::ui::objectManager::getSettingsJSON(void) {
 		rapidjson::Value items(rapidjson::kArrayType);
 
 		// Create current color style settings entry
-		rapidjson::Value colorSettings;
-		colorSettings.SetObject();
-		std::string currentColorStyleString = getCurrentColorStyleName().toStdString();
-		rapidjson::Value currentColorStyle(currentColorStyleString.c_str(), allocator);
-		colorSettings.AddMember(RESTORABLE_UI_COLORSTYLE, currentColorStyle, allocator);
-		items.PushBack(colorSettings, allocator);
+		if (my_currentColorStyle != nullptr) {
+			rapidjson::Value colorSettings;
+			colorSettings.SetObject();
+			std::string currentColorStyleString = getCurrentColorStyleName().toStdString();
+			rapidjson::Value currentColorStyle(currentColorStyleString.c_str(), allocator);
+			colorSettings.AddMember(RESTORABLE_UI_COLORSTYLE, currentColorStyle, allocator);
+			items.PushBack(colorSettings, allocator);
+		}
 
 		// Collect data for objects that have to be restored
 		for (my_mapAliasesIterator itm = my_mapAliases.begin(); itm != my_mapAliases.end(); itm++) {
@@ -4181,10 +4191,15 @@ void ak::ui::objectManager::setupSettings(
 				assert(obj[RESTORABLE_UI_COLORSTYLE].IsString());
 				QString colorStyle = obj[RESTORABLE_UI_COLORSTYLE].GetString();
 				if (colorStyle == "Default") {
-					setDefaultColorStyle();
+					if (my_currentColorStyle == nullptr) {
+						setDefaultColorStyle();
+					} else if (my_currentColorStyle->getColorStyleName() != "Default") { setDefaultColorStyle(); }
 				}
 				else if (colorStyle == "Default_Dark") {
-					setDefaultDarkColorStyle();
+					if (my_currentColorStyle == nullptr) {
+						setDefaultDarkColorStyle();
+					}
+					else if (my_currentColorStyle->getColorStyleName() != "Default_Dark") { setDefaultDarkColorStyle(); }
 				}
 				else {
 					assert(0); // Not implemented color style
@@ -4240,6 +4255,29 @@ void ak::ui::objectManager::setupSettings(
 }
 
 // ###############################################################################################################################################
+
+void ak::ui::objectManager::setColorStyle(
+	ui::colorStyle *									_colorStyle
+) {
+	try {
+		assert(_colorStyle != nullptr); // Nullptr provided
+		my_currentColorStyle = _colorStyle;
+
+		for (my_mapObjectsIterator obj = my_mapObjects.begin(); obj != my_mapObjects.end(); obj++) {
+			if (obj->second->isPaintableType()) {
+				// Cast paintable
+				ak::ui::core::aPaintable * itm = nullptr;
+				itm = dynamic_cast<ak::ui::core::aPaintable *>(obj->second);
+				assert(itm != nullptr); // Cast failed
+				itm->setColorStyle(my_currentColorStyle);
+			}
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::setColorStyle()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::setColorStyle()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::setColorStyle()"); }
+
+}
 
 void ak::ui::objectManager::addCreatedUid(
 	ak::UID												_creatorUid,

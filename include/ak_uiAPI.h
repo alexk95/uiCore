@@ -92,11 +92,17 @@ namespace ak {
 
 			QString currentColorStyleName(void) const;
 
-			//! @brief Will set the color style
-			//! @param _colorStyle The colorStyle to set
+			//! @brief Will add the color style
+			//! @param _colorStyle The colorStyle to add
+			//! @param _activate If true the provided color style will be set
 			//! @throw ak::Exception on any error
+			void addColorStyle(
+				ak::ui::colorStyle *		_colorStyle,
+				bool						_activate
+			);
+
 			void setColorStyle(
-				ak::ui::colorStyle *		_colorStyle
+				const QString &				_colorStyleName
 			);
 
 			//! @brief Will set the default dark colorStyle
@@ -176,8 +182,7 @@ namespace ak {
 			ak::messenger *											_messenger = nullptr,
 			ak::uidManager *										_uidManager = nullptr,
 			ak::ui::iconManager *									_iconManager = nullptr,
-			ak::ui::objectManager *									_objectManager = nullptr,
-			ak::ui::colorStyle *									_colorStyle = nullptr
+			ak::ui::objectManager *									_objectManager = nullptr
 		);
 
 		//! @brief Will destroy all objects created by this API
@@ -1811,10 +1816,17 @@ namespace ak {
 			ak::UID									_creatorUid
 		);
 
-		//! @brief Will set the current color style used in this API
-		//! @param _colorStyle The color style to set
+		//! @brief Will add the color style to the API
+		//! @param _colorStyle The color style to add
+		//! @param _activate If true, the provided color style will be set as current color style
+		UICORE_API void addColorStyle(
+			ak::ui::colorStyle *					_colorStyle,
+			bool									_activate
+		);
+
+		//! @brief Will set the color style with the specified name as current color style
 		UICORE_API void setColorStyle(
-			ak::ui::colorStyle *		_colorStyle
+			const QString &				_colorStyleName
 		);
 
 		//! @brief Will return the current color style
@@ -1966,21 +1978,7 @@ namespace ak {
 		//! @param _path The search path to add
 		//! @throw ak::Exception if the API is not initialized
 		UICORE_API void addIconSearchPath(
-			const char *											_path
-		);
-
-		//! @brief Will add the provided search path to the icon manager
-		//! @param _path The search path to add
-		//! @throw ak::Exception if the API is not initialized
-		UICORE_API void addIconSearchPath(
 			const QString &											_path
-		);
-
-		//! @brief Will remove the provided search path from the icon manager
-		//! @param _path The existing search path to remove
-		//! @throw ak::Exception if the API is not initialized
-		UICORE_API void removeIconSearchPath(
-			const char *											_path
 		);
 
 		//! @brief Will remove the provided search path from the icon manager
