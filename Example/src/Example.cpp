@@ -70,8 +70,6 @@ Example::Example()
 
 Example::~Example() {}
 
-#include <qpushbutton.h>
-
 void Example::eventCallback(
 	ak::UID					_sender,
 	ak::core::eventType		_eventType,
@@ -135,12 +133,10 @@ void Example::eventCallback(
 				my_notifier->enable();
 			}
 			else if (_sender == my_ui.ttb_aTest) {
-				my_testButton->setStyleSheet("QPushButton{background-color:#000000;}\n");
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, false);
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);
 			}
 			else if (_sender == my_ui.ttb_aTest2) {
-				my_testButton->setStyleSheet("");
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, true);
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, false);
 			}
@@ -295,10 +291,6 @@ void Example::setupUi(void) {
 
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, dd, "Test 3");
 			
-			my_testButton = new QPushButton("test");
-
-			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_testButton, "Test 4");
-
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
 			

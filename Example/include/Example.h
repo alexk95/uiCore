@@ -18,8 +18,6 @@
 // Forward declaration
 class ExampleNotifier;
 
-class QPushButton;
-
 //! This class is managing the UI
 class Example
 {
@@ -73,9 +71,7 @@ private:
 	};
 
 	ak::UID						my_tester;
-
-	QPushButton *				my_testButton;
-
+	
 	structUi					my_ui;			//! Contains all UIDs of the UI
 	ak::UID						my_uid;			//! The UID of this application
 	ExampleNotifier *			my_notifier;	//! The notifier that receives the callback messages

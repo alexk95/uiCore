@@ -365,6 +365,8 @@ void ak::uiAPI::setupSettings(
 	const char *										_json
 ) {
 	try {
+		if (_json == nullptr) { return; }
+		if (*_json == 0) { return; }
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
 		oM->setupSettings(_json);
 	}
