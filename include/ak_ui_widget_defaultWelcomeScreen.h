@@ -15,6 +15,7 @@
 // AK header
 #include <ak_ui_core_aWidgetManager.h>	// base class (welcomeScreen)
 #include <ak_core.h>					// eventType
+#include <ak_globalDataTypes.h>			// ak::ID and ak::UID types
 
 // Qt header
 #include <qobject.h>					// base class (signalLinker)
@@ -41,7 +42,7 @@ namespace ak {
 		// Forward declaration
 		class colorStyle;
 		class defaultWelcomeScreenSignalLinker;
-		namespace qt { class list; }
+		namespace qt { class list; class listItem; }
 
 		namespace widget {
 
@@ -67,16 +68,20 @@ namespace ak {
 
 				// #############################################################################################################
 
-				ak::ID addRecent(
+				//! @brief Will add a new item at the specified group
+				//! @param _group The group to add the item at (0: Recents, 1: Open, 2: New)
+				//! @param _text The text of the new item
+				ak::ID addItem(
+					ak::ID							_group,
 					const QString &					_text
 				);
 
-				ak::ID addRecent(
-					const QIcon &					_icon,
-					const QString &					_text
-				);
-
-				ak::ID addOpen(
+				//! @brief Will add a new item at the specified group
+				//! @param _group The group to add the item at (0: Recents, 1: Open, 2: New)
+				//! @param _icon The icon of the new item
+				//! @param _text The text of the new item
+				ak::ID addItem(
+					ak::ID							_group,
 					const QIcon &					_icon,
 					const QString &					_text
 				);
@@ -85,7 +90,8 @@ namespace ak {
 
 				// Event handling
 
-				void handleEventRecents(
+				void handleEvent(
+					ak::UID							_group,
 					ak::ID							_item,
 					ak::core::eventType				_event
 				);
@@ -133,6 +139,8 @@ namespace ak {
 				structEntries						my_open;
 				structEntries						my_new;
 
+				int									my_headerLabelTextSize;
+
 				defaultWelcomeScreenSignalLinker *	my_signalLinker;
 
 			}; // class defaultWelcomeScreen;
@@ -161,11 +169,21 @@ namespace ak {
 			// ########################################################################################
 
 		private slots:
-
+			void slotItemClicked(QListWidgetItem *);
+			void slotItemDoubleClicked(QListWidgetItem *);
 
 		private:
 
 			widget::defaultWelcomeScreen *		my_screen;
+			std::vector<qt::list *>				my_lists;
+
+			qt::list * castList(
+				QObject *						_sender
+			);
+
+			qt::listItem * castListItem(
+				QListWidgetItem *				_item
+			);
 
 			defaultWelcomeScreenSignalLinker() = delete;
 			defaultWelcomeScreenSignalLinker(const defaultWelcomeScreenSignalLinker &) = delete;

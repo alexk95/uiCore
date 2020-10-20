@@ -14,8 +14,12 @@
 #include <ak_ui_qt_list.h>
 #include <ak_ui_colorStyle.h>
 
+// Qt header
+#include <qevent.h>
+#include <qscrollbar.h>
+
 ak::ui::qt::list::list()
-	: ak::ui::core::aWidget(ak::ui::core::oList), my_currentId(ak::invalidID)
+	: ak::ui::core::aWidget(ak::ui::core::oList), my_currentId(ak::invalidID), my_verticalScrollbarAlwaysVisible(true)
 {}
 
 ak::ui::qt::list::~list() {
@@ -30,6 +34,33 @@ void ak::ui::qt::list::setColorStyle(
 	assert(_colorStyle != nullptr);	// nullptr provided
 	my_colorStyle = _colorStyle;
 	setStyleSheet(_colorStyle->getStylesheet(ui::colorStyle::styleableObject::sList));
+}
+
+void ak::ui::qt::list::keyPressEvent(QKeyEvent *_event)
+{ QListWidget::keyPressEvent(_event); emit keyPressed(_event); }
+
+void ak::ui::qt::list::keyReleaseEvent(QKeyEvent * _event)
+{ QListWidget::keyReleaseEvent(_event); emit keyReleased(_event); }
+
+void ak::ui::qt::list::mouseMoveEvent(QMouseEvent * _event)
+{ QListWidget::mouseMoveEvent(_event); emit mouseMove(_event); }
+
+void ak::ui::qt::list::enterEvent(QEvent *_event)
+{
+	QListWidget::leaveEvent(_event);
+	if (!my_verticalScrollbarAlwaysVisible) {
+		verticalScrollBar()->setVisible(true);
+	}
+	emit leave(_event);
+}
+
+void ak::ui::qt::list::leaveEvent(QEvent *_event)
+{
+	QListWidget::leaveEvent(_event);
+	if (!my_verticalScrollbarAlwaysVisible) {
+		verticalScrollBar()->setVisible(false);
+	}
+	emit leave(_event);
 }
 
 // ###########################################################################################################################################
@@ -71,6 +102,13 @@ ak::ui::qt::listItem * ak::ui::qt::list::Item(
 }
 
 void ak::ui::qt::list::Clear() { clear(); memFree(); }
+
+void ak::ui::qt::list::setVerticalScrollbarAlwaysVisible(
+	bool							_vis
+) {
+	my_verticalScrollbarAlwaysVisible = _vis;
+	verticalScrollBar()->setVisible(false);
+}
 
 void ak::ui::qt::list::memFree(void) {
 	for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {

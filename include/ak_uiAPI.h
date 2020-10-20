@@ -614,26 +614,37 @@ namespace ak {
 				ak::UID												_objectUid
 			);
 
-			UICORE_API ak::ID addRecentsItem(
+			//! @brief Will add a new item at the specified group and the specified parent item
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item or the group
+			//! @param _text The initial text of the new item
+			UICORE_API ak::ID addItem(
 				ak::UID												_objectUid,
+				ak::ID												_parentId,
 				const QString &										_text
 			);
 
-			UICORE_API ak::ID addRecentsItem(
+			//! @brief Will add a new item at the specified group and the specified parent item
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item or the group
+			//! @param _text The initial text of the new item
+			//! @param _icon The initial icon
+			UICORE_API ak::ID addItem(
 				ak::UID												_objectUid,
+				ak::ID												_parentId,
 				const QString &										_text,
 				const QIcon &										_icon
 			);
 
-			UICORE_API ak::ID addRecentsItem(
+			//! @brief Will add a new item at the specified group and the specified parent item
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item or the group
+			//! @param _text The initial text of the new item
+			//! @param _iconName The name of the initial icon
+			//! @param _iconSize The size of the initial icon
+			UICORE_API ak::ID addItem(
 				ak::UID												_objectUid,
-				const QString &										_text,
-				const QString &										_iconName,
-				const QString &										_iconSize
-			);
-
-			UICORE_API ak::ID addOpenItem(
-				ak::UID												_objectUid,
+				ak::ID												_parentId,
 				const QString &										_text,
 				const QString &										_iconName,
 				const QString &										_iconSize

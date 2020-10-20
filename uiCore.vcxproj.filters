@@ -189,9 +189,6 @@
     <ClInclude Include="include\ak_ui_core_aRestorable.h">
       <Filter>Header Files\ak\ui\core</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_ui_qt_list.h">
-      <Filter>Header Files\ak\ui\qt</Filter>
-    </ClInclude>
     <ClInclude Include="include\ak_ui_colorStyleDefault.h">
       <Filter>Header Files\ak\ui</Filter>
     </ClInclude>
@@ -255,6 +252,9 @@
       <Filter>Header Files\ak\ui</Filter>
     </QtMoc>
     <QtMoc Include="include\ak_ui_qt_lineEdit.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_list.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
   </ItemGroup>

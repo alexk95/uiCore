@@ -28,6 +28,10 @@ ak::ui::color ak::ui::colorStyle::getControlsMainBackcolor(void) const { return 
 
 ak::ui::color ak::ui::colorStyle::getControlsErrorForecolor(void) const { return my_controlsErrorForecolor; }
 
+ak::ui::color ak::ui::colorStyle::getControlsFocusedColor(void) const { return my_controlsFocusColor; }
+
+ak::ui::color ak::ui::colorStyle::getControlsPressedColor(void) const { return my_controlsPressedColor; }
+
 void ak::ui::colorStyle::setWindowMainForecolor(
 	const ak::ui::color &		_color
 ) { my_windowMainForecolor = _color; }
@@ -47,6 +51,14 @@ void ak::ui::colorStyle::setControlsMainBackcolor(
 void ak::ui::colorStyle::setControlsErrorForecolor(
 	const ak::ui::color &		_color
 ) { my_controlsErrorForecolor = _color; }
+
+void ak::ui::colorStyle::setControlsFocusedColor(
+	const ak::ui::color &		_color
+) { my_controlsFocusColor = _color; }
+
+void ak::ui::colorStyle::setControlsPressedColor(
+	const ak::ui::color &		_color
+) { my_controlsPressedColor = _color; }
 
 void ak::ui::colorStyle::addDirectory(
 	const QString &					_directory

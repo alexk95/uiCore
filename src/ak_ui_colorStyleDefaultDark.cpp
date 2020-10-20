@@ -21,6 +21,8 @@ ak::ui::colorStyleDefaultDark::colorStyleDefaultDark() {
 	setControlsErrorForecolor(ak::ui::color(255,0,0));
 	setWindowMainBackcolor(ak::ui::color(48, 48, 48));
 	setWindowMainForecolor(ak::ui::color(255, 255, 255));
+	setControlsPressedColor(ak::ui::color(60, 200, 60));
+	setControlsFocusedColor(ak::ui::color(60, 60, 200));
 }
 
 ak::ui::colorStyleDefaultDark::~colorStyleDefaultDark() {}
@@ -212,19 +214,18 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 
 		case ak::ui::colorStyle::styleableObject::sList:
 			out.append("QListWidget{"
-				_fore _backControl
+				_fore _backTransparent
 				"}\n");
-
-			/* out.append("QListWidget::item:alternate{"
-				_alternateBackWindow
-				"}\n");
-				*/
 
 			out.append("QListWidget::item:selected{"
 				_selectedFore _selectedBack
 				"}\n");
 
-			out.append("QListWidget::item:hover:!selected{"
+			out.append("QListWidget::item:pressed:hover{"
+				_selectedFore _selectedBack
+				"}\n");
+
+			out.append("QListWidget::item:hover:!pressed:!selected{"
 				_focusFore _focusBack
 				"}\n");
 
@@ -232,19 +233,15 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			
 		case ak::ui::colorStyle::styleableObject::sListBorderless:
 			out.append("QListWidget{"
-				_fore _backControl
-				"border-color:#00000000;"
+				_fore _backTransparent
+				"border:0px;"
 				"}\n");
 
-			out.append("QListWidget::item:alternate{"
-				_alternateBackWindow
-				"}\n");
-
-			out.append("QListWidget::item:selected{"
+			out.append("QListWidget::item:pressed{"
 				_selectedFore _selectedBack
 				"}\n");
 
-			out.append("QListWidget::item:hover:!selected{"
+			out.append("QListWidget::item:hover:!pressed{"
 				_focusFore _focusBack
 				"}\n");
 

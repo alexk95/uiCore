@@ -22,6 +22,10 @@
 // C++ header
 #include <map>
 
+class QMouseEvent;
+class QKeyEvent;
+class QEvent;
+
 namespace ak {
 	namespace ui {
 
@@ -34,6 +38,7 @@ namespace ak {
 			class listItem;
 
 			class list : public QListWidget, public ak::ui::core::aWidget {
+				Q_OBJECT
 			public:
 				// Constructor
 
@@ -51,6 +56,12 @@ namespace ak {
 					const ak::ui::colorStyle *			_colorStyle
 				) override;
 
+				virtual void keyPressEvent(QKeyEvent * _event) override;
+				virtual void keyReleaseEvent(QKeyEvent * _event) override;
+				virtual void mouseMoveEvent(QMouseEvent *) override;
+				virtual void enterEvent(QEvent *) override;
+				virtual void leaveEvent(QEvent *) override;
+				
 				// ###########################################################################################################################################
 
 				//! @brief Will add a new item to this list
@@ -70,16 +81,27 @@ namespace ak {
 				//! @brief Will remove all items
 				void Clear(void);
 
+				void setVerticalScrollbarAlwaysVisible(
+					bool							_vis
+				);
+
 				listItem * Item(
 					const QString &					_text
 				);
 
 				//QString itemText
+			signals:
+				void keyPressed(QKeyEvent *);
+				void keyReleased(QKeyEvent *);
+				void mouseMove(QMouseEvent *);
+				void leave(QEvent *);
 
 			private:
 				
 				//! Will clear the memory allocated by this object
 				void memFree(void);
+
+				bool								my_verticalScrollbarAlwaysVisible;
 
 				ak::ID								my_currentId;
 				std::map<ak::ID, listItem *>		my_items;

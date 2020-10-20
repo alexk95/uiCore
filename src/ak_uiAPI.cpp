@@ -939,61 +939,49 @@ void ak::uiAPI::obj::addObjectToContainer(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addObjectToContainer()"); }
 }
 
-ak::ID ak::uiAPI::obj::addRecentsItem(
+ak::ID ak::uiAPI::obj::addItem(
 	ak::UID												_objectUid,
+	ak::ID												_parentId,
 	const QString &										_text
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addRecentsItem(_objectUid, _text);
+		return oM->obj_addItem(_objectUid, _parentId, _text);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addRecentsItem(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addRecentsItem(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addRecentsItem(QString)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addItem()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addItem()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addItem()"); }
 }
 
-ak::ID ak::uiAPI::obj::addRecentsItem(
+ak::ID ak::uiAPI::obj::addItem(
 	ak::UID												_objectUid,
+	ak::ID												_parentId,
 	const QString &										_text,
 	const QIcon &										_icon
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addRecentsItem(_objectUid, _text, _icon);
+		return oM->obj_addItem(_objectUid, _parentId, _text, _icon);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addRecentsItem(QString, QIcon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addRecentsItem(QString, QIcon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addRecentsItem(QString, QIcon)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addItem(QIcon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addItem(QIcon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addItem(QIcon)"); }
 }
 
-ak::ID ak::uiAPI::obj::addRecentsItem(
+ak::ID ak::uiAPI::obj::addItem(
 	ak::UID												_objectUid,
+	ak::ID												_parentId,
 	const QString &										_text,
 	const QString &										_iconName,
 	const QString &										_iconSize
 ) {
 	try {
 		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addRecentsItem(_objectUid, _text, _iconName, _iconSize);
+		return oM->obj_addItem(_objectUid, _parentId, _text, _iconName, _iconSize);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addRecentsItem(QString, QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addRecentsItem(QString, QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addRecentsItem(QString, QString)"); }
-}
-
-ak::ID ak::uiAPI::obj::addOpenItem(
-	ak::UID												_objectUid,
-	const QString &										_text,
-	const QString &										_iconName,
-	const QString &										_iconSize
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addOpenItem(_objectUid, _text, _iconName, _iconSize);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addOpenItem(QString, QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addOpenItem(QString, QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addOpenItem(QString, QString)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addItem(QString, QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addItem(QString, QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addItem(QString, QString)"); }
 }
 
 void ak::uiAPI::obj::setCentralWidget(

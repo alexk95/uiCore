@@ -24,6 +24,10 @@
 #define ICO_Bright "Sun"
 #define ICO_Dark "Moon"
 
+#define WELCOME_ID_RECENTS 0
+#define WELCOME_ID_OPEN 1
+#define WELCOME_ID_NEW 2
+
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>			// Writer
 #include <rapidjson/stringbuffer.h>		// String buffer
@@ -135,10 +139,18 @@ void Example::eventCallback(
 			else if (_sender == my_ui.ttb_aTest) {
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, false);
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);
+				ak::uiAPI::obj::setVisible(my_ui.dockProperties, false);
+				ak::uiAPI::obj::setVisible(my_ui.dockOutput, false);
+				//ak::uiAPI::obj::setVisible(my_ui.dockTester, false);
+				ak::uiAPI::obj::setVisible(my_ui.dockTree, false);
 			}
 			else if (_sender == my_ui.ttb_aTest2) {
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, true);
 				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, false);
+				ak::uiAPI::obj::setVisible(my_ui.dockProperties, true);
+				ak::uiAPI::obj::setVisible(my_ui.dockOutput, true);
+				//ak::uiAPI::obj::setVisible(my_ui.dockTester, true);
+				ak::uiAPI::obj::setVisible(my_ui.dockTree, true);
 			}
 		}
 		else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {
@@ -229,7 +241,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester1");
 			ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester2");
 			ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester3");
-			my_ui.ttb_gNONE = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.ttb_pFile, "");
+			my_ui.ttb_gNONE = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.ttb_pFile, "Test");
 			my_ui.ttb_aExit = ak::uiAPI::createAction(my_uid, "Exit", "ExitAppBlue", "32");
 			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
 			my_ui.ttb_aTest = ak::uiAPI::createAction(my_uid, "Test", "Test", "32");
@@ -247,6 +259,7 @@ void Example::setupUi(void) {
 			my_ui.tester = ak::uiAPI::createTextEdit(my_uid);
 			my_ui.table1 = ak::uiAPI::createTable(my_uid, 2, 2);
 			my_ui.table2 = ak::uiAPI::createTable(my_uid, 3, 3);
+			my_ui.welcomeScreen = ak::uiAPI::createDefaultWelcomeScreen(my_uid);
 
 			// Create docks
 			my_ui.dockOutput = ak::uiAPI::createDock(my_uid, "Output");
@@ -271,26 +284,29 @@ void Example::setupUi(void) {
 			ak::uiAPI::addDock(my_ui.mainWindow, my_ui.dockProperties, ak::ui::core::dock_dockLeft);
 			//ak::uiAPI::tabifyDock(my_ui.mainWindow, my_ui.dockOutput, my_ui.dockTester);
 
+			ak::uiAPI::obj::setVisible(my_ui.dockProperties, false);
+			ak::uiAPI::obj::setVisible(my_ui.dockOutput, false);
+			//ak::uiAPI::obj::setVisible(my_ui.dockTester, false);
+			ak::uiAPI::obj::setVisible(my_ui.dockTree, false);
+
 			// Setup widgets
 			ak::uiAPI::obj::setAutoSelectAndDeselectChildrenEnabled(my_ui.treeWidget, true);
 			ak::uiAPI::obj::setMultiSelectionEnabled(my_ui.treeWidget, true);
 			ak::uiAPI::obj::setReadOnly(my_ui.outputWidget);
 			ak::uiAPI::obj::setFilterVisible(my_ui.treeWidget);
 			
-			ak::UID dd = ak::uiAPI::createDefaultWelcomeScreen(my_uid);
-
 			for (int fill = 0; fill < 30; fill++) {
 				QString txt("Test ");
 				if (fill > 0) {
 					txt.append(QString::number(fill));
 				}
-				ak::uiAPI::obj::addRecentsItem(dd, txt, "Test", "32");
+				ak::uiAPI::obj::addItem(my_ui.welcomeScreen, WELCOME_ID_RECENTS, txt, "Test", "32");
 			}
 		
-			ak::uiAPI::obj::addOpenItem(dd, "Test", "Test", "32");
+			ak::uiAPI::obj::addItem(my_ui.welcomeScreen, WELCOME_ID_OPEN, "Open", "Test", "32");
+			ak::uiAPI::obj::addItem(my_ui.welcomeScreen, WELCOME_ID_NEW, "Create new", "Test", "32");
 
-			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, dd, "Test 3");
-			
+			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.welcomeScreen, "Welcome");
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
 			ak::uiAPI::obj::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
 			
@@ -316,6 +332,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::registerUidNotifier(my_ui.tester, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.ttb_aTest, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.ttb_aTest2, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.welcomeScreen, my_notifier);
 
 			// Create default data
 			defaultData();

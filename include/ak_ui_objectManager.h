@@ -291,26 +291,37 @@ namespace ak {
 				ak::UID												_objectUid
 			);
 
-			ak::ID obj_addRecentsItem(
+			//! @brief Will add a new item at the specified group and the specified parent item
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item or the group
+			//! @param _text The initial text of the new item
+			ak::ID obj_addItem(
 				ak::UID												_objectUid,
+				ak::ID												_parentId,
 				const QString &										_text
 			);
 
-			ak::ID obj_addRecentsItem(
+			//! @brief Will add a new item at the specified group and the specified parent item
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item or the group
+			//! @param _text The initial text of the new item
+			//! @param _icon The initial icon
+			ak::ID obj_addItem(
 				ak::UID												_objectUid,
+				ak::ID												_parentId,
 				const QString &										_text,
 				const QIcon &										_icon
 			);
 
-			ak::ID obj_addRecentsItem(
+			//! @brief Will add a new item at the specified group and the specified parent item
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item or the group
+			//! @param _text The initial text of the new item
+			//! @param _iconName The name of the initial icon
+			//! @param _iconSize The size of the initial icon
+			ak::ID obj_addItem(
 				ak::UID												_objectUid,
-				const QString &										_text,
-				const QString &										_iconName,
-				const QString &										_iconSize
-			);
-
-			ak::ID obj_addOpenItem(
-				ak::UID												_objectUid,
+				ak::ID												_parentId,
 				const QString &										_text,
 				const QString &										_iconName,
 				const QString &										_iconSize

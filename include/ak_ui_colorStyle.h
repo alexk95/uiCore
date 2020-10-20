@@ -92,6 +92,12 @@ namespace ak {
 			//! @brief Returns the currently set controls mian error foreground color
 			ak::ui::color getControlsErrorForecolor(void) const;
 
+			//! @brief Returns the currently set controls focus color
+			ak::ui::color getControlsFocusedColor(void) const;
+
+			//! @brief Returns the currently set controls pressed color
+			ak::ui::color getControlsPressedColor(void) const;
+
 			//! @brief Set the window main foreground color
 			//! @param _color The color to set
 			void setWindowMainForecolor(
@@ -119,6 +125,18 @@ namespace ak {
 			//! @brief Will set the error forecolor for the controls
 			//! @param _color The color to set
 			void setControlsErrorForecolor(
+				const ak::ui::color &		_color
+			);
+
+			//! @brief Will set the controls focus color
+			//! @param _color The color to set
+			void setControlsFocusedColor(
+				const ak::ui::color &		_color
+			);
+
+			//! @brief Will set the controls pressed color
+			//! @param _color The color to set
+			void setControlsPressedColor(
 				const ak::ui::color &		_color
 			);
 		
@@ -159,6 +177,8 @@ namespace ak {
 			ak::ui::color				my_controlsMainForecolor;		//! The currently set controls main foreground color
 			ak::ui::color				my_controlsMainBackcolor;		//! The currently set controls main background color
 			ak::ui::color				my_controlsErrorForecolor;		//! The currently set controls error foreground color
+			ak::ui::color				my_controlsFocusColor;			//! The currently set controls focus color
+			ak::ui::color				my_controlsPressedColor;		//! The currently set controls pressed color
 
 			std::vector<QString>	my_directories;					//! Contains all directories to scan for incons
 		};

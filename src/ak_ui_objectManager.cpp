@@ -752,14 +752,15 @@ void ak::ui::objectManager::obj_setCentralWidget(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_setCentralWidget(QWidget)"); }
 }
 
-ak::ID ak::ui::objectManager::obj_addRecentsItem(
+ak::ID ak::ui::objectManager::obj_addItem(
 	ak::UID												_objectUid,
+	ak::ID												_groupId,
 	const QString &										_text
 ) {
 	try {
 		// Find parent object
 		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
-		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check parent UID"); }
+		assert(itm != my_mapObjects.end()); // Invalid object UID provided
 		switch (itm->second->objectType())
 		{
 		case ak::ui::core::objectType::oDefaultWelcomeScreen:
@@ -767,7 +768,7 @@ ak::ID ak::ui::objectManager::obj_addRecentsItem(
 			ak::ui::widget::defaultWelcomeScreen * actualObject = nullptr;
 			actualObject = dynamic_cast<ui::widget::defaultWelcomeScreen *>(itm->second);
 			assert(actualObject != nullptr); // Cast failed
-			return actualObject->addRecent(_text);
+			return actualObject->addItem(_groupId, _text);
 		}
 		break;
 		default:
@@ -775,20 +776,21 @@ ak::ID ak::ui::objectManager::obj_addRecentsItem(
 			return ak::invalidID;
 		}
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addRecentsItem(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addRecentsItem(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addRecentsItem(QString)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addItem(QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addItem(QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addItem(QString)"); }
 }
 
-ak::ID ak::ui::objectManager::obj_addRecentsItem(
+ak::ID ak::ui::objectManager::obj_addItem(
 	ak::UID												_objectUid,
+	ak::ID												_groupId,
 	const QString &										_text,
 	const QIcon &										_icon
 ) {
 	try {
 		// Find parent object
 		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
-		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check parent UID"); }
+		assert(itm != my_mapObjects.end()); // Invalid object UID provided
 		switch (itm->second->objectType())
 		{
 		case ak::ui::core::objectType::oDefaultWelcomeScreen:
@@ -796,7 +798,7 @@ ak::ID ak::ui::objectManager::obj_addRecentsItem(
 			ak::ui::widget::defaultWelcomeScreen * actualObject = nullptr;
 			actualObject = dynamic_cast<ui::widget::defaultWelcomeScreen *>(itm->second);
 			assert(actualObject != nullptr); // Cast failed
-			return actualObject->addRecent(_icon, _text);
+			return actualObject->addItem(_groupId, _icon, _text);
 		}
 		break;
 		default:
@@ -804,13 +806,14 @@ ak::ID ak::ui::objectManager::obj_addRecentsItem(
 			return ak::invalidID;
 		}
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addRecentsItem(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addRecentsItem(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addRecentsItem(QString)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addItem(QString, QIcon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addItem(QString, QIcon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addItem(QString, QIcon)"); }
 }
 
-ak::ID ak::ui::objectManager::obj_addRecentsItem(
+ak::ID ak::ui::objectManager::obj_addItem(
 	ak::UID												_objectUid,
+	ak::ID												_groupId,
 	const QString &										_text,
 	const QString &										_iconName,
 	const QString &										_iconSize
@@ -818,7 +821,7 @@ ak::ID ak::ui::objectManager::obj_addRecentsItem(
 	try {
 		// Find parent object
 		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
-		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check parent UID"); }
+		assert(itm != my_mapObjects.end()); // Invalid object UID provided
 		switch (itm->second->objectType())
 		{
 		case ak::ui::core::objectType::oDefaultWelcomeScreen:
@@ -826,9 +829,7 @@ ak::ID ak::ui::objectManager::obj_addRecentsItem(
 			ak::ui::widget::defaultWelcomeScreen * actualObject = nullptr;
 			actualObject = dynamic_cast<ui::widget::defaultWelcomeScreen *>(itm->second);
 			assert(actualObject != nullptr); // Cast failed
-			// Get icon
-			const QIcon * ico = my_iconManager->icon(_iconName, _iconSize);
-			return actualObject->addRecent(*ico, _text);
+			return actualObject->addItem(_groupId, *my_iconManager->icon(_iconName, _iconSize),_text);
 		}
 		break;
 		default:
@@ -836,41 +837,9 @@ ak::ID ak::ui::objectManager::obj_addRecentsItem(
 			return ak::invalidID;
 		}
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addRecentsItem(QString, QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addRecentsItem(QString, QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addRecentsItem(QString, QString)"); }
-}
-
-ak::ID ak::ui::objectManager::obj_addOpenItem(
-	ak::UID												_objectUid,
-	const QString &										_text,
-	const QString &										_iconName,
-	const QString &										_iconSize
-) {
-	try {
-		// Find parent object
-		my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
-		if (itm == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check parent UID"); }
-		switch (itm->second->objectType())
-		{
-		case ak::ui::core::objectType::oDefaultWelcomeScreen:
-		{
-			ak::ui::widget::defaultWelcomeScreen * actualObject = nullptr;
-			actualObject = dynamic_cast<ui::widget::defaultWelcomeScreen *>(itm->second);
-			assert(actualObject != nullptr); // Cast failed
-			// Get icon
-			const QIcon * ico = my_iconManager->icon(_iconName, _iconSize);
-			return actualObject->addOpen(*ico, _text);
-		}
-		break;
-		default:
-			assert(0); // Invalid object type
-			return ak::invalidID;
-		}
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addOpenItem(QString, QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addOpenItem(QString, QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addOpenItem(QString, QString)"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::obj_addItem(QString, QString, QString)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::obj_addItem(QString, QString, QString)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::obj_addItem(QString, QString, QString)"); }
 }
 
 void ak::ui::objectManager::obj_setText(

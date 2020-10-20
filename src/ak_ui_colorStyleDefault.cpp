@@ -21,6 +21,8 @@ ak::ui::colorStyleDefault::colorStyleDefault() {
 	setControlsErrorForecolor(ak::ui::color(255, 0, 0));
 	setWindowMainBackcolor(ak::ui::color(255, 255, 255));
 	setWindowMainForecolor(ak::ui::color(0, 0, 0));
+	setControlsFocusedColor(ak::ui::color(60, 60, 200));
+	setControlsPressedColor(ak::ui::color(60, 60, 200));
 }
 
 ak::ui::colorStyleDefault::~colorStyleDefault() {}
