@@ -1,4 +1,4 @@
-# Install script for directory: E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/src/TabToolbar
+# Install script for directory: D:/uiCore/Third_Party_Libraries/QtTabToolbar/src/TabToolbar
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,25 +34,25 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xdevelx" OR NOT CMAKE_INSTALL_COMPONENT)
   if("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY OPTIONAL FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/Debug/TabToolbard.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY OPTIONAL FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/Debug/TabToolbard.lib")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY OPTIONAL FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/Release/TabToolbar.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY OPTIONAL FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/Release/TabToolbar.lib")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY OPTIONAL FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/MinSizeRel/TabToolbar.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY OPTIONAL FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/MinSizeRel/TabToolbar.lib")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY OPTIONAL FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/RelWithDebInfo/TabToolbar.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY OPTIONAL FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/RelWithDebInfo/TabToolbar.lib")
   endif()
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xbinx" OR NOT CMAKE_INSTALL_COMPONENT)
   if("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE SHARED_LIBRARY FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/Debug/TabToolbard.dll")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE SHARED_LIBRARY FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/Debug/TabToolbard.dll")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE SHARED_LIBRARY FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/Release/TabToolbar.dll")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE SHARED_LIBRARY FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/Release/TabToolbar.dll")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE SHARED_LIBRARY FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/MinSizeRel/TabToolbar.dll")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE SHARED_LIBRARY FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/MinSizeRel/TabToolbar.dll")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE SHARED_LIBRARY FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/RelWithDebInfo/TabToolbar.dll")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE SHARED_LIBRARY FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/RelWithDebInfo/TabToolbar.dll")
   endif()
 endif()
 

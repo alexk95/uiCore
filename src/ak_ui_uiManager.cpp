@@ -173,7 +173,7 @@ void ak::ui::uiManager::setColorStyle(
 		my_statusLabel->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sLabel));
 
 		// TabToolbar
-		my_tabToolBar->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sToolBar));
+		my_tabToolBar->SetStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sToolBar));
 		my_tabToolBar->SetTabBarStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTabWidget));
 		my_tabToolBar->SetTabBarTabStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTabBar));
 		my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sToolButton));

@@ -46,7 +46,7 @@ Example::Example()
 	try { ak::uiAPI::addIconSearchPath(QString(qgetenv("UI_CORE_ROOT") + "\\Icons\\")); }
 	catch (...) {}
 
-	my_ui.logInDialog = ak::uiAPI::createLogInDialog(my_uid, true, "OpenTwin", "Username");
+	my_ui.logInDialog = ak::uiAPI::createLogInDialog(my_uid, true, "OpenTwin", "Username", "TheHashedPassword");
 
 	// Create my notifier
 	my_notifier = new ExampleNotifier(this);

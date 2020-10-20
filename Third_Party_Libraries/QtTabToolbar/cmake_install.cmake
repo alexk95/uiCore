@@ -1,4 +1,4 @@
-# Install script for directory: E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar
+# Install script for directory: D:/uiCore/Third_Party_Libraries/QtTabToolbar
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,28 +33,28 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xdevelx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE DIRECTORY FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/include" FILES_MATCHING REGEX "/[^/]*\\.h$")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE DIRECTORY FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/include" FILES_MATCHING REGEX "/[^/]*\\.h$")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE FILE FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/LICENSE")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE FILE FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/LICENSE")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE FILE FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/COPYING")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE FILE FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/COPYING")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE FILE FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/COPYING.LESSER")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE FILE FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/COPYING.LESSER")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/./cmake-modules" TYPE FILE FILES "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/cmake-modules/FindTabToolbar.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/./cmake-modules" TYPE FILE FILES "D:/uiCore/Third_Party_Libraries/QtTabToolbar/cmake-modules/FindTabToolbar.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/cmake_install.cmake")
+  include("D:/uiCore/Third_Party_Libraries/QtTabToolbar/src/TabToolbar/cmake_install.cmake")
 
 endif()
 
@@ -66,5 +66,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "E:/SimulationPlatform/Third_Party_Libraries/QtTabToolbar/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/uiCore/Third_Party_Libraries/QtTabToolbar/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -100,14 +100,15 @@ TabToolbar::~TabToolbar()
 {
 }
 
+// Changed by Alexander Kuester
 bool TabToolbar::event(QEvent* event)
 {
-    if(event->type() == QEvent::StyleChange && !ignoreStyleEvent)
+    /*if(event->type() == QEvent::StyleChange && !ignoreStyleEvent)
         QTimer::singleShot(0, this, [this]()
         { // on KDE new palette is not ready yet, wait
             const QString styleName = (style ? style->objectName() : GetDefaultStyle());
             SetStyle(styleName);
-        });
+        }); */
     return QToolBar::event(event);
 }
 
@@ -141,8 +142,10 @@ unsigned TabToolbar::GroupMaxHeight() const
     return groupMaxHeight;
 }
 
+// Changed by Alexander Kuester
 void TabToolbar::SetStyle(const QString& styleName)
 {
+	return;	// New
     ignoreStyleEvent = true;
     style.reset(CreateStyle(styleName).release());
     setStyleSheet(GetSheetForStyle(*style));
@@ -291,14 +294,22 @@ Page* TabToolbar::AddPage(const QString& pageName)
     return page;
 }
 
+// Created by Alexander Kuester
+void TabToolbar::SetStylesheet(const QString& styleSheet) {
+	setStyleSheet(styleSheet);
+}
+
+// Created by Alexander Kuester
 void TabToolbar::SetTabBarStylesheet(const QString& styleSheet) {
 	tabBar->setStyleSheet(styleSheet);
 }
 
+// Created by Alexander Kuester
 void TabToolbar::SetTabBarTabStylesheet(const QString& styleSheet) {
 	tabBar->tabBar()->setStyleSheet(styleSheet);
 }
 
+// Created by Alexander Kuester
 void TabToolbar::SetHideButtonStylesheet(const QString& styleSheet) {
 	hideButton->setStyleSheet(styleSheet);
 }

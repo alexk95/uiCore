@@ -11,3 +11,4 @@ Makefile
 ui*.h
 CMakeCache.txt
 *.log
+/**/.vs

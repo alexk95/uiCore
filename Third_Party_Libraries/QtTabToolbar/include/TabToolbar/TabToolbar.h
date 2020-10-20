@@ -44,15 +44,16 @@ public:
     Page*    AddPage(const QString& pageName);
     QAction* HideAction();
     void     AddCornerAction(QAction* action);
-    void     SetStyle(const QString& styleName);
+    void     SetStyle(const QString& styleName);					// Changed by Alexander Kuester
     QString  GetStyle() const;
     unsigned RowCount() const;
     unsigned GroupMaxHeight() const;
     int      CurrentTab() const;
     void     SetCurrentTab(int index);
-    void     SetTabBarStylesheet(const QString& styleSheet);
-	void     SetTabBarTabStylesheet(const QString& styleSheet);
-	void     SetHideButtonStylesheet(const QString& styleSheet);
+	void     SetStylesheet(const QString& styleSheet);				// Created by Alexander Kuester
+    void     SetTabBarStylesheet(const QString& styleSheet);		// Created by Alexander Kuester
+	void     SetTabBarTabStylesheet(const QString& styleSheet);		// Created by Alexander Kuester
+	void     SetHideButtonStylesheet(const QString& styleSheet);	// Created by Alexander Kuester
 
 signals:
     void     Minimized();
@@ -69,7 +70,7 @@ private slots:
     void     ShowTab(int index);
 
 protected:
-    bool     event(QEvent* event) override;
+    bool     event(QEvent* event) override;							// Changed by Alexander Kuester
 
 private:
     void     AdjustVerticalSize(unsigned vSize);
