@@ -14,22 +14,26 @@
 #pragma once
 
 // Qt header
-#include <qaction.h>					// base class
+#include <qwidgetaction.h>					// base class
 #include <qstring.h>					// QString
 #include <qicon.h>						// QIcon
 #include <qtoolbutton.h>				// ToolButtonPopupMode
 
 // AK header
-#include <ak_ui_core_aObject.h>			// base class
+#include <ak_ui_core_aPaintable.h>			// base class
 
 #include <ak_globalDataTypes.h>
 
+class QWidget;
+
 namespace ak {
 	namespace ui {
+		class colorStyle;
+
 		namespace qt {
 
 			//! @brief This class combines the functionallity of a QAction and a ak::ui::core::aPaintable
-			class action : public QAction, public ak::ui::core::aObject
+			class action : public QWidgetAction, public ak::ui::core::aPaintable
 			{
 				Q_OBJECT
 			public:
@@ -64,12 +68,23 @@ namespace ak {
 				//! @brief Deconstructor
 				virtual ~action();
 
+				//! @brief Will set the objects color style
+				//! @param _colorStyle The color style to set
+				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
+				virtual void setColorStyle(
+					const ak::ui::colorStyle *					_colorStyle
+				) override;
+
+				virtual QWidget * createWidget(QWidget *parent) override;
+				virtual void deleteWidget(QWidget *widget) override;
+
 				// #######################################################################################################
 
 				//! @brief Retuns the popup mode this Action is using
 				QToolButton::ToolButtonPopupMode popupMode(void);
 
 			private:
+				QWidget *									my_widget;
 				QToolButton::ToolButtonPopupMode			my_popupMode;		//! The popup Mode of this Action
 			};
 		} // namespace qt

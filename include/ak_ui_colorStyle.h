@@ -60,7 +60,8 @@ namespace ak {
 				sToolBar,
 				sToolButton,
 				sTree,
-				sWidget
+				sWidget,
+				sWidgetAll
 			};
 
 			//! @brief Will return the name of this styleSheet

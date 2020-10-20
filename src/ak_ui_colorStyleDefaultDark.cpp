@@ -444,7 +444,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		
 		// Tabbar
 		case ak::ui::colorStyle::styleableObject::sTabBar:
-
+			/*/
 			out.append("QWidget{"
 				_fore _backWindow
 				"}\n");
@@ -452,7 +452,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("QWidget *{"
 				_fore _backWindow
 				"}\n");
-
+				*/
 			out.append("QTabBar{"
 				_backWindow
 				"}\n");
@@ -497,7 +497,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		
 		// Tab widget
 		case ak::ui::colorStyle::styleableObject::sTabWidget:
-			
+			/*/
 			out.append("QWidget{"
 				_fore _backWindow
 				"}\n");
@@ -505,7 +505,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("QWidget *{"
 				_fore _backWindow
 				"}\n");
-
+				*/
 			out.append("QTabWidget{"
 				_fore _backWindow
 				"}\n");
@@ -517,7 +517,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("QTabWidget::tab-bar{"
 				_fore _backWindow
 				"}\n");
-
+			/*
 			out.append("QTabWidget QToolButton{"
 				_fore _backWindow _alternateBackWindow
 				"}\n");
@@ -529,14 +529,15 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("QTabWidget QToolButton:pressed{"
 				_selectedFore _selectedBack
 				"}\n");
-
+				*/
 			break;
 
 		// ######################################################################################################
 	
 		// Tab widget page
 		case ak::ui::colorStyle::styleableObject::sTabWidgetPage:
-			
+			/*
+			/
 			out.append("QWidget{"
 				_fore _backWindow
 				"}\n");
@@ -544,7 +545,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("QWidget *{"
 				_fore _backWindow
 				"}\n");
-
+				*/
 			out.append("QTabWidget{"
 				_borderDefaultControl
 				"}\n");
@@ -553,6 +554,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 				_fore _backWindow _alternateBackWindow
 				"}\n");
 
+			/*/
 			out.append("QTabWidget QToolButton{"
 				_fore _backWindow _alternateBackWindow
 				"}\n");
@@ -576,7 +578,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("QToolButton:pressed{"
 				_selectedFore _selectedBack
 				"}\n");
-
+				*/
 			break;
 
 		// ######################################################################################################
@@ -593,6 +595,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		// Toolbar
 		case ak::ui::colorStyle::styleableObject::sToolBar:
 			
+			/*/
 			out.append("QWidget{"
 				_fore _backWindow
 				"}\n");
@@ -604,7 +607,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("*{"
 				_fore _backWindow
 				"}\n");
-
+				*/
 			out.append("QToolBar{"
 				_fore _backWindow "border: none;"
 				"}\n");
@@ -612,7 +615,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("QToolBar QToolBar *{"
 				_fore _backWindow "border: none;"
 				"}\n");
-
+			/*/
 			out.append("QToolBar QToolButton{"
 				_fore _backWindow _alternateBackWindow
 				"}\n");
@@ -624,7 +627,7 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			out.append("QToolBar QToolButton:pressed{"
 				_selectedFore _selectedBack
 				"}\n");
-
+				*/
 			break;
 
 		// ######################################################################################################
@@ -723,6 +726,21 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 		{
 			out.append("QWidget{"
 				_fore _backWindow
+				"}\n");
+		}
+		break;
+		case ak::ui::colorStyle::styleableObject::sWidgetAll:
+		{
+			out.append("QWidget{"
+				_fore _backWindow _alternateBackWindow
+				"}\n");
+
+			out.append("QWidget:hover:!pressed{"
+				_focusFore _focusBack
+				"}\n");
+
+			out.append("QWidget:pressed{"
+				_selectedFore _selectedBack
 				"}\n");
 		}
 		break;
