@@ -81,146 +81,156 @@ void Example::eventCallback(
 	int						_info2
 ) {
 	try {
-		if (my_ui.mainWindow != ak::invalidUID) {
-			QString str("Event { Sender=\"");
-			str.append(QString::number(_sender));
-			str.append("\"; EventType = \"");
-			str.append(ak::uiAPI::toString(_eventType));
-			str.append("\"; Info1=\"");
-			str.append(QString::number(_info1));
-			str.append("\"; Info2=\"");
-			if (_eventType == ak::core::eKeyPressed) { str.append(ak::uiAPI::toString((ak::ui::core::keyType)_info2)); }
-			else { str.append(QString::number(_info2)); }
-			str.append("\"; }");
-			ak::uiAPI::obj::appendText(my_ui.outputWidget, str);
-		}
-		if (_eventType == ak::core::eventType::eClicked) {
-			if (_sender == my_ui.logInDialog) {
-				// Validate logic
-
-				// ...
-
-				QString str1 = ak::uiAPI::dialog::username(my_ui.logInDialog);
-				QString str2 = ak::uiAPI::dialog::password(my_ui.logInDialog);
-				bool d = ak::uiAPI::dialog::savePassword(my_ui.logInDialog);
-
-				// Show main UI and close dialog
-				ak::uiAPI::dialog::close(my_ui.logInDialog, ak::ui::core::resultOk);
+		try {
+			if (my_ui.mainWindow != ak::invalidUID) {
+				QString str("Event { Sender=\"");
+				str.append(QString::number(_sender));
+				str.append("\"; EventType = \"");
+				str.append(ak::uiAPI::toString(_eventType));
+				str.append("\"; Info1=\"");
+				str.append(QString::number(_info1));
+				str.append("\"; Info2=\"");
+				if (_eventType == ak::core::eKeyPressed) { str.append(ak::uiAPI::toString((ak::ui::core::keyType)_info2)); }
+				else { str.append(QString::number(_info2)); }
+				str.append("\"; }");
+				ak::uiAPI::obj::appendText(my_ui.outputWidget, str);
+				if (_sender == my_ui.welcomeScreen) {
+					str = "    -> Item text: ";
+					str.append(ak::uiAPI::itm::getText(_sender, _info1, _info2));
+					ak::uiAPI::obj::appendText(my_ui.outputWidget, str);
+				}
 			}
-			else if (_sender == my_ui.ttb_aExit) {
-				// Close the main window
+			if (_eventType == ak::core::eventType::eClicked) {
+				if (_sender == my_ui.logInDialog) {
+					// Validate logic
+
+					// ...
+
+					QString str1 = ak::uiAPI::dialog::username(my_ui.logInDialog);
+					QString str2 = ak::uiAPI::dialog::password(my_ui.logInDialog);
+					bool d = ak::uiAPI::dialog::savePassword(my_ui.logInDialog);
+
+					// Show main UI and close dialog
+					ak::uiAPI::dialog::close(my_ui.logInDialog, ak::ui::core::resultOk);
+				}
+				else if (_sender == my_ui.ttb_aExit) {
+					// Close the main window
+					QSettings settings("AK", "uiCoreExample");
+					QString cfg = ak::uiAPI::getSettingsJSON().c_str();
+					settings.setValue("UI.Config", cfg);
+					ak::uiAPI::closeWindow(my_ui.mainWindow);
+				}
+				else  if (_sender == my_ui.ttb_aColorStyle) {
+
+					// Disable notifier to not receive changed messages
+					my_notifier->disable();
+
+					// Change color style
+					if (ak::uiAPI::obj::getText(my_ui.ttb_aColorStyle) == TXT_Bright) {
+						ak::uiAPI::obj::appendText(my_ui.outputWidget, "Set: ColorStyle { Style=\"DefaultBright\"; }");
+						ak::uiAPI::setDefaultColorStyle();
+						ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
+						ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Dark);
+					}
+					else {
+						ak::uiAPI::obj::appendText(my_ui.outputWidget, "Set: ColorStyle { Style=\"DefaultDark\"; }");
+						ak::uiAPI::setDefaultDarkColorStyle();
+						ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
+						ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Bright);
+					}
+
+					// Enable the notifier again
+					my_notifier->enable();
+				}
+				else if (_sender == my_ui.ttb_aTest) {
+					ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, false);
+					ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);
+					ak::uiAPI::obj::setVisible(my_ui.dockProperties, false);
+					ak::uiAPI::obj::setVisible(my_ui.dockOutput, false);
+					//ak::uiAPI::obj::setVisible(my_ui.dockTester, false);
+					ak::uiAPI::obj::setVisible(my_ui.dockTree, false);
+				}
+				else if (_sender == my_ui.ttb_aTest2) {
+					ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, true);
+					ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, false);
+					ak::uiAPI::obj::setVisible(my_ui.dockProperties, true);
+					ak::uiAPI::obj::setVisible(my_ui.dockOutput, true);
+					//ak::uiAPI::obj::setVisible(my_ui.dockTester, true);
+					ak::uiAPI::obj::setVisible(my_ui.dockTree, true);
+				}
+			}
+			else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {
+				QString msg("PropteryChange{ id=\"");
+				msg.append(QString::number(_info1));
+				msg.append("\"; Name=\"");
+				msg.append(ak::uiAPI::itm::getText(my_ui.propertiesWidget, _info1));
+				msg.append("\"; Type=\"");
+
+				switch (ak::uiAPI::itm::getValueType(my_ui.propertiesWidget, _info1))
+				{
+				case ak::core::valueType::vBool:
+					if (ak::uiAPI::itm::getValueBoolean(my_ui.propertiesWidget, _info1)) {
+						msg.append("Boolean\"; Value=\"True");
+					}
+					else { msg.append("Boolean\"; Value=\"False"); }
+					break;
+				case ak::core::valueType::vColor:
+					msg.append("Color\"; Value=\"");
+					my_settingColor = ak::uiAPI::itm::getValueColor(my_ui.propertiesWidget, _info1);
+					msg.append(my_settingColor.toRGBString(":"));
+					break;
+				case ak::core::valueType::vDouble:
+					msg.append("Double\"; Value=\"");
+					msg.append(QString::number(ak::uiAPI::itm::getValueDouble(my_ui.propertiesWidget, _info1)));
+					break;
+				case ak::core::valueType::vInt:
+					msg.append("Integer\"; Value=\"");
+					msg.append(QString::number(ak::uiAPI::itm::getValueInteger(my_ui.propertiesWidget, _info1)));
+					break;
+				case ak::core::valueType::vSelection:
+					msg.append("Selection\"; Value=\"");
+					msg.append(ak::uiAPI::itm::getValueSelection(my_ui.propertiesWidget, _info1));
+					break;
+				case ak::core::valueType::vString:
+					msg.append("String\"; Value=\"");
+					msg.append(ak::uiAPI::itm::getValueString(my_ui.propertiesWidget, _info1));
+					break;
+				default:
+					assert(0); // Unknown type
+					break;
+				}
+				msg.append("\"; }");
+				ak::uiAPI::obj::appendText(my_ui.outputWidget, msg);
+			}
+			else if (_sender == my_tester && _eventType == ak::core::eventType::eTimeout) {
+				// Load last settings
 				QSettings settings("AK", "uiCoreExample");
-				QString cfg = ak::uiAPI::getSettingsJSON().c_str();
-				settings.setValue("UI.Config", cfg);
-				ak::uiAPI::closeWindow(my_ui.mainWindow);
-			}
-			else  if (_sender == my_ui.ttb_aColorStyle) {
+				QString lastConfigString = settings.value("UI.Config", "").toString();
+				if (lastConfigString.length() > 0) {
+					std::string s(lastConfigString.toStdString());
 
-				// Disable notifier to not receive changed messages
-				my_notifier->disable();
+					ak::uiAPI::setupSettings(s.c_str());
 
-				// Change color style
-				if (ak::uiAPI::obj::getText(my_ui.ttb_aColorStyle) == TXT_Bright) {
-					ak::uiAPI::obj::appendText(my_ui.outputWidget, "Set: ColorStyle { Style=\"DefaultBright\"; }");
-					ak::uiAPI::setDefaultColorStyle();
-					ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
-					ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Dark);
+					QString currentColorStyleName = ak::uiAPI::getCurrentColorStyleName();
+					if (currentColorStyleName == "Default" || currentColorStyleName == "") {
+						ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Dark);
+						ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
+					}
+					else {
+						ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Bright);
+						ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
+					}
+
 				}
-				else {
-					ak::uiAPI::obj::appendText(my_ui.outputWidget, "Set: ColorStyle { Style=\"DefaultDark\"; }");
-					ak::uiAPI::setDefaultDarkColorStyle();
-					ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
-					ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Bright);
-				}
-
-				// Enable the notifier again
-				my_notifier->enable();
-			}
-			else if (_sender == my_ui.ttb_aTest) {
-				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, false);
-				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, true);
-				ak::uiAPI::obj::setVisible(my_ui.dockProperties, false);
-				ak::uiAPI::obj::setVisible(my_ui.dockOutput, false);
-				//ak::uiAPI::obj::setVisible(my_ui.dockTester, false);
-				ak::uiAPI::obj::setVisible(my_ui.dockTree, false);
-			}
-			else if (_sender == my_ui.ttb_aTest2) {
-				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest, true);
-				ak::uiAPI::obj::setEnabled(my_ui.ttb_aTest2, false);
-				ak::uiAPI::obj::setVisible(my_ui.dockProperties, true);
-				ak::uiAPI::obj::setVisible(my_ui.dockOutput, true);
-				//ak::uiAPI::obj::setVisible(my_ui.dockTester, true);
-				ak::uiAPI::obj::setVisible(my_ui.dockTree, true);
 			}
 		}
-		else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {
-			QString msg("PropteryChange{ id=\"");
-			msg.append(QString::number(_info1));
-			msg.append("\"; Name=\"");
-			msg.append(ak::uiAPI::itm::getText(my_ui.propertiesWidget, _info1));
-			msg.append("\"; Type=\"");
-
-			switch (ak::uiAPI::itm::getValueType(my_ui.propertiesWidget, _info1))
-			{
-			case ak::core::valueType::vBool:
-				if (ak::uiAPI::itm::getValueBoolean(my_ui.propertiesWidget, _info1)) {
-					msg.append("Boolean\"; Value=\"True");
-				}
-				else { msg.append("Boolean\"; Value=\"False"); }
-				break;
-			case ak::core::valueType::vColor:
-				msg.append("Color\"; Value=\"");
-				my_settingColor = ak::uiAPI::itm::getValueColor(my_ui.propertiesWidget, _info1);
-				msg.append(my_settingColor.toRGBString(":"));
-				break;
-			case ak::core::valueType::vDouble:
-				msg.append("Double\"; Value=\"");
-				msg.append(QString::number(ak::uiAPI::itm::getValueDouble(my_ui.propertiesWidget, _info1)));
-				break;
-			case ak::core::valueType::vInt:
-				msg.append("Integer\"; Value=\"");
-				msg.append(QString::number(ak::uiAPI::itm::getValueInteger(my_ui.propertiesWidget, _info1)));
-				break;
-			case ak::core::valueType::vSelection:
-				msg.append("Selection\"; Value=\"");
-				msg.append(ak::uiAPI::itm::getValueSelection(my_ui.propertiesWidget, _info1));
-				break;
-			case ak::core::valueType::vString:
-				msg.append("String\"; Value=\"");
-				msg.append(ak::uiAPI::itm::getValueString(my_ui.propertiesWidget, _info1));
-				break;
-			default:
-				assert(0); // Unknown type
-				break;
-			}
-			msg.append("\"; }");
-			ak::uiAPI::obj::appendText(my_ui.outputWidget, msg);
-		}
-		else if (_sender == my_tester && _eventType == ak::core::eventType::eTimeout) {
-			// Load last settings
-			QSettings settings("AK", "uiCoreExample");
-			QString lastConfigString = settings.value("UI.Config", "").toString();
-			if (lastConfigString.length() > 0) {
-				std::string s(lastConfigString.toStdString());
-				
-				ak::uiAPI::setupSettings(s.c_str());
-
-				QString currentColorStyleName = ak::uiAPI::getCurrentColorStyleName();
-				if (currentColorStyleName == "Default" || currentColorStyleName == "") {
-					ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Dark);
-					ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
-				}
-				else {
-					ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Bright);
-					ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
-				}
-
-			}
-		}
+		catch (const ak::Exception & e) { throw ak::Exception(e, "Example::eventCallback()"); }
+		catch (const std::exception & e) { throw ak::Exception(e.what(), "Example::eventCallback()"); }
+		catch (...) { throw ak::Exception("Unknown error", "Example::eventCallback()"); }
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "Example::eventCallback()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "Example::eventCallback()"); }
-	catch (...) { throw ak::Exception("Unknown error", "Example::eventCallback()"); }
+	catch (const ak::Exception & e) {
+		ak::uiAPI::special::showMessageBox(my_ui.mainWindow, e.what(), "Error");
+	}
 }
 
 void Example::setupUi(void) {

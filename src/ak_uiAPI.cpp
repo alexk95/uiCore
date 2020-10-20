@@ -1937,6 +1937,21 @@ void ak::uiAPI::itm::setText(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setText()"); }
 }
 
+void ak::uiAPI::itm::setText(
+	ak::UID												_objectUid,
+	ak::ID												_parentId,
+	ak::ID												_itemId,
+	const QString &										_text
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_setText(_objectUid, _parentId, _itemId, _text);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setText(parent)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setText(parent)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setText(parent)"); }
+}
+
 void ak::uiAPI::itm::setIcon(
 	ak::UID												_objectUid,
 	ak::ID												_itemId,
@@ -1964,6 +1979,37 @@ void ak::uiAPI::itm::setIcon(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setIcon()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setIcon()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setIcon()"); }
+}
+
+void ak::uiAPI::itm::setIcon(
+	ak::UID												_objectUid,
+	ak::ID												_parentId,
+	ak::ID												_itemId,
+	const QIcon &										_icon
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_setIcon(_objectUid, _parentId, _itemId, _icon);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setIcon(parent, QIcon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setIcon(parent, QIcon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setIcon(parent, QIcon)"); }
+}
+
+void ak::uiAPI::itm::setIcon(
+	ak::UID												_objectUid,
+	ak::ID												_parentId,
+	ak::ID												_itemId,
+	const QString &										_iconName,
+	const QString &										_iconSize
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_setIcon(_objectUid, _parentId, _itemId, _iconName, _iconSize);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setIcon(parent)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setIcon(parent)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setIcon(parent)"); }
 }
 
 void ak::uiAPI::itm::setEnabled(
@@ -2036,6 +2082,20 @@ QString ak::uiAPI::itm::getText(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getText()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getText()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getText()"); }
+}
+
+QString ak::uiAPI::itm::getText(
+	ak::UID												_objectUid,
+	ak::ID												_parentId,
+	ak::ID												_itemId
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_getText(_objectUid, _parentId, _itemId);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getText(parent)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getText(parent)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getText(parent)"); }
 }
 
 ak::core::valueType ak::uiAPI::itm::getValueType(

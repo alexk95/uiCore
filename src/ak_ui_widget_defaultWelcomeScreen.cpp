@@ -246,6 +246,74 @@ ak::ID ak::ui::widget::defaultWelcomeScreen::addItem(
 	}
 }
 
+void ak::ui::widget::defaultWelcomeScreen::clear(void) {
+	if (my_recents.List != nullptr) { my_recents.List->Clear(); }
+	if (my_open.List != nullptr) { my_open.List->Clear(); }
+	if (my_new.List != nullptr) { my_new.List->Clear(); }
+}
+
+void ak::ui::widget::defaultWelcomeScreen::clear(
+	ak::ID							_group
+) {
+	switch (_group)
+	{
+	case MY_ID_RECENTS: if (my_recents.List != nullptr) { my_recents.List->Clear(); } break;
+	case MY_ID_OPEN: if (my_open.List != nullptr) { my_open.List->Clear(); } break;
+	case MY_ID_NEW: if (my_new.List != nullptr) { my_new.List->Clear(); } break;
+	default:
+		assert(0); // Invalid group provided
+		break;
+	}
+}
+
+QString ak::ui::widget::defaultWelcomeScreen::itemText(
+	ak::ID							_group,
+	ak::ID							_item
+) {
+	switch (_group)
+	{
+	case MY_ID_RECENTS: assert(my_recents.List != nullptr); return my_recents.List->itemText(_item); break;
+	case MY_ID_OPEN: assert(my_open.List != nullptr); return my_open.List->itemText(_item); break;
+	case MY_ID_NEW: assert(my_new.List != nullptr); return my_new.List->itemText(_item); break;
+	default:
+		assert(0); // Invalid group provided
+		break;
+	}
+	return "";
+}
+
+void ak::ui::widget::defaultWelcomeScreen::setItemText(
+	ak::ID							_group,
+	ak::ID							_item,
+	const QString &					_text
+) {
+	switch (_group)
+	{
+	case MY_ID_RECENTS: assert(my_recents.List != nullptr); my_recents.List->setItemText(_item, _text); break;
+	case MY_ID_OPEN: assert(my_open.List != nullptr); my_open.List->setItemText(_item, _text); break;
+	case MY_ID_NEW: assert(my_new.List != nullptr); my_new.List->setItemText(_item, _text); break;
+	default:
+		assert(0); // Invalid group provided
+		break;
+	}
+}
+
+void ak::ui::widget::defaultWelcomeScreen::setItemIcon(
+	ak::ID							_group,
+	ak::ID							_item,
+	const QIcon &					_icon
+) {
+	switch (_group)
+	{
+	case MY_ID_RECENTS: assert(my_recents.List != nullptr); my_recents.List->setItemIcon(_item, _icon); break;
+	case MY_ID_OPEN: assert(my_open.List != nullptr); my_open.List->setItemIcon(_item, _icon); break;
+	case MY_ID_NEW: assert(my_new.List != nullptr); my_new.List->setItemIcon(_item, _icon); break;
+	default:
+		assert(0); // Invalid group provided
+		break;
+	}
+}
+
 // #############################################################################################################
 
 				// Event handling

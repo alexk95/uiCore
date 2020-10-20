@@ -18,6 +18,8 @@
 
 // Qt header
 #include <qlistwidget.h>			// base class (list, listItem)
+#include <qstring.h>
+#include <qicon.h>
 
 // C++ header
 #include <map>
@@ -87,6 +89,28 @@ namespace ak {
 
 				listItem * Item(
 					const QString &					_text
+				);
+
+				listItem * Item(
+					ak::ID							_id
+				);
+
+				QString itemText(
+					ak::ID							_id
+				);
+
+				void setItemText(
+					ak::ID							_id,
+					const QString &					_text
+				);
+
+				void setItemIcon(
+					ak::ID							_id,
+					const QIcon &					_icon
+				);
+
+				void removeItem(
+					ak::ID							_id
 				);
 
 				//QString itemText

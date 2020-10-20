@@ -101,7 +101,48 @@ ak::ui::qt::listItem * ak::ui::qt::list::Item(
 	return nullptr;
 }
 
-void ak::ui::qt::list::Clear() { clear(); memFree(); }
+ak::ui::qt::listItem * ak::ui::qt::list::Item(
+	ak::ID							_id
+) {
+	my_itemsIterator itm = my_items.find(_id);
+	assert(itm != my_items.end()); // Invalid item id provided
+	assert(itm->second != nullptr);	// nullptr stored
+	return itm->second;
+}
+
+QString ak::ui::qt::list::itemText(
+	ak::ID							_id
+) {
+	listItem * itm = Item(_id);
+	return itm->text();
+}
+
+void ak::ui::qt::list::setItemText(
+	ak::ID							_id,
+	const QString &					_text
+) {
+	listItem * itm = Item(_id);
+	itm->setText(_text);
+}
+
+void ak::ui::qt::list::setItemIcon(
+	ak::ID							_id,
+	const QIcon &					_icon
+) {
+	listItem * itm = Item(_id);
+	itm->setIcon(_icon);
+}
+
+void ak::ui::qt::list::removeItem(
+	ak::ID							_id
+) {
+	listItem * itm = Item(_id);
+	removeItemWidget(itm);
+	delete itm;
+	my_items.erase(_id);
+}
+
+void ak::ui::qt::list::Clear() { clear(); my_currentId = ak::invalidID; memFree(); }
 
 void ak::ui::qt::list::setVerticalScrollbarAlwaysVisible(
 	bool							_vis

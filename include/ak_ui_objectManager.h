@@ -664,9 +664,16 @@ namespace ak {
 
 			//! @brief Will clear the items of the provided object
 			//! @param _objectUid The UID of the object to clear its items
-			//! @throw ak::Exception if the provided object UID is invalid
 			void obj_clear(
 				ak::UID												_objectUid
+			);
+
+			//! @brief Will clear the items of the provided object
+			//! @param _objectUid The UID of the object to clear its items
+			//! @param _parentId The ID of the parent item or the group
+			void obj_clear(
+				ak::UID												_objectUid,
+				ak::ID												_parentId
 			);
 
 			//! @brief Will delete all provided items from the provided object
@@ -861,7 +868,7 @@ namespace ak {
 
 			//! @brief Will set the text of the specified item
 			//! @param _objectUid The UID of the object
-			//! @param _tab The item to set the text at
+			//! @param _itemId The item to set the text at
 			//! @param _text The text to set
 			//! @throw ak::Exception if the specified UID or ID is invalid
 			void itm_setText(
@@ -870,9 +877,22 @@ namespace ak {
 				const QString &										_text
 			);
 
+			//! @brief Will set the text of the specified item at the specified parent item or group
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item or group
+			//! @param _itemId The item to set the text at
+			//! @param _text The text to set
+			//! @throw ak::Exception if the specified UID or ID is invalid
+			void itm_setText(
+				ak::UID												_objectUid,
+				ak::ID												_parentId,
+				ak::ID												_itemId,
+				const QString &										_text
+			);
+
 			//! @brief Will set the icon of the specified item
 			//! @param _objectUid The UID of the object
-			//! @param _tab The item to set the icon at
+			//! @param _itemId The item to set the icon at
 			//! @param _icon The icon to set
 			void itm_setIcon(
 				ak::UID												_objectUid,
@@ -882,11 +902,37 @@ namespace ak {
 
 			//! @brief Will set the icon of the specified item
 			//! @param _objectUid The UID of the object
-			//! @param _tab The item to set the icon at
+			//! @param _itemId The item to set the icon at
 			//! @param _iconName The name of the icon to set
 			//! @param _iconSize The size of the icon to set
 			void itm_setIcon(
 				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				const QString &										_iconName,
+				const QString &										_iconSize
+			);
+
+			//! @brief Will set the icon of the specified item
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item or group
+			//! @param _itemId The item to set the icon at
+			//! @param _icon The icon to set
+			void itm_setIcon(
+				ak::UID												_objectUid,
+				ak::ID												_parentId,
+				ak::ID												_itemId,
+				const QIcon &										_icon
+			);
+
+			//! @brief Will set the icon of the specified item
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item or group
+			//! @param _itemId The item to set the icon at
+			//! @param _iconName The name of the icon to set
+			//! @param _iconSize The size of the icon to set
+			void itm_setIcon(
+				ak::UID												_objectUid,
+				ak::ID												_parentId,
 				ak::ID												_itemId,
 				const QString &										_iconName,
 				const QString &										_iconSize
@@ -945,6 +991,16 @@ namespace ak {
 			//! @param _itemId The ID of the item to get the text of
 			QString itm_getText(
 				ak::UID												_objectUid,
+				ak::ID												_itemId
+			);
+
+			//! @brief Will return the text of the specified item at the specified object with the specified parent item or group
+			//! @param _objectUid The UID of the object
+			//! @param _parentId The ID of the parent item or group
+			//! @param _itemId The ID of the item to get the text of
+			QString itm_getText(
+				ak::UID												_objectUid,
+				ak::ID												_parentId,
 				ak::ID												_itemId
 			);
 

@@ -86,6 +86,32 @@ namespace ak {
 					const QString &					_text
 				);
 
+				//! @brief Will remove all items from all groups
+				void clear(void);
+
+				//! @brief Will remove all items from the specified group
+				//! @param _group The group to remove all items from
+				void clear(
+					ak::ID							_group
+				);
+
+				QString itemText(
+					ak::ID							_group,
+					ak::ID							_item
+				);
+
+				void setItemText(
+					ak::ID							_group,
+					ak::ID							_item,
+					const QString &					_text
+				);
+
+				void setItemIcon(
+					ak::ID							_group,
+					ak::ID							_item,
+					const QIcon &					_icon
+				);
+
 				// #############################################################################################################
 
 				// Event handling
