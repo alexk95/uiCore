@@ -859,6 +859,28 @@ namespace ak {
 				const QString &										_text
 			);
 
+			//! @brief Will set the icon of the specified item
+			//! @param _objectUid The UID of the object
+			//! @param _tab The item to set the icon at
+			//! @param _icon The icon to set
+			void itm_setIcon(
+				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				const QIcon &										_icon
+			);
+
+			//! @brief Will set the icon of the specified item
+			//! @param _objectUid The UID of the object
+			//! @param _tab The item to set the icon at
+			//! @param _iconName The name of the icon to set
+			//! @param _iconSize The size of the icon to set
+			void itm_setIcon(
+				ak::UID												_objectUid,
+				ak::ID												_itemId,
+				const QString &										_iconName,
+				const QString &										_iconSize
+			);
+
 			//! @brief Will set the enabled state of the specified item at the specified object
 			//! @param _objectUid The UID of the object
 			//! @param _itemId The ID of the item

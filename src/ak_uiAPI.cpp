@@ -1947,6 +1947,35 @@ void ak::uiAPI::itm::setText(
 	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setText()"); }
 }
 
+void ak::uiAPI::itm::setIcon(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	const QIcon &										_icon
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_setIcon(_objectUid, _itemId, _icon);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setIcon(QIcon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setIcon(QIcon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setIcon(QIcon)"); }
+}
+
+void ak::uiAPI::itm::setIcon(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	const QString &										_iconName,
+	const QString &										_iconSize
+) {
+	try {
+		ak::ui::objectManager * oM = my_apiManager.objectManager();
+		return oM->itm_setIcon(_objectUid, _itemId, _iconName, _iconSize);
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setIcon()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setIcon()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setIcon()"); }
+}
+
 void ak::uiAPI::itm::setEnabled(
 	ak::UID												_objectUid,
 	ak::ID												_itemId,

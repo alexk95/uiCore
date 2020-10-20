@@ -372,21 +372,30 @@ void Example::defaultData(void) {
 	//			---	C2A
 
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "A|A1|A1A");
-	ak::uiAPI::obj::createItem(my_ui.treeWidget, "A|A1|A1B");
+	
+	ak::ID i = ak::uiAPI::obj::createItem(my_ui.treeWidget, "A|A1|A1B");
+	ak::uiAPI::itm::setIcon(my_ui.treeWidget, i, "Test", "32");
+	
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "A|A1|A1C");
 
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "A|A2|A2A");
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "A|A2|A2B");
 
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "A|A3|A3A");
-	ak::uiAPI::obj::createItem(my_ui.treeWidget, "A|A3|A3B");
+	
+	i = ak::uiAPI::obj::createItem(my_ui.treeWidget, "A|A3|A3B");
+	ak::uiAPI::itm::setIcon(my_ui.treeWidget, i, "Sun", "32");
+
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "A|A3|A3C");
 
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "B|B1|B1A");
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "B|B1|B1B");
 
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "B|B2|B2A");
-	ak::uiAPI::obj::createItem(my_ui.treeWidget, "B|B2|B2B");
+	
+	i = ak::uiAPI::obj::createItem(my_ui.treeWidget, "B|B2|B2B");
+	ak::uiAPI::itm::setIcon(my_ui.treeWidget, i, "Moon", "32");
+
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "B|B2|B2C");
 
 	ak::uiAPI::obj::createItem(my_ui.treeWidget, "C|C1|C1A");

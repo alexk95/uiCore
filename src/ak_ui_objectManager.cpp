@@ -3015,7 +3015,7 @@ void ak::ui::objectManager::itm_setText(
 	try {
 		// Get object
 		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
-		if (obj == my_mapObjects.end()) { throw ak::Exception("Invalid UID", "Check object UID"); }
+		assert(obj != my_mapObjects.end()); // Invalid object ID
 		switch (obj->second->objectType())
 		{
 		case ak::ui::core::objectType::oTree:
@@ -3023,8 +3023,7 @@ void ak::ui::objectManager::itm_setText(
 			// Cast tree
 			ak::ui::widget::tree * t = nullptr;
 			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
-			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tree"); }
-
+			assert(t != nullptr); // Cast failed
 			t->setItemText(_itemId, _text);
 		}
 		break;
@@ -3033,17 +3032,76 @@ void ak::ui::objectManager::itm_setText(
 			// Cast tree
 			ak::ui::widget::tabView * t = nullptr;
 			t = dynamic_cast<ak::ui::widget::tabView *>(obj->second);
-			if (t == nullptr) { throw ak::Exception("Cast failed", "Cast tab view"); }
+			assert(t != nullptr); // Cast failed
 			t->setTabText(_itemId, _text);
 		}
 		break;
 		default:
-			throw ak::Exception("Invalid object type", "Check object type");
+			assert(0); // Invalid object type
 		}
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_setText()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_setText()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_setText()"); }
+}
+
+void ak::ui::objectManager::itm_setIcon(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	const QIcon &										_icon
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		assert(obj != my_mapObjects.end()); // Invalid object ID
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast tree
+			ak::ui::widget::tree * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
+			assert(t != nullptr); // Cast failed
+			t->setItemIcon(_itemId, _icon);
+		}
+		break;
+		default:
+			assert(0); // Invalid object type
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_setIcon(QIcon)"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_setIcon(QIcon)"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_setIcon(QIcon)"); }
+}
+
+void ak::ui::objectManager::itm_setIcon(
+	ak::UID												_objectUid,
+	ak::ID												_itemId,
+	const QString &										_iconName,
+	const QString &										_iconSize
+) {
+	try {
+		// Get object
+		my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+		assert(obj != my_mapObjects.end()); // Invalid object ID
+		switch (obj->second->objectType())
+		{
+		case ak::ui::core::objectType::oTree:
+		{
+			// Cast tree
+			ak::ui::widget::tree * t = nullptr;
+			t = dynamic_cast<ak::ui::widget::tree *>(obj->second);
+			assert(t != nullptr); // Cast failed
+			t->setItemIcon(_itemId, *my_iconManager->icon(_iconName, _iconSize));
+		}
+		break;
+		default:
+			assert(0); // Invalid object type
+		}
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::objectManager::itm_setIcon()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::objectManager::itm_setIcon()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::objectManager::itm_setIcon()"); }
 }
 
 void ak::ui::objectManager::itm_setEnabled(

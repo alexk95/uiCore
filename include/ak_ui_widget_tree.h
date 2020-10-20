@@ -181,10 +181,17 @@ namespace ak {
 				//! @brief Will set the item text of the specified item
 				//! @param _itemId The ID of the item to set the text at
 				//! @param _text The text to set
-				//! @throw ak::Exception if the item does not exist
 				void setItemText(
 					ak::ID							_itemId,
 					const QString &					_text
+				);
+
+				//! @brief Will set the item icon of the specified item
+				//! @param _itemId The ID of the item to set the icon at
+				//! @param _icon The icon to set
+				void setItemIcon(
+					ak::ID							_itemId,
+					const QIcon &					_icon
 				);
 
 				// ###########################################################################################################################################

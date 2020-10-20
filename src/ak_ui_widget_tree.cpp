@@ -351,8 +351,17 @@ void ak::ui::widget::tree::setItemText(
 	const QString &					_text
 ) {
 	my_itemsIterator itm = my_items.find(_itemId);
-	if (itm == my_items.end()) { throw ak::Exception("Item index is invalid", "ak::ui::widget::tree::setItemText()"); }
+	assert(itm != my_items.end()); // Invalid item ID
 	itm->second->setText(0, _text);
+}
+
+void  ak::ui::widget::tree::setItemIcon(
+	ak::ID							_itemId,
+	const QIcon &					_icon
+) {
+	my_itemsIterator itm = my_items.find(_itemId);
+	assert(itm != my_items.end()); // Invalid item ID
+	itm->second->setIcon(0, _icon);
 }
 
 // ###########################################################################################################################################
