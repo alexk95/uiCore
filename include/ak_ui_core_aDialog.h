@@ -14,16 +14,17 @@
 #pragma once
 
 // AK header
-#include <ak_ui_core.h>		// dialogResult type
+#include <ak_globalDataTypes.h>	// API type
+#include <ak_ui_core.h>			// dialogResult type
 
 // Qt header
-#include <qdialog.h>
+#include <qdialog.h>			// Base class
 
 namespace ak {
 	namespace ui {
 		namespace core {
 
-			class aDialog : public QDialog {
+			class UICORE_API aDialog : public QDialog {
 				Q_OBJECT
 			public:
 				//! @brief Constructor
