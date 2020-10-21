@@ -13,16 +13,14 @@
 
 #include <ak_ui_core_aDialog.h>		// corresponding header
 
+#include <qwidget.h>
+
 ak::ui::core::aDialog::aDialog(
 	QWidget *					_parent
 )	: QDialog(_parent), my_result(ui::core::resultNone)
-{
+{}
 
-}
-
-ak::ui::core::aDialog::~aDialog() {
-
-}
+ak::ui::core::aDialog::~aDialog() {}
 
 void ak::ui::core::aDialog::setResult(
 	ui::core::dialogResult		_result

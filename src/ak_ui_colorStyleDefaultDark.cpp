@@ -113,6 +113,18 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 			break;
 
 		// ######################################################################################################
+
+		// Dock
+		case ak::ui::colorStyle::styleableObject::sDialog:
+		{
+			out.append("QDialog{"
+				_fore _backWindow
+				"}\n");
+			break;
+		}
+		break;
+
+		// ######################################################################################################
 		
 		// Dock
 		case ak::ui::colorStyle::styleableObject::sDock:

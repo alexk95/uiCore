@@ -20,9 +20,7 @@
 #include <qtoolbutton.h>				// ToolButtonPopupMode
 
 // AK header
-#include <ak_ui_core_aPaintable.h>			// base class
-
-#include <ak_globalDataTypes.h>
+#include <ak_ui_core_aPaintable.h>		// base class
 
 class QWidget;
 

@@ -1904,7 +1904,7 @@ void ak::ui::objectManager::obj_setEnabled(
 			ak::ui::widget::colorEditButton * o = nullptr;
 			o = dynamic_cast<ak::ui::widget::colorEditButton *>(obj->second);
 			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast color edit button"); }
-			o->setEnabled(_enabled);
+			o->SetEnabled(_enabled);
 		}
 		break;
 		case ak::ui::core::objectType::oComboBox:
@@ -2030,7 +2030,7 @@ void ak::ui::objectManager::obj_setVisible(
 			ak::ui::widget::colorEditButton * o = nullptr;
 			o = dynamic_cast<ak::ui::widget::colorEditButton *>(obj->second);
 			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast color edit button"); }
-			o->setVisible(_visible);
+			o->SetVisible(_visible);
 		}
 		break;
 		case ak::ui::core::objectType::oComboBox:
@@ -2738,7 +2738,7 @@ bool ak::ui::objectManager::obj_getEnabled(
 			ak::ui::widget::colorEditButton * o = nullptr;
 			o = dynamic_cast<ak::ui::widget::colorEditButton *>(obj->second);
 			if (o == nullptr) { throw ak::Exception("Cast failed", "Cast color edit button"); }
-			return o->enabled();
+			return o->Enabled();
 		}
 		break;
 		case ak::ui::core::objectType::oComboButton:

@@ -20,12 +20,14 @@
 // Qt header
 #include <qdialog.h>			// Base class
 
+// Forward declaration
+class QWidget;
+
 namespace ak {
 	namespace ui {
 		namespace core {
 
 			class UICORE_API aDialog : public QDialog {
-				Q_OBJECT
 			public:
 				//! @brief Constructor
 				//! @param _parent The parent widget

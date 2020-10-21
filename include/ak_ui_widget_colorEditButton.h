@@ -8,12 +8,12 @@
  *	This file is part of the uiCore project.
  *	This file is subject to the terms and conditions defined in
  *	file 'LICENSE', which is part of this source code package.
- *	See license at: https://github.com/alexk95/uiCore
  */
 
 #pragma once
 
 // Qt header
+#include <qobject.h>						// base class
 #include <qstring.h>
 
 // AK header
@@ -26,27 +26,25 @@
 // Forward declaration
 class QHBoxLayout;
 class QWidget;
-class QGraphicsView;
 
 namespace ak {
 
 	// Forward declaration
 	class messenger;
-	class notifierColorEditButton;
 	class uidManager;
 	
 	namespace ui {
 
 		// Forward declaration
 		class objectManager;
-		class signalLinker;
 		class iconManager;
 		class colorStyle;
-		namespace qt { class pushButton; }
+		namespace qt { class pushButton; class graphicsView; }
 
 		namespace widget {
 			
-			class colorEditButton : public ak::ui::core::aWidgetManager {
+			class colorEditButton : public QObject, public ak::ui::core::aWidgetManager {
+				Q_OBJECT
 			public:
 
 				colorEditButton(
@@ -80,17 +78,17 @@ namespace ak {
 				);
 
 				//! @brief Will set the enabled state of this colorEditButton
-				void setEnabled(
+				void SetEnabled(
 					bool						_enabled = true
 				);
 
 				//! @brief Will set the visible state of this colorEditButton
-				void setVisible(
+				void SetVisible(
 					bool						_visible = true
 				);
 
 				//! @brief Will return the enabled state of this colorEditButton
-				bool enabled() const;
+				bool Enabled() const;
 
 				//! @brief Returns the currently set color
 				ak::ui::color color(void) const;
@@ -101,30 +99,18 @@ namespace ak {
 					const QString &				_text
 				);
 
-				//! @brief Will perform actions for the provided widget event
-				//! @param _sender The sender of the event
-				//! @param _eventType The type of the event
-				//! @param _info1 Additional information 1
-				//! @param _info2 Additional information 2
-				void widgetEvent(
-					ak::UID						_sender,
-					ak::core::eventType			_eventType,
-					int							_info1 = 0,
-					int							_info2 = 0
-				);
+			private slots:
+				void slotButtonClicked();
 
 			private:
 
-				QGraphicsView *					my_view;					//! Graphics view required to display the color
+				ui::qt::graphicsView *			my_view;					//! Graphics view required to display the color
 				ak::ui::qt::pushButton *		my_button;					//! The button to change the color
 				QHBoxLayout *					my_layout;					//! The layout used to place the widgets
-				QWidget *						my_widget;					//! The central widget of the color edit button
 
-				ak::messenger *					my_externalMessenger;		//! The external messenger used to send notifications
-				ak::uidManager *				my_externalUidManager;		//! The external UID manager
-				ak::notifierColorEditButton *	my_notifier;				//! The notifier used for the internal messaging system
 				ak::ui::color					my_color;					//! The currently set color
-				ui::signalLinker *				my_signalLinker;			//! Signal linker used to conenct the pushbutton callback
+				
+				QWidget *						my_widget;
 
 				//! Block default constructor
 				colorEditButton() = delete;

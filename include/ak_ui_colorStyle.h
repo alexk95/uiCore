@@ -37,6 +37,7 @@ namespace ak {
 				sCheckBox,
 				sComboBox,
 				sComboButton,
+				sDialog,
 				sDock,
 				sLabel,
 				sLineEdit,

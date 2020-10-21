@@ -23,8 +23,6 @@
 
 #include <rapidjson/document.h>		// RJSON document
 
-#include <ak_globalDataTypes.h>
-
 // Forward declaration
 class QKeyEvent;
 
