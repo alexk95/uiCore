@@ -12,6 +12,8 @@
 #include <ak_exception.h>		// Error handling
 #include <ak_uiAPI.h>			// uiAPI
 #include <ak_ui_core.h>			// dockLocation type
+#include <ak_ui_colorStyle.h>
+#include <propertyGrid.h>
 
 #include <qstring.h>
 #include <qsettings.h>
@@ -62,9 +64,9 @@ Example::Example()
 	if (result == ak::ui::core::resultOk) {
 		setupUi();
 		
-		my_tester = ak::uiAPI::createTimer(my_uid);
-		ak::uiAPI::registerUidNotifier(my_tester, my_notifier);
-		ak::uiAPI::obj::shoot(my_tester, 0);
+		my_timerRestoreSettings = ak::uiAPI::createTimer(my_uid);
+		ak::uiAPI::registerUidNotifier(my_timerRestoreSettings, my_notifier);
+		ak::uiAPI::obj::shoot(my_timerRestoreSettings, 0);
 		
 		ak::uiAPI::obj::showMaximized(my_ui.mainWindow);
 		
@@ -202,7 +204,7 @@ void Example::eventCallback(
 				msg.append("\"; }");
 				ak::uiAPI::obj::appendText(my_ui.outputWidget, msg);
 			}
-			else if (_sender == my_tester && _eventType == ak::core::eventType::eTimeout) {
+			else if (_sender == my_timerRestoreSettings && _eventType == ak::core::eventType::eTimeout) {
 				// Load last settings
 				QSettings settings("AK", "uiCoreExample");
 				QString lastConfigString = settings.value("UI.Config", "").toString();
@@ -211,8 +213,8 @@ void Example::eventCallback(
 
 					ak::uiAPI::setupSettings(s.c_str());
 
-					QString currentColorStyleName = ak::uiAPI::getCurrentColorStyleName();
-					if (currentColorStyleName == "Default" || currentColorStyleName == "") {
+					const ak::ui::colorStyle * currentColorStyle = ak::uiAPI::getCurrentColorStyle();
+					if (currentColorStyle->getColorStyleName() == "Default" || currentColorStyle->getColorStyleName() == "") {
 						ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Dark);
 						ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
 					}
@@ -220,6 +222,8 @@ void Example::eventCallback(
 						ak::uiAPI::obj::setText(my_ui.ttb_aColorStyle, TXT_Bright);
 						ak::uiAPI::obj::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
 					}
+
+					my_testWidget->setColorStyle(currentColorStyle);
 
 				}
 			}
@@ -232,6 +236,8 @@ void Example::eventCallback(
 		ak::uiAPI::special::showMessageBox(my_ui.mainWindow, e.what(), "Error");
 	}
 }
+
+#include <propertyGrid.h>
 
 void Example::setupUi(void) {
 	// Create default UI
@@ -283,8 +289,36 @@ void Example::setupUi(void) {
 			ak::uiAPI::obj::setAlias(my_ui.dockTree, "Dock.Tree");
 			
 			// Set widgets to docks
+			my_testWidget = new propertyGrid();
+
+			// Create groups
+			my_testWidget->addGroup("Test group");
+			my_testWidget->addGroup("Test group 2");
+			my_testWidget->addGroup("Test group 3");
+
+			// Add items to default group
+			my_testWidget->addItem("Groupless item 1", "Tester1");
+			my_testWidget->addItem("Groupless item 2", "Tester2");
+			
+			// Add items to group 1
+			my_testWidget->addItem("Test group", "Test1", "Tester1");
+			my_testWidget->addItem("Test group", "Test2", "Tester2");
+			my_testWidget->addItem("Test group", "Test3", "Tester3");
+
+			// Add items to group 2
+			my_testWidget->addItem("Test group 2", "Test11", "Tester11");
+			my_testWidget->addItem("Test group 2", "Test22", "Tester22");
+			my_testWidget->addItem("Test group 2", "Test33", "Tester33");
+
+			// Add items to group 3
+			my_testWidget->addItem("Test group 3", "Test111", "Tester111");
+			my_testWidget->addItem("Test group 3", "Test222", "Tester222");
+			my_testWidget->addItem("Test group 3", "Test333", "Tester333");
+
+
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockOutput, my_ui.outputWidget);
-			ak::uiAPI::obj::setCentralWidget(my_ui.dockProperties, my_ui.propertiesWidget);
+			ak::uiAPI::obj::setCentralWidget(my_ui.dockProperties, my_testWidget->widget());
+			//ak::uiAPI::obj::setCentralWidget(my_ui.dockProperties, my_ui.propertiesWidget);
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockTester, my_ui.tester);
 			ak::uiAPI::obj::setCentralWidget(my_ui.dockTree, my_ui.treeWidget);
 

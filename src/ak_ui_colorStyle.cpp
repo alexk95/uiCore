@@ -30,6 +30,10 @@ ak::ui::color ak::ui::colorStyle::getControlsFocusedColor(void) const { return m
 
 ak::ui::color ak::ui::colorStyle::getControlsPressedColor(void) const { return my_controlsPressedColor; }
 
+ak::ui::color ak::ui::colorStyle::getAlternateForeColor(void) const { return my_alternateForeColor; }
+
+ak::ui::color ak::ui::colorStyle::getAlternateBackColor(void) const { return my_alternateBackColor; }
+
 void ak::ui::colorStyle::setWindowMainForecolor(
 	const ak::ui::color &		_color
 ) { my_windowMainForecolor = _color; }
