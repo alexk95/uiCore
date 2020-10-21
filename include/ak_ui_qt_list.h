@@ -2,7 +2,6 @@
  * ak_ui_qt_list.h
  *
  *  Created on: October 13, 2020
- *	Last modified on: October 13, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
  *	This file is part of the uiCore component.

@@ -2,7 +2,6 @@
  * ak_ui_qt_lineEdit.h
  *
  *  Created on: March 10, 2020
- *	Last modified on: September 07, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
  *	This file is part of the uiCore component.

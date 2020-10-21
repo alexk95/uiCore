@@ -2,16 +2,15 @@
  * ak_ui_ttb_subgroup.h
  *
  *  Created on: August 05, 2020
- 	Last modified on: August 27, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
- *	This file is part of the uiCore project.
+ *	This file is part of the uiCore component.
  *	This file is subject to the terms and conditions defined in
  *	file 'LICENSE', which is part of this source code package.
- *	See license at: https://github.com/alexk95/uiCore
  *
  *	This class is using a modified version of the "Qt TabToolbar" library.
- *	The changes to the library are listed in the documentation.
+ *	The changes to the library are listed in the documentation which was
+ *	provided with this source code package.
  */
 
 #pragma once

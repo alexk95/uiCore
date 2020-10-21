@@ -2,10 +2,9 @@
  * ak_ui_widget_colorEditButton.h
  *
  *  Created on: August 05, 2020
- *	Last modified on: September 07, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
- *	This file is part of the uiCore project.
+ *	This file is part of the uiCore component.
  *	This file is subject to the terms and conditions defined in
  *	file 'LICENSE', which is part of this source code package.
  */
