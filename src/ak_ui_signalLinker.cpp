@@ -18,15 +18,15 @@
 // AK qt header
 #include <ak_ui_qt_action.h>
 #include <ak_ui_qt_checkBox.h>
+#include <ak_ui_qt_colorEditButton.h>
+#include <ak_ui_qt_comboBox.h>
+#include <ak_ui_qt_comboButton.h>
 #include <ak_ui_qt_dock.h>
 #include <ak_ui_qt_lineEdit.h>
 #include <ak_ui_qt_pushButton.h>
 #include <ak_ui_qt_table.h>
 #include <ak_ui_qt_textEdit.h>
-#include <ak_ui_qt_comboBox.h>
-#include <ak_ui_qt_comboButton.h>
 #include <ak_ui_qt_timer.h>
-#include <ak_ui_qt_tree.h>
 
 // Qt header
 #include <qmessagebox.h>			// QMessageBox
@@ -70,6 +70,9 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+			break;
+		case ak::ui::core::objectType::oColorEditButton:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(changed()), this, SLOT(slotChanged()));
 			break;
 		case ak::ui::core::objectType::oComboBox:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(activated(int)), this, SLOT(slotIndexActivated(int)));
@@ -133,202 +136,163 @@ ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::action *								_object,
 	ak::UID												_objectUid
 ) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oAction });
-		_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
-		_object->connect(_object, SIGNAL(triggered()), this, SLOT(slotClicked()));
-		_object->connect(_object, SIGNAL(hovered()), this, SLOT(slotFocused()));
-		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::action)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::action)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::action)"); }
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oAction });
+	_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
+	_object->connect(_object, SIGNAL(triggered()), this, SLOT(slotClicked()));
+	_object->connect(_object, SIGNAL(hovered()), this, SLOT(slotFocused()));
+	_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+	return _objectUid;
 }
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::checkBox *								_object,
 	ak::UID												_objectUid
 ) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oCheckBox });
-		_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-		_object->connect(_object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
-		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::checkBox)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::checkBox)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::checkBox)"); }
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oCheckBox });
+	_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
+	_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+	_object->connect(_object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
+	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	return _objectUid;
+}
+
+ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::colorEditButton *						_object,
+	ak::UID												_objectUid
+) {
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oColorEditButton });
+	_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
+	return _objectUid;
 }
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::comboBox *								_object,
 	ak::UID												_objectUid
 ) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oComboBox });
-		_object->connect(_object, SIGNAL(activated(int)), this, SLOT(slotIndexActivated(int)));
-		_object->connect(_object, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged(int)));
-		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboBox)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::comboBox)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::comboBox)"); }
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oComboBox });
+	_object->connect(_object, SIGNAL(activated(int)), this, SLOT(slotIndexActivated(int)));
+	_object->connect(_object, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged(int)));
+	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	return _objectUid;
 }
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::comboButton *							_object,
 	ak::UID												_objectUid
 ) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oComboButton });
-		_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-		_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
-		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oComboButton });
+	_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
+	_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+	_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
+	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	return _objectUid;
 }
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::lineEdit *								_object,
 	ak::UID												_objectUid
 ) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oLineEdit });
-		_object->connect(_object, SIGNAL(cursorPositionChanged(int,int)), this, SLOT(slotCursorPositionChanged()));
-		_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-		_object->connect(_object, SIGNAL(textChanged(const QString &)), this, SLOT(slotChanged()));
-		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::lineEdit)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::lineEdit)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::lineEdit)"); }
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oLineEdit });
+	_object->connect(_object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged()));
+	_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+	_object->connect(_object, SIGNAL(textChanged(const QString &)), this, SLOT(slotChanged()));
+	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	return _objectUid;
 }
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::dock *									_object,
 	ak::UID												_objectUid
 ) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oDock });
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::comboButton)"); }
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oDock });
+	return _objectUid;
 }
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::pushButton *							_object,
 	ak::UID												_objectUid
 ) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oPushButton });
-		_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-		_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::pushButton)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::pushButton)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::pushButton)"); }
-}
-
-ak::UID ak::ui::signalLinker::addLink(
-	ak::ui::qt::timer *									_object,
-	ak::UID												_objectUid
-) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTimer });
-		_object->connect(_object, SIGNAL(timeout()), this, SLOT(slotTimeout()));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::timer)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::timer)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::timer)"); }
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oPushButton });
+	_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
+	_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	return _objectUid;
 }
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::table *									_object,
 	ak::UID												_objectUid
 ) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTable });
-		_object->connect(_object, SIGNAL(cellActivated(int, int)), this, SLOT(tableCellActivated(int, int)));
-		_object->connect(_object, SIGNAL(cellChanged(int, int)), this, SLOT(tableCellChanged(int, int)));
-		_object->connect(_object, SIGNAL(cellClicked(int, int)), this, SLOT(tableCellClicked(int, int)));
-		_object->connect(_object, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(tableCellDoubleClicked(int, int)));
-		_object->connect(_object, SIGNAL(cellEntered(int, int)), this, SLOT(tableCellEntered(int, int)));
-		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::table)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::table)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::table)"); }
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTable });
+	_object->connect(_object, SIGNAL(cellActivated(int, int)), this, SLOT(tableCellActivated(int, int)));
+	_object->connect(_object, SIGNAL(cellChanged(int, int)), this, SLOT(tableCellChanged(int, int)));
+	_object->connect(_object, SIGNAL(cellClicked(int, int)), this, SLOT(tableCellClicked(int, int)));
+	_object->connect(_object, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(tableCellDoubleClicked(int, int)));
+	_object->connect(_object, SIGNAL(cellEntered(int, int)), this, SLOT(tableCellEntered(int, int)));
+	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	return _objectUid;
 }
 
 ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::textEdit *								_object,
 	ak::UID												_objectUid
 ) {
-	try {
-		if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-		if (my_objects.count(_objectUid) > 0) { throw ak::Exception("Object with the provided uid already exists", "Check UID"); }
-		_object->setUid(_objectUid);
-		my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTextEdit });
-		_object->connect(_object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
-		_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-		_object->connect(_object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
-		_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-		_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-		return _objectUid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::signalLinker::addLink(ak::ui::qt::textEdit)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::signalLinker::addLink(ak::ui::qt::textEdit)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::signalLinker::addLink(ak::ui::qt::textEdit)"); }
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTextEdit });
+	_object->connect(_object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
+	_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+	_object->connect(_object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
+	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	return _objectUid;
 }
 
+ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::timer *									_object,
+	ak::UID												_objectUid
+) {
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTimer });
+	_object->connect(_object, SIGNAL(timeout()), this, SLOT(slotTimeout()));
+	return _objectUid;
+}
 
 // ###################################################################################
 
@@ -341,14 +305,6 @@ void ak::ui::signalLinker::slotChanged() {
 	obj = dynamic_cast<ak::ui::core::aObject *>(sender());
 	assert(obj != nullptr); // Cast failed
 	raiseEventProtected(obj->uid(), ak::core::eventType::eChanged, 0, 0);
-	if (obj->objectType() == ak::ui::core::objectType::oTextEdit) {
-		// Cast text edit
-		ak::ui::qt::textEdit * txt = nullptr;
-		txt = dynamic_cast<ak::ui::qt::textEdit *>(obj);
-		assert(txt != nullptr); // Cast failed
-		// Perform action
-		txt->performAutoScrollToBottom();
-	}
 }
 
 void ak::ui::signalLinker::slotClicked() {

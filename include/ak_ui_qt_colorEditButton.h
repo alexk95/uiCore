@@ -38,17 +38,16 @@ namespace ak {
 		class objectManager;
 		class iconManager;
 		class colorStyle;
-		namespace qt { class pushButton; class graphicsView; }
 
-		namespace widget {
+		namespace qt {
 			
-			class colorEditButton : public QObject, public ak::ui::core::aWidgetManager {
+			class pushButton; class graphicsView;
+
+			class colorEditButton : public QObject, public ak::ui::core::aWidget {
 				Q_OBJECT
 			public:
 
 				colorEditButton(
-					ak::messenger *				_messenger,
-					ak::uidManager *			_uidManager,
 					const ak::ui::color &		_color,
 					const QString &				_textOverride = QString(""),
 					ak::ui::colorStyle *		_colorStyle = nullptr
@@ -97,6 +96,9 @@ namespace ak {
 				void overrideText(
 					const QString &				_text
 				);
+
+			signals:
+				void changed(void);
 
 			private slots:
 				void slotButtonClicked();

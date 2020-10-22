@@ -18,11 +18,20 @@
 #include <qscrollbar.h>
 
 ak::ui::qt::textEdit::textEdit(QWidget * _parent)
-: QTextEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(false) {}
+: QTextEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(false)
+{
+	connect(this, SIGNAL(textChanged()), this, SLOT(slotChanged()));
+}
 ak::ui::qt::textEdit::textEdit(const QString & _text, QWidget * _parent)
-: QTextEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(false) {}
+: QTextEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(false)
+{
+	connect(this, SIGNAL(textChanged()), this, SLOT(slotChanged()));
+}
 
-ak::ui::qt::textEdit::~textEdit() {}
+ak::ui::qt::textEdit::~textEdit()
+{
+	disconnect(this, SIGNAL(textChanged()), this, SLOT(slotChanged()));
+}
 
 // #######################################################################################################
 // Event handling
@@ -34,6 +43,10 @@ void ak::ui::qt::textEdit::keyPressEvent(QKeyEvent *_event)
 
 void ak::ui::qt::textEdit::keyReleaseEvent(QKeyEvent *_event) {
 	QTextEdit::keyReleaseEvent(_event); emit keyReleased(_event);
+}
+
+void ak::ui::qt::textEdit::slotChanged() {
+	performAutoScrollToBottom();
 }
 
 // #######################################################################################################

@@ -10,7 +10,7 @@
  */
 
 // AK header
-#include <ak_ui_widget_colorEditButton.h>	// corresponding class
+#include <ak_ui_qt_colorEditButton.h>	// corresponding class
 #include <ak_exception.h>					// error handling
 #include <ak_messenger.h>					// messenger
 #include <ak_ui_colorStyle.h>				// colorStyle
@@ -22,22 +22,18 @@
 #include <qlayout.h>						// QHBoxLayout
 #include <qcolordialog.h>					// QColorDialog
 
-ak::ui::widget::colorEditButton::colorEditButton(
-	ak::messenger *								_messenger,
-	ak::uidManager *							_uidManager,
+ak::ui::qt::colorEditButton::colorEditButton(
 	const ak::ui::color &						_color,
 	const QString &								_textOverride,
 	ak::ui::colorStyle *						_colorStyle
 )
-	: ak::ui::core::aWidgetManager(ak::ui::core::objectType::oColorEditButton, _messenger, _uidManager),
+	: ak::ui::core::aWidget(ak::ui::core::objectType::oColorEditButton),
 	my_button(nullptr),
 	my_layout(nullptr),
 	my_view(nullptr)
 {
 	try {
 		// Check arguments
-		assert(_messenger != nullptr); // Is nullptr
-		assert(_uidManager != nullptr); // Is nullptr
 
 		my_widget = new QWidget();
 		my_widget->setContentsMargins(QMargins(0, 0, 0, 0));
@@ -71,24 +67,20 @@ ak::ui::widget::colorEditButton::colorEditButton(
 		connect(my_button, SIGNAL(clicked()), this, SLOT(slotButtonClicked()));
 
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::colorEditButton::colorEditButton()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::colorEditButton::colorEditButton()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::colorEditButton::colorEditButton()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::qt::colorEditButton::colorEditButton()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::qt::colorEditButton::colorEditButton()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::colorEditButton::colorEditButton()"); }
 }
 
-ak::ui::widget::colorEditButton::~colorEditButton() {
-	aWidgetManager::memFree();
-
+ak::ui::qt::colorEditButton::~colorEditButton() {
 	if (my_button != nullptr) { delete my_button; my_button = nullptr; }
 	if (my_layout != nullptr) { delete my_layout; my_layout = nullptr; }
 	if (my_view != nullptr) { delete my_view; my_view = nullptr; }
-
-	if (my_messenger != nullptr) { my_messenger->sendMessage(my_uid, ak::core::eventType::eDestroyed); }
 }
 
-QWidget * ak::ui::widget::colorEditButton::widget(void) { return my_widget; }
+QWidget * ak::ui::qt::colorEditButton::widget(void) { return my_widget; }
 
-void ak::ui::widget::colorEditButton::setColorStyle(
+void ak::ui::qt::colorEditButton::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
 	try {
@@ -96,14 +88,14 @@ void ak::ui::widget::colorEditButton::setColorStyle(
 		my_colorStyle = _colorStyle;
 		my_button->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sPushButton));
 	} 
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::colorEditButton::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::colorEditButton::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::colorEditButton::setColorStyle()"); }
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::qt::colorEditButton::setColorStyle()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::qt::colorEditButton::setColorStyle()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::colorEditButton::setColorStyle()"); }
 }
 
 // #############################################################################################################################
 
-void ak::ui::widget::colorEditButton::setColor(
+void ak::ui::qt::colorEditButton::setColor(
 	const ak::ui::color &							_color
 ) {
 	my_color = _color;
@@ -111,31 +103,31 @@ void ak::ui::widget::colorEditButton::setColor(
 	my_button->setText(my_color.toRGBString(","));
 }
 
-void ak::ui::widget::colorEditButton::SetEnabled(
+void ak::ui::qt::colorEditButton::SetEnabled(
 	bool											_enabled
 ) { my_button->setEnabled(_enabled); }
 
-void ak::ui::widget::colorEditButton::SetVisible(
+void ak::ui::qt::colorEditButton::SetVisible(
 	bool											_visible
 ) { my_button->setVisible(_visible); }
 
-bool ak::ui::widget::colorEditButton::Enabled() const { return my_button->isEnabled(); }
+bool ak::ui::qt::colorEditButton::Enabled() const { return my_button->isEnabled(); }
 
-ak::ui::color ak::ui::widget::colorEditButton::color(void) const { return my_color; }
+ak::ui::color ak::ui::qt::colorEditButton::color(void) const { return my_color; }
 
-void ak::ui::widget::colorEditButton::overrideText(
+void ak::ui::qt::colorEditButton::overrideText(
 	const QString &								_text
 ) {
 	my_button->setText(_text);
 }
 
-void ak::ui::widget::colorEditButton::slotButtonClicked() {
+void ak::ui::qt::colorEditButton::slotButtonClicked() {
 	// Show color dialog
 	QColor c = QColorDialog::getColor(my_color.toQColor());
 	ak::ui::color newColor(c);
 	if (newColor != my_color) {
 		setColor(newColor);
 		// Send changed message
-		my_messenger->sendMessage(my_uid, ak::core::eventType::eChanged);
+		emit changed();
 	}
 }

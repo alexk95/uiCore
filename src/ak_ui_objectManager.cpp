@@ -35,6 +35,7 @@
 // AK Qt objects
 #include <ak_ui_qt_action.h>				// action
 #include <ak_ui_qt_checkBox.h>				// checkBox
+#include <ak_ui_qt_colorEditButton.h>		// colorEditButton
 #include <ak_ui_qt_comboBox.h>				// comboBox
 #include <ak_ui_qt_comboButton.h>			// comboButton
 #include <ak_ui_qt_dock.h>					// dock
@@ -44,7 +45,6 @@
 
 // AK widget objects
 #include <ak_ui_widget_propertyGrid.h>		// propertyGrid
-#include <ak_ui_widget_colorEditButton.h>	// colorEditButton
 #include <ak_ui_widget_defaultWelcomeScreen.h>
 #include <ak_ui_widget_propertyGridItem.h>	// propertyGridItem
 #include <ak_ui_widget_table.h>				// table
@@ -146,9 +146,10 @@ ak::UID ak::ui::objectManager::createColorEditButton(
 	const QString &										_textOverride
 ) {
 	// Create object
-	ak::ui::widget::colorEditButton * obj = new ak::ui::widget::colorEditButton(my_messenger, my_uidManager, _color, _textOverride);
+	qt::colorEditButton * obj = new qt::colorEditButton(_color, _textOverride);
 	// Set parameter
 	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
+	my_signalLinker->addLink(obj);
 	// Store data
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
 	addCreatedUid(_creatorUid, obj->uid());
@@ -687,8 +688,8 @@ void ak::ui::objectManager::obj_setText(
 	case ak::ui::core::objectType::oColorEditButton:
 	{
 		// Cast object
-		ak::ui::widget::colorEditButton * obj = nullptr;
-		obj = dynamic_cast<ak::ui::widget::colorEditButton *>(itm->second);
+		ak::ui::qt::colorEditButton * obj = nullptr;
+		obj = dynamic_cast<ak::ui::qt::colorEditButton *>(itm->second);
 		assert(obj != nullptr); // Cast failed
 		obj->overrideText(_text);
 	}
@@ -898,8 +899,8 @@ void ak::ui::objectManager::obj_setColor(
 	case ak::ui::core::objectType::oColorEditButton:
 	{
 		// Cast object
-		ak::ui::widget::colorEditButton * obj = nullptr;
-		obj = dynamic_cast<ak::ui::widget::colorEditButton *>(itm->second);
+		qt::colorEditButton * obj = nullptr;
+		obj = dynamic_cast<qt::colorEditButton *>(itm->second);
 		assert(obj != nullptr); // Cast failed
 		obj->setColor(_color);
 	}
@@ -1535,8 +1536,8 @@ void ak::ui::objectManager::obj_setEnabled(
 	case ak::ui::core::objectType::oColorEditButton:
 	{
 		// Cast object
-		ak::ui::widget::colorEditButton * o = nullptr;
-		o = dynamic_cast<ak::ui::widget::colorEditButton *>(obj->second);
+		qt::colorEditButton * o = nullptr;
+		o = dynamic_cast<qt::colorEditButton *>(obj->second);
 		assert(o != nullptr); // Cast failed
 		o->SetEnabled(_enabled);
 	}
@@ -1656,8 +1657,8 @@ void ak::ui::objectManager::obj_setVisible(
 	case ak::ui::core::objectType::oColorEditButton:
 	{
 		// Cast object
-		ak::ui::widget::colorEditButton * o = nullptr;
-		o = dynamic_cast<ak::ui::widget::colorEditButton *>(obj->second);
+		qt::colorEditButton * o = nullptr;
+		o = dynamic_cast<qt::colorEditButton *>(obj->second);
 		assert(o != nullptr); // Cast failed
 		o->SetVisible(_visible);
 	}
@@ -2066,8 +2067,8 @@ QString ak::ui::objectManager::obj_getText(
 	case ak::ui::core::objectType::oColorEditButton:
 	{
 		// Cast object
-		ak::ui::widget::colorEditButton * obj = nullptr;
-		obj = dynamic_cast<ak::ui::widget::colorEditButton *>(itm->second);
+		qt::colorEditButton * obj = nullptr;
+		obj = dynamic_cast<qt::colorEditButton *>(itm->second);
 		assert(obj != nullptr); // Cast failed
 		return obj->color().toRGBString(".");
 	}
@@ -2185,8 +2186,8 @@ ak::ui::color ak::ui::objectManager::obj_getColor(
 	case ak::ui::core::objectType::oColorEditButton:
 	{
 		// Cast object
-		ak::ui::widget::colorEditButton * obj = nullptr;
-		obj = dynamic_cast<ak::ui::widget::colorEditButton *>(itm->second);
+		qt::colorEditButton * obj = nullptr;
+		obj = dynamic_cast<qt::colorEditButton *>(itm->second);
 		assert(obj != nullptr); // Cast failed
 		return obj->color();
 	}
@@ -2266,8 +2267,8 @@ bool ak::ui::objectManager::obj_getEnabled(
 	case ak::ui::core::objectType::oColorEditButton:
 	{
 		// Cast object
-		ak::ui::widget::colorEditButton * o = nullptr;
-		o = dynamic_cast<ak::ui::widget::colorEditButton *>(obj->second);
+		qt::colorEditButton * o = nullptr;
+		o = dynamic_cast<qt::colorEditButton *>(obj->second);
 		assert(o != nullptr); // Cast failed
 		return o->Enabled();
 	}

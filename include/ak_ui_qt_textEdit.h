@@ -90,6 +90,9 @@ namespace ak {
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);
 
+			private slots:
+				void slotChanged();
+
 			private:
 				bool							my_autoScrollToBottom;		//! If true, the textbox will automatically scroll down on text change
 				

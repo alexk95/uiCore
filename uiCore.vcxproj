@@ -149,7 +149,7 @@
     <ClInclude Include="include\ak_ui_ttb_page.h" />
     <ClInclude Include="include\ak_ui_ttb_subgroup.h" />
     <QtMoc Include="include\ak_ui_uiManager.h" />
-    <QtMoc Include="include\ak_ui_widget_colorEditButton.h" />
+    <QtMoc Include="include\ak_ui_qt_colorEditButton.h" />
     <QtMoc Include="include\ak_ui_widget_defaultWelcomeScreen.h" />
     <ClInclude Include="include\ak_ui_widget_propertyGrid.h" />
     <ClInclude Include="include\ak_ui_widget_propertyGridItem.h" />
@@ -228,7 +228,7 @@
     <ClCompile Include="src\ak_ui_ttb_subgroup.cpp" />
     <ClCompile Include="src\ak_ui_uiManager.cpp" />
     <ClCompile Include="src\ak_ui_uiManagerTimerSignalLinker.cpp" />
-    <ClCompile Include="src\ak_ui_widget_colorEditButton.cpp" />
+    <ClCompile Include="src\ak_ui_qt_colorEditButton.cpp" />
     <ClCompile Include="src\ak_ui_widget_defaultWelcomeScreen.cpp" />
     <ClCompile Include="src\ak_ui_widget_propertyGrid.cpp" />
     <ClCompile Include="src\ak_ui_widget_propertyGridItem.cpp" />

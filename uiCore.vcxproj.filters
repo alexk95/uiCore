@@ -254,8 +254,8 @@
     <QtMoc Include="include\ak_ui_qt_graphicsView.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
-    <QtMoc Include="include\ak_ui_widget_colorEditButton.h">
-      <Filter>Header Files\ak\ui\widget</Filter>
+    <QtMoc Include="include\ak_ui_qt_colorEditButton.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -355,9 +355,6 @@
     <ClCompile Include="src\ak_ui_qt_treeItem.cpp">
       <Filter>Source Files\ak\ui\qt</Filter>
     </ClCompile>
-    <ClCompile Include="src\ak_ui_widget_colorEditButton.cpp">
-      <Filter>Source Files\ak\ui\widget</Filter>
-    </ClCompile>
     <ClCompile Include="src\ak_ui_widget_propertyGrid.cpp">
       <Filter>Source Files\ak\ui\widget</Filter>
     </ClCompile>
@@ -440,6 +437,9 @@
       <Filter>Source Files\ak\ui\qt</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_ui_qt_graphicsView.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_colorEditButton.cpp">
       <Filter>Source Files\ak\ui\qt</Filter>
     </ClCompile>
   </ItemGroup>

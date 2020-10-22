@@ -25,7 +25,7 @@
 #include <ak_ui_qt_checkBox.h>
 #include <ak_ui_qt_comboButton.h>
 
-#include <ak_ui_widget_colorEditButton.h>
+#include <ak_ui_qt_colorEditButton.h>
 
 // Qt header
 #include <qcolordialog.h>					// QColorDialog
@@ -365,10 +365,10 @@ void ak::ui::widget::propertyGrid::createItem(
 		my_table->setCellSelectable(my_table->rowCount() - 1, 1, false);
 
 		// Add item
-		ui::widget::colorEditButton * nObj = nullptr;
-		if (_isMultipleValues) { nObj = new ui::widget::colorEditButton(my_messenger, my_uidManager, _value, "..."); }
-		else { nObj = new ui::widget::colorEditButton(my_messenger, my_uidManager, _value); }
-		nObj->setUid(my_uidManager->getId());
+		ui::qt::colorEditButton * nObj = nullptr;
+		if (_isMultipleValues) { nObj = new ui::qt::colorEditButton(_value, "..."); }
+		else { nObj = new ui::qt::colorEditButton(_value); }
+		my_signalLinker->addLink(nObj);
 		my_table->setCellWidget(nObj->widget(), my_table->rowCount() -1, 1);
 		my_messenger->registerUidReceiver(nObj->uid(), my_internalNotifier);	
 
@@ -816,8 +816,8 @@ void ak::ui::widget::propertyGrid::raiseWidgetEvent(
 				if (ptItm->isMultivalued()) { ptItm->setIsMultivalued(false); }
 
 				// Cast actual object
-				ak::ui::widget::colorEditButton * actualObject = nullptr;
-				actualObject = dynamic_cast<ak::ui::widget::colorEditButton *>(ptItm->widget());
+				qt::colorEditButton * actualObject = nullptr;
+				actualObject = dynamic_cast<qt::colorEditButton *>(ptItm->widget());
 				assert(actualObject != nullptr);
 
 				// Save changes
