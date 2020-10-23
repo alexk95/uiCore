@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 	// Initialize the API. This function call is mandatory,
 	// otherwise the API will not be able to create objects.
 	// The initialization will create all core objects required for the API to work
-	uiAPI::ini(true);
+	uiAPI::ini();
 
 	// Create the main class that is managing the functions of the UI
 	Example e;

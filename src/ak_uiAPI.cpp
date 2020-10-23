@@ -9,44 +9,61 @@
  *	file 'LICENSE', which is part of this source code package.
  */
 
-// AK header
+// AK main header
 #include <ak_uiAPI.h>						// corresponding header
 #include <ak_messenger.h>					// messenger
 #include <ak_ui_objectManager.h>			// objectManager
 #include <ak_notifierStaticEvent.h>			// notifierStaticEvent
 #include <ak_notifier.h>					// notifier
 #include <ak_exception.h>					// error handling
+
+// AK specialized header
 #include <ak_ui_colorStyle.h>				// colorStyle
 #include <ak_ui_iconManager.h>				// iconManager
 #include <ak_ui_uiManager.h>				// uiManager
 #include <ak_uidMangager.h>					// UID manager
 #include <ak_singletonAllowedMessages.h>	// allowed messages
+
+// AK object and widgets
+#include <ak_ui_core_aObject.h>
+#include <ak_ui_core_aWidget.h>
+#include <ak_ui_core_aRestorable.h>
+#include <ak_ui_core_ttbContainer.h>
+#include <ak_ui_qt_action.h>
+#include <ak_ui_qt_dock.h>					// dock
+#include <ak_ui_widget_tree.h>				// tree
+#include <ak_ui_widget_propertyGrid.h>		// propertyGrid
+#include <ak_ui_qt_textEdit.h>
+#include <ak_ui_widget_welcomeScreen.h>
+#include <ak_ui_widget_tabView.h>
 #include <ak_file.h>						// file
 #include <ak_ui_dialog_prompt.h>			// prompt dialog
+#include <ak_ui_dialog_logIn.h>
+#include <ak_ui_qt_timer.h>
 
 // Qt header
-#include <qapplication.h>					// QApplication
 #include <qsurfaceformat.h>					// QSurfaceFormat
 #include <qfiledialog.h>					// Open/Save file dialog
 #include <qfile.h>
 
-static ak::uiAPI::apiManager					my_apiManager;					//! The API manager
+static ak::uiAPI::apiManager		my_apiManager;					//! The API manager
+static ak::ui::objectManager *		my_objManager = nullptr;					//! The object manager used in this API
+static ak::messenger *				my_messenger = nullptr;					//! The messenger used in this API
+static ak::uidManager *				my_uidManager = nullptr;					//! The UID manager used in this API
+static ak::ui::iconManager *		my_iconManager = nullptr;					//! The icon manager used in this API
 
 ak::uiAPI::apiManager::apiManager()
-	: my_iconManager(nullptr),
-	my_iconManagerIsExtern(false),
-	my_messenger(nullptr),
+	: my_iconManagerIsExtern(false),
 	my_messengerIsExtern(false),
-	my_objManager(nullptr),
 	my_objManagerIsExtern(false),
-	my_uidManager(nullptr),
 	my_uidManagerIsExtern(false),
 	my_isInitialized(false),
-	my_app(nullptr),
 	my_appIsRunning(false),
 	my_defaultSurfaceFormat(nullptr),
-	my_fileUidManager(nullptr)
+	my_fileUidManager(nullptr),
+	my_app(nullptr)
 {
+	my_app = new ui::application();
 	ak::singletonAllowedMessages::instance();
 	my_fileUidManager = new ak::uidManager();
 }
@@ -83,173 +100,53 @@ ak::uiAPI::apiManager::~apiManager() {
 }
 
 void ak::uiAPI::apiManager::ini(
-	bool												_createQApplication,
-	int													_argc,
-	char **												_argv,
 	ak::messenger *										_messenger,
 	ak::uidManager *									_uidManager,
 	ak::ui::iconManager *								_iconManager,
 	ak::ui::objectManager *								_objectManager
 ) {
-	try {
-		assert(!my_isInitialized); // Is already initialized
-
-		// QApplication
-		if (_createQApplication) {
-			my_app = new QApplication(_argc, _argv);
-			assert(my_app != nullptr); // Failed to create
-		}
-
-		// messenger
-		if (_messenger == nullptr) {
-			my_messenger = new ak::messenger();
-			assert(my_messenger != nullptr); // Failed to create
-		}
-		else { my_messenger = _messenger; my_messengerIsExtern = true; }
-
-		// uid manager
-		if (_uidManager == nullptr) {
-			my_uidManager = new ak::uidManager();
-			assert(my_uidManager != nullptr); // Failed to create
-		}
-		else { my_uidManager = _uidManager; my_uidManagerIsExtern = true; }
-
-		// icon manager
-		if (_iconManager == nullptr) {
-			my_iconManager = new ak::ui::iconManager(QString(""));
-			assert(my_iconManager != nullptr); // Failed to create
-		}
-		else { my_iconManager = _iconManager; my_iconManagerIsExtern = true; }
-
-		// object manager
-		if (_objectManager == nullptr) {
-			my_objManager = new ak::ui::objectManager(my_messenger, my_uidManager, my_iconManager);
-			assert(my_objManager != nullptr); // Failed to create
-		}
-		else {
-			assert(my_messengerIsExtern);	// Internal messenger cannot be used with external objectManager
-			assert(my_uidManagerIsExtern);	// Internal uidManager cannot be used with external objectManager
-			my_objManager = _objectManager;
-		}
-
-		my_isInitialized = true;
+	assert(!my_isInitialized); // Is already initialized
+	
+	// messenger
+	if (_messenger == nullptr) {
+		my_messenger = new ak::messenger();
+		assert(my_messenger != nullptr); // Failed to create
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::ini()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::ini()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::ini()"); }
+	else { my_messenger = _messenger; my_messengerIsExtern = true; }
+
+	// uid manager
+	if (_uidManager == nullptr) {
+		my_uidManager = new ak::uidManager();
+		assert(my_uidManager != nullptr); // Failed to create
+	}
+	else { my_uidManager = _uidManager; my_uidManagerIsExtern = true; }
+
+	// icon manager
+	if (_iconManager == nullptr) {
+		my_iconManager = new ak::ui::iconManager(QString(""));
+		assert(my_iconManager != nullptr); // Failed to create
+	}
+	else { my_iconManager = _iconManager; my_iconManagerIsExtern = true; }
+
+	// object manager
+	if (_objectManager == nullptr) {
+		my_objManager = new ak::ui::objectManager(my_messenger, my_uidManager);
+		assert(my_objManager != nullptr); // Failed to create
+	}
+	else {
+		assert(my_messengerIsExtern);	// Internal messenger cannot be used with external objectManager
+		assert(my_uidManagerIsExtern);	// Internal uidManager cannot be used with external objectManager
+		my_objManager = _objectManager;
+	}
+
+	my_isInitialized = true;
 }
 
 bool ak::uiAPI::apiManager::isInitialized(void) const { return my_isInitialized; }
 
-void ak::uiAPI::apiManager::addColorStyle(
-	ak::ui::colorStyle *								_colorStyle,
-	bool												_activate
-) {
-	try {
-		assert(my_isInitialized); // Not initialized
-		my_objManager->addColorStyle(_colorStyle, _activate);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::addColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::addColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::addColorStyle()"); }
-}
-
-void ak::uiAPI::apiManager::setColorStyle(
-	const QString &				_colorStyleName
-) {
-	try {
-		assert(my_isInitialized); // Not initialized
-		my_objManager->setColorStyle(_colorStyleName);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::setColorStyle()"); }
-}
-
-void ak::uiAPI::apiManager::setDarkColorStyle(void) {
-	try {
-		assert(my_isInitialized); // Not initialized
-		my_objManager->setDefaultDarkColorStyle();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::setDarkColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::setDarkColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::setDarkColorStyle()"); }
-}
-
-void ak::uiAPI::apiManager::setDefaultColorStyle(void) {
-	try {
-		assert(my_isInitialized); // Not initialized
-		my_objManager->setDefaultColorStyle();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::setDefaultColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::setDefaultColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::setDefaultColorStyle()"); }
-}
-
-ak::messenger * ak::uiAPI::apiManager::messenger(void) const {
-	try {
-		assert(my_isInitialized); // API is not initialized
-		return my_messenger;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::messenger()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::messenger()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::messenger()"); }
-}
-
-ak::uidManager * ak::uiAPI::apiManager::uidManager(void) const {
-	try {
-		assert(my_isInitialized); // API is not initialized
-		return my_uidManager;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::uidManager()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::uidManager()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::uidManager()"); }
-}
-
-ak::ui::iconManager * ak::uiAPI::apiManager::iconManager(void) const {
-	try {
-		assert(my_isInitialized); // API is not initialized
-		return my_iconManager;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::iconManager()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::iconManager()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::iconManager()"); }
-}
-
-ak::ui::objectManager * ak::uiAPI::apiManager::objectManager(void) const {
-	try {
-		assert(my_isInitialized); // API is not initialized
-		return my_objManager;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::objectManager()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::objectManager()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::objectManager()"); }
-}
-
-ak::ui::colorStyle * ak::uiAPI::apiManager::currentColorStyle(void) const {
-	try {
-		assert(my_isInitialized); // API is not initialized
-		return my_objManager->getCurrentColorStyle();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::colorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::colorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::colorStyle()"); }
-}
-
-QString ak::uiAPI::apiManager::currentColorStyleName(void) const {
-	assert(my_isInitialized); // API is not initialized
-	return my_objManager->getCurrentColorStyleName();
-}
-
 int ak::uiAPI::apiManager::exec(void) {
-	try {
-		assert(my_app != nullptr); // App not created on initialization
-		assert(!my_appIsRunning); // App is already running
-		return my_app->exec();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::exec()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::exec()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::exec()"); }
+	assert(my_isInitialized);	// API not initialized
+	return my_app->exec();
 }
 
 QSurfaceFormat * ak::uiAPI::apiManager::getDefaultSurfaceFormat(void) {
@@ -260,52 +157,37 @@ QSurfaceFormat * ak::uiAPI::apiManager::getDefaultSurfaceFormat(void) {
 ak::file * ak::uiAPI::apiManager::getFile(
 	ak::UID												_fileUid
 ) {
-	try {
-		if (_fileUid == ak::invalidUID) {
-			ak::file * f = new ak::file();
-			f->setUid(my_fileUidManager->getId());
-			my_mapFiles.insert_or_assign(f->uid(), f);
-			return f;
-		}
-		else {
-			my_mapFilesIterator itm = my_mapFiles.find(_fileUid);
-			if (itm == my_mapFiles.end()) { throw ak::Exception("Invalid file UID", "Check file UID"); }
-			ak::file * f = itm->second;
-			return f;
-		}
+	if (_fileUid == ak::invalidUID) {
+		ak::file * f = new ak::file();
+		f->setUid(my_fileUidManager->getId());
+		my_mapFiles.insert_or_assign(f->uid(), f);
+		return f;
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::getFile()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::getFile()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::getFile()"); }
+	else {
+		my_mapFilesIterator itm = my_mapFiles.find(_fileUid);
+		assert(itm != my_mapFiles.end());	// Invalid file UID
+		ak::file * f = itm->second;
+		return f;
+	}
 }
 
 ak::file * ak::uiAPI::apiManager::getExistingFile(
 	ak::UID												_fileUid
 ) {
-	try {
-		my_mapFilesIterator itm = my_mapFiles.find(_fileUid);
-		if (itm == my_mapFiles.end()) { throw ak::Exception("Invalid file UID", "Check file UID"); }
-		ak::file * f = itm->second;
-		return f;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::getFile()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::getFile()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::getFile()"); }
+	my_mapFilesIterator itm = my_mapFiles.find(_fileUid);
+	assert(itm != my_mapFiles.end());	// Invalid file UID
+	ak::file * f = itm->second;
+	return f;
 }
 
 void ak::uiAPI::apiManager::deleteFile(
 	ak::UID												_fileUid
 ) {
-	try {
-		my_mapFilesIterator itm = my_mapFiles.find(_fileUid);
-		if (itm == my_mapFiles.end()) { throw ak::Exception("Invalid file UID", "Check file UID"); }
-		ak::file * f = itm->second;
-		delete f;
-		my_mapFiles.erase(_fileUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::apiManager::deleteFile()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::apiManager::deleteFile()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::apiManager::deleteFile()"); }
+	my_mapFilesIterator itm = my_mapFiles.find(_fileUid);
+	assert(itm != my_mapFiles.end());	// Invalid file UID
+	ak::file * f = itm->second;
+	delete f;
+	my_mapFiles.erase(_fileUid);
 }
 
 void ak::uiAPI::apiManager::deleteAllFiles() {
@@ -318,24 +200,13 @@ void ak::uiAPI::apiManager::deleteAllFiles() {
 // ###############################################################################################################################################
 
 void ak::uiAPI::ini(
-	bool												_createQApplication,
-	int													_argc,
-	char **												_argv,
 	ak::messenger *										_messenger,
 	ak::uidManager *									_uidManager,
 	ak::ui::iconManager *								_iconManager,
 	ak::ui::objectManager *								_objectManager
-) { my_apiManager.ini(_createQApplication, _argc, _argv, _messenger, _uidManager, _iconManager, _objectManager); }
+) { my_apiManager.ini(_messenger, _uidManager, _iconManager, _objectManager); }
 
-void ak::uiAPI::destroy(void) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->destroyAll();
-	}
-	catch (const ak::Exception &e) { throw ak::Exception(e, "ak::uiAPI::destroy()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::destroy()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::destroy()"); }
-}
+void ak::uiAPI::destroy(void) {	if (my_objManager != nullptr) { my_objManager->destroyAll(); } }
 
 void ak::uiAPI::enableEventTypes(
 	ak::core::eventType									_types
@@ -349,28 +220,17 @@ std::vector<ak::core::eventType> ak::uiAPI::enabledEventTypes(void) { return ak:
 
 std::vector<ak::core::eventType> ak::uiAPI::disabledEventTypes(void) { return ak::singletonAllowedMessages::instance()->disabledMessages(); }
 
-std::string ak::uiAPI::getSettingsJSON(void) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->getSettingsJSON();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getSettingsJSON()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getSettingsJSON()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getSettingsJSON()"); }
+std::string ak::uiAPI::saveState(void) {
+	assert(my_objManager != nullptr);	// API not initialized
+	return my_objManager->saveState();
 }
 
-void ak::uiAPI::setupSettings(
-	const char *										_json
+void ak::uiAPI::restoreState(
+	const std::string &									_json
 ) {
-	try {
-		if (_json == nullptr) { return; }
-		if (*_json == 0) { return; }
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->setupSettings(_json);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setupSettings()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setupSettings()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setupSettings()"); }
+	assert(my_objManager != nullptr); // Not initialized
+	if (_json.length() == 0) { return; }
+	my_objManager->restoreState(_json.c_str());
 }
 
 // ###############################################################################################################################################
@@ -379,41 +239,23 @@ ak::UID ak::uiAPI::registerUidNotifier(
 	ak::UID												_senderUid,
 	ak::notifier *										_notifier
 ) {
-	try
-	{
-		// Check UID status
-		return my_apiManager.messenger()->registerUidReceiver(_senderUid, _notifier);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::registerUidNotifier()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::registerUidNotifier()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::registerUidNotifier()"); }
+	assert(my_messenger != nullptr); // API not initialized
+	return my_messenger->registerUidReceiver(_senderUid, _notifier);
 }
 
 ak::UID ak::uiAPI::registerEventTypeNotifier(
 	ak::core::eventType									_event,
 	ak::notifier *										_notifier
 ) {
-	try
-	{
-		// Check UID status
-		return my_apiManager.messenger()->registerEventTypeReceiver(_event, _notifier);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::registerEventTypeNotifier()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::registerEventTypeNotifier()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::registerEventTypeNotifier()"); }
+	assert(my_messenger != nullptr); // API not initialized
+	return my_messenger->registerEventTypeReceiver(_event, _notifier);
 }
 
 ak::UID ak::uiAPI::registerAllMessagesNotifier(
 	ak::notifier *										_notifier
 ) {
-	try
-	{
-		// Check UID status
-		return my_apiManager.messenger()->registerNotifierForAllMessages(_notifier);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::registerAllMessagesNotifier()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::registerAllMessagesNotifier()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::registerAllMessagesNotifier()"); }
+	assert(my_messenger != nullptr); // API not initialized
+	return my_messenger->registerNotifierForAllMessages(_notifier);
 }
 
 void ak::uiAPI::sendMessage(
@@ -422,13 +264,8 @@ void ak::uiAPI::sendMessage(
 	int													_info1,
 	int													_info2
 ) {
-	try {
-		ak::messenger * m = my_apiManager.messenger();
-		m->sendMessage(_senderUid, _event, _info1, _info2);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::sendMessage()"); }
-	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::sendMessage()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::sendMessage()"); }
+	assert(my_messenger != nullptr); // API not initialized
+	return my_messenger->sendMessage(_senderUid, _event, _info1, _info2);
 }
 
 void ak::uiAPI::setSurfaceFormatDefaultSamplesCount(
@@ -441,27 +278,7 @@ void ak::uiAPI::setSurfaceFormatDefaultSamplesCount(
 
 // ###############################################################################################################################################
 
-ak::UID ak::uiAPI::createAction(
-	ak::UID												_creatorUid,
-	const char *										_text,
-	const char *										_iconName,
-	const char *										_iconSize
-) {
-	try {
-		if (_iconSize != nullptr && _iconName != nullptr) {
-			// Create icon from parameter
-			ak::ui::iconManager * iM =  my_apiManager.iconManager();
-			return createAction(_creatorUid, QString(_text), *iM->icon(QString(_iconName), QString(_iconSize)));
-		}
-		else {
-			// Create action without an icon
-			return createAction(_creatorUid, QString(_text), QIcon());
-		}
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createAction(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createAction(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createAction(char *)"); }
-}
+// Object creation
 
 ak::UID ak::uiAPI::createAction(
 	ak::UID												_creatorUid,
@@ -469,20 +286,9 @@ ak::UID ak::uiAPI::createAction(
 	const QString &										_iconName,
 	const QString &										_iconSize
 ) {
-	try {
-		if (_iconSize.length() > 0 && _iconName.length() > 0) {
-			// Create icon from parameter
-			ak::ui::iconManager * iM = my_apiManager.iconManager();
-			return createAction(_creatorUid, _text, *iM->icon(_iconName, _iconSize));
-		}
-		else {
-			// Create action without an icon
-			return createAction(_creatorUid, _text, QIcon());
-		}
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createAction(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createAction(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createAction(QString)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	return my_objManager->createAction(_creatorUid, _text, *my_iconManager->icon(_iconName, _iconSize));
 }
 
 ak::UID ak::uiAPI::createAction(
@@ -490,27 +296,8 @@ ak::UID ak::uiAPI::createAction(
 	const QString &										_text,
 	const QIcon &										_icon
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createAction(_creatorUid, _text, _icon);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createAction(QIcon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createAction(QIcon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createAction(QIcon)"); }
-}
-
-ak::UID ak::uiAPI::createCheckbox(
-	ak::UID												_creatorUid,
-	const char *										_text,
-	bool												_checked
-) {
-	try {
-		return createCheckbox(_creatorUid, QString(_text), _checked);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createCheckbox(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createCheckbox(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createCheckbox(char *)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createAction(_creatorUid, _text, _icon);
 }
 
 ak::UID ak::uiAPI::createCheckbox(
@@ -518,35 +305,8 @@ ak::UID ak::uiAPI::createCheckbox(
 	const QString &										_text,
 	bool												_checked
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		// Create and set checkbox
-		ak::UID uid = oM->createCheckBox(_creatorUid, _text);
-		oM->obj_setChecked(uid, _checked);
-		return uid;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createCheckbox(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createCheckbox(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createCheckbox(QString)"); }
-}
-
-ak::UID ak::uiAPI::createColorEditButton(
-	ak::UID												_creatorUid,
-	int													_r,
-	int													_g,
-	int													_b,
-	int													_a,
-	const char *										_textOverride
-) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createColorEditButton(_creatorUid, ak::ui::color(_r, _g, _b, _a), QString(_textOverride));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createColorEditButton(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createColorEditButton(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createColorEditButton(char *)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createCheckBox(_creatorUid, _text, _checked);
 }
 
 ak::UID ak::uiAPI::createColorEditButton(
@@ -557,14 +317,8 @@ ak::UID ak::uiAPI::createColorEditButton(
 	int													_a,
 	const QString &										_textOverride
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createColorEditButton(_creatorUid, ak::ui::color(_r, _g, _b, _a), _textOverride);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createColorEditButton(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createColorEditButton(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createColorEditButton(QString)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createColorEditButton(_creatorUid, ui::color(_r, _g, _b, _a), _textOverride);
 }
 
 ak::UID ak::uiAPI::createColorEditButton(
@@ -572,141 +326,39 @@ ak::UID ak::uiAPI::createColorEditButton(
 	const ak::ui::color &								_color,
 	const QString &										_textOverride
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createColorEditButton(_creatorUid, _color, _textOverride);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createColorEditButton(color)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createColorEditButton(color)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createColorEditButton(color)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createColorEditButton(_creatorUid, _color, _textOverride);
 }
 
 ak::UID ak::uiAPI::createComboBox(
 	ak::UID												_creatorUid
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createComboBox(_creatorUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createComboBox()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createComboBox()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createComboBox()"); }
-}
-
-ak::UID ak::uiAPI::createComboButton(
-	ak::UID												_creatorUid,
-	const char *										_text,
-	const std::vector<ak::ui::qt::comboButtonItem> &	_possibleSelection
-) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createComboButton(_creatorUid, QString(_text), _possibleSelection);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createComboButton()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createComboButton()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createComboButton()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createComboBox(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createComboButton(
 	ak::UID												_creatorUid,
 	const QString &										_text,
-	const std::vector<ak::ui::qt::comboButtonItem> &	_possibleSelection
+	const std::vector<QString> &						_possibleSelection
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createComboButton(_creatorUid, _text, _possibleSelection);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createComboButton()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createComboButton()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createComboButton()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createComboButton(_creatorUid, _text, _possibleSelection);
 }
 
-ak::UID ak::uiAPI::createComboButtonItem(
-	ak::UID												_creatorUid,
-	const char *										_text
-) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createComboButtonItem(_creatorUid, QString(_text));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createComboButtonItem(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createComboButtonItem(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createComboButtonItem(char *)"); }
-}
-
-ak::UID ak::uiAPI::createComboButtonItem(
-	ak::UID												_creatorUid,
-	const QString &										_text
-) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createComboButtonItem(_creatorUid, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createComboButtonItem(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createComboButtonItem(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createComboButtonItem(QString)"); }
-}
-
-ak::UID ak::uiAPI::createComboButtonItem(
-	ak::UID												_creatorUid,
-	const QIcon &										_icon,
-	const QString &										_text
-) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createComboButtonItem(_creatorUid, _icon, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createComboButtonItem(QIcon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createComboButtonItem(QIcon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createComboButtonItem(QIcon)"); }
-}
-
-ak::UID ak::uiAPI::createDefaultWelcomeScreen(
+ak::UID ak::uiAPI::createWelcomeScreen(
 	ak::UID												_creatorUid
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createDefaultWelcomeScreen(_creatorUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createDefaultWelcomeScreen()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createDefaultWelcomeScreen()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createDefaultWelcomeScreen()"); }
-}
-
-ak::UID ak::uiAPI::createDock(
-	ak::UID												_creatorUid,
-	const char *										_text
-) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createDock(_creatorUid, QString(_text));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createDock(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createDock(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createDock(char *)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createWelcomeScreen(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createDock(
 	ak::UID												_creatorUid,
 	const QString &										_text
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createDock(_creatorUid, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createDock(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createDock(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createDock(QString)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createDock(_creatorUid, _text);
 }
 
 ak::UID ak::uiAPI::createLogInDialog(
@@ -716,55 +368,24 @@ ak::UID ak::uiAPI::createLogInDialog(
 	const QString &										_username,
 	const QString &										_password
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createLogInDialog(_creatorUid, _showSavePassword, _imageName, _username, _password);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createLogInDialog(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createLogInDialog(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createLogInDialog(QString)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	return my_objManager->createLogInDialog(_creatorUid, _showSavePassword, *my_iconManager->pixmap(_imageName), _username, _password);
 }
 
 ak::UID ak::uiAPI::createPropertyGrid(
 	ak::UID												_creatorUid
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createPropertyGrid(_creatorUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createPropertyGrid()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createPropertyGrid()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createPropertyGrid()"); }
-}
-
-ak::UID ak::uiAPI::createPushButton(
-	ak::UID												_creatorUid,
-	const char *										_text
-) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createPushButton(_creatorUid, QString(_text));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createPushButton(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createPushButton(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createPushButton(char *)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createPropertyGrid(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createPushButton(
 	ak::UID												_creatorUid,
 	const QString &										_text
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createPushButton(_creatorUid, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createPushButton(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createPushButton(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createPushButton(QString)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createPushButton(_creatorUid, _text);
 }
 
 ak::UID ak::uiAPI::createPushButton(
@@ -772,14 +393,8 @@ ak::UID ak::uiAPI::createPushButton(
 	const QIcon &										_icon,
 	const QString &										_text
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createPushButton(_creatorUid, _icon, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createPushButton(QIcon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createPushButton(QIcon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createPushButton(QIcon)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createPushButton(_creatorUid, _icon, _text);
 }
 
 ak::UID ak::uiAPI::createTable(
@@ -787,29 +402,8 @@ ak::UID ak::uiAPI::createTable(
 	int													_rows,
 	int													_columns
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createTable(_creatorUid, _rows, _columns);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createTable()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createTable()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTable()"); }
-}
-
-ak::UID ak::uiAPI::createTabToolBarSubContainer(
-	ak::UID												_creatorUid,
-	ak::UID												_parentUid,
-	const char *										_text
-) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createTabToolBarSubContainer(_creatorUid, _parentUid, QString(_text));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createTabToolBarSubContainer(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createTabToolBarSubContainer(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTabToolBarSubContainer(char *)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createTable(_creatorUid, _rows, _columns);
 }
 
 ak::UID ak::uiAPI::createTabToolBarSubContainer(
@@ -817,1569 +411,202 @@ ak::UID ak::uiAPI::createTabToolBarSubContainer(
 	ak::UID												_parentUid,
 	const QString &										_text
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createTabToolBarSubContainer(_creatorUid, _parentUid, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createTabToolBarSubContainer(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createTabToolBarSubContainer(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTabToolBarSubContainer(QString)"); }
-}
-
-ak::UID ak::uiAPI::createTextEdit(
-	ak::UID												_creatorUid,
-	const char *										_initialText
-) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createTextEdit(_creatorUid, QString(_initialText));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createTextEdit(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createTextEdit(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTextEdit(char *)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createTabToolBarSubContainer(_creatorUid, _parentUid, _text);
 }
 
 ak::UID ak::uiAPI::createTextEdit(
 	ak::UID												_creatorUid,
 	const QString &										_initialText
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createTextEdit(_creatorUid, _initialText);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createTextEdit(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createTextEdit(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTextEdit(QString)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createTextEdit(_creatorUid, _initialText);
 }
 
 ak::UID ak::uiAPI::createTimer(
 	ak::UID												_creatorUid
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createTimer(_creatorUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createTimer()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createTimer()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTimer()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createTimer(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createTree(
 	ak::UID												_creatorUid
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createTree(_creatorUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createTree()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createTree()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTree()"); }
-}
-
-ak::UID ak::uiAPI::createUiManager(
-	ak::UID												_creatorUid
-) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createUiManager(_creatorUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createUiManager()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createUiManager()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createUiManager()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createTree(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createTabView(
 	ak::UID												_creatorUid
 ) {
-	try {
-		// Get manager
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->createTabView(_creatorUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createTabView()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createTabView()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createTabView()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createTabView(_creatorUid);
 }
+
+ak::UID ak::uiAPI::createWindow(
+	ak::UID												_creatorUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createWindow(_creatorUid);
+}
+
+// Object creation
 
 // ###############################################################################################################################################
 
-// object setter
+// Action
 
-void ak::uiAPI::obj::setAlias(
-	ak::UID												_objectUid,
-	const QString &										_alias
+void ak::uiAPI::action::setEnabled(
+	ak::UID												_actionUID,
+	bool												_enabled
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setAlias(_objectUid, _alias);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setAlias()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setAlias()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setAlias()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::action * actualAction = nullptr;
+	actualAction = dynamic_cast<ui::qt::action *>(my_objManager->object(_actionUID));
+	assert(actualAction != nullptr); // Invalid object type
+	actualAction->setEnabled(_enabled);
 }
 
-void ak::uiAPI::obj::addObjectToContainer(
-	ak::UID												_parentUid,
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addObjectToContainer(_parentUid, _objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addObjectToContainer()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addObjectToContainer()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addObjectToContainer()"); }
-}
-
-ak::ID ak::uiAPI::obj::addItem(
-	ak::UID												_objectUid,
-	ak::ID												_parentId,
+void ak::uiAPI::action::setText(
+	ak::UID												_actionUID,
 	const QString &										_text
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addItem(_objectUid, _parentId, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addItem()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addItem()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addItem()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::action * actualAction = nullptr;
+	actualAction = dynamic_cast<ui::qt::action *>(my_objManager->object(_actionUID));
+	assert(actualAction != nullptr); // Invalid object type
+	actualAction->setText(_text);
 }
 
-ak::ID ak::uiAPI::obj::addItem(
-	ak::UID												_objectUid,
-	ak::ID												_parentId,
-	const QString &										_text,
+void ak::uiAPI::action::setIcon(
+	ak::UID												_actionUID,
 	const QIcon &										_icon
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addItem(_objectUid, _parentId, _text, _icon);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addItem(QIcon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addItem(QIcon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addItem(QIcon)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::action * actualAction = nullptr;
+	actualAction = dynamic_cast<ui::qt::action *>(my_objManager->object(_actionUID));
+	assert(actualAction != nullptr); // Invalid object type
+	actualAction->setIcon(_icon);
 }
 
-ak::ID ak::uiAPI::obj::addItem(
-	ak::UID												_objectUid,
-	ak::ID												_parentId,
-	const QString &										_text,
+void ak::uiAPI::action::setIcon(
+	ak::UID												_actionUID,
 	const QString &										_iconName,
-	const QString &										_iconSize
+	const QString &										_iconFolder
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addItem(_objectUid, _parentId, _text, _iconName, _iconSize);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addItem(QString, QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addItem(QString, QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addItem(QString, QString)"); }
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::qt::action * actualAction = nullptr;
+	actualAction = dynamic_cast<ui::qt::action *>(my_objManager->object(_actionUID));
+	assert(actualAction != nullptr); // Invalid object type
+	actualAction->setIcon(*my_iconManager->icon(_iconName, _iconFolder));
 }
 
-void ak::uiAPI::obj::setCentralWidget(
-	ak::UID												_parentUid,
-	ak::UID												_objectUid
+QString ak::uiAPI::action::getText(
+	ak::UID												_actionUID
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setCentralWidget(_parentUid, _objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setCentralWidget(UID)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setCentralWidget(UID)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setCentralWidget(UID)"); }
-}	
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::action * actualAction = nullptr;
+	actualAction = dynamic_cast<ui::qt::action *>(my_objManager->object(_actionUID));
+	assert(actualAction != nullptr); // Invalid object type
+	return actualAction->text();
+}
 
-void ak::uiAPI::obj::setCentralWidget(
-	ak::UID												_parentUid,
+// Action
+
+// ###############################################################################################################################################
+
+// Container
+
+void ak::uiAPI::container::addObject(
+	ak::UID												_containerUID,
+	ak::UID												_objectUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::core::ttbContainer * actualContainer = nullptr;
+	actualContainer = dynamic_cast<ui::core::ttbContainer *>(my_objManager->object(_containerUID));
+	assert(actualContainer != nullptr); // Invalid object type
+	actualContainer->addChild(my_objManager->object(_objectUID));
+}
+
+// Container
+
+// ###############################################################################################################################################
+
+// Dock
+
+void ak::uiAPI::dock::setCentralWidget(
+	ak::UID												_dockUID,
+	ak::UID												_widgetUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	
+	ui::qt::dock * actualDock = nullptr;
+	actualDock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_dockUID));
+	assert(actualDock != nullptr); // Invalid object type
+
+	ui::core::aWidget * actualWidget = nullptr;
+	actualWidget = dynamic_cast<ui::core::aWidget *>(my_objManager->object(_widgetUID));
+	assert(actualWidget != nullptr); // Invalid object type
+	
+	actualDock->setWidget(actualWidget->widget());
+}
+
+void ak::uiAPI::dock::setCentralWidget(
+	ak::UID												_dockUID,
 	QWidget *											_widget
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setCentralWidget(_parentUid, _widget);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setCentralWidget(QWidget)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setCentralWidget(QWidget)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setCentralWidget(QWidget)"); }
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::qt::dock * actualDock = nullptr;
+	actualDock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_dockUID));
+	assert(actualDock != nullptr); // Invalid object type
+
+	actualDock->setWidget(_widget);
 }
 
-void ak::uiAPI::obj::setText(
-	ak::UID												_objectUid,
-	const char *										_text
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setText(_objectUid, QString(_text));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setText(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setText(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setText(char *)"); }
-}
-
-void ak::uiAPI::obj::setText(
-	ak::UID												_objectUid,
-	const QString &										_text
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setText(_objectUid, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setText(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setText(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setText(QString)"); }
-}
-
-void ak::uiAPI::obj::setChecked(
-	ak::UID												_objectUid,
-	bool												_checked
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setChecked(_objectUid, _checked);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setChecked()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setChecked()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setChecke()"); }
-}
-
-void ak::uiAPI::obj::setTristate(
-	ak::UID												_objectUid,
-	bool												_isTristate
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setTristate(_objectUid, _isTristate);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setTristate()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setTristate()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setTristate()"); }
-}
-
-void ak::uiAPI::obj::setFilterVisible(
-	ak::UID												_objectUid,
-	bool												_vis
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setFilterVisible(_objectUid, _vis);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setFilterVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setFilterVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setFilterVisible()"); }
-}
-
-void ak::uiAPI::obj::setFilterCaseSensitive(
-	ak::UID												_objectUid,
-	bool												_caseSensitive,
-	bool												_refresh
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setFilterCaseSensitive(_objectUid, _caseSensitive, _refresh);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setFilterCaseSensitive()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setFilterCaseSensitive()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setFilterCaseSensitive()"); }
-}
-
-void ak::uiAPI::obj::setFilterRefreshOnChange(
-	ak::UID												_objectUid,
-	bool												_refreshOnChange
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setFilterRefreshOnChange(_objectUid, _refreshOnChange);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setFilterRefreshOnChange()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setFilterRefreshOnChange()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setFilterRefreshOnChange()"); }
-}
-
-void ak::uiAPI::obj::setItems(
-	ak::UID												_objectUid,
-	const std::vector<ak::ui::qt::comboButtonItem> &	_items
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setItems(_objectUid, _items);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setItems()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setItems()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setItems()"); }
-}
-
-void ak::uiAPI::obj::setColor(
-	ak::UID												_objectUid,
-	int													_r,
-	int													_g,
-	int													_b,
-	int													_a
-) {
-	try {
-		setColor(_objectUid, ak::ui::color(_r, _g, _b, _a));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setColor(RGBA)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setColor(RGBA)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setColor(RGBA)"); }
-}
-
-void ak::uiAPI::obj::setColor(
-	ak::UID												_objectUid,
-	const ak::ui::color &								_color
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setColor(_objectUid, _color);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setColor(color)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setColor(color)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setColor(color)"); }
-}
-
-void ak::uiAPI::obj::setIcon(
-	ak::UID												_objectUid,
-	const char *										_iconName,
-	const char *										_iconSize
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		ak::ui::iconManager * iM = my_apiManager.iconManager();
-		oM->obj_setIcon(_objectUid, *iM->icon(QString(_iconName), QString(_iconSize)));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setIcon(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setIcon(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setIcon(char *)"); }
-}
-
-void ak::uiAPI::obj::setIcon(
-	ak::UID												_objectUid,
-	const QString &										_iconName,
-	const QString &										_iconSize
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		ak::ui::iconManager * iM = my_apiManager.iconManager();
-		oM->obj_setIcon(_objectUid, *iM->icon(_iconName, _iconSize));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setIcon(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setIcon(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setIcon(QString)"); }
-}
-
-void ak::uiAPI::obj::setIcon(
-	ak::UID												_objectUid,
-	const QIcon &										_icon
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		ak::ui::iconManager * iM = my_apiManager.iconManager();
-		oM->obj_setIcon(_objectUid, _icon);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setIcon(QIcon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setIcon(QIcon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setIcon(QIcon)"); }
-}
-
-void ak::uiAPI::obj::setReadOnly(
-	ak::UID												_objectUid,
-	bool												_readOnly
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setReadOnly(_objectUid, _readOnly);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setReadOnly()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setReadOnly()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setReadOnly()"); }
-}
-
-void ak::uiAPI::obj::setTabToolBarVisible(
-	ak::UID												_uiManagerUid,
-	bool												_vis
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setTabToolBarVisible(_uiManagerUid, _vis);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setTabToolBarVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setTabToolBarVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setTabToolBarVisible()"); }
-}
-
-void ak::uiAPI::obj::setTabLocation(
-	ak::UID												_objectUid,
-	ak::ui::core::tabLocation							_location
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setTabLocation(_objectUid, _location);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setTabLocation()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setTabLocation()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setTabLocation()"); }
-}
-
-void ak::uiAPI::obj::setTabFocused(
-	ak::UID												_objectUid,
-	ak::ID												_tab
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setTabFocused(_objectUid, _tab);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setTabFocused()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setTabFocused()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setTabFocused()"); }
-}
-
-void ak::uiAPI::obj::appendText(
-	ak::UID												_objectUid,
-	const char *										_text
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_appendText(_objectUid, QString(_text));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::appendText(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::appendText(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::appendText(char *)"); }
-}
-
-void ak::uiAPI::obj::appendText(
-	ak::UID												_objectUid,
-	const QString &										_text
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_appendText(_objectUid, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::appendText(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::appendText(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::appendText(QString)"); }
-}
-
-void ak::uiAPI::obj::setAutoScrollToBottomEnabled(
-	ak::UID												_objectUid,
-	bool												_enabled
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_setAutoScrollToBottomEnabled(_objectUid, _enabled);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setAutoScrollToBottomEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setAutoScrollToBottomEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setAutoScrollToBottomEnabled()"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const char *										_itemName,
-	bool												_value,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, QString(_itemName), _value, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(bool)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(bool)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(bool)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const QString &										_itemName,
-	bool												_value,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(bool)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(bool)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(bool)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const char *										_itemName,
-	int													_value,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, QString(_itemName), _value, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(int)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(int)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(int)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const QString &										_itemName,
-	int													_value,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(int)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(int)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(int)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const char *										_itemName,
-	double												_value,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, QString(_itemName), _value, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(double)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(double)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(double)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const QString &										_itemName,
-	double												_value,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(double)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(double)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addProperty(double)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const char *										_itemName,
-	const char *										_value,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, QString(_itemName), QString(_value), _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(QString)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const QString &										_itemName,
-	const QString &										_value,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(QString)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const char *										_itemName,
-	const ak::ui::color &								_value,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, QString(_itemName), _value, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(color)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(color)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(color)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const QString &										_itemName,
-	const ak::ui::color &								_value,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, _itemName, _value, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(color)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(color)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(color)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const char *										_itemName,
-	const std::vector<QString> &						_selection,
-	const QString &										_selectedValue,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, QString(_itemName), toComboButtonItem(_selection), _selectedValue, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
-}
-
-void ak::uiAPI::obj::addProperty(
-	ak::UID												_objectUid,
-	const QString &										_itemName,
-	const std::vector<QString> &						_selection,
-	const QString &										_selectedValue,
-	bool												_isMultipleValues
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_addProperty(_objectUid, _itemName, toComboButtonItem(_selection), _selectedValue, _isMultipleValues);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addProperty(comboButtonItems)"); }
-}
-
-ak::ID ak::uiAPI::obj::createItem(
-	ak::UID												_objectUid,
-	ak::ID												_parentId,
-	const QString &										_text,
-	ak::ui::core::textAlignment							_textAlignment,
-	QIcon												_icon
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_createItem(_objectUid, _parentId, _text, _textAlignment, _icon);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::createItem(parent)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::createItem(parent)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::createItem(parent)"); }
-}
-
-ak::ID ak::uiAPI::obj::createItem(
-	ak::UID												_objectUid,
-	ak::ID												_parentItemId,
-	const QString &										_iconName,
-	const QString &										_iconSize,
-	const QString &										_text,
-	ak::ui::core::textAlignment							_textAlignment
-) {
-	try {
-		return createItem(_objectUid, _parentItemId, _text, _textAlignment, *my_apiManager.iconManager()->icon(_iconName, _iconSize));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::createItem(parent, icon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::createItem(parent, icon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::createItem(parent, icon)"); }
-}
-
-ak::ID ak::uiAPI::obj::createItem(
-	ak::UID												_objectUid,
-	const QString &										_cmd,
-	char												_delimiter,
-	ak::ui::core::textAlignment							_textAlignment,
-	const QIcon  &										_icon
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_createItem(_objectUid, _cmd, _delimiter, _textAlignment, _icon);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::createItem(command)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::createItem(command)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::createItem(command)"); }
-}
-
-ak::ID ak::uiAPI::obj::createItem(
-	ak::UID												_objectUid,
-	const QString &										_cmd,
-	const QString &										_iconName,
-	const QString &										_iconSize,
-	char												_delimiter,
-	ak::ui::core::textAlignment							_textAlignment
-) {
-	try {
-		return createItem(_objectUid, _cmd, _delimiter, _textAlignment, *my_apiManager.iconManager()->icon(_iconName, _iconSize));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::createItem(command, icon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::createItem(command, icon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::createItem(command, icon)"); }
-}
-
-void ak::uiAPI::obj::deselectAllItems(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_deselectAllItems(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::deselectAllItems()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::deselectAllItems()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::deselectAllItems()"); }
-}
-
-ak::ID ak::uiAPI::obj::addTab(
-	ak::UID												_objectUid,
-	ak::UID												_widgetUid,
-	const QString &										_title,
-	const QIcon &										_icon
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addTab(_objectUid, _widgetUid, _title, _icon);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addTab(UID)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addTab(UID)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addTab(UID)"); }
-}
-
-ak::ID ak::uiAPI::obj::addTab(
-	ak::UID												_objectUid,
-	QWidget *											_widget,
-	const QString &										_title,
-	const QIcon &										_icon
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addTab(_objectUid, _widget, _title, _icon);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addTab()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addTab()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addTab()"); }
-}
-
-ak::ID ak::uiAPI::obj::addTab(
-	ak::UID												_objectUid,
-	ak::UID												_widgetUid,
-	const QString &										_title,
-	const QString &										_iconName,
-	const QString &										_iconSize
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addTab(_objectUid, _widgetUid, _title, _iconName, _iconSize);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addTab(UID, icon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addTab(UID, icon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addTab(UID, icon)"); }
-}
-
-ak::ID ak::uiAPI::obj::addTab(
-	ak::UID												_objectUid,
-	QWidget *											_widget,
-	const QString &										_title,
-	const QString &										_iconName,
-	const QString &										_iconSize
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_addTab(_objectUid, _widget, _title, _iconName, _iconSize);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::addTab(widget, icon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::addTab(widget, icon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::addTab(widget, icon)"); }
-}
-
-void ak::uiAPI::obj::setMultiSelectionEnabled(
-	ak::UID												_objectUid,
-	bool												_multiSelection
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_setMultiSelectionEnabled(_objectUid, _multiSelection);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setMultiSelectionEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setMultiSelectionEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setMultiSelectionEnabled()"); }
-}
-
-void ak::uiAPI::obj::setAutoSelectAndDeselectChildrenEnabled(
-	ak::UID												_objectUid,
-	bool												_enabled
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_setAutoSelectAndDeselectChildrenEnabled(_objectUid, _enabled);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
-}
-
-void ak::uiAPI::obj::setAutoExpandSelectedItems(
-	ak::UID												_objectUid,
-	bool												_enabled
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_setAutoExpandSelectedItems(_objectUid, _enabled);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setSelectAndDeselectChildrenEnabled()"); }
-}
-
-void ak::uiAPI::obj::setEnabled(
-	ak::UID												_objectUid,
-	bool												_enabled
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_setEnabled(_objectUid, _enabled);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setEnabled()"); }
-}
-
-void ak::uiAPI::obj::setVisible(
-	ak::UID												_objectUid,
+void ak::uiAPI::dock::setVisible(
+	ak::UID												_dockUID,
 	bool												_visible
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_setVisible(_objectUid, _visible);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::setVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::setVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::setVisible()"); }
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::qt::dock * actualDock = nullptr;
+	actualDock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_dockUID));
+	assert(actualDock != nullptr); // Invalid object type
+
+	actualDock->setVisible(_visible);
 }
 
-void ak::uiAPI::obj::clear(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_clear(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::clear()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::clear()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::clear()"); }
-}
-
-void ak::uiAPI::obj::deleteItems(
-	ak::UID												_objectUid,
-	const std::vector<ak::ID> &							_items
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		std::vector<ak::ID> v(_items);
-		std::sort(v.begin(), v.end());
-		v.erase(std::unique(v.begin(), v.end()), v.end());
-		return oM->obj_deleteItems(_objectUid, v);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::deleteItems()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::deleteItems()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::deleteItems()"); }
-}
-
-void ak::uiAPI::obj::start(
-	ak::UID												_objectUid,
-	int													_value
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_start(_objectUid, _value);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::start()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::start()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::start()"); }
-}
-
-void ak::uiAPI::obj::stop(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_stop(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::stop()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::stop()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::stop()"); }
-}
-
-void ak::uiAPI::obj::shoot(
-	ak::UID												_objectUid,
-	int													_value
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_shoot(_objectUid, _value);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::shoot()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::shoot()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::shoot()"); }
-}
-
-void ak::uiAPI::obj::destroy(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_delete(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::destroy()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::destroy()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::destroy()"); }
-}
-
-void ak::uiAPI::obj::showMaximized(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->obj_showMaximized(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::showMaximized()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::showMaximized()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::showMaximized()"); }
-}
+// Dock
 
 // ###############################################################################################################################################
 
-// Object getter
-
-QString ak::uiAPI::obj::getAlias(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_getAlias(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getAlias()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getAlias()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getAlias()"); }
-}
-
-QString ak::uiAPI::obj::getText(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_getText(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getText()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getText()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getText()"); }
-}
-
-bool ak::uiAPI::obj::getTristate(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_getTristate(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getTristate()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getTristate()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getTristate()"); }
-}
-
-bool ak::uiAPI::obj::getChecked(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_getChecked(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getChecked()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getChecked()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getChecked()"); }
-}
-
-std::vector<ak::ID> ak::uiAPI::obj::getSelectedItems(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_getSelectedItems(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getSelectedItems()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getSelectedItems()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getSelectedItems()"); }
-}
-
-bool ak::uiAPI::obj::getAutoScrollToBottomEnabled(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_getAutoScrollToBottomEnabled(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getAutoScrollToBottomEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getAutoScrollToBottomEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getAutoScrollToBottomEnabled()"); }
-}
-
-ak::ID ak::uiAPI::obj::getItem(
-	ak::UID												_objectUid,
-	const QString &										_text
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_getItem(_objectUid, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getItem()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getItem()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getItem()"); }
-}
-
-int ak::uiAPI::obj::getItemCount(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_getItemCount(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getItemCount()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getItemCount()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getItemCount()"); }
-}
-
-int ak::uiAPI::obj::getFocusedTab(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_getFocusedTab(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getFocusedTab()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getFocusedTab()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getFocusedTab()"); }
-}
-
-bool ak::uiAPI::obj::getAutoExpandSelectedItems(
-	ak::UID												_objectUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->obj_getAutoExpandSelectedItems(_objectUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::obj::getAutoExpandSelectedItems()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::obj::getAutoExpandSelectedItems()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::obj::getAutoExpandSelectedItems()"); }
-}
-
-// ###############################################################################################################################################
-
-// Item setter
-
-void ak::uiAPI::itm::setSelected(
-	ak::UID												_objectUid,
-	ak::ID												_itemId,
-	bool												_selected
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setSelected(_objectUid, _itemId, _selected);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setItemSelected()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setItemSelected()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setItemSelected()"); }
-}
-
-void ak::uiAPI::itm::setSingleSelected(
-	ak::UID												_objectUid,
-	ak::ID												_itemId,
-	bool												_selected
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setSingleSelected(_objectUid, _itemId, _selected);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setSingleSelected()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setSingleSelected()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setSingleSelected()"); }
-}
-
-void ak::uiAPI::itm::toggleSelection(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_toggleSelection(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::toggleSelection()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::toggleSelection()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::toggleSelection()"); }
-}
-
-void ak::uiAPI::itm::setText(
-	ak::UID												_objectUid,
-	ak::ID												_itemId,
-	const QString &										_text
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setText(_objectUid, _itemId, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setText()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setText()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setText()"); }
-}
-
-void ak::uiAPI::itm::setText(
-	ak::UID												_objectUid,
-	ak::ID												_parentId,
-	ak::ID												_itemId,
-	const QString &										_text
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setText(_objectUid, _parentId, _itemId, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setText(parent)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setText(parent)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setText(parent)"); }
-}
-
-void ak::uiAPI::itm::setIcon(
-	ak::UID												_objectUid,
-	ak::ID												_itemId,
-	const QIcon &										_icon
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setIcon(_objectUid, _itemId, _icon);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setIcon(QIcon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setIcon(QIcon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setIcon(QIcon)"); }
-}
-
-void ak::uiAPI::itm::setIcon(
-	ak::UID												_objectUid,
-	ak::ID												_itemId,
-	const QString &										_iconName,
-	const QString &										_iconSize
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setIcon(_objectUid, _itemId, _iconName, _iconSize);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setIcon()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setIcon()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setIcon()"); }
-}
-
-void ak::uiAPI::itm::setIcon(
-	ak::UID												_objectUid,
-	ak::ID												_parentId,
-	ak::ID												_itemId,
-	const QIcon &										_icon
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setIcon(_objectUid, _parentId, _itemId, _icon);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setIcon(parent, QIcon)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setIcon(parent, QIcon)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setIcon(parent, QIcon)"); }
-}
-
-void ak::uiAPI::itm::setIcon(
-	ak::UID												_objectUid,
-	ak::ID												_parentId,
-	ak::ID												_itemId,
-	const QString &										_iconName,
-	const QString &										_iconSize
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setIcon(_objectUid, _parentId, _itemId, _iconName, _iconSize);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setIcon(parent)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setIcon(parent)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setIcon(parent)"); }
-}
-
-void ak::uiAPI::itm::setEnabled(
-	ak::UID												_objectUid,
-	ak::ID												_itemId,
-	bool												_enabled
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setEnabled(_objectUid, _itemId, _enabled);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setEnabled()"); }
-}
-
-void ak::uiAPI::itm::setVisible(
-	ak::UID												_objectUid,
-	ak::ID												_itemId,
-	bool												_visible
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_setVisible(_objectUid, _itemId, _visible);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::setVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::setVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::setVisible()"); }
-}
-
-// ###############################################################################################################################################
-
-// Item getter
-
-std::vector<QString> ak::uiAPI::itm::getPath(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getPath(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getPath()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getPath()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getPath()"); }
-}
-
-QString ak::uiAPI::itm::getPathString(
-	ak::UID												_objectUid,
-	ak::ID												_itemId,
-	char												_delimiter
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getPathString(_objectUid, _itemId, _delimiter);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getPathString()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getPathString()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getPathString()"); }
-}
-
-QString ak::uiAPI::itm::getText(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getText(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getText()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getText()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getText()"); }
-}
-
-QString ak::uiAPI::itm::getText(
-	ak::UID												_objectUid,
-	ak::ID												_parentId,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getText(_objectUid, _parentId, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getText(parent)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getText(parent)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getText(parent)"); }
-}
-
-ak::core::valueType ak::uiAPI::itm::getValueType(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getValueType(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueType()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueType()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueType()"); }
-}
-
-ak::ID ak::uiAPI::itm::getID(
-	ak::UID												_objectUid,
-	const QString &										_itemPath,
-	char												_delimiter
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getID(_objectUid, _itemPath, _delimiter);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getID()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getID()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getID()"); }
-}
-
-bool ak::uiAPI::itm::getValueBoolean(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getValueBoolean(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueBoolean()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueBoolean()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueBoolean()"); }
-}
-
-ak::ui::color ak::uiAPI::itm::getValueColor(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getValueColor(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueColor()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueColor()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueColor()"); }
-}
-
-double ak::uiAPI::itm::getValueDouble(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getValueDouble(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueDouble()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueDouble()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueDouble()"); }
-}
-
-int ak::uiAPI::itm::getValueInteger(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getValueInteger(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueInteger()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueInteger()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueInteger()"); }
-}
-
-std::vector<QString> ak::uiAPI::itm::getValuePossibleSelection(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getValuePossibleSelection(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValuePossibleSelection()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValuePossibleSelection()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValuePossibleSelection()"); }
-}
-
-QString ak::uiAPI::itm::getValueSelection(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getValueSelection(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueSelection()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueSelection()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueSelection()"); }
-}
-
-QString ak::uiAPI::itm::getValueString(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getValueString(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueString()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueString()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueString()"); }
-}
-
-bool ak::uiAPI::itm::getValueIsMultivalued(
-	ak::UID												_objectUid,
-	ak::ID												_itemId
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->itm_getValueIsMultivalued(_objectUid, _itemId);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::itm::getValueIsMultivalued()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::itm::getValueIsMultivalued()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::itm::getValueIsMultivalued()"); }
-}
-
-// ###############################################################################################################################################
-
-void ak::uiAPI::special::showMessageBox(
-	ak::UID												_uiManagerUid,
-	const char *										_message,
-	const char *										_title
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		// Get UI manager
-		ak::ui::core::aObject * obj = oM->obj_get(_uiManagerUid);
-		if (obj->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected main window", "Check object type"); }
-		ak::ui::uiManager * ui = nullptr;
-		ui = dynamic_cast<ak::ui::uiManager *>(obj);
-		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
-		ui->showMessageBox(QString(_message), QString(_title));
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::showMessageBox(char *)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::showMessageBox(char *)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::showMessageBox(char *)"); }
-}
-
-void ak::uiAPI::special::showMessageBox(
-	ak::UID												_uiManagerUid,
-	const QString &										_message,
-	const QString &										_title
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		// Get UI manager
-		ak::ui::core::aObject * obj = oM->obj_get(_uiManagerUid);
-		if (obj->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected main window", "Check object type"); }
-		ak::ui::uiManager * ui = nullptr;
-		ui = dynamic_cast<ak::ui::uiManager *>(obj);
-		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
-		ui->showMessageBox(_message, _title);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::showMessageBox(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::showMessageBox(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::showMessageBox(QString)"); }
-}
-
-QString ak::uiAPI::special::openFileDialog(
-	ak::UID												_uiManagerUid,
-	const QString &										_caption,
-	const QString &										_initialDir,
-	const QString &										_filter,
-	QString *											_selectedFilter
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		// Get UI manager
-		ak::ui::core::aObject * obj = oM->obj_get(_uiManagerUid);
-		if (obj->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected main window", "Check object type"); }
-		ak::ui::uiManager * ui = nullptr;
-		ui = dynamic_cast<ak::ui::uiManager *>(obj);
-		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
-		return QFileDialog::getOpenFileName(nullptr, _caption, _initialDir, _filter, _selectedFilter);
-		
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::special::openFileDialog()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::special::openFileDialog()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::special::openFileDialog()"); }
-}
-
-QString ak::uiAPI::special::saveFileDialog(
-	ak::UID												_uiManagerUid,
-	const QString &										_caption,
-	const QString &										_initialDir,
-	const QString &										_filter,
-	QString *											_selectedFilter
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		// Get UI manager
-		ak::ui::core::aObject * obj = oM->obj_get(_uiManagerUid);
-		if (obj->objectType() != ak::ui::core::objectType::oMainWindow) { throw ak::Exception("Invalid object type, expected main window", "Check object type"); }
-		ak::ui::uiManager * ui = nullptr;
-		ui = dynamic_cast<ak::ui::uiManager *>(obj);
-		if (ui == nullptr) { throw ak::Exception("Cast failed", "Cast UI manager"); }
-		return QFileDialog::getSaveFileName(nullptr, _caption, _initialDir, _filter, _selectedFilter);
-
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::special::saveFileDialog()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::special::saveFileDialog()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::special::saveFileDialog()"); }
-}
-
-QString ak::uiAPI::special::createEventText(
-	ak::UID												_sender,
-	ak::core::eventType									_event,
-	int													_info1,
-	int													_info2
-) {
-	QString str("Event{Sender=\"");
-	str.append(QString::number(_sender));
-	str.append("\";EventType=\"");
-	str.append(ak::uiAPI::toString(_event));
-	str.append("\";Info1=\"");
-	str.append(QString::number(_info1));
-	if (_event == ak::core::eKeyPressed || _event == ak::core::eKeyReleased) {
-		str.append("\";Info2=Key{KeyName=\"");
-		str.append(ak::uiAPI::toString((ak::ui::core::keyType)_info2));
-		str.append("\"}}");
-	} else {
-		str.append("\";Info2=\"");
-		str.append(QString::number(_info2));
-		str.append("\"}");
-	}
-	return str;
-}
-
-// ###############################################################################################################################################
-
-// File setter
+// File
 
 ak::UID ak::uiAPI::file::load(
 	const QString &										_filePath
 ) {
-	try {
-		ak::file * f = my_apiManager.getFile(ak::invalidUID);
-		f->load(_filePath);
-		return f->uid();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::load()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::load()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::load()"); }
+	ak::file * f = my_apiManager.getFile(ak::invalidUID);
+	f->load(_filePath);
+	return f->uid();
 }
 
 void ak::uiAPI::file::load(
 	ak::UID												_fileUid,
 	const QString &										_filePath
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		f->load(_filePath);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::load(file)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::load(file)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::load(file)"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	f->load(_filePath);
 }
 
 void ak::uiAPI::file::save(
 	ak::UID												_fileUid,
 	bool												_append
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		f->save(_append);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::save()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::save()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::save()"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	f->save(_append);
 }
 
 void ak::uiAPI::file::save(
@@ -2387,606 +614,1657 @@ void ak::uiAPI::file::save(
 	const QString &										_filePath,
 	bool												_append
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		f->save(_filePath, _append);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::save(filePath)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::save(filePath)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::save(filePath)"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	f->save(_filePath, _append);
 }
 
 void ak::uiAPI::file::setPath(
 	ak::UID												_fileUid,
 	const QString &										_path
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		f->setPath(_path);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::setPath()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::setPath()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::setPath()"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	f->setPath(_path);
 }
 
 void ak::uiAPI::file::setLines(
 	ak::UID												_fileUid,
 	const QStringList &									_lines
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		f->setLines(_lines);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::setLines(QStringList)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::setLines(QStringList)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::setLines(QStringList)"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	f->setLines(_lines);
 }
 
 void ak::uiAPI::file::addLine(
 	ak::UID												_fileUid,
 	const QString &										_line
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		QStringList lst = _line.split("\n");
-		for (QString str : lst) { str.append('\n'); f->addLine(str); }
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::addLine(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::addLine(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::addLine(QString)"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	QStringList lst = _line.split("\n");
+	for (QString str : lst) { str.append('\n'); f->addLine(str); }
 }
 
 void ak::uiAPI::file::addLine(
 	ak::UID												_fileUid,
 	const QStringList &									_lines
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		f->addLine(_lines);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::addLine(QStringList)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::addLine(QStringList)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::addLine(QStringList)"); }
-}
-
-// ###############################################################################################################################################
-
-// File Getter
-
-ak::UID ak::uiAPI::file::uid(
-	ak::UID												_fileUid
-) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		return f->uid();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::uid()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::uid()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::uid()"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	f->addLine(_lines);
 }
 
 QString ak::uiAPI::file::name(
 	ak::UID												_fileUid
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		return f->name();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::name()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::name()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::name()"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	return f->name();
 }
 
 QString ak::uiAPI::file::path(
 	ak::UID												_fileUid
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		return f->path();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::path()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::path()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::path()"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	return f->path();
 }
 
 QString ak::uiAPI::file::extension(
 	ak::UID												_fileUid
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		return f->extension();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::extension()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::extension()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::extension()"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	return f->extension();
 }
 
 QStringList ak::uiAPI::file::lines(
 	ak::UID												_fileUid
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		return f->lines();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::lines()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::lines()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::lines()"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	return f->lines();
 }
 
 int ak::uiAPI::file::linesCount(
 	ak::UID												_fileUid
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		return f->linesCount();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::linesCount()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::linesCount()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::linesCount()"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	return f->linesCount();
 }
 
 bool ak::uiAPI::file::hasChanged(
 	ak::UID												_fileUid
 ) {
-	try {
-		ak::file * f = my_apiManager.getExistingFile(_fileUid);
-		return f->hasChanged();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::file::hasChanged()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::file::hasChanged()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::file::hasChanged()"); }
+	ak::file * f = my_apiManager.getExistingFile(_fileUid);
+	return f->hasChanged();
 }
+
+// file
 
 // ###############################################################################################################################################
 
-// Dialogs
+// Log in dialog
 
-ak::ui::core::dialogResult ak::uiAPI::dialog::show(
-	ak::UID												_dialogUid
+ak::ui::core::dialogResult ak::uiAPI::logInDialog::showDialog(
+	ak::UID												_dialogUID
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->dialog_show(_dialogUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::show()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::show()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::show()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::logIn * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->showDialog();
 }
 
-ak::ui::core::dialogResult ak::uiAPI::dialog::result(
-	ak::UID												_dialogUid
+void ak::uiAPI::logInDialog::close(
+	ak::UID												_dialogUID,
+	ui::core::dialogResult								_result
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->dialog_result(_dialogUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::result()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::result()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::result()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::logIn * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
+	assert(actualObject != nullptr); // Invalid object type
+	actualObject->close(_result);
 }
 
-QString ak::uiAPI::dialog::username(
-	ak::UID												_dialogUid
+QString ak::uiAPI::logInDialog::getUsername(
+	ak::UID												_dialogUID
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->dialog_username(_dialogUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::username()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::username()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::username()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::logIn * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->username();
 }
 
-QString ak::uiAPI::dialog::password(
-	ak::UID												_dialogUid
+QString ak::uiAPI::logInDialog::getPassword(
+	ak::UID												_dialogUID
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->dialog_password(_dialogUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::password()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::password()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::password()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::logIn * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->password();
 }
 
-bool ak::uiAPI::dialog::savePassword(
-	ak::UID												_dialogUid
+bool ak::uiAPI::logInDialog::getSavePassword(
+	ak::UID												_dialogUID
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->dialog_savePassword(_dialogUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::savePassword()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::savePassword()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::savePassword()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::logIn * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->savePassword();
 }
 
-void ak::uiAPI::dialog::showInvalidLogIn(
-	ak::UID												_dialogUid
+// Log in dialog
+
+// ###############################################################################################################################################
+
+// Object
+
+void ak::uiAPI::object::destroy(
+	ak::UID												_objectUID
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->dialog_showInvalidLogIn(_dialogUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::showInvalidLogIn()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::showInvalidLogIn()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::showInvalidLogIn()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	my_objManager->destroy(_objectUID);
 }
 
-void ak::uiAPI::dialog::close(
-	ak::UID												_dialogUid,
-	ak::ui::core::dialogResult							_result
+void ak::uiAPI::object::setAlias(
+	ak::UID												_objectUID,
+	const QString &										_alias
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->dialog_close(_dialogUid, _result);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::close()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::close()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::close()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	ui::core::aRestorable * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::core::aRestorable *>(my_objManager->object(_objectUID));
+	assert(actualObject != nullptr); // Invalid object type
+	my_objManager->removeAlias(actualObject->alias());	// Delete last alias
+	if (_alias.length() != 0) { my_objManager->addAlias(_alias, _objectUID); }
+	actualObject->setAlias(_alias);
 }
 
-ak::ui::core::dialogResult ak::uiAPI::dialog::showPrompt(
-	const QString &										_message,
-	const QString &										_title,
-	ak::ui::core::promptType							_type
+// Object
+
+// ###############################################################################################################################################
+
+// promptDialog
+
+ak::ui::core::dialogResult ak::uiAPI::promptDialog::show(
+	const QString &				_message,
+	const QString &				_title,
+	ak::ui::core::promptType	_type
 ) {
-	try {
-		ui::dialog::prompt dia(_message, _title, _type);
-		const ak::ui::colorStyle * cS = my_apiManager.currentColorStyle();
-		if (cS != nullptr) { dia.setColorStyle(cS); }
-		return dia.showDialog();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::dialog::showPrompt()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::dialog::showPrompt()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::dialog::showPrompt()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::prompt dialog(_message, _title, _type);
+	dialog.setColorStyle(my_objManager->getCurrentColorStyle());
+	return dialog.showDialog();
+}
+
+ak::ui::core::dialogResult ak::uiAPI::promptDialog::show(
+	const QString &				_message,
+	const QString &				_title
+) {
+	ui::dialog::prompt dialog(_message, _title, ak::ui::core::promptType::promptOk);
+	return dialog.showDialog();
+}
+
+// promptDialog
+
+// ###############################################################################################################################################
+
+// propertyGrid
+
+void ak::uiAPI::propertyGrid::addGroup(
+	ak::UID											_propertyGridUID,
+	const QString &									_groupName
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->addGroup(_groupName);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_itemName,
+	bool											_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_itemName,
+	const ui::color &								_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_itemName,
+	double											_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_itemName,
+	int												_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_itemName,
+	const std::vector<QString> &					_possibleSelection,
+	const QString &									_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _possibleSelection, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_itemName,
+	const char *									_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, QString(_value));
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_itemName,
+	const QString &									_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_itemName,
+	bool											_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_itemName,
+	const ui::color &								_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_itemName,
+	double											_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_itemName,
+	int												_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_itemName,
+	const std::vector<QString> &					_possibleSelection,
+	const QString &									_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _possibleSelection, _value);
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_itemName,
+	const char *									_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, QString(_value));
+}
+
+ak::ID ak::uiAPI::propertyGrid::addItem(
+	ak::UID											_propertyGridUID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_itemName,
+	const QString &									_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
+}
+
+QString ak::uiAPI::propertyGrid::getItemGroup(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemGroup(_itemID);
+}
+
+QString ak::uiAPI::propertyGrid::getItemName(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemName(_itemID);
+}
+
+std::vector<QString> ak::uiAPI::propertyGrid::getItemPossibleSelection(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemPossibleSelection(_itemID);
+}
+
+bool ak::uiAPI::propertyGrid::getItemValueBool(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemValueBool(_itemID);
+}
+
+ak::ui::color ak::uiAPI::propertyGrid::getItemValueColor(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemValueColor(_itemID);
+}
+
+double ak::uiAPI::propertyGrid::getItemValueDouble(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemValueDouble(_itemID);
+}
+
+int ak::uiAPI::propertyGrid::getItemValueInteger(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemValueInteger(_itemID);
+}
+
+QString ak::uiAPI::propertyGrid::getItemValueSelection(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemValueSelection(_itemID);
+}
+
+QString ak::uiAPI::propertyGrid::getItemValueString(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemValueString(_itemID);
+}
+
+ak::core::valueType ak::uiAPI::propertyGrid::getItemValueType(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemValueType(_itemID);
+}
+
+// propertyGrid
+
+// ###############################################################################################################################################
+
+// TabView
+
+ak::ID ak::uiAPI::tabView::addTab(
+	ak::UID				_tabViewUID,
+	ak::UID				_widgetUID,
+	const QString &		_title
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	ui::core::aWidget * actualWidget = nullptr;
+	actualWidget = dynamic_cast<ui::core::aWidget *>(my_objManager->object(_widgetUID));
+	assert(actualWidget != nullptr); // Invalid object type
+
+	return actualTabView->createTab(actualWidget->widget(), _title);
+}
+
+ak::ID ak::uiAPI::tabView::addTab(
+	ak::UID				_tabViewUID,
+	ak::UID				_widgetUID,
+	const QString &		_title,
+	const QString &		_iconName,
+	const QString &		_iconFolder
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	ui::core::aWidget * actualWidget = nullptr;
+	actualWidget = dynamic_cast<ui::core::aWidget *>(my_objManager->object(_widgetUID));
+	assert(actualWidget != nullptr); // Invalid object type
+
+	return actualTabView->createTab(actualWidget->widget(), _title, *my_iconManager->icon(_iconName, _iconFolder));
+}
+
+ak::ID ak::uiAPI::tabView::addTab(
+	ak::UID				_tabViewUID,
+	ak::UID				_widgetUID,
+	const QString &		_title,
+	const QIcon &		_icon
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	ui::core::aWidget * actualWidget = nullptr;
+	actualWidget = dynamic_cast<ui::core::aWidget *>(my_objManager->object(_widgetUID));
+	assert(actualWidget != nullptr); // Invalid object type
+
+	return actualTabView->createTab(actualWidget->widget(), _title, _icon);
+}
+
+ak::ID ak::uiAPI::tabView::addTab(
+	ak::UID				_tabViewUID,
+	QWidget *			_widget,
+	const QString &		_title
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	return actualTabView->createTab(_widget, _title);
+}
+
+ak::ID ak::uiAPI::tabView::addTab(
+	ak::UID				_tabViewUID,
+	QWidget *			_widget,
+	const QString &		_title,
+	const QString &		_iconName,
+	const QString &		_iconFolder
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	return actualTabView->createTab(_widget, _title, *my_iconManager->icon(_iconName, _iconFolder));
+}
+
+ak::ID ak::uiAPI::tabView::addTab(
+	ak::UID				_tabViewUID,
+	QWidget *			_widget,
+	const QString &		_title,
+	const QIcon &		_icon
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	return actualTabView->createTab(_widget, _title, _icon);
+}
+
+// TabView
+
+// ###############################################################################################################################################
+
+// TextEdit
+
+void ak::uiAPI::textEdit::setText(
+	ak::UID				_textEditUID,
+	const QString &		_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::textEdit * actualTextEdit = nullptr;
+	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
+	assert(actualTextEdit != nullptr); // Invalid object type
+	return actualTextEdit->setText(_text);
+}
+
+void ak::uiAPI::textEdit::appendText(
+	ak::UID				_textEditUID,
+	const QString &		_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::textEdit * actualTextEdit = nullptr;
+	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
+	assert(actualTextEdit != nullptr); // Invalid object type
+	return actualTextEdit->append(_text);
+}
+
+void ak::uiAPI::textEdit::setReadOnly(
+	ak::UID				_textEditUID,
+	bool				_readOnly
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::textEdit * actualTextEdit = nullptr;
+	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
+	assert(actualTextEdit != nullptr); // Invalid object type
+	actualTextEdit->setReadOnly(_readOnly);
+}
+
+// TextEdit
+
+// ###############################################################################################################################################
+
+// Timer
+
+int ak::uiAPI::timer::getInterval(
+	ak::UID							_timerUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::timer * actualTimer = nullptr;
+	actualTimer = dynamic_cast<ui::qt::timer *>(my_objManager->object(_timerUID));
+	assert(actualTimer != nullptr); // Invalid object type
+	return actualTimer->interval();
+}
+
+void ak::uiAPI::timer::setInterval(
+	ak::UID							_timerUID,
+	int								_interval
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::timer * actualTimer = nullptr;
+	actualTimer = dynamic_cast<ui::qt::timer *>(my_objManager->object(_timerUID));
+	assert(actualTimer != nullptr); // Invalid object type
+	actualTimer->setInterval(_interval);
+}
+
+void ak::uiAPI::timer::shoot(
+	ak::UID							_timerUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::timer * actualTimer = nullptr;
+	actualTimer = dynamic_cast<ui::qt::timer *>(my_objManager->object(_timerUID));
+	assert(actualTimer != nullptr); // Invalid object type
+	actualTimer->setSingleShot(true);
+	actualTimer->start();
+}
+
+void ak::uiAPI::timer::shoot(
+	ak::UID							_timerUID,
+	int								_interval
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::timer * actualTimer = nullptr;
+	actualTimer = dynamic_cast<ui::qt::timer *>(my_objManager->object(_timerUID));
+	assert(actualTimer != nullptr); // Invalid object type
+	actualTimer->setInterval(_interval);
+	actualTimer->setSingleShot(true);
+	actualTimer->start();
+}
+
+void ak::uiAPI::timer::start(
+	ak::UID							_timerUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::timer * actualTimer = nullptr;
+	actualTimer = dynamic_cast<ui::qt::timer *>(my_objManager->object(_timerUID));
+	assert(actualTimer != nullptr); // Invalid object type
+	actualTimer->setSingleShot(false);
+	actualTimer->start();
+}
+
+void ak::uiAPI::timer::start(
+	ak::UID							_timerUID,
+	int								_interval
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::timer * actualTimer = nullptr;
+	actualTimer = dynamic_cast<ui::qt::timer *>(my_objManager->object(_timerUID));
+	assert(actualTimer != nullptr); // Invalid object type
+	actualTimer->setInterval(_interval);
+	actualTimer->setSingleShot(false);
+	actualTimer->start();
+}
+
+void ak::uiAPI::timer::stop(
+	ak::UID							_timerUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::timer * actualTimer = nullptr;
+	actualTimer = dynamic_cast<ui::qt::timer *>(my_objManager->object(_timerUID));
+	assert(actualTimer != nullptr); // Invalid object type
+	actualTimer->stop();
+}
+
+// Timer
+
+// ###############################################################################################################################################
+
+// Tree
+
+ak::ID ak::uiAPI::tree::addItem(
+	ak::UID							_treeUID,
+	const QString &					_text,
+	ak::ID							_parentId,
+	ak::ui::core::textAlignment		_textAlignment
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->add(_parentId, _text, _textAlignment);
+}
+
+ak::ID ak::uiAPI::tree::addItem(
+	ak::UID							_treeUID,
+	const QString &					_text,
+	const QString &					_iconName,
+	const QString &					_iconSize,
+	ak::ID							_parentId,
+	ak::ui::core::textAlignment		_textAlignment
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->add(_parentId, _text, _textAlignment, *my_iconManager->icon(_iconName, _iconSize));
+}
+
+ak::ID ak::uiAPI::tree::addItem(
+	ak::UID							_treeUID,
+	const QString &					_cmd,
+	char							_delimiter,
+	ak::ui::core::textAlignment		_textAlignment
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->add(_cmd, _delimiter, _textAlignment);
+}
+
+ak::ID ak::uiAPI::tree::addItem(
+	ak::UID							_treeUID,
+	const QString &					_cmd,
+	char							_delimiter,
+	const QString &					_iconName,
+	const QString &					_iconSize,
+	ak::ui::core::textAlignment		_textAlignment
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->add(_cmd, _delimiter, _textAlignment, *my_iconManager->icon(_iconName, _iconSize));
+}
+
+void ak::uiAPI::tree::clear(
+	ak::UID							_treeUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->clear();
+}
+
+void ak::uiAPI::tree::collapseAllItems(
+	ak::UID							_treeUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->collapseAllItems();
+}
+
+void ak::uiAPI::tree::deleteItem(
+	ak::UID							_treeUID,
+	ak::ID							_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->deleteItem(_itemID);
+}
+
+void ak::uiAPI::tree::deleteItems(
+	ak::UID							_treeUID,
+	const std::vector<ak::ID> &		_itemIDs
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->deleteItems(_itemIDs);
+}
+
+void ak::uiAPI::tree::deselectAllItems(
+	ak::UID							_treeUID,
+	bool							_sendSelectionChangedEvent
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->deselectAllItems(_sendSelectionChangedEvent);
+}
+
+void ak::uiAPI::tree::expandAllItems(
+	ak::UID							_treeUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->expandAllItems();
+}
+
+bool ak::uiAPI::tree::getAutoExpandSelectedItemsEnabled(
+	ak::UID							_treeUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->autoExpandSelectedItemsEnabled();
+}
+
+ak::ID ak::uiAPI::tree::getItemID(
+	ak::UID							_treeUID,
+	const QString &					_itemPath,
+	char							_delimiter
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->getItemID(_itemPath, _delimiter);
+}
+
+std::vector<QString> ak::uiAPI::tree::getItemPath(
+	ak::UID							_treeUID,
+	ak::ID							_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->getItemPath(_itemID);
+}
+
+QString ak::uiAPI::tree::getItemPathString(
+	ak::UID							_treeUID,
+	ak::ID							_itemID,
+	char							_delimiter
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->getItemPathString(_itemID, _delimiter);
+}
+
+QString ak::uiAPI::tree::getItemText(
+	ak::UID							_treeUID,
+	ak::ID							_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->getItemText(_itemID);
+}
+
+bool ak::uiAPI::tree::isEnabled(
+	ak::UID							_treeUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->enabled();
+}
+
+int ak::uiAPI::tree::itemCount(
+	ak::UID							_treeUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->itemCount();
+}
+
+std::vector<ak::ID> ak::uiAPI::tree::selectedItems(
+	ak::UID							_treeUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	return actualTree->selectedItems();
+}
+
+void ak::uiAPI::tree::setAutoExpandSelectedItemsEnabled(
+	ak::UID							_treeUID,
+	bool							_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setAutoExpandSelectedItemsEnabled(_enabled);
+}
+
+void ak::uiAPI::tree::setAutoSelectAndDeselectChildrenEnabled(
+	ak::UID							_treeUID,
+	bool							_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setAutoSelectAndDeselectChildrenEnabled(_enabled);
+}
+
+void ak::uiAPI::tree::setEnabled(
+	ak::UID							_treeUID,
+	bool							_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setEnabled(_enabled);
+}
+
+void ak::uiAPI::tree::setFilterCaseSensitiveEnabled(
+	ak::UID							_treeUID,
+	bool							_caseSensitiveEnabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setFilterCaseSensitive(_caseSensitiveEnabled);
+}
+
+void ak::uiAPI::tree::setFilterRefreshOnChangeEnabled(
+	ak::UID							_treeUID,
+	bool							_refreshOnChangeEnabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setFilterRefreshOnChange(_refreshOnChangeEnabled);
+}
+
+void ak::uiAPI::tree::setFilterVisible(
+	ak::UID							_treeUID,
+	bool							_visible
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setFilterVisible(_visible);
+}
+
+void ak::uiAPI::tree::setItemIcon(
+	ak::UID							_treeUID,
+	ak::ID							_itemID,
+	const QIcon &					_icon
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setItemIcon(_itemID, _icon);
+}
+
+void ak::uiAPI::tree::setItemIcon(
+	ak::UID							_treeUID,
+	ak::ID							_itemID,
+	const QString &					_iconName,
+	const QString &					_iconFolder
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setItemIcon(_itemID, *my_iconManager->icon(_iconName, _iconFolder));
+}
+
+void ak::uiAPI::tree::setItemEnabled(
+	ak::UID							_treeUID,
+	ak::ID							_itemID,
+	bool							_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setItemEnabled(_itemID, _enabled);
+}
+
+void ak::uiAPI::tree::setItemSelected(
+	ak::UID							_treeUID,
+	ak::ID							_itemID,
+	bool							_selected,
+	bool							_singleSelection
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	if (_singleSelection) { actualTree->setSingleItemSelected(_itemID, _selected); }
+	else { actualTree->setItemSelected(_itemID, _selected); }
+}
+
+void ak::uiAPI::tree::setItemText(
+	ak::UID							_treeUID,
+	ak::ID							_itemID,
+	const QString &					_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setItemText(_itemID, _text);
+}
+
+void ak::uiAPI::tree::setItemVisible(
+	ak::UID							_treeUID,
+	ak::ID							_itemID,
+	bool							_visible
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setItemVisible(_itemID, _visible);
+}
+
+void ak::uiAPI::tree::setMultiSelectionEnabled(
+	ak::UID							_treeUID,
+	bool							_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setMultiSelectionEnabled(_enabled);
+}
+
+void ak::uiAPI::tree::setVisible(
+	ak::UID							_treeUID,
+	bool							_visible
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setVisible(_visible);
+}
+
+void ak::uiAPI::tree::toggleItemSelection(
+	ak::UID							_treeUID,
+	ak::ID							_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->toggleItemSelection(_itemID);
+}
+
+// Tree
+
+// ###############################################################################################################################################
+
+// Welcome screen
+
+void ak::uiAPI::welcomeScreen::addItem(
+	ak::UID							_welcomeScreenUID,
+	ak::ID							_group,
+	const QString &					_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItem(_group, _text);
+}
+
+void ak::uiAPI::welcomeScreen::addItem(
+	ak::UID							_welcomeScreenUID,
+	ak::ID							_group,
+	const QString &					_text,
+	const QString &					_iconName,
+	const QString &					_iconFolder
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItem(_group, *my_iconManager->icon(_iconName, _iconFolder), _text);
+}
+
+void ak::uiAPI::welcomeScreen::addItem(
+	ak::UID							_welcomeScreenUID,
+	ak::ID							_group,
+	const QString &					_text,
+	const QIcon &					_icon
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItem(_group, _icon, _text);
+}
+
+void ak::uiAPI::welcomeScreen::addItemAtReecent(
+	ak::UID							_welcomeScreenUID,
+	const QString &					_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItemAtRecents(_text);
+}
+
+void ak::uiAPI::welcomeScreen::addItemAtReecent(
+	ak::UID							_welcomeScreenUID,
+	const QString &					_text,
+	const QString &					_iconName,
+	const QString &					_iconFolder
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItemAtRecents(*my_iconManager->icon(_iconName, _iconFolder), _text);
+}
+
+void ak::uiAPI::welcomeScreen::addItemAtReecent(
+	ak::UID							_welcomeScreenUID,
+	const QString &					_text,
+	const QIcon &					_icon
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItemAtRecents(_icon, _text);
+}
+
+void ak::uiAPI::welcomeScreen::addItemAtOpen(
+	ak::UID							_welcomeScreenUID,
+	const QString &					_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItemAtOpen(_text);
+}
+
+void ak::uiAPI::welcomeScreen::addItemAtOpen(
+	ak::UID							_welcomeScreenUID,
+	const QString &					_text,
+	const QString &					_iconName,
+	const QString &					_iconFolder
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItemAtOpen(*my_iconManager->icon(_iconName, _iconFolder), _text);
+}
+
+void ak::uiAPI::welcomeScreen::addItemAtOpen(
+	ak::UID							_welcomeScreenUID,
+	const QString &					_text,
+	const QIcon &					_icon
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItemAtOpen(_icon, _text);
+}
+
+void ak::uiAPI::welcomeScreen::addItemAtNew(
+	ak::UID							_welcomeScreenUID,
+	const QString &					_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItemAtNew(_text);
+}
+
+void ak::uiAPI::welcomeScreen::addItemAtNew(
+	ak::UID							_welcomeScreenUID,
+	const QString &					_text,
+	const QString &					_iconName,
+	const QString &					_iconFolder
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItemAtNew(*my_iconManager->icon(_iconName, _iconFolder), _text);
+}
+
+void ak::uiAPI::welcomeScreen::addItemAtNew(
+	ak::UID							_welcomeScreenUID,
+	const QString &					_text,
+	const QIcon &					_icon
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->addItemAtNew(_icon, _text);
+}
+
+QString ak::uiAPI::welcomeScreen::getItemText(
+	ak::UID							_welcomeScreenUID,
+	ak::ID							_group,
+	ak::ID							_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	return actualWelcomeScreen->itemText(_group, _itemID);
+}
+
+QString ak::uiAPI::welcomeScreen::getItemTextAtRecent(
+	ak::UID							_welcomeScreenUID,
+	ak::ID							_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	return actualWelcomeScreen->itemTextAtRecent(_itemID);
+}
+
+QString ak::uiAPI::welcomeScreen::getItemTextAtOpen(
+	ak::UID							_welcomeScreenUID,
+	ak::ID							_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	return actualWelcomeScreen->itemTextAtOpen(_itemID);
+}
+
+QString ak::uiAPI::welcomeScreen::getItemTextAtNew(
+	ak::UID							_welcomeScreenUID,
+	ak::ID							_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	return actualWelcomeScreen->itemTextAtNew(_itemID);
+}
+
+QString ak::uiAPI::welcomeScreen::getGroupName(
+	ak::UID							_welcomeScreenUID,
+	ak::ID							_group
+) { return ui::widget::welcomeScreen::groupName(_group); }
+
+// Welcome screen
+
+// ###############################################################################################################################################
+
+// Window
+
+void ak::uiAPI::window::close(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->close();
+}
+
+void ak::uiAPI::window::setStatusLabelVisible(
+	ak::UID												_windowUID,
+	bool												_visible
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setStatusLabelVisible(_visible);
+}
+
+void ak::uiAPI::window::setStatusProgressVisible(
+	ak::UID												_windowUID,
+	bool												_visible
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setStatusBarVisible(_visible);
+}
+
+void ak::uiAPI::window::setStatusLabelText(
+	ak::UID												_windowUID,
+	const QString &										_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setStatusLabelText(_text);
+}
+
+void ak::uiAPI::window::setStatusProgressValue(
+	ak::UID												_windowUID,
+	int													_value
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setStatusBarProgress(_value);
+}
+
+void ak::uiAPI::window::setStatusProgressContinuous(
+	ak::UID												_windowUID,
+	bool												_continuous
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setStatusBarContinuous(_continuous);
+}
+
+void ak::uiAPI::window::setTabToolBarVisible(
+	ak::UID												_windowUID,
+	bool												_visible
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setTabToolBarVisible(_visible);
+}
+
+bool ak::uiAPI::window::getStatusLabelVisible(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	return actualWindow->getStatusLabelVisible();
+}
+
+bool ak::uiAPI::window::getStatusProgressVisible(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	return actualWindow->getStatusBarVisible();
+}
+
+QString ak::uiAPI::window::getStatusLabelText(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	return actualWindow->getStatusLabelText();
+}
+
+int ak::uiAPI::window::getStatusProgressValue(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	return actualWindow->getStatusBarProgress();
+}
+
+bool ak::uiAPI::window::getStatusProgressContinuous(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	return actualWindow->getStatusBarContinuous();
+}
+
+void ak::uiAPI::window::addDock(
+	ak::UID												_windowUID,
+	ak::UID												_dockUid,
+	ak::ui::core::dockLocation							_dockLocation
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	ui::qt::dock * dock = nullptr;
+
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	
+	dock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_dockUid));
+	assert(dock != nullptr); // Invalid object type
+
+	actualWindow->addDock(dock, _dockLocation);
+}
+
+void ak::uiAPI::window::tabifyDock(
+	ak::UID												_windowUID,
+	ak::UID												_parentUid,
+	ak::UID												_dockUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	ui::qt::dock * parentDock = nullptr;
+	ui::qt::dock * dock = nullptr;
+
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+
+	parentDock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_parentUid));
+	assert(parentDock != nullptr); // Invalid object type
+
+	dock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_dockUid));
+	assert(dock != nullptr); // Invalid object type
+
+	actualWindow->tabifyDock(parentDock, dock);
+}
+
+void ak::uiAPI::window::setDockBottomLeftPriority(
+	ak::UID												_windowUID,
+	ak::ui::core::dockLocation							_dockLocation
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setDockPriorityBottomLeft(_dockLocation);
+}
+
+void ak::uiAPI::window::setDockBottomRightPriority(
+	ak::UID												_windowUID,
+	ak::ui::core::dockLocation							_dockLocation
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setDockPriorityBottomRight(_dockLocation);
+}
+
+void ak::uiAPI::window::setCentralWidget(
+	ak::UID												_windowUID,
+	ak::UID												_widgetUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+
+	ui::core::aWidget * actualWidget = nullptr;
+	actualWidget = dynamic_cast<ui::core::aWidget *>(my_objManager->object(_widgetUID));
+	assert(actualWidget != nullptr); // Invalid object type
+
+	actualWindow->setCentralWidget(actualWidget->widget());
+}
+
+void ak::uiAPI::window::setCentralWidget(
+	ak::UID												_windowUID,
+	QWidget *											_widget
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setCentralWidget(_widget);
+}
+
+void ak::uiAPI::window::showMaximized(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->showMaximized();
+}
+
+void ak::uiAPI::window::showMinimized(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->showMaximized();
 }
 
 // ###############################################################################################################################################
 
 QString ak::uiAPI::toString(
 	ak::core::eventType									_type
-) {
-	try {
-		return ak::core::toQString(_type);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(eventType)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(eventType)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(eventType)"); }
-}
+) { return ak::core::toQString(_type); }
 
 QString ak::uiAPI::toString(
 	ak::core::valueType									_type
-) {
-	try {
-		return ak::core::toQString(_type);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(valueType)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(valueType)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(valueType)"); }
-}
+) { return ak::core::toQString(_type); }
 
 QString ak::uiAPI::toString(
 	ak::ui::core::textAlignment							_type
-) {
-	try {
-		return ak::ui::core::toQString(_type);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(textAlignment)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(textAlignment)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(textAlignment)"); }
-}
+) { return ak::ui::core::toQString(_type); }
 
 QString ak::uiAPI::toString(
 	ak::ui::core::dockLocation							_dockLocation
-) {
-	try {
-		return ak::ui::core::toQString(_dockLocation);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(dockLocation)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(dockLocation)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(dockLocation)"); }
-}
+) { return ak::ui::core::toQString(_dockLocation); }
 
 QString ak::uiAPI::toString(
 	ak::ui::core::tabLocation							_tabLocation
-) {
-	try {
-		return ak::ui::core::toQString(_tabLocation);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(tabLocation)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(tabLocation)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(tabLocation)"); }
-}
+) { return ak::ui::core::toQString(_tabLocation); }
 
 QString ak::uiAPI::toQString(
 	ak::ui::core::dialogResult							_dialogResult
-) {
-	try { return ak::ui::core::toQString(_dialogResult); }
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(dialogResult)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(dialogResult)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(dialogResult)"); }
-}
+) { return ak::ui::core::toQString(_dialogResult); }
 
 QString ak::uiAPI::toString(
 	ak::ui::core::keyType								_type
-) {
-	try {
-		return ak::ui::core::toQString(_type);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(keyType)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(keyType)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(keyType)"); }
-}
+) { return ak::ui::core::toQString(_type); }
 
 QString ak::uiAPI::toString(
 	ak::ui::core::objectType							_type
-) {
-	try {
-		return ak::ui::core::toQString(_type);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::toString(objectType)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::toString(objectType)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::toString(objectType)"); }
-}
+) { return ak::ui::core::toQString(_type); }
 
 // ###############################################################################################################################################
 
 void ak::uiAPI::creatorDestroyed(
 	ak::UID												_creatorUid
 ) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->creatorDestroyed(_creatorUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::creatorDestroyed()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::creatorDestroyed()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::creatorDestroyed()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	my_objManager->creatorDestroyed(_creatorUid);
 }
 
 void ak::uiAPI::addColorStyle(
 	ak::ui::colorStyle *								_colorStyle,
 	bool												_activate
 ) {
-	try {
-		my_apiManager.addColorStyle(_colorStyle, _activate);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setColorStyle()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	my_objManager->addColorStyle(_colorStyle, _activate);
 }
 
 void ak::uiAPI::setColorStyle(
 	const QString &				_colorStyleName
 ) {
-	try {
-		my_apiManager.setColorStyle(_colorStyleName);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setColorStyle()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	my_objManager->setColorStyle(_colorStyleName);
 }
 
 const ak::ui::colorStyle *  ak::uiAPI::getCurrentColorStyle(void) {
-	try { return my_apiManager.currentColorStyle(); }
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getColorStyle()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->getCurrentColorStyle();
 }
 
-QString ak::uiAPI::getCurrentColorStyleName(void) { return my_apiManager.currentColorStyleName(); }
+QString ak::uiAPI::getCurrentColorStyleName(void) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->getCurrentColorStyleName();
+}
 
 void ak::uiAPI::setDefaultDarkColorStyle() {
-	try {
-		my_apiManager.setDarkColorStyle();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setDefaultDarkColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setDefaultDarkColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setDefaultDarkColorStyle()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	my_objManager->setDefaultDarkColorStyle();
 }
 
 void ak::uiAPI::setDefaultColorStyle() {
-	try {
-		my_apiManager.setDefaultColorStyle();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setDefaultBrightColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setDefaultBrightColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setDefaultBrightColorStyle()"); }
-}
-
-void ak::uiAPI::setStatusLabelVisible(
-	ak::UID												_uiManagerUid,
-	bool												_visible
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->setStatusLabelVisible(_uiManagerUid, _visible);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setStatusLabelVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setStatusLabelVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setStatusLabelVisible()"); }
-}
-
-void ak::uiAPI::setStatusProgressVisible(
-	ak::UID												_uiManagerUid,
-	bool												_visible
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->setStatusProgressVisible(_uiManagerUid, _visible);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setStatusProgressVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setStatusProgressVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setStatusProgressVisible()"); }
-}
-
-void ak::uiAPI::setStatusLabelText(
-	ak::UID												_uiManagerUid,
-	const QString &										_text
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->setStatusLabelText(_uiManagerUid, _text);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setStatusLabelText()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setStatusLabelText()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setStatusLabelText()"); }
-}
-
-void ak::uiAPI::setStatusProgressValue(
-	ak::UID												_uiManagerUid,
-	int													_value
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->setStatusProgressValue(_uiManagerUid, _value);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setStatusProgressValue()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setStatusProgressValue()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setStatusProgressValue()"); }
-}
-
-void ak::uiAPI::setStatusProgressContinuous(
-	ak::UID												_uiManagerUid,
-	bool												_continuous
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		oM->setStatusProgressContinuous(_uiManagerUid, _continuous);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setStatusProgressContinuous()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setStatusProgressContinuous()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setStatusProgressContinuous()"); }
-}
-
-bool ak::uiAPI::getStatusLabelVisible(
-	ak::UID												_uiManagerUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->getStatusLabelVisible(_uiManagerUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getStatusLabelVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getStatusLabelVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getStatusLabelVisible()"); }
-}
-
-bool ak::uiAPI::getStatusProgressVisible(
-	ak::UID												_uiManagerUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->getStatusProgressVisible(_uiManagerUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getStatusProgressVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getStatusProgressVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getStatusProgressVisible()"); }
-}
-
-QString ak::uiAPI::getStatusLabelText(
-	ak::UID												_uiManagerUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->getStatusLabelText(_uiManagerUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getStatusLabelText()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getStatusLabelText()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getStatusLabelText()"); }
-}
-
-int ak::uiAPI::getStatusProgressValue(
-	ak::UID												_uiManagerUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->getStatusProgressValue(_uiManagerUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getStatusProgressValue()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getStatusProgressValue()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getStatusProgressValue()"); }
-}
-
-bool ak::uiAPI::getStatusProgressContinuous(
-	ak::UID												_uiManagerUid
-) {
-	try {
-		ak::ui::objectManager * oM = my_apiManager.objectManager();
-		return oM->getStatusProgressContinuous(_uiManagerUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getStatusProgressContinuous()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getStatusProgressContinuous()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getStatusProgressContinuous()"); }
-}
-
-// ###############################################################################################################################################
-
-// dock
-
-void ak::uiAPI::addDock(
-	ak::UID												_uiManagerUid,
-	ak::UID												_dockUid,
-	ak::ui::core::dockLocation							_dockLocation
-) {
-	try {
-		ak::ui::objectManager * obj = my_apiManager.objectManager();
-		obj->addDock(_uiManagerUid, _dockUid, _dockLocation);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addDock()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addDock()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addDock()"); }
-}
-
-void ak::uiAPI::tabifyDock(
-	ak::UID												_uiManagerUid,
-	ak::UID												_parentUid,
-	ak::UID												_dockUid
-) {
-	try {
-		ak::ui::objectManager * obj = my_apiManager.objectManager();
-		obj->tabifyDock(_uiManagerUid, _parentUid, _dockUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::tabifyDock()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::tabifyDock()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::tabifyDock()"); }
-}
-
-void ak::uiAPI::setDockBottomLeftPriority(
-	ak::UID												_uiManagerUid,
-	ak::ui::core::dockLocation							_dockLocation
-) {
-	try {
-		ak::ui::objectManager * obj = my_apiManager.objectManager();
-		obj->setDockBottomLeftPriority(_uiManagerUid, _dockLocation);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setDockBottomLeftPriority()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setDockBottomLeftPriority()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setDockBottomLeftPriority()"); }
-}
-
-void ak::uiAPI::setDockBottomRightPriority(
-	ak::UID												_uiManagerUid,
-	ak::ui::core::dockLocation							_dockLocation
-) {
-	try {
-		ak::ui::objectManager * obj = my_apiManager.objectManager();
-		obj->setDockBottomRightPriority(_uiManagerUid, _dockLocation);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::setDockBottomRightPriority()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::setDockBottomRightPriority()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::setDockBottomRightPriority()"); }
-}
-
-void ak::uiAPI::closeWindow(
-	ak::UID												_uiManagerUid
-) {
-	try {
-		ak::ui::objectManager * obj = my_apiManager.objectManager();
-		obj->close(_uiManagerUid);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::closeWindow()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::closeWindow()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::closeWindow()"); }
+	assert(my_objManager != nullptr); // API not initialized
+	my_objManager->setDefaultColorStyle();
 }
 
 // ###############################################################################################################################################
@@ -2994,71 +2272,41 @@ void ak::uiAPI::closeWindow(
 void ak::uiAPI::addIconSearchPath(
 	const QString &										_path
 ) {
-	try {
-		ak::ui::objectManager * manager = my_apiManager.objectManager();
-		manager->addIconSearchPath(_path);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::addIconSearchPath(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::addIconSearchPath(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::addIconSearchPath(QString)"); }
+	assert(my_iconManager != nullptr); // API not initialized
+	assert(my_objManager != nullptr); // API not initialized
+	my_iconManager->addDirectory(_path);
+	my_objManager->setIconSearchDirectories(my_iconManager->searchDirectories());
 }
 
 void ak::uiAPI::removeIconSearchPath(
 	const QString &										_path
 ) {
-	try {
-		ak::ui::objectManager * manager = my_apiManager.objectManager();
-		manager->removeIconSearchPath(_path);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::removeIconSearchPath(QString)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::removeIconSearchPath(QString)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::removeIconSearchPath(QString)"); }
+	assert(my_iconManager != nullptr); // API not initialized
+	assert(my_objManager != nullptr); // API not initialized
+	my_iconManager->removeDirectory(_path);
+	my_objManager->setIconSearchDirectories(my_iconManager->searchDirectories());
 }
 
 ak::UID ak::uiAPI::createUid(void) {
-	try {
-		return my_apiManager.uidManager()->getId();
-	} catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::createUid()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::createUid()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::createUid()"); }
+	assert(my_uidManager != nullptr); // API not initialized
+	return my_uidManager->getId();
 } 
 
-ak::messenger *ak::uiAPI::getMessenger(void) {
-	try {
-		// Return messenger
-		return my_apiManager.messenger();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getMessenger()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getMessenger()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getMessenger()"); }
-}
+ak::messenger *ak::uiAPI::getMessenger(void) { return my_messenger; }
 
 const QIcon & ak::uiAPI::getIcon(
 	const QString &											_name,
 	const QString &											_size
 ) {
-	try {
-		// Return icon manager
-		return *my_apiManager.iconManager()->icon(_name, _size);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getIcon()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getIcon()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getIcon()"); }
+	assert(my_iconManager != nullptr); // API not initialized
+	return *my_iconManager->icon(_name, _size);
 }
 
 // ###############################################################################################################################################
 
 // special
 
-int ak::uiAPI::exec(void) {
-	try {
-		// Return icon manager
-		return my_apiManager.exec();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::uiAPI::getIconManager()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::uiAPI::getIconManager()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::uiAPI::getIconManager()"); }
-}
+int ak::uiAPI::exec(void) { return my_apiManager.exec(); }
 
 std::vector<ak::ui::qt::comboButtonItem> ak::uiAPI::toComboButtonItem(
 	const std::vector<QString> &						_items
@@ -3075,8 +2323,4 @@ std::vector<ak::ui::qt::comboButtonItem> ak::uiAPI::toComboButtonItem(
 	}
 	assert(ret.size() == _items.size());
 	return ret;
-}
-
-void ak::uiAPI::testCall(void) {
-	assert(0); // No functionallity
 }

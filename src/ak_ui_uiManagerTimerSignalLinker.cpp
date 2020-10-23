@@ -81,4 +81,4 @@ void ak::ui::uiManagerTimerSignalLinker::timerTimeoutProgressHide() { my_uiManag
 
 void ak::ui::uiManagerTimerSignalLinker::timerTimeoutProgressShow() { my_uiManager->setStatusBarVisible(true, false); }
 
-void ak::ui::uiManagerTimerSignalLinker::timerTimeoutShowWindow() { my_uiManager->maximizeWindow(); }
+void ak::ui::uiManagerTimerSignalLinker::timerTimeoutShowWindow() { my_uiManager->showMaximized(); }

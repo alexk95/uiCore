@@ -72,14 +72,14 @@ namespace ak {
 				//! @param _menu The items to set as the menu for this combo button
 				//! @throw ak::Exception if the creation of a new item failed
 				void setItems(
-					const std::vector<ak::ui::qt::comboButtonItem> &		_menu
+					const std::vector<QString> &					_menu
 				);
 
 				//! @brief Will add a new item to the combo button
 				//! @param _other The new item to add
 				//! @throw ak::Exception if the creation of the new item failed
 				int addItem(
-					const ak::ui::qt::comboButtonItem &					_other
+					const QString &									_other
 				);
 
 				//! @brief Will return the ammount of items in the combo button

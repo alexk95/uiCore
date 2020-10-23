@@ -44,7 +44,6 @@ namespace ak {
 			class tabView : public ak::ui::core::aWidgetManager {
 			public:
 				tabView(
-					iconManager *						_iconManager,
 					messenger *							_messenger,
 					uidManager *						_uidManager,
 					objectManager *						_objectManager,

@@ -26,33 +26,24 @@
 #include <qtabwidget.h>
 
 ak::ui::widget::tabView::tabView(
-	iconManager *				_iconManager,
 	messenger *					_messenger,
 	uidManager *				_uidManager,
 	objectManager *				_objectManager,
 	colorStyle *				_colorStyle
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTabView, _messenger, _uidManager, _colorStyle),
-	my_tabView(nullptr), my_tabViewSignalLinker(nullptr)
+my_tabView(nullptr), my_tabViewSignalLinker(nullptr)
 {
-	try {
-		// Creatte the tabView
-		my_tabView = new ak::ui::qt::tabView(_colorStyle);
-		if (my_tabView == nullptr) { throw ak::Exception("Failed to create", "Create tabView"); }
-		
-		// Set color style
-		if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
+	// Creatte the tabView
+	my_tabView = new ak::ui::qt::tabView(_colorStyle);
 
-		// Create signal linker
-		my_tabViewSignalLinker = new ak::ui::tabViewSignalLinker(my_tabView, this);
-		if (my_tabViewSignalLinker == nullptr) { throw ak::Exception("Failed to create", "Create signal linker"); }
+	// Set color style
+	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
 
-		// Get id for myself
-		my_uid = my_uidManager->getId();
+	// Create signal linker
+	my_tabViewSignalLinker = new ak::ui::tabViewSignalLinker(my_tabView, this);
 
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tabView::tabView()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tabView::tabView()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tabView::tabView()"); }
+	// Get id for myself
+	my_uid = my_uidManager->getId();
 }
 
 ak::ui::widget::tabView::~tabView() {
@@ -68,15 +59,10 @@ QWidget * ak::ui::widget::tabView::widget(void) { return my_tabView->widget(); }
 
 void ak::ui::widget::tabView::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
-) { 
-	try {
-		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
-		my_tabView->setColorStyle(_colorStyle);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tabView::tabView()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tabView::tabView()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tabView::tabView()"); }
+) {
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	my_tabView->setColorStyle(_colorStyle);
 }
 
 // #######################################################################################################
@@ -115,14 +101,7 @@ ak::ID ak::ui::widget::tabView::createTab(
 	QWidget *									_widget,
 	const QString &								_title,
 	const QIcon &								_icon
-) {
-	try {
-		return my_tabView->addTab(_widget, _icon, _title);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tabView::createTab()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tabView::createTab()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tabView::createTab()"); }
-}
+) { return my_tabView->addTab(_widget, _icon, _title); }
 
 void ak::ui::widget::tabView::setTabLocation(
 	ak::ui::core::tabLocation			_location
@@ -141,7 +120,7 @@ void ak::ui::widget::tabView::setTabLocation(
 void ak::ui::widget::tabView::focusTab(
 	ak::ID								_tab
 ) {
-	if (_tab < 0 || _tab >= my_tabView->count()) { throw ak::Exception("Tab index out of range", "ak::ui::widget::tabView::focusTab()"); }
+	assert(_tab >= 0 && _tab < my_tabView->count()); // Tab index out of range
 	my_tabView->setCurrentIndex(_tab);
 }
 
@@ -149,7 +128,7 @@ void ak::ui::widget::tabView::setTabText(
 	ak::ID								_tab,
 	const QString &						_text
 ) {
-	if (_tab < 0 || _tab >= my_tabView->count()) { throw ak::Exception("Tab index out of range", "ak::ui::widget::tabView::focusTab()"); }
+	assert(_tab >= 0 && _tab < my_tabView->count()); // Tab index out of range
 	my_tabView->setTabText(_tab, _text);
 }
 
@@ -178,6 +157,6 @@ ak::ID ak::ui::widget::tabView::focusedTab(void) const { return my_tabView->curr
 QString ak::ui::widget::tabView::tabText(
 	ak::ID								_tab
 ) const {
-	if (_tab < 0 || _tab >= my_tabView->count()) { throw ak::Exception("Tab index out of range", "ak::ui::widget::tabView::focusTab()"); }
+	assert(_tab >= 0 && _tab < my_tabView->count()); // Tab index out of range
 	return my_tabView->tabText(_tab);
 }

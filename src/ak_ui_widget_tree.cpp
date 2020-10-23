@@ -390,7 +390,7 @@ void ak::ui::widget::tree::setMultiSelectionEnabled(
 	else { my_tree->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection); }
 }
 
-void ak::ui::widget::tree::setSelectAndDeselectChildrenEnabled(
+void ak::ui::widget::tree::setAutoSelectAndDeselectChildrenEnabled(
 	bool							_enabled
 ) { my_selectAndDeselectChildren = _enabled; }
 
@@ -402,30 +402,41 @@ void ak::ui::widget::tree::collapseAllItems(void) {
 	for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) { itm->second->setExpanded(false); }
 }
 
-void ak::ui::widget::tree::deleteItems(
-	const std::vector<ak::ID> &				_items
+void ak::ui::widget::tree::deleteItem(
+	ak::ID												_itemID
 ) {
-	try {
-		try {
-			my_treeSignalLinker->disable();
-			for (auto id : _items) {
-				my_itemsIterator itm = my_items.find(id);
-				if (itm != my_items.end()) {
-					qt::treeItem * item = itm->second;
-					for (auto cId : item->allChildsIDs()) { my_items.erase(cId); }
-					if (item->parentId() == ak::invalidID) {
-						my_tree->removeTopLevelItem(item->id());
-					}
-					delete item;
-					my_items.erase(id);
-				}
-			}
-			selectionChangedEvent(true);
+	my_treeSignalLinker->disable();
+	my_itemsIterator itm = my_items.find(_itemID);
+	assert(itm != my_items.end());		// Invalid item id
+	qt::treeItem * item = itm->second;
+	for (auto cId : item->allChildsIDs()) { my_items.erase(cId); }
+	if (item->parentId() == ak::invalidID) {
+		my_tree->removeTopLevelItem(item->id());
+	}
+	delete item;
+	my_items.erase(_itemID);
+
+	my_treeSignalLinker->enable();
+	selectionChangedEvent(true);
+}
+
+void ak::ui::widget::tree::deleteItems(
+	const std::vector<ak::ID> &				_itemIDs
+) {
+	my_treeSignalLinker->disable();
+	for (auto id : _itemIDs) {
+		my_itemsIterator itm = my_items.find(id);
+		assert(itm != my_items.end());		// Invalid item id
+		qt::treeItem * item = itm->second;
+		for (auto cId : item->allChildsIDs()) { my_items.erase(cId); }
+		if (item->parentId() == ak::invalidID) {
+			my_tree->removeTopLevelItem(item->id());
 		}
-		catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::deleteItems()"); }
-		catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::deleteItems()"); }
-		catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::deleteItems()"); }
-	} catch (const ak::Exception & e) { my_treeSignalLinker->enable(); throw e; }
+		delete item;
+		my_items.erase(id);
+	}
+	my_treeSignalLinker->enable();
+	selectionChangedEvent(true);
 }
 
 // ###########################################################################################################################

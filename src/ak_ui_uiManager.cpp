@@ -42,15 +42,11 @@
 ak::ui::uiManager::uiManager(
 	ak::messenger *									_messenger,
 	ak::uidManager *								_uidManager,
-	ak::ui::iconManager *							_iconManager,
-	ak::ui::objectManager *							_objectManager,
 	ak::ui::colorStyle *							_colorStyle
 ) : ak::ui::core::aPaintable(ak::ui::core::objectType::oMainWindow),
 	my_window(nullptr),
 	my_messenger(nullptr),
 	my_uidManager(nullptr),
-	my_iconManager(nullptr),
-	my_objectManager(nullptr),
 	my_tabToolBar(nullptr),
 	my_statusLabel(nullptr),
 	my_progressBar(nullptr),
@@ -65,14 +61,10 @@ ak::ui::uiManager::uiManager(
 		// Check parameter
 		if (_messenger == nullptr) { throw ak::Exception("Is nullptr", "Check messenger"); }
 		if (_uidManager == nullptr) { throw ak::Exception("Is nullptr", "Check UID manager"); }
-		if (_iconManager == nullptr) { throw ak::Exception("Is nullptr", "Check icon manager"); }
-		if (_objectManager == nullptr) { throw ak::Exception("Is nullptr", "Check object manager"); }
 		my_messenger = _messenger;
 		my_uidManager = _uidManager;
 		my_uid = my_uidManager->getId();
-		my_iconManager = _iconManager;
 		my_colorStyle = _colorStyle;
-		my_objectManager = _objectManager;
 
 		// Create main window
 		my_window = new QMainWindow();
@@ -244,7 +236,8 @@ void ak::ui::uiManager::restoreSettings(
 			actualState.push_back(itm->GetInt());
 		}
 
-		QMetaObject::invokeMethod(this, "slotRestoreSetting", Qt::ConnectionType::QueuedConnection, Q_ARG(QByteArray, actualState));
+		slotRestoreSetting(actualState);
+		//QMetaObject::invokeMethod(this, "slotRestoreSetting", Qt::ConnectionType::QueuedConnection, Q_ARG(QByteArray, actualState));
 	}
 }
 
@@ -295,33 +288,17 @@ void ak::ui::uiManager::addDock(
 }
 
 void ak::ui::uiManager::tabifyDock(
-	ak::UID										_firstDockUid,
-	ak::UID										_secondDockUid
+	ak::ui::qt::dock *							_mainDock,
+	ak::ui::qt::dock *							_subDock
 ) {
-	try {
-		// Get and cast dock 1
-		ak::ui::core::aObject * d1 = my_objectManager->obj_get(_firstDockUid);
-		if (d1->objectType() != ak::ui::core::objectType::oDock) { throw ak::Exception("Invalid object type, expected dock", "Check object type"); }
-		ak::ui::qt::dock * dock1 = nullptr;
-		dock1 = dynamic_cast<ak::ui::qt::dock *>(d1);
-		assert(dock1 != nullptr); // Cast failed
+	assert(_mainDock != nullptr); // Cast failed
+	assert(_subDock != nullptr); // Cast failed
 
-		// Get and cast dock 2
-		ak::ui::core::aObject * d2 = my_objectManager->obj_get(_secondDockUid);
-		if (d2->objectType() != ak::ui::core::objectType::oDock) { throw ak::Exception("Invalid object type, expected dock", "Check object type"); }
-		ak::ui::qt::dock * dock2 = nullptr;
-		dock2 = dynamic_cast<ak::ui::qt::dock *>(d2);
-		assert(dock2 != nullptr); // Cast failed
-		
-		// tabify dock
-		my_window->tabifyDockWidget(dock1, dock2);
-		my_window->resizeDocks({ dock2 }, { 0 }, Qt::Orientation::Vertical);
-		my_window->resizeDocks({ dock2 }, { 0 }, Qt::Orientation::Horizontal);
-		dock1->raise();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::tabifyDock()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::tabifyDock()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::tabifyDock()"); }
+	// tabify dock
+	my_window->tabifyDockWidget(_mainDock, _subDock);
+	my_window->resizeDocks({ _subDock }, { 0 }, Qt::Orientation::Vertical);
+	my_window->resizeDocks({ _subDock }, { 0 }, Qt::Orientation::Horizontal);
+	_mainDock->raise();
 }
 
 void ak::ui::uiManager::setDockPriorityBottomLeft(
@@ -457,17 +434,11 @@ void ak::ui::uiManager::setStatusLabelVisible(
 	}
 }
 
-void ak::ui::uiManager::maximizeWindow(void) {
-	my_window->showMaximized();
-}
+void ak::ui::uiManager::showMaximized(void) { my_window->showMaximized(); }
 
-void ak::ui::uiManager::minimizeWindow(void) {
-	my_window->showMinimized();
-}
+void ak::ui::uiManager::showMinimized(void) { my_window->showMinimized(); }
 
-void ak::ui::uiManager::close(void) {
-	my_window->close();
-}
+void ak::ui::uiManager::close(void) { my_window->close(); }
 
 void ak::ui::uiManager::deleteObject(
 	ak::UID													_objectUid
@@ -514,20 +485,6 @@ int ak::ui::uiManager::getShowStatusObjectDelayTimerInterval(void) const {
 
 int ak::ui::uiManager::getHideStatusObjectDelayTimerInterval(void) const {
 	return my_timerLabelHide->interval();
-}
-
-void ak::ui::uiManager::showMessageBox(
-	const QString &														_message,
-	const QString &														_title
-) {
-	try{
-		QMessageBox msg;
-		msg.setText(_message);
-		msg.setWindowTitle(_title);
-		msg.exec();
-	}
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::showMessagebox()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::showMessagebox()"); }
 }
 
 //

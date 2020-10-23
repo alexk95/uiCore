@@ -228,7 +228,7 @@ namespace ak {
 
 				//! @brief Enables or disables the ability to automatically select/deselect the childrens of an item
 				//! @param _enabled if true, the childs of an item will be selected/deselected automatically
-				void setSelectAndDeselectChildrenEnabled(
+				void setAutoSelectAndDeselectChildrenEnabled(
 					bool							_enabled
 				);
 
@@ -238,11 +238,16 @@ namespace ak {
 				//! @brief Will collapse all items in this tree
 				void collapseAllItems(void);
 
-				//! @brief Will delete the provided items in this tree
+				//! @brief Will delete the provided item from this tree
+				//! @param _item The item to delete
+				void deleteItem(
+					ak::ID												_itemID
+				);
+
+				//! @brief Will delete the provided items from this tree
 				//! @param _items The items to delete
-				//! @throw ak::Exception if any of the item IDs is invalid
 				void deleteItems(
-					const std::vector<ak::ID> &							_items
+					const std::vector<ak::ID> &							_itemIDs
 				);
 
 				// ###########################################################################################################################################

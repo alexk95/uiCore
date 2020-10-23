@@ -74,7 +74,7 @@ void ak::ui::qt::comboButton::clearItems(void) {
 }
 
 void ak::ui::qt::comboButton::setItems(
-	const std::vector<ak::ui::qt::comboButtonItem> &		_menu
+	const std::vector<QString> &		_menu
 ) {
 	try {
 		clearItems();
@@ -99,7 +99,7 @@ void ak::ui::qt::comboButton::setItems(
 }
 
 int ak::ui::qt::comboButton::addItem(
-	const ak::ui::qt::comboButtonItem &					_other
+	const QString &						_other
 ) {
 	try {
 		// Create new item

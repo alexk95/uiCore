@@ -13,13 +13,11 @@
   <ItemGroup>
     <ClInclude Include="include\Example.h" />
     <ClInclude Include="include\ExampleNotifier.h" />
-    <QtMoc Include="include\propertyGrid.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Example.cpp" />
     <ClCompile Include="src\ExampleNotifier.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\propertyGrid.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{63A6BF5F-A201-4F33-A81F-6CE3448FE9AF}</ProjectGuid>

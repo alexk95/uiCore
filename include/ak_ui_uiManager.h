@@ -66,8 +66,6 @@ namespace ak {
 			uiManager(
 				ak::messenger *											_messenger,
 				ak::uidManager *										_uidManager,
-				ak::ui::iconManager *									_iconManager,
-				ak::ui::objectManager *									_objectManager,
 				ak::ui::colorStyle *									_colorStyle = nullptr
 			);
 
@@ -128,8 +126,8 @@ namespace ak {
 			//! @param _mainDockUid The UID of the main (parent) dock
 			//! @param _subDockUid The UID of the sub (child) dock
 			void tabifyDock(
-				ak::UID										_mainDockUid,
-				ak::UID										_subDockUid
+				ak::ui::qt::dock *							_mainDock,
+				ak::ui::qt::dock *							_subDock
 			);
 
 			//! @brief Will set the priority of the bottom left corner to the specified dock location
@@ -156,10 +154,10 @@ namespace ak {
 			//! @brief Will set the visible state of the status label
 			//! If the show delayed option is active the delay timer will start and set the visible state of the status label on timeout
 			//! @param _visible If true, the status label will be set to visible, otherwise to hidden
-			//! @param _showDelayed If true, the status label will be shown/hidden by the delay timer
+			//! @param _hideDelayed If true, the status label will be hidden by the delay timer
 			void setStatusLabelVisible(
-				bool													_visible,
-				bool													_showDelayed = true
+				bool													_visible = true,
+				bool													_hideDelayed = true
 			);
 
 			//! @brief Will set the progress of the status bar
@@ -206,14 +204,6 @@ namespace ak {
 
 			//! @brief Will return the currently set interval for the status label and progress bar hide timer
 			int getHideStatusObjectDelayTimerInterval(void) const;
-
-			//! @brief Wil show a messagebox
-			//! @param _message The message to be displayed
-			//! @param _title The message box window title
-			void showMessageBox(
-				const QString &											_message,
-				const QString &											_title
-			);
 
 			// #############################################################################################################
 			// TabToolbar
@@ -262,10 +252,10 @@ namespace ak {
 			// ELEMENT MANIPULATION
 
 			//! @brief Will set the window state to maximized
-			void maximizeWindow(void);
+			void showMaximized(void);
 
 			//! @brief Will set the window state to minimized
-			void minimizeWindow(void);
+			void showMinimized(void);
 
 			//! @brief Will close the window
 			void close(void);
@@ -289,9 +279,7 @@ namespace ak {
 			ak::messenger *												my_messenger;					//! The messenger used in this object
 			ak::uidManager *											my_uidManager;					//! The UID manager used in this object
 			tt::TabToolbar *											my_tabToolBar;					//! The TabToolBar of this window
-			ak::ui::iconManager *										my_iconManager;					//! The icon manager used in this object
 			ak::ui::uiManagerTimerSignalLinker *						my_timerSignalLinker;			//! The signal linker used to link the timer singnals
-			ak::ui::objectManager *										my_objectManager;				//! The object manager this window is using
 
 			bool														my_progressBarContinuous;		//! If true, the status bar ist currently continuous
 

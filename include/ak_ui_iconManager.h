@@ -54,8 +54,7 @@ namespace ak {
 			//! @param _throwException If true, an exception will be thrown if the provided directory does not exist
 			//! @throw ak::Exception if the provided directory does not exist
 			bool removeDirectory(
-				const QString &									_directory,
-				bool											_throwException = false
+				const QString &									_directory
 			);
 
 			//! @brief Will return the icon loaded from the files location

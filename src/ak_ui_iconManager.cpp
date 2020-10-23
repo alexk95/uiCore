@@ -30,7 +30,6 @@ ak::ui::iconManager::iconManager(
 	my_mutex(nullptr)
 {
 	my_mutex = new std::mutex();
-	if (my_mutex == nullptr) { throw ak::Exception("Failed to create mutex", "ak::ui::iconManager::iconManager()"); }
 	// Check if a main directory was provided
 	if (_mainDirectory.length() > 0) {
 		QDir dir(_mainDirectory);
@@ -90,8 +89,7 @@ void ak::ui::iconManager::addDirectory(
 }
 
 bool ak::ui::iconManager::removeDirectory(
-	const QString &					_directory,
-	bool							_throwException
+	const QString &					_directory
 ) {
 	// Lock the mutex
 	my_mutex->lock();
@@ -109,7 +107,7 @@ bool ak::ui::iconManager::removeDirectory(
 		}
 	}
 	my_mutex->unlock();
-	if (_throwException) { throw ak::Exception("The provided directory does not exist", "ak::ui::iconManager::removeDirectory()"); }
+	assert(0); // The provided directory does not exist
 	return false;
 }
 
@@ -124,8 +122,7 @@ const QIcon * ak::ui::iconManager::icon(
 			// icon does not exist at all
 			QIcon * newIcon = createIcon(_iconName, _iconSize);
 			std::map<QString, QIcon *> * newMap = nullptr;
-			newMap = new (std::nothrow) std::map<QString, QIcon *>;
-			if (newMap == nullptr) { delete newIcon; throw ak::Exception("Failed to create", "Create size map"); }
+			newMap = new std::map<QString, QIcon *>;
 			newMap->insert_or_assign(_iconSize, newIcon);
 			my_icons.insert_or_assign(_iconName, newMap);
 			my_mutex->unlock();
@@ -196,8 +193,7 @@ QIcon * ak::ui::iconManager::createIcon(
 			// Check if the file exist
 			if (file.exists()) {
 				QIcon * ico = nullptr;
-				ico = new (std::nothrow) QIcon(file.fileName());
-				if (ico == nullptr) { throw ak::Exception("Failed to create", "Create icon"); }
+				ico = new QIcon(file.fileName());
 				return ico;
 			}
 		}

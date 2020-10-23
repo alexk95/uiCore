@@ -91,6 +91,10 @@ namespace ak {
 
 				virtual void paintEvent(QPaintEvent *pe) override;
 
+				void close(
+					ui::core::dialogResult				_result
+				);
+
 				// ####################################################################
 
 				// Getter

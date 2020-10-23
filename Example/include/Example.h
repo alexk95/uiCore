@@ -17,7 +17,7 @@
 
 // Forward declaration
 class ExampleNotifier;
-class propertyGrid;
+
 //! This class is managing the UI
 class Example
 {
@@ -73,8 +73,6 @@ private:
 
 	ak::UID						my_timerRestoreSettings;
 
-	propertyGrid *				my_testWidget;
-	
 	structUi					my_ui;			//! Contains all UIDs of the UI
 	ak::UID						my_uid;			//! The UID of this application
 	ExampleNotifier *			my_notifier;	//! The notifier that receives the callback messages

@@ -1,5 +1,5 @@
 /*
- * ak_ui_widget_defaultWelcomeScreen.h
+ * ak_ui_widget_welcomeScreen.h
  *
  *  Created on: October 09, 2020
  *	Author: Alexander Kuester
@@ -40,20 +40,20 @@ namespace ak {
 
 		// Forward declaration
 		class colorStyle;
-		class defaultWelcomeScreenSignalLinker;
+		class welcomeScreenSignalLinker;
 		namespace qt { class list; class listItem; }
 
 		namespace widget {
 
-			class defaultWelcomeScreen : public ui::core::aWidgetManager {
+			class welcomeScreen : public ui::core::aWidgetManager {
 			public:
-				defaultWelcomeScreen(
+				welcomeScreen(
 					ak::messenger *			_messenger,
 					ak::uidManager *		_uidManager,
 					ak::ui::colorStyle *	_colorStyle = nullptr
 
 				);
-				virtual ~defaultWelcomeScreen();
+				virtual ~welcomeScreen();
 
 				//! @brief Will return the widgets widget to display it
 				virtual QWidget * widget(void) override;
@@ -85,6 +85,48 @@ namespace ak {
 					const QString &					_text
 				);
 
+				//! @brief Will add a new item at the  group
+				//! @param _text The text of the new item
+				ak::ID addItemAtRecents(
+					const QString &					_text
+				);
+
+				//! @brief Will add a new item at the  group
+				//! @param _icon The icon of the new item
+				//! @param _text The text of the new item
+				ak::ID addItemAtRecents(
+					const QIcon &					_icon,
+					const QString &					_text
+				);
+
+				//! @brief Will add a new item at the  group
+				//! @param _text The text of the new item
+				ak::ID addItemAtOpen(
+					const QString &					_text
+				);
+
+				//! @brief Will add a new item at the  group
+				//! @param _icon The icon of the new item
+				//! @param _text The text of the new item
+				ak::ID addItemAtOpen(
+					const QIcon &					_icon,
+					const QString &					_text
+				);
+
+				//! @brief Will add a new item at the  group
+				//! @param _text The text of the new item
+				ak::ID addItemAtNew(
+					const QString &					_text
+				);
+
+				//! @brief Will add a new item at the  group
+				//! @param _icon The icon of the new item
+				//! @param _text The text of the new item
+				ak::ID addItemAtNew(
+					const QIcon &					_icon,
+					const QString &					_text
+				);
+
 				//! @brief Will remove all items from all groups
 				void clear(void);
 
@@ -99,6 +141,18 @@ namespace ak {
 					ak::ID							_item
 				);
 
+				QString itemTextAtRecent(
+					ak::ID							_item
+				);
+
+				QString itemTextAtOpen(
+					ak::ID							_item
+				);
+
+				QString itemTextAtNew(
+					ak::ID							_item
+				);
+
 				void setItemText(
 					ak::ID							_group,
 					ak::ID							_item,
@@ -109,6 +163,10 @@ namespace ak {
 					ak::ID							_group,
 					ak::ID							_item,
 					const QIcon &					_icon
+				);
+
+				static QString groupName(
+					ak::ID							_group
 				);
 
 				// #############################################################################################################
@@ -166,7 +224,7 @@ namespace ak {
 
 				int									my_headerLabelTextSize;
 
-				defaultWelcomeScreenSignalLinker *	my_signalLinker;
+				welcomeScreenSignalLinker *			my_signalLinker;
 
 			}; // class defaultWelcomeScreen;
 		} // namespace widget
@@ -177,15 +235,15 @@ namespace ak {
 
 		// ########################################################################################
 
-		class defaultWelcomeScreenSignalLinker : public QObject {
+		class welcomeScreenSignalLinker : public QObject {
 			Q_OBJECT
 		public:
 
-			defaultWelcomeScreenSignalLinker(
-				widget::defaultWelcomeScreen *	_screen
+			welcomeScreenSignalLinker(
+				widget::welcomeScreen *	_screen
 			);
 
-			virtual ~defaultWelcomeScreenSignalLinker();
+			virtual ~welcomeScreenSignalLinker();
 
 			void addLink(
 				qt::list *						_object
@@ -199,7 +257,7 @@ namespace ak {
 
 		private:
 
-			widget::defaultWelcomeScreen *		my_screen;
+			widget::welcomeScreen *				my_screen;
 			std::vector<qt::list *>				my_lists;
 
 			qt::list * castList(
@@ -210,9 +268,9 @@ namespace ak {
 				QListWidgetItem *				_item
 			);
 
-			defaultWelcomeScreenSignalLinker() = delete;
-			defaultWelcomeScreenSignalLinker(const defaultWelcomeScreenSignalLinker &) = delete;
-			defaultWelcomeScreenSignalLinker & operator = (const defaultWelcomeScreenSignalLinker &) = delete;
+			welcomeScreenSignalLinker() = delete;
+			welcomeScreenSignalLinker(const welcomeScreenSignalLinker &) = delete;
+			welcomeScreenSignalLinker & operator = (const welcomeScreenSignalLinker &) = delete;
 
 		};
 

@@ -174,6 +174,10 @@ void ak::ui::dialog::logIn::paintEvent(QPaintEvent *pe)
 	paint.drawPixmap(rectOfPixmap.topLeft(), my_currentImage);
 }
 
+void ak::ui::dialog::logIn::close(
+	ui::core::dialogResult				_result
+) { setResult(_result); QDialog::close(); }
+
 // ####################################################################
 
 // Getter
