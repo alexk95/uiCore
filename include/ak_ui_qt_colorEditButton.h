@@ -97,6 +97,12 @@ namespace ak {
 					const QString &				_text
 				);
 
+				//! @brief Will fill the background for the current parent widget
+				//! @param _color The color to set
+				void fillBackground(
+					const ui::color &			_color
+				);
+
 			signals:
 				void changed(void);
 

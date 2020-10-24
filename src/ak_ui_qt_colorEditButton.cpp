@@ -22,6 +22,8 @@
 #include <qlayout.h>						// QHBoxLayout
 #include <qcolordialog.h>					// QColorDialog
 
+#define MY_OBJECTNAME "CentralWidget_ColorEditButton"
+
 ak::ui::qt::colorEditButton::colorEditButton(
 	const ak::ui::color &						_color,
 	const QString &								_textOverride,
@@ -37,6 +39,7 @@ ak::ui::qt::colorEditButton::colorEditButton(
 
 		my_widget = new QWidget();
 		my_widget->setContentsMargins(QMargins(0, 0, 0, 0));
+		my_widget->setObjectName(MY_OBJECTNAME);
 
 		// Create layout
 		my_layout = new QHBoxLayout(my_widget);
@@ -119,6 +122,16 @@ void ak::ui::qt::colorEditButton::overrideText(
 	const QString &								_text
 ) {
 	my_button->setText(_text);
+}
+
+void ak::ui::qt::colorEditButton::fillBackground(
+	const ui::color &			_color
+) {
+	QString sheet("#" MY_OBJECTNAME "{background-color:#");
+	sheet.append(_color.toHexString(true));
+	sheet.append(";}\n");
+	my_widget->setAutoFillBackground(true);
+	my_widget->setStyleSheet(sheet);
 }
 
 void ak::ui::qt::colorEditButton::slotButtonClicked() {

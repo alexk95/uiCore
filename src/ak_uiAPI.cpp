@@ -818,6 +818,18 @@ void ak::uiAPI::propertyGrid::addGroup(
 	actualPropertyGrid->addGroup(_groupName);
 }
 
+void ak::uiAPI::propertyGrid::addGroup(
+	ak::UID											_propertyGridUID,
+	const QColor &									_color,
+	const QString &									_groupName
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->addGroup(_color, _groupName);
+}
+
 ak::ID ak::uiAPI::propertyGrid::addItem(
 	ak::UID											_propertyGridUID,
 	bool											_isMultipleValues,

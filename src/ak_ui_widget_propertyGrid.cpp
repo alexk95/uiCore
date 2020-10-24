@@ -26,13 +26,15 @@
 #include <qfont.h>
 #include <qstringlist.h>
 
+#define ALTERNATE_ROW_COLOR_VALUE 40
+
 ak::ui::widget::propertyGrid::propertyGrid(
 	messenger *				_messenger,
 	uidManager *			_uidManager
 )
-	: ak::ui::core::aWidgetManager(ak::ui::core::oPropertyGrid, _messenger, _uidManager),
-	my_alternateForeColor(180, 180, 180), my_alternateBackColor(0, 0, 0), my_isAlternateGroup(false),
-	my_currentID(ak::invalidID)
+	: ak::ui::core::aWidgetManager(ak::ui::core::oPropertyGrid, _messenger, _uidManager), my_currentID(ak::invalidID),
+	my_groupHeaderBackColor(80,80,80), my_groupHeaderForeColor(0,0,0), my_itemDefaultBackgroundColor(230,230,230),
+	my_itemTextColorError(255,0,0), my_itemTextColorNormal(0,0,0)
 {
 	assert(_messenger != nullptr); // nullptr provided
 	assert(_uidManager != nullptr); // nullptr provided
@@ -51,7 +53,6 @@ ak::ui::widget::propertyGrid::propertyGrid(
 
 	my_defaultGroup = new propertyGridGroup(my_table, "");
 	my_defaultGroup->activate();
-
 }
 
 ak::ui::widget::propertyGrid::~propertyGrid() {
@@ -71,15 +72,16 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	my_table->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTable));
-	my_alternateBackColor = my_colorStyle->getAlternateBackColor().toQColor();
-	my_alternateForeColor = my_colorStyle->getAlternateForeColor().toQColor();
-	my_isAlternateGroup = false;
+	//my_table->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTable));
+	my_groupHeaderBackColor = my_colorStyle->getHeaderBackgroundColor().toQColor();
+	my_groupHeaderForeColor = my_colorStyle->getHeaderForegroundColor().toQColor();
+	my_itemDefaultBackgroundColor = my_colorStyle->getControlsMainBackcolor().toQColor();
+	my_itemTextColorNormal = my_colorStyle->getControlsMainForecolor().toQColor();
+	my_itemTextColorError = my_colorStyle->getControlsErrorForecolor().toQColor();
+
 	for (auto itm : my_groups) {
-		my_isAlternateGroup = !my_isAlternateGroup;
-		if (my_isAlternateGroup) {
-			itm.second->setColors(my_alternateForeColor, my_alternateBackColor);
-		}
+		itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
+		itm.second->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
 	}
 }
 
@@ -94,10 +96,24 @@ void ak::ui::widget::propertyGrid::addGroup(
 	my_groupsIterator itm = my_groups.find(_group);
 	assert(itm == my_groups.end());	// Group already exists
 	propertyGridGroup * newGroup = new propertyGridGroup(my_table, _group);
-	my_isAlternateGroup = !my_isAlternateGroup;
-	if (my_isAlternateGroup) {
-		newGroup->setColors(my_alternateForeColor, my_alternateBackColor);
-	}
+	newGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
+	newGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
+	newGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
+	newGroup->activate();
+	my_groups.insert_or_assign(_group, newGroup);
+}
+
+void ak::ui::widget::propertyGrid::addGroup(
+	const QColor &									_color,
+	const QString &									_group
+) {
+	assert(_group.length() > 0); // Empty group name provided
+	my_groupsIterator itm = my_groups.find(_group);
+	assert(itm == my_groups.end());	// Group already exists
+	propertyGridGroup * newGroup = new propertyGridGroup(my_table, _group);
+	newGroup->setItemsBackColor(_color);
+	newGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
+	newGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	newGroup->activate();
 	my_groups.insert_or_assign(_group, newGroup);
 }
@@ -369,7 +385,7 @@ void ak::ui::widget::propertyGrid::slotItemChanged(void) {
 ak::ui::widget::propertyGridGroup::propertyGridGroup(
 	qt::table *							_propertyGridTable,
 	const QString &						_groupName
-) : my_propertyGridTable(_propertyGridTable), my_isActivated(false), my_isVisible(true), my_colorWasSet(false)
+) : my_propertyGridTable(_propertyGridTable), my_isActivated(false), my_isVisible(true), my_isAlternateBackground(false)
 {
 	assert(my_propertyGridTable != nullptr);
 	my_item = new QTableWidgetItem;
@@ -386,7 +402,6 @@ ak::ui::widget::propertyGridGroup::propertyGridGroup(
 	my_propertyGridTable->setItem(r, 0, my_item);
 	QFont font = my_item->font();
 	font.setBold(true);
-	font.setUnderline(true);
 	my_item->setFont(font);
 
 	connect(my_propertyGridTable, SIGNAL(itemDoubleClicked(QTableWidgetItem *)), this, SLOT(slotDoubleClicked(QTableWidgetItem *)));
@@ -408,21 +423,41 @@ void ak::ui::widget::propertyGridGroup::activate(void) {
 	checkVisibility();
 }
 
-void ak::ui::widget::propertyGridGroup::setColors(
+void ak::ui::widget::propertyGridGroup::setHeaderColors(
 	const QColor &				_foreColor,
 	const QColor &				_backColor
 ) {
-	my_colorWasSet = true;
 	my_backColor = _backColor;
 	my_foreColor = _foreColor;
 
 	my_item->setBackgroundColor(my_backColor);
 	my_item->setTextColor(my_foreColor);
+}
 
-	for (auto itm : my_items) {
-		itm->setBackColor(my_backColor);
-		itm->setTextColor(my_foreColor);
-	}
+void ak::ui::widget::propertyGridGroup::setItemsBackColor(
+	const QColor &									_backgroudColor
+) {
+	my_colorItemBackground = _backgroudColor;
+	int r = my_colorItemBackground.red() + ALTERNATE_ROW_COLOR_VALUE;
+	int g = my_colorItemBackground.green() + ALTERNATE_ROW_COLOR_VALUE;
+	int b = my_colorItemBackground.blue() + ALTERNATE_ROW_COLOR_VALUE;
+	int a = my_colorItemBackground.alpha() - ALTERNATE_ROW_COLOR_VALUE;
+	if (r < 0) { r = 0; }
+	if (r > 255) { r = 255; }
+	if (g < 0) { g = 0; }
+	if (g > 255) { g = 255; }
+	if (b < 0) { b = 0; }
+	if (b > 255) { b = 255; }
+	if (a < 0) { a = 0; }
+	if (a > 255) { a = 255; }
+	my_colorItemBackgroundAlternate.setRgb(r, g, b, a);
+}
+
+void ak::ui::widget::propertyGridGroup::setItemsTextColors(
+	const QColor &									_textColorNormal,
+	const QColor &									_textColorError
+) {
+
 }
 
 ak::ui::widget::propertyGridItem * ak::ui::widget::propertyGridGroup::addItem(
@@ -438,10 +473,10 @@ ak::ui::widget::propertyGridItem * ak::ui::widget::propertyGridGroup::addItem(
 	my_propertyGridTable->insertRow(r + 1);
 	propertyGridItem * newItem = new propertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
 	my_items.push_back(newItem);
-	if (my_colorWasSet) {
-		newItem->setBackColor(my_backColor);
-		newItem->setTextColor(my_backColor);
-	}
+	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
+	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
+	else { newItem->setBackgroundColor(my_colorItemBackground); }
+	my_isAlternateBackground = !my_isAlternateBackground;
 	checkVisibility();
 	newItem->setId(_itemId);
 	return newItem;
@@ -460,10 +495,10 @@ ak::ui::widget::propertyGridItem * ak::ui::widget::propertyGridGroup::addItem(
 	my_propertyGridTable->insertRow(r + 1);
 	propertyGridItem * newItem = new propertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
 	my_items.push_back(newItem);
-	if (my_colorWasSet) {
-		newItem->setBackColor(my_backColor);
-		newItem->setTextColor(my_backColor);
-	}
+	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
+	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
+	else { newItem->setBackgroundColor(my_colorItemBackground); }
+	my_isAlternateBackground = !my_isAlternateBackground;
 	checkVisibility();
 	newItem->setId(_itemId);
 	return newItem;
@@ -482,10 +517,10 @@ ak::ui::widget::propertyGridItem * ak::ui::widget::propertyGridGroup::addItem(
 	my_propertyGridTable->insertRow(r + 1);
 	propertyGridItem * newItem = new propertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
 	my_items.push_back(newItem);
-	if (my_colorWasSet) {
-		newItem->setBackColor(my_backColor);
-		newItem->setTextColor(my_backColor);
-	}
+	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
+	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
+	else { newItem->setBackgroundColor(my_colorItemBackground); }
+	my_isAlternateBackground = !my_isAlternateBackground;
 	checkVisibility();
 	newItem->setId(_itemId);
 	return newItem;
@@ -504,10 +539,10 @@ ak::ui::widget::propertyGridItem * ak::ui::widget::propertyGridGroup::addItem(
 	my_propertyGridTable->insertRow(r + 1);
 	propertyGridItem * newItem = new propertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
 	my_items.push_back(newItem);
-	if (my_colorWasSet) {
-		newItem->setBackColor(my_backColor);
-		newItem->setTextColor(my_backColor);
-	}
+	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
+	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
+	else { newItem->setBackgroundColor(my_colorItemBackground); }
+	my_isAlternateBackground = !my_isAlternateBackground;
 	checkVisibility();
 	newItem->setId(_itemId);
 	return newItem;
@@ -527,10 +562,10 @@ ak::ui::widget::propertyGridItem * ak::ui::widget::propertyGridGroup::addItem(
 	my_propertyGridTable->insertRow(r + 1);
 	propertyGridItem * newItem = new propertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _possibleSelection, _value);
 	my_items.push_back(newItem);
-	if (my_colorWasSet) {
-		newItem->setBackColor(my_backColor);
-		newItem->setTextColor(my_backColor);
-	}
+	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
+	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
+	else { newItem->setBackgroundColor(my_colorItemBackground); }
+	my_isAlternateBackground = !my_isAlternateBackground;
 	checkVisibility();
 	newItem->setId(_itemId);
 	return newItem;
@@ -549,10 +584,10 @@ ak::ui::widget::propertyGridItem * ak::ui::widget::propertyGridGroup::addItem(
 	my_propertyGridTable->insertRow(r + 1);
 	propertyGridItem * newItem = new propertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
 	my_items.push_back(newItem);
-	if (my_colorWasSet) {
-		newItem->setBackColor(my_backColor);
-		newItem->setTextColor(my_backColor);
-	}
+	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
+	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
+	else { newItem->setBackgroundColor(my_colorItemBackground); }
+	my_isAlternateBackground = !my_isAlternateBackground;
 	checkVisibility();
 	newItem->setId(_itemId);
 	return newItem;
@@ -588,6 +623,15 @@ void ak::ui::widget::propertyGridGroup::checkVisibility(void) {
 	}
 }
 
+void ak::ui::widget::propertyGridGroup::repaint(void) {
+	my_isAlternateBackground = false;
+	for (auto itm : my_items) {
+		if (my_isAlternateBackground) { itm->setBackgroundColor(my_colorItemBackgroundAlternate); }
+		else { itm->setBackgroundColor(my_colorItemBackground); }
+		itm->setTextColors(my_colorTextNormal, my_colorTextError);
+	}
+}
+
 // ##############################################################################################################++++++++++++++++++++++++++++++
 
 // ##############################################################################################################++++++++++++++++++++++++++++++
@@ -617,6 +661,11 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	else {
 		my_widgetBool->setChecked(_value);
 	}
+	QString sheet("QCheckBox{background-color:#");
+	sheet.append(my_colorBackground.toHexString(true));
+	sheet.append(";}\n");
+	my_widgetBool->setStyleSheet(sheet);
+	my_widgetBool->setAutoFillBackground(true);
 
 	// Make the first cell read only
 	Qt::ItemFlags f = my_cellSettingName->flags();
@@ -755,6 +804,7 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	}
 	my_valuePossibleSelection = _possibleSlection;
 	my_widgetSelection->setItems(my_valuePossibleSelection);
+	my_widgetSelection->setAutoFillBackground(true);
 
 	// Make the first cell read only
 	Qt::ItemFlags f = my_cellSettingName->flags();
@@ -818,18 +868,19 @@ void ak::ui::widget::propertyGridItem::setId(
 
 ak::ID ak::ui::widget::propertyGridItem::getId(void) const { return my_id; }
 
-void ak::ui::widget::propertyGridItem::setTextColor(
-	const QColor &						_color
-) {
-	my_cellSettingName->setTextColor(_color);
-	my_cellValue->setTextColor(_color);
-}
+bool ak::ui::widget::propertyGridItem::getIsCurrentlyError() const { return my_isCurrentlyError; }
 
-void ak::ui::widget::propertyGridItem::setBackColor(
-	const QColor &						_color
+void ak::ui::widget::propertyGridItem::setBackgroundColor(
+	const QColor &					_backgroundColor
+) { my_colorBackground = _backgroundColor; repaint(); }
+
+void ak::ui::widget::propertyGridItem::setTextColors(
+	const QColor &					_foregroundNormal,
+	const QColor &					_foregroundError
 ) {
-	my_cellSettingName->setBackgroundColor(_color);
-	my_cellValue->setBackgroundColor(_color);
+	my_colorErrorForeground = _foregroundError;
+	my_colorNormalForeground = _foregroundNormal;
+	repaint();
 }
 
 // #################################################################################
@@ -939,13 +990,13 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 				else {
 					my_cellValue->setText(QString::number(my_valueDouble));
 				}
-				my_cellValue->setTextColor(my_colorErrorForeground.toQColor());
+				my_cellValue->setTextColor(my_colorErrorForeground);
 				my_ignoreCellEvent = false;
 			}
 			else {
 				my_valueDouble = v;
 				my_isMultipleValues = false;
-				my_cellValue->setTextColor(my_colorNormalForeground.toQColor());
+				my_cellValue->setTextColor(my_colorNormalForeground);
 				my_ignoreCellEvent = false;
 				emit changed();
 			}
@@ -967,13 +1018,13 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 				else {
 					my_cellValue->setText(QString::number(my_valueInteger));
 				}
-				my_cellValue->setTextColor(my_colorErrorForeground.toQColor());
+				my_cellValue->setTextColor(my_colorErrorForeground);
 				my_ignoreCellEvent = false;
 			}
 			else {
 				my_valueInteger = v;
 				my_isMultipleValues = false;
-				my_cellValue->setTextColor(my_colorNormalForeground.toQColor());
+				my_cellValue->setTextColor(my_colorNormalForeground);
 				my_ignoreCellEvent = false;
 				emit changed();
 			}
@@ -991,9 +1042,53 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 }
 
 void ak::ui::widget::propertyGridItem::ini(void) {
+	my_cellSettingName = nullptr;
+	my_cellValue = nullptr;
 	my_widgetBool = nullptr;
 	my_widgetColor = nullptr;
 	my_widgetSelection = nullptr;
 	my_ignoreCellEvent = false;
-	my_colorErrorForeground.setRGBA(255, 0, 0);
+	my_isCurrentlyError = false;
+	my_colorErrorForeground = QColor(255, 0, 0);
+	my_colorNormalForeground = QColor(0, 0, 0);
+}
+
+void ak::ui::widget::propertyGridItem::repaint(void) {
+	if (my_cellSettingName != nullptr) {
+		my_cellSettingName->setBackgroundColor(my_colorBackground.toQColor());
+		my_cellSettingName->setTextColor(my_colorNormalForeground);
+	}
+	if (my_cellValue != nullptr) {
+		my_cellValue->setBackgroundColor(my_colorBackground.toQColor());
+		if (my_isCurrentlyError) {
+			my_cellValue->setTextColor(my_colorErrorForeground);
+		}
+		else {
+			my_cellValue->setTextColor(my_colorNormalForeground);
+		}
+	}
+	else {
+		switch (my_valueType)
+		{
+		case ak::core::vBool:
+		{
+			assert(my_widgetBool != nullptr); // Something went wrong
+			QString sheet("QCheckBox{background-color:#");
+			sheet.append(my_colorBackground.toHexString(true));
+			sheet.append(";}\n");
+			my_widgetBool->setStyleSheet(sheet);
+		}
+			break;
+		case ak::core::vColor:
+		{
+			assert(my_widgetColor != nullptr); // Something went wrong
+			my_widgetColor->fillBackground(my_colorBackground);
+		}
+			break;
+		case ak::core::vSelection:
+			break;
+		default:
+			break;
+		}
+	}
 }

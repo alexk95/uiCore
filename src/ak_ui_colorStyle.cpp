@@ -34,6 +34,10 @@ ak::ui::color ak::ui::colorStyle::getAlternateForeColor(void) const { return my_
 
 ak::ui::color ak::ui::colorStyle::getAlternateBackColor(void) const { return my_alternateBackColor; }
 
+ak::ui::color ak::ui::colorStyle::getHeaderForegroundColor(void) const { return my_headerForeColor; }
+
+ak::ui::color ak::ui::colorStyle::getHeaderBackgroundColor(void) const { return my_headerBackColor; }
+
 void ak::ui::colorStyle::setWindowMainForecolor(
 	const ak::ui::color &		_color
 ) { my_windowMainForecolor = _color; }

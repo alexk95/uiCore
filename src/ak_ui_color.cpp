@@ -77,6 +77,17 @@ ak::ui::color & ak::ui::color::operator = (
 	return *this;
 }
 
+ak::ui::color & ak::ui::color::operator = (
+	const QColor & _other
+	) {
+	my_a = _other.alpha();
+	my_r = _other.red();
+	my_g = _other.green();
+	my_b = _other.blue();
+	my_wasChanged = false;
+	return *this;
+}
+
 ak::ui::color ak::ui::color::operator + (
 	const ak::ui::color & _other
 ) {

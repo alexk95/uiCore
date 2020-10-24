@@ -58,6 +58,12 @@ namespace ak {
 				const ak::ui::color & _other
 				);
 
+			//! @brief Copies the channel values of the other color
+			//! @param _other The object to retreive the data from
+			ak::ui::color & operator = (
+				const QColor & _other
+				);
+
 			//! @brief Builds the average color and returns it
 			//! @param _other The object to retreive the data from
 			ak::ui::color operator + (

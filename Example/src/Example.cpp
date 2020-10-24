@@ -279,11 +279,6 @@ void Example::setupUi(void) {
 			ak::uiAPI::object::setAlias(my_ui.dockTester, "Dock.Tester");
 			ak::uiAPI::object::setAlias(my_ui.dockTree, "Dock.Tree");
 			
-			// Create groups
-			ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, "Test group");
-			ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, "Test group 2");
-			ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, "Test group 3");
-
 			ak::uiAPI::dock::setCentralWidget(my_ui.dockOutput, my_ui.outputWidget);
 			ak::uiAPI::dock::setCentralWidget(my_ui.dockProperties, my_ui.propertiesWidget);
 			ak::uiAPI::dock::setCentralWidget(my_ui.dockTester, my_ui.tester);
@@ -415,15 +410,20 @@ void Example::defaultData(void) {
 
 	// Property grid
 
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test int", 13);
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test string", "Some text");
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test double", 10.0);
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test bool", true);
+	// Create groups
+	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 70, 200, 200), "Test group");
+	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(200, 70, 70, 200), "Test group 2");
+	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 200, 70, 200), "Test group 3");
+
+	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group", "Test int", 13);
+	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group", "Test string", "Some text");
+	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 2", "Test double", 10.0);
+	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 2", "Test bool", true);
 	std::vector<QString> v;
 	v.push_back("Test");
 	v.push_back("Some other item");
 	v.push_back("And another setting");
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test selection", v, "Test");
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test color", my_settingColor);
+	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test selection", v, "Test");
+	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test color", my_settingColor);
 	
 }

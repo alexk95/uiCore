@@ -78,6 +78,11 @@ namespace ak {
 					const QString &									_group
 				);
 
+				void addGroup(
+					const QColor &									_color,
+					const QString &									_group
+				);
+
 				// Add item to default group
 
 				ak::ID addItem(
@@ -223,9 +228,13 @@ namespace ak {
 				propertyGridGroup *						my_defaultGroup;
 
 				ak::ID									my_currentID;
-				QColor									my_alternateForeColor;
-				QColor									my_alternateBackColor;
-				bool									my_isAlternateGroup;
+
+				QColor									my_groupHeaderForeColor;
+				QColor									my_groupHeaderBackColor;
+				QColor									my_itemDefaultBackgroundColor;
+				QColor									my_itemTextColorError;
+				QColor									my_itemTextColorNormal;
+
 			};
 
 			// ##############################################################################################################
@@ -252,9 +261,18 @@ namespace ak {
 
 				void activate(void);
 
-				void setColors(
+				void setHeaderColors(
 					const QColor &								_foreColor,
 					const QColor &								_backColor
+				);
+
+				void setItemsBackColor(
+					const QColor &									_backgroundColor
+				);
+
+				void setItemsTextColors(
+					const QColor &									_textColorNormal,
+					const QColor &									_textColorError
 				);
 
 				propertyGridItem * addItem(
@@ -307,6 +325,8 @@ namespace ak {
 
 				void checkVisibility(void);
 
+				void repaint(void);
+
 				std::list<propertyGridItem *>			my_items;
 				qt::table *								my_propertyGridTable;
 				QTableWidgetItem *						my_item;
@@ -314,10 +334,14 @@ namespace ak {
 				QString									my_name;
 				bool									my_isActivated;
 				bool									my_isVisible;
+				bool									my_isAlternateBackground;
 
 				QColor									my_foreColor;
 				QColor									my_backColor;
-				bool									my_colorWasSet;
+				QColor									my_colorTextError;
+				QColor									my_colorTextNormal;
+				QColor									my_colorItemBackground;
+				QColor									my_colorItemBackgroundAlternate;
 
 				propertyGridGroup() = delete;
 				propertyGridGroup(const propertyGridGroup &) = delete;
@@ -398,13 +422,17 @@ namespace ak {
 
 				ak::ID getId(void) const;
 
-				void setTextColor(
-					const QColor &						_color
+				bool getIsCurrentlyError() const;
+
+				void setBackgroundColor(
+					const QColor &						_backgroundColor
 				);
 
-				void setBackColor(
-					const QColor &						_color
+				void setTextColors(
+					const QColor &						_foregroundNormal,
+					const QColor &						_foregroundError
 				);
+
 
 				// #################################################################################
 
@@ -443,15 +471,21 @@ namespace ak {
 
 				void ini(void);
 
+				void repaint(void);
+
 				ak::ID							my_id;
 				bool							my_isMultipleValues;
 				bool							my_ignoreCellEvent;
+				bool							my_isCurrentlyError;
 
 				qt::table *						my_propertyGridTable;
 				QString							my_group;
 				QString							my_name;
-				ui::color						my_colorErrorForeground;
-				ui::color						my_colorNormalForeground;
+
+				QColor							my_colorErrorForeground;
+				QColor							my_colorNormalForeground;
+				ui::color						my_colorBackground;
+
 
 				QTableWidgetItem *				my_cellSettingName;
 				QTableWidgetItem *				my_cellValue;

@@ -680,6 +680,12 @@ namespace ak {
 				const QString &									_groupName
 			);
 
+			UICORE_API void addGroup(
+				ak::UID											_propertyGridUID,
+				const QColor &									_color,
+				const QString &									_groupName
+			);
+
 			UICORE_API ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
