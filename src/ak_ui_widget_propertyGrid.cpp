@@ -46,10 +46,12 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	my_widget = new QWidget();
 	my_widget->setContentsMargins(0, 0, 0, 0);
 	my_layout = new QVBoxLayout(my_widget);
+	my_layout->setContentsMargins(0, 0, 0, 0);
 
 	my_widgetInfo = new QWidget();
 	my_layoutInfo = new QHBoxLayout(my_widgetInfo);
 	my_labelInfoNoItems = new QLabel("No items");
+	my_labelInfoNoItems->setVisible(false);
 	my_layoutInfo->addStretch(1);
 	my_layoutInfo->addWidget(my_labelInfoNoItems, 0, Qt::AlignmentFlag::AlignCenter);
 	my_layoutInfo->addStretch(1);
@@ -76,7 +78,8 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	my_defaultGroup->setGroupHeaderVisible(false);
 	my_defaultGroup->activate();
 
-	itemCountChanged();
+	my_checkItemVisibilityRequired = true;
+	slotCheckItemVisibility();
 }
 
 ak::ui::widget::propertyGrid::~propertyGrid() {
