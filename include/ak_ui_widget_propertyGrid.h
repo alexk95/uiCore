@@ -169,9 +169,19 @@ namespace ak {
 
 				// ##############################################################################################################
 
+				// Clear items
+
+				void clear(void);
+
+				// ##############################################################################################################
+
 				// Item information gathering
 
 				QString getItemGroup(
+					ak::ID											_itemID
+				);
+
+				bool getItemIsMultipleValues(
 					ak::ID											_itemID
 				);
 
@@ -318,6 +328,8 @@ namespace ak {
 					const QString &									_value
 				);
 
+				void clear(void);
+
 			private slots:
 				void slotDoubleClicked(QTableWidgetItem *);
 
@@ -439,6 +451,8 @@ namespace ak {
 				// Information gathering
 
 				QString getGroup() const;
+
+				bool getIsMultipleValues() const;
 
 				QString getName() const;
 

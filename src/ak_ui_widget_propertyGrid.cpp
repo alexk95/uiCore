@@ -286,6 +286,16 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 
 // ##############################################################################################################
 
+// Clear items
+
+void ak::ui::widget::propertyGrid::clear(void) {
+	for (auto itm : my_groups) {
+		itm.second->clear();
+	}
+}
+
+// ##############################################################################################################
+
 // Item information gathering
 
 QString ak::ui::widget::propertyGrid::getItemGroup(
@@ -294,6 +304,14 @@ QString ak::ui::widget::propertyGrid::getItemGroup(
 	my_itemsIterator itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getGroup();
+}
+
+bool ak::ui::widget::propertyGrid::getItemIsMultipleValues(
+	ak::ID											_itemID
+) {
+	my_itemsIterator itm = my_items.find(_itemID);
+	assert(itm != my_items.end()); // Invalid item ID
+	return itm->second->getIsMultipleValues();
 }
 
 QString ak::ui::widget::propertyGrid::getItemName(
@@ -408,7 +426,9 @@ ak::ui::widget::propertyGridGroup::propertyGridGroup(
 
 }
 
-ak::ui::widget::propertyGridGroup::~propertyGridGroup() {}
+ak::ui::widget::propertyGridGroup::~propertyGridGroup() {
+	my_propertyGridTable->removeRow(my_item->row());
+}
 
 QString ak::ui::widget::propertyGridGroup::name(void) const { return my_name; }
 
@@ -591,6 +611,14 @@ ak::ui::widget::propertyGridItem * ak::ui::widget::propertyGridGroup::addItem(
 	checkVisibility();
 	newItem->setId(_itemId);
 	return newItem;
+}
+
+void ak::ui::widget::propertyGridGroup::clear(void) {
+	for (auto itm : my_items) {
+		propertyGridItem * actualItem = itm;
+		delete actualItem;
+	}
+	my_items.clear();
 }
 
 // ##############################################################################################################
@@ -855,7 +883,10 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 ak::ui::widget::propertyGridItem::~propertyGridItem() {
 	my_propertyGridTable->removeRow(my_cellSettingName->row());
 	delete my_cellSettingName;
-	delete my_cellValue;
+	if (my_cellValue != nullptr) { delete my_cellValue; }
+	if (my_widgetBool != nullptr) { delete my_widgetBool; }
+	if (my_widgetColor != nullptr) { delete my_widgetColor; }
+	if (my_widgetSelection != nullptr) { delete my_widgetSelection; }
 }
 
 int ak::ui::widget::propertyGridItem::row() const {
@@ -888,6 +919,8 @@ void ak::ui::widget::propertyGridItem::setTextColors(
 // Information gathering
 
 QString ak::ui::widget::propertyGridItem::getGroup() const { return my_group; }
+
+bool ak::ui::widget::propertyGridItem::getIsMultipleValues() const { return my_isMultipleValues; }
 
 QString ak::ui::widget::propertyGridItem::getName() const { return my_name; }
 

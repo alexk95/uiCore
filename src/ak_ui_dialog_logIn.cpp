@@ -201,9 +201,13 @@ bool ak::ui::dialog::logIn::savePassword(void) const {
 	else { return my_savePassword->isChecked(); }
 }
 
-void ak::ui::dialog::logIn::showInvalidLogIn(void) {
-	createToolTip(my_inputPassword.edit, "Invalid username and password combination");
-}
+void ak::ui::dialog::logIn::showToolTipAtUsername(
+	const QString &							_text
+) { createToolTip(my_inputUsername.edit, _text); }
+
+void ak::ui::dialog::logIn::showToolTipAtPassword(
+	const QString &							_text
+) { createToolTip(my_inputPassword.edit, _text); }
 
 void ak::ui::dialog::logIn::slotClicked(void) {
 	assert(my_inputPassword.edit != nullptr);

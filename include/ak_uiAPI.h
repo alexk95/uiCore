@@ -631,6 +631,20 @@ namespace ak {
 				ak::UID												_dialogUID
 			);
 
+			//! @brief Will display a invalid log in popup message at this dialogs username input
+			//! @param _text The text to set as a tooltip
+			UICORE_API void showToolTipAtUsername(
+				ak::UID												_dialogUID,
+				const QString &										_text
+			);
+
+			//! @brief Will display a invalid log in popup message at this dialogs password input
+			//! @param _text The text to set as a tooltip
+			UICORE_API void showToolTipAtPassword(
+				ak::UID												_dialogUID,
+				const QString &										_text
+			);
+
 		} // namespace logInDialog
 
 		// ###############################################################################################################################################
@@ -793,7 +807,16 @@ namespace ak {
 				const QString &									_value
 			);
 
+			UICORE_API void clear(
+				ak::UID											_propertyGridUID
+			);
+
 			UICORE_API QString getItemGroup(
+				ak::UID											_propertyGridUID,
+				ak::ID											_itemID
+			);
+
+			UICORE_API bool getItemIsMultipleValues(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
@@ -893,6 +916,35 @@ namespace ak {
 				const QIcon &		_icon
 			);
 
+			UICORE_API ak::ID getFocusedTab(
+				ak::UID				_tabViewUID
+			);
+
+			UICORE_API QString getTabText(
+				ak::UID				_tabViewUID,
+				ak::ID				_tabID
+			);
+
+			UICORE_API void setEnabled(
+				ak::UID				_tabViewUID,
+				bool				_enabled
+			);
+
+			UICORE_API void setTabbarLocation(
+				ak::UID								_tabViewUID,
+				ak::ui::core::tabLocation			_location
+			);
+
+			UICORE_API void setTabFocused(
+				ak::UID				_tabViewUID,
+				ak::ID				_tabID
+			);
+
+			UICORE_API void setVisible(
+				ak::UID				_tabViewUID,
+				bool				_visible
+			);
+
 		}
 
 		// ###############################################################################################################################################
@@ -901,19 +953,28 @@ namespace ak {
 
 		namespace textEdit {
 
-			UICORE_API void setText(
-				ak::UID				_textEditUID,
-				const QString &		_text
-			);
-
 			UICORE_API void appendText(
 				ak::UID				_textEditUID,
 				const QString &		_text
 			);
 
+			UICORE_API void clear(
+				ak::UID				_textEditUID
+			);
+
+			UICORE_API void setAutoScrollToBottomEnabled(
+				ak::UID				_textEditUID,
+				bool				_enabled = true
+			);
+
 			UICORE_API void setReadOnly(
 				ak::UID				_textEditUID,
 				bool				_readOnly = true
+			);
+
+			UICORE_API void setText(
+				ak::UID				_textEditUID,
+				const QString &		_text
 			);
 
 		}
@@ -1429,56 +1490,6 @@ namespace ak {
 
 		// ###############################################################################################################################################
 
-		//! @brief Will return a string representation of the provided eventType
-		//! @param _type The event type that should be represented
-		UICORE_API QString toString(
-			ak::core::eventType									_type
-		);
-
-		//! @brief Will return a string representation of the provided valueType
-		//! @param _type The value type that should be represented
-		UICORE_API QString toString(
-			ak::core::valueType									_type
-		);
-
-		//! @brief Will return a string representation of the provided valtextAlignmentueType
-		//! @param _type The text alignment that should be represented
-		UICORE_API QString toString(
-			ak::ui::core::textAlignment							_type
-		);
-
-		//! @brief Will return a string representation of the provided dockLocation
-		//! @param _type The dock location that should be represented
-		UICORE_API QString toString(
-			ak::ui::core::dockLocation							_dockLocation
-		);
-
-		//! @brief Will return a string representation of the provided tab location
-		//! @param _type The tab location that should be represented
-		UICORE_API QString toString(
-			ak::ui::core::tabLocation							_tabLocation
-		);
-
-		//! @brief Create a string representation of the provided dialog result
-		//! @param _dialogResult The dialog result to be converted
-		UICORE_API QString toQString(
-			ak::ui::core::dialogResult							_dialogResult
-		);
-
-		//! @brief Will return a string representation of the provided keyType
-		//! @param _type The key type that should be represented
-		UICORE_API QString toString(
-			ak::ui::core::keyType								_type
-		);
-
-		//! @brief Will return a string representation of the provided objectType
-		//! @param _type The object type that should be represented
-		UICORE_API QString toString(
-			ak::ui::core::objectType							_type
-		);
-
-		// ###############################################################################################################################################
-
 		//! @brief Will destroy all objects created by this creator
 		//! @param _creatorUid The UID of the creator
 		//! @throw ak::Exception if the API is not initialized
@@ -1551,9 +1562,65 @@ namespace ak {
 		//! The return value will be returned as soon as the application is closing
 		UICORE_API int exec(void);
 
-		std::vector<ak::ui::qt::comboButtonItem> toComboButtonItem(
-			const std::vector<QString> &							_items
-		);
+		namespace special {
+
+			//! @brief Will return a string representation of the provided eventType
+		//! @param _type The event type that should be represented
+			UICORE_API QString toString(
+				ak::core::eventType									_type
+			);
+
+			//! @brief Will return a string representation of the provided valueType
+			//! @param _type The value type that should be represented
+			UICORE_API QString toString(
+				ak::core::valueType									_type
+			);
+
+			//! @brief Will return a string representation of the provided valtextAlignmentueType
+			//! @param _type The text alignment that should be represented
+			UICORE_API QString toString(
+				ak::ui::core::textAlignment							_type
+			);
+
+			//! @brief Will return a string representation of the provided dockLocation
+			//! @param _type The dock location that should be represented
+			UICORE_API QString toString(
+				ak::ui::core::dockLocation							_dockLocation
+			);
+
+			//! @brief Will return a string representation of the provided tab location
+			//! @param _type The tab location that should be represented
+			UICORE_API QString toString(
+				ak::ui::core::tabLocation							_tabLocation
+			);
+
+			//! @brief Create a string representation of the provided dialog result
+			//! @param _dialogResult The dialog result to be converted
+			UICORE_API QString toQString(
+				ak::ui::core::dialogResult							_dialogResult
+			);
+
+			//! @brief Will return a string representation of the provided keyType
+			//! @param _type The key type that should be represented
+			UICORE_API QString toString(
+				ak::ui::core::keyType								_type
+			);
+
+			//! @brief Will return a string representation of the provided objectType
+			//! @param _type The object type that should be represented
+			UICORE_API QString toString(
+				ak::ui::core::objectType							_type
+			);
+
+			//! @brief Will create a JSON type representation of the event
+			UICORE_API QString toEventText(
+				ak::UID												_senderUID,
+				ak::core::eventType									_eventType,
+				int													_info1,
+				int													_info2
+			);
+
+		}
 
 	} // namespace uiAPI
 } // namespace ak

@@ -108,8 +108,17 @@ namespace ak {
 				//! @brief Returns the save password state
 				bool savePassword(void) const;
 
-				//! @brief Will display a invalid log in popup message at this dialog
-				void showInvalidLogIn(void);
+				//! @brief Will display a invalid log in popup message at this dialogs username input
+				//! @param _text The text to set as a tooltip
+				void showToolTipAtUsername(
+					const QString &							_text
+				);
+
+				//! @brief Will display a invalid log in popup message at this dialogs password input
+				//! @param _text The text to set as a tooltip
+				void showToolTipAtPassword(
+					const QString &							_text
+				);
 
 			private slots:
 				//! @brief Callback for the log in button

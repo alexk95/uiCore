@@ -55,9 +55,6 @@
     <Filter Include="Source Files\ak\ui\qt">
       <UniqueIdentifier>{bc01b182-2c7b-44c7-9c24-8ccd30e090f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ak\ui\widget">
-      <UniqueIdentifier>{2b8929e1-747b-434d-9b14-5f493d57e5e8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\ak\ui\ttb">
       <UniqueIdentifier>{5714a2dc-a744-4fba-8471-ed48317228c2}</UniqueIdentifier>
     </Filter>
@@ -69,6 +66,9 @@
     </Filter>
     <Filter Include="Source Files\ak\ui\dialog">
       <UniqueIdentifier>{3a664e3f-b0ee-41b1-916e-a2df39157180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ak\ui\widget">
+      <UniqueIdentifier>{2b8929e1-747b-434d-9b14-5f493d57e5e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -159,9 +159,6 @@
     <ClInclude Include="include\ak_singletonAllowedMessages.h">
       <Filter>Header Files\ak</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_ui_widget_tabView.h">
-      <Filter>Header Files\ak\ui\widget</Filter>
-    </ClInclude>
     <ClInclude Include="include\ak_ui_qt_tabView.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </ClInclude>
@@ -221,9 +218,6 @@
     <QtMoc Include="include\ak_ui_qt_tree.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
-    <QtMoc Include="include\ak_ui_tabViewSignalLinker.h">
-      <Filter>Header Files\ak\ui</Filter>
-    </QtMoc>
     <QtMoc Include="include\ak_ui_qt_dock.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
@@ -252,6 +246,9 @@
       <Filter>Header Files\ak\ui\widget</Filter>
     </QtMoc>
     <QtMoc Include="include\ak_ui_widget_welcomeScreen.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_widget_tabView.h">
       <Filter>Header Files\ak\ui\widget</Filter>
     </QtMoc>
   </ItemGroup>
@@ -393,9 +390,6 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_qt_tabView.cpp">
       <Filter>Source Files\ak\ui\qt</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ak_ui_tabViewSignalLinker.cpp">
-      <Filter>Source Files\ak\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_ui_qt_timer.cpp">
       <Filter>Source Files\ak\ui\qt</Filter>

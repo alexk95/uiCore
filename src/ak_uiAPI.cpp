@@ -750,6 +750,28 @@ bool ak::uiAPI::logInDialog::getSavePassword(
 	return actualObject->savePassword();
 }
 
+void ak::uiAPI::logInDialog::showToolTipAtUsername(
+	ak::UID												_dialogUID,
+	const QString &										_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::logIn * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
+	assert(actualObject != nullptr); // Invalid object type
+	actualObject->showToolTipAtUsername(_text);
+}
+
+void ak::uiAPI::logInDialog::showToolTipAtPassword(
+	ak::UID												_dialogUID,
+	const QString &										_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::logIn * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
+	assert(actualObject != nullptr); // Invalid object type
+	actualObject->showToolTipAtPassword(_text);
+}
+
 // Log in dialog
 
 // ###############################################################################################################################################
@@ -1021,6 +1043,16 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
 
+void ak::uiAPI::propertyGrid::clear(
+	ak::UID											_propertyGridUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->clear();
+}
+
 QString ak::uiAPI::propertyGrid::getItemGroup(
 	ak::UID											_propertyGridUID,
 	ak::ID											_itemID
@@ -1030,6 +1062,17 @@ QString ak::uiAPI::propertyGrid::getItemGroup(
 	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemGroup(_itemID);
+}
+
+bool ak::uiAPI::propertyGrid::getItemIsMultipleValues(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->getItemIsMultipleValues(_itemID);
 }
 
 QString ak::uiAPI::propertyGrid::getItemName(
@@ -1241,22 +1284,88 @@ ak::ID ak::uiAPI::tabView::addTab(
 	return actualTabView->createTab(_widget, _title, _icon);
 }
 
+ak::ID ak::uiAPI::tabView::getFocusedTab(
+	ak::UID				_tabViewUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	return actualTabView->focusedTab();
+}
+
+QString ak::uiAPI::tabView::getTabText(
+	ak::UID				_tabViewUID,
+	ak::ID				_tabID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	return actualTabView->tabText(_tabID);
+}
+
+void ak::uiAPI::tabView::setEnabled(
+	ak::UID				_tabViewUID,
+	bool				_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	actualTabView->setEnabled(_enabled);
+}
+
+void ak::uiAPI::tabView::setTabbarLocation(
+	ak::UID								_tabViewUID,
+	ak::ui::core::tabLocation			_location
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	actualTabView->setTabLocation(_location);
+}
+
+void ak::uiAPI::tabView::setTabFocused(
+	ak::UID				_tabViewUID,
+	ak::ID				_tabID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	actualTabView->focusTab(_tabID);
+}
+
+void ak::uiAPI::tabView::setVisible(
+	ak::UID				_tabViewUID,
+	bool				_visible
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	actualTabView->setVisible(_visible);
+}
+
 // TabView
 
 // ###############################################################################################################################################
 
 // TextEdit
-
-void ak::uiAPI::textEdit::setText(
-	ak::UID				_textEditUID,
-	const QString &		_text
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::textEdit * actualTextEdit = nullptr;
-	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
-	assert(actualTextEdit != nullptr); // Invalid object type
-	return actualTextEdit->setText(_text);
-}
 
 void ak::uiAPI::textEdit::appendText(
 	ak::UID				_textEditUID,
@@ -1269,6 +1378,27 @@ void ak::uiAPI::textEdit::appendText(
 	return actualTextEdit->append(_text);
 }
 
+void ak::uiAPI::textEdit::clear(
+	ak::UID				_textEditUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::textEdit * actualTextEdit = nullptr;
+	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
+	assert(actualTextEdit != nullptr); // Invalid object type
+	return actualTextEdit->clear();
+}
+
+void ak::uiAPI::textEdit::setAutoScrollToBottomEnabled(
+	ak::UID				_textEditUID,
+	bool				_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::textEdit * actualTextEdit = nullptr;
+	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
+	assert(actualTextEdit != nullptr); // Invalid object type
+	return actualTextEdit->setAutoScrollToBottom(_enabled);
+}
+
 void ak::uiAPI::textEdit::setReadOnly(
 	ak::UID				_textEditUID,
 	bool				_readOnly
@@ -1278,6 +1408,17 @@ void ak::uiAPI::textEdit::setReadOnly(
 	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
 	assert(actualTextEdit != nullptr); // Invalid object type
 	actualTextEdit->setReadOnly(_readOnly);
+}
+
+void ak::uiAPI::textEdit::setText(
+	ak::UID				_textEditUID,
+	const QString &		_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::textEdit * actualTextEdit = nullptr;
+	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
+	assert(actualTextEdit != nullptr); // Invalid object type
+	return actualTextEdit->setText(_text);
 }
 
 // TextEdit
@@ -2203,40 +2344,6 @@ void ak::uiAPI::window::showMinimized(
 
 // ###############################################################################################################################################
 
-QString ak::uiAPI::toString(
-	ak::core::eventType									_type
-) { return ak::core::toQString(_type); }
-
-QString ak::uiAPI::toString(
-	ak::core::valueType									_type
-) { return ak::core::toQString(_type); }
-
-QString ak::uiAPI::toString(
-	ak::ui::core::textAlignment							_type
-) { return ak::ui::core::toQString(_type); }
-
-QString ak::uiAPI::toString(
-	ak::ui::core::dockLocation							_dockLocation
-) { return ak::ui::core::toQString(_dockLocation); }
-
-QString ak::uiAPI::toString(
-	ak::ui::core::tabLocation							_tabLocation
-) { return ak::ui::core::toQString(_tabLocation); }
-
-QString ak::uiAPI::toQString(
-	ak::ui::core::dialogResult							_dialogResult
-) { return ak::ui::core::toQString(_dialogResult); }
-
-QString ak::uiAPI::toString(
-	ak::ui::core::keyType								_type
-) { return ak::ui::core::toQString(_type); }
-
-QString ak::uiAPI::toString(
-	ak::ui::core::objectType							_type
-) { return ak::ui::core::toQString(_type); }
-
-// ###############################################################################################################################################
-
 void ak::uiAPI::creatorDestroyed(
 	ak::UID												_creatorUid
 ) {
@@ -2320,19 +2427,68 @@ const QIcon & ak::uiAPI::getIcon(
 
 int ak::uiAPI::exec(void) { return my_apiManager.exec(); }
 
-std::vector<ak::ui::qt::comboButtonItem> ak::uiAPI::toComboButtonItem(
-	const std::vector<QString> &						_items
+QString ak::uiAPI::special::toString(
+	ak::core::eventType									_type
 ) {
-	std::vector<ak::ui::qt::comboButtonItem> ret;
-	if (_items.size() > 0) {
-		ret.reserve(_items.size());
-		assert(ret.size() == 0);
+	return ak::core::toQString(_type);
+}
 
-		for (QString str : _items) {
-			ak::ui::qt::comboButtonItem itm(str);
-			ret.push_back(itm);
-		}
-	}
-	assert(ret.size() == _items.size());
-	return ret;
+QString ak::uiAPI::special::toString(
+	ak::core::valueType									_type
+) {
+	return ak::core::toQString(_type);
+}
+
+QString ak::uiAPI::special::toString(
+	ak::ui::core::textAlignment							_type
+) {
+	return ak::ui::core::toQString(_type);
+}
+
+QString ak::uiAPI::special::toString(
+	ak::ui::core::dockLocation							_dockLocation
+) {
+	return ak::ui::core::toQString(_dockLocation);
+}
+
+QString ak::uiAPI::special::toString(
+	ak::ui::core::tabLocation							_tabLocation
+) {
+	return ak::ui::core::toQString(_tabLocation);
+}
+
+QString ak::uiAPI::special::toQString(
+	ak::ui::core::dialogResult							_dialogResult
+) {
+	return ak::ui::core::toQString(_dialogResult);
+}
+
+QString ak::uiAPI::special::toString(
+	ak::ui::core::keyType								_type
+) {
+	return ak::ui::core::toQString(_type);
+}
+
+QString ak::uiAPI::special::toString(
+	ak::ui::core::objectType							_type
+) {
+	return ak::ui::core::toQString(_type);
+}
+
+QString ak::uiAPI::special::toEventText(
+	ak::UID												_senderUID,
+	ak::core::eventType									_eventType,
+	int													_info1,
+	int													_info2
+) {
+	QString out("Event{\"Sender\":");
+	out.append(QString::number(_senderUID));
+	out.append(", \"EventType\":\"");
+	out.append(toString(_eventType));
+	out.append("\", \"Info1\":");
+	out.append(QString::number(_info1));
+	out.append("\", \"Info2\":");
+	out.append(QString::number(_info2));
+	out.append("}");
+	return out;
 }

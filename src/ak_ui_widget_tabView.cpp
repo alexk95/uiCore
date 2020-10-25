@@ -18,8 +18,6 @@
 #include <ak_ui_colorStyle.h>				// colorStyle
 #include <ak_ui_objectManager.h>			// objectManager
 #include <ak_ui_iconManager.h>				// iconManager
-#include <ak_ui_tabViewSignalLinker.h>		// signal linking
-
 
 // Qt header
 #include <qwidget.h>
@@ -31,7 +29,7 @@ ak::ui::widget::tabView::tabView(
 	objectManager *				_objectManager,
 	colorStyle *				_colorStyle
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTabView, _messenger, _uidManager, _colorStyle),
-my_tabView(nullptr), my_tabViewSignalLinker(nullptr)
+my_tabView(nullptr)
 {
 	// Creatte the tabView
 	my_tabView = new ak::ui::qt::tabView(_colorStyle);
@@ -39,15 +37,24 @@ my_tabView(nullptr), my_tabViewSignalLinker(nullptr)
 	// Set color style
 	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
 
-	// Create signal linker
-	my_tabViewSignalLinker = new ak::ui::tabViewSignalLinker(my_tabView, this);
-
 	// Get id for myself
 	my_uid = my_uidManager->getId();
+
+	// Connect item signals
+	connect(my_tabView, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentTabChanged(int)));
+	connect(my_tabView, SIGNAL(tabBarClicked(int)), this, SLOT(slotItemClicked(int)));
+	connect(my_tabView, SIGNAL(tabCloseRequested(int)), this, SLOT(slotItemCloseRequested(int)));
+	connect(my_tabView, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(slotItemDoubleClicked(int)));
 }
 
 ak::ui::widget::tabView::~tabView() {
 	my_messenger->sendMessage(my_uid, ak::core::eventType::eDestroyed);
+
+	disconnect(my_tabView, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentTabChanged(int)));
+	disconnect(my_tabView, SIGNAL(tabBarClicked(int)), this, SLOT(slotItemClicked(int)));
+	disconnect(my_tabView, SIGNAL(tabCloseRequested(int)), this, SLOT(slotItemCloseRequested(int)));
+	disconnect(my_tabView, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(slotItemDoubleClicked(int)));
+
 	if (my_tabView != nullptr) { delete my_tabView; my_tabView = nullptr; }
 }
 
@@ -63,34 +70,6 @@ void ak::ui::widget::tabView::setColorStyle(
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
 	my_tabView->setColorStyle(_colorStyle);
-}
-
-// #######################################################################################################
-
-// Tab functions
-
-void ak::ui::widget::tabView::tabEvent(
-	int											_index,
-	ak::ui::tabViewSignalLinker::tabEventType	_eventType
-) {
-	try {
-		switch (_eventType)
-		{
-		case tabViewSignalLinker::tabEventType::teClicked:
-			my_messenger->sendMessage(my_uid, ak::core::eventType::eClicked, _index, 0); break;
-		case tabViewSignalLinker::tabEventType::teCloseRequested:
-			my_messenger->sendMessage(my_uid, ak::core::eventType::eClosing, _index, 0); break;
-		case tabViewSignalLinker::tabEventType::teCurrentChanged:
-			my_messenger->sendMessage(my_uid, ak::core::eventType::eChanged, _index, 0); break;
-		case tabViewSignalLinker::tabEventType::teDoubleClicked:
-			my_messenger->sendMessage(my_uid, ak::core::eventType::eDoubleClicked, _index, 0); break;
-		default:
-			assert(0); // Not implemented yet
-			break;
-		}
-	} catch (...) {
-		assert(0); // Error handling not implemented
-	}
 }
 
 // #######################################################################################################
@@ -159,4 +138,24 @@ QString ak::ui::widget::tabView::tabText(
 ) const {
 	assert(_tab >= 0 && _tab < my_tabView->count()); // Tab index out of range
 	return my_tabView->tabText(_tab);
+}
+
+// #######################################################################################################
+
+// Slots
+
+void ak::ui::widget::tabView::slotCurrentTabChanged(int index) {
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eChanged, index);
+}
+
+void ak::ui::widget::tabView::slotItemClicked(int index) {
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eClicked, index);
+}
+
+void ak::ui::widget::tabView::slotItemDoubleClicked(int index) {
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eDoubleClicked, index);
+}
+
+void ak::ui::widget::tabView::slotItemCloseRequested(int index) {
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eClosing, index);
 }

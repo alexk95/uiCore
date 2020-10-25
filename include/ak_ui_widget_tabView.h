@@ -14,10 +14,10 @@
 // AK header
 #include <ak_ui_core_aWidgetManager.h>		// Base class
 #include <ak_globalDataTypes.h>				// UID and ID data types
-#include <ak_ui_tabViewSignalLinker.h>		// tab event type
 #include <ak_ui_core.h>						// tabLocation type
 
 // Qt header
+#include <qobject.h>
 #include <qstring.h>
 #include <qicon.h>
 
@@ -41,7 +41,8 @@ namespace ak {
 
 		namespace widget {
 
-			class tabView : public ak::ui::core::aWidgetManager {
+			class tabView : public QObject, public ak::ui::core::aWidgetManager {
+				Q_OBJECT
 			public:
 				tabView(
 					messenger *							_messenger,
@@ -65,18 +66,6 @@ namespace ak {
 				virtual void setColorStyle(
 					const ak::ui::colorStyle *				_colorStyle
 				) override;
-
-				// #######################################################################################################
-				
-				// Tab functions
-
-				//! @brief Will send an event message
-				//! @param _index The index of the tab page where the even occured
-				//! @param _eventType The type of the event
-				void tabEvent(
-					int									_index,
-					tabViewSignalLinker::tabEventType	_eventType
-				);
 
 				// #######################################################################################################
 
@@ -146,11 +135,15 @@ namespace ak {
 					ak::ID								_tab
 				) const;
 
+			private slots:
+				void slotCurrentTabChanged(int index);
+				void slotItemClicked(int index);
+				void slotItemDoubleClicked(int index);
+				void slotItemCloseRequested(int index);
+
 			private:
 
 				qt::tabView *					my_tabView;					//! The tab view this widget is managing
-				tabViewSignalLinker *			my_tabViewSignalLinker;		//! The signal linker connecting the widgets callbacks to the event function
-
 			};
 
 		}
