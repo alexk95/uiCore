@@ -226,11 +226,20 @@ std::string ak::uiAPI::saveState(void) {
 }
 
 void ak::uiAPI::restoreState(
+	const std::string &									_json,
+	bool												_ignoreColorStyle
+) {
+	assert(my_objManager != nullptr); // Not initialized
+	if (_json.length() == 0) { return; }
+	my_objManager->restoreState(_json.c_str(), _ignoreColorStyle);
+}
+
+void ak::uiAPI::restoreColorStyle(
 	const std::string &									_json
 ) {
 	assert(my_objManager != nullptr); // Not initialized
 	if (_json.length() == 0) { return; }
-	my_objManager->restoreState(_json.c_str());
+	my_objManager->restoreStateColorStyleOnly(_json.c_str());
 }
 
 // ###############################################################################################################################################
@@ -1386,6 +1395,19 @@ void ak::uiAPI::tabView::setVisible(
 	actualTabView->setVisible(_visible);
 }
 
+void ak::uiAPI::tabView::setObjectName(
+	ak::UID							_tabViewUID,
+	const QString &					_name
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	actualTabView->setObjectName(_name);
+}
+
 // TabView
 
 // ###############################################################################################################################################
@@ -2125,6 +2147,17 @@ QString ak::uiAPI::welcomeScreen::getGroupName(
 	ak::ID							_group
 ) { return ui::widget::welcomeScreen::groupName(_group); }
 
+void ak::uiAPI::welcomeScreen::setObjectName(
+	ak::UID							_welcomeScreenUID,
+	const QString &					_name
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::welcomeScreen * actualWelcomeScreen = nullptr;
+	actualWelcomeScreen = dynamic_cast<ui::widget::welcomeScreen *>(my_objManager->object(_welcomeScreenUID));
+	assert(actualWelcomeScreen != nullptr); // Invalid object type
+	actualWelcomeScreen->setObjectName(_name);
+}
+
 // Welcome screen
 
 // ###############################################################################################################################################
@@ -2205,6 +2238,37 @@ void ak::uiAPI::window::setTabToolBarVisible(
 	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
 	assert(actualWindow != nullptr); // Invalid object type
 	actualWindow->setTabToolBarVisible(_visible);
+}
+
+ak::ID ak::uiAPI::window::getCurrentTabToolBarTab(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	return actualWindow->currentTabToolbarTab();
+}
+
+int ak::uiAPI::window::getTabToolBarTabCount(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	return actualWindow->tabToolbarTabCount();
+}
+
+void ak::uiAPI::window::setCurrentTabToolBarTab(
+	ak::UID												_windowUID,
+	ak::ID												_tabID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setCurrentTabToolBarTab(_tabID);
 }
 
 bool ak::uiAPI::window::getStatusLabelVisible(

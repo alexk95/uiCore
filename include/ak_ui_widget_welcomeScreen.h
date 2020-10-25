@@ -169,6 +169,12 @@ namespace ak {
 					ak::ID							_group
 				);
 
+				void setObjectName(
+					const QString &					_name
+				);
+
+				QString objectName(void) const;
+
 				// #############################################################################################################
 
 				// Event handling

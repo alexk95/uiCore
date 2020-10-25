@@ -85,6 +85,9 @@ namespace ak {
 				const QString &							_alias
 			) override;
 
+			//! @brief Will return the alias of this object
+			virtual QString alias(void) const override;
+
 			//! @brief Will create a rapidjson::Value representing this objects current state
 			//! The value looks like this:
 			//!	     { "Alias":"[ObjectAlias]","Type":"[ObjectType]","Settings":{...} }
@@ -229,6 +232,18 @@ namespace ak {
 			void addTabToolbarWidget(
 				ak::UID						_parentUid,
 				ak::UID						_objectUid
+			);
+
+			//! @brief Will return the current selected tab toolbar tab
+			ak::ID currentTabToolbarTab(void) const;
+
+			//! @brief Will return the ammount of tabs in the tabToolbar
+			int tabToolbarTabCount(void) const;
+
+			//! @brief Will set the specified tab toolbar tab as current
+			//! @param _tabID The tab to set as current
+			void setCurrentTabToolBarTab(
+				ak::ID						_tabID
 			);
 
 			// #############################################################################################################

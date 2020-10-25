@@ -40,6 +40,7 @@ QString ak::ui::core::toQString(
 	case ak::ui::core::oTabToolbarGroup: return QString("TabToolBarGroup");
 	case ak::ui::core::oTabToolbarPage: return QString("TabBoolBarPage");
 	case ak::ui::core::oTabToolbarSubgroup: return QString("TabToolBarSubGroup");
+	case ak::ui::core::oTabView: return QString("TabView");
 	case ak::ui::core::oTextEdit: return QString("TextEdit");
 	case ak::ui::core::oTimer: return QString("Timer");
 	case ak::ui::core::oTree: return QString("Tree");

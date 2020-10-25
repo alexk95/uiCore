@@ -298,6 +298,14 @@ namespace ak {
 			//! @param _json The JSON string containing the settings
 			//! @throw ak::Exception on syntax mismatch
 			void restoreState(
+				const char *										_json,
+				bool												_ignoreColorStyle
+			);
+
+			//! @brief Will setup the UI with the settings provided in the settings JSON string
+			//! @param _json The JSON string containing the settings
+			//! @throw ak::Exception on syntax mismatch
+			void restoreStateColorStyleOnly(
 				const char *										_json
 			);
 

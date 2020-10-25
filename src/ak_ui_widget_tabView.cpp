@@ -72,6 +72,59 @@ void ak::ui::widget::tabView::setColorStyle(
 	my_tabView->setColorStyle(_colorStyle);
 }
 
+void ak::ui::widget::tabView::setAlias(
+	const QString &							_alias
+) { setObjectName(_alias); }
+
+QString ak::ui::widget::tabView::alias(void) const { return objectName(); }
+
+void ak::ui::widget::tabView::addObjectSettingsToValue(
+	rapidjson::Value &						_array,
+	rapidjson::Document::AllocatorType &	_allocator
+) {
+	assert(_array.GetType() == rapidjson::Type::kArrayType); // Value is not an array type
+
+	// Initialize object
+	rapidjson::Value root;
+	root.SetObject();
+
+	// Add alias
+	std::string str(objectName().toStdString());
+	rapidjson::Value nAlias(str.c_str(), _allocator);
+	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
+
+	// Add object type
+	str = ak::ui::core::toQString(my_objectType).toStdString();
+	rapidjson::Value nType(str.c_str(), _allocator);
+	root.AddMember(RESTORABLE_NAME_TYPE, nType, _allocator);
+
+	// Create settings
+	rapidjson::Value settings;
+	settings.SetObject();
+
+	settings.AddMember(RESTORABLE_CFG_SIZE_X, my_tabView->width(), _allocator);
+	settings.AddMember(RESTORABLE_CFG_SIZE_Y, my_tabView->height(), _allocator);
+
+	// Add settings
+	root.AddMember(RESTORABLE_NAME_SETTINGS, settings, _allocator);
+	_array.PushBack(root, _allocator);
+}
+
+void ak::ui::widget::tabView::restoreSettings(
+	const rapidjson::Value &				_settings
+) {
+	assert(_settings.IsObject()); // Value is not an object
+
+	if (_settings.HasMember(RESTORABLE_CFG_SIZE_X)) {
+		assert(_settings.HasMember(RESTORABLE_CFG_SIZE_X));	// Other dimension is missing
+		assert(_settings[RESTORABLE_CFG_SIZE_X].IsInt());	// State size X is not an integer type
+		assert(_settings[RESTORABLE_CFG_SIZE_Y].IsInt());	// State size Y is not an integer type
+		auto sizeX = _settings[RESTORABLE_CFG_SIZE_X].GetInt();
+		auto sizeY = _settings[RESTORABLE_CFG_SIZE_Y].GetInt();
+		my_tabView->resize(sizeX, sizeY);
+	}
+}
+
 // #######################################################################################################
 
 // Setter

@@ -49,6 +49,7 @@ public:
     unsigned RowCount() const;
     unsigned GroupMaxHeight() const;
     int      CurrentTab() const;
+	int      TabCount() const;										// Created by Alexander Kuester
     void     SetCurrentTab(int index);
 	void     SetStylesheet(const QString& styleSheet);				// Created by Alexander Kuester
     void     SetTabBarStylesheet(const QString& styleSheet);		// Created by Alexander Kuester

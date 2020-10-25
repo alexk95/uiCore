@@ -225,6 +225,9 @@ int TabToolbar::CurrentTab() const
     return currentIndex;
 }
 
+// Created by Alexander Kuester
+int TabToolbar::TabCount() const { return tabBar->count(); }
+
 void TabToolbar::SetCurrentTab(int index)
 {
     tabBar->setCurrentIndex(index);

@@ -55,10 +55,9 @@ void ak::ui::qt::dock::setColorStyle(
 
 void ak::ui::qt::dock::setAlias(
 	const QString &							_alias
-) {
-	my_alias = _alias;
-	setObjectName(_alias);
-}
+) { setObjectName(_alias); }
+
+QString ak::ui::qt::dock::alias(void) const { return objectName(); }
 
 void ak::ui::qt::dock::addObjectSettingsToValue(
 	rapidjson::Value &						_array,

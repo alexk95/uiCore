@@ -67,7 +67,9 @@ void ak::ui::qt::checkBox::setColorStyle(
 
 void ak::ui::qt::checkBox::setAlias(
 	const QString &							_alias
-) { my_alias = _alias; setObjectName(_alias); }
+) { setObjectName(_alias); }
+
+QString ak::ui::qt::checkBox::alias(void) const { return objectName(); }
 
 void ak::ui::qt::checkBox::addObjectSettingsToValue(
 	rapidjson::Value &						_array,
@@ -80,7 +82,7 @@ void ak::ui::qt::checkBox::addObjectSettingsToValue(
 	root.SetObject();
 
 	// Add alias
-	std::string str(my_alias.toStdString());
+	std::string str(objectName().toStdString());
 	rapidjson::Value nAlias(str.c_str(), _allocator);
 	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
 

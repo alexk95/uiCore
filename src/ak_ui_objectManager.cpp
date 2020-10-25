@@ -239,6 +239,7 @@ ak::UID ak::ui::objectManager::createLogInDialog(
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
 	addCreatedUid(_creatorUid, obj->uid());
 	return obj->uid();
+	QWidget *d;
 }
 
 ak::UID ak::ui::objectManager::createPropertyGrid(
@@ -623,7 +624,8 @@ std::string ak::ui::objectManager::saveState(void) {
 }
 
 void ak::ui::objectManager::restoreState(
-	const char *										_json
+	const char *										_json,
+	bool												_ignoreColorStyle
 ) {
 	rapidjson::Document doc;
 	doc.Parse(_json);
@@ -640,7 +642,7 @@ void ak::ui::objectManager::restoreState(
 		if (obj.HasMember(RESTORABLE_UI_COLORSTYLE)) {
 			assert(obj[RESTORABLE_UI_COLORSTYLE].IsString());
 			QString colorStyleName = obj[RESTORABLE_UI_COLORSTYLE].GetString();
-			setColorStyle(colorStyleName);
+			if (!_ignoreColorStyle) { setColorStyle(colorStyleName); }
 		}
 		else {
 			assert(obj.HasMember(RESTORABLE_NAME_ALIAS));			// Does not contain name
@@ -673,6 +675,29 @@ void ak::ui::objectManager::restoreState(
 			const rapidjson::Value & settings = obj[RESTORABLE_NAME_SETTINGS];
 			assert(settings.IsObject()); // Not a setting
 			restorable->restoreSettings(settings);
+		}
+	}
+}
+
+void ak::ui::objectManager::restoreStateColorStyleOnly(
+	const char *										_json
+) {
+	rapidjson::Document doc;
+	doc.Parse(_json);
+
+	// Check document
+	assert(doc.HasMember(RESTORABLE_UI_SETTINGS));	// Member missing
+	assert(doc[RESTORABLE_UI_SETTINGS].IsArray());	// Invalid type
+	rapidjson::Value UIsettings = doc[RESTORABLE_UI_SETTINGS].GetArray();
+
+	// Go trough all items in the array
+	for (rapidjson::Value::ConstValueIterator itm = UIsettings.Begin(); itm != UIsettings.End(); itm++) {
+		const rapidjson::Value & obj = *itm;
+		assert(obj.IsObject());									// Stored item is not an object
+		if (obj.HasMember(RESTORABLE_UI_COLORSTYLE)) {
+			assert(obj[RESTORABLE_UI_COLORSTYLE].IsString());
+			QString colorStyleName = obj[RESTORABLE_UI_COLORSTYLE].GetString();
+			setColorStyle(colorStyleName);
 		}
 	}
 }

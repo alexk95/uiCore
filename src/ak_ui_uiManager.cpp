@@ -185,7 +185,9 @@ void ak::ui::uiManager::setColorStyle(
 
 void ak::ui::uiManager::setAlias(
 	const QString &							_alias
-) { my_alias = _alias; }
+) { setObjectName(_alias); }
+
+QString ak::ui::uiManager::alias(void) const { return objectName(); }
 
 void ak::ui::uiManager::addObjectSettingsToValue(
 	rapidjson::Value &						_array,
@@ -198,7 +200,7 @@ void ak::ui::uiManager::addObjectSettingsToValue(
 	root.SetObject();
 
 	// Add alias
-	std::string str(my_alias.toStdString());
+	std::string str(objectName().toStdString());
 	rapidjson::Value nAlias(str.c_str(), _allocator);
 	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
 
@@ -248,13 +250,9 @@ void ak::ui::uiManager::restoreSettings(
 void ak::ui::uiManager::setCentralWidget(
 	QWidget *														_centralWidget
 ) {
-	try {
-		if (_centralWidget == nullptr) { throw ak::Exception("Is nullptr", "Check central widget"); }
-		my_window->setCentralWidget(_centralWidget);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::setCentralWidget()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::setCentralWidget()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::setCentralWidget()"); }
+	assert(_centralWidget != nullptr); // nullptr provided
+	my_window->takeCentralWidget();
+	my_window->setCentralWidget(_centralWidget);
 }
 
 // #############################################################################################################
@@ -491,13 +489,14 @@ int ak::ui::uiManager::getHideStatusObjectDelayTimerInterval(void) const {
 	return my_timerLabelHide->interval();
 }
 
-//
+// #############################################################################################################
 
 void ak::ui::uiManager::setTabToolBarVisible(
 	bool						_vis
 ) {
 	try {
 		my_tabToolBar->setVisible(_vis);
+
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::setTabToolBarVisible()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::setTabToolBarVisible()"); }
@@ -530,7 +529,18 @@ void ak::ui::uiManager::addTabToolbarWidget(
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::addTabToolbarWidget()"); }
 }
 
-//
+ak::ID ak::ui::uiManager::currentTabToolbarTab(void) const { return my_tabToolBar->CurrentTab(); }
+
+int ak::ui::uiManager::tabToolbarTabCount(void) const { return my_tabToolBar->TabCount(); }
+
+void ak::ui::uiManager::setCurrentTabToolBarTab(
+	ak::ID						_tabID
+) {
+	assert(_tabID >= 0 && _tabID < my_tabToolBar->TabCount());	// Index out of range
+	my_tabToolBar->SetCurrentTab(_tabID);
+}
+
+// #############################################################################################################
 
 QMainWindow * ak::ui::uiManager::window(void) const { return my_window; }
 

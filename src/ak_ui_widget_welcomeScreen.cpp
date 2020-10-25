@@ -375,6 +375,16 @@ QString ak::ui::widget::welcomeScreen::groupName(
 	}
 }
 
+void ak::ui::widget::welcomeScreen::setObjectName(
+	const QString &					_name
+) {
+	my_screen.Central.widget->setObjectName(_name);
+}
+
+QString ak::ui::widget::welcomeScreen::objectName(void) const {
+	return my_screen.Central.widget->objectName();
+}
+
 // #############################################################################################################
 
 				// Event handling

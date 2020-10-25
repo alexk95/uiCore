@@ -13,6 +13,7 @@
 
 // AK header
 #include <ak_ui_core_aWidgetManager.h>		// Base class
+#include <ak_ui_core_aRestorable.h>			// Base class
 #include <ak_globalDataTypes.h>				// UID and ID data types
 #include <ak_ui_core.h>						// tabLocation type
 
@@ -41,7 +42,7 @@ namespace ak {
 
 		namespace widget {
 
-			class tabView : public QObject, public ak::ui::core::aWidgetManager {
+			class tabView : public QObject, public ui::core::aWidgetManager, public ui::core::aRestorable {
 				Q_OBJECT
 			public:
 				tabView(
@@ -65,6 +66,32 @@ namespace ak {
 				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					const ak::ui::colorStyle *				_colorStyle
+				) override;
+
+				//! @brief Will set the alias for this object
+				//! @param _alias The alias to set
+				//! @throw ak::Exception if the provided alias length is 0
+				virtual void setAlias(
+					const QString &							_alias
+				) override;
+
+				//! @brief Will return the alias of this object
+				virtual QString alias(void) const override;
+
+				//! @brief Will create a rapidjson::Value representing this objects current state
+				//! The value looks like this:
+				//!	     { "Alias":"[ObjectAlias]","Type":"[ObjectType]","Settings":{...} }
+				virtual void addObjectSettingsToValue(
+					rapidjson::Value &						_array,
+					rapidjson::Document::AllocatorType &	_allocator
+				) override;
+
+				//! @brief Will restore the settings from the provided JSON value which must have an object type
+				//! The value looks like this:
+				//!	     { { "[SettingsName]":"[SettingsValue]",... } }
+				//! @param _settings The settings to restore
+				virtual void restoreSettings(
+					const rapidjson::Value &				_settings
 				) override;
 
 				// #######################################################################################################

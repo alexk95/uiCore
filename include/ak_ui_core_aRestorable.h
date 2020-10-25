@@ -43,12 +43,6 @@ namespace ak {
 				//! @brief Default constructor
 				aRestorable();
 
-				//! @brief Constructor
-				//! @param _alias The initial alias
-				aRestorable(
-					const QString &							_alias
-				);
-
 				//! @brief Deconstructor
 				virtual ~aRestorable();
 
@@ -76,10 +70,7 @@ namespace ak {
 				) = 0;
 
 				//! @brief Will return the alias of this object
-				QString alias(void) const;
-
-			protected:
-				QString								my_alias;
+				virtual QString alias(void) const = 0;
 
 			private:
 				aRestorable(const aRestorable &) = delete;

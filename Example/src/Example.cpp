@@ -327,6 +327,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::registerUidNotifier(my_ui.ttb_aTest, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.ttb_aTest2, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.welcomeScreen, my_notifier);
+			ak::uiAPI::registerUidNotifier(my_ui.mainWindow, my_notifier);
 
 			// Create default data
 			defaultData();

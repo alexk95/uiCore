@@ -163,6 +163,13 @@ namespace ak {
 		//! @brief Will setup the UI with the settings provided in the settings JSON string
 		//! @param _json The JSON string containing the settings
 		UICORE_API void restoreState(
+			const std::string &										_json,
+			bool													_ignoreColorStyle = false
+		);
+
+		//! @brief Will restore tthe color style from the settings JSON string
+		//! @param _json The JSON string containing the settings
+		UICORE_API void restoreColorStyle(
 			const std::string &										_json
 		);
 
@@ -960,6 +967,11 @@ namespace ak {
 				bool				_visible
 			);
 
+			UICORE_API void setObjectName(
+				ak::UID							_tabViewUID,
+				const QString &					_name
+			);
+
 		}
 
 		// ###############################################################################################################################################
@@ -1369,6 +1381,11 @@ namespace ak {
 				ak::ID							_group
 			);
 
+			UICORE_API void setObjectName(
+				ak::UID							_welcomeScreenUID,
+				const QString &					_name
+			);
+
 		} // namespace welcomeScreen
 
 		// ###############################################################################################################################################
@@ -1429,6 +1446,26 @@ namespace ak {
 			UICORE_API void setTabToolBarVisible(
 				ak::UID												_windowUID,
 				bool												_visible = true
+			);
+
+			//! @brief Will return the current tab of the tab tool bar at the specified window
+			//! @param _windowUID The UID of the window
+			UICORE_API ak::ID getCurrentTabToolBarTab(
+				ak::UID												_windowUID
+			);
+
+			//! @brief Will return the tab count of the tab tool bar at the specified window
+			//! @param _windowUID The UID of the window
+			UICORE_API int getTabToolBarTabCount(
+				ak::UID												_windowUID
+			);
+
+			//! @brief Will set the specified tab toolbar tab as current at the specified window
+			//! @param _windowUID The UID of the window
+			//! @param _tabID The tab to set as current
+			UICORE_API void setCurrentTabToolBarTab(
+				ak::UID												_windowUID,
+				ak::ID												_tabID
 			);
 
 			//! @brief Will return true if the status label is visible at the provided window
