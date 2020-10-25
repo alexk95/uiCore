@@ -38,6 +38,8 @@ QString ak::core::toQString(
 	case ak::core::eReleased: return QString("Released");
 	case ak::core::eSelectionChanged: return QString("SelectionChanged");
 	case ak::core::eStateChanged: return QString("StateChanged");
+	case ak::core::eTabToolbarChanged: return QString("TabToolbarChanged");
+	case ak::core::eTabToolbarClicked: return QString("TabToolbarClicked");
 	case ak::core::eTimeout: return QString("Timeout");
 	case ak::core::eToggeledChecked: return QString("ToggeledToChecked");
 	case ak::core::eToggeledUnchecked: return QString("ToggeledToUnchecked");

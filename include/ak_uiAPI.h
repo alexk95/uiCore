@@ -916,7 +916,16 @@ namespace ak {
 				const QIcon &		_icon
 			);
 
+			UICORE_API void closeTab(
+				ak::UID				_tabViewUID,
+				ak::ID				_tabID
+			);
+
 			UICORE_API ak::ID getFocusedTab(
+				ak::UID				_tabViewUID
+			);
+
+			UICORE_API bool getTabsCloseable(
 				ak::UID				_tabViewUID
 			);
 
@@ -938,6 +947,12 @@ namespace ak {
 			UICORE_API void setTabFocused(
 				ak::UID				_tabViewUID,
 				ak::ID				_tabID
+			);
+
+			//! @brief Will set the closeabled state for the tabs in this tabView
+			//! @param _closeable If true the tabs can be closed by the user
+			UICORE_API void setTabsCloseable(
+				bool								_closeable
 			);
 
 			UICORE_API void setVisible(

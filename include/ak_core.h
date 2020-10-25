@@ -67,9 +67,11 @@ namespace ak {
 			eReleased					= 1 << 18,
 			eSelectionChanged			= 1 << 19,
 			eStateChanged				= 1 << 20,
-			eTimeout					= 1 << 21,
-			eToggeledChecked			= 1 << 22,
-			eToggeledUnchecked			= 1 << 23
+			eTabToolbarChanged			= 1 << 21,
+			eTabToolbarClicked			= 1 << 22,
+			eTimeout					= 1 << 23,
+			eToggeledChecked			= 1 << 24,
+			eToggeledUnchecked			= 1 << 25
 		};
 
 		inline eventType operator | (eventType a, eventType b)

@@ -266,7 +266,9 @@ namespace ak {
 			);
 
 		private slots:
-			void slotRestoreSetting(const QByteArray &);
+			void slotRestoreSetting(const QByteArray & _actualState);
+			void slotTabToolbarTabClicked(int _index);
+			void slotTabToolbarTabCurrentTabChanged(int _index);
 
 		private:
 			// Variables

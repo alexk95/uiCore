@@ -71,6 +71,12 @@ namespace ak {
 
 				// Setter
 
+				//! @brief Will close the specified tab
+				//! @param _tab The tab to close
+				void closeTab(
+					ak::ID								_tabID
+				);
+
 				//! @brief Will create a new tab page
 				//! Returns the ID of the new tab
 				//! @param _title The title of the new tab page
@@ -84,6 +90,12 @@ namespace ak {
 				//! @param _location The location to set
 				void setTabLocation(
 					ak::ui::core::tabLocation			_location
+				);
+
+				//! @brief Will set the closeabled state for the tabs in this tabView
+				//! @param _closeable If true the tabs can be closed by the user
+				void setTabsCloseable(
+					bool								_closeable
 				);
 
 				//! @brief Will set the current focus on the specified tab
@@ -126,6 +138,9 @@ namespace ak {
 
 				//! @brief Will return the currently focused tab
 				ak::ID focusedTab(void) const;
+
+				//! @brief Will return the currently set tabs closeable state
+				bool tabsCloseable(void) const;
 
 				//! @brief Will get the text of the specified tab
 				//! @param _tab The tab to get the text from

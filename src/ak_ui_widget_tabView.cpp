@@ -76,6 +76,13 @@ void ak::ui::widget::tabView::setColorStyle(
 
 // Setter
 
+void ak::ui::widget::tabView::closeTab(
+	ak::ID								_tabID
+) {
+	assert(_tabID >= 0 && _tabID < my_tabView->count());	// Index out of range
+	my_tabView->removeTab(_tabID);
+}
+
 ak::ID ak::ui::widget::tabView::createTab(
 	QWidget *									_widget,
 	const QString &								_title,
@@ -95,6 +102,10 @@ void ak::ui::widget::tabView::setTabLocation(
 		break;
 	}
 }
+
+void ak::ui::widget::tabView::setTabsCloseable(
+	bool								_closeable
+) { my_tabView->setTabsClosable(_closeable); }
 
 void ak::ui::widget::tabView::focusTab(
 	ak::ID								_tab
@@ -132,6 +143,8 @@ std::vector<QString> ak::ui::widget::tabView::tabTitles(void) const {
 }
 
 ak::ID ak::ui::widget::tabView::focusedTab(void) const { return my_tabView->currentIndex(); }
+
+bool ak::ui::widget::tabView::tabsCloseable(void) const { return my_tabView->tabsClosable(); }
 
 QString ak::ui::widget::tabView::tabText(
 	ak::ID								_tab

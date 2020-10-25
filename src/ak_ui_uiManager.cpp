@@ -76,6 +76,10 @@ ak::ui::uiManager::uiManager(
 		my_tabToolBar->setVisible(false);
 		my_window->addToolBar(my_tabToolBar);
 
+		// Connect tab Toolbar tab signals
+		connect(my_tabToolBar, SIGNAL(tabClicked(int)), this, SLOT(slotTabToolbarTabClicked(int)));
+		connect(my_tabToolBar, SIGNAL(currentTabChanged(int)), this, SLOT(slotTabToolbarTabCurrentTabChanged(int)));
+
 		// Create progressbar
 		my_progressBar = new QProgressBar;
 		if (my_progressBar == nullptr) { throw ak::Exception("Failed to create", "Create progress bar"); }
@@ -540,8 +544,19 @@ QString ak::ui::uiManager::windowTitle(void) const {
 	return my_window->windowTitle();
 }
 
+// #############################################################################################################
+
+// Slots
+
 void ak::ui::uiManager::slotRestoreSetting(
 	const QByteArray &					_actualState
 ) {
 	my_window->restoreState(_actualState);
+}
+
+void ak::ui::uiManager::slotTabToolbarTabClicked(int _index) {
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eTabToolbarClicked, _index);
+}
+void ak::ui::uiManager::slotTabToolbarTabCurrentTabChanged(int _index) {
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eTabToolbarChanged, _index);
 }

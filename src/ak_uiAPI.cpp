@@ -1284,6 +1284,19 @@ ak::ID ak::uiAPI::tabView::addTab(
 	return actualTabView->createTab(_widget, _title, _icon);
 }
 
+void ak::uiAPI::tabView::closeTab(
+	ak::UID				_tabViewUID,
+	ak::ID				_tabID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	return actualTabView->closeTab(_tabID);
+}
+
 ak::ID ak::uiAPI::tabView::getFocusedTab(
 	ak::UID				_tabViewUID
 ) {
@@ -1294,6 +1307,18 @@ ak::ID ak::uiAPI::tabView::getFocusedTab(
 	assert(actualTabView != nullptr); // Invalid object type
 
 	return actualTabView->focusedTab();
+}
+
+bool ak::uiAPI::tabView::getTabsCloseable(
+	ak::UID				_tabViewUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	return actualTabView->tabsCloseable();
 }
 
 QString ak::uiAPI::tabView::getTabText(
