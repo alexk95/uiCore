@@ -52,6 +52,9 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	my_table->setHorizontalHeaderLabels(headerText);
 
 	my_defaultGroup = new propertyGridGroup(my_table, "");
+	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
+	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
+	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	my_defaultGroup->activate();
 }
 
@@ -83,6 +86,9 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 		itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 		itm.second->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
 	}
+
+	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
+	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
 }
 
 // ##############################################################################################################
@@ -292,6 +298,7 @@ void ak::ui::widget::propertyGrid::clear(void) {
 	for (auto itm : my_groups) {
 		itm.second->clear();
 	}
+	my_defaultGroup->clear();
 }
 
 // ##############################################################################################################
@@ -619,6 +626,7 @@ void ak::ui::widget::propertyGridGroup::clear(void) {
 		delete actualItem;
 	}
 	my_items.clear();
+	my_isAlternateBackground = false;
 }
 
 // ##############################################################################################################
@@ -881,12 +889,14 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 }
 
 ak::ui::widget::propertyGridItem::~propertyGridItem() {
-	my_propertyGridTable->removeRow(my_cellSettingName->row());
-	delete my_cellSettingName;
+	assert(my_cellSettingName != nullptr); // This should never happen
 	if (my_cellValue != nullptr) { delete my_cellValue; }
 	if (my_widgetBool != nullptr) { delete my_widgetBool; }
 	if (my_widgetColor != nullptr) { delete my_widgetColor; }
 	if (my_widgetSelection != nullptr) { delete my_widgetSelection; }
+	int r = my_cellSettingName->row();
+	delete my_cellSettingName;
+	my_propertyGridTable->removeRow(r);
 }
 
 int ak::ui::widget::propertyGridItem::row() const {

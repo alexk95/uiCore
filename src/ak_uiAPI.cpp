@@ -63,7 +63,6 @@ ak::uiAPI::apiManager::apiManager()
 	my_fileUidManager(nullptr),
 	my_app(nullptr)
 {
-	my_app = new ui::application();
 	ak::singletonAllowedMessages::instance();
 	my_fileUidManager = new ak::uidManager();
 }
@@ -106,6 +105,7 @@ void ak::uiAPI::apiManager::ini(
 	ak::ui::objectManager *								_objectManager
 ) {
 	assert(!my_isInitialized); // Is already initialized
+	my_app = new ui::application();
 	
 	// messenger
 	if (_messenger == nullptr) {

@@ -83,11 +83,11 @@ void Example::eventCallback(
 				QString str("Event { Sender=\"");
 				str.append(QString::number(_sender));
 				str.append("\"; EventType = \"");
-				str.append(ak::uiAPI::toString(_eventType));
+				str.append(ak::uiAPI::special::toString(_eventType));
 				str.append("\"; Info1=\"");
 				str.append(QString::number(_info1));
 				str.append("\"; Info2=\"");
-				if (_eventType == ak::core::eKeyPressed) { str.append(ak::uiAPI::toString((ak::ui::core::keyType)_info2)); }
+				if (_eventType == ak::core::eKeyPressed) { str.append(ak::uiAPI::special::toString((ak::ui::core::keyType)_info2)); }
 				else { str.append(QString::number(_info2)); }
 				str.append("\"; }");
 				ak::uiAPI::textEdit::appendText(my_ui.outputWidget, str);

@@ -29,7 +29,7 @@ namespace ak {
 			public:
 				//! @brief Constructor
 				//! @param _parent The parent widget
-				aDialog(QWidget * _parent);
+				aDialog(QWidget * _parent = nullptr);
 
 				//! @brief Deconstructor
 				virtual ~aDialog();
