@@ -23,7 +23,7 @@ ak::ui::colorStyleDefault::colorStyleDefault() {
 	setControlsPressedColor(ak::ui::color(60, 60, 200));
 	my_alternateBackColor = ak::ui::color(69, 69, 69);
 	my_alternateForeColor = ak::ui::color(255, 255, 255);
-	my_headerBackColor.setRGBA(80, 80, 80);
+	my_headerBackColor.setRGBA(180, 180, 180);
 	my_headerForeColor.setRGBA(0, 0, 0);
 }
 

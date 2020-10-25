@@ -44,28 +44,17 @@ ak::ui::widget::tree::tree(
 		my_tree = new ak::ui::qt::tree(my_colorStyle);
 		assert(my_tree != nullptr); // Failed to create
 		my_tree->setUid(1);
-		QMargins treeMargins(my_tree->contentsMargins());
-		treeMargins.setLeft(0);
-		treeMargins.setRight(0);
-		treeMargins.setBottom(0);
-		//my_tree->setContentsMargins(treeMargins);
 
 		// Create filter
 		my_filter = new ak::ui::qt::lineEdit();
 		assert(my_filter != nullptr); // Failed to create
 		my_filter->setVisible(false);
-		QMargins filterMargins(my_filter->contentsMargins());
-		filterMargins.setLeft(0);
-		filterMargins.setRight(0);
-		filterMargins.setBottom(0);
-		//my_filter->setContentsMargins(filterMargins);
 
 		// Create widget
 		my_multiWidget = new QWidget();
 		assert(my_multiWidget != nullptr); // Failed to create
-		//my_multiWidget->setContentsMargins(QMargins(0, 0, 0, 0));
+		my_multiWidget->setContentsMargins(0, 0, 0, 0);
 		
-
 		// Create layout
 		my_layout = new QVBoxLayout(my_multiWidget);
 		assert(my_layout != nullptr); // Failed to create

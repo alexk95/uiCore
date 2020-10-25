@@ -30,6 +30,9 @@
 
 // Forward declaration
 class QWidget;
+class QHBoxLayout;
+class QVBoxLayout;
+class QLabel;
 
 namespace ak {
 
@@ -223,9 +226,19 @@ namespace ak {
 
 			private slots:
 				void slotItemChanged(void);
+				void slotCheckItemVisibility(void);
 
 			private:
+
+				void itemCountChanged(void);
+
+				QWidget *								my_widget;
+				QVBoxLayout *							my_layout;
+				QWidget *								my_widgetInfo;
+				QHBoxLayout *							my_layoutInfo;
+				QLabel *								my_labelInfoNoItems;
 				qt::table *								my_table;
+				bool									my_checkItemVisibilityRequired;
 
 				std::map<QString, propertyGridGroup *>	my_groups;
 				typedef std::map<QString,
@@ -244,6 +257,9 @@ namespace ak {
 				QColor									my_itemDefaultBackgroundColor;
 				QColor									my_itemTextColorError;
 				QColor									my_itemTextColorNormal;
+
+				//QTableWidgetItem *						my_verticalHeaderItemName;
+				//QTableWidgetItem *						my_verticalHeaderItemValue;
 
 			};
 
@@ -328,6 +344,10 @@ namespace ak {
 					const QString &									_value
 				);
 
+				void setGroupHeaderVisible(
+					bool											_isVisible
+				);
+
 				void clear(void);
 
 			private slots:
@@ -342,6 +362,7 @@ namespace ak {
 				std::list<propertyGridItem *>			my_items;
 				qt::table *								my_propertyGridTable;
 				QTableWidgetItem *						my_item;
+				bool									my_headerIsVisible;
 
 				QString									my_name;
 				bool									my_isActivated;

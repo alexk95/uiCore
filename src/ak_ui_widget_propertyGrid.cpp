@@ -21,6 +21,9 @@
 #include <ak_ui_dialog_prompt.h>
 
 // Qt header
+#include <qwidget.h>
+#include <qlayout.h>
+#include <qlabel.h>
 #include <qheaderview.h>
 #include <qflags.h>
 #include <qfont.h>
@@ -34,28 +37,46 @@ ak::ui::widget::propertyGrid::propertyGrid(
 )
 	: ak::ui::core::aWidgetManager(ak::ui::core::oPropertyGrid, _messenger, _uidManager), my_currentID(ak::invalidID),
 	my_groupHeaderBackColor(80,80,80), my_groupHeaderForeColor(0,0,0), my_itemDefaultBackgroundColor(230,230,230),
-	my_itemTextColorError(255,0,0), my_itemTextColorNormal(0,0,0)
+	my_itemTextColorError(255,0,0), my_itemTextColorNormal(0,0,0),
+	my_widget(nullptr), my_layout(nullptr), my_labelInfoNoItems(nullptr), my_widgetInfo(nullptr), my_layoutInfo(nullptr)
 {
 	assert(_messenger != nullptr); // nullptr provided
 	assert(_uidManager != nullptr); // nullptr provided
 
+	my_widget = new QWidget();
+	my_widget->setContentsMargins(0, 0, 0, 0);
+	my_layout = new QVBoxLayout(my_widget);
+
+	my_widgetInfo = new QWidget();
+	my_layoutInfo = new QHBoxLayout(my_widgetInfo);
+	my_labelInfoNoItems = new QLabel("No items");
+	my_layoutInfo->addStretch(1);
+	my_layoutInfo->addWidget(my_labelInfoNoItems, 0, Qt::AlignmentFlag::AlignCenter);
+	my_layoutInfo->addStretch(1);
+
 	my_table = new qt::table(0, 2);
 	my_table->verticalHeader()->setVisible(false);
+
+	// Add table first, info label will be set in the item count changed function
+	my_layout->addWidget(my_table);
+
+	QStringList lst;
+	lst.push_back("Name");
+	lst.push_back("Value");
+	my_table->setHorizontalHeaderLabels(lst);
 
 	my_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeMode::Stretch);
 	my_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::Stretch);
 	my_table->horizontalHeader()->setEnabled(false);
 
-	QStringList headerText;
-	headerText.push_back("Name");
-	headerText.push_back("Value");
-	my_table->setHorizontalHeaderLabels(headerText);
-
 	my_defaultGroup = new propertyGridGroup(my_table, "");
 	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
 	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
 	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
+	my_defaultGroup->setGroupHeaderVisible(false);
 	my_defaultGroup->activate();
+
+	itemCountChanged();
 }
 
 ak::ui::widget::propertyGrid::~propertyGrid() {
@@ -67,7 +88,7 @@ ak::ui::widget::propertyGrid::~propertyGrid() {
 // base class functions
 
 QWidget * ak::ui::widget::propertyGrid::widget(void) {
-	return my_table;
+	return my_widget;
 }
 
 void ak::ui::widget::propertyGrid::setColorStyle(
@@ -82,13 +103,35 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 	my_itemTextColorNormal = my_colorStyle->getControlsMainForecolor().toQColor();
 	my_itemTextColorError = my_colorStyle->getControlsErrorForecolor().toQColor();
 
-	for (auto itm : my_groups) {
-		itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
-		itm.second->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
-	}
+	for (auto itm : my_groups) { itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor); }
+
+	QString sheet("QHeaderView{color:#");
+	sheet.append(my_colorStyle->getHeaderForegroundColor().toHexString(true));
+	sheet.append("; background-color:#");
+	sheet.append(my_colorStyle->getHeaderBackgroundColor().toHexString(true));
+	sheet.append(";}\n");
+
+	sheet.append("QHeaderView::section{color:#");
+	sheet.append(my_colorStyle->getHeaderForegroundColor().toHexString(true));
+	sheet.append("; background-color:#");
+	sheet.append(my_colorStyle->getHeaderBackgroundColor().toHexString(true));
+	sheet.append(";}\n");
+	
+	my_table->horizontalHeader()->setStyleSheet(sheet);
+	/*/
+	QTableWidgetItem *  verticalHeaderItemName = my_table->horizontalHeaderItem(0);
+	QTableWidgetItem *  verticalHeaderItemValue = my_table->horizontalHeaderItem(1);
+	verticalHeaderItemName->setBackgroundColor(my_colorStyle->getHeaderBackgroundColor().toQColor());
+	verticalHeaderItemName->setTextColor(my_colorStyle->getHeaderForegroundColor().toQColor());
+	verticalHeaderItemValue->setBackgroundColor(my_colorStyle->getHeaderBackgroundColor().toQColor());
+	verticalHeaderItemValue->setTextColor(my_colorStyle->getHeaderForegroundColor().toQColor());
+	my_table->setHorizontalHeaderItem(0, verticalHeaderItemName);
+	my_table->setHorizontalHeaderItem(1, verticalHeaderItemValue);
+	*/
 
 	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
+	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
 }
 
 // ##############################################################################################################
@@ -132,6 +175,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -144,6 +190,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -156,6 +205,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -168,6 +220,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -181,6 +236,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _possibleSelection, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -193,6 +251,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -210,6 +271,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -225,6 +289,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -240,6 +307,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -255,6 +325,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -271,6 +344,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _possibleSelection, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -286,6 +362,9 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
 	my_items.insert_or_assign(my_currentID, newItem);
+
+	itemCountChanged();
+
 	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
 	return my_currentID;
 }
@@ -299,6 +378,8 @@ void ak::ui::widget::propertyGrid::clear(void) {
 		itm.second->clear();
 	}
 	my_defaultGroup->clear();
+	my_items.clear();
+	itemCountChanged();
 }
 
 // ##############################################################################################################
@@ -393,6 +474,10 @@ ak::core::valueType ak::ui::widget::propertyGrid::getItemValueType(
 	return itm->second->getValueType();
 }
 
+// ##############################################################################################################
+
+// Slots
+
 void ak::ui::widget::propertyGrid::slotItemChanged(void) {
 	ui::widget::propertyGridItem * actualSender = nullptr;
 	actualSender = dynamic_cast<ui::widget::propertyGridItem *>(sender());
@@ -401,16 +486,51 @@ void ak::ui::widget::propertyGrid::slotItemChanged(void) {
 	my_messenger->sendMessage(my_uid, ak::core::eventType::eChanged, actualSender->getId());
 }
 
-// ##############################################################################################################
+void ak::ui::widget::propertyGrid::slotCheckItemVisibility(void) {
+	if (my_checkItemVisibilityRequired) {
+		my_checkItemVisibilityRequired = false;
+		if (my_items.size() == 0) {
+			if (my_table->isVisible()) {
+				my_layout->removeWidget(my_table);
+				my_layout->addWidget(my_widgetInfo, 0, Qt::AlignmentFlag::AlignTop);
+				my_widgetInfo->setVisible(true);
+				my_table->setVisible(false);
+				my_layout->setContentsMargins(2, 2, 2, 2);
+			}
+		}
+		else {
+			if (!my_table->isVisible()) {
+				my_layout->removeWidget(my_widgetInfo);
+				my_layout->addWidget(my_table);
+				my_widgetInfo->setVisible(false);
+				my_table->setVisible(true);
+				my_layout->setContentsMargins(0, 0, 0, 0);
+			}
+
+		}
+	}
+}
 
 // ##############################################################################################################
 
-// ##############################################################################################################
+// Private members
+
+void ak::ui::widget::propertyGrid::itemCountChanged(void) {
+	my_checkItemVisibilityRequired = true;
+	// Queue the request to avoid flickering when clearing property grid and refilling it with new items
+	QMetaObject::invokeMethod(this, "slotCheckItemVisibility", Qt::QueuedConnection);
+}
+
+// ##############################################################################################################********************************************************
+
+// ##############################################################################################################********************************************************
+
+// ##############################################################################################################********************************************************
 
 ak::ui::widget::propertyGridGroup::propertyGridGroup(
 	qt::table *							_propertyGridTable,
 	const QString &						_groupName
-) : my_propertyGridTable(_propertyGridTable), my_isActivated(false), my_isVisible(true), my_isAlternateBackground(false)
+) : my_propertyGridTable(_propertyGridTable), my_isActivated(false), my_isVisible(true), my_isAlternateBackground(false), my_headerIsVisible(true)
 {
 	assert(my_propertyGridTable != nullptr);
 	my_item = new QTableWidgetItem;
@@ -428,6 +548,8 @@ ak::ui::widget::propertyGridGroup::propertyGridGroup(
 	QFont font = my_item->font();
 	font.setBold(true);
 	my_item->setFont(font);
+
+	setItemsBackColor(my_colorItemBackground);
 
 	connect(my_propertyGridTable, SIGNAL(itemDoubleClicked(QTableWidgetItem *)), this, SLOT(slotDoubleClicked(QTableWidgetItem *)));
 
@@ -469,22 +591,22 @@ void ak::ui::widget::propertyGridGroup::setItemsBackColor(
 	int g = my_colorItemBackground.green() + ALTERNATE_ROW_COLOR_VALUE;
 	int b = my_colorItemBackground.blue() + ALTERNATE_ROW_COLOR_VALUE;
 	int a = my_colorItemBackground.alpha() - ALTERNATE_ROW_COLOR_VALUE;
-	if (r < 0) { r = 0; }
-	if (r > 255) { r = 255; }
-	if (g < 0) { g = 0; }
-	if (g > 255) { g = 255; }
-	if (b < 0) { b = 0; }
-	if (b > 255) { b = 255; }
+	if (r > 255) { r = my_colorItemBackground.red() - ALTERNATE_ROW_COLOR_VALUE; }
+	if (g > 255) { g = my_colorItemBackground.green() - ALTERNATE_ROW_COLOR_VALUE; }
+	if (b > 255) { b = my_colorItemBackground.blue() - ALTERNATE_ROW_COLOR_VALUE; }
 	if (a < 0) { a = 0; }
 	if (a > 255) { a = 255; }
 	my_colorItemBackgroundAlternate.setRgb(r, g, b, a);
+	repaint();
 }
 
 void ak::ui::widget::propertyGridGroup::setItemsTextColors(
 	const QColor &									_textColorNormal,
 	const QColor &									_textColorError
 ) {
-
+	my_colorTextNormal = _textColorNormal;
+	my_colorTextError = _textColorError;
+	repaint();
 }
 
 ak::ui::widget::propertyGridItem * ak::ui::widget::propertyGridGroup::addItem(
@@ -620,6 +742,14 @@ ak::ui::widget::propertyGridItem * ak::ui::widget::propertyGridGroup::addItem(
 	return newItem;
 }
 
+void ak::ui::widget::propertyGridGroup::setGroupHeaderVisible(
+	bool											_isVisible
+) {
+	assert(my_item != nullptr);	// This should never happen
+	my_headerIsVisible = _isVisible;
+	my_propertyGridTable->setRowHidden(my_item->row(), !my_headerIsVisible);
+}
+
 void ak::ui::widget::propertyGridGroup::clear(void) {
 	for (auto itm : my_items) {
 		propertyGridItem * actualItem = itm;
@@ -649,12 +779,14 @@ void ak::ui::widget::propertyGridGroup::slotDoubleClicked(QTableWidgetItem * _it
 void ak::ui::widget::propertyGridGroup::checkVisibility(void) {
 	if (!my_isActivated) { return; }
 	if (my_items.size() > 0) {
-		my_propertyGridTable->setRowHidden(my_item->row(), false);
+		// Show group header (if is setVisible) and items
+		my_propertyGridTable->setRowHidden(my_item->row(), !my_headerIsVisible);
 		for (auto itm : my_items) {
 			my_propertyGridTable->setRowHidden(itm->row(), false);
 		}
 	}
 	else {
+		// Hide group header
 		my_propertyGridTable->setRowHidden(my_item->row(), true);
 	}
 }
@@ -665,6 +797,7 @@ void ak::ui::widget::propertyGridGroup::repaint(void) {
 		if (my_isAlternateBackground) { itm->setBackgroundColor(my_colorItemBackgroundAlternate); }
 		else { itm->setBackgroundColor(my_colorItemBackground); }
 		itm->setTextColors(my_colorTextNormal, my_colorTextError);
+		my_isAlternateBackground = !my_isAlternateBackground;
 	}
 }
 

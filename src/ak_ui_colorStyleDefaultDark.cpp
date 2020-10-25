@@ -24,7 +24,7 @@ ak::ui::colorStyleDefaultDark::colorStyleDefaultDark() {
 	my_alternateBackColor = ak::ui::color(69, 69, 69);
 	my_alternateForeColor = ak::ui::color(255, 255, 255);
 	my_headerBackColor.setRGBA(80, 80, 80);
-	my_headerForeColor.setRGBA(0, 0, 0);
+	my_headerForeColor.setRGBA(255, 255, 255);
 }
 
 ak::ui::colorStyleDefaultDark::~colorStyleDefaultDark() {}
