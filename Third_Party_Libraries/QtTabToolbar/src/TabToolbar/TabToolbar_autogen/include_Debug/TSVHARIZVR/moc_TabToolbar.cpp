@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_tt__TabToolbar_t {
-    QByteArrayData data[16];
-    char stringdata0[155];
+    QByteArrayData data[18];
+    char stringdata0[184];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -37,22 +37,25 @@ QT_MOC_LITERAL(2, 25, 0), // ""
 QT_MOC_LITERAL(3, 26, 9), // "Maximized"
 QT_MOC_LITERAL(4, 36, 17), // "SpecialTabClicked"
 QT_MOC_LITERAL(5, 54, 12), // "StyleChanged"
-QT_MOC_LITERAL(6, 67, 12), // "FocusChanged"
-QT_MOC_LITERAL(7, 80, 8), // "QWidget*"
-QT_MOC_LITERAL(8, 89, 3), // "old"
-QT_MOC_LITERAL(9, 93, 3), // "now"
-QT_MOC_LITERAL(10, 97, 10), // "TabClicked"
-QT_MOC_LITERAL(11, 108, 5), // "index"
-QT_MOC_LITERAL(12, 114, 17), // "CurrentTabChanged"
-QT_MOC_LITERAL(13, 132, 6), // "HideAt"
-QT_MOC_LITERAL(14, 139, 7), // "HideTab"
-QT_MOC_LITERAL(15, 147, 7) // "ShowTab"
+QT_MOC_LITERAL(6, 67, 10), // "tabClicked"
+QT_MOC_LITERAL(7, 78, 5), // "index"
+QT_MOC_LITERAL(8, 84, 17), // "currentTabChanged"
+QT_MOC_LITERAL(9, 102, 12), // "FocusChanged"
+QT_MOC_LITERAL(10, 115, 8), // "QWidget*"
+QT_MOC_LITERAL(11, 124, 3), // "old"
+QT_MOC_LITERAL(12, 128, 3), // "now"
+QT_MOC_LITERAL(13, 132, 10), // "TabClicked"
+QT_MOC_LITERAL(14, 143, 17), // "CurrentTabChanged"
+QT_MOC_LITERAL(15, 161, 6), // "HideAt"
+QT_MOC_LITERAL(16, 168, 7), // "HideTab"
+QT_MOC_LITERAL(17, 176, 7) // "ShowTab"
 
     },
     "tt::TabToolbar\0Minimized\0\0Maximized\0"
     "SpecialTabClicked\0StyleChanged\0"
+    "tabClicked\0index\0currentTabChanged\0"
     "FocusChanged\0QWidget*\0old\0now\0TabClicked\0"
-    "index\0CurrentTabChanged\0HideAt\0HideTab\0"
+    "CurrentTabChanged\0HideAt\0HideTab\0"
     "ShowTab"
 };
 #undef QT_MOC_LITERAL
@@ -63,42 +66,46 @@ static const uint qt_meta_data_tt__TabToolbar[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       6,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   69,    2, 0x06 /* Public */,
-       3,    0,   70,    2, 0x06 /* Public */,
-       4,    0,   71,    2, 0x06 /* Public */,
-       5,    0,   72,    2, 0x06 /* Public */,
+       1,    0,   79,    2, 0x06 /* Public */,
+       3,    0,   80,    2, 0x06 /* Public */,
+       4,    0,   81,    2, 0x06 /* Public */,
+       5,    0,   82,    2, 0x06 /* Public */,
+       6,    1,   83,    2, 0x06 /* Public */,
+       8,    1,   86,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       6,    2,   73,    2, 0x08 /* Private */,
-      10,    1,   78,    2, 0x08 /* Private */,
-      12,    1,   81,    2, 0x08 /* Private */,
-      13,    1,   84,    2, 0x08 /* Private */,
-      13,    0,   87,    2, 0x28 /* Private | MethodCloned */,
-      14,    1,   88,    2, 0x08 /* Private */,
-      15,    1,   91,    2, 0x08 /* Private */,
+       9,    2,   89,    2, 0x08 /* Private */,
+      13,    1,   94,    2, 0x08 /* Private */,
+      14,    1,   97,    2, 0x08 /* Private */,
+      15,    1,  100,    2, 0x08 /* Private */,
+      15,    0,  103,    2, 0x28 /* Private | MethodCloned */,
+      16,    1,  104,    2, 0x08 /* Private */,
+      17,    1,  107,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void, QMetaType::Int,    7,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 7, 0x80000000 | 7,    8,    9,
-    QMetaType::Void, QMetaType::Int,   11,
-    QMetaType::Void, QMetaType::Int,   11,
-    QMetaType::Void, QMetaType::Int,   11,
+    QMetaType::Void, 0x80000000 | 10, 0x80000000 | 10,   11,   12,
+    QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void, QMetaType::Int,    7,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,   11,
-    QMetaType::Void, QMetaType::Int,   11,
+    QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void, QMetaType::Int,    7,
 
        0        // eod
 };
@@ -113,19 +120,21 @@ void tt::TabToolbar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 1: _t->Maximized(); break;
         case 2: _t->SpecialTabClicked(); break;
         case 3: _t->StyleChanged(); break;
-        case 4: _t->FocusChanged((*reinterpret_cast< QWidget*(*)>(_a[1])),(*reinterpret_cast< QWidget*(*)>(_a[2]))); break;
-        case 5: _t->TabClicked((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 6: _t->CurrentTabChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 7: _t->HideAt((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 8: _t->HideAt(); break;
-        case 9: _t->HideTab((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 10: _t->ShowTab((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 4: _t->tabClicked((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: _t->currentTabChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->FocusChanged((*reinterpret_cast< QWidget*(*)>(_a[1])),(*reinterpret_cast< QWidget*(*)>(_a[2]))); break;
+        case 7: _t->TabClicked((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: _t->CurrentTabChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 9: _t->HideAt((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 10: _t->HideAt(); break;
+        case 11: _t->HideTab((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 12: _t->ShowTab((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<int*>(_a[0]) = -1; break;
-        case 4:
+        case 6:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 1:
@@ -164,6 +173,20 @@ void tt::TabToolbar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
                 return;
             }
         }
+        {
+            using _t = void (TabToolbar::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TabToolbar::tabClicked)) {
+                *result = 4;
+                return;
+            }
+        }
+        {
+            using _t = void (TabToolbar::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TabToolbar::currentTabChanged)) {
+                *result = 5;
+                return;
+            }
+        }
     }
 }
 
@@ -192,13 +215,13 @@ int tt::TabToolbar::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 13;
     }
     return _id;
 }
@@ -225,6 +248,20 @@ void tt::TabToolbar::SpecialTabClicked()
 void tt::TabToolbar::StyleChanged()
 {
     QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
+}
+
+// SIGNAL 4
+void tt::TabToolbar::tabClicked(int _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 4, _a);
+}
+
+// SIGNAL 5
+void tt::TabToolbar::currentTabChanged(int _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 5, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

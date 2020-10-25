@@ -186,6 +186,7 @@ QAction* TabToolbar::HideAction()
     return hideAction;
 }
 
+// Changed by Alexander Kuester
 void TabToolbar::TabClicked(int index)
 {
     if(tempShowTimer.isActive() || (index == 0 && hasSpecialTab))
@@ -199,8 +200,11 @@ void TabToolbar::TabClicked(int index)
         HideAt(index);
         isMinimized = true;
     }
+
+	emit tabClicked(index);
 }
 
+// Changed by Alexander Kuester
 void TabToolbar::CurrentTabChanged(int index)
 {
     QSignalBlocker blocker(tabBar);
@@ -212,6 +216,7 @@ void TabToolbar::CurrentTabChanged(int index)
     else
     {
         currentIndex = index;
+		emit currentTabChanged(index);
     }
 }
 

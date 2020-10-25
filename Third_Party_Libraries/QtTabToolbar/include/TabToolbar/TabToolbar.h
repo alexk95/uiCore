@@ -60,11 +60,13 @@ signals:
     void     Maximized();
     void     SpecialTabClicked();
     void     StyleChanged();
+	void	 tabClicked(int index);									// Created by Alexander Kuester
+	void	 currentTabChanged(int index);							// Created by Alexander Kuester
 
 private slots:
     void     FocusChanged(QWidget* old, QWidget* now);
-    void     TabClicked(int index);
-    void     CurrentTabChanged(int index);
+    void     TabClicked(int index);									// Changed by Alexander Kuester
+    void     CurrentTabChanged(int index);							// Changed by Alexander Kuester
     void     HideAt(int index = -1);
     void     HideTab(int index);
     void     ShowTab(int index);
