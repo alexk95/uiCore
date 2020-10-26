@@ -818,6 +818,11 @@ namespace ak {
 				ak::UID											_propertyGridUID
 			);
 
+			UICORE_API bool getItemIsReadOnly(
+				ak::UID											_propertyGridUID,
+				ak::ID											_itemID
+			);
+
 			UICORE_API QString getItemGroup(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
@@ -871,6 +876,12 @@ namespace ak {
 			UICORE_API ak::core::valueType getItemValueType(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
+			);
+
+			UICORE_API void setItemIsReadOnly(
+				ak::UID											_propertyGridUID,
+				ak::ID											_itemID,
+				bool											_readOnly = true
 			);
 
 		}

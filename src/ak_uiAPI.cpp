@@ -1062,6 +1062,17 @@ void ak::uiAPI::propertyGrid::clear(
 	actualPropertyGrid->clear();
 }
 
+bool ak::uiAPI::propertyGrid::getItemIsReadOnly(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->itemIsReadOnly(_itemID);
+}
+
 QString ak::uiAPI::propertyGrid::getItemGroup(
 	ak::UID											_propertyGridUID,
 	ak::ID											_itemID
@@ -1181,6 +1192,18 @@ ak::core::valueType ak::uiAPI::propertyGrid::getItemValueType(
 	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueType(_itemID);
+}
+
+void ak::uiAPI::propertyGrid::setItemIsReadOnly(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID,
+	bool											_readOnly
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->setItemReadOnly(_itemID, _readOnly);
 }
 
 // propertyGrid

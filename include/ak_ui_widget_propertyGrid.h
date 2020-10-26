@@ -170,6 +170,15 @@ namespace ak {
 					const QString &									_value
 				);
 
+				void setItemReadOnly(
+					ak::ID											_itemID,
+					bool											_readOnly = true
+				);
+
+				bool itemIsReadOnly(
+					ak::ID											_itemID
+				);
+
 				// ##############################################################################################################
 
 				// Clear items
@@ -495,6 +504,12 @@ namespace ak {
 
 				bool isMultipleValues(void) const;
 
+				void setReadOnly(
+					bool					_readOnly = true
+				);
+
+				bool isReadOnly();
+
 			signals:
 				void changed(void);
 
@@ -512,6 +527,7 @@ namespace ak {
 				bool							my_isMultipleValues;
 				bool							my_ignoreCellEvent;
 				bool							my_isCurrentlyError;
+				bool							my_isReadOnly;
 
 				qt::table *						my_propertyGridTable;
 				QString							my_group;

@@ -372,6 +372,23 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	return my_currentID;
 }
 
+void ak::ui::widget::propertyGrid::setItemReadOnly(
+	ak::ID											_itemID,
+	bool											_readOnly
+) {
+	my_itemsIterator itm = my_items.find(_itemID);
+	assert(itm != my_items.end()); // Invalid item ID
+	itm->second->setReadOnly(_readOnly);
+}
+
+bool ak::ui::widget::propertyGrid::itemIsReadOnly(
+	ak::ID											_itemID
+) {
+	my_itemsIterator itm = my_items.find(_itemID);
+	assert(itm != my_items.end()); // Invalid item ID
+	return itm->second->isReadOnly();
+}
+
 // ##############################################################################################################
 
 // Clear items
@@ -1108,6 +1125,40 @@ QString ak::ui::widget::propertyGridItem::getValueString() const {
 }
 
 bool ak::ui::widget::propertyGridItem::isMultipleValues(void) const { return my_isMultipleValues; }
+
+void ak::ui::widget::propertyGridItem::setReadOnly(
+	bool					_readOnly
+) {
+	switch (my_valueType)
+	{
+	case ak::core::vBool:
+		assert(my_widgetBool != nullptr); // This should not happen
+		my_widgetBool->setEnabled(!_readOnly);
+		break;
+	case ak::core::vColor:
+		assert(my_widgetColor != nullptr); // This should not happen
+		my_widgetColor->SetEnabled(!_readOnly);
+		break;
+	case ak::core::vSelection:
+		assert(my_widgetSelection != nullptr); // This should not happen
+		my_widgetSelection->setEnabled(!_readOnly);
+		break;
+	case ak::core::vDouble:
+	case ak::core::vInt:
+	case ak::core::vString:
+	{
+		Qt::ItemFlags f = my_cellValue->flags();
+		f.setFlag(Qt::ItemFlag::ItemIsEditable, !_readOnly);
+		my_cellValue->setFlags(f);
+	}
+		break;
+	default:
+		assert(0); // Invalid value type
+		break;
+	}
+}
+
+bool ak::ui::widget::propertyGridItem::isReadOnly() { return my_isReadOnly; }
 
 // #################################################################################
 

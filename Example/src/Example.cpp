@@ -412,19 +412,23 @@ void Example::defaultData(void) {
 	// Property grid
 
 	// Create groups
+	std::vector <ak::ID> ids;
 	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 70, 200, 200), "Test group");
 	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(200, 70, 70, 200), "Test group 2");
 	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 200, 70, 200), "Test group 3");
 
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group", "Test int", 13);
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group", "Test string", "Some text");
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 2", "Test double", 10.0);
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 2", "Test bool", true);
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group", "Test int", 13));
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group", "Test string", "Some text"));
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 2", "Test double", 10.0));
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 2", "Test bool", true));
 	std::vector<QString> v;
 	v.push_back("Test");
 	v.push_back("Some other item");
 	v.push_back("And another setting");
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test selection", v, "Test");
-	ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test color", my_settingColor);
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test selection", v, "Test"));
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test color", my_settingColor));
 	
+	for (auto theId : ids) {
+		ak::uiAPI::propertyGrid::setItemIsReadOnly(my_ui.propertiesWidget, theId);
+	}
 }

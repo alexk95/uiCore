@@ -136,11 +136,13 @@ void ak::ui::qt::colorEditButton::fillBackground(
 
 void ak::ui::qt::colorEditButton::slotButtonClicked() {
 	// Show color dialog
-	QColor c = QColorDialog::getColor(my_color.toQColor());
-	ak::ui::color newColor(c);
-	if (newColor != my_color) {
-		setColor(newColor);
-		// Send changed message
-		emit changed();
+	QColorDialog dia(my_color.toQColor());
+	if (dia.exec() == 1) {
+		ak::ui::color newColor(dia.currentColor());
+		if (newColor != my_color) {
+			setColor(newColor);
+			// Send changed message
+			emit changed();
+		}
 	}
 }
