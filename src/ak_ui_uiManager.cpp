@@ -72,7 +72,7 @@ ak::ui::uiManager::uiManager(
 		my_window->setAutoFillBackground(true);
 
 		// Create tab Toolbar
-		my_tabToolBar = new tt::TabToolbar(nullptr, 74U, 3U);
+		my_tabToolBar = new tt::TabToolbar();
 		my_tabToolBar->setVisible(false);
 		my_window->addToolBar(my_tabToolBar);
 
@@ -169,12 +169,11 @@ void ak::ui::uiManager::setColorStyle(
 		// TabToolbar
 		my_tabToolBar->SetStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sToolBar));
 		my_tabToolBar->SetTabBarStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTabWidget));
-		my_tabToolBar->SetTabBarTabStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTabBar));
 		my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sToolButton));
 
 		for (my_mapTabToolBarContainerIterator itm = my_mapTabToolBarContainer.begin(); itm != my_mapTabToolBarContainer.end(); itm++) {
 			assert(itm->second != nullptr); // Nullptr stored
-			itm->second->setColorStyle(my_colorStyle);
+			//itm->second->setColorStyle(my_colorStyle);
 		}
 
 	}

@@ -59,9 +59,7 @@ QString ak::ui::colorStyleDefaultDark::getColorStyleName(void) const { return QS
 #define _borderButtonPressed "border-style: inset;border-width: 1px; border-radius: 0px; border-color: #000000;padding: 2px;"
 #define _borderButtonFocus "border-style: outset;border-width: 1px; border-radius: 0px; border-color: #5050e0;padding: 2px;"
 
-// Used for tabtoolbar only (not for tabbed dock widgets)
-#define _additionTab "width: 70; height: 20;"
-#define _additionTabUnselected "margin-top: 3px; width: 70; height: 16;"
+// Used for tabtoolbar only (not for tabbed dock widgets
 #define _borderTabNormal "border-style: outset;border-width: 1px; border-radius: 0px; border-color: #c0c0c0;padding: 2px;"
 #define _borderTabPressed "border-style: inset;border-width: 1px; border-radius: 0px; border-color: #000000;padding: 2px;"
 #define _borderTabFocus "border-style: outset;border-width: 1px; border-radius: 0px; border-color: #0000a0;padding: 2px;"
@@ -376,22 +374,18 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 				"}\n");
 
 			out.append("QTabBar::tab{"
-				_foreTab _backTab _additionTab _borderTabNormal
+				_foreTab _backTab _borderTabNormal
 				"}\n");
 
 			out.append("QTabBar::tab:hover{"
-				_focusFore _focusBack _additionTab _borderTabFocus
+				_focusFore _focusBack _borderTabFocus
 				"}\n");
 
 			out.append("QTabBar::tab:selected:!hover,"
 				"QTabBar::tab:pressed{"
-				_selectedFore _selectedBack _additionTab _borderTabPressed
+				_selectedFore _selectedBack _borderTabPressed
 				"}\n");
-
-			out.append("QTabBar::tab:!selected {"
-				_additionTabUnselected
-				"}\n");
-
+			
 			break;
 
 		// ######################################################################################################
@@ -469,20 +463,16 @@ QString ak::ui::colorStyleDefaultDark::getStylesheet(
 				"}\n");
 
 			out.append("QTabBar::tab{"
-				_foreTab _backTab _additionTab _borderTabNormal
+				_foreTab _backTab _borderTabNormal
 				"}\n");
 
 			out.append("QTabBar::tab:hover{"
-				_focusFore _focusBack _additionTab _borderTabFocus
+				_focusFore _focusBack _borderTabFocus
 				"}\n");
 
 			out.append("QTabBar::tab:selected:!hover,"
 				"QTabBar::tab:pressed{"
-				_selectedFore _selectedBack _additionTab _borderTabPressed
-				"}\n");
-
-			out.append("QTabBar::tab:!selected {"
-				_additionTabUnselected
+				_selectedFore _selectedBack _borderTabPressed
 				"}\n");
 
 			break;

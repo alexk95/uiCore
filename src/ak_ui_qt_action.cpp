@@ -15,31 +15,21 @@
 #include <ak_ui_colorStyle.h>
 
 ak::ui::qt::action::action(QToolButton::ToolButtonPopupMode _popupMode, QObject * _parent)
-	: QWidgetAction(_parent), my_popupMode(_popupMode), ak::ui::core::aPaintable(ak::ui::core::objectType::oAction), my_widget(nullptr)
+	: QAction(_parent), my_popupMode(_popupMode), ak::ui::core::aPaintable(ak::ui::core::objectType::oAction), my_widget(nullptr)
 {}
 
 ak::ui::qt::action::action(const QString & _text, QToolButton::ToolButtonPopupMode _popupMode, QObject * _parent)
-	: QWidgetAction(_parent), my_popupMode(_popupMode), ak::ui::core::aPaintable(ak::ui::core::objectType::oAction), my_widget(nullptr)
+	: QAction(_parent), my_popupMode(_popupMode), ak::ui::core::aPaintable(ak::ui::core::objectType::oAction), my_widget(nullptr)
 {
 	setText(_text);
 }
 ak::ui::qt::action::action(const QIcon & _icon, const QString & _text, QToolButton::ToolButtonPopupMode _popupMode, QObject * _parent)
-	: QWidgetAction(_parent), my_popupMode(_popupMode), ak::ui::core::aPaintable(ak::ui::core::objectType::oAction), my_widget(nullptr)
+	: QAction(_parent), my_popupMode(_popupMode), ak::ui::core::aPaintable(ak::ui::core::objectType::oAction), my_widget(nullptr)
 {
 	setText(_text); setIcon(_icon);
 }
 
 ak::ui::qt::action::~action() {}
-
-QWidget * ak::ui::qt::action::createWidget(QWidget *parent) {
-	my_widget = QWidgetAction::createWidget(parent);
-	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
-	return my_widget;
-}
-void ak::ui::qt::action::deleteWidget(QWidget *widget) {
-	QWidgetAction::deleteWidget(widget);
-	my_widget = nullptr;
-}
 
 void ak::ui::qt::action::setColorStyle(
 	const ak::ui::colorStyle *					_colorStyle

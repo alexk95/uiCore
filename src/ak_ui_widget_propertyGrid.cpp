@@ -57,10 +57,8 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	my_layoutInfo->addStretch(1);
 
 	my_table = new qt::table(0, 2);
+	my_table->setVisible(true);
 	my_table->verticalHeader()->setVisible(false);
-
-	// Add table first, info label will be set in the item count changed function
-	my_layout->addWidget(my_table);
 
 	QStringList lst;
 	lst.push_back("Name");
@@ -78,8 +76,10 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	my_defaultGroup->setGroupHeaderVisible(false);
 	my_defaultGroup->activate();
 
-	my_checkItemVisibilityRequired = true;
-	slotCheckItemVisibility();
+	my_layout->addWidget(my_widgetInfo, 0, Qt::AlignmentFlag::AlignTop);
+	my_widgetInfo->setVisible(true);
+	my_table->setVisible(false);
+	my_layout->setContentsMargins(2, 2, 2, 2);
 }
 
 ak::ui::widget::propertyGrid::~propertyGrid() {

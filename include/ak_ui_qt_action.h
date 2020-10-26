@@ -12,7 +12,7 @@
 #pragma once
 
 // Qt header
-#include <qwidgetaction.h>					// base class
+#include <qaction.h>					// base class
 #include <qstring.h>					// QString
 #include <qicon.h>						// QIcon
 #include <qtoolbutton.h>				// ToolButtonPopupMode
@@ -29,7 +29,7 @@ namespace ak {
 		namespace qt {
 
 			//! @brief This class combines the functionallity of a QAction and a ak::ui::core::aPaintable
-			class action : public QWidgetAction, public ak::ui::core::aPaintable
+			class action : public QAction, public ak::ui::core::aPaintable
 			{
 				Q_OBJECT
 			public:
@@ -70,9 +70,6 @@ namespace ak {
 				virtual void setColorStyle(
 					const ak::ui::colorStyle *					_colorStyle
 				) override;
-
-				virtual QWidget * createWidget(QWidget *parent) override;
-				virtual void deleteWidget(QWidget *widget) override;
 
 				// #######################################################################################################
 
