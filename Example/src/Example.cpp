@@ -53,19 +53,46 @@ Example::Example()
 	my_notifier = new ExampleNotifier(this);
 	ak::uiAPI::registerUidNotifier(my_ui.logInDialog, my_notifier);
 
+	// Show log in dialog
 	ak::ui::core::dialogResult result = ak::uiAPI::logInDialog::showDialog(my_ui.logInDialog);
 	ak::uiAPI::object::destroy(my_ui.logInDialog);
 
 	if (result == ak::ui::core::resultOk) {
+		// Fill UI
 		setupUi();
 		
+		// Restore last color style settings
+		QSettings settings("AK", "uiCoreExample");
+		QString lastConfigString = settings.value("UI.ColorStyle", "").toString();
+		ak::uiAPI::restoreStateColorStyle(lastConfigString.toStdString());
+
+		// Check the current color style (after it was restored)
+		const ak::ui::colorStyle * currentColorStyle = ak::uiAPI::getCurrentColorStyle();
+		if (currentColorStyle->getColorStyleName() == "Default" || currentColorStyle->getColorStyleName() == "") {
+			ak::uiAPI::action::setText(my_ui.ttb_aColorStyle, TXT_Dark);
+			ak::uiAPI::action::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
+		}
+		else {
+			ak::uiAPI::action::setText(my_ui.ttb_aColorStyle, TXT_Bright);
+			ak::uiAPI::action::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
+		}
+
+		// Create and start the timer to restore the last window state
 		my_timerRestoreSettings = ak::uiAPI::createTimer(my_uid);
 		ak::uiAPI::registerUidNotifier(my_timerRestoreSettings, my_notifier);
 		ak::uiAPI::timer::shoot(my_timerRestoreSettings, 0);
 		
+		// Show the window
 		ak::uiAPI::window::showMaximized(my_ui.mainWindow);
 		
+		// Run the main application
 		ak::uiAPI::exec();
+
+		// Save state
+		QString cfg = ak::uiAPI::saveStateWindow().c_str();
+		settings.setValue("UI.Config", cfg);
+		cfg = ak::uiAPI::saveStateColorStyle().c_str();
+		settings.setValue("UI.ColorStyle", cfg);
 	}
 }
 
@@ -112,9 +139,6 @@ void Example::eventCallback(
 				}
 				else if (_sender == my_ui.ttb_aExit) {
 					// Close the main window
-					QSettings settings("AK", "uiCoreExample");
-					QString cfg = ak::uiAPI::saveState().c_str();
-					settings.setValue("UI.Config", cfg);
 					ak::uiAPI::window::close(my_ui.mainWindow);
 				}
 				else  if (_sender == my_ui.ttb_aColorStyle) {
@@ -205,19 +229,7 @@ void Example::eventCallback(
 				QString lastConfigString = settings.value("UI.Config", "").toString();
 				if (lastConfigString.length() > 0) {
 					std::string s(lastConfigString.toStdString());
-
-					ak::uiAPI::restoreState(s.c_str());
-
-					const ak::ui::colorStyle * currentColorStyle = ak::uiAPI::getCurrentColorStyle();
-					if (currentColorStyle->getColorStyleName() == "Default" || currentColorStyle->getColorStyleName() == "") {
-						ak::uiAPI::action::setText(my_ui.ttb_aColorStyle, TXT_Dark);
-						ak::uiAPI::action::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
-					}
-					else {
-						ak::uiAPI::action::setText(my_ui.ttb_aColorStyle, TXT_Bright);
-						ak::uiAPI::action::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
-					}
-
+					ak::uiAPI::restoreStateWindow(s);
 				}
 			}
 		}

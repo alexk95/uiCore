@@ -158,18 +158,20 @@ namespace ak {
 		UICORE_API std::vector<ak::core::eventType> disabledEventTypes(void);
 
 		//! @brief Will create and return a JSON string representing the UI
-		UICORE_API std::string saveState(void);
+		UICORE_API std::string saveStateWindow(void);
+
+		//! @brief Will create and return a JSON string representing the currently set ColorStyle
+		UICORE_API std::string saveStateColorStyle(void);
 
 		//! @brief Will setup the UI with the settings provided in the settings JSON string
 		//! @param _json The JSON string containing the settings
-		UICORE_API void restoreState(
-			const std::string &										_json,
-			bool													_ignoreColorStyle = false
+		UICORE_API void restoreStateWindow(
+			const std::string &										_json
 		);
 
 		//! @brief Will restore tthe color style from the settings JSON string
 		//! @param _json The JSON string containing the settings
-		UICORE_API void restoreColorStyle(
+		UICORE_API void restoreStateColorStyle(
 			const std::string &										_json
 		);
 

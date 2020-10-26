@@ -581,7 +581,7 @@ void ak::ui::objectManager::destroyAll(void) {
 	my_mapObjects.clear();
 }
 
-std::string ak::ui::objectManager::saveState(void) {
+std::string ak::ui::objectManager::saveStateWindow(void) {
 	// Prepare document
 	rapidjson::Document doc;
 	doc.SetObject();
@@ -589,16 +589,6 @@ std::string ak::ui::objectManager::saveState(void) {
 
 	// Create array value
 	rapidjson::Value items(rapidjson::kArrayType);
-
-	// Create current color style settings entry
-	if (my_currentColorStyle != nullptr) {
-		rapidjson::Value colorSettings;
-		colorSettings.SetObject();
-		std::string currentColorStyleString = getCurrentColorStyleName().toStdString();
-		rapidjson::Value currentColorStyle(currentColorStyleString.c_str(), allocator);
-		colorSettings.AddMember(RESTORABLE_UI_COLORSTYLE, currentColorStyle, allocator);
-		items.PushBack(colorSettings, allocator);
-	}
 
 	// Collect data for objects that have to be restored
 	for (my_mapAliasesIterator itm = my_mapAliases.begin(); itm != my_mapAliases.end(); itm++) {
@@ -623,9 +613,41 @@ std::string ak::ui::objectManager::saveState(void) {
 	return info;
 }
 
-void ak::ui::objectManager::restoreState(
-	const char *										_json,
-	bool												_ignoreColorStyle
+std::string ak::ui::objectManager::saveStateColorStyle(void) {
+	// Prepare document
+	rapidjson::Document doc;
+	doc.SetObject();
+	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+	// Create array value
+	rapidjson::Value items(rapidjson::kArrayType);
+
+	// Create current color style settings entry
+	if (my_currentColorStyle != nullptr) {
+		rapidjson::Value colorSettings;
+		colorSettings.SetObject();
+		std::string currentColorStyleString = getCurrentColorStyleName().toStdString();
+		rapidjson::Value currentColorStyle(currentColorStyleString.c_str(), allocator);
+		colorSettings.AddMember(RESTORABLE_UI_COLORSTYLE, currentColorStyle, allocator);
+		items.PushBack(colorSettings, allocator);
+	}
+
+	// Create JSON string
+	doc.AddMember(RESTORABLE_UI_SETTINGS, items, allocator);
+
+	rapidjson::StringBuffer buffer;
+	buffer.Clear();
+
+	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+	doc.Accept(writer);
+
+	char * json = strdup(buffer.GetString());
+	std::string info(json);
+	return info;
+}
+
+void ak::ui::objectManager::restoreStateWindow(
+	const char *										_json
 ) {
 	rapidjson::Document doc;
 	doc.Parse(_json);
@@ -639,47 +661,41 @@ void ak::ui::objectManager::restoreState(
 	for (rapidjson::Value::ConstValueIterator itm = UIsettings.Begin(); itm != UIsettings.End(); itm++) {
 		const rapidjson::Value & obj = *itm;
 		assert(obj.IsObject());									// Stored item is not an object
-		if (obj.HasMember(RESTORABLE_UI_COLORSTYLE)) {
-			assert(obj[RESTORABLE_UI_COLORSTYLE].IsString());
-			QString colorStyleName = obj[RESTORABLE_UI_COLORSTYLE].GetString();
-			if (!_ignoreColorStyle) { setColorStyle(colorStyleName); }
-		}
-		else {
-			assert(obj.HasMember(RESTORABLE_NAME_ALIAS));			// Does not contain name
-			assert(obj.HasMember(RESTORABLE_NAME_TYPE));			// Does not contain type
-			assert(obj.HasMember(RESTORABLE_NAME_SETTINGS));		// Does not contain settings
-			assert(obj[RESTORABLE_NAME_ALIAS].IsString());			// Alias is not a string
-			assert(obj[RESTORABLE_NAME_TYPE].IsString());			// Type is not a string
-			assert(obj[RESTORABLE_NAME_SETTINGS].IsObject());		// Settins is not an object
+		assert(obj.HasMember(RESTORABLE_NAME_ALIAS));			// Does not contain name
+		assert(obj.HasMember(RESTORABLE_NAME_TYPE));			// Does not contain type
+		assert(obj.HasMember(RESTORABLE_NAME_SETTINGS));		// Does not contain settings
+		assert(obj[RESTORABLE_NAME_ALIAS].IsString());			// Alias is not a string
+		assert(obj[RESTORABLE_NAME_TYPE].IsString());			// Type is not a string
+		assert(obj[RESTORABLE_NAME_SETTINGS].IsObject());		// Settins is not an object
 
-			QString objAlias = QString(obj[RESTORABLE_NAME_ALIAS].GetString());
-			QString objType = QString(obj[RESTORABLE_NAME_TYPE].GetString());
+		QString objAlias = QString(obj[RESTORABLE_NAME_ALIAS].GetString());
+		QString objType = QString(obj[RESTORABLE_NAME_TYPE].GetString());
 
-			// Check if an object with the provided alias exist
-			my_mapAliasesIterator oAlias = my_mapAliases.find(objAlias);
-			assert(oAlias != my_mapAliases.end()); // No object with specified alias exists
+		// Check if an object with the provided alias exist
+		my_mapAliasesIterator oAlias = my_mapAliases.find(objAlias);
+		assert(oAlias != my_mapAliases.end()); // No object with specified alias exists
 
-			// Get the object
-			my_mapObjectsIterator object = my_mapObjects.find(oAlias->second);
-			assert(object != my_mapObjects.end()); // Registered alias is not stored
+		// Get the object
+		my_mapObjectsIterator object = my_mapObjects.find(oAlias->second);
+		assert(object != my_mapObjects.end()); // Registered alias is not stored
 
-			// Check the object type
-			assert(ak::ui::core::toQString(object->second->objectType()) == objType); // Current object type differs from saved object type
+		// Check the object type
+		assert(ak::ui::core::toQString(object->second->objectType()) == objType); // Current object type differs from saved object type
 
-			// Check object
-			ak::ui::core::aRestorable * restorable = nullptr;
-			restorable = dynamic_cast<ak::ui::core::aRestorable *>(object->second);
-			assert(restorable != nullptr); // Cast failed
+		// Check object
+		ak::ui::core::aRestorable * restorable = nullptr;
+		restorable = dynamic_cast<ak::ui::core::aRestorable *>(object->second);
+		assert(restorable != nullptr); // Cast failed
 
-			// Apply the settings
-			const rapidjson::Value & settings = obj[RESTORABLE_NAME_SETTINGS];
-			assert(settings.IsObject()); // Not a setting
-			restorable->restoreSettings(settings);
-		}
+		// Apply the settings
+		const rapidjson::Value & settings = obj[RESTORABLE_NAME_SETTINGS];
+		assert(settings.IsObject()); // Not a setting
+		restorable->restoreSettings(settings);
+
 	}
 }
 
-void ak::ui::objectManager::restoreStateColorStyleOnly(
+void ak::ui::objectManager::restoreStateColorStyle(
 	const char *										_json
 ) {
 	rapidjson::Document doc;

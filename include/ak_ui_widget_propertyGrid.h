@@ -32,7 +32,6 @@
 class QWidget;
 class QHBoxLayout;
 class QVBoxLayout;
-class QLabel;
 
 namespace ak {
 
@@ -42,7 +41,7 @@ namespace ak {
 	namespace ui {
 		
 		class colorStyle;
-		namespace qt { class table; class checkBox; class colorEditButton; class comboButton; }
+		namespace qt { class table; class checkBox; class colorEditButton; class comboButton; class textEdit; }
 
 		namespace widget {
 
@@ -243,9 +242,7 @@ namespace ak {
 
 				QWidget *								my_widget;
 				QVBoxLayout *							my_layout;
-				QWidget *								my_widgetInfo;
-				QHBoxLayout *							my_layoutInfo;
-				QLabel *								my_labelInfoNoItems;
+				qt::textEdit *							my_infoTextEdit;
 				qt::table *								my_table;
 				bool									my_checkItemVisibilityRequired;
 

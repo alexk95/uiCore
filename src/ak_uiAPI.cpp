@@ -220,26 +220,30 @@ std::vector<ak::core::eventType> ak::uiAPI::enabledEventTypes(void) { return ak:
 
 std::vector<ak::core::eventType> ak::uiAPI::disabledEventTypes(void) { return ak::singletonAllowedMessages::instance()->disabledMessages(); }
 
-std::string ak::uiAPI::saveState(void) {
+std::string ak::uiAPI::saveStateWindow(void) {
 	assert(my_objManager != nullptr);	// API not initialized
-	return my_objManager->saveState();
+	return my_objManager->saveStateWindow();
 }
 
-void ak::uiAPI::restoreState(
-	const std::string &									_json,
-	bool												_ignoreColorStyle
-) {
-	assert(my_objManager != nullptr); // Not initialized
-	if (_json.length() == 0) { return; }
-	my_objManager->restoreState(_json.c_str(), _ignoreColorStyle);
+std::string ak::uiAPI::saveStateColorStyle(void) {
+	assert(my_objManager != nullptr);	// API not initialized
+	return my_objManager->saveStateColorStyle();
 }
 
-void ak::uiAPI::restoreColorStyle(
+void ak::uiAPI::restoreStateWindow(
 	const std::string &									_json
 ) {
 	assert(my_objManager != nullptr); // Not initialized
 	if (_json.length() == 0) { return; }
-	my_objManager->restoreStateColorStyleOnly(_json.c_str());
+	my_objManager->restoreStateWindow(_json.c_str());
+}
+
+void ak::uiAPI::restoreStateColorStyle(
+	const std::string &									_json
+) {
+	assert(my_objManager != nullptr); // Not initialized
+	if (_json.length() == 0) { return; }
+	my_objManager->restoreStateColorStyle(_json.c_str());
 }
 
 // ###############################################################################################################################################

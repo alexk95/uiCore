@@ -19,11 +19,11 @@
 #include <ak_ui_qt_colorEditButton.h>
 #include <ak_ui_qt_comboButton.h>
 #include <ak_ui_dialog_prompt.h>
+#include <ak_ui_qt_textEdit.h>
 
 // Qt header
 #include <qwidget.h>
 #include <qlayout.h>
-#include <qlabel.h>
 #include <qheaderview.h>
 #include <qflags.h>
 #include <qfont.h>
@@ -38,26 +38,26 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	: ak::ui::core::aWidgetManager(ak::ui::core::oPropertyGrid, _messenger, _uidManager), my_currentID(ak::invalidID),
 	my_groupHeaderBackColor(80,80,80), my_groupHeaderForeColor(0,0,0), my_itemDefaultBackgroundColor(230,230,230),
 	my_itemTextColorError(255,0,0), my_itemTextColorNormal(0,0,0),
-	my_widget(nullptr), my_layout(nullptr), my_labelInfoNoItems(nullptr), my_widgetInfo(nullptr), my_layoutInfo(nullptr)
+	my_widget(nullptr), my_layout(nullptr), my_infoTextEdit(nullptr)
 {
 	assert(_messenger != nullptr); // nullptr provided
 	assert(_uidManager != nullptr); // nullptr provided
 
+	// Create central widget
 	my_widget = new QWidget();
 	my_widget->setContentsMargins(0, 0, 0, 0);
 	my_layout = new QVBoxLayout(my_widget);
 	my_layout->setContentsMargins(0, 0, 0, 0);
 
-	my_widgetInfo = new QWidget();
-	my_layoutInfo = new QHBoxLayout(my_widgetInfo);
-	my_labelInfoNoItems = new QLabel("No items");
-	my_labelInfoNoItems->setVisible(false);
-	my_layoutInfo->addStretch(1);
-	my_layoutInfo->addWidget(my_labelInfoNoItems, 0, Qt::AlignmentFlag::AlignCenter);
-	my_layoutInfo->addStretch(1);
+	// Create info field
+	my_infoTextEdit = new qt::textEdit("No items");
+	my_infoTextEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	my_infoTextEdit->setReadOnly(true);
+	my_infoTextEdit->setTextInteractionFlags(Qt::TextInteractionFlag::NoTextInteraction);
+	my_layout->addWidget(my_infoTextEdit);
 
+	// Create table
 	my_table = new qt::table(0, 2);
-	my_table->setVisible(true);
 	my_table->verticalHeader()->setVisible(false);
 
 	QStringList lst;
@@ -69,6 +69,7 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	my_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::Stretch);
 	my_table->horizontalHeader()->setEnabled(false);
 
+	// Create default group
 	my_defaultGroup = new propertyGridGroup(my_table, "");
 	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
 	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
@@ -76,10 +77,6 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	my_defaultGroup->setGroupHeaderVisible(false);
 	my_defaultGroup->activate();
 
-	my_layout->addWidget(my_widgetInfo, 0, Qt::AlignmentFlag::AlignTop);
-	my_widgetInfo->setVisible(true);
-	my_table->setVisible(false);
-	my_layout->setContentsMargins(2, 2, 2, 2);
 }
 
 ak::ui::widget::propertyGrid::~propertyGrid() {
@@ -108,29 +105,18 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 
 	for (auto itm : my_groups) { itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor); }
 
-	QString sheet("QHeaderView{color:#");
-	sheet.append(my_colorStyle->getHeaderForegroundColor().toHexString(true));
-	sheet.append("; background-color:#");
-	sheet.append(my_colorStyle->getHeaderBackgroundColor().toHexString(true));
-	sheet.append(";}\n");
+	QString sheet("QHeaderView{border: none;}\n");
 
-	sheet.append("QHeaderView::section{color:#");
+	sheet.append("QHeaderView::section:selected, QHeaderView::section:!selected{color:#");
 	sheet.append(my_colorStyle->getHeaderForegroundColor().toHexString(true));
 	sheet.append("; background-color:#");
 	sheet.append(my_colorStyle->getHeaderBackgroundColor().toHexString(true));
+	sheet.append("; border: 0px ridge black");
 	sheet.append(";}\n");
-	
+	sheet.append("QHeaderView::section:first{ border-right: 1px solid black; }\n");
+
+
 	my_table->horizontalHeader()->setStyleSheet(sheet);
-	/*/
-	QTableWidgetItem *  verticalHeaderItemName = my_table->horizontalHeaderItem(0);
-	QTableWidgetItem *  verticalHeaderItemValue = my_table->horizontalHeaderItem(1);
-	verticalHeaderItemName->setBackgroundColor(my_colorStyle->getHeaderBackgroundColor().toQColor());
-	verticalHeaderItemName->setTextColor(my_colorStyle->getHeaderForegroundColor().toQColor());
-	verticalHeaderItemValue->setBackgroundColor(my_colorStyle->getHeaderBackgroundColor().toQColor());
-	verticalHeaderItemValue->setTextColor(my_colorStyle->getHeaderForegroundColor().toQColor());
-	my_table->setHorizontalHeaderItem(0, verticalHeaderItemName);
-	my_table->setHorizontalHeaderItem(1, verticalHeaderItemValue);
-	*/
 
 	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
@@ -512,19 +498,19 @@ void ak::ui::widget::propertyGrid::slotCheckItemVisibility(void) {
 		if (my_items.size() == 0) {
 			if (my_table->isVisible()) {
 				my_layout->removeWidget(my_table);
-				my_layout->addWidget(my_widgetInfo, 0, Qt::AlignmentFlag::AlignTop);
-				my_widgetInfo->setVisible(true);
+				my_layout->addWidget(my_infoTextEdit);
+				my_infoTextEdit->setVisible(true);
 				my_table->setVisible(false);
-				my_layout->setContentsMargins(2, 2, 2, 2);
+				//my_layout->setContentsMargins(2, 2, 2, 2);
 			}
 		}
 		else {
 			if (!my_table->isVisible()) {
-				my_layout->removeWidget(my_widgetInfo);
+				my_layout->removeWidget(my_infoTextEdit);
 				my_layout->addWidget(my_table);
-				my_widgetInfo->setVisible(false);
+				my_infoTextEdit->setVisible(false);
 				my_table->setVisible(true);
-				my_layout->setContentsMargins(0, 0, 0, 0);
+				//my_layout->setContentsMargins(0, 0, 0, 0);
 			}
 
 		}
