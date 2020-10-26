@@ -1382,6 +1382,19 @@ void ak::uiAPI::tabView::setTabFocused(
 	actualTabView->focusTab(_tabID);
 }
 
+void ak::uiAPI::tabView::setTabsCloseable(
+	ak::UID								_tabViewUID,
+	bool								_closeable
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	actualTabView->setTabsCloseable(_closeable);
+}
+
 void ak::uiAPI::tabView::setVisible(
 	ak::UID				_tabViewUID,
 	bool				_visible
