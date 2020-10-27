@@ -12,12 +12,14 @@
 // AK header
 #include <ak_ui_dialog_prompt.h>	// Corresponding header
 #include <ak_ui_colorStyle.h>
+#include <ak_ui_qt_label.h>
+#include <ak_ui_qt_pushButton.h>
 
 // Qt header
 #include <qwidget.h>				// QWidget
-#include <qpushbutton.h>			// QPushButton
-#include <qlabel.h>					// QLabel
 #include <qlayout.h>				// QLayout
+
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::dialog::prompt::prompt(
 	const QString &				_message,
@@ -35,51 +37,51 @@ ak::ui::dialog::prompt::prompt(
 	switch (_type)
 	{
 	case ak::ui::core::promptOk:
-		my_button1 = new QPushButton("Ok");
+		my_button1 = new qt::pushButton("Ok");
 		connect(my_button1, SIGNAL(clicked()), this, SLOT(slotOk()));
 		my_buttonsLayout->addWidget(my_button1);
 		break;
 	case ak::ui::core::promptYesNo:
-		my_button1 = new QPushButton("Yes");
+		my_button1 = new qt::pushButton("Yes");
 		connect(my_button1, SIGNAL(clicked()), this, SLOT(slotYes()));
-		my_button2 = new QPushButton("No");
+		my_button2 = new qt::pushButton("No");
 		connect(my_button2, SIGNAL(clicked()), this, SLOT(slotNo()));
 		my_buttonsLayout->addWidget(my_button1);
 		my_buttonsLayout->addWidget(my_button2);
 		break;
 	case ak::ui::core::promptYesNoCancel:
-		my_button1 = new QPushButton("Yes");
+		my_button1 = new qt::pushButton("Yes");
 		connect(my_button1, SIGNAL(clicked()), this, SLOT(slotYes()));
-		my_button2 = new QPushButton("No");
+		my_button2 = new qt::pushButton("No");
 		connect(my_button2, SIGNAL(clicked()), this, SLOT(slotNo()));
-		my_button3 = new QPushButton("Cancel");
+		my_button3 = new qt::pushButton("Cancel");
 		connect(my_button3, SIGNAL(clicked()), this, SLOT(slotCancel()));
 		my_buttonsLayout->addWidget(my_button1);
 		my_buttonsLayout->addWidget(my_button2);
 		my_buttonsLayout->addWidget(my_button3);
 		break;
 	case ak::ui::core::promptOkCancel:
-		my_button1 = new QPushButton("Ok");
+		my_button1 = new qt::pushButton("Ok");
 		connect(my_button1, SIGNAL(clicked()), this, SLOT(slotOk()));
-		my_button2 = new QPushButton("Cancel");
+		my_button2 = new qt::pushButton("Cancel");
 		connect(my_button2, SIGNAL(clicked()), this, SLOT(slotCancel()));
 		my_buttonsLayout->addWidget(my_button1);
 		my_buttonsLayout->addWidget(my_button2);
 		break;
 	case ak::ui::core::promptRetryCancel:
-		my_button1 = new QPushButton("Retry");
+		my_button1 = new qt::pushButton("Retry");
 		connect(my_button1, SIGNAL(clicked()), this, SLOT(slotRetry()));
-		my_button2 = new QPushButton("Cancel");
+		my_button2 = new qt::pushButton("Cancel");
 		connect(my_button2, SIGNAL(clicked()), this, SLOT(slotCancel()));
 		my_buttonsLayout->addWidget(my_button1);
 		my_buttonsLayout->addWidget(my_button2);
 		break;
 	case ak::ui::core::promptIgnoreRetryCancel:
-		my_button1 = new QPushButton("Ignore");
+		my_button1 = new qt::pushButton("Ignore");
 		connect(my_button1, SIGNAL(clicked()), this, SLOT(slotIgnore()));
-		my_button2 = new QPushButton("Retry");
+		my_button2 = new qt::pushButton("Retry");
 		connect(my_button2, SIGNAL(clicked()), this, SLOT(slotRetry()));
-		my_button3 = new QPushButton("Cancel");
+		my_button3 = new qt::pushButton("Cancel");
 		connect(my_button3, SIGNAL(clicked()), this, SLOT(slotCancel()));
 		my_buttonsLayout->addWidget(my_button1);
 		my_buttonsLayout->addWidget(my_button2);
@@ -93,7 +95,7 @@ ak::ui::dialog::prompt::prompt(
 	// Create info
 	my_infoWidget = new QWidget;
 	my_infoLayout = new QHBoxLayout(my_infoWidget);
-	my_label = new QLabel(_message);
+	my_label = new qt::label(_message);
 	my_label->setWordWrap(true);
 	my_infoLayout->addWidget(my_label);
 
@@ -128,19 +130,20 @@ ak::ui::dialog::prompt::~prompt() {
 void ak::ui::dialog::prompt::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	assert(_colorStyle != nullptr);
+	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
+	if (my_alias.length() > 0) {
+		setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow, "#" + my_alias + "{", "}"));
+	}
+	else {
+		setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow));
+	}
 
-	setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sMainWindow));
+	if (my_button1 != nullptr) { my_button1->setColorStyle(my_colorStyle); }
+	if (my_button2 != nullptr) { my_button2->setColorStyle(my_colorStyle); }
+	if (my_button3 != nullptr) { my_button3->setColorStyle(my_colorStyle); }
 
-	if (my_buttonsWidget != nullptr) { my_button1->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sWidget)); }
-	if (my_infoWidget != nullptr) { my_button1->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sWidget)); }
-
-	if (my_button1 != nullptr) { my_button1->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sPushButton)); }
-	if (my_button2 != nullptr) { my_button2->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sPushButton)); }
-	if (my_button3 != nullptr) { my_button3->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sPushButton)); }
-
-	if (my_label != nullptr) { my_button1->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sLabel)); }
+	if (my_label != nullptr) { my_button1->setColorStyle(my_colorStyle); }
 
 }
 

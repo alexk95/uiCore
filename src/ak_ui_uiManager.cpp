@@ -38,6 +38,7 @@
 #include <qbytearray.h>							// QByteArray
 
 // my_window->resizeDocks({ dock }, { 0 }, Qt::Horizontal); // This is the hack
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::uiManager::uiManager(
 	ak::messenger *									_messenger,
@@ -152,41 +153,67 @@ ak::ui::uiManager::~uiManager() {
 void ak::ui::uiManager::setColorStyle(
 	const ak::ui::colorStyle *								_colorStyle
 ) {
-	try {
-		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
-
-		// Main window
-		my_window->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sMainWindow));
-		my_window->statusBar()->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sStatusBar));
-
-		// Progress bar
-		my_progressBar->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sProgressBar));
-
-		// Status label
-		my_statusLabel->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sLabel));
-
-		// TabToolbar
-		my_tabToolBar->SetStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sToolBar));
-		my_tabToolBar->SetTabBarStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTabWidget));
-		my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sToolButton));
-
-		for (my_mapTabToolBarContainerIterator itm = my_mapTabToolBarContainer.begin(); itm != my_mapTabToolBarContainer.end(); itm++) {
-			assert(itm->second != nullptr); // Nullptr stored
-			//itm->second->setColorStyle(my_colorStyle);
-		}
-
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	if (my_alias.length() > 0) {
+		my_window->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "{", "}"));
+		my_window->statusBar()->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "__StatusBar{", "}"));
+		my_progressBar->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "__ProgressBar{", "}"));
+		my_statusLabel->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorTransparent, "#" + my_alias + "__StatusLabel{", "}"));
+		// TTB
+		my_tabToolBar->SetStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow));
+		my_tabToolBar->SetTabBarStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow));
+		my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow));
+		/*my_tabToolBar->SetStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "__TTB_ToolBar{", "}"));
+		my_tabToolBar->SetTabBarStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "__TTB_TabBar{", "}"));
+		my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "__TTB_HideButton{", "}"));*/
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::setColorStyle()"); }
+	else {
+		my_window->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow));
+		my_window->statusBar()->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow));
+		my_progressBar->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow));
+		my_statusLabel->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorTransparent));
+		// TTB
+		my_tabToolBar->SetStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow));
+		my_tabToolBar->SetTabBarStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow));
+		my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow));
+	}
+	for (my_mapTabToolBarContainerIterator itm = my_mapTabToolBarContainer.begin(); itm != my_mapTabToolBarContainer.end(); itm++) {
+		assert(itm->second != nullptr); // Nullptr stored
+		//itm->second->setColorStyle(my_colorStyle);
+	}
+
 }
 
 void ak::ui::uiManager::setAlias(
 	const QString &							_alias
-) { setObjectName(_alias); }
-
-QString ak::ui::uiManager::alias(void) const { return objectName(); }
+) {
+	ui::core::aObject::setAlias(_alias);
+	my_window->setObjectName(my_alias);
+	my_window->statusBar()->setObjectName(my_alias + "__StatusBar");
+	my_progressBar->setObjectName(my_alias + "__ProgressBar");
+	my_statusLabel->setObjectName(my_alias + "__StatusLabel");
+	//my_tabToolBar->setObjectName(my_alias + "__TTB_ToolBar");
+	//my_tabToolBar->setObjectName(my_alias + "__TTB_TabBar");
+	//my_tabToolBar->setObjectName(my_alias + "__TTB_HideButton");
+}
 
 void ak::ui::uiManager::addObjectSettingsToValue(
 	rapidjson::Value &						_array,
@@ -199,7 +226,7 @@ void ak::ui::uiManager::addObjectSettingsToValue(
 	root.SetObject();
 
 	// Add alias
-	std::string str(objectName().toStdString());
+	std::string str(my_alias.toStdString());
 	rapidjson::Value nAlias(str.c_str(), _allocator);
 	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
 

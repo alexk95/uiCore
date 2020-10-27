@@ -53,6 +53,18 @@ namespace ak {
 
 				// ################################################################################
 
+
+				//! @brief Will set the alias for this object
+				//! @param _alias The alias to set
+				virtual void setAlias(
+					const QString &							_alias
+				);
+
+				//! @brief Will return the alias of this object
+				QString alias(void) const;
+
+				// ################################################################################
+
 				//! @brief Will set the objects UID
 				void setUid(
 					ak::UID									_UID
@@ -88,6 +100,7 @@ namespace ak {
 				ak::UID								my_uid;				//! The objects UID
 				int									my_references;		//! The objects references
 				ak::ui::core::objectType			my_objectType;		//! The object type of this object
+				QString								my_alias;			//! The alias of this object
 
 			private:
 				// Block default constructor

@@ -25,9 +25,6 @@
 
 // Forward declaration
 class QWidget;
-class QLabel;
-class QCheckBox;
-class QPushButton;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGridLayout;
@@ -42,7 +39,7 @@ namespace ak {
 
 	namespace ui {
 
-		namespace qt { class lineEdit; }
+		namespace qt { class lineEdit; class checkBox; class label; class pushButton; }
 
 		namespace dialog {
 
@@ -136,8 +133,8 @@ namespace ak {
 
 				struct structInput
 				{
-					QLabel *				label;
-					ak::ui::qt::lineEdit *	edit;
+					qt::label *				label;
+					qt::lineEdit *			edit;
 				};
 
 				QString				my_hashedPw;
@@ -157,10 +154,10 @@ namespace ak {
 				QHBoxLayout *		my_layout;
 				QWidget *			my_layoutWidget;
 
-				QCheckBox *			my_savePassword;
+				qt::checkBox *		my_savePassword;
 				structInput			my_inputUsername;
 				structInput			my_inputPassword;
-				QPushButton *		my_buttonLogIn;
+				qt::pushButton *	my_buttonLogIn;
 				QVBoxLayout *		my_controlLayout;
 				QWidget *			my_controlLayoutWidget;
 

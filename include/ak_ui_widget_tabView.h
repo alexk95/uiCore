@@ -75,9 +75,6 @@ namespace ak {
 					const QString &							_alias
 				) override;
 
-				//! @brief Will return the alias of this object
-				virtual QString alias(void) const override;
-
 				//! @brief Will create a rapidjson::Value representing this objects current state
 				//! The value looks like this:
 				//!	     { "Alias":"[ObjectAlias]","Type":"[ObjectType]","Settings":{...} }

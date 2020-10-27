@@ -21,14 +21,15 @@
 
 // Forward declaration
 class QWidget;
-class QLabel;
-class QPushButton;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGridLayout;
 
 namespace ak {
 	namespace ui {
+
+		namespace qt { class label; class pushButton; }
+
 		namespace dialog {
 			
 			class prompt : public ui::core::aDialog, public ak::ui::core::aPaintable {
@@ -66,10 +67,10 @@ namespace ak {
 				QHBoxLayout *		my_infoLayout;
 				QWidget *			my_infoWidget;
 				
-				QLabel *			my_label;
-				QPushButton *		my_button1;
-				QPushButton *		my_button2;
-				QPushButton *		my_button3;
+				qt::label *			my_label;
+				qt::pushButton *	my_button1;
+				qt::pushButton *	my_button2;
+				qt::pushButton *	my_button3;
 
 			};
 

@@ -141,6 +141,7 @@
     <QtMoc Include="include\ak_ui_qt_lineEdit.h" />
     <QtMoc Include="include\ak_ui_qt_list.h" />
     <QtMoc Include="include\ak_ui_qt_graphicsView.h" />
+    <ClInclude Include="include\ak_ui_qt_label.h" />
     <ClInclude Include="include\ak_ui_qt_tabView.h" />
     <ClInclude Include="include\ak_ui_qt_timer.h" />
     <ClInclude Include="include\ak_ui_qt_treeItem.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="src\ak_ui_qt_comboButtonItem.cpp" />
     <ClCompile Include="src\ak_ui_qt_dock.cpp" />
     <ClCompile Include="src\ak_ui_qt_graphicsView.cpp" />
+    <ClCompile Include="src\ak_ui_qt_label.cpp" />
     <ClCompile Include="src\ak_ui_qt_lineEdit.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>

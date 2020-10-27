@@ -28,6 +28,8 @@
 // Qt header
 #include <qaction.h>					// QAction
 
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
+
 ak::ui::ttb::group::group(
 	ak::messenger *				_messenger,
 	ak::uidManager *			_uidManager,
@@ -113,16 +115,15 @@ void ak::ui::ttb::group::destroyAllSubContainer(void) {
 void ak::ui::ttb::group::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	try {
-		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
-		my_group->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sWidget));
-		for (int i = 0; i < my_subgroups.size(); i++) {
-			ak::ui::ttb::subGroup * obj = my_subgroups.at(i);
-			obj->setColorStyle(my_colorStyle);
-		}
+	return;
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	if (my_alias.length() > 0) {
+		my_group->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::ttb::group::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::ttb::group::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::ttb::group::setColorStyle()"); }
+	else {
+		my_group->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls));
+	}
 }

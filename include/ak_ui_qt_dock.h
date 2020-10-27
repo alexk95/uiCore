@@ -62,13 +62,9 @@ namespace ak {
 			
 				//! @brief Will set the alias for this object
 				//! @param _alias The alias to set
-				//! @throw ak::Exception if the provided alias length is 0
 				virtual void setAlias(
 					const QString &							_alias
 				) override;
-
-				//! @brief Will return the alias of this object
-				virtual QString alias(void) const override;
 
 				//! @brief Will create a rapidjson::Value representing this objects current state
 				//! The value looks like this:

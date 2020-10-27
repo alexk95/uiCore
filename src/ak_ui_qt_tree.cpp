@@ -19,6 +19,8 @@
 // Qt header
 #include <qheaderview.h>
 
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
+
 ak::ui::qt::tree::tree(
 	const ak::ui::colorStyle *		_colorStyle
 ) : QTreeWidget(),
@@ -51,15 +53,16 @@ QWidget * ak::ui::qt::tree::widget(void) { return this; }
 void ak::ui::qt::tree::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	try {
-		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
-		setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTree));
-		header()->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sObjectHeader));
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	if (my_alias.length() > 0) {
+		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::qt::tree::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::qt::tree::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::tree::setColorStyle()"); }
+	else {
+		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls));
+	}
 }
 
 // ####################################################################################################################################

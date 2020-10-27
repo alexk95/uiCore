@@ -14,16 +14,19 @@
 #include <ak_exception.h>						// error handling
 
 ak::ui::colorStyleDefault::colorStyleDefault() {
-	setControlsMainBackcolor(ak::ui::color(255, 255, 255));
-	setControlsMainForecolor(ak::ui::color(0, 0, 0));
-	setControlsErrorForecolor(ak::ui::color(255, 0, 0));
-	setWindowMainBackcolor(ak::ui::color(255, 255, 255));
-	setWindowMainForecolor(ak::ui::color(0, 0, 0));
-	setControlsFocusedColor(ak::ui::color(60, 60, 200));
-	setControlsPressedColor(ak::ui::color(60, 60, 200));
-	my_alternateBackColor = ak::ui::color(69, 69, 69);
-	my_alternateForeColor = ak::ui::color(255, 255, 255);
-	my_headerBackColor.setRGBA(180, 180, 180);
+	my_controlsMainBackcolor.setRGBA(255, 255, 255);
+	my_controlsMainForecolor.setRGBA(0, 0, 0);
+	my_controlsErrorForecolor.setRGBA(255, 0, 0);
+	my_controlsPressedColor.setRGBA(60, 200, 60);
+	my_controlsFocusColor.setRGBA(60, 60, 200);
+
+	my_windowMainBackcolor.setRGBA(48, 48, 48);
+	my_windowMainForecolor.setRGBA(255, 255, 255);
+
+	my_alternateBackColor.setRGBA(69, 69, 69);
+	my_alternateForeColor.setRGBA(255, 255, 255);
+
+	my_headerBackColor.setRGBA(218, 218, 218);
 	my_headerForeColor.setRGBA(0, 0, 0);
 }
 
@@ -31,13 +34,8 @@ ak::ui::colorStyleDefault::~colorStyleDefault() {}
 
 QString ak::ui::colorStyleDefault::getColorStyleName(void) const { return QString("Default"); }
 
-QString ak::ui::colorStyleDefault::getStylesheet(
-	const std::vector<ak::ui::colorStyle::styleableObject>	_items
-) const {
-	return QString();
-
-}
-
-QString ak::ui::colorStyleDefault::getStylesheet(
-	ak::ui::colorStyle::styleableObject					_object
-) const { return QString(); }
+QString ak::ui::colorStyleDefault::toStyleSheet(
+	ui::core::colorAreaFlag			_colorAreas,
+	const QString &					_prefix,
+	const QString &					_suffix
+) const { return ""; }

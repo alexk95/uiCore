@@ -72,6 +72,12 @@ namespace ak {
 					const ak::ui::colorStyle *						_colorStyle
 				) override;
 
+				//! @brief Will set the alias for this object
+				//! @param _alias The alias to set
+				virtual void setAlias(
+					const QString &							_alias
+				) override;
+
 				// ##############################################################################################################
 
 				// Item creation and manipulation

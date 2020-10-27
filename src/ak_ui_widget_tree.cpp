@@ -27,6 +27,8 @@
 #include <qmessagebox.h>
 #include <qmargins.h>
 
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
+
 ak::ui::widget::tree::tree(
 	ak::messenger *			_messenger,
 	ak::uidManager *		_uidManager,
@@ -102,19 +104,20 @@ QWidget * ak::ui::widget::tree::widget(void) { return my_multiWidget; }
 void ak::ui::widget::tree::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	try {
-		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
-		my_tree->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTree));
-		my_filter->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTextEdit));
-		//for (auto itm : my_items) {
-			//itm.second->setTextColor(0, my_colorStyle->getControlsMainForecolor().toQColor());
-			//itm.second->setBackgroundColor(0, my_colorStyle->getControlsMainBackcolor().toQColor());
-		//}
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	if (my_alias.length() > 0) {
+		my_tree->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "__Tree{", "}"));
+		my_filter->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "__Filter{", "}"));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setColorStyle()"); }
+	else {
+		my_tree->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls));
+		my_filter->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls));
+	}
 }
 
 // ###########################################################################################################################
@@ -220,6 +223,7 @@ void ak::ui::widget::tree::clear(void) {
 	}
 	my_items.clear();
 	my_currentId = 0;
+	//Note, end cleared message
 }
 
 void ak::ui::widget::tree::setItemEnabled(

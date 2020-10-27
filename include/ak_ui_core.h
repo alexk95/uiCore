@@ -13,6 +13,7 @@
 
 // Qt header
 #include <qstring.h>		// QString
+#include <qflags.h>			// QFlags
 
 // Forward declaration
 class QKeyEvent;
@@ -54,6 +55,7 @@ namespace ak {
 				oCheckBox,
 				oDefaultWelcomeScreen,
 				oDock,
+				oLabel,
 				oLineEdit,
 				oList,
 				oLogInDialog,
@@ -120,6 +122,35 @@ namespace ak {
 				key_Return,
 				key_Space
 			};
+
+			enum colorAreaFlag {
+				caBackgroundColorWindow = 0x0,
+				caForegroundColorWindow = 0x1,
+				caBorderColorWindow = 0x2,
+				caBackgroundColorHeader = 0x4,
+				caForegroundColorHeader = 0x8,
+				caBorderColorHeader = 0x10,
+				caBackgroundColorControls = 0x20,
+				caForegroundColorControls = 0x40,
+				caBorderColorControls = 0x80,
+				caDefaultBorderControls = 0x100,
+				caDefaultBorderWindow = 0x200,
+				caBackgroundColorAlternate = 0x400,
+				caForegroundColorError = 0x800,
+				caBackgroundColorFocus = 0x1000,
+				caBackgroundColorSelected = 0x2000,
+				caForegroundColorFocus = 0x4000,
+				caForegroundColorSelected = 0x8000,
+				caBackgroundColorTransparent = 0x10000,
+				caImagesTree = 0x20000,
+				caImagesDock = 0x40000,
+				caDefaultBorderHeader = 0x80000
+			};
+
+			inline colorAreaFlag operator | (colorAreaFlag a, colorAreaFlag b)
+			{ return static_cast<colorAreaFlag>(static_cast<int>(a) | static_cast<int>(b)); }
+
+			bool flagIsSet(colorAreaFlag _flags, colorAreaFlag _testFlag);
 
 			//! @brief Create a string representation of the provided elementType
 			//! @param _elementType The elementtype to be converted

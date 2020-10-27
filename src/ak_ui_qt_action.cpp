@@ -34,8 +34,14 @@ ak::ui::qt::action::~action() {}
 void ak::ui::qt::action::setColorStyle(
 	const ak::ui::colorStyle *					_colorStyle
 ) {
-	if (my_widget == nullptr) { return; }
-	my_widget->setStyleSheet(_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sWidgetAll));
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	if (my_alias.length() > 0) {
+
+	}
+	else {
+
+	}
 }
 
 QToolButton::ToolButtonPopupMode ak::ui::qt::action::popupMode(void) { return my_popupMode; }

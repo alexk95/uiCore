@@ -38,90 +38,10 @@ ak::ui::color ak::ui::colorStyle::getHeaderForegroundColor(void) const { return 
 
 ak::ui::color ak::ui::colorStyle::getHeaderBackgroundColor(void) const { return my_headerBackColor; }
 
-void ak::ui::colorStyle::setWindowMainForecolor(
-	const ak::ui::color &		_color
-) { my_windowMainForecolor = _color; }
-
-void ak::ui::colorStyle::setWindowMainBackcolor(
-	const ak::ui::color &		_color
-) { my_windowMainBackcolor = _color; }
-
-void ak::ui::colorStyle::setControlsMainForecolor(
-	const ak::ui::color &		_color
-) { my_controlsMainForecolor = _color; }
-
-void ak::ui::colorStyle::setControlsMainBackcolor(
-	const ak::ui::color &		_color
-) { my_controlsMainBackcolor = _color; }
-
-void ak::ui::colorStyle::setControlsErrorForecolor(
-	const ak::ui::color &		_color
-) { my_controlsErrorForecolor = _color; }
-
-void ak::ui::colorStyle::setControlsFocusedColor(
-	const ak::ui::color &		_color
-) { my_controlsFocusColor = _color; }
-
-void ak::ui::colorStyle::setControlsPressedColor(
-	const ak::ui::color &		_color
-) { my_controlsPressedColor = _color; }
-
-void ak::ui::colorStyle::addDirectory(
-	const QString &					_directory
-) {
-	// Check weather the provided directory exists or not
-	QDir dir(_directory);
-	if (!dir.exists()) {
-		throw ak::Exception("Provided directory does not exist!", "ak::ui::colorStyle::addDirectory()");
-	}
-	QString directory = _directory;
-	// Check if the directory ends with a path delimiter, if not then append one
-	if (!directory.endsWith('/') && !directory.endsWith('\\')) { directory.append('/'); }
-
-	// Check if directory already exists
-	for (int i = 0; i < my_directories.size(); i++) {
-		if (my_directories.at(i).toLower() == directory.toLower()) { return; }
-	}
-	// Store data
-	my_directories.push_back(directory);
-}
-
-bool ak::ui::colorStyle::removeDirectory(
-	const QString &					_directory,
-	bool							_throwException
-) {
-	QString directory = _directory;
-	// Check if the provided direcotry ends with the path delimiter, if not then append one
-	if (!directory.endsWith('/') && !directory.endsWith('\\')) { directory.append('/'); }
-	for (int i = 0; i < my_directories.size(); i++) {
-		if (my_directories.at(i).toLower() == directory.toLower()) { my_directories.erase(my_directories.begin() + i); return true; }
-	}
-	if (_throwException) { throw ak::Exception("The provided directory does not exist", "ak::ui::colorStyle::removeDirectory()"); }
-	return false;
-}
-
 void ak::ui::colorStyle::setDirectories(
 	const std::vector<QString> &	_directories
 ) {
-	my_directories.clear();
-	
-	for (QString _directory : _directories) {
-		// Check weather the provided directory exists or not
-		QDir dir(_directory);
-		if (!dir.exists()) {
-			throw ak::Exception("Provided directory does not exist!", "ak::ui::colorStyle::addDirectory()");
-		}
-		QString directory = _directory;
-		// Check if the directory ends with a path delimiter, if not then append one
-		if (!directory.endsWith('/') && !directory.endsWith('\\')) { directory.append('/'); }
-
-		// Check if directory already exists
-		for (int i = 0; i < my_directories.size(); i++) {
-			if (my_directories.at(i).toLower() == directory.toLower()) { return; }
-		}
-		// Store data
-		my_directories.push_back(directory);
-	}
+	my_directories = _directories;
 }
 
 QString ak::ui::colorStyle::getFilePath(
@@ -155,7 +75,8 @@ QString ak::ui::colorStyle::getFilePath(
 					QString(my_directories.at(i))).toStdString().c_str(), "Check file");
 			}
 		}
-		return QString("");
+		throw ak::Exception(QString(QString("The requested file: \"") + QString(_fileName) + QString("\" does not exist in the icon search directories")).toStdString(),
+			"Find file", Exception::exceptionType::FileNotFound);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::colorStyle::getFilePath()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::colorStyle::getFilePath()"); }

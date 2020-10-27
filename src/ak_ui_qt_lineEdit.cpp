@@ -13,6 +13,8 @@
 #include <ak_exception.h>			// Error handling
 #include <ak_ui_colorStyle.h>		// colorStyle
 
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
+
 ak::ui::qt::lineEdit::lineEdit(QWidget * _parent)
 	: QLineEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oLineEdit), my_autoScrollToBottom(false) {}
 ak::ui::qt::lineEdit::lineEdit(const QString & _text, QWidget * _parent)
@@ -39,14 +41,16 @@ QWidget * ak::ui::qt::lineEdit::widget(void) { return this; }
 void ak::ui::qt::lineEdit::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	try {
-		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
-		this->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sLineEdit));
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	if (my_alias.length() > 0) {
+		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::qt::lineEdit::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::qt::lineEdit::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::lineEdit::setColorStyle()"); }
+	else {
+		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls));
+	}
 }
 
 // #######################################################################################################

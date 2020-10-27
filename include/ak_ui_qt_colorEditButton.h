@@ -56,7 +56,7 @@ namespace ak {
 				virtual ~colorEditButton();
 				
 				// #############################################################################################################################
-				// ak::widget Functions
+				// Base class functions
 
 				//! @brief Will return the widgets widget to display it
 				virtual QWidget * widget(void) override;

@@ -14,13 +14,8 @@
 #include <ak_exception.h>				// error handling
 
 ak::ui::core::aObject::aObject(ak::ui::core::objectType _type, ak::UID _uid, int _references)
-:	my_uid(_uid), my_references(0), my_objectType(_type)
-{
-	try { setReferences(_references); }
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::core::aObject::aObject()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::core::aObject::aObject()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::core::aObject::aObject()"); }
-}
+:	my_uid(_uid), my_references(0), my_objectType(_type), my_alias("")
+{ setReferences(_references); }
 
 ak::ui::core::aObject::aObject(
 	const ak::ui::core::aObject &			_other
@@ -28,6 +23,7 @@ ak::ui::core::aObject::aObject(
 	my_uid = _other.uid();
 	my_references = _other.references();
 	my_objectType = _other.objectType();
+	my_alias = _other.alias();
 }
 
 ak::ui::core::aObject & ak::ui::core::aObject::operator = (
@@ -36,25 +32,31 @@ ak::ui::core::aObject & ak::ui::core::aObject::operator = (
 	my_uid = _other.uid();
 	my_references = _other.references();
 	my_objectType = _other.objectType();
+	my_alias = _other.alias();
 	return *this;
 }
 
 ak::ui::core::aObject::~aObject() {}
+
+void ak::ui::core::aObject::setAlias(
+	const QString &							_alias
+) { my_alias = _alias; }
+
+QString ak::ui::core::aObject::alias(void) const { return my_alias; }
 
 void ak::ui::core::aObject::setUid(ak::UID _UID) { my_uid = _UID; }
 
 ak::UID ak::ui::core::aObject::uid(void) const { return my_uid; }
 
 void ak::ui::core::aObject::setReferences(int _references) {
-	if (_references < 0) { throw ak::Exception("Provided reference is negative", "ak::ui::core::aObject::setReferences()"); }
-	if (_references >= INT16_MAX) { throw ak::Exception("Reference overflow", "ak::ui::core::aObject::setReferences()"); }
+	assert(_references >= 0 && _references <= INT16_MAX); // Reference out of range
 	my_references = _references;
 }
 
 int ak::ui::core::aObject::references(void) const { return my_references; }
 
 int ak::ui::core::aObject::incrReferences(void) {
-	if (my_references == INT16_MAX) { throw ak::Exception("References overflow", "ak::ui::core::aObject::incrReferences()"); }
+	assert(my_references < INT16_MAX); // Maximum references reached
 	return ++my_references;
 }
 

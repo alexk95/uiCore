@@ -62,19 +62,8 @@ namespace ak {
 					const rapidjson::Value &				_settings
 				) = 0;
 
-				//! @brief Will set the alias for this object
-				//! @param _alias The alias to set
-				//! @throw ak::Exception if the provided alias length is 0
-				virtual void setAlias(
-					const QString &							_alias
-				) = 0;
-
-				//! @brief Will return the alias of this object
-				virtual QString alias(void) const = 0;
-
 			private:
 				aRestorable(const aRestorable &) = delete;
-
 			};
 
 		}

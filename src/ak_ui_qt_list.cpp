@@ -17,6 +17,8 @@
 #include <qevent.h>
 #include <qscrollbar.h>
 
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
+
 ak::ui::qt::list::list()
 	: ak::ui::core::aWidget(ak::ui::core::oList), my_currentId(ak::invalidID), my_verticalScrollbarAlwaysVisible(true)
 {}
@@ -30,9 +32,17 @@ QWidget * ak::ui::qt::list::widget(void) { return this; }
 void ak::ui::qt::list::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	assert(_colorStyle != nullptr);	// nullptr provided
+	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	setStyleSheet(_colorStyle->getStylesheet(ui::colorStyle::styleableObject::sList));
+	if (my_alias.length() > 0) {
+		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBackgroundColorAlternate,
+			"#" + my_alias + "{", "}"));
+	}
+	else {
+		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBackgroundColorAlternate));
+	}
 }
 
 void ak::ui::qt::list::keyPressEvent(QKeyEvent *_event)

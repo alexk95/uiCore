@@ -30,6 +30,7 @@
 #include <qstringlist.h>
 
 #define ALTERNATE_ROW_COLOR_VALUE 40
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::widget::propertyGrid::propertyGrid(
 	messenger *				_messenger,
@@ -104,23 +105,29 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 	my_itemTextColorError = my_colorStyle->getControlsErrorForecolor().toQColor();
 
 	for (auto itm : my_groups) { itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor); }
-
-	QString sheet("QHeaderView{border: none;}\n");
-
-	sheet.append("QHeaderView::section:selected, QHeaderView::section:!selected{color:#");
-	sheet.append(my_colorStyle->getHeaderForegroundColor().toHexString(true));
-	sheet.append("; background-color:#");
-	sheet.append(my_colorStyle->getHeaderBackgroundColor().toHexString(true));
-	sheet.append("; border: 0px ridge black");
-	sheet.append(";}\n");
-	sheet.append("QHeaderView::section:first{ border-right: 1px solid black; }\n");
-
-
-	my_table->horizontalHeader()->setStyleSheet(sheet);
-
 	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
 	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
+
+	QString sheet("QHeaderView{border: none;}\n");
+
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader |
+		TYPE_COLORAREA::caBackgroundColorHeader, "QHeaderView::section{","border: 0px}"
+		"QHeaderView::section:first{border-right: 1px solid black;}"));
+
+	my_table->horizontalHeader()->setStyleSheet(sheet);
+	my_table->setColorStyle(my_colorStyle);
+	my_infoTextEdit->setColorStyle(my_colorStyle);
+	/*my_table->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader |
+		TYPE_COLORAREA::caBackgroundColorHeader, "{", "}"));*/
+}
+
+void ak::ui::widget::propertyGrid::setAlias(
+	const QString &							_alias
+) {
+	ui::core::aObject::setAlias(_alias);
+	my_table->setObjectName(my_alias + "__Table");
+	my_infoTextEdit->setObjectName(my_alias + "__TextEdit");
 }
 
 // ##############################################################################################################

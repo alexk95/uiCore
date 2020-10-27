@@ -11,7 +11,6 @@
 
 // AK header
 #include <ak_ui_qt_colorEditButton.h>	// corresponding class
-#include <ak_exception.h>					// error handling
 #include <ak_messenger.h>					// messenger
 #include <ak_ui_colorStyle.h>				// colorStyle
 #include <ak_ui_qt_pushButton.h>			// pushButton
@@ -23,6 +22,7 @@
 #include <qcolordialog.h>					// QColorDialog
 
 #define MY_OBJECTNAME "CentralWidget_ColorEditButton"
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::qt::colorEditButton::colorEditButton(
 	const ak::ui::color &						_color,
@@ -34,45 +34,39 @@ ak::ui::qt::colorEditButton::colorEditButton(
 	my_layout(nullptr),
 	my_view(nullptr)
 {
-	try {
-		// Check arguments
+	// Check arguments
 
-		my_widget = new QWidget();
-		my_widget->setContentsMargins(QMargins(0, 0, 0, 0));
-		my_widget->setObjectName(MY_OBJECTNAME);
+	my_widget = new QWidget();
+	my_widget->setContentsMargins(QMargins(0, 0, 0, 0));
+	my_widget->setObjectName(MY_OBJECTNAME);
 
-		// Create layout
-		my_layout = new QHBoxLayout(my_widget);
-		my_layout->setContentsMargins(QMargins(0, 0, 0, 0));
+	// Create layout
+	my_layout = new QHBoxLayout(my_widget);
+	my_layout->setContentsMargins(QMargins(0, 0, 0, 0));
 
-		// Create graphics view
-		my_view = new ak::ui::qt::graphicsView();
-		my_view->setHeightForWidthActive(true);
-		my_view->setMaximumWidth(30);
-		my_view->setMaximumHeight(30);
-		
-		// Create pushbutton
-		my_button = new ak::ui::qt::pushButton();
-		my_button->setContentsMargins(QMargins(0, 0, 0, 0));
+	// Create graphics view
+	my_view = new ak::ui::qt::graphicsView();
+	my_view->setHeightForWidthActive(true);
+	my_view->setMaximumWidth(30);
+	my_view->setMaximumHeight(30);
 
-		my_layout->addWidget(my_view);
-		my_layout->addWidget(my_button);
-		//my_layout->setStretch(1, 1);
+	// Create pushbutton
+	my_button = new ak::ui::qt::pushButton();
+	my_button->setContentsMargins(QMargins(0, 0, 0, 0));
 
-		// Set the current color
-		setColor(_color);
+	my_layout->addWidget(my_view);
+	my_layout->addWidget(my_button);
+	//my_layout->setStretch(1, 1);
 
-		// Override the color text if required
-		if (_textOverride.length() > 0) { overrideText(_textOverride); }
+	// Set the current color
+	setColor(_color);
 
-		if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
+	// Override the color text if required
+	if (_textOverride.length() > 0) { overrideText(_textOverride); }
 
-		connect(my_button, SIGNAL(clicked()), this, SLOT(slotButtonClicked()));
+	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
 
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::qt::colorEditButton::colorEditButton()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::qt::colorEditButton::colorEditButton()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::colorEditButton::colorEditButton()"); }
+	connect(my_button, SIGNAL(clicked()), this, SLOT(slotButtonClicked()));
 }
 
 ak::ui::qt::colorEditButton::~colorEditButton() {
@@ -86,14 +80,14 @@ QWidget * ak::ui::qt::colorEditButton::widget(void) { return my_widget; }
 void ak::ui::qt::colorEditButton::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	try {
-		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
-		my_button->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sPushButton));
-	} 
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::qt::colorEditButton::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::qt::colorEditButton::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::colorEditButton::setColorStyle()"); }
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	if (my_alias.length() > 0) {
+		my_button->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
+	}
+	else {
+		my_button->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls));
+	}
 }
 
 // #############################################################################################################################

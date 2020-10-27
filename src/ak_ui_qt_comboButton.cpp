@@ -17,6 +17,8 @@
 // Qt header
 #include <qmenu.h>					// dropDownMenu
 
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
+
 ak::ui::qt::comboButton::comboButton(
 	const QString &				_initialText,
 	const ak::ui::colorStyle *	_colorStyle,
@@ -128,16 +130,22 @@ int ak::ui::qt::comboButton::getItemCount(void) const { return my_items.size(); 
 void ak::ui::qt::comboButton::setColorStyle(
 	const ak::ui::colorStyle *								_colorStyle
 ) {
-	try {
-		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
-		setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sPushButton));
-		my_menu->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sMenu));
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	if (my_alias.length() > 0) {
+		QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
+		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBackgroundColorAlternate, "#" + my_alias + " QMenu{", "}"));
+		this->setStyleSheet(sheet);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::qt::comboButton::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::qt::comboButton::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::qt::comboButton::setColorStyle()"); }
-	
+	else {
+		QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls));
+		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+			TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBackgroundColorAlternate, "QPushButton QMenu{", "}"));
+		this->setStyleSheet(sheet);
+	}
 }
 
 void ak::ui::qt::comboButton::slotItemTriggered() {

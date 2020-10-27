@@ -15,6 +15,8 @@
 // Qt header
 #include <qevent.h>				// QKeyEvent
 
+bool ak::ui::core::flagIsSet(colorAreaFlag _flags, colorAreaFlag _testFlag) { return ((_flags & _testFlag) == _testFlag); }
+
 QString ak::ui::core::toQString(
 	objectType				_objectType
 ) {
@@ -27,6 +29,7 @@ QString ak::ui::core::toQString(
 	case ak::ui::core::oCheckBox: return QString("CheckBox");
 	case ak::ui::core::oDefaultWelcomeScreen: return ("DefaultWelcomeScreen");
 	case ak::ui::core::oDock: return QString("Dock");
+	case ak::ui::core::oLabel: return QString("Label");
 	case ak::ui::core::oLineEdit: return QString("LineEdit");
 	case ak::ui::core::oList: return QString("List");
 	case ak::ui::core::oLogInDialog: return QString("LogInDialog");

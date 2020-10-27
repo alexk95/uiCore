@@ -24,6 +24,8 @@
 // TTB header (TabToolbar library)
 #include <TabToolbar/Page.h>			// tt::Page
 
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
+
 ak::ui::ttb::page::page(
 	ak::messenger *				_messenger,
 	ak::uidManager *			_uidManager,
@@ -85,16 +87,14 @@ void ak::ui::ttb::page::destroyAllSubContainer(void) {
 void ak::ui::ttb::page::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	try {
-		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
-		my_page->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::sTabWidgetPage));
-		for (int i = 0; i < my_groups.size(); i++) {
-			ak::ui::ttb::group * obj = my_groups.at(i);
-			obj->setColorStyle(my_colorStyle);
-		}
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	if (my_alias.length() > 0) {
+		my_page->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBorderColorWindow, "#" + my_alias + "{", "}"));
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::ttb::page::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::ttb::page::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::ttb::page::setColorStyle()"); }
+	else {
+		my_page->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBorderColorWindow));
+	}
 }

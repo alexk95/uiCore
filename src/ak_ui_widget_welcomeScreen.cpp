@@ -30,6 +30,7 @@
 #define MY_ID_RECENTS 0
 #define MY_ID_OPEN 1
 #define MY_ID_NEW 2
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::widget::welcomeScreen::welcomeScreen(
 	messenger *				_messenger,
@@ -143,53 +144,18 @@ void ak::ui::widget::welcomeScreen::setColorStyle(
 ) {
 
 	assert(_colorStyle != nullptr); // Nullptr provided
-
 	my_colorStyle = _colorStyle;
 
-	QString sheet(my_colorStyle->getStylesheet(colorStyle::styleableObject::sWidget));
-	if (my_screen.Central.widget != nullptr) { my_screen.Central.widget->setStyleSheet(sheet); }
-	if (my_screen.New.widget != nullptr) { my_screen.New.widget->setStyleSheet(sheet); }
-	if (my_screen.Open.widget != nullptr) { my_screen.Open.widget->setStyleSheet(sheet); }
-	if (my_screen.OpenNewCentral.widget != nullptr) { my_screen.OpenNewCentral.widget->setStyleSheet(sheet); }
-	if (my_screen.Recents.widget != nullptr) { my_screen.Recents.widget->setStyleSheet(sheet); }
-
-	sheet = "QListWidget{"
-		"background-color:#00000000;"
-		"border:0px;"
-		"}\n"
-
-		"QListWidget::item{"
-		"background-color:#00000000;"
-		"color:#";
-	sheet.append(my_colorStyle->getControlsMainForecolor().toHexString());
-
-	sheet.append(
-		";}\n"
-		"QListWidget::item:hover:!pressed:!selected{"
-		"background-color:#00000000;"
-		"color:#");
-	sheet.append(my_colorStyle->getControlsFocusedColor().toHexString());
-
-	sheet.append(
-		";}\n"
-		"QListWidget::item:pressed:hover{"
-		"background-color:#00000000;"
-		"color:#");
-	sheet.append(my_colorStyle->getControlsPressedColor().toHexString());
-	sheet.append(
-		";}\n"
-		"QListWidget::item:selected{"
-		"background-color:#00000000;"
-		"color:#");
-	sheet.append(my_colorStyle->getControlsPressedColor().toHexString());
-
-	sheet.append(
-		";}\n"
-	);
+	// List
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorTransparent, "QListWidget{", " border:0px;}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorTransparent |
+		TYPE_COLORAREA::caForegroundColorControls, "QListWidget::item{", " border:0px;}\n"));
 
 	if (my_new.List != nullptr) { my_new.List->setStyleSheet(sheet); }
 	if (my_open.List != nullptr) { my_open.List->setStyleSheet(sheet); }
-	sheet = my_colorStyle->getStylesheet(colorStyle::styleableObject::sListBorderless);
+	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorTransparent, "QListWidget{", " border:0px;}\n");
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorTransparent |
+		TYPE_COLORAREA::caForegroundColorControls, "QListWidget::item{", " border:0px;}\n"));
 	if (sheet.length() == 0) {
 		sheet = "QListWidget{"
 			"background-color:#00000000;"
@@ -198,20 +164,19 @@ void ak::ui::widget::welcomeScreen::setColorStyle(
 	}
 	if (my_recents.List != nullptr) { my_recents.List->setStyleSheet(sheet); }
 
-	sheet = "QLabel{color:#";
-	sheet.append(my_colorStyle->getControlsFocusedColor().toHexString());
-	sheet.append(";}\n");
-	if (my_new.Label != nullptr) { my_new.Label->setStyleSheet(sheet); }
-	if (my_open.Label != nullptr) { my_open.Label->setStyleSheet(sheet); }
-	if (my_recents.Label != nullptr) { my_recents.Label->setStyleSheet(sheet); }
-
+	// Scroll bar @ list
 	sheet = "QScrollBar::add-line:vertical{border: 0px; background-color: #00000000; width: 0px; height: 0px;}"
 		"QScrollBar::sub-line:vertical{border: 0px; background-color: #00000000; width: 0px; height: 0px;}";
 	if (my_new.List != nullptr) { my_new.List->verticalScrollBar()->setStyleSheet(sheet); }
 	if (my_open.List != nullptr) { my_open.List->verticalScrollBar()->setStyleSheet(sheet); }
 	if (my_recents.List != nullptr) { my_recents.List->verticalScrollBar()->setStyleSheet(sheet); }
 
-
+	// Label
+	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+		TYPE_COLORAREA::caBackgroundColorControls, "QLabel{", "}");
+	if (my_new.Label != nullptr) { my_new.Label->setStyleSheet(sheet); }
+	if (my_open.Label != nullptr) { my_open.Label->setStyleSheet(sheet); }
+	if (my_recents.Label != nullptr) { my_recents.Label->setStyleSheet(sheet); }
 }
 
 ak::ID ak::ui::widget::welcomeScreen::addItem(

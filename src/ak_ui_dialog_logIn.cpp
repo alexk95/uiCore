@@ -12,20 +12,22 @@
 // AK header
 #include <ak_ui_dialog_logIn.h>		// corresponding header
 #include <ak_ui_colorStyle.h>
-#include <ak_ui_core.h>
+#include <ak_ui_core.h>				// colorAreaFlag
 #include <ak_messenger.h>			// messenger
-#include <ak_ui_qt_lineEdit.h>
+
+#include <ak_ui_qt_lineEdit.h>		// qt::lineEdit
+#include <ak_ui_qt_label.h>			// qt::label
+#include <ak_ui_qt_pushButton.h>	// qt::pushButton
+#include <ak_ui_qt_checkBox.h>		// qt::checkBox
 
 // Qt header
 #include <qcryptographichash.h>		// Hashing the password
 #include <qwidget.h>				// QWidget
-#include <qlabel.h>					// QLabel
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qtooltip.h>
-
+#include <qlayout.h>				// QLayout
+#include <qtooltip.h>				// QToolTip
 #include <qpainter.h>
+
+#define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::dialog::logIn::logIn(
 	ak::messenger *								_messenger,
@@ -53,12 +55,12 @@ ak::ui::dialog::logIn::logIn(
 	int rowCounter = 0;
 
 	// Create username objects
-	my_inputUsername.label = new QLabel("Username:");
-	my_inputUsername.edit = new ak::ui::qt::lineEdit(_username);
+	my_inputUsername.label = new qt::label("Username:");
+	my_inputUsername.edit = new qt::lineEdit(_username);
 	my_inputUsername.label->setBuddy(my_inputUsername.edit);
 
 	// Create password objects
-	my_inputPassword.label = new QLabel("Password:");
+	my_inputPassword.label = new qt::label("Password:");
 	my_inputPassword.edit = new ak::ui::qt::lineEdit();
 	my_inputPassword.edit->setEchoMode(QLineEdit::EchoMode::Password);
 	if (_hashedPassword.length() > 0) { my_inputPassword.edit->setText("xxxxxxxxxx"); }
@@ -72,13 +74,13 @@ ak::ui::dialog::logIn::logIn(
 
 	// Check if required to create save password
 	if (_showSavePassword) {
-		my_savePassword = new QCheckBox("Save password");
+		my_savePassword = new qt::checkBox("Save password");
 		my_savePassword->setChecked(true);
 		my_gridLayout->addWidget(my_savePassword, rowCounter++, 1);
 	}
 
 	// Create log in button
-	my_buttonLogIn = new QPushButton("Log-in", this);
+	my_buttonLogIn = new qt::pushButton("Log-in", this);
 	
 	// Connect signals
 	connect(my_buttonLogIn, SIGNAL(clicked()), this, SLOT(slotClicked()));
@@ -93,11 +95,10 @@ ak::ui::dialog::logIn::logIn(
 
 	my_controlLayoutWidget = new QWidget();
 	my_controlLayoutWidget->setLayout(my_controlLayout);
-	my_controlLayoutWidget->setObjectName("ABC");
-	my_controlLayoutWidget->setStyleSheet("#ABC{"
+	my_controlLayoutWidget->setObjectName("__LogInDialog.ControlLayoutWidget");
+	my_controlLayoutWidget->setStyleSheet("#__LogInDialog.ControlLayoutWidget{"
 		"background-color:#90000000;"
 		"border-radius:10px;"
-
 		"}\n"
 		"QLabel{color:#FFFFFF}\n"
 		"QCheckBox{color:#FFFFFF}\n");
@@ -151,17 +152,19 @@ void ak::ui::dialog::logIn::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sMainWindow));
+	if (my_alias.length() > 0) {
+		setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow, "#" + my_alias + "{", "}"));
+	}
+	else {
+		setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow));
+	}
+	my_buttonLogIn->setColorStyle(my_colorStyle);
 
-	my_buttonLogIn->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sPushButton));
-	my_gridWidget->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sWidget));
-
-	my_inputUsername.label->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sLabel));
+	my_inputUsername.label->setColorStyle(my_colorStyle);
 	my_inputUsername.edit->setColorStyle(my_colorStyle);
 
-	my_inputPassword.label->setStyleSheet(my_colorStyle->getStylesheet(colorStyle::sLabel));
+	my_inputPassword.label->setColorStyle(my_colorStyle);
 	my_inputPassword.edit->setColorStyle(my_colorStyle);
-
 }
 
 void ak::ui::dialog::logIn::paintEvent(QPaintEvent *pe)

@@ -74,9 +74,7 @@ void ak::ui::widget::tabView::setColorStyle(
 
 void ak::ui::widget::tabView::setAlias(
 	const QString &							_alias
-) { setObjectName(_alias); }
-
-QString ak::ui::widget::tabView::alias(void) const { return objectName(); }
+) { ui::core::aObject::setAlias(_alias); setObjectName(my_alias); }
 
 void ak::ui::widget::tabView::addObjectSettingsToValue(
 	rapidjson::Value &						_array,

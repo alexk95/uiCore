@@ -450,13 +450,11 @@ void ak::ui::objectManager::creatorDestroyed(
 			for (int i = 0; i < itm->second->size(); i++) {
 				my_mapObjectsIterator obj = my_mapObjects.find(itm->second->at(i));
 				if (obj != my_mapObjects.end()) {
-					ak::ui::core::aObject * d = obj->second;
+					ak::ui::core::aObject * actualObject = obj->second;
 					// Check if object is a restorable type and remove it from the map
-					ak::ui::core::aRestorable * restorable = nullptr;
-					restorable = dynamic_cast<ak::ui::core::aRestorable *>(d);
-					if (restorable != nullptr) { my_mapAliases.erase(restorable->alias()); }
+					my_mapAliases.erase(actualObject->alias());
 					// Delete object
-					delete d;
+					delete actualObject;
 					obj->second = nullptr;
 					my_mapObjects.erase(itm->second->at(i));
 				}
@@ -487,11 +485,7 @@ void ak::ui::objectManager::destroy(
 	assert(object != my_mapObjects.end());	// Invalid object UID
 	
 	ui::core::aObject * actualObject = object->second;
-	ui::core::aRestorable * restorable = nullptr;
-	
-	// Check if object is a restorable and remove it form the alias map
-	restorable = dynamic_cast<ui::core::aRestorable *>(actualObject);
-	if (restorable != nullptr) { my_mapAliases.erase(restorable->alias()); }
+	my_mapAliases.erase(actualObject->alias());
 	
 	// Destroy object
 	delete actualObject;

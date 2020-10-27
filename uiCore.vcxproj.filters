@@ -180,6 +180,9 @@
     <ClInclude Include="include\ak_ui_application.h">
       <Filter>Header Files\ak\ui</Filter>
     </ClInclude>
+    <ClInclude Include="include\ak_ui_qt_label.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\ak_ui_signalLinker.h">
@@ -429,6 +432,9 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_widget_welcomeScreen.cpp">
       <Filter>Source Files\ak\ui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_label.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

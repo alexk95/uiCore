@@ -803,12 +803,11 @@ void ak::uiAPI::object::setAlias(
 	const QString &										_alias
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::core::aRestorable * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::core::aRestorable *>(my_objManager->object(_objectUID));
-	assert(actualObject != nullptr); // Invalid object type
+	ui::core::aObject * actualObject = my_objManager->object(_objectUID);
+	assert(actualObject != nullptr); // That should not happen
 	my_objManager->removeAlias(actualObject->alias());	// Delete last alias
-	if (_alias.length() != 0) { my_objManager->addAlias(_alias, _objectUID); }
 	actualObject->setAlias(_alias);
+	if (_alias.length() != 0) { my_objManager->addAlias(_alias, _objectUID); }
 }
 
 // Object

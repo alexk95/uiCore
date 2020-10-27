@@ -102,14 +102,9 @@ QWidget * ak::ui::widget::table::widget(void) { return my_table; }
 void ak::ui::widget::table::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	try {
-		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
-		my_table->setColorStyle(_colorStyle);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::table::setColorStyle()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::table::setColorStyle()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::table::setColorStyle()"); }
+	assert(_colorStyle != nullptr); // nullptr provided
+	my_colorStyle = _colorStyle;
+	my_table->setColorStyle(my_colorStyle);
 }
 
 // ##############################################################################################################

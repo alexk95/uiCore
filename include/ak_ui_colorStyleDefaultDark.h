@@ -35,18 +35,23 @@ namespace ak {
 			//! @brief Will return the name of this styleSheet
 			virtual QString getColorStyleName(void) const override;
 
-			//! @brief Creates an returns a QStylesheet for all provided objects
-			//! @param _items The items to create a stylesheet string for
-			//! @throw ak::Exception if one of the image files needed does not exist
-			virtual QString getStylesheet(
-				const std::vector<styleableObject>	_items
-			) const override;
-
-			//! @brief Creates an returns a QStylesheet for the provided object
-			//! @param _object The object to create a stylesheet string for
-			//! @throw ak::Exception if one of the image files needed does not exist
-			virtual QString getStylesheet(
-				styleableObject					_object
+			//! @brief Will return a stylesheet that can be applied
+			//! If the color areas foreground and background are provided the stylesheet will look something like this:
+			//!			color:#00ffd0; background-color:#ffffff;
+			//! A prefix can be added to specify the widget
+			//! When _prefix = "QLabel{" then the stylehseet will now look like this
+			//!			QLabel{color:#00ffd0; background-color:#ffffff;
+			//! Now a suffix would make sense.
+			//! When _suffix = "}\n" then the stylesheet will now look like this
+			//!			QLabel{color:#00ffd0; background-color:#ffffff;}\n
+			//!
+			//! @param _colorAreas The ares to add to the stylesheet
+			//! @param _prefix The prefix to add to the stylesheet
+			//! @param _suffix The suffix to add to the stylesheet
+			virtual QString toStyleSheet(
+				ui::core::colorAreaFlag			_colorAreas,
+				const QString &					_prefix = QString(),
+				const QString &					_suffix = QString()
 			) const override;
 		};
 	} // namespace ui
