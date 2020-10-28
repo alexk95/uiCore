@@ -56,7 +56,9 @@ ak::ui::ttb::page::~page() {
 
 void ak::ui::ttb::page::addChild(
 	ak::ui::core::aObject *		_child
-) { throw ak::Exception("Childs can't be added to a page only groups", "ak::ui::ttb::page::addChild()"); }
+) {
+	assert(0); //Childs can't be added to a page, only to groups
+}
 
 ak::ui::core::ttbContainer * ak::ui::ttb::page::createSubContainer(
 	const QString &				_text
@@ -98,3 +100,5 @@ void ak::ui::ttb::page::setColorStyle(
 			TYPE_COLORAREA::caBorderColorWindow));
 	}
 }
+
+int ak::ui::ttb::page::subContainerCount(void) const { return my_groups.size(); }

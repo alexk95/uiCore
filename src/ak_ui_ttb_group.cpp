@@ -127,3 +127,5 @@ void ak::ui::ttb::group::setColorStyle(
 			TYPE_COLORAREA::caBackgroundColorControls));
 	}
 }
+
+int ak::ui::ttb::group::subContainerCount(void) const { return my_subgroups.size(); }

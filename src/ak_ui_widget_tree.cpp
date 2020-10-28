@@ -223,6 +223,7 @@ void ak::ui::widget::tree::clear(void) {
 	}
 	my_items.clear();
 	my_currentId = 0;
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eCleared);
 	//Note, end cleared message
 }
 

@@ -264,7 +264,8 @@ namespace ak {
 			);
 
 			void destroy(
-				ak::UID												_objectUID
+				ak::UID												_objectUID,
+				bool												_ignoreIfObjectHasChildObjects = false
 			);
 
 			void setIconSearchDirectories(

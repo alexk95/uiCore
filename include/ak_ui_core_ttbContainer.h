@@ -56,6 +56,9 @@ namespace ak {
 				//! @brief Returns the count of childs this container has
 				virtual int childCount(void) const;
 
+				//! @brief Returns the count of sub containers
+				virtual int subContainerCount(void) const = 0;
+
 				//! @brief Will add the provided child to this container
 				//! @param _child The child to add
 				virtual void addChild(
@@ -74,6 +77,7 @@ namespace ak {
 				ak::messenger *					my_messenger;
 				ak::uidManager *				my_uidManager;
 				std::vector<aObject *>			my_childs;
+				std::vector<ttbContainer *>		my_subContainer;
 
 			private:
 				// Block default constructor

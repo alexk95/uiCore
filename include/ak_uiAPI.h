@@ -662,8 +662,12 @@ namespace ak {
 
 		namespace object {
 
+			//! @brief Will destroy the specifed object
+			//! @param _objectUID The UID of the object to destroy
+			//! @param _ignoreIfObjectHasChildObjects If true, will not destroy the specified object if it still has child objects
 			UICORE_API void destroy(
-				ak::UID												_objectUID
+				ak::UID												_objectUID,
+				bool												_ignoreIfObjectHasChildObjects = false
 			);
 
 			UICORE_API void setAlias(
@@ -934,6 +938,11 @@ namespace ak {
 				QWidget *			_widget,
 				const QString &		_title,
 				const QIcon &		_icon
+			);
+
+			//! @brief Will close all tabs of the specified tabView
+			UICORE_API void closeAllTabs(
+				ak::UID				_tabViewUID
 			);
 
 			UICORE_API void closeTab(

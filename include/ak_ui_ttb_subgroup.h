@@ -74,6 +74,9 @@ namespace ak {
 					const ak::ui::colorStyle *			_colorStyle
 				) override;
 
+				//! @brief Returns the count of sub containers
+				virtual int subContainerCount(void) const override;
+
 			private:
 				tt::SubGroup *			my_subGroup;
 				QString					my_text;

@@ -101,6 +101,9 @@ namespace ak {
 					ak::ID								_tabID
 				);
 
+				//! @brief Will close all tabs of this tabView
+				void closeAllTabs(void);
+
 				//! @brief Will create a new tab page
 				//! Returns the ID of the new tab
 				//! @param _title The title of the new tab page

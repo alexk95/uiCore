@@ -393,6 +393,7 @@ void ak::ui::widget::propertyGrid::clear(void) {
 	my_defaultGroup->clear();
 	my_items.clear();
 	itemCountChanged();
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eCleared);
 }
 
 // ##############################################################################################################

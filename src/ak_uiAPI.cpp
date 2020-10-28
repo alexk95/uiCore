@@ -792,10 +792,11 @@ void ak::uiAPI::logInDialog::showToolTipAtPassword(
 // Object
 
 void ak::uiAPI::object::destroy(
-	ak::UID												_objectUID
+	ak::UID												_objectUID,
+	bool												_ignoreIfObjectHasChildObjects
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	my_objManager->destroy(_objectUID);
+	my_objManager->destroy(_objectUID, _ignoreIfObjectHasChildObjects);
 }
 
 void ak::uiAPI::object::setAlias(
@@ -1317,6 +1318,18 @@ ak::ID ak::uiAPI::tabView::addTab(
 	assert(actualTabView != nullptr); // Invalid object type
 
 	return actualTabView->createTab(_widget, _title, _icon);
+}
+
+void ak::uiAPI::tabView::closeAllTabs(
+	ak::UID				_tabViewUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	actualTabView->closeAllTabs();
 }
 
 void ak::uiAPI::tabView::closeTab(

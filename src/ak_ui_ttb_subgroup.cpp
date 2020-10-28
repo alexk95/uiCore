@@ -110,3 +110,5 @@ void ak::ui::ttb::subGroup::setColorStyle(
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::ttb::subGroup::setColorStyle()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::ttb::subGroup::setColorStyle()"); }
 }
+
+int ak::ui::ttb::subGroup::subContainerCount(void) const { return 0; }

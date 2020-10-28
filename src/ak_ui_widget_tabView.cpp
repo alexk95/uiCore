@@ -134,6 +134,11 @@ void ak::ui::widget::tabView::closeTab(
 	my_tabView->removeTab(_tabID);
 }
 
+void ak::ui::widget::tabView::closeAllTabs(void) {
+	while (my_tabView->count() != 0) { my_tabView->removeTab(0); }
+	my_messenger->sendMessage(my_uid, ak::core::eventType::eCleared);
+}
+
 ak::ID ak::ui::widget::tabView::createTab(
 	QWidget *									_widget,
 	const QString &								_title,

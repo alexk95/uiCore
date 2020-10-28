@@ -14,6 +14,7 @@
 
  // AK header
 #include <ak_ui_objectManager.h>			// corresponding header
+#include <ak_ui_core.h>						// object Type
 #include <ak_messenger.h>					// messenger
 #include <ak_notifierObjectManager.h>		// notifierObjectManager
 #include <ak_ui_uiManager.h>				// uiManager
@@ -477,7 +478,8 @@ void ak::ui::objectManager::creatorDestroyed(
 }
 
 void ak::ui::objectManager::destroy(
-	ak::UID												_objectUID
+	ak::UID												_objectUID,
+	bool												_ignoreIfObjectHasChildObjects
 ) {
 	my_notifier->disable();
 
@@ -485,6 +487,25 @@ void ak::ui::objectManager::destroy(
 	assert(object != my_mapObjects.end());	// Invalid object UID
 	
 	ui::core::aObject * actualObject = object->second;
+
+	if (_ignoreIfObjectHasChildObjects) {
+		switch (actualObject->objectType())
+		{
+		case ui::core::objectType::oTabToolbarPage:
+		case ui::core::objectType::oTabToolbarGroup:
+		case ui::core::objectType::oTabToolbarSubgroup:
+		{
+			ui::core::ttbContainer * container = nullptr;
+			container = dynamic_cast<ui::core::ttbContainer *>(actualObject);
+			assert(container != nullptr); // Cast failed
+			if (container->childCount() != 0 || container->subContainerCount() != 0) { return; }
+		}
+		break;
+		default:
+			break;
+		}
+	}
+
 	my_mapAliases.erase(actualObject->alias());
 	
 	// Destroy object
