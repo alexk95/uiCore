@@ -14,14 +14,14 @@
 #include <ak_exception.h>						// error handling
 
 ak::ui::colorStyleDefault::colorStyleDefault() {
-	my_controlsMainBackcolor.setRGBA(255, 255, 255);
+	my_controlsMainBackcolor.setRGBA(204, 204, 204);
 	my_controlsMainForecolor.setRGBA(0, 0, 0);
 	my_controlsErrorForecolor.setRGBA(255, 0, 0);
 	my_controlsPressedColor.setRGBA(60, 200, 60);
 	my_controlsFocusColor.setRGBA(60, 60, 200);
 
-	my_windowMainBackcolor.setRGBA(48, 48, 48);
-	my_windowMainForecolor.setRGBA(255, 255, 255);
+	my_windowMainBackcolor.setRGBA(255, 255, 255);
+	my_windowMainForecolor.setRGBA(0, 0, 0);
 
 	my_alternateBackColor.setRGBA(69, 69, 69);
 	my_alternateForeColor.setRGBA(255, 255, 255);

@@ -11,9 +11,13 @@
 
 #pragma once
 
+#include <qglobal.h>
+
 #if  defined(_WIN32) || defined (_WIN64)
 #define OS_WINDOWS 1
-#define UICORE_API __declspec(dllexport)
+
+#define UICORE_API Q_DECL_EXPORT
+
 #elif defined(__unix__) || defined (unix) || defined(__unix)
 #define OS_UNIX 1
 #endif

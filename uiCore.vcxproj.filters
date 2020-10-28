@@ -212,9 +212,6 @@
     <QtMoc Include="include\ak_ui_qt_pushButton.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
-    <QtMoc Include="include\ak_ui_qt_table.h">
-      <Filter>Header Files\ak\ui\qt</Filter>
-    </QtMoc>
     <QtMoc Include="include\ak_ui_qt_textEdit.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
@@ -253,6 +250,9 @@
     </QtMoc>
     <QtMoc Include="include\ak_ui_widget_tabView.h">
       <Filter>Header Files\ak\ui\widget</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_table.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

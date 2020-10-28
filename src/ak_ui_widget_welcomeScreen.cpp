@@ -150,18 +150,14 @@ void ak::ui::widget::welcomeScreen::setColorStyle(
 	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorTransparent, "QListWidget{", " border:0px;}\n"));
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorTransparent |
 		TYPE_COLORAREA::caForegroundColorControls, "QListWidget::item{", " border:0px;}\n"));
-
-	if (my_new.List != nullptr) { my_new.List->setStyleSheet(sheet); }
-	if (my_open.List != nullptr) { my_open.List->setStyleSheet(sheet); }
-	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorTransparent, "QListWidget{", " border:0px;}\n");
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorTransparent |
-		TYPE_COLORAREA::caForegroundColorControls, "QListWidget::item{", " border:0px;}\n"));
 	if (sheet.length() == 0) {
 		sheet = "QListWidget{"
 			"background-color:#00000000;"
 			"border:0px;"
 			"}\n";
 	}
+	if (my_new.List != nullptr) { my_new.List->setStyleSheet(sheet); }
+	if (my_open.List != nullptr) { my_open.List->setStyleSheet(sheet); }
 	if (my_recents.List != nullptr) { my_recents.List->setStyleSheet(sheet); }
 
 	// Scroll bar @ list
@@ -172,8 +168,9 @@ void ak::ui::widget::welcomeScreen::setColorStyle(
 	if (my_recents.List != nullptr) { my_recents.List->verticalScrollBar()->setStyleSheet(sheet); }
 
 	// Label
-	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-		TYPE_COLORAREA::caBackgroundColorControls, "QLabel{", "}");
+	sheet = "QLabel{color:#";
+	sheet.append(my_colorStyle->getControlsFocusedColor().toHexString());
+	sheet.append(";}");
 	if (my_new.Label != nullptr) { my_new.Label->setStyleSheet(sheet); }
 	if (my_open.Label != nullptr) { my_open.Label->setStyleSheet(sheet); }
 	if (my_recents.Label != nullptr) { my_recents.Label->setStyleSheet(sheet); }
