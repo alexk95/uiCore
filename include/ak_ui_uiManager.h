@@ -78,6 +78,12 @@ namespace ak {
 				const ak::ui::colorStyle *								_colorStyle
 			) override;
 
+			//! @brief Will remove the child from this object (not destroy it)
+				//! This function should be called from the deconstructor of a child
+			virtual void removeChildObject(
+				aObject *								_child
+			) override;
+
 			//! @brief Will set the alias for this object
 			//! @param _alias The alias to set
 			//! @throw ak::Exception if the provided alias length is 0

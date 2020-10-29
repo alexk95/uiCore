@@ -32,6 +32,7 @@ ak::ui::qt::textEdit::textEdit(const QString & _text, QWidget * _parent)
 
 ak::ui::qt::textEdit::~textEdit()
 {
+	A_OBJECT_DESTROYING
 	disconnect(this, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 }
 

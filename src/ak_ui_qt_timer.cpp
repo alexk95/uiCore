@@ -16,4 +16,4 @@ ak::ui::qt::timer::timer()
 	: QTimer(), ak::ui::core::aObject(ak::ui::core::objectType::oTimer)
 {}
 
-ak::ui::qt::timer::~timer() {}
+ak::ui::qt::timer::~timer() { A_OBJECT_DESTROYING }

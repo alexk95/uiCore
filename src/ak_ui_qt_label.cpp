@@ -23,7 +23,7 @@ ak::ui::qt::label::label(const QString & _text, QWidget * _parent)
 	: QLabel(_text, _parent), ui::core::aWidget(ui::core::objectType::oLabel)
 {}
 
-ak::ui::qt::label::~label() {}
+ak::ui::qt::label::~label() { A_OBJECT_DESTROYING }
 
 QWidget * ak::ui::qt::label::widget(void) { return this; }
 

@@ -14,7 +14,7 @@
 #include <ak_exception.h>				// error handling
 
 ak::ui::core::aObject::aObject(ak::ui::core::objectType _type, ak::UID _uid, int _references)
-:	my_uid(_uid), my_references(0), my_objectType(_type), my_alias("")
+:	my_uid(_uid), my_references(0), my_objectType(_type), my_alias(""), my_parentObject(nullptr), my_owner(nullptr)
 { setReferences(_references); }
 
 ak::ui::core::aObject::aObject(
@@ -38,11 +38,56 @@ ak::ui::core::aObject & ak::ui::core::aObject::operator = (
 
 ak::ui::core::aObject::~aObject() {}
 
+// ################################################################################
+
+void ak::ui::core::aObject::removeChildObject(
+	aObject *								_child
+) {
+	assert(_child != nullptr); // Nullptr provided
+	assert(my_childObjects.find(_child->uid()) != my_childObjects.end()); // Child is not registered
+	my_childObjects.erase(_child->uid());
+}
+
+void ak::ui::core::aObject::addChildObject(
+	aObject *								_child
+) {
+	assert(_child != nullptr);
+	assert(my_childObjects.find(_child->uid()) == my_childObjects.end()); // Child with the specified UID already exists
+	my_childObjects.insert_or_assign(_child->uid(), _child);
+}
+
 void ak::ui::core::aObject::setAlias(
 	const QString &							_alias
 ) { my_alias = _alias; }
 
+// ################################################################################
+
 QString ak::ui::core::aObject::alias(void) const { return my_alias; }
+
+void ak::ui::core::aObject::setParentObject(
+	aObject *								_parentObject
+) { my_parentObject = _parentObject; }
+
+ak::ui::core::aObject * ak::ui::core::aObject::parentObject(void) const { return my_parentObject; }
+
+int ak::ui::core::aObject::childObjectCount(void) const { return my_childObjects.size(); }
+
+ak::ui::core::aObject * ak::ui::core::aObject::childObject(
+	ak::UID									_childUID
+) {
+	my_childObjectsIterator itm = my_childObjects.find(_childUID);
+	assert(itm != my_childObjects.end()); // Invalid object UID
+	assert(itm->second != nullptr);	// Nullptr stored
+	return itm->second;
+}
+
+void ak::ui::core::aObject::setOwner(
+	aObject *								_object
+) { my_owner = _object; }
+
+ak::ui::core::aObject * ak::ui::core::aObject::owner(void) const { return my_owner; }
+
+// ################################################################################
 
 void ak::ui::core::aObject::setUid(ak::UID _UID) { my_uid = _UID; }
 

@@ -25,7 +25,7 @@ ak::ui::qt::pushButton::pushButton(const QString & _text, QWidget * _parent)
 ak::ui::qt::pushButton::pushButton(const QIcon & _icon, const QString & _text, QWidget * _parent)
 : QPushButton(_icon, _text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oPushButton) {}
 
-ak::ui::qt::pushButton::~pushButton() {}
+ak::ui::qt::pushButton::~pushButton() { A_OBJECT_DESTROYING }
 
 // #######################################################################################################
 // Event handling

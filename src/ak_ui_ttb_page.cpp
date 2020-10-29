@@ -28,24 +28,14 @@
 
 ak::ui::ttb::page::page(
 	ak::messenger *				_messenger,
-	ak::uidManager *			_uidManager,
 	tt::Page *					_page,
 	const QString &				_text
-) : ak::ui::core::ttbContainer(_messenger, _uidManager, ak::ui::core::objectType::oTabToolbarPage),
-	my_page(nullptr)
+) : ak::ui::core::ttbContainer(_messenger, ak::ui::core::objectType::oTabToolbarPage),
+my_page(_page)
 {
-	try {
-		if (_page == nullptr) { throw ak::Exception("Is nullptr", "Check page"); }
-		if (_messenger == nullptr) { throw ak::Exception("Is nullptr", "Check messenger"); }
-		if (_uidManager == nullptr) { throw ak::Exception("Is nullptr", "Check UID manager"); }
-
-		my_page = _page;
-		my_text = _text;
-		
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::ttb::page::page()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::ttb::page::page()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::ttb::page::page()"); }
+	assert(my_page != nullptr); // Nullptr provided
+	assert(_messenger != nullptr); // Nullptr { throw ak::Exception("Is nullptr", "Check messenger"); }
+	my_text = _text;
 }
 
 ak::ui::ttb::page::~page() {
@@ -63,27 +53,17 @@ void ak::ui::ttb::page::addChild(
 ak::ui::core::ttbContainer * ak::ui::ttb::page::createSubContainer(
 	const QString &				_text
 ) {
-	try {
-		ak::ui::ttb::group * obj = new ak::ui::ttb::group(my_messenger, my_uidManager, my_page->AddGroup(_text), _text);
-		if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
-		my_groups.push_back(obj);
-		return obj;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::ttb::page::createSubContainer()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::ttb::page::createSubContainer()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::ttb::page::createSubContainer()"); }
+	ak::ui::ttb::group * obj = new ak::ui::ttb::group(my_messenger, my_page->AddGroup(_text), _text);
+	if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
+	my_subContainer.push_back(obj);
+	return obj;
 }
 
 void ak::ui::ttb::page::destroyAllSubContainer(void) {
-	try {
-		for (int i = 0; i < my_groups.size(); i++) {
-			ak::ui::ttb::group * obj = my_groups.at(i);
-			delete obj;
-		}
+	for (int i = 0; i < my_subContainer.size(); i++) {
+		ui::core::ttbContainer * obj = my_subContainer.at(i);
+		delete obj;
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::ttb::page::createSubContainer()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::ttb::page::createSubContainer()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::ttb::page::createSubContainer()"); }
 }
 
 void ak::ui::ttb::page::setColorStyle(
@@ -100,5 +80,3 @@ void ak::ui::ttb::page::setColorStyle(
 			TYPE_COLORAREA::caBorderColorWindow));
 	}
 }
-
-int ak::ui::ttb::page::subContainerCount(void) const { return my_groups.size(); }

@@ -35,6 +35,7 @@ ak::ui::qt::dock::dock(
 }
 
 ak::ui::qt::dock::~dock() {
+	A_OBJECT_DESTROYING
 	disconnect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
 }
 
@@ -56,6 +57,15 @@ void ak::ui::qt::dock::setColorStyle(
 			TYPE_COLORAREA::caBackgroundColorWindow));
 	}
 }
+
+void ak::ui::qt::dock::removeChildObject(
+	aObject *									_child
+) {
+	ui::core::aObject::removeChildObject(_child);
+	setWidget(nullptr);
+}
+
+// #######################################################################################################
 
 void ak::ui::qt::dock::setAlias(
 	const QString &							_alias

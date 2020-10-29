@@ -66,6 +66,7 @@ my_cellsWithWidget(nullptr), my_signalLinker(nullptr)
 }
 
 ak::ui::widget::table::~table() {
+	A_OBJECT_DESTROYING
 	// The signal linker must be deleted because the clear function creates a new one
 	if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
 

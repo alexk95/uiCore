@@ -34,70 +34,68 @@ ak::ui::widget::tree::tree(
 	ak::uidManager *		_uidManager,
 	const ak::ui::colorStyle *	_colorStyle
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTree, _messenger, _uidManager, _colorStyle),
-	my_tree(nullptr), my_filter(nullptr), my_layout(nullptr), my_multiWidget(nullptr), my_treeSignalLinker(nullptr), my_filterSignalLinker(nullptr),
-	my_notifierFilter(nullptr), my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0), 
-	my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false), my_expandSelectedItems(true)
+my_tree(nullptr), my_filter(nullptr), my_layout(nullptr), my_multiWidget(nullptr), my_treeSignalLinker(nullptr), my_filterSignalLinker(nullptr),
+my_notifierFilter(nullptr), my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0),
+my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false), my_expandSelectedItems(true)
 {
-	try {
-		// Set my UID
-		my_uid = my_uidManager->getId();
+	// Set my UID
+	my_uid = my_uidManager->getId();
 
-		// Create tree
-		my_tree = new ak::ui::qt::tree(my_colorStyle);
-		assert(my_tree != nullptr); // Failed to create
-		my_tree->setUid(1);
+	// Create tree
+	my_tree = new ak::ui::qt::tree(my_colorStyle);
+	assert(my_tree != nullptr); // Failed to create
+	my_tree->setUid(1);
 
-		// Create filter
-		my_filter = new ak::ui::qt::lineEdit();
-		assert(my_filter != nullptr); // Failed to create
-		my_filter->setVisible(false);
+	// Create filter
+	my_filter = new ak::ui::qt::lineEdit();
+	assert(my_filter != nullptr); // Failed to create
+	my_filter->setVisible(false);
 
-		// Create widget
-		my_multiWidget = new QWidget();
-		assert(my_multiWidget != nullptr); // Failed to create
-		my_multiWidget->setContentsMargins(0, 0, 0, 0);
-		
-		// Create layout
-		my_layout = new QVBoxLayout(my_multiWidget);
-		assert(my_layout != nullptr); // Failed to create
-		my_layout->setContentsMargins(0, 0, 0, 0);
-		my_layout->addWidget(my_filter);
-		my_layout->addWidget(my_tree);
+	// Create widget
+	my_multiWidget = new QWidget();
+	assert(my_multiWidget != nullptr); // Failed to create
+	my_multiWidget->setContentsMargins(0, 0, 0, 0);
 
-		// Create tree signal linker
-		my_treeSignalLinker = new ak::ui::treeSignalLinker(this, my_tree);
-		assert(my_treeSignalLinker != nullptr); // Failed to create
+	// Create layout
+	my_layout = new QVBoxLayout(my_multiWidget);
+	assert(my_layout != nullptr); // Failed to create
+	my_layout->setContentsMargins(0, 0, 0, 0);
+	my_layout->addWidget(my_filter);
+	my_layout->addWidget(my_tree);
 
-		// Create internal UID manager
-		my_internalUidManager = new ak::uidManager();
-		assert(my_internalUidManager != nullptr); // Failed to create
+	// Create tree signal linker
+	my_treeSignalLinker = new ak::ui::treeSignalLinker(this, my_tree);
+	assert(my_treeSignalLinker != nullptr); // Failed to create
 
-		// Create internal messenger
-		my_internalMessenger = new ak::messenger();
-		assert(my_internalMessenger != nullptr); // Failed to create
+	// Create internal UID manager
+	my_internalUidManager = new ak::uidManager();
+	assert(my_internalUidManager != nullptr); // Failed to create
 
-		// Create filter signal linker
-		my_filterSignalLinker = new ak::ui::signalLinker(my_internalMessenger, my_internalUidManager);
-		assert(my_filterSignalLinker != nullptr); // Failed to create
-		my_filterSignalLinker->addLink(my_filter);
+	// Create internal messenger
+	my_internalMessenger = new ak::messenger();
+	assert(my_internalMessenger != nullptr); // Failed to create
 
-		// Create notifier filter
-		my_notifierFilter = new ak::notifierTreeFilter(this);
-		assert(my_notifierFilter != nullptr); // Failed to create
+	// Create filter signal linker
+	my_filterSignalLinker = new ak::ui::signalLinker(my_internalMessenger, my_internalUidManager);
+	assert(my_filterSignalLinker != nullptr); // Failed to create
+	my_filterSignalLinker->addLink(my_filter);
 
-		my_tree->setHeaderLabel(QString(""));
-		
-		my_tree->setMouseTracking(true);
-		my_tree->setHeaderHidden(true);
+	// Create notifier filter
+	my_notifierFilter = new ak::notifierTreeFilter(this);
+	assert(my_notifierFilter != nullptr); // Failed to create
 
-		my_internalMessenger->registerUidReceiver(my_filter->uid(), my_notifierFilter);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::tree()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::tree()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::tree()"); }
+	my_tree->setHeaderLabel(QString(""));
+
+	my_tree->setMouseTracking(true);
+	my_tree->setHeaderHidden(true);
+
+	my_internalMessenger->registerUidReceiver(my_filter->uid(), my_notifierFilter);
 }
 
-ak::ui::widget::tree::~tree() { memFree(); }
+ak::ui::widget::tree::~tree() {
+	A_OBJECT_DESTROYING
+	memFree();
+}
 
 QWidget * ak::ui::widget::tree::widget(void) { return my_multiWidget; }
 
@@ -130,34 +128,29 @@ ak::ID ak::ui::widget::tree::add(
 	ak::ui::core::textAlignment		_textAlignment,
 	QIcon							_icon
 ) {
-	try {
-		if (_parentId == -1) {
-			// Check if top level item already exists
-			ak::ui::qt::treeItem * itm = my_tree->topLevelItem(_text);
-			if (itm == nullptr) {
-				// Create and add new item
-				itm = createItem(_text, _textAlignment, _icon);
-				my_tree->AddTopLevelItem(itm);
-				my_items.insert_or_assign(itm->id(), itm);
-			}
-			return itm->id();
+	if (_parentId == -1) {
+		// Check if top level item already exists
+		ak::ui::qt::treeItem * itm = my_tree->topLevelItem(_text);
+		if (itm == nullptr) {
+			// Create and add new item
+			itm = createItem(_text, _textAlignment, _icon);
+			my_tree->AddTopLevelItem(itm);
+			my_items.insert_or_assign(itm->id(), itm);
 		}
-		else {
-			// Find parent object
-			my_itemsIterator parent = my_items.find(_parentId);
-			assert(parent != my_items.end()); // Invalid ID provided
-			ak::ui::qt::treeItem * itm = parent->second->findChild(_text);
-			if (itm == nullptr) {
-				itm = createItem(_text, _textAlignment, _icon);
-				parent->second->AddChild(itm);
-				my_items.insert_or_assign(itm->id(), itm);
-			}
-			return itm->id();
-		}
+		return itm->id();
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::add(parent)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::add(parent)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::add(parent)"); }
+	else {
+		// Find parent object
+		my_itemsIterator parent = my_items.find(_parentId);
+		assert(parent != my_items.end()); // Invalid ID provided
+		ak::ui::qt::treeItem * itm = parent->second->findChild(_text);
+		if (itm == nullptr) {
+			itm = createItem(_text, _textAlignment, _icon);
+			parent->second->AddChild(itm);
+			my_items.insert_or_assign(itm->id(), itm);
+		}
+		return itm->id();
+	}
 }
 
 ak::ID ak::ui::widget::tree::add(
@@ -166,50 +159,45 @@ ak::ID ak::ui::widget::tree::add(
 	ak::ui::core::textAlignment		_textAlignment,
 	const QIcon  &					_icon
 ) {
-	try {
-		assert(_cmd.length() > 0); // Provided command is empty
-		QStringList items = _cmd.split(_delimiter);
+	assert(_cmd.length() > 0); // Provided command is empty
+	QStringList items = _cmd.split(_delimiter);
 
-		assert(items.count() != 0); // Split failed
+	assert(items.count() != 0); // Split failed
 
-		// Create a pointer to store the current item
-		ak::ui::qt::treeItem * currentItem = nullptr;
+	// Create a pointer to store the current item
+	ak::ui::qt::treeItem * currentItem = nullptr;
 
-		// Search for the root element
-		for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
-			if (itm->second != nullptr) {
-				if (itm->second->text(0) == items.at(0)) { currentItem = itm->second; break; }
-			}
+	// Search for the root element
+	for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
+		if (itm->second != nullptr) {
+			if (itm->second->text(0) == items.at(0)) { currentItem = itm->second; break; }
 		}
-
-		// Create a new root item
-		if (currentItem == nullptr) {
-			currentItem = createItem(items.at(0), _textAlignment);
-			assert(currentItem != nullptr); // Failed to create item
-			my_tree->AddTopLevelItem(currentItem);
-			my_items.insert_or_assign(currentItem->id(), currentItem);
-		}
-
-		for (int i = 1; i < items.count(); i++) {
-			ak::ui::qt::treeItem * nItm = currentItem->findChild(items.at(i));
-			if (nItm == nullptr) {
-				// Create new item
-				if (i == items.count() - 1) { nItm = createItem(items.at(i), _textAlignment, _icon); }
-				else { nItm = createItem(items.at(i), _textAlignment); }
-				assert(nItm != nullptr); // Failed to create
-				// Add item
-				currentItem->AddChild(nItm);
-				// Store data
-				my_items.insert_or_assign(nItm->id(), nItm);
-			}
-			currentItem = nItm;
-		}
-
-		return currentItem->id();
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::add(command)"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::add(command)"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::add(command)"); }
+
+	// Create a new root item
+	if (currentItem == nullptr) {
+		currentItem = createItem(items.at(0), _textAlignment);
+		assert(currentItem != nullptr); // Failed to create item
+		my_tree->AddTopLevelItem(currentItem);
+		my_items.insert_or_assign(currentItem->id(), currentItem);
+	}
+
+	for (int i = 1; i < items.count(); i++) {
+		ak::ui::qt::treeItem * nItm = currentItem->findChild(items.at(i));
+		if (nItm == nullptr) {
+			// Create new item
+			if (i == items.count() - 1) { nItm = createItem(items.at(i), _textAlignment, _icon); }
+			else { nItm = createItem(items.at(i), _textAlignment); }
+			assert(nItm != nullptr); // Failed to create
+			// Add item
+			currentItem->AddChild(nItm);
+			// Store data
+			my_items.insert_or_assign(nItm->id(), nItm);
+		}
+		currentItem = nItm;
+	}
+
+	return currentItem->id();
 }
 
 void ak::ui::widget::tree::clear(void) {
@@ -231,82 +219,57 @@ void ak::ui::widget::tree::setItemEnabled(
 	ak::ID							_itemId,
 	bool							_enabled
 ) {
-	try {
-		my_itemsIterator itm = my_items.find(_itemId);
-		assert(itm != my_items.end()); // Invalid ID provided
-		my_treeSignalLinker->disable();
-		itm->second->setDisabled(!_enabled);
-		if (my_selectAndDeselectChildren) { itm->second->setChildsEnabled(_enabled); }
-		my_treeSignalLinker->enable();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setItemEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setItemEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setItemEnabled()"); }
+	my_itemsIterator itm = my_items.find(_itemId);
+	assert(itm != my_items.end()); // Invalid ID provided
+	my_treeSignalLinker->disable();
+	itm->second->setDisabled(!_enabled);
+	if (my_selectAndDeselectChildren) { itm->second->setChildsEnabled(_enabled); }
+	my_treeSignalLinker->enable();
 }
 
 void ak::ui::widget::tree::setItemSelected(
 	ak::ID							_itemId,
 	bool							_selected
 ) {
-	try {
-		my_itemsIterator itm = my_items.find(_itemId);
-		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
-		my_treeSignalLinker->disable();
-		itm->second->setSelected(_selected);
-		if (my_selectAndDeselectChildren) { itm->second->setChildsSelected(_selected); }
-		my_treeSignalLinker->enable();
-		selectionChangedEvent(true);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setItemSelected()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setItemSelected()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setItemSelected()"); }
+	my_itemsIterator itm = my_items.find(_itemId);
+	assert(itm != my_items.end()); // Invalid item ID
+	my_treeSignalLinker->disable();
+	itm->second->setSelected(_selected);
+	if (my_selectAndDeselectChildren) { itm->second->setChildsSelected(_selected); }
+	my_treeSignalLinker->enable();
+	selectionChangedEvent(true);
 }
 
 void ak::ui::widget::tree::setItemVisible(
 	ak::ID							_itemId,
 	bool							_visible
 ) {
-	try {
-		my_itemsIterator itm = my_items.find(_itemId);
-		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
-		my_treeSignalLinker->disable();
-		itm->second->setVisible(_visible);
-		if (my_selectAndDeselectChildren) { itm->second->setChildsVisible(_visible); }
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setItemVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setItemVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setItemVisible()"); }
+	my_itemsIterator itm = my_items.find(_itemId);
+	assert(itm != my_items.end()); // Invalid item ID
+	my_treeSignalLinker->disable();
+	itm->second->setVisible(_visible);
+	if (my_selectAndDeselectChildren) { itm->second->setChildsVisible(_visible); }
 }
 
 void ak::ui::widget::tree::setSingleItemSelected(
 	ak::ID							_itemId,
 	bool							_selected
 ) {
-	try {
-		deselectAllItems(false);
-		setItemSelected(_itemId, _selected);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setSingleItemSelected()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setSingleItemSelected()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setSingleItemSelected()"); }
+	deselectAllItems(false);
+	setItemSelected(_itemId, _selected);
 }
 
 void ak::ui::widget::tree::toggleItemSelection(
 	ak::ID							_itemId
 ) {
-	try {
-		my_itemsIterator itm = my_items.find(_itemId);
-		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
-		my_treeSignalLinker->disable();
-		bool state = itm->second->isSelected();
-		itm->second->setSelected(!state);
-		if (my_selectAndDeselectChildren) { itm->second->setChildsSelected(!state); }
-		my_treeSignalLinker->enable();
-		selectionChangedEvent(true);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::toggleItemSelection()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::toggleItemSelection()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::toggleItemSelection()"); }
+	my_itemsIterator itm = my_items.find(_itemId);
+	assert(itm != my_items.end()); // Invalid item ID
+	my_treeSignalLinker->disable();
+	bool state = itm->second->isSelected();
+	itm->second->setSelected(!state);
+	if (my_selectAndDeselectChildren) { itm->second->setChildsSelected(!state); }
+	my_treeSignalLinker->enable();
+	selectionChangedEvent(true);
 }
 
 void ak::ui::widget::tree::deselectAllItems(
@@ -329,13 +292,8 @@ void ak::ui::widget::tree::setVisible(
 void ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled(
 	bool							_autoExpand
 ) {
-	try {
-		my_expandSelectedItems = _autoExpand;
-		if (my_expandSelectedItems) { selectionChangedEvent(false); }
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled()"); }
+	my_expandSelectedItems = _autoExpand;
+	if (my_expandSelectedItems) { selectionChangedEvent(false); }
 }
 
 void ak::ui::widget::tree::setItemText(
@@ -448,62 +406,42 @@ std::vector<ak::ID> ak::ui::widget::tree::selectedItems(void) {
 std::vector<QString> ak::ui::widget::tree::getItemPath(
 	ak::ID							_itemId
 ) {
-	try {
-		my_itemsIterator itm = my_items.find(_itemId);
-		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
-		return toVector(itm->second->getItemPath());
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::getItemPath()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::getItemPath()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::getItemPath()"); }
+	my_itemsIterator itm = my_items.find(_itemId);
+	assert(itm != my_items.end()); // Invalid item ID
+	return toVector(itm->second->getItemPath());
 }
 
 QString ak::ui::widget::tree::getItemPathString(
 	ak::ID							_itemId,
 	char							_delimiter
 ) {
-	try {
-		my_itemsIterator itm = my_items.find(_itemId);
-		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
-		return itm->second->getItemPathString(_delimiter);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::getItemPathString()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::getItemPathString()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::getItemPathString()"); }
+	my_itemsIterator itm = my_items.find(_itemId);
+	assert(itm != my_items.end()); // Invalid item ID
+	return itm->second->getItemPathString(_delimiter);
 }
 
 ak::ID ak::ui::widget::tree::getItemID(
 	const QString &					_itemPath,
 	char							_delimiter
 ) {
-	try {
-		if (_itemPath.length() == 0) { throw ak::Exception("No item path provided", "Check item path"); }
-		QStringList lst = _itemPath.split(_delimiter);
-		assert(lst.count() > 0); // split error
-		for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
-			if (itm->second->text(0) == lst.at(0)) {
-				if (lst.count() == 1) { return itm->second->id(); }
-				return itm->second->getItemID(lst, 1);
-			}
+	assert(_itemPath.length() != 0); // No item path provided
+	QStringList lst = _itemPath.split(_delimiter);
+	assert(lst.count() > 0); // split error
+	for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
+		if (itm->second->text(0) == lst.at(0)) {
+			if (lst.count() == 1) { return itm->second->id(); }
+			return itm->second->getItemID(lst, 1);
 		}
-		return ak::invalidID;
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::getItemID()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::getItemID()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::getItemID()"); }
+	return ak::invalidID;
 }
 
 QString ak::ui::widget::tree::getItemText(
 	ak::ID							_itemId
 ) {
-	try {
-		my_itemsIterator itm = my_items.find(_itemId);
-		if (itm == my_items.end()) { throw ak::Exception("Invalid ID", "Check item ID"); }
-		return itm->second->text(0);
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::getItemText()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::getItemText()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::getItemText()"); }
+	my_itemsIterator itm = my_items.find(_itemId);
+	assert(itm != my_items.end()); // Invalid item ID
+	return itm->second->text(0);
 }
 
 bool ak::ui::widget::tree::enabled() const { return my_tree->isEnabled(); }
@@ -519,45 +457,30 @@ bool ak::ui::widget::tree::autoExpandSelectedItemsEnabled(void) const { return m
 void ak::ui::widget::tree::raiseKeyEvent(
 	ui::core::keyType				_key,
 	bool							_keyDown
-) { 
-	try {
-		if (_keyDown) { my_messenger->sendMessage(my_uid, ak::core::eventType::eKeyPressed, 0, _key); }
-		else { my_messenger->sendMessage(my_uid, ak::core::eventType::eKeyReleased, 0, _key); }
-	}
-	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::raiseKeyPressedEvent()"); }
-	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::raiseKeyPressedEvent()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::raiseKeyPressedEvent()"); }
+) {
+	if (_keyDown) { my_messenger->sendMessage(my_uid, ak::core::eventType::eKeyPressed, 0, _key); }
+	else { my_messenger->sendMessage(my_uid, ak::core::eventType::eKeyReleased, 0, _key); }
 }
 
 void ak::ui::widget::tree::performFilterTextChanged(void) {
-	try {
-		if (my_filterRefreshOnChange) { performFilterEnterPressed(); }
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::performFilterTextChanged()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::performFilterTextChanged()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::performFilterTextChanged()"); }
+	if (my_filterRefreshOnChange) { performFilterEnterPressed(); }
 }
 
 void ak::ui::widget::tree::performFilterEnterPressed(void) {
-	try {
-		QString filter = my_filter->text();
-		if (filter.length() == 0) {
-			// Show all items
-			for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) { itm->second->setHidden(false); }
-		}
-		else {
-			// Check filter
-			Qt::CaseSensitivity sens = Qt::CaseSensitivity::CaseInsensitive;
-			if (my_filterCaseSensitive) { sens = Qt::CaseSensitivity::CaseSensitive; }
-			for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
-				if (itm->second->text(0).toLower().contains(filter, sens)) { itm->second->setVisible(true); }
-				else { itm->second->setHidden(true); }
-			}
+	QString filter = my_filter->text();
+	if (filter.length() == 0) {
+		// Show all items
+		for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) { itm->second->setHidden(false); }
+	}
+	else {
+		// Check filter
+		Qt::CaseSensitivity sens = Qt::CaseSensitivity::CaseInsensitive;
+		if (my_filterCaseSensitive) { sens = Qt::CaseSensitivity::CaseSensitive; }
+		for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
+			if (itm->second->text(0).toLower().contains(filter, sens)) { itm->second->setVisible(true); }
+			else { itm->second->setHidden(true); }
 		}
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::performFilterEnterPressed()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::performFilterEnterPressed()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::performFilterEnterPressed()"); }
 }
 
 void ak::ui::widget::tree::raiseItemEvent(
@@ -565,81 +488,70 @@ void ak::ui::widget::tree::raiseItemEvent(
 	ak::core::eventType				_eventType,
 	int								_info2
 ) {
-	try {
-		switch (_eventType)
-		{
-		case ak::core::eventType::eDestroyed: my_messenger->sendMessage(my_uid, ak::core::eventType::eDestroyed, 0, 0); return;
-		case ak::core::eventType::eActivated: break;
-		case ak::core::eventType::eChanged: break;
-		case ak::core::eventType::eClicked: break;
-		case ak::core::eventType::eCollpased: break;
-		case ak::core::eventType::eDoubleClicked: break;
-		case ak::core::eventType::eFocused: break;
-		case ak::core::eventType::eExpanded: break;
-		case ak::core::eventType::eLocationChanged: break;
-		default: throw ak::Exception("Invalid event type", "Check event type"); break;
-		}
-
-		// Check item id (id only not required for destroyed message)
-
-		if (_eventType == ak::core::eCollpased) {
-			my_itemsIterator itm = my_items.find(_itemId);
-			assert(itm != my_items.end());
-			itm->second->collapse();
-		}
-
-		my_messenger->sendMessage(my_uid, _eventType, _itemId, _info2);
-		return;
+	switch (_eventType)
+	{
+	case ak::core::eventType::eDestroyed: my_messenger->sendMessage(my_uid, ak::core::eventType::eDestroyed, 0, 0); return;
+	case ak::core::eventType::eActivated: break;
+	case ak::core::eventType::eChanged: break;
+	case ak::core::eventType::eClicked: break;
+	case ak::core::eventType::eCollpased: break;
+	case ak::core::eventType::eDoubleClicked: break;
+	case ak::core::eventType::eFocused: break;
+	case ak::core::eventType::eExpanded: break;
+	case ak::core::eventType::eLocationChanged: break;
+	default:
+		assert(0); // Invalid event type
+		break;
 	}
-	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::raiseItemEvent()"); }
-	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::raiseItemEvent()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::raiseItemEvent()"); }
+
+	// Check item id (id only not required for destroyed message)
+
+	if (_eventType == ak::core::eCollpased) {
+		my_itemsIterator itm = my_items.find(_itemId);
+		assert(itm != my_items.end());
+		itm->second->collapse();
+	}
+
+	my_messenger->sendMessage(my_uid, _eventType, _itemId, _info2);
+	return;
 }
 
 void ak::ui::widget::tree::raiseLeaveEvent(void) {
-	try { my_messenger->sendMessage(my_uid, ak::core::eFocusLeft, 0, 0); }
-	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::raiseLeaveEvent()"); }
-	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::raiseLeaveEvent()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::raiseLeaveEvent()"); }
+	my_messenger->sendMessage(my_uid, ak::core::eFocusLeft, 0, 0);
 }
 
 void ak::ui::widget::tree::selectionChangedEvent(
 	bool							_sendMessage
 ) {
-	try {
-		if (my_selectAndDeselectChildren) {
-			my_treeSignalLinker->disable();
-			// Get selected items
-			QList<QTreeWidgetItem *> selected = my_tree->selectedItems();
-			// Select childs of selected items
-			for (QTreeWidgetItem * itm : selected) {
-				// Cast item
-				ak::ui::qt::treeItem * i = nullptr;
-				i = dynamic_cast<ak::ui::qt::treeItem *>(itm);
-				assert(i != nullptr); // Cast failed
-				i->setChildsSelected(true);
-				if (my_expandSelectedItems) { i->expandAllParents(false); }
-			}
-			my_treeSignalLinker->enable();
+	if (my_selectAndDeselectChildren) {
+		my_treeSignalLinker->disable();
+		// Get selected items
+		QList<QTreeWidgetItem *> selected = my_tree->selectedItems();
+		// Select childs of selected items
+		for (QTreeWidgetItem * itm : selected) {
+			// Cast item
+			ak::ui::qt::treeItem * i = nullptr;
+			i = dynamic_cast<ak::ui::qt::treeItem *>(itm);
+			assert(i != nullptr); // Cast failed
+			i->setChildsSelected(true);
+			if (my_expandSelectedItems) { i->expandAllParents(false); }
 		}
-		else if (my_expandSelectedItems) {
-			my_treeSignalLinker->disable();
-			// Get selected items
-			QList<QTreeWidgetItem *> selected = my_tree->selectedItems();
-			for (QTreeWidgetItem * itm : selected) {
-				// Cast item
-				ak::ui::qt::treeItem * i = nullptr;
-				i = dynamic_cast<ak::ui::qt::treeItem *>(itm);
-				assert(i != nullptr); // Cast failed
-				i->expandAllParents(false);
-			}
-			my_treeSignalLinker->enable();
-		}
-		if (_sendMessage) { my_messenger->sendMessage(my_uid, ak::core::eventType::eSelectionChanged); }
+		my_treeSignalLinker->enable();
 	}
-	catch (ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::selectionChangedEvent()"); }
-	catch (std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::selectionChangedEvent()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::selectionChangedEvent()"); }
+	else if (my_expandSelectedItems) {
+		my_treeSignalLinker->disable();
+		// Get selected items
+		QList<QTreeWidgetItem *> selected = my_tree->selectedItems();
+		for (QTreeWidgetItem * itm : selected) {
+			// Cast item
+			ak::ui::qt::treeItem * i = nullptr;
+			i = dynamic_cast<ak::ui::qt::treeItem *>(itm);
+			assert(i != nullptr); // Cast failed
+			i->expandAllParents(false);
+		}
+		my_treeSignalLinker->enable();
+	}
+	if (_sendMessage) { my_messenger->sendMessage(my_uid, ak::core::eventType::eSelectionChanged); }
 }
 
 // ###########################################################################################################################
@@ -649,25 +561,19 @@ ak::ui::qt::treeItem * ak::ui::widget::tree::createItem(
 	ak::ui::core::textAlignment		_textAlignment,
 	QIcon							_icon
 ) {
-	try {
-		// Create item
-		ak::ui::qt::treeItem * itm = nullptr;
-		itm = new ak::ui::qt::treeItem(my_currentId);
-		if (itm == nullptr) { throw ak::Exception("Failed to create", "Create tree item"); }
-		// Set params
-		itm->setTextAlignment(0, ak::ui::core::toQtAlignment(_textAlignment));
-		itm->setText(0, _text);
-		itm->setIcon(0, _icon);
-		//if (my_colorStyle != nullptr) {
-			//itm->setTextColor(0, my_colorStyle->getControlsMainForecolor().toQColor());
-			//itm->setBackgroundColor(0, my_colorStyle->getControlsMainBackcolor().toQColor());
-		//}
-		my_currentId++;
-		return itm;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::createItem()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::createItem()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::createItem()"); }
+	// Create item
+	ak::ui::qt::treeItem * itm = nullptr;
+	itm = new ak::ui::qt::treeItem(my_currentId);
+	// Set params
+	itm->setTextAlignment(0, ak::ui::core::toQtAlignment(_textAlignment));
+	itm->setText(0, _text);
+	itm->setIcon(0, _icon);
+	//if (my_colorStyle != nullptr) {
+		//itm->setTextColor(0, my_colorStyle->getControlsMainForecolor().toQColor());
+		//itm->setBackgroundColor(0, my_colorStyle->getControlsMainBackcolor().toQColor());
+	//}
+	my_currentId++;
+	return itm;
 }
 
 void ak::ui::widget::tree::memFree(void) {
@@ -697,23 +603,11 @@ void ak::ui::widget::tree::memFree(void) {
 void ak::ui::widget::tree::clearItem(
 	ak::ui::qt::treeItem *			_item
 ) {
-	try {
-		for (auto itm : _item->childs()) {
-			clearItem(_item);
-			my_items.erase(itm->id());
-			delete itm;
-		}
+	for (auto itm : _item->childs()) {
+		clearItem(_item);
+		my_items.erase(itm->id());
+		delete itm;
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::widget::tree::clearItem()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::widget::tree::clearItem()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::widget::tree::clearItem()"); }
 }
 
 // ###########################################################################################################################################
-
-void ak::ui::widget::tree::showMessage(const ak::Exception & _e) {
-	QMessageBox msg;
-	msg.setText(_e.what());
-	msg.setWindowTitle("Error");
-	msg.exec();
-}

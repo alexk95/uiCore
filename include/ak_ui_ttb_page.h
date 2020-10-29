@@ -47,7 +47,6 @@ namespace ak {
 			public:
 				page(
 					ak::messenger *				_messenger,
-					ak::uidManager *			_uidManager,
 					tt::Page *					_page,
 					const QString &				_text
 				);
@@ -75,14 +74,11 @@ namespace ak {
 				virtual void setColorStyle(
 					const ak::ui::colorStyle *			_colorStyle
 				) override;
-
-				//! @brief Returns the count of sub containers
-				virtual int subContainerCount(void) const override;
-
+				
 			private:
 				tt::Page *							my_page;
 				QString								my_text;
-				std::vector<ak::ui::ttb::group *>	my_groups;
+				//std::vector<ak::ui::ttb::group *>	my_groups;
 
 				// Block default constructor
 				page() = delete;

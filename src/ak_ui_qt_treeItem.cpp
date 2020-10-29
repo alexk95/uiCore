@@ -35,6 +35,7 @@ ak::ui::qt::treeItem::treeItem(
 	my_id(_newId), my_parent(_parent) {}
 
 ak::ui::qt::treeItem::~treeItem() {
+	A_OBJECT_DESTROYING
 	treeItem * dx = this;
 	QString txt = dx->text(0);
 	if (my_parent != nullptr) { my_parent->eraseChild(my_id); }

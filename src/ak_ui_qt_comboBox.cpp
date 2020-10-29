@@ -19,7 +19,7 @@
 ak::ui::qt::comboBox::comboBox(QWidget * _parent)
 	: QComboBox(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oComboBox) {}
 
-ak::ui::qt::comboBox::~comboBox() {}
+ak::ui::qt::comboBox::~comboBox() { A_OBJECT_DESTROYING }
 
 // #######################################################################################################
 // Event handling

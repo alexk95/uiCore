@@ -43,7 +43,6 @@ namespace ak {
 				//! @param _colorStyle The initial color style used in this paintable
 				ttbContainer(
 					ak::messenger *				_messenger,
-					ak::uidManager *			_uidManager,
 					ak::ui::core::objectType	_type,
 					const ak::ui::colorStyle *	_colorStyle = nullptr,
 					ak::UID						 _UID = ak::invalidUID,
@@ -53,11 +52,8 @@ namespace ak {
 				//! @brief Deconstructor
 				virtual ~ttbContainer();
 
-				//! @brief Returns the count of childs this container has
-				virtual int childCount(void) const;
-
 				//! @brief Returns the count of sub containers
-				virtual int subContainerCount(void) const = 0;
+				int subContainerCount(void) const;
 
 				//! @brief Will add the provided child to this container
 				//! @param _child The child to add
@@ -75,8 +71,6 @@ namespace ak {
 
 			protected:
 				ak::messenger *					my_messenger;
-				ak::uidManager *				my_uidManager;
-				std::vector<aObject *>			my_childs;
 				std::vector<ttbContainer *>		my_subContainer;
 
 			private:

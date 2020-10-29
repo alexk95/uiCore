@@ -21,33 +21,23 @@
 #include <ak_uidMangager.h>				// UID manager
 #include <ak_ui_colorStyle.h>			// colorStyle
 #include <ak_ui_core_aWidget.h>			// aWidget
+#include <ak_ui_qt_action.h>
 
  // TTB header (TabToolbar library)
 #include <TabToolbar/Group.h>			// tt::Group
-
-// Qt header
-#include <qaction.h>					// QAction
 
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::ttb::group::group(
 	ak::messenger *				_messenger,
-	ak::uidManager *			_uidManager,
 	tt::Group *					_group,
 	const QString &				_text
-) : ak::ui::core::ttbContainer(_messenger, _uidManager, ak::ui::core::objectType::oTabToolbarPage),
-	my_group(nullptr)
+) : ak::ui::core::ttbContainer(_messenger, ak::ui::core::objectType::oTabToolbarPage),
+	my_group(_group)
 {
-	try {
-		if (_group == nullptr) { throw ak::Exception("Is nullptr", "Check group"); }
-		if (_messenger == nullptr) { throw ak::Exception("Is nullptr", "Check messenger"); }
-		if (_uidManager == nullptr) { throw ak::Exception("Is nullptr", "Check UID manager"); }
-		my_group = _group;
-		my_text = _text;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::ttb::group::group()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::ttb::group::group()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::ttb::group::group()"); }
+	assert(my_group != nullptr); // Nullptr provided
+	assert(_messenger != nullptr); // Nullptr provided
+	my_text = _text;
 }
 
 ak::ui::ttb::group::~group() {
@@ -59,57 +49,42 @@ ak::ui::ttb::group::~group() {
 void ak::ui::ttb::group::addChild(
 	ak::ui::core::aObject *		_child
 ) {
-	try {
-		if (_child == nullptr) { throw ak::Exception("Is nullptr", "Check child"); }
-		if (_child->objectType() == ak::ui::core::objectType::oAction) {
-			// Cast action
-			QAction * ac = nullptr;
-			ac = dynamic_cast<QAction *>(_child);
-			if (ac == nullptr) { throw ak::Exception("Cast failed", "Check cast"); }
-			//Place action
-			my_group->AddAction(QToolButton::ToolButtonPopupMode::InstantPopup, ac);
-		}
-		else {
-			// Check child
-			if (!_child->isWidgetType()) { throw ak::Exception("Object is not widget type", "Check object type"); }
-			// Cast widget
-			ak::ui::core::aWidget * w = nullptr;
-			w = dynamic_cast<ak::ui::core::aWidget *>(_child);
-			if (w == nullptr) { throw ak::Exception("Cast failed", "Check cast"); }
-			// Place widget
-			my_group->AddWidget(w->widget());
-		}
-		// Store object0
-		my_childs.push_back(_child);
+	assert(_child != nullptr); // Nullptr provided
+	if (_child->objectType() == ak::ui::core::objectType::oAction) {
+		// Cast action
+		qt::action * ac = nullptr;
+		ac = dynamic_cast<qt::action *>(_child);
+		assert(ac != nullptr); // Wrong object type
+		//Place action
+		my_group->AddAction(ac->popupMode(), ac);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::ttb::group::addChild()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::ttb::group::addChild()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::ttb::group::addChild()"); }
+	else {
+		// Check child
+		assert(_child->isWidgetType()); // Provided object es no action and no widget
+		// Cast widget
+		ak::ui::core::aWidget * w = nullptr;
+		w = dynamic_cast<ak::ui::core::aWidget *>(_child);
+		assert(w != nullptr); // Cast failed
+		// Place widget
+		my_group->AddWidget(w->widget());
+	}
+	// Store object0
+	my_childObjects.insert_or_assign(_child->uid(), _child);
 }
 
 ak::ui::core::ttbContainer * ak::ui::ttb::group::createSubContainer(
 	const QString &				_text
 ) {
-	try {
-		subGroup * obj = new ak::ui::ttb::subGroup(my_messenger, my_uidManager, my_group->AddSubGroup(tt::SubGroup::Align::Yes), _text);
-		my_subgroups.push_back(obj);
-		return obj;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::ttb::group::createSubContainer()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::ttb::group::createSubContainer()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::ttb::group::createSubContainer()"); }
+	subGroup * obj = new ak::ui::ttb::subGroup(my_messenger, my_group->AddSubGroup(tt::SubGroup::Align::Yes), _text);
+	my_subContainer.push_back(obj);
+	return obj;
 }
 
 void ak::ui::ttb::group::destroyAllSubContainer(void) {
-	try {
-		for (int i = 0; i < my_subgroups.size(); i++) {
-			subGroup * obj = my_subgroups.at(i);
-			delete obj;
-		}
+	for (int i = 0; i < my_subContainer.size(); i++) {
+		ui::core::ttbContainer * obj = my_subContainer.at(i);
+		delete obj;
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::ttb::group::createSubContainer()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::ttb::group::createSubContainer()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::ttb::group::createSubContainer()"); }
 }
 
 void ak::ui::ttb::group::setColorStyle(
@@ -127,5 +102,3 @@ void ak::ui::ttb::group::setColorStyle(
 			TYPE_COLORAREA::caBackgroundColorControls));
 	}
 }
-
-int ak::ui::ttb::group::subContainerCount(void) const { return my_subgroups.size(); }

@@ -135,7 +135,10 @@ ak::ui::widget::welcomeScreen::welcomeScreen(
 
 }
 
-ak::ui::widget::welcomeScreen::~welcomeScreen() { memFree(); }
+ak::ui::widget::welcomeScreen::~welcomeScreen() {
+	A_OBJECT_DESTROYING
+	memFree();
+}
 
 QWidget * ak::ui::widget::welcomeScreen::widget(void) { return my_screen.Central.widget; }
 

@@ -23,7 +23,7 @@ ak::ui::qt::table::table(QWidget * _parent)
 ak::ui::qt::table::table(int _rows, int _columns, QWidget * _parent)
 : QTableWidget(_rows, _columns, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTable) {}
 
-ak::ui::qt::table::~table() {}
+ak::ui::qt::table::~table() { A_OBJECT_DESTROYING }
 
 // #######################################################################################################
 // Event handling

@@ -18,6 +18,14 @@
 // Qt header
 #include <qstring.h>				// QString
 
+// C++ header
+#include <map>
+
+//! Use to notify the parent object that this object is currently destroying
+#define A_OBJECT_DESTROYING_WITHOWNER if (my_owner != nullptr) { ak::ui::core::aObject * obj = my_owner->parentObject(); if (obj != nullptr) { obj->removeChildObject(my_owner); } }
+#define A_OBJECT_DESTROYING_WITHPARENT if (my_parentObject != nullptr) { my_parentObject->removeChildObject(this); my_parentObject = nullptr; }
+#define A_OBJECT_DESTROYING A_OBJECT_DESTROYING_WITHOWNER else A_OBJECT_DESTROYING_WITHPARENT
+
 namespace ak {
 	namespace ui {
 		namespace core {
@@ -53,6 +61,18 @@ namespace ak {
 
 				// ################################################################################
 
+				//! @brief Will remove the child from this object (not destroy it)
+				//! This function should be called from the deconstructor of a child
+				//! @param _child The child to remove
+				virtual void removeChildObject(
+					aObject *								_child
+				);
+
+				//! @brief Will add the child to this object
+				//! @param _child The child to add
+				virtual void addChildObject(
+					aObject *								_child
+				);
 
 				//! @brief Will set the alias for this object
 				//! @param _alias The alias to set
@@ -60,8 +80,36 @@ namespace ak {
 					const QString &							_alias
 				);
 
+				//! @brief Will set the parent object of this object
+				virtual void setParentObject(
+					aObject *								_parentObject
+				);
+
+				// ################################################################################
+
 				//! @brief Will return the alias of this object
 				QString alias(void) const;
+
+				//! @brief Will return a pointer to the parent object
+				aObject * parentObject(void) const;
+
+				//! @brief Will return the count of sub objects
+				int childObjectCount(void) const;
+
+				//! @brief Will return the child with the specified UID
+				//! @param _childUID The UID of the child object
+				aObject * childObject(
+					ak::UID									_childUID
+				);
+
+				//! @brief Will set the owner of this object
+				//! @param _object The to set as owner
+				void setOwner(
+					aObject *								_object
+				);
+
+				//! @brief Will return the owner of this object
+				aObject * owner(void) const;
 
 				// ################################################################################
 
@@ -101,6 +149,11 @@ namespace ak {
 				int									my_references;		//! The objects references
 				ak::ui::core::objectType			my_objectType;		//! The object type of this object
 				QString								my_alias;			//! The alias of this object
+				aObject *							my_parentObject;
+				aObject *							my_owner;
+				std::map<ak::UID, aObject *>		my_childObjects;
+				typedef std::map<ak::UID,
+					aObject *>::iterator			my_childObjectsIterator;
 
 			private:
 				// Block default constructor

@@ -24,6 +24,7 @@ ak::ui::qt::list::list()
 {}
 
 ak::ui::qt::list::~list() {
+	A_OBJECT_DESTROYING
 	memFree();
 }
 

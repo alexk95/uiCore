@@ -25,7 +25,7 @@ ak::ui::qt::tabView::tabView(
 ) : QTabWidget(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTabView, _colorStyle)
 {}
 
-ak::ui::qt::tabView::~tabView() {}
+ak::ui::qt::tabView::~tabView() { A_OBJECT_DESTROYING }
 
 // #######################################################################################################
 // Base class functions

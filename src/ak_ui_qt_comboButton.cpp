@@ -43,7 +43,7 @@ ak::ui::qt::comboButton::comboButton(
 }
 
 //! @brief Deconstructor
-ak::ui::qt::comboButton::~comboButton() { clearItems(); }
+ak::ui::qt::comboButton::~comboButton() { A_OBJECT_DESTROYING clearItems(); }
 
 // #######################################################################################################
 // Event handling

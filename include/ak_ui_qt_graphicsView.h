@@ -11,7 +11,11 @@
 
 #pragma once
 
-#include <qgraphicsview.h>
+// AK header
+#include <ak_ui_core_aWidget.h>
+
+// Qt header
+#include <qgraphicsview.h>		// Base class
 
 class QResizeEvent;
 
@@ -19,11 +23,17 @@ namespace ak {
 	namespace ui {
 		namespace qt {
 
-			class graphicsView : public QGraphicsView {
+			class graphicsView : public QGraphicsView, ui::core::aWidget {
 				Q_OBJECT
 			public:
 				graphicsView();
 				virtual ~graphicsView();
+
+				virtual QWidget * widget(void) override;
+
+				virtual void setColorStyle(
+					const ak::ui::colorStyle *					_colorStyle
+				) override;
 
 				virtual void resizeEvent(QResizeEvent *event) override;
 

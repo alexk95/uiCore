@@ -563,7 +563,20 @@ void ak::uiAPI::dock::setCentralWidget(
 	actualWidget = dynamic_cast<ui::core::aWidget *>(my_objManager->object(_widgetUID));
 	assert(actualWidget != nullptr); // Invalid object type
 	
+	QWidget * currentCentralWidget = actualDock->widget();
+	if (currentCentralWidget != nullptr) {
+		ui::core::aObject * actualCentralObject = nullptr;
+		actualCentralObject = dynamic_cast<ui::core::aObject *>(currentCentralWidget);
+		if (actualCentralObject != nullptr) {
+			actualCentralObject->setParentObject(nullptr);
+		}
+	}
+
 	actualDock->setWidget(actualWidget->widget());
+
+	// Get the objects to know each other
+	actualWidget->setParentObject(actualDock);
+	actualDock->addChildObject(actualWidget);
 }
 
 void ak::uiAPI::dock::setCentralWidget(

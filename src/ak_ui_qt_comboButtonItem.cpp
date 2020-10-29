@@ -38,4 +38,4 @@ ak::ui::qt::comboButtonItem & ak::ui::qt::comboButtonItem::operator = (const ak:
 	return *this;
 }
 
-ak::ui::qt::comboButtonItem::~comboButtonItem() {}
+ak::ui::qt::comboButtonItem::~comboButtonItem() { A_OBJECT_DESTROYING }

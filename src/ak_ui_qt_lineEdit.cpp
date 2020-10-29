@@ -20,7 +20,7 @@ ak::ui::qt::lineEdit::lineEdit(QWidget * _parent)
 ak::ui::qt::lineEdit::lineEdit(const QString & _text, QWidget * _parent)
 	: QLineEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oLineEdit), my_autoScrollToBottom(false) {}
 
-ak::ui::qt::lineEdit::~lineEdit() {}
+ak::ui::qt::lineEdit::~lineEdit() { A_OBJECT_DESTROYING }
 
 // #######################################################################################################
 // Event handling

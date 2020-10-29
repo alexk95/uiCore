@@ -81,7 +81,7 @@ ak::ui::widget::propertyGrid::propertyGrid(
 }
 
 ak::ui::widget::propertyGrid::~propertyGrid() {
-
+	A_OBJECT_DESTROYING
 }
 
 // ##############################################################################################################

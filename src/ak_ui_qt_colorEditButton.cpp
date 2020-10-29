@@ -70,6 +70,8 @@ ak::ui::qt::colorEditButton::colorEditButton(
 }
 
 ak::ui::qt::colorEditButton::~colorEditButton() {
+	A_OBJECT_DESTROYING
+
 	if (my_button != nullptr) { delete my_button; my_button = nullptr; }
 	if (my_layout != nullptr) { delete my_layout; my_layout = nullptr; }
 	if (my_view != nullptr) { delete my_view; my_view = nullptr; }

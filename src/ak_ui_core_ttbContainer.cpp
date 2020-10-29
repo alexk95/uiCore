@@ -18,27 +18,17 @@
 
 ak::ui::core::ttbContainer::ttbContainer(
 	ak::messenger *				_messenger,
-	ak::uidManager *			_uidManager,
 	ak::ui::core::objectType	_type,
 	const ak::ui::colorStyle *	_colorStyle,
 	ak::UID						_uid,
 	int							_references
 ) : ak::ui::core::aPaintable(_type, _colorStyle, _uid, _references),
-	my_messenger(nullptr),
-	my_uidManager(nullptr)
+my_messenger(nullptr)
 {
-	try {
-		if (_messenger == nullptr) { throw ak::Exception("Is nullptr", "Check messenger"); }
-		if (_uidManager == nullptr) { throw ak::Exception("Is nullptr", "Check UID manager"); }
-		my_messenger = _messenger;
-		my_uidManager = _uidManager;
-		my_uid = my_uidManager->getId();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::core::ttbContainer::ttbContainer()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::core::ttbContainer::ttbContainer()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::core::ttbContainer::ttbContainer()"); }
+	assert(_messenger != nullptr); // Is nullptr
+	my_messenger = _messenger;
 }
 
 ak::ui::core::ttbContainer::~ttbContainer() {}
 
-int ak::ui::core::ttbContainer::childCount(void) const { return my_childs.size(); }
+int ak::ui::core::ttbContainer::subContainerCount(void) const { return my_subContainer.size(); }

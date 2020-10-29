@@ -29,7 +29,7 @@ ak::ui::qt::tree::tree(
 	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
 }
 
-ak::ui::qt::tree::~tree() {}
+ak::ui::qt::tree::~tree() { A_OBJECT_DESTROYING }
 
 // #######################################################################################################
 // Event handling

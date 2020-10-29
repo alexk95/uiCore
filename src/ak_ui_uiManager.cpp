@@ -144,7 +144,7 @@ ak::ui::uiManager::uiManager(
 }
 
 ak::ui::uiManager::~uiManager() {
-	
+	A_OBJECT_DESTROYING
 	// Delete the timer signal linker first, so all objects will be disconnected propertly
 	if (my_timerSignalLinker != nullptr) { delete my_timerSignalLinker; my_timerSignalLinker = nullptr; }
 
@@ -200,6 +200,14 @@ void ak::ui::uiManager::setColorStyle(
 		//itm->second->setColorStyle(my_colorStyle);
 	}
 
+}
+
+void ak::ui::uiManager::removeChildObject(
+	aObject *								_child
+) {
+	ui::core::aObject::removeChildObject(_child);
+	my_window->takeCentralWidget();
+	my_window->setCentralWidget(nullptr);
 }
 
 void ak::ui::uiManager::setAlias(
@@ -520,39 +528,23 @@ int ak::ui::uiManager::getHideStatusObjectDelayTimerInterval(void) const {
 void ak::ui::uiManager::setTabToolBarVisible(
 	bool						_vis
 ) {
-	try {
-		my_tabToolBar->setVisible(_vis);
-
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::setTabToolBarVisible()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::setTabToolBarVisible()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::setTabToolBarVisible()"); }
+	my_tabToolBar->setVisible(_vis);
 }
 
 ak::ui::ttb::page * ak::ui::uiManager::createTabToolbarSubContainer(
 	const QString &				_text
 ) {
-	try {
-		tt::Page * page = my_tabToolBar->AddPage(_text);
-		ak::ui::ttb::page * p = new ak::ui::ttb::page(my_messenger, my_uidManager, page, _text);
-		if (my_colorStyle != nullptr) { p->setColorStyle(my_colorStyle); }
-		return p;
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::createTabToolbarSubContainer()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::createTabToolbarSubContainer()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::createTabToolbarSubContainer()"); }
+	tt::Page * page = my_tabToolBar->AddPage(_text);
+	ak::ui::ttb::page * p = new ak::ui::ttb::page(my_messenger, page, _text);
+	if (my_colorStyle != nullptr) { p->setColorStyle(my_colorStyle); }
+	return p;
 }
 
 void ak::ui::uiManager::addTabToolbarWidget(
 	ak::UID						_parentUid,
 	ak::UID						_objectUid
 ) {
-	try {
-		assert(0); // Not implemented yet
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::addTabToolbarWidget()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::addTabToolbarWidget()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::addTabToolbarWidget()"); }
+	assert(0); // Not implemented yet
 }
 
 ak::ID ak::ui::uiManager::currentTabToolbarTab(void) const { return my_tabToolBar->CurrentTab(); }

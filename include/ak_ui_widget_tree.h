@@ -385,8 +385,6 @@ namespace ak {
 				bool										my_selectAndDeselectChildren;
 				bool										my_expandSelectedItems;
 
-				void showMessage(const ak::Exception &);
-
 			};
 
 		} // namespace widget

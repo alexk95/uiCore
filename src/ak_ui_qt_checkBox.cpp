@@ -30,7 +30,7 @@ ak::ui::qt::checkBox::checkBox(
 	QWidget *								_parent
 ) : QCheckBox(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oCheckBox) {}
 
-ak::ui::qt::checkBox::~checkBox() {}
+ak::ui::qt::checkBox::~checkBox() { A_OBJECT_DESTROYING }
 
 // #######################################################################################################
 

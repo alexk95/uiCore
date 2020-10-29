@@ -29,7 +29,7 @@ ak::ui::qt::action::action(const QIcon & _icon, const QString & _text, QToolButt
 	setText(_text); setIcon(_icon);
 }
 
-ak::ui::qt::action::~action() {}
+ak::ui::qt::action::~action() { A_OBJECT_DESTROYING }
 
 void ak::ui::qt::action::setColorStyle(
 	const ak::ui::colorStyle *					_colorStyle

@@ -127,6 +127,8 @@ ak::ui::dialog::logIn::logIn(
 }
 
 ak::ui::dialog::logIn::~logIn() {
+	A_OBJECT_DESTROYING
+
 	if (my_inputPassword.label != nullptr) { delete my_inputPassword.label; }
 	if (my_inputPassword.edit != nullptr) { delete my_inputPassword.edit; }
 

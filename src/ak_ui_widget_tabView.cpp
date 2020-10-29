@@ -48,6 +48,7 @@ my_tabView(nullptr)
 }
 
 ak::ui::widget::tabView::~tabView() {
+	A_OBJECT_DESTROYING
 	my_messenger->sendMessage(my_uid, ak::core::eventType::eDestroyed);
 
 	disconnect(my_tabView, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentTabChanged(int)));

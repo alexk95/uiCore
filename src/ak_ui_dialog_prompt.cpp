@@ -112,6 +112,8 @@ ak::ui::dialog::prompt::prompt(
 }
 
 ak::ui::dialog::prompt::~prompt() {
+	A_OBJECT_DESTROYING
+
 	if (my_label != nullptr) { delete my_label; }
 
 	if (my_infoLayout != nullptr) { delete my_layout; }

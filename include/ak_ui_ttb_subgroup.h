@@ -45,7 +45,6 @@ namespace ak {
 			public:
 				subGroup(
 					ak::messenger *				_messenger,
-					ak::uidManager *			_uidManager,
 					tt::SubGroup *				_group,
 					const QString &				_text
 				);
@@ -73,10 +72,7 @@ namespace ak {
 				virtual void setColorStyle(
 					const ak::ui::colorStyle *			_colorStyle
 				) override;
-
-				//! @brief Returns the count of sub containers
-				virtual int subContainerCount(void) const override;
-
+				
 			private:
 				tt::SubGroup *			my_subGroup;
 				QString					my_text;

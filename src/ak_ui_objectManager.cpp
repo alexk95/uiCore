@@ -396,6 +396,7 @@ ak::UID ak::ui::objectManager::createTabToolBarSubContainer(
 	// Create subcontainer
 	ak::ui::core::ttbContainer * sub = cont->createSubContainer(_text);
 	assert(sub != nullptr); // Invalid information received
+	sub->setUid(my_uidManager->getId());
 	// Store data
 	if (my_currentColorStyle != nullptr) { sub->setColorStyle(my_currentColorStyle); }
 	my_mapObjects.insert_or_assign(sub->uid(), sub);
@@ -420,6 +421,7 @@ ak::UID ak::ui::objectManager::createTabToolBarPage(
 	// Create container
 	ak::ui::core::ttbContainer * cont = ui->createTabToolbarSubContainer(_text);
 	assert(cont != nullptr); // Invalid information received
+	cont->setUid(my_uidManager->getId());
 	// Store data
 	if (my_currentColorStyle != nullptr) { cont->setColorStyle(my_currentColorStyle); }
 	my_mapObjects.insert_or_assign(cont->uid(), cont);
@@ -489,6 +491,7 @@ void ak::ui::objectManager::destroy(
 	ui::core::aObject * actualObject = object->second;
 
 	if (_ignoreIfObjectHasChildObjects) {
+		if (actualObject->childObjectCount() != 0) { return; }
 		switch (actualObject->objectType())
 		{
 		case ui::core::objectType::oTabToolbarPage:
@@ -498,11 +501,9 @@ void ak::ui::objectManager::destroy(
 			ui::core::ttbContainer * container = nullptr;
 			container = dynamic_cast<ui::core::ttbContainer *>(actualObject);
 			assert(container != nullptr); // Cast failed
-			if (container->childCount() != 0 || container->subContainerCount() != 0) { return; }
+			if (container->subContainerCount() != 0) { return; }
 		}
 		break;
-		default:
-			break;
 		}
 	}
 
