@@ -19,6 +19,9 @@
 #include <ak_globalDataTypes.h>		// UID and ID type
 #include <ak_ui_core.h>				// objectType
 
+#define TTB_CONT_DEL_PARENTCHECK assert(my_parentObject != nullptr); my_parentObject->removeChildObject(this);
+#define TTB_CONTAINER_DESTROYING TTB_CONT_DEL_PARENTCHECK
+
 namespace ak {
 
 	// Forward declaration

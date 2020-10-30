@@ -39,13 +39,15 @@ public:
     Group*   AddGroup(const QString& name);
     void     hide();
     void     show();
+	int		 getIndex(void) const;	// Created by Alexander Kuester
+	void     setIndex(int index);	// Created by Alexander Kuester
 
 signals:
     void     Hiding(int index);
     void     Showing(int index);
 
 private:
-    const int    myIndex;
+    int		     myIndex;			// Changed by Alexander Kuester
     QHBoxLayout* innerLayout;
     QWidget*     innerArea;
 };

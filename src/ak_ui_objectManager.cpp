@@ -401,6 +401,10 @@ ak::UID ak::ui::objectManager::createTabToolBarSubContainer(
 	if (my_currentColorStyle != nullptr) { sub->setColorStyle(my_currentColorStyle); }
 	my_mapObjects.insert_or_assign(sub->uid(), sub);
 	addCreatedUid(_creatorUid, sub->uid());
+	
+	sub->setParentObject(cont);
+	cont->addChildObject(sub);
+	
 	return sub->uid();
 }
 
@@ -426,6 +430,10 @@ ak::UID ak::ui::objectManager::createTabToolBarPage(
 	if (my_currentColorStyle != nullptr) { cont->setColorStyle(my_currentColorStyle); }
 	my_mapObjects.insert_or_assign(cont->uid(), cont);
 	addCreatedUid(_creatorUid, cont->uid());
+
+	cont->setParentObject(ui);
+	ui->addChildObject(cont);
+
 	return cont->uid();
 }
 

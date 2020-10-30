@@ -61,6 +61,10 @@ private:
     QFrame*    ConstructInnerFrame(int spacing);
 
     QVBoxLayout* innerLayout;
+
+	std::map<QAction *, QToolButton *>	actionButtonMap;
+	typedef std::map<QAction *,
+		QToolButton *>::iterator		actionButtonMapIterator;
 };
 
 }

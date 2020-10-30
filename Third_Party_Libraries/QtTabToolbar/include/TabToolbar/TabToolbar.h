@@ -41,7 +41,7 @@ public:
     virtual ~TabToolbar();
 
     void     SetSpecialTabEnabled(bool enabled);
-    Page*    AddPage(const QString& pageName);
+    Page*    AddPage(const QString& pageName);						// Changed by Alexander Kuester
     QAction* HideAction();
     void     AddCornerAction(QAction* action);
     void     SetStyle(const QString& styleName);					// Changed by Alexander Kuester
@@ -55,6 +55,8 @@ public:
     void     SetTabBarStylesheet(const QString& styleSheet);		// Created by Alexander Kuester
 	void     SetTabBarTabStylesheet(const QString& styleSheet);		// Created by Alexander Kuester
 	void     SetHideButtonStylesheet(const QString& styleSheet);	// Created by Alexander Kuester
+	void	 DestroyPage(int index);								// Created by Alexander Kuester
+	void	 DestroyPage(Page * page);								// Created by Alexander Kuester
 
 signals:
     void     Minimized();
@@ -93,6 +95,8 @@ private:
     bool           isShown = true;
     QTimer         tempShowTimer;
     std::unique_ptr<StyleParams> style;
+
+	std::vector<Page *>	pages;
 
     friend class Page;
 };

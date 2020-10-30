@@ -102,6 +102,10 @@ Group* Page::AddGroup(const QString& name)
     return grp;
 }
 
+int Page::getIndex(void) const { return myIndex; }
+
+void Page::setIndex(int index) { myIndex = index; }
+
 void Page::hide()
 {
     emit Hiding(myIndex);

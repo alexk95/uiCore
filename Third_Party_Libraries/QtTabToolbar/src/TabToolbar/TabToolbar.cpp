@@ -28,6 +28,7 @@
 #include <TabToolbar/Page.h>
 #include <TabToolbar/Styles.h>
 #include <TabToolbar/StyleTools.h>
+#include <cassert>
 
 using namespace tt;
 
@@ -299,6 +300,7 @@ Page* TabToolbar::AddPage(const QString& pageName)
     QObject::connect(page, &Page::Hiding, this, &TabToolbar::HideTab);
     QObject::connect(page, &Page::Showing, this, &TabToolbar::ShowTab);
     tabBar->addTab(page, pageName);
+	pages.push_back(page);
     return page;
 }
 
@@ -320,4 +322,18 @@ void TabToolbar::SetTabBarTabStylesheet(const QString& styleSheet) {
 // Created by Alexander Kuester
 void TabToolbar::SetHideButtonStylesheet(const QString& styleSheet) {
 	hideButton->setStyleSheet(styleSheet);
+}
+
+// Created by Alexander Kuester
+void TabToolbar::DestroyPage(int index) {
+	assert(index >= 0 && index < pages.size());	// Index out of range
+	pages.erase(pages.begin() + index);
+	for (int i = index; i < pages.size(); i++) { pages.at(i)->setIndex(i); }
+	tabBar->removeTab(index);
+}
+
+// Created by Alexander Kuester
+void TabToolbar::DestroyPage(Page * page) {
+	assert(page != nullptr); // Nullptr provided
+	DestroyPage(page->getIndex());
 }

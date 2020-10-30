@@ -28,7 +28,7 @@ ak::ui::ttb::subGroup::subGroup(
 	ak::messenger *				_messenger,
 	tt::SubGroup *				_group,
 	const QString &				_text
-) : ak::ui::core::ttbContainer(_messenger, ak::ui::core::objectType::oTabToolbarPage),
+) : ak::ui::core::ttbContainer(_messenger, ak::ui::core::objectType::oTabToolbarSubgroup),
 my_subGroup(_group)
 {
 	assert(my_subGroup != nullptr); // Nullptr provided
@@ -36,7 +36,11 @@ my_subGroup(_group)
 	my_text = _text;
 }
 
-ak::ui::ttb::subGroup::~subGroup() { delete my_subGroup; }
+ak::ui::ttb::subGroup::~subGroup() {
+	TTB_CONTAINER_DESTROYING
+		
+	delete my_subGroup;
+}
 
 void ak::ui::ttb::subGroup::addChild(
 	ak::ui::core::aObject *		_child
@@ -60,6 +64,8 @@ void ak::ui::ttb::subGroup::addChild(
 		// Place widget
 		my_subGroup->AddWidget(w->widget());
 	}
+	_child->setParentObject(this);
+	addChildObject(_child);
 	// Store object0
 	my_childObjects.insert_or_assign(_child->uid(), _child);
 }
@@ -78,4 +84,18 @@ void ak::ui::ttb::subGroup::setColorStyle(
 ) {
 		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;
+}
+
+void ak::ui::ttb::subGroup::removeChildObject(
+	aObject *								_child
+) {
+	assert(_child != nullptr); // Nullptr provided
+	ak::ui::core::aObject::removeChildObject(_child);
+	
+	if (_child->objectType() == ui::core::objectType::oAction) {
+		ui::qt::action * action = nullptr;
+		action = dynamic_cast<ui::qt::action *>(_child);
+		assert(action != nullptr);	// Cast failed
+		my_subGroup->removeAction(action);
+	}
 }

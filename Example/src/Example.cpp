@@ -164,6 +164,13 @@ void Example::eventCallback(
 					my_notifier->enable();
 				}
 				else if (_sender == my_ui.ttb_aTest) {
+
+					for (auto itm : my_testingData) {
+						ak::uiAPI::object::destroy(itm, true);
+					}
+
+					ak::uiAPI::action::setEnabled(my_ui.ttb_aTest, false);
+					return;
 					ak::uiAPI::action::setEnabled(my_ui.ttb_aTest, false);
 					ak::uiAPI::action::setEnabled(my_ui.ttb_aTest2, true);
 					ak::uiAPI::dock::setVisible(my_ui.dockProperties, false);
@@ -258,9 +265,6 @@ void Example::setupUi(void) {
 			// Setup tab toolbar
 			ak::uiAPI::window::setTabToolBarVisible(my_ui.mainWindow);
 			my_ui.ttb_pFile = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "File");
-			ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester1");
-			ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester2");
-			ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester3");
 			my_ui.ttb_gNONE = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.ttb_pFile, "Test");
 			my_ui.ttb_aExit = ak::uiAPI::createAction(my_uid, "Exit", "ExitAppBlue", "32");
 			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
@@ -350,6 +354,28 @@ void Example::setupUi(void) {
 			ak::uiAPI::window::setStatusLabelVisible(my_ui.mainWindow, true);
 			ak::uiAPI::window::setStatusProgressVisible(my_ui.mainWindow, true);
 			ak::uiAPI::window::setStatusLabelVisible(my_ui.mainWindow, false);
+
+			ak::UID p = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester1");
+			ak::UID g1 = ak::uiAPI::createTabToolBarSubContainer(my_uid, p, "Tester1");
+			ak::UID g2 = ak::uiAPI::createTabToolBarSubContainer(my_uid, p, "Tester2");
+			ak::UID a1 = ak::uiAPI::createAction(my_uid, "A1", "Test", "32");
+			ak::UID a2 = ak::uiAPI::createAction(my_uid, "A2", "Test", "32");
+			ak::UID a3 = ak::uiAPI::createAction(my_uid, "A3", "Test", "32");
+			ak::UID a4 = ak::uiAPI::createAction(my_uid, "A4", "Test", "32");
+			ak::uiAPI::container::addObject(g1, a1);
+			ak::uiAPI::container::addObject(g1, a2);
+			ak::uiAPI::container::addObject(g2, a3);
+			ak::uiAPI::container::addObject(g2, a4);
+			
+			my_testingData.push_back(a4);
+			my_testingData.push_back(a3);
+			my_testingData.push_back(a2);
+			my_testingData.push_back(a1);
+			my_testingData.push_back(g1);
+			my_testingData.push_back(g2);
+			my_testingData.push_back(p);
+
+
 		}
 		catch (const ak::Exception & e) { throw ak::Exception(e, "Example::Example()"); }
 		catch (const std::exception & e) { throw ak::Exception(e.what(), "Example::Example()"); }
@@ -427,20 +453,21 @@ void Example::defaultData(void) {
 	// Create groups
 	std::vector <ak::ID> ids;
 	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 70, 200, 200), "Test group");
-	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(200, 70, 70, 200), "Test group 2");
-	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 200, 70, 200), "Test group 3");
 
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group", "Test int", 13));
-	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group", "Test string", "Some text"));
+	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(200, 70, 70, 200), "Test group 2");
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group 2", "Test double", 10.0));
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group 2", "Test bool", true));
 	std::vector<QString> v;
 	v.push_back("Test");
 	v.push_back("Some other item");
 	v.push_back("And another setting");
+	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 200, 70, 200), "Test group 3");
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test selection", v, "Test"));
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test color", my_settingColor));
-	
+
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group", "Test string", "Some text"));
+
 	for (auto theId : ids) {
 		//ak::uiAPI::propertyGrid::setItemIsReadOnly(my_ui.propertiesWidget, theId);
 	}

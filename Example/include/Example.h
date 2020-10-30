@@ -78,4 +78,7 @@ private:
 	ExampleNotifier *			my_notifier;	//! The notifier that receives the callback messages
 	ak::ui::color				my_settingColor;
 	std::string					my_JSONSettingsString;
+
+	std::vector < ak::UID>	my_testingData;
+
 };

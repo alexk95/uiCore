@@ -58,6 +58,9 @@ void SubGroup::AddAction(QToolButton::ToolButtonPopupMode type, QAction* action,
     btn->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
 
     frame->layout()->addWidget(btn);
+
+	actionButtonMap.insert_or_assign(action, btn);		// Added by Alexander Kuester
+
     innerLayout->insertWidget(innerLayout->count()-1, frame);
 }
 

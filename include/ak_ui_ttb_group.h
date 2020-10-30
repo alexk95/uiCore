@@ -76,6 +76,13 @@ namespace ak {
 					const ak::ui::colorStyle *			_colorStyle
 				) override;
 
+				//! @brief Will remove the child from this object (not destroy it)
+				//! This function should be called from the deconstructor of a child
+				//! @param _child The child to remove
+				virtual void removeChildObject(
+					aObject *								_child
+				) override;
+
 			private:
 				tt::Group *								my_group;
 				QString									my_text;

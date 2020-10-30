@@ -206,8 +206,16 @@ void ak::ui::uiManager::removeChildObject(
 	aObject *								_child
 ) {
 	ui::core::aObject::removeChildObject(_child);
-	my_window->takeCentralWidget();
-	my_window->setCentralWidget(nullptr);
+	if (_child->objectType() == ak::ui::core::objectType::oTabToolbarPage) {
+		ttb::page * page = nullptr;
+		page = dynamic_cast<ttb::page *>(_child);
+		assert(page != nullptr); // Cast failed
+		my_tabToolBar->DestroyPage(page->index());
+	}
+	else {
+		my_window->takeCentralWidget();
+		my_window->setCentralWidget(nullptr);
+	}
 }
 
 void ak::ui::uiManager::setAlias(

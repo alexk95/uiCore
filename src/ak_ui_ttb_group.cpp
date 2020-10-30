@@ -32,7 +32,7 @@ ak::ui::ttb::group::group(
 	ak::messenger *				_messenger,
 	tt::Group *					_group,
 	const QString &				_text
-) : ak::ui::core::ttbContainer(_messenger, ak::ui::core::objectType::oTabToolbarPage),
+) : ak::ui::core::ttbContainer(_messenger, ak::ui::core::objectType::oTabToolbarGroup),
 	my_group(_group)
 {
 	assert(my_group != nullptr); // Nullptr provided
@@ -41,6 +41,8 @@ ak::ui::ttb::group::group(
 }
 
 ak::ui::ttb::group::~group() {
+	TTB_CONTAINER_DESTROYING
+
 	destroyAllSubContainer();
 	delete my_group;
 
@@ -68,6 +70,8 @@ void ak::ui::ttb::group::addChild(
 		// Place widget
 		my_group->AddWidget(w->widget());
 	}
+	_child->setParentObject(this);
+	addChildObject(_child);
 	// Store object0
 	my_childObjects.insert_or_assign(_child->uid(), _child);
 }
@@ -100,5 +104,31 @@ void ak::ui::ttb::group::setColorStyle(
 	else {
 		my_group->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
 			TYPE_COLORAREA::caBackgroundColorControls));
+	}
+}
+
+void ak::ui::ttb::group::removeChildObject(
+	aObject *								_child
+) {
+	assert(_child != nullptr); // Nullptr provided
+	ak::ui::core::aObject::removeChildObject(_child);
+	if (_child->objectType() == ui::core::objectType::oTabToolbarSubgroup) {
+		ttb::subGroup * Group = nullptr;
+		Group = dynamic_cast<ttb::subGroup *>(_child);
+		assert(Group != nullptr);
+		for (int i = 0; i < my_subContainer.size(); i++) {
+			if (my_subContainer.at(i) == Group) {
+				my_subContainer.erase(my_subContainer.begin() + i);
+				return;
+			}
+		}
+		assert(0); // Group not found
+	}
+	else if (_child->objectType() == ui::core::objectType::oAction) {
+		// Its a action
+		qt::action * action = nullptr;
+		action = dynamic_cast<qt::action *>(_child);
+		assert(action != nullptr);	// Cast failed
+		my_group->RemoveAction(action);
 	}
 }

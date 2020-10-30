@@ -147,7 +147,17 @@ void Group::AddAction(QToolButton::ToolButtonPopupMode type, QAction* action, QM
         if(menu)
             btn->setMenu(menu);
         innerLayout->addWidget(btn);
+		actionButtonMap.insert_or_assign(action, btn);		// Added by Alexander Kuester
     }
+}
+
+// Added by Alexander Kuester
+void Group::RemoveAction(QAction* action) {
+	actionButtonMapIterator btn = actionButtonMap.find(action);
+	assert(btn != actionButtonMap.end());	// Action was not added
+	assert(btn->second);	// Nullptr stored
+	innerLayout->removeWidget(btn->second);
+	actionButtonMap.erase(action);
 }
 
 void Group::AddWidget(QWidget* widget)

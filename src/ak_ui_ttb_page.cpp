@@ -39,6 +39,8 @@ my_page(_page)
 }
 
 ak::ui::ttb::page::~page() {
+	TTB_CONTAINER_DESTROYING
+
 	destroyAllSubContainer();
 	delete my_page;
 
@@ -80,3 +82,28 @@ void ak::ui::ttb::page::setColorStyle(
 			TYPE_COLORAREA::caBorderColorWindow));
 	}
 }
+
+void ak::ui::ttb::page::removeChildObject(
+	aObject *								_child
+) {
+	assert(_child != nullptr); // Nullptr provided
+	ak::ui::core::aObject::removeChildObject(_child);
+	if (_child->objectType() == ui::core::objectType::oTabToolbarGroup) {
+		ttb::group * Group = nullptr;
+		Group = dynamic_cast<ttb::group *>(_child);
+		assert(Group != nullptr);
+		for (int i = 0; i < my_subContainer.size(); i++) {
+			if (my_subContainer.at(i) == Group) {
+				my_subContainer.erase(my_subContainer.begin() + i);
+				return;
+			}
+		}
+		assert(0); // Group not found
+	}
+	else {
+		// Its a widget/action
+
+	}
+}
+
+int ak::ui::ttb::page::index(void) const { return my_page->getIndex(); }

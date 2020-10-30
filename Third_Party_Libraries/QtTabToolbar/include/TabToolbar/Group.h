@@ -24,7 +24,7 @@
 #include <QVariant>
 #include <TabToolbar/API.h>
 #include <TabToolbar/SubGroup.h>
-
+#include <map>						// Added by Alexander Kuester
 class QAction;
 class QMenu;
 
@@ -42,10 +42,16 @@ public:
     SubGroup*   AddSubGroup(SubGroup::Align align);
     void        AddWidget(QWidget* widget);
 
+	void	    RemoveAction(QAction* action);		// Added by Alexander Kuester
+
 private:
     QFrame*     CreateSeparator();
 
     QHBoxLayout* innerLayout;
+
+	std::map<QAction *, QToolButton *>	actionButtonMap;
+	typedef std::map<QAction *,
+		QToolButton *>::iterator		actionButtonMapIterator;
 };
 
 }
