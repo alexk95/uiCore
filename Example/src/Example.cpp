@@ -222,6 +222,7 @@ void Example::eventCallback(
 				}
 				msg.append("\"; }");
 				ak::uiAPI::textEdit::appendText(my_ui.outputWidget, msg);
+				
 			}
 			else if (_sender == my_timerRestoreSettings && _eventType == ak::core::eventType::eTimeout) {
 				// Load last settings
@@ -429,10 +430,10 @@ void Example::defaultData(void) {
 	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(200, 70, 70, 200), "Test group 2");
 	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 200, 70, 200), "Test group 3");
 
-	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group", "Test int", 13));
-	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group", "Test string", "Some text"));
-	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 2", "Test double", 10.0));
-	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 2", "Test bool", true));
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group", "Test int", 13));
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group", "Test string", "Some text"));
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group 2", "Test double", 10.0));
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group 2", "Test bool", true));
 	std::vector<QString> v;
 	v.push_back("Test");
 	v.push_back("Some other item");
@@ -441,6 +442,6 @@ void Example::defaultData(void) {
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test color", my_settingColor));
 	
 	for (auto theId : ids) {
-		ak::uiAPI::propertyGrid::setItemIsReadOnly(my_ui.propertiesWidget, theId);
+		//ak::uiAPI::propertyGrid::setItemIsReadOnly(my_ui.propertiesWidget, theId);
 	}
 }

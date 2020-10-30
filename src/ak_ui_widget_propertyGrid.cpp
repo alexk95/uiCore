@@ -1235,7 +1235,7 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 				msg.append(my_name);
 				msg.append(". Expected natural number.");
 				ui::dialog::prompt dia(msg, "Error", ui::core::promptType::promptOk);
-				dia.showDialog();	
+				dia.showDialog();
 				if (my_isMultipleValues) {
 					my_cellValue->setText("...");
 				}
@@ -1283,6 +1283,7 @@ void ak::ui::widget::propertyGridItem::repaint(void) {
 		my_cellSettingName->setTextColor(my_colorNormalForeground);
 	}
 	if (my_cellValue != nullptr) {
+		my_ignoreCellEvent = true;
 		my_cellValue->setBackgroundColor(my_colorBackground.toQColor());
 		if (my_isCurrentlyError) {
 			my_cellValue->setTextColor(my_colorErrorForeground);
@@ -1290,6 +1291,7 @@ void ak::ui::widget::propertyGridItem::repaint(void) {
 		else {
 			my_cellValue->setTextColor(my_colorNormalForeground);
 		}
+		my_ignoreCellEvent = false;
 	}
 	else {
 		switch (my_valueType)
