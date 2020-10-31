@@ -24,7 +24,6 @@ namespace ak {
 
 		// Forward declaration
 		class colorStyle;
-		namespace qt { class dock; }
 
 		namespace core {
 
