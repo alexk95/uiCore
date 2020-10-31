@@ -95,8 +95,8 @@ ak::ui::dialog::logIn::logIn(
 
 	my_controlLayoutWidget = new QWidget();
 	my_controlLayoutWidget->setLayout(my_controlLayout);
-	my_controlLayoutWidget->setObjectName("__LogInDialog.ControlLayoutWidget");
-	my_controlLayoutWidget->setStyleSheet("#__LogInDialog.ControlLayoutWidget{"
+	my_controlLayoutWidget->setObjectName("LogInDialogControlLayoutWidget");
+	my_controlLayoutWidget->setStyleSheet("#LogInDialogControlLayoutWidget{"
 		"background-color:#90000000;"
 		"border-radius:10px;"
 		"}\n"
@@ -167,6 +167,14 @@ void ak::ui::dialog::logIn::setColorStyle(
 
 	my_inputPassword.label->setColorStyle(my_colorStyle);
 	my_inputPassword.edit->setColorStyle(my_colorStyle);
+
+	my_controlLayoutWidget->setStyleSheet("#LogInDialogControlLayoutWidget{"
+		"background-color:#90000000;"
+		"border-radius:10px;"
+		"}\n"
+		"QLabel{color:#FFFFFF}\n"
+		"QCheckBox{color:#FFFFFF}\n");
+
 }
 
 void ak::ui::dialog::logIn::paintEvent(QPaintEvent *pe)
