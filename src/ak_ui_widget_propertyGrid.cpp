@@ -1123,6 +1123,7 @@ bool ak::ui::widget::propertyGridItem::isMultipleValues(void) const { return my_
 void ak::ui::widget::propertyGridItem::setReadOnly(
 	bool					_readOnly
 ) {
+	my_ignoreCellEvent = true;
 	switch (my_valueType)
 	{
 	case ak::core::vBool:
@@ -1150,6 +1151,7 @@ void ak::ui::widget::propertyGridItem::setReadOnly(
 		assert(0); // Invalid value type
 		break;
 	}
+	my_ignoreCellEvent = false;
 }
 
 bool ak::ui::widget::propertyGridItem::isReadOnly() { return my_isReadOnly; }
