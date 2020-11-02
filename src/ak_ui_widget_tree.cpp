@@ -205,10 +205,6 @@ void ak::ui::widget::tree::clear(void) {
 	my_treeSignalLinker = new ak::ui::treeSignalLinker(this, my_tree);
 
 	my_tree->Clear();
-	for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
-		ak::ui::qt::treeItem * item = itm->second;
-		if (item == nullptr) { delete item; }
-	}
 	my_items.clear();
 	my_currentId = 0;
 	my_messenger->sendMessage(my_uid, ak::core::eventType::eCleared);
