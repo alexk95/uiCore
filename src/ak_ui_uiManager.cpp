@@ -572,9 +572,7 @@ QMainWindow * ak::ui::uiManager::window(void) const { return my_window; }
 
 void ak::ui::uiManager::setWindowTitle(
 	const QString &														_title
-) {
-	my_window->setWindowTitle(_title);
-}
+) { my_window->setWindowTitle(_title); }
 
 QString ak::ui::uiManager::windowTitle(void) const {
 	return my_window->windowTitle();

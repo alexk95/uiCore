@@ -1491,6 +1491,14 @@ namespace ak {
 				ak::ID												_tabID
 			);
 
+			//! @brief Will set the title at the specified window
+			//! @param _windowUID The UID of the window
+			//! @param _title The title to set
+			UICORE_API void setTitle(
+				ak::UID												_windowUID,
+				const QString &										_title
+			);
+
 			//! @brief Will return true if the status label is visible at the provided window
 			//! @param _windowUID The UID of the window
 			UICORE_API bool getStatusLabelVisible(

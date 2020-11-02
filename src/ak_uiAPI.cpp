@@ -2336,6 +2336,17 @@ void ak::uiAPI::window::setCurrentTabToolBarTab(
 	actualWindow->setCurrentTabToolBarTab(_tabID);
 }
 
+void ak::uiAPI::window::setTitle(
+	ak::UID												_windowUID,
+	const QString &										_title
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setWindowTitle(_title);
+}
+
 bool ak::uiAPI::window::getStatusLabelVisible(
 	ak::UID												_windowUID
 ) {
