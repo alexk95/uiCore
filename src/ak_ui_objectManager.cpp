@@ -29,6 +29,7 @@
 
 // AK dialogs
 #include <ak_ui_dialog_logIn.h>
+#include <ak_ui_dialog_options.h>
 
 // AK Qt objects
 #include <ak_ui_qt_action.h>				// action
@@ -192,21 +193,6 @@ ak::UID ak::ui::objectManager::createComboButtonItem(
 	return obj->uid();
 }
 
-ak::UID ak::ui::objectManager::createWelcomeScreen(
-	ak::UID												_creatorUid
-) {
-	// Create object
-	ak::ui::widget::welcomeScreen * obj = new ak::ui::widget::welcomeScreen(my_messenger, my_uidManager, my_currentColorStyle);
-
-	// Set parameter
-	obj->setUid(my_uidManager->getId());
-
-	// Store data
-	my_mapObjects.insert_or_assign(obj->uid(), obj);
-	addCreatedUid(_creatorUid, obj->uid());
-	return obj->uid();
-}
-
 ak::UID ak::ui::objectManager::createDock(
 	ak::UID												_creatorUid,
 	const QString &										_text
@@ -288,6 +274,19 @@ ak::UID ak::ui::objectManager::createPushButton(
 	return obj->uid();
 }
 
+ak::UID ak::ui::objectManager::createOptionsDialog(
+	ak::UID												_creatorUid
+) {
+	// Create object
+	dialog::options * obj = new dialog::options(my_messenger);
+	obj->setUid(my_uidManager->getId());
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
+
+}
+
 ak::UID ak::ui::objectManager::createTable(
 	ak::UID												_creatorUid,
 	int													_rows,
@@ -342,18 +341,6 @@ ak::UID ak::ui::objectManager::createTree(
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
 	addCreatedUid(_creatorUid, obj->uid());
 	return obj->uid();
-}
-
-ak::UID ak::ui::objectManager::createWindow(
-	ak::UID												_creatorUid
-) {
-	// Create new ui manager
-	ak::ui::uiManager * ui = nullptr;
-	ui = new ak::ui::uiManager(my_messenger, my_uidManager, my_currentColorStyle);
-	// Store data
-	my_mapObjects.insert_or_assign(ui->uid(), ui);
-	addCreatedUid(_creatorUid, ui->uid());
-	return ui->uid();
 }
 
 ak::UID ak::ui::objectManager::createTabView(
@@ -435,6 +422,33 @@ ak::UID ak::ui::objectManager::createTabToolBarPage(
 	ui->addChildObject(cont);
 
 	return cont->uid();
+}
+
+ak::UID ak::ui::objectManager::createWelcomeScreen(
+	ak::UID												_creatorUid
+) {
+	// Create object
+	ak::ui::widget::welcomeScreen * obj = new ak::ui::widget::welcomeScreen(my_messenger, my_uidManager, my_currentColorStyle);
+
+	// Set parameter
+	obj->setUid(my_uidManager->getId());
+
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
+}
+
+ak::UID ak::ui::objectManager::createWindow(
+	ak::UID												_creatorUid
+) {
+	// Create new ui manager
+	ak::ui::uiManager * ui = nullptr;
+	ui = new ak::ui::uiManager(my_messenger, my_uidManager, my_currentColorStyle);
+	// Store data
+	my_mapObjects.insert_or_assign(ui->uid(), ui);
+	addCreatedUid(_creatorUid, ui->uid());
+	return ui->uid();
 }
 
 // ###############################################################################################################################################

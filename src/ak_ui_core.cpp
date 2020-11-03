@@ -35,6 +35,7 @@ QString ak::ui::core::toQString(
 	case ak::ui::core::oList: return QString("List");
 	case ak::ui::core::oLogInDialog: return QString("LogInDialog");
 	case ak::ui::core::oMainWindow: return QString("Window");
+	case ak::ui::core::oOptionsDialog: return QString("OptionsDialog");
 	case ak::ui::core::oPictureBox: return QString("PictureBox");
 	case ak::ui::core::oPrompt: return QString("Prompt");
 	case ak::ui::core::oPropertyGrid: return QString("PropertyGrid");

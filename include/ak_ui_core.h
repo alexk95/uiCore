@@ -62,6 +62,7 @@ namespace ak {
 				oLogInDialog,
 				oMainWindow,
 				oMenu,
+				oOptionsDialog,
 				oPictureBox,
 				oPrompt,
 				oPropertyGrid,

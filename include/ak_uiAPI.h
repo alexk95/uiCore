@@ -371,6 +371,12 @@ namespace ak {
 			const QString &											_text = QString("")
 		);
 
+		//! @brief Will create a new options dialog and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		UICORE_API ak::UID createOptionsDialog(
+			ak::UID													_creatorUid
+		);
+
 		//! @brief Will create a new Table and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _rows The initial row count of the Table

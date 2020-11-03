@@ -254,6 +254,9 @@
     <QtMoc Include="include\ak_ui_qt_table.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
+    <QtMoc Include="include\ak_ui_dialog_options.h">
+      <Filter>Header Files\ak\ui\dialog</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -435,6 +438,9 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_qt_label.cpp">
       <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_dialog_options.cpp">
+      <Filter>Source Files\ak\ui\dialog</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

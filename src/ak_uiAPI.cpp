@@ -401,6 +401,13 @@ ak::UID ak::uiAPI::createPushButton(
 	return my_objManager->createPushButton(_creatorUid, _text);
 }
 
+ak::UID ak::uiAPI::createOptionsDialog(
+	ak::UID												_creatorUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createOptionsDialog(_creatorUid);
+}
+
 ak::UID ak::uiAPI::createPushButton(
 	ak::UID												_creatorUid,
 	const QIcon &										_icon,

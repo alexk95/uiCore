@@ -135,6 +135,7 @@
     <ClInclude Include="include\ak_ui_core_ttbContainer.h" />
     <QtMoc Include="include\ak_ui_dialog_logIn.h" />
     <QtMoc Include="include\ak_ui_dialog_prompt.h" />
+    <QtMoc Include="include\ak_ui_dialog_options.h" />
     <ClInclude Include="include\ak_ui_iconManager.h" />
     <ClInclude Include="include\ak_ui_objectManager.h" />
     <QtMoc Include="include\ak_ui_qt_dock.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="src\ak_ui_core_aWidgetManager.cpp" />
     <ClCompile Include="src\ak_ui_core_ttbContainer.cpp" />
     <ClCompile Include="src\ak_ui_dialog_logIn.cpp" />
+    <ClCompile Include="src\ak_ui_dialog_options.cpp" />
     <ClCompile Include="src\ak_ui_dialog_prompt.cpp" />
     <ClCompile Include="src\ak_ui_iconManager.cpp" />
     <ClCompile Include="src\ak_ui_objectManager.cpp" />
