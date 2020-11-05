@@ -48,31 +48,15 @@ void ak::ui::qt::table::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBackgroundColorAlternate,
-			"#" + my_alias + "{", "}"));
-		QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader | TYPE_COLORAREA::caBackgroundColorHeader,
-			"QHeaderView{border: none;", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader |
-			TYPE_COLORAREA::caBackgroundColorHeader |
-			TYPE_COLORAREA::caDefaultBorderHeader | TYPE_COLORAREA::caBorderColorHeader
-			,
-			"QHeaderView::section{", "}"));
-		this->horizontalHeader()->setStyleSheet(sheet);
-		this->verticalHeader()->setStyleSheet(sheet);
-	}
-	else {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBackgroundColorAlternate));
-		QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader | TYPE_COLORAREA::caBackgroundColorHeader,
-			"QHeaderView{border: none;", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader |
-			TYPE_COLORAREA::caBackgroundColorHeader |
-			TYPE_COLORAREA::caDefaultBorderHeader | TYPE_COLORAREA::caBorderColorHeader
-			,
-			"QHeaderView::section{", "}"));
-		this->horizontalHeader()->setStyleSheet(sheet);
-		this->verticalHeader()->setStyleSheet(sheet);
-	}
+	this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+		TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBackgroundColorAlternate));
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader | TYPE_COLORAREA::caBackgroundColorHeader,
+		"QHeaderView{border: none;", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader |
+		TYPE_COLORAREA::caBackgroundColorHeader |
+		TYPE_COLORAREA::caDefaultBorderHeader | TYPE_COLORAREA::caBorderColorHeader
+		,
+		"QHeaderView::section{", "}"));
+	this->horizontalHeader()->setStyleSheet(sheet);
+	this->verticalHeader()->setStyleSheet(sheet);
 }

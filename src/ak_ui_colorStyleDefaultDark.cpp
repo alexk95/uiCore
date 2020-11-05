@@ -13,12 +13,12 @@
 #include <ak_ui_colorStyleDefaultDark.h>		// correspoding header
 #include <ak_exception.h>						// error handling
 
-ak::ui::colorStyleDefaultDark::colorStyleDefaultDark() { 
+ak::ui::colorStyleDefaultDark::colorStyleDefaultDark() {
 	my_controlsMainBackcolor.setRGBA(48, 48, 48);
 	my_controlsMainForecolor.setRGBA(255, 255, 255);
 	my_controlsErrorForecolor.setRGBA(255,0,0);
 	my_controlsPressedColor.setRGBA(60, 200, 60);
-	my_controlsFocusColor.setRGBA(60, 60, 200);
+	my_controlsFocusColor.setRGBA(64, 128, 200);
 
 	my_windowMainBackcolor.setRGBA(48, 48, 48);
 	my_windowMainForecolor.setRGBA(255, 255, 255);

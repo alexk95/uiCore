@@ -165,10 +165,15 @@ void ak::ui::uiManager::setColorStyle(
 	my_statusLabel->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
 		TYPE_COLORAREA::caBackgroundColorTransparent));
 	// TTB
-	my_tabToolBar->SetStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-		TYPE_COLORAREA::caBackgroundColorWindow));
-	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-		TYPE_COLORAREA::caBackgroundColorWindow, "QTabWidget{", "}"));
+	QString sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow, "QToolBar{border: 0px;", "}");
+	if (sheet.length() == 0) {
+		sheet = "QToolBar{border: 0px;}";
+	}
+	my_tabToolBar->SetStylesheet(sheet);
+	
+	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow, "QTabWidget{", "}");
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBorderColorHeader, "QTabWidget::pane{border: 0px solid; border-top-width: 1px; border-bottom-width: 1px;", "}\n"));
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
 		"QTabWidget::tab-bar{", "}\n"));
