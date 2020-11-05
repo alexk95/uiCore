@@ -16,6 +16,7 @@
 
 // Qt header
 #include <qevent.h>								// QKeyEvent
+#include <qtabbar.h>
 
 // C++ header
 #include <string>								// string
@@ -48,13 +49,25 @@ void ak::ui::qt::dock::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "{", "}"));
-	}
-	else {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow));
+	QString sheet;
+	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow, "QDockWidget{", "}\n");
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader |
+		TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caBorderColorHeader, "QDockWidget::title{border-width: 1px;", "}\n"));
+	this->setStyleSheet(sheet);
+	
+	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
+		"QTabBar{", "}\n");
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
+		"QTabBar::tab{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorFocus | TYPE_COLORAREA::caForegroundColorFocus,
+		"QTabBar::tab:hover{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected,
+		"QTabBar::tab:selected QTabBar::tab::pressed{", "}"));
+
+	auto lst = findChildren<QTabBar *>();
+	for (auto itm : lst) {
+		itm->setStyleSheet(sheet);
 	}
 }
 

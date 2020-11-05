@@ -155,46 +155,40 @@ void ak::ui::uiManager::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		my_window->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "{", "}"));
-		my_window->statusBar()->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "__StatusBar{", "}"));
-		my_progressBar->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "__ProgressBar{", "}"));
-		my_statusLabel->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorTransparent, "#" + my_alias + "__StatusLabel{", "}"));
-		// TTB
-		my_tabToolBar->SetStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow));
-		my_tabToolBar->SetTabBarStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow));
-		my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow));
-		/*my_tabToolBar->SetStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "__TTB_ToolBar{", "}"));
-		my_tabToolBar->SetTabBarStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "__TTB_TabBar{", "}"));
-		my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow, "#" + my_alias + "__TTB_HideButton{", "}"));*/
+
+	my_window->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow));
+	my_window->statusBar()->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow));
+	my_progressBar->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow));
+	my_statusLabel->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorTransparent));
+	// TTB
+	my_tabToolBar->SetStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow));
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow, "QTabWidget{", "}"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBorderColorHeader, "QTabWidget::pane{border: 0px solid; border-top-width: 1px; border-bottom-width: 1px;", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
+		"QTabWidget::tab-bar{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
+		"QTabBar::tab{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorFocus | TYPE_COLORAREA::caForegroundColorFocus,
+		"QTabBar::tab:hover{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected,
+		"QTabBar::tab:selected QTabBar::tab::pressed{", "}"));
+
+	if (sheet.length() == 0) {
+		// Provide manual stylesheet to fix styling issue in toolBar
+		sheet = "QTabWidget{}\n"
+				"QTabWidget::pane{border: 0px solid #707070; border-top-width: 1px; border-bottom-width: 1px;}\n"
+			;
 	}
-	else {
-		my_window->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow));
-		my_window->statusBar()->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow));
-		my_progressBar->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow));
-		my_statusLabel->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorTransparent));
-		// TTB
-		my_tabToolBar->SetStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow));
-		my_tabToolBar->SetTabBarStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow));
-		my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBackgroundColorWindow));
-	}
+
+	my_tabToolBar->SetTabBarStylesheet(sheet);
+	my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow));
 	for (my_mapTabToolBarContainerIterator itm = my_mapTabToolBarContainer.begin(); itm != my_mapTabToolBarContainer.end(); itm++) {
 		assert(itm->second != nullptr); // Nullptr stored
 		//itm->second->setColorStyle(my_colorStyle);

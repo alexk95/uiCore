@@ -14,7 +14,7 @@
 #include <ak_exception.h>						// error handling
 
 ak::ui::colorStyleDefaultDark::colorStyleDefaultDark() { 
-	my_controlsMainBackcolor.setRGBA(80, 80, 80);
+	my_controlsMainBackcolor.setRGBA(48, 48, 48);
 	my_controlsMainForecolor.setRGBA(255, 255, 255);
 	my_controlsErrorForecolor.setRGBA(255,0,0);
 	my_controlsPressedColor.setRGBA(60, 200, 60);
@@ -46,7 +46,7 @@ QString ak::ui::colorStyleDefaultDark::getColorStyleName(void) const { return QS
 */
 
 #define STYLE_COLOR_BACK_ALTERNATE "alternate-background-color:#454545;"
-#define STYLE_COLOR_BACK_CONTROLS "background-color: #505050;"
+#define STYLE_COLOR_BACK_CONTROLS "background-color: #303030;"
 #define STYLE_COLOR_BACK_FOCUS "background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #4080e0, stop : 1 #a0a0f0);"
 #define STYLE_COLOR_BACK_HEADER "background-color: #505050;"
 #define STYLE_COLOR_BACK_SELECTED "background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 #10b010, stop : 1 #a0f0a0);"
@@ -68,8 +68,8 @@ QString ak::ui::colorStyleDefaultDark::getColorStyleName(void) const { return QS
 #define STYLE_DEFAULT_BORDER_HEADER "border: 1px solid;"
 #define STYLE_DEFAULT_BORDER_WINDOW "border: 1px solid;"
 
-#define CHECK_FLAG_IF if (ak::ui::core::flagIsSet(_colorAreas, ak::ui::core::colorAreaFlag
-#define CHECK_FLAG_THEN )) ret.append
+#define CHECK_IF_FLAG if (ak::ui::core::flagIsSet(_colorAreas, ak::ui::core::colorAreaFlag
+#define THEN_ADD_STYLE )) ret.append
 
 QString ak::ui::colorStyleDefaultDark::toStyleSheet(
 	ui::core::colorAreaFlag			_colorAreas,
@@ -78,25 +78,25 @@ QString ak::ui::colorStyleDefaultDark::toStyleSheet(
 ) const {
 	QString ret(_prefix);
 	
-	CHECK_FLAG_IF::caBackgroundColorAlternate CHECK_FLAG_THEN(STYLE_COLOR_BACK_ALTERNATE);
-	CHECK_FLAG_IF::caBackgroundColorControls CHECK_FLAG_THEN(STYLE_COLOR_BACK_CONTROLS);
-	CHECK_FLAG_IF::caBackgroundColorFocus CHECK_FLAG_THEN(STYLE_COLOR_BACK_FOCUS);
-	CHECK_FLAG_IF::caBackgroundColorHeader CHECK_FLAG_THEN(STYLE_COLOR_BACK_HEADER);
-	CHECK_FLAG_IF::caBackgroundColorSelected CHECK_FLAG_THEN(STYLE_COLOR_BACK_SELECTED);
-	CHECK_FLAG_IF::caBackgroundColorTransparent CHECK_FLAG_THEN(STYLE_COLOR_BACK_TRANSPARENT);
-	CHECK_FLAG_IF::caBackgroundColorWindow CHECK_FLAG_THEN(STYLE_COLOR_BACK_WINDOW);
-	CHECK_FLAG_IF::caBorderColorControls CHECK_FLAG_THEN(STYLE_COLOR_BORDER_CONTROLS);
-	CHECK_FLAG_IF::caBorderColorHeader CHECK_FLAG_THEN(STYLE_COLOR_BORDER_HEADER);
-	CHECK_FLAG_IF::caBorderColorWindow CHECK_FLAG_THEN(STYLE_COLOR_BORDER_WINDOW);
-	CHECK_FLAG_IF::caDefaultBorderControls CHECK_FLAG_THEN(STYLE_DEFAULT_BORDER_CONTROLS);
-	CHECK_FLAG_IF::caDefaultBorderHeader CHECK_FLAG_THEN(STYLE_DEFAULT_BORDER_HEADER);
-	CHECK_FLAG_IF::caDefaultBorderWindow CHECK_FLAG_THEN(STYLE_DEFAULT_BORDER_WINDOW);
-	CHECK_FLAG_IF::caForegroundColorControls CHECK_FLAG_THEN(STYLE_COLOR_FORE_CONTROLS);
-	CHECK_FLAG_IF::caForegroundColorError CHECK_FLAG_THEN(STYLE_COLOR_FORE_ERROR);
-	CHECK_FLAG_IF::caForegroundColorFocus CHECK_FLAG_THEN(STYLE_COLOR_FORE_FOCUS);
-	CHECK_FLAG_IF::caForegroundColorHeader CHECK_FLAG_THEN(STYLE_COLOR_FORE_HEADER);
-	CHECK_FLAG_IF::caForegroundColorSelected CHECK_FLAG_THEN(STYLE_COLOR_FORE_SELECTED);
-	CHECK_FLAG_IF::caForegroundColorWindow CHECK_FLAG_THEN(STYLE_COLOR_FORE_WINDOW);
+	CHECK_IF_FLAG::caBackgroundColorAlternate THEN_ADD_STYLE(STYLE_COLOR_BACK_ALTERNATE);
+	CHECK_IF_FLAG::caBackgroundColorControls THEN_ADD_STYLE(STYLE_COLOR_BACK_CONTROLS);
+	CHECK_IF_FLAG::caBackgroundColorFocus THEN_ADD_STYLE(STYLE_COLOR_BACK_FOCUS);
+	CHECK_IF_FLAG::caBackgroundColorHeader THEN_ADD_STYLE(STYLE_COLOR_BACK_HEADER);
+	CHECK_IF_FLAG::caBackgroundColorSelected THEN_ADD_STYLE(STYLE_COLOR_BACK_SELECTED);
+	CHECK_IF_FLAG::caBackgroundColorTransparent THEN_ADD_STYLE(STYLE_COLOR_BACK_TRANSPARENT);
+	CHECK_IF_FLAG::caBackgroundColorWindow THEN_ADD_STYLE(STYLE_COLOR_BACK_WINDOW);
+ 	CHECK_IF_FLAG::caBorderColorControls THEN_ADD_STYLE(STYLE_COLOR_BORDER_CONTROLS);
+	CHECK_IF_FLAG::caBorderColorHeader THEN_ADD_STYLE(STYLE_COLOR_BORDER_HEADER);
+	CHECK_IF_FLAG::caBorderColorWindow THEN_ADD_STYLE(STYLE_COLOR_BORDER_WINDOW);
+	CHECK_IF_FLAG::caDefaultBorderControls THEN_ADD_STYLE(STYLE_DEFAULT_BORDER_CONTROLS);
+	CHECK_IF_FLAG::caDefaultBorderHeader THEN_ADD_STYLE(STYLE_DEFAULT_BORDER_HEADER);
+	CHECK_IF_FLAG::caDefaultBorderWindow THEN_ADD_STYLE(STYLE_DEFAULT_BORDER_WINDOW);
+	CHECK_IF_FLAG::caForegroundColorControls THEN_ADD_STYLE(STYLE_COLOR_FORE_CONTROLS);
+	CHECK_IF_FLAG::caForegroundColorError THEN_ADD_STYLE(STYLE_COLOR_FORE_ERROR);
+	CHECK_IF_FLAG::caForegroundColorFocus THEN_ADD_STYLE(STYLE_COLOR_FORE_FOCUS);
+	CHECK_IF_FLAG::caForegroundColorHeader THEN_ADD_STYLE(STYLE_COLOR_FORE_HEADER);
+	CHECK_IF_FLAG::caForegroundColorSelected THEN_ADD_STYLE(STYLE_COLOR_FORE_SELECTED);
+	CHECK_IF_FLAG::caForegroundColorWindow THEN_ADD_STYLE(STYLE_COLOR_FORE_WINDOW);
 
 	ret.append(_suffix);
 	return ret;

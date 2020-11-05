@@ -37,35 +37,20 @@ void ak::ui::qt::tabView::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		assert(0);
-		QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls, "QWidget{", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls
-			, "QTabWidget{", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
-			"QTabWidget::pane{", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
-			"QTabWidget::tab-bar{", "}"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
-			"QTabBar::tab{", "}"));
-		this->setStyleSheet(sheet);
-	}
-	else {
-		QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls, "QWidget{", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls
+
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+		TYPE_COLORAREA::caBackgroundColorControls, "QWidget{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls
 		, "QTabWidget{", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
-			"QTabWidget::pane{", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
-			"QTabWidget::tab-bar{", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
-			"QTabBar::tab{", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorFocus | TYPE_COLORAREA::caForegroundColorFocus,
-			"QTabBar::tab:hover{", "}\n"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected,
-			"QTabBar::tab:selected QTabBar::tab::pressed{", "}"));
-		this->setStyleSheet(sheet);
-	}
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
+		"QTabWidget::pane{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
+		"QTabWidget::tab-bar{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
+		"QTabBar::tab{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorFocus | TYPE_COLORAREA::caForegroundColorFocus,
+		"QTabBar::tab:hover{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected,
+		"QTabBar::tab:selected QTabBar::tab::pressed{", "}"));
+	this->setStyleSheet(sheet);
 }

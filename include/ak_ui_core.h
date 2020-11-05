@@ -126,27 +126,27 @@ namespace ak {
 			};
 
 			enum colorAreaFlag {
-				caBackgroundColorWindow = 0x0,
-				caForegroundColorWindow = 0x1,
-				caBorderColorWindow = 0x2,
-				caBackgroundColorHeader = 0x4,
-				caForegroundColorHeader = 0x8,
-				caBorderColorHeader = 0x10,
-				caBackgroundColorControls = 0x20,
-				caForegroundColorControls = 0x40,
-				caBorderColorControls = 0x80,
-				caDefaultBorderControls = 0x100,
-				caDefaultBorderWindow = 0x200,
-				caBackgroundColorAlternate = 0x400,
-				caForegroundColorError = 0x800,
-				caBackgroundColorFocus = 0x1000,
-				caBackgroundColorSelected = 0x2000,
-				caForegroundColorFocus = 0x4000,
-				caForegroundColorSelected = 0x8000,
-				caBackgroundColorTransparent = 0x10000,
-				caImagesTree = 0x20000,
-				caImagesDock = 0x40000,
-				caDefaultBorderHeader = 0x80000
+				caBackgroundColorWindow			= 1 << 0,
+				caForegroundColorWindow			= 1 << 1,
+				caBorderColorWindow				= 1 << 2,
+				caBackgroundColorHeader			= 1 << 3,
+				caForegroundColorHeader			= 1 << 4,
+				caBorderColorHeader				= 1 << 5,
+				caBackgroundColorControls		= 1 << 6,
+				caForegroundColorControls		= 1 << 7,
+				caBorderColorControls			= 1 << 8,
+				caDefaultBorderControls			= 1 << 9,
+				caDefaultBorderWindow			= 1 << 10,
+				caBackgroundColorAlternate		= 1 << 11,
+				caForegroundColorError			= 1 << 12,
+				caBackgroundColorFocus			= 1 << 13,
+				caBackgroundColorSelected		= 1 << 14,
+				caForegroundColorFocus			= 1 << 15,
+				caForegroundColorSelected		= 1 << 16,
+				caBackgroundColorTransparent	= 1 << 17,
+				caImagesTree					= 1 << 18,
+				caImagesDock					= 1 << 19,
+				caDefaultBorderHeader			= 1 << 20
 			};
 
 			inline colorAreaFlag operator | (colorAreaFlag a, colorAreaFlag b)

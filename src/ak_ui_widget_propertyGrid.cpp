@@ -118,8 +118,6 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 	my_table->horizontalHeader()->setStyleSheet(sheet);
 	my_table->setColorStyle(my_colorStyle);
 	my_infoTextEdit->setColorStyle(my_colorStyle);
-	/*my_table->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader |
-		TYPE_COLORAREA::caBackgroundColorHeader, "{", "}"));*/
 }
 
 void ak::ui::widget::propertyGrid::setAlias(

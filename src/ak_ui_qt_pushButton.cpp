@@ -50,12 +50,12 @@ void ak::ui::qt::pushButton::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
-	}
-	else {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls));
-	}
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+		TYPE_COLORAREA::caBackgroundColorControls, "QPushButton{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorFocus |
+		TYPE_COLORAREA::caBackgroundColorFocus, "QPushButton:hover:!pressed{", "}\n"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorSelected |
+		TYPE_COLORAREA::caBackgroundColorSelected, "QPushButton:pressed{", "}\n"));
+
+	this->setStyleSheet(sheet);
 }

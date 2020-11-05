@@ -84,12 +84,7 @@ void ak::ui::qt::colorEditButton::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		my_button->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
-	}
-	else {
-		my_button->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls));
-	}
+	my_button->setColorStyle(my_colorStyle);
 }
 
 // #############################################################################################################################
