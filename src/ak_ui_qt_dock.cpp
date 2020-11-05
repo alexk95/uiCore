@@ -54,21 +54,8 @@ void ak::ui::qt::dock::setColorStyle(
 		TYPE_COLORAREA::caBackgroundColorWindow, "QDockWidget{", "}\n");
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader |
 		TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caBorderColorHeader, "QDockWidget::title{border-width: 1px;", "}\n"));
-	this->setStyleSheet(sheet);
 	
-	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
-		"QTabBar{", "}\n");
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
-		"QTabBar::tab{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorFocus | TYPE_COLORAREA::caForegroundColorFocus,
-		"QTabBar::tab:hover{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected,
-		"QTabBar::tab:selected QTabBar::tab::pressed{", "}"));
-
-	auto lst = findChildren<QTabBar *>();
-	for (auto itm : lst) {
-		itm->setStyleSheet(sheet);
-	}
+	this->setStyleSheet(sheet);
 }
 
 void ak::ui::qt::dock::removeChildObject(

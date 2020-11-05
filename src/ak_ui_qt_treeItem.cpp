@@ -39,11 +39,23 @@ ak::ui::qt::treeItem::~treeItem() {
 	treeItem * dx = this;
 	QString txt = dx->text(0);
 	if (my_parent != nullptr) { my_parent->eraseChild(my_id); }
+
+	// OLD
+	/*
 	while (my_childs.size() > 0) {
 		for (auto itm : my_childs) {
 			delete itm; break;
 		}
 	}
+	*/
+
+	// NEW
+	// The child items themselves will be deleted by the corresponding functionality in the QTreeWidgetItem
+	// However, they must no longer refer to this deleted item. Therefore we set their parent to nullptr.
+	for (auto itm : my_childs) {
+		itm->setParentItem(nullptr);
+	}
+	my_childs.clear();
 }
 
 // ##############################################################################################
