@@ -158,15 +158,12 @@ void ak::ui::uiManager::setColorStyle(
 
 	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
 		TYPE_COLORAREA::caBackgroundColorWindow));
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow,
-		"QToolBar{", "}\n"));	
+	
 	my_window->setStyleSheet(sheet);
 
 	// Double paint to not mess up the tab toolbar
 	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
 		TYPE_COLORAREA::caBackgroundColorWindow, "QMainWindow{", "}\n");
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow,
-		"QToolBar{", "}\n"));
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow | TYPE_COLORAREA::caBackgroundColorWindow,
 		"QTabBar{", "}\n"));
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
@@ -187,7 +184,7 @@ void ak::ui::uiManager::setColorStyle(
 	// TTB
 	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
 		TYPE_COLORAREA::caBackgroundColorWindow, "QToolBar{border: 0px;", "}");
-	if (sheet.length() == 0) {
+	if (sheet.isEmpty()) {
 		sheet = "QToolBar{border: 0px;}";
 	}
 	my_tabToolBar->SetStylesheet(sheet);
@@ -563,7 +560,28 @@ ak::ui::ttb::page * ak::ui::uiManager::createTabToolbarSubContainer(
 ) {
 	tt::Page * page = my_tabToolBar->AddPage(_text);
 	ak::ui::ttb::page * p = new ak::ui::ttb::page(my_messenger, page, _text);
-	if (my_colorStyle != nullptr) { p->setColorStyle(my_colorStyle); }
+	if (my_colorStyle != nullptr) { p->setColorStyle(my_colorStyle);
+		QString sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+			TYPE_COLORAREA::caBackgroundColorWindow, "QTabWidget{", "}");
+		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBorderColorHeader, "QTabWidget::pane{border: 0px solid; border-top-width: 1px; border-bottom-width: 1px;", "}\n"));
+		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
+			"QTabWidget::tab-bar{", "}\n"));
+		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
+			"QTabBar::tab{", "}\n"));
+		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorFocus | TYPE_COLORAREA::caForegroundColorFocus,
+			"QTabBar::tab:hover{", "}\n"));
+		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected,
+			"QTabBar::tab:selected QTabBar::tab::pressed{", "}"));
+
+		if (sheet.length() == 0) {
+			// Provide manual stylesheet to fix styling issue in toolBar
+			sheet = "QTabWidget{}\n"
+				"QTabWidget::pane{border: 0px solid #707070; border-top-width: 1px; border-bottom-width: 1px;}\n"
+				;
+		}
+
+		my_tabToolBar->SetTabBarStylesheet(sheet);
+	}
 	return p;
 }
 

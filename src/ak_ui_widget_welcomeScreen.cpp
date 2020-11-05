@@ -61,7 +61,8 @@ ak::ui::widget::welcomeScreen::welcomeScreen(
 
 	// Create central widget
 	my_screen.Central = toLayoutWidgetCombo(new QHBoxLayout, new QWidget);
-	
+	my_screen.Central.widget->setObjectName("UICOREWelcomeScreenCentralWidget");
+
 	// Create recents object
 	my_screen.RecentsCentralDummy = toLayoutWidgetCombo(new QHBoxLayout, new QWidget);
 	my_screen.Central.layout->addWidget(my_screen.RecentsCentralDummy.widget);
@@ -148,6 +149,9 @@ void ak::ui::widget::welcomeScreen::setColorStyle(
 
 	assert(_colorStyle != nullptr); // Nullptr provided
 	my_colorStyle = _colorStyle;
+
+	my_screen.Central.widget->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls,
+		"#UICOREWelcomeScreenCentralWidget{", "}"));
 
 	// List
 	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorTransparent, "QListWidget{", " border:0px;}\n"));

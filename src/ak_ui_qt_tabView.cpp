@@ -38,12 +38,19 @@ void ak::ui::qt::tabView::setColorStyle(
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
 
-	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-		TYPE_COLORAREA::caBackgroundColorControls, "QWidget{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls
+	/*QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+		TYPE_COLORAREA::caBackgroundColorControls, "QWidget{", "}\n"));*/
+	QString sheet;
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls //|
+		//TYPE_COLORAREA::caBorderColorControls
 		, "QTabWidget{", "}\n"));
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
-		"QTabWidget::pane{", "}\n"));
+		"QTabWidget::pane{", "border: 1px solid #"));
+	if (!sheet.isEmpty()) {
+		QString Color(my_colorStyle->getHeaderBackgroundColor().toHexString(true));
+		sheet.append(Color);
+		sheet.append(";}\n");
+	}
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
 		"QTabWidget::tab-bar{", "}\n"));
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,

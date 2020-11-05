@@ -55,14 +55,49 @@ void ak::ui::qt::tree::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+		TYPE_COLORAREA::caBackgroundColorControls, "QTreeWidget{", "}"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+		TYPE_COLORAREA::caBackgroundColorControls, "QTreeWidget::item{", "}"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorFocus |
+		TYPE_COLORAREA::caBackgroundColorFocus, "QTreeWidget::item:hover{", "}"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorSelected |
+		TYPE_COLORAREA::caBackgroundColorSelected, "QTreeWidget::item:selected:!hover{", "}"));
+	
+	if (!sheet.isEmpty()) {
+		sheet.append("QTreeWidget::branch:has-siblings:!adjoins-item{border-image: url(");
+		sheet.append(my_colorStyle->getFilePath("Tree/Tree_Branch_End_Root.png"));
+		sheet.append(") 0;}");
+
+		sheet.append("QTreeWidget::branch:has-siblings:adjoins-item{border-image: url(");
+		sheet.append(my_colorStyle->getFilePath("Tree/Tree_Branch_HasSiblings.png"));
+		sheet.append(") 0;}");
+
+		sheet.append("QTreeWidget::branch:!has-children:!has-siblings:adjoins-item{border-image: url(");
+		sheet.append(my_colorStyle->getFilePath("Tree/Tree_Branch_End.png"));
+		sheet.append(") 0;}");
+
+		sheet.append("QTreeWidget::branch:has-children:!has-siblings:closed:!hover,"
+			"QTreeWidget::branch:closed:has-children:has-siblings:!hover{border-image: none; image: url(");
+		sheet.append(my_colorStyle->getFilePath("Tree/Tree_Branch_HasChildren.png"));
+		sheet.append(");}");
+
+		sheet.append("QTreeWidget::branch:has-children:!has-siblings:closed:hover,"
+			"QTreeWidget::branch:closed:has-children:has-siblings:hover{border-image: none; image: url(");
+		sheet.append(my_colorStyle->getFilePath("Tree/Tree_Branch_HasChildren_Focus.png"));
+		sheet.append(");}");
+
+		sheet.append("QTreeWidget::branch:open:has-children:!has-siblings:!hover,"
+			"QTreeWidget::branch:open:has-children:has-siblings:!hover{border-image: none; image: url(");
+		sheet.append(my_colorStyle->getFilePath("Tree/Tree_Branch_Open.png"));
+		sheet.append(");}");
+
+		sheet.append("QTreeWidget::branch:open:has-children:!has-siblings:hover,"
+			"QTreeWidget::branch:open:has-children:has-siblings:hover{border-image: none; image: url(");
+		sheet.append(my_colorStyle->getFilePath("Tree/Tree_Branch_Open_Focus.png"));
+		sheet.append(");}");
 	}
-	else {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls));
-	}
+	this->setStyleSheet(sheet);
 }
 
 // ####################################################################################################################################

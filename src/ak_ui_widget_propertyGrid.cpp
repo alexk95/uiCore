@@ -1190,6 +1190,9 @@ void ak::ui::widget::propertyGridItem::slotValueWidgetEvent() {
 	}
 }
 
+#include <string>
+#include <sstream>
+
 void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 	QTableWidgetItem *									_item
 ) {
@@ -1201,8 +1204,10 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 		case ak::core::vDouble:
 		{
 			my_ignoreCellEvent = true;
-			double v = theText.toDouble();
-			if (theText != QString::number(v)) {
+			bool failed = false;
+			double v;
+			v = ak::core::numbers::validateNumber<double>(theText.toStdString(), failed);
+			if (failed) {
 				QString msg("Invalid value format provided for setting ");
 				msg.append(my_name);
 				msg.append(". Expected numeric.");
@@ -1229,8 +1234,10 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 		case ak::core::vInt:
 		{
 			my_ignoreCellEvent = true;
-			int v = theText.toInt();
-			if (theText != QString::number(v)) {
+			bool failed = false;
+			int v;
+			v = ak::core::numbers::validateNumber<int>(theText.toStdString(), failed);
+			if (failed) {
 				QString msg("Invalid value format provided for setting ");
 				msg.append(my_name);
 				msg.append(". Expected natural number.");

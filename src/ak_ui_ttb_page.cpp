@@ -73,14 +73,8 @@ void ak::ui::ttb::page::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		my_page->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBorderColorWindow, "#" + my_alias + "{", "}"));
-	}
-	else {
-		my_page->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-			TYPE_COLORAREA::caBorderColorWindow));
-	}
+	my_page->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow));
 }
 
 void ak::ui::ttb::page::removeChildObject(

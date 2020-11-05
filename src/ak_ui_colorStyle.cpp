@@ -28,8 +28,6 @@ ak::ui::color ak::ui::colorStyle::getControlsErrorForecolor(void) const { return
 
 ak::ui::color ak::ui::colorStyle::getControlsFocusedColor(void) const { return my_controlsFocusColor; }
 
-ak::ui::color ak::ui::colorStyle::getControlsPressedColor(void) const { return my_controlsPressedColor; }
-
 ak::ui::color ak::ui::colorStyle::getAlternateForeColor(void) const { return my_alternateForeColor; }
 
 ak::ui::color ak::ui::colorStyle::getAlternateBackColor(void) const { return my_alternateBackColor; }
@@ -71,14 +69,14 @@ QString ak::ui::colorStyle::getFilePath(
 				}
 			}
 			catch (...) {
-				throw ak::Exception(QString(QString("Failed to check file\nFile: ") + QString(_fileName) + QString("\nPath: ") +
+				throw Exception(QString(QString("Failed to check file\nFile: ") + QString(_fileName) + QString("\nPath: ") +
 					QString(my_directories.at(i))).toStdString().c_str(), "Check file");
 			}
 		}
-		throw ak::Exception(QString(QString("The requested file: \"") + QString(_fileName) + QString("\" does not exist in the icon search directories")).toStdString(),
+		throw Exception(QString(QString("The requested file: \"") + QString(_fileName) + QString("\" does not exist in the icon search directories")).toStdString(),
 			"Find file", Exception::exceptionType::FileNotFound);
 	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::colorStyle::getFilePath()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::colorStyle::getFilePath()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::colorStyle::getFilePath()"); }
+	catch (const Exception & e) { throw Exception(e, "ak::ui::colorStyle::getFilePath()"); }
+	catch (const std::exception & e) { throw Exception(e.what(), "ak::ui::colorStyle::getFilePath()"); }
+	catch (...) { throw Exception("Unknown error", "ak::ui::colorStyle::getFilePath()"); }
 }

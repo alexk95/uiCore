@@ -53,6 +53,7 @@ namespace ak {
 				const QString &					_prefix = QString(),
 				const QString &					_suffix = QString()
 			) const override;
+
 		};
 	} // namespace ui
 } // namespace ak

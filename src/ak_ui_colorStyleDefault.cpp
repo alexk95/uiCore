@@ -17,8 +17,10 @@ ak::ui::colorStyleDefault::colorStyleDefault() {
 	my_controlsMainBackcolor.setRGBA(204, 204, 204);
 	my_controlsMainForecolor.setRGBA(0, 0, 0);
 	my_controlsErrorForecolor.setRGBA(255, 0, 0);
-	my_controlsPressedColor.setRGBA(60, 200, 60);
+	my_controlsPressedBackColor.setRGBA(60, 200, 60);
+	my_controlsPressedForeColor.setRGBA(0, 0, 0);
 	my_controlsFocusColor.setRGBA(60, 60, 200);
+	my_controlsBorderColor.setRGBA(0, 0, 0);
 
 	my_windowMainBackcolor.setRGBA(255, 255, 255);
 	my_windowMainForecolor.setRGBA(0, 0, 0);
@@ -39,3 +41,9 @@ QString ak::ui::colorStyleDefault::toStyleSheet(
 	const QString &					_prefix,
 	const QString &					_suffix
 ) const { return ""; }
+
+QString ak::ui::colorStyleDefault::getFilePath(
+	const QString &			_fileName
+) const {
+	return "";
+}

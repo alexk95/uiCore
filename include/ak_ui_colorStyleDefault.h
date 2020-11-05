@@ -53,6 +53,13 @@ namespace ak {
 				const QString &					_prefix = QString(),
 				const QString &					_suffix = QString()
 			) const override;
+
+			//! @brief Returns the filename for the requested file by searching the set directories
+			//! @param _fileName The filename only of the requsted file (subdirectories have to be provided)
+			//! @throw ak::Exception if the file does not exist (with exception type = FileNotFound)
+			virtual QString getFilePath(
+				const QString &			_fileName
+			) const override;
 		};
 	} // namespace ui
 } // namespace ak

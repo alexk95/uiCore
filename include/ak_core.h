@@ -14,6 +14,8 @@
 // C++ header
 #include <vector>					// vector<T>
 #include <list>						// list<T>
+#include <string>
+#include <sstream>
 
 // Qt header
 #include <qstring.h>				// QString
@@ -238,6 +240,18 @@ namespace ak {
 
 			// ############################################################################################################################################
 			// Check type
+
+			template <class T> T validateNumber(std::string _string, bool & _failed) {
+				std::stringstream ss(_string);
+				T v;
+				ss >> v;
+				_failed = false;
+				if (ss.fail()) { _failed = true; }
+				std::string rest;
+				ss >> rest;
+				if (!rest.empty()) { _failed = true; }
+				return v;
+			}
 
 			//! @brief Returns true if the provided C-String is in a format ready to be converted to a double or float
 			//! @param str The C-String to be checked
