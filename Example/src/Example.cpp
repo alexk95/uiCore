@@ -164,27 +164,25 @@ void Example::eventCallback(
 					my_notifier->enable();
 				}
 				else if (_sender == my_ui.ttb_aTest) {
+					ak::uiAPI::propertyGrid::clear(my_ui.propertiesWidget);
+					ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 70, 200, 200), "Test group111");
 
-					for (auto itm : my_testingData) {
-						ak::uiAPI::object::destroy(itm, true);
-					}
+					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group111", "Test int", 13);
+					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group111", "Test string", "Some text");
 
-					ak::uiAPI::action::setEnabled(my_ui.ttb_aTest, false);
-					return;
-					ak::uiAPI::action::setEnabled(my_ui.ttb_aTest, false);
-					ak::uiAPI::action::setEnabled(my_ui.ttb_aTest2, true);
-					ak::uiAPI::dock::setVisible(my_ui.dockProperties, false);
-					ak::uiAPI::dock::setVisible(my_ui.dockOutput, false);
-					//ak::uiAPI::dock::setVisible(my_ui.dockTester, false);
-					ak::uiAPI::dock::setVisible(my_ui.dockTree, false);
+					ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(200, 70, 70, 200), "Test group 222");
+					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group 222", "Test double", 10.0);
+					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group 222", "Test bool", true);
+					std::vector<QString> v;
+					v.push_back("Test");
+					v.push_back("Some other item");
+					v.push_back("And another setting");
+					ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 200, 70, 200), "Test group 333");
+					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 333", "Test selection", v, "Test");
+					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 333", "Test color", my_settingColor);
 				}
 				else if (_sender == my_ui.ttb_aTest2) {
-					ak::uiAPI::action::setEnabled(my_ui.ttb_aTest, true);
-					ak::uiAPI::action::setEnabled(my_ui.ttb_aTest2, false);
-					ak::uiAPI::dock::setVisible(my_ui.dockProperties, true);
-					ak::uiAPI::dock::setVisible(my_ui.dockOutput, true);
-					//ak::uiAPI::dock::setVisible(my_ui.dockTester, true);
-					ak::uiAPI::dock::setVisible(my_ui.dockTree, true);
+					
 				}
 			}
 			else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {
@@ -455,9 +453,12 @@ void Example::defaultData(void) {
 	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 70, 200, 200), "Test group");
 
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group", "Test int", 13));
+	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group", "Test string", "Some text"));
+
 	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(200, 70, 70, 200), "Test group 2");
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group 2", "Test double", 10.0));
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group 2", "Test bool", true));
+	
 	std::vector<QString> v;
 	v.push_back("Test");
 	v.push_back("Some other item");
@@ -465,8 +466,6 @@ void Example::defaultData(void) {
 	ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 200, 70, 200), "Test group 3");
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test selection", v, "Test"));
 	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 3", "Test color", my_settingColor));
-
-	ids.push_back(ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group", "Test string", "Some text"));
 
 	for (auto theId : ids) {
 		//ak::uiAPI::propertyGrid::setItemIsReadOnly(my_ui.propertiesWidget, theId);

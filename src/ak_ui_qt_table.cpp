@@ -15,6 +15,7 @@
 #include <ak_exception.h>			// error handling
 
 #include <qheaderview.h>
+#include <qevent.h>
 
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
@@ -37,6 +38,11 @@ void ak::ui::qt::table::keyPressEvent(QKeyEvent *_event)
 void ak::ui::qt::table::keyReleaseEvent(QKeyEvent * _event) {
 	QTableWidget::keyReleaseEvent(_event);
 	emit keyReleased(_event);
+}
+
+void ak::ui::qt::table::focusOutEvent(QFocusEvent * _event) {
+	QTableWidget::focusOutEvent(_event);
+	emit focusLost();
 }
 
 // #######################################################################################################

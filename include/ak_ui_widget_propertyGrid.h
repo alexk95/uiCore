@@ -241,6 +241,7 @@ namespace ak {
 			private slots:
 				void slotItemChanged(void);
 				void slotCheckItemVisibility(void);
+				void slotFocusLost(void);
 
 			private:
 
@@ -362,6 +363,8 @@ namespace ak {
 
 				void clear(void);
 
+				void deselect(void);
+
 			private slots:
 				void slotDoubleClicked(QTableWidgetItem *);
 
@@ -478,6 +481,7 @@ namespace ak {
 					const QColor &						_foregroundError
 				);
 
+				void deselect(void);
 
 				// #################################################################################
 

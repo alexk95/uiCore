@@ -19,7 +19,8 @@ ak::ui::colorStyleDefaultDark::colorStyleDefaultDark() {
 	my_controlsErrorForecolor.setRGBA(255,0,0);
 	my_controlsPressedBackColor.setRGBA(60, 200, 60);
 	my_controlsPressedForeColor.setRGBA(0, 0, 0);
-	my_controlsFocusColor.setRGBA(64, 128, 200);
+	my_controlsFocusBackColor.setRGBA(64, 128, 200);
+	my_controlsFocusForeColor.setRGBA(255, 255, 255);
 	my_controlsBorderColor.setRGBA(130, 135, 144);
 
 	my_windowMainBackcolor.setRGBA(48, 48, 48);

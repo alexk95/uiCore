@@ -176,7 +176,7 @@ void ak::ui::widget::welcomeScreen::setColorStyle(
 
 	// Label
 	sheet = "QLabel{color:#";
-	sheet.append(my_colorStyle->getControlsFocusedColor().toHexString());
+	sheet.append(my_colorStyle->getControlsFocusedBackColor().toHexString());
 	sheet.append(";}");
 	if (my_new.Label != nullptr) { my_new.Label->setStyleSheet(sheet); }
 	if (my_open.Label != nullptr) { my_open.Label->setStyleSheet(sheet); }

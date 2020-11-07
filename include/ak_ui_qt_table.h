@@ -20,6 +20,7 @@
 #include <ak_globalDataTypes.h>
 
 // Forward declaration
+class QFocusEvent;
 class QKeyEvent;
 
 namespace ak {
@@ -58,6 +59,9 @@ namespace ak {
 				//! @brief Emits a key released signal a key is released
 				virtual void keyReleaseEvent(QKeyEvent * _event) override;
 
+				//! @brief Emits a focusLost signal
+				virtual void focusOutEvent(QFocusEvent * _event) override;
+
 				// #######################################################################################################
 				// Base class functions
 
@@ -74,6 +78,7 @@ namespace ak {
 			signals:
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);
+				void focusLost();
 			};
 
 		} // namespace qt

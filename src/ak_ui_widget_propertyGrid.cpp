@@ -60,6 +60,7 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	// Create table
 	my_table = new qt::table(0, 2);
 	my_table->verticalHeader()->setVisible(false);
+	my_table->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
 
 	QStringList lst;
 	lst.push_back("Name");
@@ -78,10 +79,14 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	my_defaultGroup->setGroupHeaderVisible(false);
 	my_defaultGroup->activate();
 
+	connect(my_table, SIGNAL(focusLost()), this, SLOT(slotFocusLost()));
+
 }
 
 ak::ui::widget::propertyGrid::~propertyGrid() {
 	A_OBJECT_DESTROYING
+
+	clear();
 }
 
 // ##############################################################################################################
@@ -105,6 +110,7 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 	my_itemTextColorError = my_colorStyle->getControlsErrorForecolor().toQColor();
 
 	for (auto itm : my_groups) { itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor); }
+
 	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
 	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
@@ -140,7 +146,6 @@ void ak::ui::widget::propertyGrid::addGroup(
 	assert(itm == my_groups.end());	// Group already exists
 	propertyGridGroup * newGroup = new propertyGridGroup(my_table, _group);
 	newGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
-	newGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
 	newGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	newGroup->activate();
 	my_groups.insert_or_assign(_group, newGroup);
@@ -155,7 +160,6 @@ void ak::ui::widget::propertyGrid::addGroup(
 	assert(itm == my_groups.end());	// Group already exists
 	propertyGridGroup * newGroup = new propertyGridGroup(my_table, _group);
 	newGroup->setItemsBackColor(_color);
-	newGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
 	newGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	newGroup->activate();
 	my_groups.insert_or_assign(_group, newGroup);
@@ -386,10 +390,13 @@ bool ak::ui::widget::propertyGrid::itemIsReadOnly(
 
 void ak::ui::widget::propertyGrid::clear(void) {
 	for (auto itm : my_groups) {
-		itm.second->clear();
+		propertyGridGroup * group = itm.second;
+		delete group;
 	}
 	my_defaultGroup->clear();
 	my_items.clear();
+	my_groups.clear();
+	my_currentID = ak::invalidID;
 	itemCountChanged();
 	my_messenger->sendMessage(my_uid, ak::core::eventType::eCleared);
 }
@@ -523,6 +530,10 @@ void ak::ui::widget::propertyGrid::slotCheckItemVisibility(void) {
 	}
 }
 
+void ak::ui::widget::propertyGrid::slotFocusLost(void) {
+	for (auto group : my_groups) { group.second->deselect(); }
+}
+
 // ##############################################################################################################
 
 // Private members
@@ -542,7 +553,8 @@ void ak::ui::widget::propertyGrid::itemCountChanged(void) {
 ak::ui::widget::propertyGridGroup::propertyGridGroup(
 	qt::table *							_propertyGridTable,
 	const QString &						_groupName
-) : my_propertyGridTable(_propertyGridTable), my_isActivated(false), my_isVisible(true), my_isAlternateBackground(false), my_headerIsVisible(true)
+) : my_propertyGridTable(_propertyGridTable), my_isActivated(false), my_isVisible(true), my_isAlternateBackground(false), my_headerIsVisible(true),
+	my_colorTextNormal(0, 0, 0), my_colorTextError(255, 0, 0)
 {
 	assert(my_propertyGridTable != nullptr);
 	my_item = new QTableWidgetItem;
@@ -568,7 +580,10 @@ ak::ui::widget::propertyGridGroup::propertyGridGroup(
 }
 
 ak::ui::widget::propertyGridGroup::~propertyGridGroup() {
-	my_propertyGridTable->removeRow(my_item->row());
+	int r = my_item->row();
+	clear();
+	delete my_item;
+	my_propertyGridTable->removeRow(r);
 }
 
 QString ak::ui::widget::propertyGridGroup::name(void) const { return my_name; }
@@ -771,6 +786,11 @@ void ak::ui::widget::propertyGridGroup::clear(void) {
 	my_isAlternateBackground = false;
 }
 
+void ak::ui::widget::propertyGridGroup::deselect(void) {
+	for (auto itm : my_items) { itm->deselect(); }
+	my_item->setSelected(false);
+}
+
 // ##############################################################################################################
 
 // slots
@@ -846,7 +866,6 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	sheet.append(my_colorBackground.toHexString(true));
 	sheet.append(";}\n");
 	my_widgetBool->setStyleSheet(sheet);
-	my_widgetBool->setAutoFillBackground(true);
 
 	// Make the first cell read only
 	Qt::ItemFlags f = my_cellSettingName->flags();
@@ -1069,6 +1088,11 @@ void ak::ui::widget::propertyGridItem::setTextColors(
 	repaint();
 }
 
+void ak::ui::widget::propertyGridItem::deselect(void) {
+	my_cellSettingName->setSelected(false);
+	if (my_cellValue != nullptr) { my_cellValue->setSelected(false); }
+}
+
 // #################################################################################
 
 // Information gathering
@@ -1213,6 +1237,7 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 				msg.append(". Expected numeric.");
 				ui::dialog::prompt dia(msg, "Error", ui::core::promptType::promptOk);
 				dia.showDialog();
+				my_cellValue->setSelected(false);
 				if (my_isMultipleValues) {
 					my_cellValue->setText("...");
 				}
@@ -1243,6 +1268,7 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 				msg.append(". Expected natural number.");
 				ui::dialog::prompt dia(msg, "Error", ui::core::promptType::promptOk);
 				dia.showDialog();
+				my_cellValue->setSelected(false);
 				if (my_isMultipleValues) {
 					my_cellValue->setText("...");
 				}

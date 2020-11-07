@@ -26,7 +26,9 @@ ak::ui::color ak::ui::colorStyle::getControlsMainBackcolor(void) const { return 
 
 ak::ui::color ak::ui::colorStyle::getControlsErrorForecolor(void) const { return my_controlsErrorForecolor; }
 
-ak::ui::color ak::ui::colorStyle::getControlsFocusedColor(void) const { return my_controlsFocusColor; }
+ak::ui::color ak::ui::colorStyle::getControlsFocusedBackColor(void) const { return my_controlsFocusBackColor; }
+
+ak::ui::color ak::ui::colorStyle::getControlsFocusedForeColor(void) const { return my_controlsFocusForeColor; }
 
 ak::ui::color ak::ui::colorStyle::getAlternateForeColor(void) const { return my_alternateForeColor; }
 

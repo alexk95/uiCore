@@ -68,8 +68,11 @@ namespace ak {
 			//! @brief Returns the currently set controls mian error foreground color
 			ak::ui::color getControlsErrorForecolor(void) const;
 
+			//! @brief Returns the currently set controls focus background color
+			ak::ui::color getControlsFocusedBackColor(void) const;
+
 			//! @brief Returns the currently set controls focus color
-			ak::ui::color getControlsFocusedColor(void) const;
+			ak::ui::color getControlsFocusedForeColor(void) const;
 
 			//! @brief Returns the currently set controls pressed color
 			ak::ui::color getControlsPressedForeColor(void) const { return my_controlsPressedForeColor; }
@@ -112,7 +115,8 @@ namespace ak {
 			ak::ui::color				my_controlsMainForecolor;		//! The currently set controls main foreground color
 			ak::ui::color				my_controlsMainBackcolor;		//! The currently set controls main background color
 			ak::ui::color				my_controlsErrorForecolor;		//! The currently set controls error foreground color
-			ak::ui::color				my_controlsFocusColor;			//! The currently set controls focus color
+			ak::ui::color				my_controlsFocusBackColor;			//! The currently set controls focus back color
+			ak::ui::color				my_controlsFocusForeColor;			//! The currently set controls focus fore color
 			ak::ui::color				my_controlsPressedBackColor;		//! The currently set controls pressed color
 			ak::ui::color				my_controlsPressedForeColor;		//! The currently set controls pressed color
 			ak::ui::color				my_alternateBackColor;
