@@ -145,6 +145,7 @@
     <ClInclude Include="include\ak_ui_qt_label.h" />
     <ClInclude Include="include\ak_ui_qt_tabView.h" />
     <ClInclude Include="include\ak_ui_qt_timer.h" />
+    <ClInclude Include="include\ak_ui_qt_toolButton.h" />
     <ClInclude Include="include\ak_ui_qt_treeItem.h" />
     <ClInclude Include="include\ak_ui_ttb_group.h" />
     <ClInclude Include="include\ak_ui_ttb_page.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="src\ak_ui_qt_tabView.cpp" />
     <ClCompile Include="src\ak_ui_qt_textEdit.cpp" />
     <ClCompile Include="src\ak_ui_qt_timer.cpp" />
+    <ClCompile Include="src\ak_ui_qt_toolButton.cpp" />
     <ClCompile Include="src\ak_ui_qt_tree.cpp" />
     <ClCompile Include="src\ak_ui_qt_treeItem.cpp" />
     <ClCompile Include="src\ak_ui_signalLinker.cpp" />

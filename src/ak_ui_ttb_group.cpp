@@ -94,17 +94,15 @@ void ak::ui::ttb::group::destroyAllSubContainer(void) {
 void ak::ui::ttb::group::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	return;
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		my_group->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
-	}
-	else {
-		my_group->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls));
-	}
+	my_group->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow));
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorFocus | TYPE_COLORAREA::caBackgroundColorFocus, "QToolButton:hover:!pressed{", "}"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorSelected | TYPE_COLORAREA::caBackgroundColorSelected, "QToolButton:pressed{", "}"));
+	//sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls, "QToolButton QToolTip{", "}"));
+	my_group->SetToolButtonStylesheet(sheet);
+	my_group->SetToolButtonStylesheet("QToolButton QToolTip{color: black;}");
 }
 
 void ak::ui::ttb::group::removeChildObject(

@@ -160,6 +160,11 @@ void Group::RemoveAction(QAction* action) {
 	actionButtonMap.erase(action);
 }
 
+// Added by Alexander Kuester
+void Group::SetToolButtonStylesheet(const QString & sheet) {
+	for (auto itm : actionButtonMap) { itm.second->setStyleSheet(sheet); }
+}
+
 void Group::AddWidget(QWidget* widget)
 {
     widget->setParent(this);

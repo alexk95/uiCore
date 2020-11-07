@@ -107,6 +107,8 @@ ak::UID ak::ui::objectManager::createAction(
 	// Create object
 	ak::ui::qt::action * obj = new ak::ui::qt::action(_icon, _text, _popupMode);
 	// Set parameter
+	obj->setToolTip("");
+	obj->setWhatsThis("");
 	my_signalLinker->addLink(obj);
 	// Store data
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
