@@ -58,6 +58,7 @@ void ak::ui::qt::tabView::setColorStyle(
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorFocus | TYPE_COLORAREA::caForegroundColorFocus,
 		"QTabBar::tab:hover{", "}\n"));
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected,
-		"QTabBar::tab:selected QTabBar::tab::pressed{", "}"));
+		"QTabBar::tab:selected{", "}"));
+	
 	this->setStyleSheet(sheet);
 }
