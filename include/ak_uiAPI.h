@@ -1127,6 +1127,12 @@ namespace ak {
 				ak::UID							_toolButtonUID
 			);
 
+			//! @brief Will get the current ToolTip of the toolButton
+			//! @param _toolButtonUID The UID of the tool button
+			UICORE_API QString getToolTip(
+				ak::UID							_toolButtonUID
+			);
+
 			//! @brief Will set the enabled state of the toolButton
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _enabled If true, the toolButton will be enabled
@@ -1139,6 +1145,14 @@ namespace ak {
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _text The text to set
 			UICORE_API void setText(
+				ak::UID							_toolButtonUID,
+				const QString &					_text
+			);
+
+			//! @brief Will set the ToolTip of the toolButton
+			//! @param _toolButtonUID The UID of the tool button
+			//! @param _text The text to set
+			UICORE_API void setToolTip(
 				ak::UID							_toolButtonUID,
 				const QString &					_text
 			);

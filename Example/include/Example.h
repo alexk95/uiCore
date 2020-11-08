@@ -79,6 +79,6 @@ private:
 	ak::ui::color				my_settingColor;
 	std::string					my_JSONSettingsString;
 
-	std::vector < ak::UID>	my_testingData;
+	std::vector <ak::UID>		my_testingData;
 
 };

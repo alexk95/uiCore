@@ -1687,6 +1687,16 @@ QString ak::uiAPI::toolButton::getText(
 	return actualToolButton->getAction()->text();
 }
 
+QString ak::uiAPI::toolButton::getToolTip(
+	ak::UID							_toolButtonUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	return actualToolButton->ToolTip();
+}
+
 void ak::uiAPI::toolButton::setEnabled(
 	ak::UID							_toolButtonUID,
 	bool							_enabled
@@ -1707,6 +1717,17 @@ void ak::uiAPI::toolButton::setText(
 	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	actualToolButton->getAction()->setText(_text);
+}
+
+void ak::uiAPI::toolButton::setToolTip(
+	ak::UID							_toolButtonUID,
+	const QString &					_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	actualToolButton->SetToolTip(_text);
 }
 
 void ak::uiAPI::toolButton::setIcon(

@@ -79,11 +79,26 @@ void ak::ui::qt::toolButton::setColorStyle(
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorSelected |
 		TYPE_COLORAREA::caBackgroundColorSelected, "QToolButton:pressed{", "}"));
 
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-		TYPE_COLORAREA::caBackgroundColorControls, "QToolButton QToolTip{", "}"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorHeader |
+		TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caBorderColorHeader,
+		"QToolTip{", "border: 1px;}"));
 
-	this->setStyleSheet(sheet);
+
+	setStyleSheet(sheet);
 }
+
+// #######################################################################################################
+
+void ak::ui::qt::toolButton::SetToolTip(
+	const QString &						_text
+) {
+	setToolTip(_text);
+	setWhatsThis(_text);
+	my_action->setToolTip(_text);
+	my_action->setWhatsThis(_text);
+}
+
+QString ak::ui::qt::toolButton::ToolTip(void) const { return toolTip(); }
 
 // #######################################################################################################
 
@@ -97,5 +112,9 @@ void ak::ui::qt::toolButton::slotClicked() { emit clicked(); }
 
 void ak::ui::qt::toolButton::ini(void) {
 	setDefaultAction(my_action);
+	setToolTip("");
+	setWhatsThis("");
+	my_action->setToolTip("");
+	my_action->setWhatsThis("");
 	connect(my_action, SIGNAL(triggered(bool)), this, SLOT(slotClicked()));
 }

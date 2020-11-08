@@ -71,10 +71,12 @@ Example::Example()
 		if (currentColorStyle->getColorStyleName() == "Default" || currentColorStyle->getColorStyleName() == "") {
 			ak::uiAPI::toolButton::setText(my_ui.ttb_aColorStyle, TXT_Dark);
 			ak::uiAPI::toolButton::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
+			ak::uiAPI::toolButton::setToolTip(my_ui.ttb_aColorStyle, "Set the color Style to Dark");
 		}
 		else {
 			ak::uiAPI::toolButton::setText(my_ui.ttb_aColorStyle, TXT_Bright);
 			ak::uiAPI::toolButton::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
+			ak::uiAPI::toolButton::setToolTip(my_ui.ttb_aColorStyle, "Set the color Style to Bright");
 		}
 
 		// Create and start the timer to restore the last window state
@@ -152,12 +154,14 @@ void Example::eventCallback(
 						ak::uiAPI::setDefaultColorStyle();
 						ak::uiAPI::toolButton::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
 						ak::uiAPI::toolButton::setText(my_ui.ttb_aColorStyle, TXT_Dark);
+						ak::uiAPI::toolButton::setToolTip(my_ui.ttb_aColorStyle, "Set the color Style to Dark");
 					}
 					else {
 						ak::uiAPI::textEdit::appendText(my_ui.outputWidget, "Set: ColorStyle { Style=\"DefaultDark\"; }");
 						ak::uiAPI::setDefaultDarkColorStyle();
 						ak::uiAPI::toolButton::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
 						ak::uiAPI::toolButton::setText(my_ui.ttb_aColorStyle, TXT_Bright);
+						ak::uiAPI::toolButton::setToolTip(my_ui.ttb_aColorStyle, "Set the color Style to Bright");
 					}
 
 					// Enable the notifier again

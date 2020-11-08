@@ -74,6 +74,15 @@ namespace ak {
 				//! @brief Will return the action of this tool button
 				action * getAction() const { return my_action; }
 
+				//! @brief Will set the toolTip and WhatsThis of this toolButton and its action
+				//! @param _text The text to set
+				void SetToolTip(
+					const QString &						_text
+				);
+
+				//! @brief Will return the current toolTip of this toolButton
+				QString ToolTip(void) const;
+
 			signals:
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);
