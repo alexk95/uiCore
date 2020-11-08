@@ -339,6 +339,7 @@ ak::UID ak::ui::objectManager::createToolButton(
 	// Create object
 	ak::ui::qt::toolButton * obj = new ak::ui::qt::toolButton();
 	// Set parameter
+	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 	my_signalLinker->addLink(obj);
 	// Store data
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
@@ -353,6 +354,7 @@ ak::UID ak::ui::objectManager::createToolButton(
 	// Create object
 	ak::ui::qt::toolButton * obj = new ak::ui::qt::toolButton(_text);
 	// Set parameter
+	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 	my_signalLinker->addLink(obj);
 	// Store data
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
@@ -368,6 +370,7 @@ ak::UID ak::ui::objectManager::createToolButton(
 	// Create object
 	ak::ui::qt::toolButton * obj = new ak::ui::qt::toolButton(_icon, _text);
 	// Set parameter
+	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 	my_signalLinker->addLink(obj);
 	// Store data
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
