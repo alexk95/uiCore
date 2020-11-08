@@ -40,6 +40,7 @@
 #include <ak_ui_dialog_prompt.h>			// prompt dialog
 #include <ak_ui_dialog_logIn.h>
 #include <ak_ui_qt_timer.h>
+#include <ak_ui_qt_toolButton.h>
 
 // Qt header
 #include <qsurfaceformat.h>					// QSurfaceFormat
@@ -448,6 +449,41 @@ ak::UID ak::uiAPI::createTimer(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	return my_objManager->createTimer(_creatorUid);
+}
+
+ak::UID ak::uiAPI::createToolButton(
+	ak::UID													_creatorUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createToolButton(_creatorUid);
+}
+
+ak::UID ak::uiAPI::createToolButton(
+	ak::UID													_creatorUid,
+	const QString &											_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createToolButton(_creatorUid, _text);
+}
+
+ak::UID ak::uiAPI::createToolButton(
+	ak::UID													_creatorUid,
+	const QString &											_text,
+	const QIcon &											_icon
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createToolButton(_creatorUid, _text, _icon);
+}
+
+ak::UID ak::uiAPI::createToolButton(
+	ak::UID													_creatorUid,
+	const QString &											_text,
+	const QString &											_iconName,
+	const QString &											_iconFolder
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	return my_objManager->createToolButton(_creatorUid, _text, *my_iconManager->icon(_iconName, _iconFolder));
 }
 
 ak::UID ak::uiAPI::createTree(
@@ -1626,6 +1662,76 @@ void ak::uiAPI::timer::stop(
 }
 
 // Timer
+
+// ###############################################################################################################################################
+
+// ToolButton
+
+bool ak::uiAPI::toolButton::getIsEnabled(
+	ak::UID							_toolButtonUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	return actualToolButton->getAction()->isEnabled();
+}
+
+QString ak::uiAPI::toolButton::getText(
+	ak::UID							_toolButtonUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	return actualToolButton->getAction()->text();
+}
+
+void ak::uiAPI::toolButton::setEnabled(
+	ak::UID							_toolButtonUID,
+	bool							_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	actualToolButton->getAction()->setEnabled(_enabled);
+}
+
+void ak::uiAPI::toolButton::setText(
+	ak::UID							_toolButtonUID,
+	const QString &					_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	actualToolButton->getAction()->setText(_text);
+}
+
+void ak::uiAPI::toolButton::setIcon(
+	ak::UID							_toolButtonUID,
+	const QIcon &					_icon
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	actualToolButton->getAction()->setIcon(_icon);
+}
+
+void ak::uiAPI::toolButton::setIcon(
+	ak::UID							_toolButtonUID,
+	const QString &					_iconName,
+	const QString &					_iconFolder
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	actualToolButton->getAction()->setIcon(*my_iconManager->icon(_iconName, _iconFolder));
+}
 
 // ###############################################################################################################################################
 

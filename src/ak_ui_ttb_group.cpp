@@ -22,6 +22,7 @@
 #include <ak_ui_colorStyle.h>			// colorStyle
 #include <ak_ui_core_aWidget.h>			// aWidget
 #include <ak_ui_qt_action.h>
+#include <ak_ui_qt_toolButton.h>
 
  // TTB header (TabToolbar library)
 #include <TabToolbar/Group.h>			// tt::Group
@@ -60,7 +61,20 @@ void ak::ui::ttb::group::addChild(
 		//Place action
 		my_group->AddAction(ac->popupMode(), ac);
 	}
-	else {
+	else if (_child->objectType() == ak::ui::core::objectType::oToolButton) {
+		// Cast widget
+		ak::ui::qt::toolButton * w = nullptr;
+		w = dynamic_cast<ak::ui::qt::toolButton *>(_child);
+		assert(w != nullptr); // Cast failed
+		// Setup widget
+		const int iconSize = QApplication::style()->pixelMetric(QStyle::PM_LargeIconSize);
+		w->setAutoRaise(true);
+		w->setIconSize(QSize(iconSize, iconSize));
+		w->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+		w->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+		// Place widget
+		my_group->AddWidget(w->widget());
+	} else {
 		// Check child
 		assert(_child->isWidgetType()); // Provided object es no action and no widget
 		// Cast widget

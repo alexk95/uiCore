@@ -69,12 +69,12 @@ Example::Example()
 		// Check the current color style (after it was restored)
 		const ak::ui::colorStyle * currentColorStyle = ak::uiAPI::getCurrentColorStyle();
 		if (currentColorStyle->getColorStyleName() == "Default" || currentColorStyle->getColorStyleName() == "") {
-			ak::uiAPI::action::setText(my_ui.ttb_aColorStyle, TXT_Dark);
-			ak::uiAPI::action::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
+			ak::uiAPI::toolButton::setText(my_ui.ttb_aColorStyle, TXT_Dark);
+			ak::uiAPI::toolButton::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
 		}
 		else {
-			ak::uiAPI::action::setText(my_ui.ttb_aColorStyle, TXT_Bright);
-			ak::uiAPI::action::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
+			ak::uiAPI::toolButton::setText(my_ui.ttb_aColorStyle, TXT_Bright);
+			ak::uiAPI::toolButton::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
 		}
 
 		// Create and start the timer to restore the last window state
@@ -147,17 +147,17 @@ void Example::eventCallback(
 					my_notifier->disable();
 
 					// Change color style
-					if (ak::uiAPI::action::getText(my_ui.ttb_aColorStyle) == TXT_Bright) {
+					if (ak::uiAPI::toolButton::getText(my_ui.ttb_aColorStyle) == TXT_Bright) {
 						ak::uiAPI::textEdit::appendText(my_ui.outputWidget, "Set: ColorStyle { Style=\"DefaultBright\"; }");
 						ak::uiAPI::setDefaultColorStyle();
-						ak::uiAPI::action::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
-						ak::uiAPI::action::setText(my_ui.ttb_aColorStyle, TXT_Dark);
+						ak::uiAPI::toolButton::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
+						ak::uiAPI::toolButton::setText(my_ui.ttb_aColorStyle, TXT_Dark);
 					}
 					else {
 						ak::uiAPI::textEdit::appendText(my_ui.outputWidget, "Set: ColorStyle { Style=\"DefaultDark\"; }");
 						ak::uiAPI::setDefaultDarkColorStyle();
-						ak::uiAPI::action::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
-						ak::uiAPI::action::setText(my_ui.ttb_aColorStyle, TXT_Bright);
+						ak::uiAPI::toolButton::setIcon(my_ui.ttb_aColorStyle, ICO_Bright, "32");
+						ak::uiAPI::toolButton::setText(my_ui.ttb_aColorStyle, TXT_Bright);
 					}
 
 					// Enable the notifier again
@@ -264,10 +264,10 @@ void Example::setupUi(void) {
 			ak::uiAPI::window::setTabToolBarVisible(my_ui.mainWindow);
 			my_ui.ttb_pFile = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "File");
 			my_ui.ttb_gNONE = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.ttb_pFile, "Test");
-			my_ui.ttb_aExit = ak::uiAPI::createAction(my_uid, "Exit", "ExitAppBlue", "32");
-			my_ui.ttb_aColorStyle = ak::uiAPI::createAction(my_uid, TXT_Bright, ICO_Bright, "32");
-			my_ui.ttb_aTest = ak::uiAPI::createAction(my_uid, "Test", "Test", "32");
-			my_ui.ttb_aTest2 = ak::uiAPI::createAction(my_uid, "Test 2", "Test", "32");
+			my_ui.ttb_aExit = ak::uiAPI::createToolButton(my_uid, "Exit", "ExitAppBlue", "32");
+			my_ui.ttb_aColorStyle = ak::uiAPI::createToolButton(my_uid, TXT_Bright, ICO_Bright, "32");
+			my_ui.ttb_aTest = ak::uiAPI::createToolButton(my_uid, "Test", "Test", "32");
+			my_ui.ttb_aTest2 = ak::uiAPI::createToolButton(my_uid, "Test 2", "Test", "32");
 			ak::uiAPI::container::addObject(my_ui.ttb_gNONE, my_ui.ttb_aExit);
 			ak::uiAPI::container::addObject(my_ui.ttb_gNONE, my_ui.ttb_aColorStyle);
 			ak::uiAPI::container::addObject(my_ui.ttb_gNONE, my_ui.ttb_aTest);
@@ -326,7 +326,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
 			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
 			
-			ak::uiAPI::action::setEnabled(my_ui.ttb_aTest2, false);
+			ak::uiAPI::toolButton::setEnabled(my_ui.ttb_aTest2, false);
 			
 			// Set central widget
 			ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
@@ -356,10 +356,10 @@ void Example::setupUi(void) {
 			ak::UID p = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester1");
 			ak::UID g1 = ak::uiAPI::createTabToolBarSubContainer(my_uid, p, "Tester1");
 			ak::UID g2 = ak::uiAPI::createTabToolBarSubContainer(my_uid, p, "Tester2");
-			ak::UID a1 = ak::uiAPI::createAction(my_uid, "A1", "Test", "32");
-			ak::UID a2 = ak::uiAPI::createAction(my_uid, "A2", "Test", "32");
-			ak::UID a3 = ak::uiAPI::createAction(my_uid, "A3", "Test", "32");
-			ak::UID a4 = ak::uiAPI::createAction(my_uid, "A4", "Test", "32");
+			ak::UID a1 = ak::uiAPI::createToolButton(my_uid, "A1", "Test", "32");
+			ak::UID a2 = ak::uiAPI::createToolButton(my_uid, "A2", "Test", "32");
+			ak::UID a3 = ak::uiAPI::createToolButton(my_uid, "A3", "Test", "32");
+			ak::UID a4 = ak::uiAPI::createToolButton(my_uid, "A4", "Test", "32");
 			ak::uiAPI::container::addObject(g1, a1);
 			ak::uiAPI::container::addObject(g1, a2);
 			ak::uiAPI::container::addObject(g2, a3);

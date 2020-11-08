@@ -40,7 +40,8 @@
 #include <ak_ui_qt_dock.h>					// dock
 #include <ak_ui_qt_pushButton.h>			// pushButton
 #include <ak_ui_qt_textEdit.h>				// textEdit
-#include <ak_ui_qt_timer.h>
+#include <ak_ui_qt_timer.h>					// timer
+#include <ak_ui_qt_toolButton.h>			// toolButton
 
 // AK widget objects
 #include <ak_ui_widget_propertyGrid.h>		// propertyGrid
@@ -324,6 +325,48 @@ ak::UID ak::ui::objectManager::createTimer(
 ) {
 	// Create object
 	ak::ui::qt::timer * obj = new ak::ui::qt::timer();
+	// Set parameter
+	my_signalLinker->addLink(obj);
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
+}
+
+ak::UID ak::ui::objectManager::createToolButton(
+	ak::UID												_creatorUid
+) {
+	// Create object
+	ak::ui::qt::toolButton * obj = new ak::ui::qt::toolButton();
+	// Set parameter
+	my_signalLinker->addLink(obj);
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
+}
+
+ak::UID ak::ui::objectManager::createToolButton(
+	ak::UID												_creatorUid,
+	const QString &										_text
+) {
+	// Create object
+	ak::ui::qt::toolButton * obj = new ak::ui::qt::toolButton(_text);
+	// Set parameter
+	my_signalLinker->addLink(obj);
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
+}
+
+ak::UID ak::ui::objectManager::createToolButton(
+	ak::UID												_creatorUid,
+	const QString &										_text,
+	const QIcon &										_icon
+) {
+	// Create object
+	ak::ui::qt::toolButton * obj = new ak::ui::qt::toolButton(_icon, _text);
 	// Set parameter
 	my_signalLinker->addLink(obj);
 	// Store data

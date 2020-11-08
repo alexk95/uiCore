@@ -45,7 +45,6 @@ namespace ak {
 			//! @param _messenger The globally used messaging system
 			//! @param _uidManager The globally used uidManager
 			//! @param _colorStyle The globally used color style
-			//! @throw ak::Exception if one of the required arguments is a nullptr or a object creation failed
 			objectManager(
 				ak::messenger *										_messenger,
 				ak::uidManager *									_uidManager
@@ -63,7 +62,6 @@ namespace ak {
 			//! @param _text The initial text of the action
 			//! @param _icon The initial icon of the action
 			//! @param _popupMode The popup mode of the action
-			//! @throw ak::Exception if failed to create
 			ak::UID createAction(
 				ak::UID												_creatorUid,
 				const QString &										_text,
@@ -74,7 +72,6 @@ namespace ak {
 			//! @brief Will create a check box and return its UID
 			//! @param _creatorUid The UID of the creator
 			//! @param _text The initial text of the check box
-			//! @throw ak::Exception if failed to create
 			ak::UID createCheckBox(
 				ak::UID												_creatorUid,
 				const QString &										_text = QString(""),
@@ -85,7 +82,6 @@ namespace ak {
 			//! @param _creatorUid The UID of the creator
 			//! @param _color The initial color set to the color edit button
 			//! @param _textOverride If a text is provided then the default color text will be overridden
-			//! @throw ak::Exception if failed to create
 			ak::UID createColorEditButton(
 				ak::UID												_creatorUid,
 				const ak::ui::color &								_color,
@@ -94,7 +90,6 @@ namespace ak {
 
 			//! @brief Will create a combo box and return its UID
 			//! @param _creatorUid The UID of the creator
-			//! @throw ak::Exception if failed to create
 			ak::UID createComboBox(
 				ak::UID												_creatorUid
 			);
@@ -103,7 +98,6 @@ namespace ak {
 			//! @param _creatorUid The UID of the creator
 			//! @param _initialText The initial text of the combo button
 			//! @param _possibleSelection The items that can be selected in the combo button
-			//! @throw ak::Exception if failed to create
 			ak::UID createComboButton(	
 				ak::UID												_creatorUid,
 				const QString &										_initialText = QString(""),
@@ -122,7 +116,6 @@ namespace ak {
 			//! @brief Will create a dock and return its UID
 			//! @param _creatorUid The UID of the creator
 			//! @param _text The text of the dock
-			//! @throw ak::Exception if failed to create
 			ak::UID createDock(
 				ak::UID												_creatorUid,
 				const QString &										_text = QString()
@@ -144,7 +137,6 @@ namespace ak {
 			//! @brief Will create a push button and return its UID
 			//! @param _creatorUid The UID of the creator
 			//! @param _text The text of the push button
-			//! @throw ak::Exception if failed to create
 			ak::UID createPushButton(
 				ak::UID												_creatorUid,
 				const QString &										_text = QString("")
@@ -154,7 +146,6 @@ namespace ak {
 			//! @param _creatorUid The UID of the creator
 			//! @param _icon The icon of the push button
 			//! @param _text The text of the push button
-			//! @throw ak::Exception if failed to create
 			ak::UID createPushButton(
 				ak::UID												_creatorUid,
 				const QIcon &										_icon,
@@ -163,7 +154,6 @@ namespace ak {
 
 			//! @brief Will create a property grid and return its UID
 			//! @param _creatorUid The UID of the creator
-			//! @throw ak::Exception if failed to create
 			ak::UID createPropertyGrid(
 				ak::UID												_creatorUid
 			);
@@ -178,7 +168,6 @@ namespace ak {
 			//! @param _creatorUid The UID of the creator
 			//! @param _rows The initial row count of the table
 			//! @param _columns The initial column count of the table
-			//! @throw ak::Exception if failed to create
 			ak::UID createTable(
 				ak::UID												_creatorUid,
 				int													_rows,
@@ -188,7 +177,6 @@ namespace ak {
 			//! @brief Will create a text edit and return its UID
 			//! @param _creatorUid The UID of the creator
 			//! @param _initialText The initial text of the text edit
-			//! @throw ak::Exception if failed to create
 			ak::UID createTextEdit(
 				ak::UID												_creatorUid,
 				const QString &										_initialText = QString("")
@@ -196,21 +184,42 @@ namespace ak {
 
 			//! @brief WIll create a timer and return its UID
 			//! @param _creatorUid The UID of the creator
-			//! @throw ak::Exception if failed to create
 			ak::UID createTimer(
 				ak::UID												_creatorUid
 			);
 
+			//! @brief Will create a toolButton and return its UID
+			//! @param _creatorUid The UID of the creator
+			ak::UID createToolButton(
+				ak::UID												_creatorUid
+			);
+
+			//! @brief Will create a toolButton and return its UID
+			//! @param _creatorUid The UID of the creator
+			//! @param _text The initial text of the toolButton
+			ak::UID createToolButton(
+				ak::UID												_creatorUid,
+				const QString &										_text
+			);
+
+			//! @brief Will create a toolButton and return its UID
+			//! @param _creatorUid The UID of the creator
+			//! @param _text The initial text of the toolButton
+			//! @param _icon The initial icon of the toolButton
+			ak::UID createToolButton(
+				ak::UID												_creatorUid,
+				const QString &										_text,
+				const QIcon &										_icon
+			);
+
 			//! @brief Will create a tree and return its UID
 			//! @param _creatorUid The UID of the creator
-			//! @throw ak::Exception if failed to create
 			ak::UID createTree(
 				ak::UID												_creatorUid
 			);
 
 			//! @brief Will create a new tab view and return its UID
 			//! @param _creatorUid The UID of the creator who creates this object
-			//! @throw ak::Exception if the provided UID is invali
 			ak::UID createTabView(
 				ak::UID												_creatorUid
 			);
@@ -219,7 +228,6 @@ namespace ak {
 			//! @param _creatorUid The UID of the creator
 			//! @param _parentUid The UID of the parent container or 
 			//! @param _text The text of the new container
-			//! @throw ak::Exception if failed to create or the parent UID is invalid
 			ak::UID createTabToolBarSubContainer(
 				ak::UID												_creatorUid,
 				ak::UID												_parentUid,
@@ -230,7 +238,6 @@ namespace ak {
 			//! @param _creatorUid The UID of the creator
 			//! @param _uiManagerUid The UID of the ui manager where to create the page at
 			//! @param _text The text of the page
-			//! @throw ak::Exception if failed to create or the uiManager UID is invalid
 			ak::UID createTabToolBarPage(
 				ak::UID												_creatorUid,
 				ak::UID												_uiManagerUid,
@@ -313,7 +320,6 @@ namespace ak {
 
 			//! @brief Will setup the UI with the settings provided in the settings JSON string
 			//! @param _json The JSON string containing the settings
-			//! @throw ak::Exception on syntax mismatch
 			void restoreStateColorStyle(
 				const char *										_json
 			);

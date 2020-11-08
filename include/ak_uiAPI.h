@@ -414,6 +414,42 @@ namespace ak {
 			ak::UID													_creatorUid
 		);
 
+		//! @brief Will create a toolButton and return its UID
+		//! @param _creatorUid The UID of the creator
+		UICORE_API ak::UID createToolButton(
+			ak::UID													_creatorUid
+		);
+
+		//! @brief Will create a toolButton and return its UID
+		//! @param _creatorUid The UID of the creator
+		//! @param _text The initial text of the toolButton
+		UICORE_API ak::UID createToolButton(
+			ak::UID													_creatorUid,
+			const QString &											_text
+		);
+
+		//! @brief Will create a toolButton and return its UID
+		//! @param _creatorUid The UID of the creator
+		//! @param _text The initial text of the toolButton
+		//! @param _icon The initial icon of the toolButton
+		UICORE_API ak::UID createToolButton(
+			ak::UID													_creatorUid,
+			const QString &											_text,
+			const QIcon &											_icon
+		);
+
+		//! @brief Will create a toolButton and return its UID
+		//! @param _creatorUid The UID of the creator
+		//! @param _text The initial text of the toolButton
+		//! @param _iconName The name of the initial icon for the toolButton
+		//! @param _iconFolder The folder of the initial icon for the toolButton
+		UICORE_API ak::UID createToolButton(
+			ak::UID													_creatorUid,
+			const QString &											_text,
+			const QString &											_iconName,
+			const QString &											_iconFolder
+		);
+
 		//! @brief Will create a new Tree and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
@@ -1073,6 +1109,59 @@ namespace ak {
 			);
 
 		} // namespace timer
+
+		// ###############################################################################################################################################
+
+		// ToolButton
+
+		namespace toolButton {
+
+			//! @brief Will return the current enabled state of the toolButton
+			UICORE_API bool getIsEnabled(
+				ak::UID							_toolButtonUID
+			);
+
+			//! @brief Will get the text of the toolButton
+			//! @param _toolButtonUID The UID of the tool button
+			UICORE_API QString getText(
+				ak::UID							_toolButtonUID
+			);
+
+			//! @brief Will set the enabled state of the toolButton
+			//! @param _toolButtonUID The UID of the tool button
+			//! @param _enabled If true, the toolButton will be enabled
+			UICORE_API void setEnabled(
+				ak::UID							_toolButtonUID,
+				bool							_enabled = true
+			);
+
+			//! @brief Will set the text of the toolButton
+			//! @param _toolButtonUID The UID of the tool button
+			//! @param _text The text to set
+			UICORE_API void setText(
+				ak::UID							_toolButtonUID,
+				const QString &					_text
+			);
+
+			//! @brief Will set the icon of the toolButton
+			//! @param _toolButtonUID The UID of the tool button
+			//! @param _icon The icon to set
+			UICORE_API void setIcon(
+				ak::UID							_toolButtonUID,
+				const QIcon &					_icon
+			);
+
+			//! @brief Will set the icon of the toolButton
+			//! @param _toolButtonUID The UID of the tool button
+			//! @param _iconName The name of the icon to set
+			//! @param _iconFolder The folder of the icon to set
+			UICORE_API void setIcon(
+				ak::UID							_toolButtonUID,
+				const QString &					_iconName,
+				const QString &					_iconFolder
+			);
+
+		} // namespace toolButton
 
 		// ###############################################################################################################################################
 

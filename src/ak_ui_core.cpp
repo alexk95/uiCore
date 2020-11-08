@@ -22,35 +22,36 @@ QString ak::ui::core::toQString(
 ) {
 	switch (_objectType)
 	{
-	case ak::ui::core::oNone: return QString("None");
-	case ak::ui::core::oAction: return QString("Action");
-	case ak::ui::core::oComboBox: return QString("ComboBox");
-	case ak::ui::core::oComboButton: return QString("ComboButton");
-	case ak::ui::core::oCheckBox: return QString("CheckBox");
-	case ak::ui::core::oDefaultWelcomeScreen: return ("DefaultWelcomeScreen");
-	case ak::ui::core::oDock: return QString("Dock");
-	case ak::ui::core::oGraphicsView: return QString("GraphicsView");
-	case ak::ui::core::oLabel: return QString("Label");
-	case ak::ui::core::oLineEdit: return QString("LineEdit");
-	case ak::ui::core::oList: return QString("List");
-	case ak::ui::core::oLogInDialog: return QString("LogInDialog");
-	case ak::ui::core::oMainWindow: return QString("Window");
-	case ak::ui::core::oOptionsDialog: return QString("OptionsDialog");
-	case ak::ui::core::oPictureBox: return QString("PictureBox");
-	case ak::ui::core::oPrompt: return QString("Prompt");
-	case ak::ui::core::oPropertyGrid: return QString("PropertyGrid");
-	case ak::ui::core::oPushButton: return QString("PushButton");
-	case ak::ui::core::oTable: return QString("Table");
-	case ak::ui::core::oTabToolbar: return QString("TabToolBar");
-	case ak::ui::core::oTabToolbarGroup: return QString("TabToolBarGroup");
-	case ak::ui::core::oTabToolbarPage: return QString("TabBoolBarPage");
-	case ak::ui::core::oTabToolbarSubgroup: return QString("TabToolBarSubGroup");
-	case ak::ui::core::oTabView: return QString("TabView");
-	case ak::ui::core::oTextEdit: return QString("TextEdit");
-	case ak::ui::core::oTimer: return QString("Timer");
-	case ak::ui::core::oTree: return QString("Tree");
-	case ak::ui::core::objectType::oTreeItem: return QString("TreeItem");
-	case ak::ui::core::objectType::oWidget: return QString("Widget");
+	case ui::core::oNone: return QString("None");
+	case ui::core::oAction: return QString("Action");
+	case ui::core::oComboBox: return QString("ComboBox");
+	case ui::core::oComboButton: return QString("ComboButton");
+	case ui::core::oCheckBox: return QString("CheckBox");
+	case ui::core::oDefaultWelcomeScreen: return ("DefaultWelcomeScreen");
+	case ui::core::oDock: return QString("Dock");
+	case ui::core::oGraphicsView: return QString("GraphicsView");
+	case ui::core::oLabel: return QString("Label");
+	case ui::core::oLineEdit: return QString("LineEdit");
+	case ui::core::oList: return QString("List");
+	case ui::core::oLogInDialog: return QString("LogInDialog");
+	case ui::core::oMainWindow: return QString("Window");
+	case ui::core::oOptionsDialog: return QString("OptionsDialog");
+	case ui::core::oPictureBox: return QString("PictureBox");
+	case ui::core::oPrompt: return QString("Prompt");
+	case ui::core::oPropertyGrid: return QString("PropertyGrid");
+	case ui::core::oPushButton: return QString("PushButton");
+	case ui::core::oTable: return QString("Table");
+	case ui::core::oTabToolbar: return QString("TabToolBar");
+	case ui::core::oTabToolbarGroup: return QString("TabToolBarGroup");
+	case ui::core::oTabToolbarPage: return QString("TabBoolBarPage");
+	case ui::core::oTabToolbarSubgroup: return QString("TabToolBarSubGroup");
+	case ui::core::oTabView: return QString("TabView");
+	case ui::core::oTextEdit: return QString("TextEdit");
+	case ui::core::oTimer: return QString("Timer");
+	case ui::core::oToolButton: return QString("ToolButton");
+	case ui::core::oTree: return QString("Tree");
+	case ui::core::objectType::oTreeItem: return QString("TreeItem");
+	case ui::core::objectType::oWidget: return QString("Widget");
 	default: assert(0); // Not implemented yet
 	}
 	return QString("");
@@ -61,9 +62,9 @@ QString ak::ui::core::toQString(
 ) {
 	switch (_textAlignment)
 	{
-	case ak::ui::core::align_alignCenter: return QString("AlignCenter");
-	case ak::ui::core::align_alignLeft: return QString("AlignLeft");
-	case ak::ui::core::align_alignRight: return QString("AlignRight");
+	case ui::core::align_alignCenter: return QString("AlignCenter");
+	case ui::core::align_alignLeft: return QString("AlignLeft");
+	case ui::core::align_alignRight: return QString("AlignRight");
 	default: assert(0); // Not implemented yet
 	}
 	return QString("");
@@ -74,10 +75,10 @@ QString ak::ui::core::toQString(
 ) {
 	switch (_tabLocation)
 	{
-	case ak::ui::core::tabLocation::tab_locationDown: return QString("Down");
-	case ak::ui::core::tabLocation::tab_locationLeft: return QString("Left");
-	case ak::ui::core::tabLocation::tab_locationRight: return QString("Right");
-	case ak::ui::core::tabLocation::tab_locationUp: return QString("Up");
+	case ui::core::tabLocation::tab_locationDown: return QString("Down");
+	case ui::core::tabLocation::tab_locationLeft: return QString("Left");
+	case ui::core::tabLocation::tab_locationRight: return QString("Right");
+	case ui::core::tabLocation::tab_locationUp: return QString("Up");
 	default: assert(0); // Not implemented yet
 		break;
 	}
@@ -89,9 +90,9 @@ QString ak::ui::core::toQString(
 ) {
 	switch (_dockLocation)
 	{
-	case ak::ui::core::dock_dockBottom: return QString("DockBottom");
-	case ak::ui::core::dock_dockLeft: return QString("DockLeft");
-	case ak::ui::core::dock_dockRight: return QString("DockRight");
+	case ui::core::dock_dockBottom: return QString("DockBottom");
+	case ui::core::dock_dockLeft: return QString("DockLeft");
+	case ui::core::dock_dockRight: return QString("DockRight");
 	default: assert(0); // Not implemented yet
 	}
 	return QString("");
@@ -102,13 +103,13 @@ QString ak::ui::core::toQString(
 ) {
 	switch (_dialogResult)
 	{
-	case ak::ui::core::resultYes: return QString("Result.Yes");
-	case ak::ui::core::resultNo: return QString("Result.No");
-	case ak::ui::core::resultOk: return QString("Result.Ok");
-	case ak::ui::core::resultCancel: return QString("Result.Cancel");
-	case ak::ui::core::resultIgnore: return QString("Result.Ignore");
-	case ak::ui::core::resultRetry: return QString("Result.Retry");
-	case ak::ui::core::resultNone: return QString("Result.None");
+	case ui::core::resultYes: return QString("Result.Yes");
+	case ui::core::resultNo: return QString("Result.No");
+	case ui::core::resultOk: return QString("Result.Ok");
+	case ui::core::resultCancel: return QString("Result.Cancel");
+	case ui::core::resultIgnore: return QString("Result.Ignore");
+	case ui::core::resultRetry: return QString("Result.Retry");
+	case ui::core::resultNone: return QString("Result.None");
 	default:
 		assert(0);
 		return QString();
@@ -120,12 +121,12 @@ QString ak::ui::core::toQString(
 ) {
 	switch (_promptType)
 	{
-	case ak::ui::core::promptOk: return QString("Prompt.Ok");
-	case ak::ui::core::promptYesNo: return QString("Prompt.YesNo");
-	case ak::ui::core::promptYesNoCancel: return QString("Prompt.YesNoCancel");
-	case ak::ui::core::promptOkCancel: return QString("Prompt.OkCancel");
-	case ak::ui::core::promptRetryCancel: return QString("Prompt.RetryCancel");
-	case ak::ui::core::promptIgnoreRetryCancel: return QString("Prompt.IgnoreRetryCancel");
+	case ui::core::promptOk: return QString("Prompt.Ok");
+	case ui::core::promptYesNo: return QString("Prompt.YesNo");
+	case ui::core::promptYesNoCancel: return QString("Prompt.YesNoCancel");
+	case ui::core::promptOkCancel: return QString("Prompt.OkCancel");
+	case ui::core::promptRetryCancel: return QString("Prompt.RetryCancel");
+	case ui::core::promptIgnoreRetryCancel: return QString("Prompt.IgnoreRetryCancel");
 	default:
 		assert(0); // Unknown type
 		return QString();
@@ -137,26 +138,26 @@ QString ak::ui::core::toQString(
 ) {
 	switch (_keyType)
 	{
-	case ak::ui::core::key_Unknown: return QString("KeyUnknown");
-	case ak::ui::core::key_Alt: return QString("KeyAlt");
-	case ak::ui::core::key_AltGr: return QString("KeyAltGr");
-	case ak::ui::core::key_Control: return QString("KeyControl");
-	case ak::ui::core::key_Delete: return QString("KeyDelete");
-	case ak::ui::core::key_Escape: return QString("KeyEscape");
-	case ak::ui::core::key_F1: return QString("KeyF1");
-	case ak::ui::core::key_F10: return QString("KeyF10");
-	case ak::ui::core::key_F11: return QString("KeyF11");
-	case ak::ui::core::key_F12: return QString("KeyF12");
-	case ak::ui::core::key_F2: return QString("KeyF2");
-	case ak::ui::core::key_F3: return QString("KeyF3");
-	case ak::ui::core::key_F4: return QString("KeyF4");
-	case ak::ui::core::key_F5: return QString("KeyF5");
-	case ak::ui::core::key_F6: return QString("KeyF6");
-	case ak::ui::core::key_F7: return QString("KeyF7");
-	case ak::ui::core::key_F8: return QString("KeyF8");
-	case ak::ui::core::key_F9: return QString("KeyF9");
-	case ak::ui::core::key_Return: return QString("KeyReturn");
-	case ak::ui::core::key_Space: return QString("KeySpace");
+	case ui::core::key_Unknown: return QString("KeyUnknown");
+	case ui::core::key_Alt: return QString("KeyAlt");
+	case ui::core::key_AltGr: return QString("KeyAltGr");
+	case ui::core::key_Control: return QString("KeyControl");
+	case ui::core::key_Delete: return QString("KeyDelete");
+	case ui::core::key_Escape: return QString("KeyEscape");
+	case ui::core::key_F1: return QString("KeyF1");
+	case ui::core::key_F10: return QString("KeyF10");
+	case ui::core::key_F11: return QString("KeyF11");
+	case ui::core::key_F12: return QString("KeyF12");
+	case ui::core::key_F2: return QString("KeyF2");
+	case ui::core::key_F3: return QString("KeyF3");
+	case ui::core::key_F4: return QString("KeyF4");
+	case ui::core::key_F5: return QString("KeyF5");
+	case ui::core::key_F6: return QString("KeyF6");
+	case ui::core::key_F7: return QString("KeyF7");
+	case ui::core::key_F8: return QString("KeyF8");
+	case ui::core::key_F9: return QString("KeyF9");
+	case ui::core::key_Return: return QString("KeyReturn");
+	case ui::core::key_Space: return QString("KeySpace");
 	default:
 		assert(0); // Not implemented yet
 		return QString("");
@@ -201,9 +202,9 @@ Qt::AlignmentFlag ak::ui::core::toQtAlignment(
 ) {
 	switch (_textAlignment)
 	{
-	case ak::ui::core::align_alignLeft: return Qt::AlignmentFlag::AlignLeft;
-	case ak::ui::core::align_alignRight: return Qt::AlignmentFlag::AlignRight;
-	case ak::ui::core::align_alignCenter: return Qt::AlignmentFlag::AlignCenter;
+	case ui::core::align_alignLeft: return Qt::AlignmentFlag::AlignLeft;
+	case ui::core::align_alignRight: return Qt::AlignmentFlag::AlignRight;
+	case ui::core::align_alignCenter: return Qt::AlignmentFlag::AlignCenter;
 	default:
 		assert(0);	// Not implemented yet
 		return Qt::AlignmentFlag::AlignCenter;

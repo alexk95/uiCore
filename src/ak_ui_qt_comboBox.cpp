@@ -22,6 +22,7 @@ ak::ui::qt::comboBox::comboBox(QWidget * _parent)
 ak::ui::qt::comboBox::~comboBox() { A_OBJECT_DESTROYING }
 
 // #######################################################################################################
+
 // Event handling
 
 void ak::ui::qt::comboBox::keyPressEvent(QKeyEvent *_event)
@@ -44,12 +45,7 @@ void ak::ui::qt::comboBox::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
-	}
-	else {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls));
-	}
+	
+	this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+	TYPE_COLORAREA::caBackgroundColorControls));
 }

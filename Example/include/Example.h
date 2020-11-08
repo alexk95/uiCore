@@ -52,8 +52,8 @@ private:
 		ak::UID				mainWindow;			//! The UID of the main window
 		ak::UID				ttb_pFile;			//! The UID of the file page in the tab toolbar
 		ak::UID				ttb_gNONE;			//! The UID of the group in the file page in the tab toolbar
-		ak::UID				ttb_aExit;			//! The UID of exit action
-		ak::UID				ttb_aColorStyle;	//! The UID of the colorStlye action
+		ak::UID				ttb_aExit;			//! The UID of exit toolButton
+		ak::UID				ttb_aColorStyle;	//! The UID of the colorStlye toolButton
 		ak::UID				dockTree;			//! The UID of the dock containing the tree widget
 		ak::UID				dockProperties;		//! The UID of the dock containing the propertyGrid widget
 		ak::UID				dockOutput;			//! The UID of the dock containing the output textEdit widget

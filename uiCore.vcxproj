@@ -145,7 +145,7 @@
     <ClInclude Include="include\ak_ui_qt_label.h" />
     <ClInclude Include="include\ak_ui_qt_tabView.h" />
     <ClInclude Include="include\ak_ui_qt_timer.h" />
-    <ClInclude Include="include\ak_ui_qt_toolButton.h" />
+    <QtMoc Include="include\ak_ui_qt_toolButton.h" />
     <ClInclude Include="include\ak_ui_qt_treeItem.h" />
     <ClInclude Include="include\ak_ui_ttb_group.h" />
     <ClInclude Include="include\ak_ui_ttb_page.h" />

@@ -27,6 +27,7 @@
 #include <ak_ui_qt_table.h>
 #include <ak_ui_qt_textEdit.h>
 #include <ak_ui_qt_timer.h>
+#include <ak_ui_qt_toolButton.h>
 
 // Qt header
 #include <qmessagebox.h>			// QMessageBox
@@ -120,6 +121,11 @@ ak::ui::signalLinker::~signalLinker()
 			break;
 		case ak::ui::core::objectType::oTimer:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(timeout()), this, SLOT(slotTimeout()));
+			break;
+		case ak::ui::core::objectType::oToolButton:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		default:
 			assert(0); // Not implemented object type
@@ -291,6 +297,20 @@ ak::UID ak::ui::signalLinker::addLink(
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTimer });
 	_object->connect(_object, SIGNAL(timeout()), this, SLOT(slotTimeout()));
+	return _objectUid;
+}
+
+ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::toolButton *							_object,
+	ak::UID												_objectUid
+) {
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oToolButton });
+	_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
+	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 	return _objectUid;
 }
 

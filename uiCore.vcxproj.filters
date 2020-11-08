@@ -183,9 +183,6 @@
     <ClInclude Include="include\ak_ui_qt_label.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_ui_qt_toolButton.h">
-      <Filter>Header Files\ak\ui\qt</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\ak_ui_signalLinker.h">
@@ -259,6 +256,9 @@
     </QtMoc>
     <QtMoc Include="include\ak_ui_dialog_options.h">
       <Filter>Header Files\ak\ui\dialog</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_toolButton.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

@@ -76,6 +76,7 @@ namespace ak {
 				oTabView,
 				oTextEdit,
 				oTimer,
+				oToolButton,
 				oTree,
 				oTreeItem,
 				oWidget
