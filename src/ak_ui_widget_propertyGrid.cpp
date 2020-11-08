@@ -1342,9 +1342,25 @@ void ak::ui::widget::propertyGridItem::repaint(void) {
 		{
 			assert(my_widgetColor != nullptr); // Something went wrong
 			my_widgetColor->fillBackground(my_colorBackground);
+			
 		}
 			break;
 		case ak::core::vSelection:
+		{
+			assert(my_widgetSelection != nullptr); // Something went wrong
+			QString sheet("QPushButton{color: #");
+			ui::color fore(my_colorNormalForeground);
+			ui::color back(my_colorBackground);
+			sheet.append(fore.toHexString(true));
+			sheet.append("; background-color: #");
+			sheet.append(back.toHexString(true));
+			sheet.append(";} QPushButton QMenu{color: #");
+			sheet.append(fore.toHexString(true));
+			sheet.append("; background-color: #");
+			sheet.append(back.toHexString(true));
+			sheet.append("; alternate-background-color: red;}");
+			my_widgetSelection->setStyleSheet(sheet);
+		}
 			break;
 		default:
 			break;

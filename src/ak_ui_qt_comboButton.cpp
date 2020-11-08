@@ -132,20 +132,11 @@ void ak::ui::qt::comboButton::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBackgroundColorAlternate, "#" + my_alias + " QMenu{", "}"));
-		this->setStyleSheet(sheet);
-	}
-	else {
-		QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls));
-		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBackgroundColorAlternate, "QPushButton QMenu{", "}"));
-		this->setStyleSheet(sheet);
-	}
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+		TYPE_COLORAREA::caBackgroundColorControls));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+		TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBackgroundColorAlternate, "QPushButton QMenu{", "}"));
+	this->setStyleSheet(sheet);
 }
 
 void ak::ui::qt::comboButton::slotItemTriggered() {

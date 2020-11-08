@@ -173,7 +173,7 @@ void ak::ui::uiManager::setColorStyle(
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected,
 		"QTabBar::tab:selected{", "}"));
 	my_window->setStyleSheet(sheet);
-
+	
 	my_window->statusBar()->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
 		TYPE_COLORAREA::caBackgroundColorWindow));
 	my_progressBar->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
