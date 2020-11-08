@@ -302,7 +302,7 @@ ak::UID ak::uiAPI::createAction(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	return my_objManager->createAction(_creatorUid, _text, *my_iconManager->icon(_iconName, _iconSize));
+	return my_objManager->createToolButton(_creatorUid, _text, *my_iconManager->icon(_iconName, _iconSize));
 }
 
 ak::UID ak::uiAPI::createAction(
@@ -311,7 +311,7 @@ ak::UID ak::uiAPI::createAction(
 	const QIcon &										_icon
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createAction(_creatorUid, _text, _icon);
+	return my_objManager->createToolButton(_creatorUid, _text, _icon);
 }
 
 ak::UID ak::uiAPI::createCheckbox(
