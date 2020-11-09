@@ -27,7 +27,6 @@
 
 // Forward declaration
 class QWidget;
-class QMainWindow;
 class QLabel;
 class QProgressBar;
 class QTimer;
@@ -43,12 +42,13 @@ namespace ak {
 
 		// Forward declaration
 		namespace ttb { class ttbContainer; class page; }
-		namespace qt { class dock; }
+		namespace qt { class dock; class window; }
 		namespace core { class ttbContainer; class aWidget; }
 		class uiManagerTimerSignalLinker;
 		class colorStyle;
 		class iconManager;
 		class objectManager;
+		class windowEventHandler;
 
 		//! @brief This class is used to manage a QMainWindow
 		//! It provides several functions to create and manipulate the UI
@@ -57,6 +57,7 @@ namespace ak {
 			Q_OBJECT
 		public:
 			// #############################################################################################################
+			
 			// Constructors
 
 			//! @brief Constructor
@@ -117,6 +118,7 @@ namespace ak {
 			);
 
 			// #############################################################################################################
+			
 			// Dock management
 
 			//! @brief Will add the provided dock and place it at the specified dock location
@@ -149,6 +151,7 @@ namespace ak {
 			);
 
 			// #############################################################################################################
+			
 			// Status
 
 			//! @brief Will set the text of the status label
@@ -181,7 +184,7 @@ namespace ak {
 				bool													_visible,
 				bool													_showDelayed = true
 			);
-
+			
 			//! @brief Will set the status bar to an continuous stage
 			void setStatusBarContinuous(
 				bool													_continuos = true
@@ -212,6 +215,7 @@ namespace ak {
 			int getHideStatusObjectDelayTimerInterval(void) const;
 
 			// #############################################################################################################
+			
 			// TabToolbar
 			
 			//! @brief Will set the visible status of the tabToolbar
@@ -250,10 +254,11 @@ namespace ak {
 			);
 
 			// #############################################################################################################
+			
 			// Window
 	
 			//! @brief Returns a pointer to the QMainWindow this UI Manager is managing
-			QMainWindow * window(void) const;
+			qt::window * window(void) const;
 
 			//! @brief Will est the window title to the title provided
 			//! @param _title The title to set
@@ -264,9 +269,22 @@ namespace ak {
 			//! @brief Will return the currently set window title
 			QString windowTitle(void) const;
 
+			//! @brief Will add the provided event handler to this window
+			//! @param _eventHandler The event handler to add
+			void addEventHandler(
+				windowEventHandler *					_eventHandler
+			);
+
+			//! @brief Will remove the provided event handler from this window
+			//! @param _eventHandler The event handler to remove
+			void removeEventHandler(
+				windowEventHandler *					_eventHandler
+			);
+
 			// #############################################################################################################
 			// #############################################################################################################
 			// #############################################################################################################
+			
 			// ELEMENT MANIPULATION
 
 			//! @brief Will set the window state to maximized
@@ -291,7 +309,7 @@ namespace ak {
 		private:
 			// Variables
 
-			QMainWindow *												my_window;						//! The QMainWindow the UI manager is applying its changes to
+			qt::window *												my_window;						//! The QMainWindow the UI manager is applying its changes to
 			
 			QLabel *													my_statusLabel;					//! The label used to display status messages
 			QProgressBar *												my_progressBar;					//! The progress bar used to display the progress of

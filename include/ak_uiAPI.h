@@ -45,6 +45,7 @@ namespace ak {
 		class objectManager;
 		class colorStyle;
 		class iconManager;
+		class windowEventHandler;
 	}
 
 	namespace uiAPI {
@@ -1526,10 +1527,26 @@ namespace ak {
 
 		namespace window {
 
+			//! @brief Will add the provided event handler to the window
+			//! @param _windowUID The UID of the window
+			//! @param _eventHandler The event handler to add
+			UICORE_API void addEventHandler(
+				ak::UID												_windowUID,
+				ui::windowEventHandler *							_eventHandler
+			);
+
 			//! @brief Will close the provided window
 			//! @param _windowUID The UID of the uiManager to close
 			UICORE_API void close(
 				ak::UID												_windowUID
+			);
+
+			//! @brief Will remove the provided event handler from the window
+			//! @param _windowUID The UID of the window
+			//! @param _eventHandler The event handler to remove
+			UICORE_API void removeEventHandler(
+				ak::UID												_windowUID,
+				ui::windowEventHandler *							_eventHandler
 			);
 
 			//! @brief Will set the visible state of the status label of the provided window.

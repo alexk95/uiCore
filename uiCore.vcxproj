@@ -133,6 +133,7 @@
     <ClInclude Include="include\ak_ui_core_aWidget.h" />
     <ClInclude Include="include\ak_ui_core_aWidgetManager.h" />
     <ClInclude Include="include\ak_ui_core_ttbContainer.h" />
+    <ClInclude Include="include\ak_ui_windowEventHandler.h" />
     <QtMoc Include="include\ak_ui_dialog_logIn.h" />
     <QtMoc Include="include\ak_ui_dialog_prompt.h" />
     <QtMoc Include="include\ak_ui_dialog_options.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="include\ak_ui_qt_timer.h" />
     <QtMoc Include="include\ak_ui_qt_toolButton.h" />
     <ClInclude Include="include\ak_ui_qt_treeItem.h" />
+    <QtMoc Include="include\ak_ui_qt_window.h" />
     <ClInclude Include="include\ak_ui_ttb_group.h" />
     <ClInclude Include="include\ak_ui_ttb_page.h" />
     <ClInclude Include="include\ak_ui_ttb_subgroup.h" />
@@ -224,6 +226,7 @@
     <ClCompile Include="src\ak_ui_qt_toolButton.cpp" />
     <ClCompile Include="src\ak_ui_qt_tree.cpp" />
     <ClCompile Include="src\ak_ui_qt_treeItem.cpp" />
+    <ClCompile Include="src\ak_ui_qt_window.cpp" />
     <ClCompile Include="src\ak_ui_signalLinker.cpp" />
     <ClCompile Include="src\ak_ui_treeSignalLinker.cpp" />
     <ClCompile Include="src\ak_ui_ttb_group.cpp" />

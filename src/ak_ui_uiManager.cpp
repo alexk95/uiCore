@@ -21,6 +21,7 @@
 #include <ak_ui_core_ttbContainer.h>			// ttbContainer
 #include <ak_ui_ttb_page.h>						// page
 #include <ak_uidMangager.h>						// UID manager
+#include <ak_ui_qt_window.h>					// window
 
 // TabToolBar header
 #include <TabToolbar/TabToolbar.h>				// tt::TabToolbar
@@ -29,7 +30,6 @@
 // Qt header
 
 #include <qwidget.h>							// QWidget
-#include <qmainwindow.h>						// QMainWindow
 #include <qprogressbar.h>						// QProgressBar
 #include <qstatusbar.h>							// QStatusBar
 #include <qlabel.h>								// QLabel
@@ -45,102 +45,89 @@ ak::ui::uiManager::uiManager(
 	ak::uidManager *								_uidManager,
 	ak::ui::colorStyle *							_colorStyle
 ) : ak::ui::core::aPaintable(ak::ui::core::objectType::oMainWindow),
-	my_window(nullptr),
-	my_messenger(nullptr),
-	my_uidManager(nullptr),
-	my_tabToolBar(nullptr),
-	my_statusLabel(nullptr),
-	my_progressBar(nullptr),
-	my_timerLabelHide(nullptr),
-	my_timerLabelShow(nullptr),
-	my_timerProgressHide(nullptr),
-	my_timerProgressShow(nullptr),
-	my_timerSignalLinker(nullptr),
-	my_timerShowMainWindow(nullptr)
+my_window(nullptr),
+my_messenger(nullptr),
+my_uidManager(nullptr),
+my_tabToolBar(nullptr),
+my_statusLabel(nullptr),
+my_progressBar(nullptr),
+my_timerLabelHide(nullptr),
+my_timerLabelShow(nullptr),
+my_timerProgressHide(nullptr),
+my_timerProgressShow(nullptr),
+my_timerSignalLinker(nullptr),
+my_timerShowMainWindow(nullptr)
 {
-	try {
-		// Check parameter
-		if (_messenger == nullptr) { throw ak::Exception("Is nullptr", "Check messenger"); }
-		if (_uidManager == nullptr) { throw ak::Exception("Is nullptr", "Check UID manager"); }
-		my_messenger = _messenger;
-		my_uidManager = _uidManager;
-		my_uid = my_uidManager->getId();
-		my_colorStyle = _colorStyle;
+	// Check parameter
+	assert(_messenger != nullptr); // Nullptr provided
+	assert(_uidManager != nullptr); // Nullptr provided
+	my_messenger = _messenger;
+	my_uidManager = _uidManager;
+	my_uid = my_uidManager->getId();
+	my_colorStyle = _colorStyle;
 
-		// Create main window
-		my_window = new QMainWindow();
-		if (my_window == nullptr) { throw ak::Exception("Failed to create", "Create main window"); }
-		my_window->setAutoFillBackground(true);
+	// Create main window
+	my_window = new qt::window();
 
-		// Create tab Toolbar
-		my_tabToolBar = new tt::TabToolbar();
-		my_tabToolBar->setVisible(false);
-		my_window->addToolBar(my_tabToolBar);
+	my_window->setAutoFillBackground(true);
 
-		// Connect tab Toolbar tab signals
-		connect(my_tabToolBar, SIGNAL(tabClicked(int)), this, SLOT(slotTabToolbarTabClicked(int)));
-		connect(my_tabToolBar, SIGNAL(currentTabChanged(int)), this, SLOT(slotTabToolbarTabCurrentTabChanged(int)));
+	// Create tab Toolbar
+	my_tabToolBar = new tt::TabToolbar();
+	my_tabToolBar->setVisible(false);
+	my_window->addToolBar(my_tabToolBar);
 
-		// Create progressbar
-		my_progressBar = new QProgressBar;
-		if (my_progressBar == nullptr) { throw ak::Exception("Failed to create", "Create progress bar"); }
-		my_progressBar->setMinimumWidth(180);
-		my_progressBar->setMaximumWidth(180);
-		my_progressBar->setMinimum(0);
-		my_progressBar->setValue(0);
-		my_progressBar->setMaximum(100);
-		my_progressBar->setVisible(false);
+	// Connect tab Toolbar tab signals
+	connect(my_tabToolBar, SIGNAL(tabClicked(int)), this, SLOT(slotTabToolbarTabClicked(int)));
+	connect(my_tabToolBar, SIGNAL(currentTabChanged(int)), this, SLOT(slotTabToolbarTabCurrentTabChanged(int)));
 
-		// Create status label
-		my_statusLabel = new QLabel;
-		if (my_statusLabel == nullptr) { throw ak::Exception("Failed to create", "Create status label"); }
-		my_statusLabel->setMinimumWidth(250);
-		my_statusLabel->setMaximumWidth(250);
-		my_statusLabel->setText(QString());
+	// Create progressbar
+	my_progressBar = new QProgressBar;
+	my_progressBar->setMinimumWidth(180);
+	my_progressBar->setMaximumWidth(180);
+	my_progressBar->setMinimum(0);
+	my_progressBar->setValue(0);
+	my_progressBar->setMaximum(100);
+	my_progressBar->setVisible(false);
 
-		my_window->statusBar()->addPermanentWidget(my_progressBar, 180);
-		my_window->statusBar()->addPermanentWidget(my_statusLabel, 250);
-		my_window->statusBar()->setVisible(true);
+	// Create status label
+	my_statusLabel = new QLabel;
+	my_statusLabel->setMinimumWidth(250);
+	my_statusLabel->setMaximumWidth(250);
+	my_statusLabel->setText(QString());
 
-		// Setup timer
-		my_timerLabelHide = new QTimer;
-		if (my_timerLabelHide == nullptr) { throw ak::Exception("Failed to create", "Create timer for label hide"); }
-		my_timerLabelShow = new QTimer;
-		if (my_timerLabelShow == nullptr) { throw ak::Exception("Failed to create", "Create timer for label show"); }
-		my_timerProgressHide = new QTimer;
-		if (my_timerProgressHide == nullptr) { throw ak::Exception("Failed to create", "Create timer for progress bar hide"); }
-		my_timerProgressShow = new QTimer;
-		if (my_timerProgressShow == nullptr) { throw ak::Exception("Failed to create", "Create timer for progress bar show"); }
-		my_timerShowMainWindow = new QTimer;
-		if (my_timerShowMainWindow == nullptr) { throw ak::Exception("Failed to create", "Create timer for showing main window"); }
-		my_timerLabelHide->setInterval(1500);
-		my_timerLabelShow->setInterval(3000);
-		my_timerProgressHide->setInterval(1500);
-		my_timerProgressShow->setInterval(3000);
-		my_timerShowMainWindow->setInterval(1);
-		my_timerShowMainWindow->setSingleShot(true);
+	my_window->statusBar()->addPermanentWidget(my_progressBar, 180);
+	my_window->statusBar()->addPermanentWidget(my_statusLabel, 250);
+	my_window->statusBar()->setVisible(true);
 
-		// Create timer signal linker
-		my_timerSignalLinker = new ak::ui::uiManagerTimerSignalLinker(this);
-		if (my_timerSignalLinker == nullptr) { throw ak::Exception("Failed to create", "Create timer signal linker"); }
+	// Setup timer
+	my_timerLabelHide = new QTimer;
+	my_timerLabelShow = new QTimer;
+	my_timerProgressHide = new QTimer;
+	my_timerProgressShow = new QTimer;
+	my_timerShowMainWindow = new QTimer;
+	my_timerLabelHide->setInterval(1500);
+	my_timerLabelShow->setInterval(3000);
+	my_timerProgressHide->setInterval(1500);
+	my_timerProgressShow->setInterval(3000);
+	my_timerShowMainWindow->setInterval(1);
+	my_timerShowMainWindow->setSingleShot(true);
 
-		// Link timer to the corresponding functions (realised via the timer type) 
-		my_timerSignalLinker->addLink(my_timerLabelHide, ak::ui::uiManagerTimerSignalLinker::timerType::statusLabelHide);
-		my_timerSignalLinker->addLink(my_timerLabelShow, ak::ui::uiManagerTimerSignalLinker::timerType::statusLabelShow);
-		my_timerSignalLinker->addLink(my_timerProgressHide, ak::ui::uiManagerTimerSignalLinker::timerType::progressHide);
-		my_timerSignalLinker->addLink(my_timerProgressShow, ak::ui::uiManagerTimerSignalLinker::timerType::progressShow);
-		my_timerSignalLinker->addLink(my_timerShowMainWindow, ak::ui::uiManagerTimerSignalLinker::timerType::showWindow);
+	// Create timer signal linker
+	my_timerSignalLinker = new ak::ui::uiManagerTimerSignalLinker(this);
 
-		if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
+	// Link timer to the corresponding functions (realised via the timer type) 
+	my_timerSignalLinker->addLink(my_timerLabelHide, ak::ui::uiManagerTimerSignalLinker::timerType::statusLabelHide);
+	my_timerSignalLinker->addLink(my_timerLabelShow, ak::ui::uiManagerTimerSignalLinker::timerType::statusLabelShow);
+	my_timerSignalLinker->addLink(my_timerProgressHide, ak::ui::uiManagerTimerSignalLinker::timerType::progressHide);
+	my_timerSignalLinker->addLink(my_timerProgressShow, ak::ui::uiManagerTimerSignalLinker::timerType::progressShow);
+	my_timerSignalLinker->addLink(my_timerShowMainWindow, ak::ui::uiManagerTimerSignalLinker::timerType::showWindow);
 
-		// Show main window
-		//my_timerShowMainWindow->start();
-		my_window->resize(800, 600);
+	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
+
+	// Show main window
+	//my_timerShowMainWindow->start();
+	my_window->resize(800, 600);
 	//	my_window->showMaximized();
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::uiManager()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::uiManager()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::uiManager()"); }
 }
 
 ak::ui::uiManager::~uiManager() {
@@ -156,34 +143,16 @@ void ak::ui::uiManager::setColorStyle(
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
 
-	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-		TYPE_COLORAREA::caBackgroundColorWindow));
-	
-	my_window->setStyleSheet(sheet);
+	my_window->setColorStyle(_colorStyle);
 
-	// Double paint to not mess up the tab toolbar
-	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-		TYPE_COLORAREA::caBackgroundColorWindow, "QMainWindow{", "}\n");
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow | TYPE_COLORAREA::caBackgroundColorWindow,
-		"QTabBar{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorHeader | TYPE_COLORAREA::caForegroundColorHeader,
-		"QTabBar::tab{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorFocus | TYPE_COLORAREA::caForegroundColorFocus,
-		"QTabBar::tab:hover{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected,
-		"QTabBar::tab:selected{", "}"));
-	my_window->setStyleSheet(sheet);
-	
-	my_window->statusBar()->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-		TYPE_COLORAREA::caBackgroundColorWindow));
 	my_progressBar->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
 		TYPE_COLORAREA::caBackgroundColorWindow));
 	my_statusLabel->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
 		TYPE_COLORAREA::caBackgroundColorTransparent));
 
 	// TTB
-	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-		TYPE_COLORAREA::caBackgroundColorWindow, "QToolBar{border: 0px;", "}");
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow, "QToolBar{border: 0px;", "}"));
 	if (sheet.isEmpty()) {
 		sheet = "QToolBar{border: 0px;}";
 	}
@@ -584,15 +553,21 @@ void ak::ui::uiManager::setCurrentTabToolBarTab(
 
 // #############################################################################################################
 
-QMainWindow * ak::ui::uiManager::window(void) const { return my_window; }
+ak::ui::qt::window * ak::ui::uiManager::window(void) const { return my_window; }
 
 void ak::ui::uiManager::setWindowTitle(
 	const QString &														_title
 ) { my_window->setWindowTitle(_title); }
 
-QString ak::ui::uiManager::windowTitle(void) const {
-	return my_window->windowTitle();
-}
+QString ak::ui::uiManager::windowTitle(void) const { return my_window->windowTitle(); }
+
+void ak::ui::uiManager::addEventHandler(
+	windowEventHandler *					_eventHandler
+) { my_window->addEventHandler(_eventHandler); }
+
+void ak::ui::uiManager::removeEventHandler(
+	windowEventHandler *					_eventHandler
+) { my_window->removeEventHandler(_eventHandler); }
 
 // #############################################################################################################
 

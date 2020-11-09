@@ -23,6 +23,7 @@
 #include <ak_ui_uiManager.h>				// uiManager
 #include <ak_uidMangager.h>					// UID manager
 #include <ak_singletonAllowedMessages.h>	// allowed messages
+#include <ak_ui_windowEventHandler.h>
 
 // AK object and widgets
 #include <ak_ui_core_aObject.h>
@@ -2363,6 +2364,17 @@ void ak::uiAPI::welcomeScreen::setObjectName(
 
 // Window
 
+void ak::uiAPI::window::addEventHandler(
+	ak::UID												_windowUID,
+	ui::windowEventHandler *							_eventHandler
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->addEventHandler(_eventHandler);
+}
+
 void ak::uiAPI::window::close(
 	ak::UID												_windowUID
 ) {
@@ -2371,6 +2383,17 @@ void ak::uiAPI::window::close(
 	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
 	assert(actualWindow != nullptr); // Invalid object type
 	actualWindow->close();
+}
+
+void ak::uiAPI::window::removeEventHandler(
+	ak::UID												_windowUID,
+	ui::windowEventHandler *							_eventHandler
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->removeEventHandler(_eventHandler);
 }
 
 void ak::uiAPI::window::setStatusLabelVisible(
