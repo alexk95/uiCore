@@ -33,6 +33,9 @@ ak::ui::qt::window::~window() {}
 void ak::ui::qt::window::setColorStyle(
 	const ui::colorStyle *					_colorStyle
 ) {
+	assert(_colorStyle != nullptr);		// Nullptr provided
+	my_colorStyle = _colorStyle;
+
 	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
 		TYPE_COLORAREA::caBackgroundColorWindow));
 
