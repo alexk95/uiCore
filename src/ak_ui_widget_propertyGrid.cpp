@@ -124,6 +124,9 @@ void ak::ui::widget::propertyGrid::setColorStyle(
 	my_table->horizontalHeader()->setStyleSheet(sheet);
 	my_table->setColorStyle(my_colorStyle);
 	my_infoTextEdit->setColorStyle(my_colorStyle);
+
+	for (auto itm : my_items) { itm.second->setColorStyle(my_colorStyle); }
+
 }
 
 void ak::ui::widget::propertyGrid::setAlias(
@@ -172,6 +175,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -187,6 +191,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -202,6 +207,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -217,6 +223,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -233,6 +240,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _possibleSelection, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -248,6 +256,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -268,6 +277,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -286,6 +296,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -304,6 +315,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -322,6 +334,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -341,6 +354,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _possibleSelection, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -359,6 +373,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
+	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, newItem);
 
 	itemCountChanged();
@@ -847,7 +862,7 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	const QString &						_settingName,
 	bool								_value
 ) : my_propertyGridTable(_propertyGridTable), my_group(_group), my_valueType(ak::core::valueType::vBool),
-	my_name(_settingName), my_valueBool(_value), my_isMultipleValues(_isMultipleValues)
+	my_name(_settingName), my_valueBool(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
 {
 	assert(my_propertyGridTable != nullptr);
 
@@ -888,7 +903,7 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	const QString &						_settingName,
 	const ui::color &					_value
 ) : my_propertyGridTable(_propertyGridTable), my_group(_group), my_valueType(ak::core::valueType::vColor),
-	my_name(_settingName), my_valueColor(_value), my_isMultipleValues(_isMultipleValues)
+	my_name(_settingName), my_valueColor(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
 {
 	assert(my_propertyGridTable != nullptr);
 
@@ -921,7 +936,7 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	const QString &						_settingName,
 	double								_value
 ) : my_propertyGridTable(_propertyGridTable), my_group(_group), my_valueType(ak::core::valueType::vDouble),
-	my_name(_settingName), my_valueDouble(_value), my_isMultipleValues(_isMultipleValues)
+	my_name(_settingName), my_valueDouble(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
 {
 	assert(my_propertyGridTable != nullptr);
 
@@ -954,7 +969,7 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	const QString &						_settingName,
 	int									_value
 ) : my_propertyGridTable(_propertyGridTable), my_group(_group), my_valueType(ak::core::valueType::vInt),
-	my_name(_settingName), my_valueInteger(_value), my_isMultipleValues(_isMultipleValues)
+	my_name(_settingName), my_valueInteger(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
 {
 	assert(my_propertyGridTable != nullptr);
 
@@ -988,7 +1003,7 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	const std::vector<QString> &		_possibleSlection,
 	const QString &						_value
 ) : my_propertyGridTable(_propertyGridTable), my_group(_group), my_valueType(ak::core::valueType::vSelection),
-	my_name(_settingName), my_valueSelection(_value), my_isMultipleValues(_isMultipleValues)
+	my_name(_settingName), my_valueSelection(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
 {
 	assert(my_propertyGridTable != nullptr);
 
@@ -1027,7 +1042,7 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	const QString &						_settingName,
 	const QString &						_value
 ) : my_propertyGridTable(_propertyGridTable), my_group(_group), my_valueType(ak::core::valueType::vString),
-	my_name(_settingName), my_valueString(_value), my_isMultipleValues(_isMultipleValues)
+	my_name(_settingName), my_valueString(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
 {
 	assert(my_propertyGridTable != nullptr);
 
@@ -1178,6 +1193,14 @@ void ak::ui::widget::propertyGridItem::setReadOnly(
 
 bool ak::ui::widget::propertyGridItem::isReadOnly() { return my_isReadOnly; }
 
+void ak::ui::widget::propertyGridItem::setColorStyle(
+	const ui::colorStyle *	_style
+) {
+	assert(_style != nullptr); // Nullptr provided
+	my_globalColorStyle = _style;
+	repaint();
+}
+
 // #################################################################################
 
 // Slots
@@ -1214,9 +1237,6 @@ void ak::ui::widget::propertyGridItem::slotValueWidgetEvent() {
 	}
 }
 
-#include <string>
-#include <sstream>
-
 void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 	QTableWidgetItem *									_item
 ) {
@@ -1244,13 +1264,13 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 				else {
 					my_cellValue->setText(QString::number(my_valueDouble));
 				}
-				my_cellValue->setTextColor(my_colorErrorForeground);
+				my_cellValue->setTextColor(my_colorErrorForeground.toQColor());
 				my_ignoreCellEvent = false;
 			}
 			else {
 				my_valueDouble = v;
 				my_isMultipleValues = false;
-				my_cellValue->setTextColor(my_colorNormalForeground);
+				my_cellValue->setTextColor(my_colorNormalForeground.toQColor());
 				my_ignoreCellEvent = false;
 				emit changed();
 			}
@@ -1275,13 +1295,13 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 				else {
 					my_cellValue->setText(QString::number(my_valueInteger));
 				}
-				my_cellValue->setTextColor(my_colorErrorForeground);
+				my_cellValue->setTextColor(my_colorErrorForeground.toQColor());
 				my_ignoreCellEvent = false;
 			}
 			else {
 				my_valueInteger = v;
 				my_isMultipleValues = false;
-				my_cellValue->setTextColor(my_colorNormalForeground);
+				my_cellValue->setTextColor(my_colorNormalForeground.toQColor());
 				my_ignoreCellEvent = false;
 				emit changed();
 			}
@@ -1313,16 +1333,16 @@ void ak::ui::widget::propertyGridItem::ini(void) {
 void ak::ui::widget::propertyGridItem::repaint(void) {
 	if (my_cellSettingName != nullptr) {
 		my_cellSettingName->setBackgroundColor(my_colorBackground.toQColor());
-		my_cellSettingName->setTextColor(my_colorNormalForeground);
+		my_cellSettingName->setTextColor(my_colorNormalForeground.toQColor());
 	}
 	if (my_cellValue != nullptr) {
 		my_ignoreCellEvent = true;
 		my_cellValue->setBackgroundColor(my_colorBackground.toQColor());
 		if (my_isCurrentlyError) {
-			my_cellValue->setTextColor(my_colorErrorForeground);
+			my_cellValue->setTextColor(my_colorErrorForeground.toQColor());
 		}
 		else {
-			my_cellValue->setTextColor(my_colorNormalForeground);
+			my_cellValue->setTextColor(my_colorNormalForeground.toQColor());
 		}
 		my_ignoreCellEvent = false;
 	}
@@ -1341,8 +1361,20 @@ void ak::ui::widget::propertyGridItem::repaint(void) {
 		case ak::core::vColor:
 		{
 			assert(my_widgetColor != nullptr); // Something went wrong
+			QString sheet("QPushButton{background-color: #");
+			sheet.append(my_colorBackground.toHexString(true));
+			sheet.append("; color: #");
+			sheet.append(my_colorNormalForeground.toHexString(true));
+			sheet.append("; }");
+
+			if (my_globalColorStyle != nullptr) {
+				sheet.append(my_globalColorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorFocus | TYPE_COLORAREA::caForegroundColorFocus, "QPushButton:hover{", "}"));
+				sheet.append(my_globalColorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected, "QPushButton:pressed{", "}"));
+			}
+
+
 			my_widgetColor->fillBackground(my_colorBackground);
-			
+			my_widgetColor->setPushButtonStyleSheet(sheet);
 		}
 			break;
 		case ak::core::vSelection:
@@ -1358,7 +1390,13 @@ void ak::ui::widget::propertyGridItem::repaint(void) {
 			sheet.append(fore.toHexString(true));
 			sheet.append("; background-color: #");
 			sheet.append(back.toHexString(true));
-			sheet.append("; alternate-background-color: red;}");
+			sheet.append("; alternate-background-color: red; border 1px solid black; }");
+
+			if (my_globalColorStyle != nullptr) {
+				sheet.append(my_globalColorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorFocus | TYPE_COLORAREA::caForegroundColorFocus, "QPushButton:hover{", "}"));
+				sheet.append(my_globalColorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected, "QPushButton:pressed{", "}"));
+			}
+
 			my_widgetSelection->setStyleSheet(sheet);
 		}
 			break;

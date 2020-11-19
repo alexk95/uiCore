@@ -103,6 +103,12 @@ namespace ak {
 					const ui::color &			_color
 				);
 
+				//! @brief Will apply the stylesheet to the pushButton of this colorEditButton
+				//! @param _sheet The styleSheet to apply
+				void setPushButtonStyleSheet(
+					const QString &				_sheet
+				);
+
 			signals:
 				void changed(void);
 

@@ -147,7 +147,11 @@ namespace ak {
 				caBackgroundColorTransparent	= 1 << 17,
 				caImagesTree					= 1 << 18,
 				caImagesDock					= 1 << 19,
-				caDefaultBorderHeader			= 1 << 20
+				caDefaultBorderHeader			= 1 << 20,
+				caBackgroundColorDialogWindow	= 1 << 21,
+				caForegroundColorDialogWindow	= 1 << 22,
+				caBackgroundColorButton			= 1 << 23,
+				caForegroundColorButton			= 1 << 24
 			};
 
 			inline colorAreaFlag operator | (colorAreaFlag a, colorAreaFlag b)

@@ -134,18 +134,14 @@ void ak::ui::dialog::prompt::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow, "#" + my_alias + "{", "}"));
-	}
-	else {
-		setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow));
-	}
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorDialogWindow | TYPE_COLORAREA::caForegroundColorDialogWindow, "QDialog {", "}"));
+	setStyleSheet(sheet);
 
 	if (my_button1 != nullptr) { my_button1->setColorStyle(my_colorStyle); }
 	if (my_button2 != nullptr) { my_button2->setColorStyle(my_colorStyle); }
 	if (my_button3 != nullptr) { my_button3->setColorStyle(my_colorStyle); }
 
-	if (my_label != nullptr) { my_button1->setColorStyle(my_colorStyle); }
+	if (my_label != nullptr) { my_label->setColorStyle(my_colorStyle); }
 
 }
 

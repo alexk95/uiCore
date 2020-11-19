@@ -125,6 +125,12 @@ void ak::ui::qt::colorEditButton::fillBackground(
 	my_widget->setStyleSheet(sheet);
 }
 
+void ak::ui::qt::colorEditButton::setPushButtonStyleSheet(
+	const QString &				_sheet
+) {
+	my_button->setStyleSheet(_sheet);
+}
+
 void ak::ui::qt::colorEditButton::slotButtonClicked() {
 	// Show color dialog
 	QColorDialog dia(my_color.toQColor());

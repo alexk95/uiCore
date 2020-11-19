@@ -517,6 +517,10 @@ namespace ak {
 
 				bool isReadOnly();
 
+				void setColorStyle(
+					const ui::colorStyle *	_style
+				);
+
 			signals:
 				void changed(void);
 
@@ -540,10 +544,11 @@ namespace ak {
 				QString							my_group;
 				QString							my_name;
 
-				QColor							my_colorErrorForeground;
-				QColor							my_colorNormalForeground;
+				ui::color						my_colorErrorForeground;
+				ui::color						my_colorNormalForeground;
 				ui::color						my_colorBackground;
 
+				const ui::colorStyle *			my_globalColorStyle;
 
 				QTableWidgetItem *				my_cellSettingName;
 				QTableWidgetItem *				my_cellValue;

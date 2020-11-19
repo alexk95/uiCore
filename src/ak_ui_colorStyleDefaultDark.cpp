@@ -55,6 +55,8 @@ QString ak::ui::colorStyleDefaultDark::getColorStyleName(void) const { return QS
 #define STYLE_COLOR_BACK_SELECTED "background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 #10b010, stop : 1 #a0f0a0);"
 #define STYLE_COLOR_BACK_TRANSPARENT "background-color: transparent;"
 #define STYLE_COLOR_BACK_WINDOW "background-color: #303030;"
+#define STYLE_COLOR_BACK_DIALOGWINDOW "background-color: #404040;"
+#define STYLE_COLOR_BACK_PUSHBUTTON "background-color: #505050;"
 
 #define STYLE_COLOR_FORE_CONTROLS "color: white;"
 #define STYLE_COLOR_FORE_ERROR "color: #ff0000;"
@@ -62,6 +64,8 @@ QString ak::ui::colorStyleDefaultDark::getColorStyleName(void) const { return QS
 #define STYLE_COLOR_FORE_HEADER "color: white;"
 #define STYLE_COLOR_FORE_SELECTED "color: black;"
 #define STYLE_COLOR_FORE_WINDOW "color: white;"
+#define STYLE_COLOR_FORE_DIALOGWINDOW "color: white;"
+#define STYLE_COLOR_FORE_PUSHBUTTON "color: white;"
 
 #define STYLE_COLOR_BORDER_CONTROLS "border-color: #707070;"
 #define STYLE_COLOR_BORDER_HEADER "border-color: #707070;"
@@ -100,6 +104,10 @@ QString ak::ui::colorStyleDefaultDark::toStyleSheet(
 	CHECK_IF_FLAG::caForegroundColorHeader THEN_ADD_STYLE(STYLE_COLOR_FORE_HEADER);
 	CHECK_IF_FLAG::caForegroundColorSelected THEN_ADD_STYLE(STYLE_COLOR_FORE_SELECTED);
 	CHECK_IF_FLAG::caForegroundColorWindow THEN_ADD_STYLE(STYLE_COLOR_FORE_WINDOW);
+	CHECK_IF_FLAG::caBackgroundColorDialogWindow THEN_ADD_STYLE(STYLE_COLOR_BACK_DIALOGWINDOW);
+	CHECK_IF_FLAG::caBackgroundColorButton THEN_ADD_STYLE(STYLE_COLOR_BACK_PUSHBUTTON);
+	CHECK_IF_FLAG::caForegroundColorDialogWindow THEN_ADD_STYLE(STYLE_COLOR_FORE_DIALOGWINDOW);
+	CHECK_IF_FLAG::caForegroundColorButton THEN_ADD_STYLE(STYLE_COLOR_FORE_PUSHBUTTON);
 
 	ret.append(_suffix);
 	return ret;
