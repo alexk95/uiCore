@@ -13,6 +13,7 @@
 
 // Qt header
 #include <qtextedit.h>				// base class
+#include <qpoint.h>					// QPoint
 
 // AK header
 #include <ak_ui_core.h>				// Key type
@@ -21,6 +22,7 @@
 
 // Forward declaration
 class QKeyEvent;
+class QMenu;
 
 namespace ak {
 	namespace ui {
@@ -32,6 +34,8 @@ namespace ak {
 
 			// Forward declaration
 			class dock;
+			class action;
+			class contextMenuItem;
 
 			//! @brief This class combines the functionallity of a QTextEdit and a ak::ui::core::aWidget
 			class textEdit : public QTextEdit, public ak::ui::core::aWidget
@@ -74,6 +78,31 @@ namespace ak {
 
 				// #######################################################################################################
 
+				// Context menu
+
+				//! @brief Will add a context menu item and return its ID
+				//! @param _text The text of the new item
+				//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
+				ak::ID addContextMenuItem(
+					const QString &						_text,
+					ui::core::contextMenuRole			_role = ui::core::contextMenuRole::crNone
+				);
+
+				//! @brief Will add a context menu item and return its ID
+				//! @param _icon The icon of the new item
+				//! @param _text The text of the new item
+				//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
+				ak::ID addContextMenuItem(
+					const QIcon &						_icon,
+					const QString &						_text,
+					ui::core::contextMenuRole			_role = ui::core::contextMenuRole::crNone
+				);
+
+				//! @brief Will remove all context menu items from the context menu
+				void clearContextMenu(void);
+
+				// #######################################################################################################
+
 				//! @brief Will set the auto scroll to bottom option.
 				//! @param _autoScroll If true, the object will automatically scroll to the bottom on change
 				void setAutoScrollToBottom(
@@ -89,13 +118,29 @@ namespace ak {
 			signals:
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);
+				void contextMenuItemClicked(ak::ID);
 
 			private slots:
 				void slotChanged();
+				void slotCustomMenuRequested(const QPoint & _pos);
+				void slotContextMenuItemClicked();
 
 			private:
 				bool							my_autoScrollToBottom;		//! If true, the textbox will automatically scroll down on text change
-				
+				QMenu *							my_contextMenu;
+				ak::ID							my_currentContextMenuItemId;
+
+				std::vector<contextMenuItem *>	my_contextMenuItems;
+
+				// Initialize the textEdit
+				void ini(void);
+
+				//! @brief Will add a context menu item and return its ID
+				//! @param _item The item to add
+				ak::ID addContextMenuItem(
+					contextMenuItem *			_item
+				);
+
 				textEdit(const textEdit &) = delete;
 				textEdit & operator = (const textEdit &) = delete;
 

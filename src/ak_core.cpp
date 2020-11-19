@@ -43,6 +43,7 @@ QString ak::core::toQString(
 	case ak::core::eTimeout: return QString("Timeout");
 	case ak::core::eToggeledChecked: return QString("ToggeledToChecked");
 	case ak::core::eToggeledUnchecked: return QString("ToggeledToUnchecked");
+	case ak::core::eContextMenuItemClicked: return QString("ContextMenuItemClicked");
 	default: assert(0); // not implemented yet
 	}
 	return QString("");

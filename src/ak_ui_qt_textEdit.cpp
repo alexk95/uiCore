@@ -13,22 +13,21 @@
 #include <ak_ui_qt_textEdit.h>	// corresponding class
 #include <ak_exception.h>		// error handling
 #include <ak_ui_colorStyle.h>	// colorStyle
+#include <ak_ui_qt_contextMenuItem.h>
+#include <ak_ui_core.h>
 
 // Qt header
 #include <qscrollbar.h>
+#include <qmenu.h>
 
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::qt::textEdit::textEdit(QWidget * _parent)
-: QTextEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(false)
-{
-	connect(this, SIGNAL(textChanged()), this, SLOT(slotChanged()));
-}
+: QTextEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(false), my_contextMenu(nullptr)
+{ ini(); }
 ak::ui::qt::textEdit::textEdit(const QString & _text, QWidget * _parent)
-: QTextEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(false)
-{
-	connect(this, SIGNAL(textChanged()), this, SLOT(slotChanged()));
-}
+: QTextEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oTextEdit), my_autoScrollToBottom(false), my_contextMenu(nullptr)
+{ ini(); }
 
 ak::ui::qt::textEdit::~textEdit()
 {
@@ -52,6 +51,27 @@ void ak::ui::qt::textEdit::slotChanged() {
 	performAutoScrollToBottom();
 }
 
+void ak::ui::qt::textEdit::slotCustomMenuRequested(const QPoint & _pos) {
+	my_contextMenu->exec(viewport()->mapToGlobal(_pos));
+}
+
+void ak::ui::qt::textEdit::slotContextMenuItemClicked() {
+	qt::contextMenuItem * item = nullptr;
+	item = dynamic_cast<qt::contextMenuItem *>(sender());
+	assert(item != nullptr); // Cast failed
+	switch (item->role())
+	{
+	case ui::core::contextMenuRole::crClear:
+		clear();
+		break;
+	case ui::core::contextMenuRole::crNone:
+		emit(contextMenuItemClicked(item->id())); break;
+	default:
+		break;
+	}
+
+}
+
 // #######################################################################################################
 
 QWidget * ak::ui::qt::textEdit::widget(void) { return this; }
@@ -61,14 +81,46 @@ void ak::ui::qt::textEdit::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls, "#" + my_alias + "{", "}"));
+
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
+		TYPE_COLORAREA::caBackgroundColorControls, "QTextEdit{", "}"));
+	this->setStyleSheet(sheet);
+	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorDialogWindow | TYPE_COLORAREA::caBackgroundColorDialogWindow, "QMenu{", "}");
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorDialogWindow | TYPE_COLORAREA::caBackgroundColorDialogWindow, "QMenu::item{", "}"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorFocus | TYPE_COLORAREA::caBackgroundColorFocus, "QMenu::item:selected{", "}"));
+	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorSelected | TYPE_COLORAREA::caBackgroundColorSelected, "QMenu::item:pressed{", "}"));
+	my_contextMenu->setStyleSheet(sheet);
+}
+
+// #######################################################################################################
+
+// Context menu
+
+ak::ID ak::ui::qt::textEdit::addContextMenuItem(
+	const QString &						_text,
+	ui::core::contextMenuRole			_role
+) {
+	contextMenuItem * item = new contextMenuItem(_text, _role);
+	return addContextMenuItem(item);
+}
+
+ak::ID ak::ui::qt::textEdit::addContextMenuItem(
+	const QIcon &						_icon,
+	const QString &						_text,
+	ui::core::contextMenuRole			_role
+) {
+	contextMenuItem * item = new contextMenuItem(_icon, _text, _role);
+	return addContextMenuItem(item);
+}
+
+void ak::ui::qt::textEdit::clearContextMenu(void) {
+	for (auto itm : my_contextMenuItems) {
+		contextMenuItem * item = itm;
+		delete item;
 	}
-	else {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-			TYPE_COLORAREA::caBackgroundColorControls));
-	}
+	my_contextMenuItems.clear();
+	my_contextMenu->clear();
+	my_currentContextMenuItemId = ak::invalidID;
 }
 
 // #######################################################################################################
@@ -85,4 +137,26 @@ void ak::ui::qt::textEdit::performAutoScrollToBottom(void) {
 		QScrollBar * bar = verticalScrollBar();
 		if (bar->isVisible()) { bar->setValue(bar->maximum());}
 	}
+}
+
+// #######################################################################################################
+
+void ak::ui::qt::textEdit::ini(void) {
+	my_currentContextMenuItemId = ak::invalidID;
+	connect(this, SIGNAL(textChanged()), this, SLOT(slotChanged()));
+	setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(slotCustomMenuRequested(const QPoint &)));
+	my_contextMenu = new QMenu(this);
+	addContextMenuItem("Clear", ui::core::contextMenuRole::crClear);
+}
+
+ak::ID ak::ui::qt::textEdit::addContextMenuItem(
+	contextMenuItem *			_item
+) {
+	assert(_item != nullptr); // Nullptr provided
+	_item->setId(++my_currentContextMenuItemId);
+	my_contextMenuItems.push_back(_item);
+	connect(_item, SIGNAL(triggered(bool)), this, SLOT(slotContextMenuItemClicked()));
+	my_contextMenu->addAction(_item);
+	return _item->id();
 }

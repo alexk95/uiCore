@@ -118,6 +118,7 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(contextMenuItemClicked(ak::ID)), this, SLOT(slotContextMenuItemClicked(ak::ID)));
 			break;
 		case ak::ui::core::objectType::oTimer:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(timeout()), this, SLOT(slotTimeout()));
@@ -285,6 +286,7 @@ ak::UID ak::ui::signalLinker::addLink(
 	_object->connect(_object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	_object->connect(_object, SIGNAL(contextMenuItemClicked(ak::ID)), this, SLOT(slotContextMenuItemClicked(ak::ID)));
 	return _objectUid;
 }
 
@@ -391,9 +393,9 @@ void ak::ui::signalLinker::slotToggled(bool _checked)
 	}
 }
 
-void ak::ui::signalLinker::slotTimeout(void) {
-	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eTimeout, 0, 0);
-}
+void ak::ui::signalLinker::slotTimeout(void) { raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eTimeout, 0, 0); }
+
+void ak::ui::signalLinker::slotContextMenuItemClicked(ak::ID _itemId) { raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eContextMenuItemClicked, _itemId, 0); }
 
 // ##### Table
 

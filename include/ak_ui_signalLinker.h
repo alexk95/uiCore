@@ -190,6 +190,7 @@ namespace ak {
 			void slotStateChanged(int);
 			void slotToggled(bool);
 			void slotTimeout(void);
+			void slotContextMenuItemClicked(ak::ID);
 
 			// ##### Table
 

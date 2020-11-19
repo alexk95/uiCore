@@ -164,9 +164,19 @@ QString ak::ui::core::toQString(
 	}
 }
 
-//! @brief Will return the key type of the provided QKeyEvent
-//! If the key is not included in the keyType type a keyType::key_Unknown will be returned
-//! @param _event The event to extract the keyType from
+QString ak::ui::core::toQString(
+	contextMenuRole							_role
+) {
+	switch (_role)
+	{
+	case ak::ui::core::crNone: return QString("None");
+	case ak::ui::core::crClear: return QString("Clear");
+	default:
+		assert(0); // Not implemented yet
+		return QString("");
+	}
+}
+
 ak::ui::core::keyType ak::ui::core::getKey(
 	QKeyEvent *								_event
 ) {

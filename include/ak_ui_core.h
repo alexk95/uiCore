@@ -154,6 +154,11 @@ namespace ak {
 				caForegroundColorButton			= 1 << 24
 			};
 
+			enum contextMenuRole {
+				crNone,
+				crClear
+			};
+
 			inline colorAreaFlag operator | (colorAreaFlag a, colorAreaFlag b)
 			{ return static_cast<colorAreaFlag>(static_cast<int>(a) | static_cast<int>(b)); }
 
@@ -198,6 +203,11 @@ namespace ak {
 			//! @brief Create a string representation of the provided keyType
 			QString toQString(
 				keyType									_keyType
+			);
+
+			//! @brief Create a string representation of the provided contextMenuRole
+			QString toQString(
+				contextMenuRole							_role
 			);
 
 			//! @brief Will return the key type of the provided QKeyEvent

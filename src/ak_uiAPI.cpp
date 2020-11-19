@@ -1577,6 +1577,56 @@ void ak::uiAPI::textEdit::setText(
 	return actualTextEdit->setText(_text);
 }
 
+ak::ID ak::uiAPI::textEdit::addContextMenuItem(
+	ak::UID							_textEditUID,
+	const QString &					_text,
+	ui::core::contextMenuRole		_role
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::textEdit * actualTextEdit = nullptr;
+	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
+	assert(actualTextEdit != nullptr); // Invalid object type
+	return actualTextEdit->addContextMenuItem(_text, _role);
+}
+
+ak::ID ak::uiAPI::textEdit::addContextMenuItem(
+	ak::UID							_textEditUID,
+	const QIcon &					_icon,
+	const QString &					_text,
+	ui::core::contextMenuRole		_role
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::textEdit * actualTextEdit = nullptr;
+	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
+	assert(actualTextEdit != nullptr); // Invalid object type
+	return actualTextEdit->addContextMenuItem(_icon, _text, _role);
+}
+
+ak::ID ak::uiAPI::textEdit::addContextMenuItem(
+	ak::UID							_textEditUID,
+	const QString &					_text,
+	const QString &					_iconName,
+	const QString &					_iconSize,
+	ui::core::contextMenuRole		_role
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::qt::textEdit * actualTextEdit = nullptr;
+	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
+	assert(actualTextEdit != nullptr); // Invalid object type
+	return actualTextEdit->addContextMenuItem(*my_iconManager->icon(_iconName, _iconSize), _text, _role);
+}
+
+void ak::uiAPI::textEdit::clearContextMenu(
+	ak::UID							_textEditUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::textEdit * actualTextEdit = nullptr;
+	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
+	assert(actualTextEdit != nullptr); // Invalid object type
+	actualTextEdit->clearContextMenu();
+}
+
 // TextEdit
 
 // ###############################################################################################################################################

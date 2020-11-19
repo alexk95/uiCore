@@ -133,6 +133,7 @@
     <ClInclude Include="include\ak_ui_core_aWidget.h" />
     <ClInclude Include="include\ak_ui_core_aWidgetManager.h" />
     <ClInclude Include="include\ak_ui_core_ttbContainer.h" />
+    <QtMoc Include="include\ak_ui_qt_contextMenuItem.h" />
     <ClInclude Include="include\ak_ui_windowEventHandler.h" />
     <QtMoc Include="include\ak_ui_dialog_logIn.h" />
     <QtMoc Include="include\ak_ui_dialog_prompt.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="src\ak_ui_qt_comboBox.cpp" />
     <ClCompile Include="src\ak_ui_qt_comboButton.cpp" />
     <ClCompile Include="src\ak_ui_qt_comboButtonItem.cpp" />
+    <ClCompile Include="src\ak_ui_qt_contextMenuItem.cpp" />
     <ClCompile Include="src\ak_ui_qt_dock.cpp" />
     <ClCompile Include="src\ak_ui_qt_graphicsView.cpp" />
     <ClCompile Include="src\ak_ui_qt_label.cpp" />
