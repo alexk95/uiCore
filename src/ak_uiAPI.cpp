@@ -43,6 +43,7 @@
 #include <ak_ui_qt_timer.h>
 #include <ak_ui_qt_toolButton.h>
 #include <ak_ui_qt_contextMenuItem.h>
+#include <ak_ui_qt_window.h>
 
 // Qt header
 #include <qsurfaceformat.h>					// QSurfaceFormat
@@ -223,30 +224,49 @@ std::vector<ak::core::eventType> ak::uiAPI::enabledEventTypes(void) { return ak:
 
 std::vector<ak::core::eventType> ak::uiAPI::disabledEventTypes(void) { return ak::singletonAllowedMessages::instance()->disabledMessages(); }
 
-std::string ak::uiAPI::saveStateWindow(void) {
+std::string ak::uiAPI::saveStateWindow(
+	const std::string &									_applicationVersion
+) {
 	assert(my_objManager != nullptr);	// API not initialized
-	return my_objManager->saveStateWindow();
+	return my_objManager->saveStateWindow(_applicationVersion);
 }
 
-std::string ak::uiAPI::saveStateColorStyle(void) {
+std::string ak::uiAPI::saveStateColorStyle(
+	const std::string &									_applicationVersion
+) {
 	assert(my_objManager != nullptr);	// API not initialized
-	return my_objManager->saveStateColorStyle();
+	return my_objManager->saveStateColorStyle(_applicationVersion);
 }
 
-void ak::uiAPI::restoreStateWindow(
-	const std::string &									_json
+ak::settingsRestoreErrorCode ak::uiAPI::restoreStateWindow(
+	const std::string &									_json,
+	const std::string &									_applicationVersion
 ) {
 	assert(my_objManager != nullptr); // Not initialized
-	if (_json.length() == 0) { return; }
-	my_objManager->restoreStateWindow(_json.c_str());
+	if (_json.length() == 0) { return srecNone; }
+	return my_objManager->restoreStateWindow(_json.c_str(), _applicationVersion);
 }
 
-void ak::uiAPI::restoreStateColorStyle(
-	const std::string &									_json
+ak::settingsRestoreErrorCode ak::uiAPI::restoreStateColorStyle(
+	const std::string &									_json,
+	const std::string &									_applicationVersion
 ) {
 	assert(my_objManager != nullptr); // Not initialized
-	if (_json.length() == 0) { return; }
-	my_objManager->restoreStateColorStyle(_json.c_str());
+	if (_json.length() == 0) { return srecNone; }
+	return my_objManager->restoreStateColorStyle(_json.c_str(), _applicationVersion);
+}
+
+QWidget * ak::uiAPI::getWidget(
+	ak::UID													_objectUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::core::aObject * obj = my_objManager->object(_objectUid);
+	assert(obj != nullptr); // Invalid UID
+	assert(obj->isWidgetType()); // Object is not a widget type
+	ui::core::aWidget * widget = nullptr;
+	widget = dynamic_cast<ui::core::aWidget *>(obj);
+	assert(widget != nullptr); // Cast failed
+	return widget->widget();
 }
 
 // ###############################################################################################################################################
@@ -2825,6 +2845,16 @@ void ak::uiAPI::window::showMinimized(
 	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
 	assert(actualWindow != nullptr); // Invalid object type
 	actualWindow->showMaximized();
+}
+
+QSize ak::uiAPI::window::size(
+	ak::UID												_windowUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	return actualWindow->window()->size();
 }
 
 // ###############################################################################################################################################

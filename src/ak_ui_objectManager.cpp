@@ -63,6 +63,10 @@
 #define COLORSTYLE_INDEX_DEFAULT 0
 #define COLORSTYLE_INDEX_DARK 1
 
+#define SETTING_VERSION_WINDOWSTATE "Version-WindowState"
+#define SETTING_VERSION_APPLICATION "Version-Application"
+#define CONFIG_VERSION_WINDOWSTATE "1.0"
+
 ak::ui::objectManager::objectManager(
 	ak::messenger *										_messenger,
 	ak::uidManager *									_uidManager
@@ -667,11 +671,21 @@ void ak::ui::objectManager::destroyAll(void) {
 	my_mapObjects.clear();
 }
 
-std::string ak::ui::objectManager::saveStateWindow(void) {
+std::string ak::ui::objectManager::saveStateWindow(
+	const std::string &									_applicationVersion
+) {
 	// Prepare document
 	rapidjson::Document doc;
 	doc.SetObject();
 	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+	// Add app version string
+	rapidjson::Value appV(_applicationVersion.c_str(), allocator);
+	doc.AddMember(SETTING_VERSION_APPLICATION, appV, allocator);
+
+	// Add object type
+	rapidjson::Value cfgV(CONFIG_VERSION_WINDOWSTATE, allocator);
+	doc.AddMember(SETTING_VERSION_WINDOWSTATE, cfgV, allocator);
 
 	// Create array value
 	rapidjson::Value items(rapidjson::kArrayType);
@@ -699,7 +713,9 @@ std::string ak::ui::objectManager::saveStateWindow(void) {
 	return info;
 }
 
-std::string ak::ui::objectManager::saveStateColorStyle(void) {
+std::string ak::ui::objectManager::saveStateColorStyle(
+	const std::string &									_applicationVersion
+) {
 	// Prepare document
 	rapidjson::Document doc;
 	doc.SetObject();
@@ -732,11 +748,24 @@ std::string ak::ui::objectManager::saveStateColorStyle(void) {
 	return info;
 }
 
-void ak::ui::objectManager::restoreStateWindow(
-	const char *										_json
+ak::settingsRestoreErrorCode ak::ui::objectManager::restoreStateWindow(
+	const char *										_json,
+	const std::string &									_applicationVersion
 ) {
 	rapidjson::Document doc;
 	doc.Parse(_json);
+
+	// Check version
+	if (!doc.HasMember(SETTING_VERSION_APPLICATION) ||
+		!doc.HasMember(SETTING_VERSION_WINDOWSTATE)) {
+		return srecSettingsVersionMismatch;
+	}
+	assert(doc[SETTING_VERSION_APPLICATION].IsString());
+	assert(doc[SETTING_VERSION_WINDOWSTATE].IsString());
+	std::string settingVersionApp(doc[SETTING_VERSION_APPLICATION].GetString());
+	std::string settingVersionWindowState(doc[SETTING_VERSION_WINDOWSTATE].GetString());
+	if (_applicationVersion != settingVersionApp) { return srecAppVersionMismatch; }
+	if (CONFIG_VERSION_WINDOWSTATE != settingVersionWindowState) { return srecSettingsVersionMismatch; }
 
 	// Check document
 	assert(doc.HasMember(RESTORABLE_UI_SETTINGS));	// Member missing
@@ -779,13 +808,27 @@ void ak::ui::objectManager::restoreStateWindow(
 		restorable->restoreSettings(settings);
 
 	}
+	return srecNone;
 }
 
-void ak::ui::objectManager::restoreStateColorStyle(
-	const char *										_json
+ak::settingsRestoreErrorCode ak::ui::objectManager::restoreStateColorStyle(
+	const char *										_json,
+	const std::string &									_applicationVersion
 ) {
 	rapidjson::Document doc;
 	doc.Parse(_json);
+
+	// Check version
+	if (!doc.HasMember(SETTING_VERSION_APPLICATION) ||
+		!doc.HasMember(SETTING_VERSION_WINDOWSTATE)) {
+		return srecSettingsVersionMismatch;
+	}
+	assert(doc[SETTING_VERSION_APPLICATION].IsString());
+	assert(doc[SETTING_VERSION_WINDOWSTATE].IsString());
+	std::string settingVersionApp(doc[SETTING_VERSION_APPLICATION].GetString());
+	std::string settingVersionWindowState(doc[SETTING_VERSION_WINDOWSTATE].GetString());
+	if (_applicationVersion != settingVersionApp) { return srecAppVersionMismatch; }
+	if (CONFIG_VERSION_WINDOWSTATE != settingVersionWindowState) { return srecSettingsVersionMismatch; }
 
 	// Check document
 	assert(doc.HasMember(RESTORABLE_UI_SETTINGS));	// Member missing
@@ -802,6 +845,7 @@ void ak::ui::objectManager::restoreStateColorStyle(
 			setColorStyle(colorStyleName);
 		}
 	}
+	return srecNone;
 }
 
 void ak::ui::objectManager::addAlias(

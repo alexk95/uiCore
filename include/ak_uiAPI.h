@@ -19,6 +19,7 @@
 #include <qstring.h>					// QString
 #include <qicon.h>						// QIcon
 #include <qstringlist.h>				// QStringList
+#include <qsize.h>
 
 // AK header
 #include <ak_core.h>					// message type
@@ -159,21 +160,33 @@ namespace ak {
 		UICORE_API std::vector<ak::core::eventType> disabledEventTypes(void);
 
 		//! @brief Will create and return a JSON string representing the UI
-		UICORE_API std::string saveStateWindow(void);
+		UICORE_API std::string saveStateWindow(
+			const std::string &										_applicationVersion
+		);
 
 		//! @brief Will create and return a JSON string representing the currently set ColorStyle
-		UICORE_API std::string saveStateColorStyle(void);
+		UICORE_API std::string saveStateColorStyle(
+			const std::string &										_applicationVersion
+		);
 
 		//! @brief Will setup the UI with the settings provided in the settings JSON string
 		//! @param _json The JSON string containing the settings
-		UICORE_API void restoreStateWindow(
-			const std::string &										_json
+		UICORE_API settingsRestoreErrorCode restoreStateWindow(
+			const std::string &										_json,
+			const std::string &										_applicationVersion
 		);
 
 		//! @brief Will restore tthe color style from the settings JSON string
 		//! @param _json The JSON string containing the settings
-		UICORE_API void restoreStateColorStyle(
-			const std::string &										_json
+		UICORE_API settingsRestoreErrorCode restoreStateColorStyle(
+			const std::string &										_json,
+			const std::string &										_applicationVersion
+		);
+
+		//! @brief Will return the QWidget of the specifed object
+		//! @param _objectUid The UID of the object
+		UICORE_API QWidget * getWidget(
+			ak::UID													_objectUid
 		);
 
 		// ###############################################################################################################################################
@@ -1761,6 +1774,10 @@ namespace ak {
 			);
 
 			UICORE_API void showMinimized(
+				ak::UID												_windowUID
+			);
+
+			UICORE_API QSize size(
 				ak::UID												_windowUID
 			);
 

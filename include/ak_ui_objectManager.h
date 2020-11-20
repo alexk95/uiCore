@@ -306,22 +306,28 @@ namespace ak {
 			void destroyAll(void);
 
 			//! @brief Will return the JSON settings string of all objects that have an alias set
-			std::string saveStateWindow(void);
+			std::string saveStateWindow(
+				const std::string &									_applicationVersion
+			);
 
 			//! @brief Will return the JSON settings string of all objects that have an alias set
-			std::string saveStateColorStyle(void);
-
-			//! @brief Will setup the UI with the settings provided in the settings JSON string
-			//! @param _json The JSON string containing the settings
-			//! @throw ak::Exception on syntax mismatch
-			void restoreStateWindow(
-				const char *										_json
+			std::string saveStateColorStyle(
+				const std::string &									_applicationVersion
 			);
 
 			//! @brief Will setup the UI with the settings provided in the settings JSON string
 			//! @param _json The JSON string containing the settings
-			void restoreStateColorStyle(
-				const char *										_json
+			//! @throw ak::Exception on syntax mismatch
+			settingsRestoreErrorCode restoreStateWindow(
+				const char *										_json,
+				const std::string &									_applicationVersion
+			);
+
+			//! @brief Will setup the UI with the settings provided in the settings JSON string
+			//! @param _json The JSON string containing the settings
+			settingsRestoreErrorCode restoreStateColorStyle(
+				const char *										_json,
+				const std::string &									_applicationVersion
 			);
 
 			void addAlias(

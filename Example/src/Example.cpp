@@ -25,6 +25,8 @@
 #define ICO_Bright "Sun"
 #define ICO_Dark "Moon"
 
+#define APP_SETTINGS_VERSION "1.0"
+
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>			// Writer
 #include <rapidjson/stringbuffer.h>		// String buffer
@@ -64,7 +66,7 @@ Example::Example()
 		// Restore last color style settings
 		QSettings settings("AK", "uiCoreExample");
 		QString lastConfigString = settings.value("UI.ColorStyle", "").toString();
-		ak::uiAPI::restoreStateColorStyle(lastConfigString.toStdString());
+		ak::uiAPI::restoreStateColorStyle(lastConfigString.toStdString(), APP_SETTINGS_VERSION);
 
 		// Check the current color style (after it was restored)
 		const ak::ui::colorStyle * currentColorStyle = ak::uiAPI::getCurrentColorStyle();
@@ -91,9 +93,9 @@ Example::Example()
 		ak::uiAPI::exec();
 
 		// Save state
-		QString cfg = ak::uiAPI::saveStateWindow().c_str();
+		QString cfg = ak::uiAPI::saveStateWindow(APP_SETTINGS_VERSION).c_str();
 		settings.setValue("UI.Config", cfg);
-		cfg = ak::uiAPI::saveStateColorStyle().c_str();
+		cfg = ak::uiAPI::saveStateColorStyle(APP_SETTINGS_VERSION).c_str();
 		settings.setValue("UI.ColorStyle", cfg);
 	}
 }
@@ -239,7 +241,7 @@ void Example::eventCallback(
 				QString lastConfigString = settings.value("UI.Config", "").toString();
 				if (lastConfigString.length() > 0) {
 					std::string s(lastConfigString.toStdString());
-					ak::uiAPI::restoreStateWindow(s);
+					ak::uiAPI::restoreStateWindow(s, APP_SETTINGS_VERSION);
 				}
 			}
 		}
