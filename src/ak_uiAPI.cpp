@@ -42,6 +42,7 @@
 #include <ak_ui_dialog_logIn.h>
 #include <ak_ui_qt_timer.h>
 #include <ak_ui_qt_toolButton.h>
+#include <ak_ui_qt_contextMenuItem.h>
 
 // Qt header
 #include <qsurfaceformat.h>					// QSurfaceFormat
@@ -588,6 +589,140 @@ void ak::uiAPI::container::addObject(
 }
 
 // Container
+
+// ###############################################################################################################################################
+
+// ContextMenu
+
+ak::ID ak::uiAPI::contextMenu::addItem(
+	ak::UID							_widgetUID,
+	const QString &					_text,
+	ui::core::contextMenuRole		_role
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::core::aObject * obj = my_objManager->object(_widgetUID);
+	assert(obj != nullptr); // Invalid UID
+	ui::qt::contextMenuItem * newItem = new ui::qt::contextMenuItem(_text, _role);
+
+	switch (obj->objectType())
+	{
+	case ui::core::objectType::oTextEdit:
+	{
+		ui::qt::textEdit * actualTextEdit = nullptr;
+		actualTextEdit = dynamic_cast<ui::qt::textEdit *>(obj);
+		assert(actualTextEdit != nullptr); // Invalid object type
+		return actualTextEdit->addContextMenuItem(newItem);
+	}
+		break;
+	default:
+		delete newItem;
+		assert(0); // Invalid object type
+		return ak::invalidID;
+	}
+}
+
+ak::ID ak::uiAPI::contextMenu::addItem(
+	ak::UID							_widgetUID,
+	const QIcon &					_icon,
+	const QString &					_text,
+	ui::core::contextMenuRole		_role
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::core::aObject * obj = my_objManager->object(_widgetUID);
+	assert(obj != nullptr); // Invalid UID
+	ui::qt::contextMenuItem * newItem = new ui::qt::contextMenuItem(_icon, _text, _role);
+
+	switch (obj->objectType())
+	{
+	case ui::core::objectType::oTextEdit:
+	{
+		ui::qt::textEdit * actualTextEdit = nullptr;
+		actualTextEdit = dynamic_cast<ui::qt::textEdit *>(obj);
+		assert(actualTextEdit != nullptr); // Invalid object type
+		return actualTextEdit->addContextMenuItem(newItem);
+	}
+	break;
+	default:
+		delete newItem;
+		assert(0); // Invalid object type
+		return ak::invalidID;
+	}
+}
+
+ak::ID ak::uiAPI::contextMenu::addItem(
+	ak::UID							_widgetUID,
+	const QString &					_text,
+	const QString &					_iconName,
+	const QString &					_iconSize,
+	ui::core::contextMenuRole		_role
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::core::aObject * obj = my_objManager->object(_widgetUID);
+	assert(obj != nullptr); // Invalid UID
+	ui::qt::contextMenuItem * newItem = new ui::qt::contextMenuItem(*my_iconManager->icon(_iconName, _iconSize), _text, _role);
+
+	switch (obj->objectType())
+	{
+	case ui::core::objectType::oTextEdit:
+	{
+		ui::qt::textEdit * actualTextEdit = nullptr;
+		actualTextEdit = dynamic_cast<ui::qt::textEdit *>(obj);
+		assert(actualTextEdit != nullptr); // Invalid object type
+		return actualTextEdit->addContextMenuItem(newItem);
+	}
+	break;
+	default:
+		delete newItem;
+		assert(0); // Invalid object type
+		return ak::invalidID;
+	}
+}
+
+void ak::uiAPI::contextMenu::addSeparator(
+	ak::UID							_widgetUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::core::aObject * obj = my_objManager->object(_widgetUID);
+	assert(obj != nullptr); // Invalid UID
+	switch (obj->objectType())
+	{
+	case ui::core::objectType::oTextEdit:
+	{
+		ui::qt::textEdit * actualTextEdit = nullptr;
+		actualTextEdit = dynamic_cast<ui::qt::textEdit *>(obj);
+		assert(actualTextEdit != nullptr); // Invalid object type
+		actualTextEdit->addContextMenuSeparator();
+	}
+	break;
+	default:
+		assert(0); // Invalid object type
+	}
+}
+
+void ak::uiAPI::contextMenu::clear(
+	ak::UID							_widgetUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::core::aObject * obj = my_objManager->object(_widgetUID);
+	assert(obj != nullptr); // Invalid UID
+
+	switch (obj->objectType())
+	{
+	case ui::core::objectType::oTextEdit:
+	{
+		ui::qt::textEdit * actualTextEdit = nullptr;
+		actualTextEdit = dynamic_cast<ui::qt::textEdit *>(obj);
+		assert(actualTextEdit != nullptr); // Invalid object type
+		actualTextEdit->clearContextMenu();
+	}
+	break;
+	default:
+		assert(0); // Invalid object type
+	}
+}
+
+// ContextMenu
 
 // ###############################################################################################################################################
 
@@ -1575,56 +1710,6 @@ void ak::uiAPI::textEdit::setText(
 	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
 	assert(actualTextEdit != nullptr); // Invalid object type
 	return actualTextEdit->setText(_text);
-}
-
-ak::ID ak::uiAPI::textEdit::addContextMenuItem(
-	ak::UID							_textEditUID,
-	const QString &					_text,
-	ui::core::contextMenuRole		_role
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::textEdit * actualTextEdit = nullptr;
-	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
-	assert(actualTextEdit != nullptr); // Invalid object type
-	return actualTextEdit->addContextMenuItem(_text, _role);
-}
-
-ak::ID ak::uiAPI::textEdit::addContextMenuItem(
-	ak::UID							_textEditUID,
-	const QIcon &					_icon,
-	const QString &					_text,
-	ui::core::contextMenuRole		_role
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::textEdit * actualTextEdit = nullptr;
-	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
-	assert(actualTextEdit != nullptr); // Invalid object type
-	return actualTextEdit->addContextMenuItem(_icon, _text, _role);
-}
-
-ak::ID ak::uiAPI::textEdit::addContextMenuItem(
-	ak::UID							_textEditUID,
-	const QString &					_text,
-	const QString &					_iconName,
-	const QString &					_iconSize,
-	ui::core::contextMenuRole		_role
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
-	ui::qt::textEdit * actualTextEdit = nullptr;
-	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
-	assert(actualTextEdit != nullptr); // Invalid object type
-	return actualTextEdit->addContextMenuItem(*my_iconManager->icon(_iconName, _iconSize), _text, _role);
-}
-
-void ak::uiAPI::textEdit::clearContextMenu(
-	ak::UID							_textEditUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::textEdit * actualTextEdit = nullptr;
-	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
-	assert(actualTextEdit != nullptr); // Invalid object type
-	actualTextEdit->clearContextMenu();
 }
 
 // TextEdit

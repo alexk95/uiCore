@@ -52,7 +52,7 @@ void ak::ui::qt::textEdit::slotChanged() {
 }
 
 void ak::ui::qt::textEdit::slotCustomMenuRequested(const QPoint & _pos) {
-	my_contextMenu->exec(viewport()->mapToGlobal(_pos));
+	if (my_contextMenuItems.size() != 0) { my_contextMenu->exec(viewport()->mapToGlobal(_pos)); }
 }
 
 void ak::ui::qt::textEdit::slotContextMenuItemClicked() {
@@ -61,15 +61,13 @@ void ak::ui::qt::textEdit::slotContextMenuItemClicked() {
 	assert(item != nullptr); // Cast failed
 	switch (item->role())
 	{
-	case ui::core::contextMenuRole::crClear:
-		clear();
-		break;
-	case ui::core::contextMenuRole::crNone:
-		emit(contextMenuItemClicked(item->id())); break;
+	case ui::core::contextMenuRole::crClear: clear(); break;
+	case ui::core::contextMenuRole::crNone: break;
 	default:
+		assert(0); // Unknown role
 		break;
 	}
-
+	emit(contextMenuItemClicked(item->id()));
 }
 
 // #######################################################################################################
@@ -97,20 +95,18 @@ void ak::ui::qt::textEdit::setColorStyle(
 // Context menu
 
 ak::ID ak::ui::qt::textEdit::addContextMenuItem(
-	const QString &						_text,
-	ui::core::contextMenuRole			_role
+	contextMenuItem *			_item
 ) {
-	contextMenuItem * item = new contextMenuItem(_text, _role);
-	return addContextMenuItem(item);
+	assert(_item != nullptr); // Nullptr provided
+	_item->setId(++my_currentContextMenuItemId);
+	my_contextMenuItems.push_back(_item);
+	connect(_item, SIGNAL(triggered(bool)), this, SLOT(slotContextMenuItemClicked()));
+	my_contextMenu->addAction(_item);
+	return _item->id();
 }
 
-ak::ID ak::ui::qt::textEdit::addContextMenuItem(
-	const QIcon &						_icon,
-	const QString &						_text,
-	ui::core::contextMenuRole			_role
-) {
-	contextMenuItem * item = new contextMenuItem(_icon, _text, _role);
-	return addContextMenuItem(item);
+void ak::ui::qt::textEdit::addContextMenuSeparator(void) {
+	my_contextMenu->addSeparator();
 }
 
 void ak::ui::qt::textEdit::clearContextMenu(void) {
@@ -147,16 +143,6 @@ void ak::ui::qt::textEdit::ini(void) {
 	setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(slotCustomMenuRequested(const QPoint &)));
 	my_contextMenu = new QMenu(this);
-	addContextMenuItem("Clear", ui::core::contextMenuRole::crClear);
-}
-
-ak::ID ak::ui::qt::textEdit::addContextMenuItem(
-	contextMenuItem *			_item
-) {
-	assert(_item != nullptr); // Nullptr provided
-	_item->setId(++my_currentContextMenuItemId);
-	my_contextMenuItems.push_back(_item);
-	connect(_item, SIGNAL(triggered(bool)), this, SLOT(slotContextMenuItemClicked()));
-	my_contextMenu->addAction(_item);
-	return _item->id();
+	contextMenuItem * newItem = new contextMenuItem("Clear", ui::core::contextMenuRole::crClear);
+	addContextMenuItem(newItem);
 }

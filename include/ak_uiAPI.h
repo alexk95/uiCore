@@ -522,6 +522,61 @@ namespace ak {
 
 		// ###############################################################################################################################################
 
+		// Context menu
+
+		namespace contextMenu {
+
+			//! @brief Will add a context menu item and return its ID
+			//! @param _textEditUID The UID of the text edit
+			//! @param _text The text of the new item
+			//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
+			UICORE_API ak::ID addItem(
+				ak::UID							_textEditUID,
+				const QString &					_text,
+				ui::core::contextMenuRole		_role = ui::core::contextMenuRole::crNone
+			);
+
+			//! @brief Will add a context menu item and return its ID
+			//! @param _textEditUID The UID of the text edit
+			//! @param _icon The icon of the new item
+			//! @param _text The text of the new item
+			//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
+			UICORE_API ak::ID addItem(
+				ak::UID							_textEditUID,
+				const QIcon &					_icon,
+				const QString &					_text,
+				ui::core::contextMenuRole		_role = ui::core::contextMenuRole::crNone
+			);
+
+			//! @brief Will add a context menu item and return its ID
+			//! @param _textEditUID The UID of the text edit
+			//! @param _icon The icon of the new item
+			//! @param _text The text of the new item
+			//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
+			UICORE_API ak::ID addItem(
+				ak::UID							_textEditUID,
+				const QString &					_text,
+				const QString &					_iconName,
+				const QString &					_iconSize,
+				ui::core::contextMenuRole		_role = ui::core::contextMenuRole::crNone
+			);
+
+			//! @brief Will add a sperator at the context menu of the textEdit
+			//! @param _textEditUID The UID of the text edit
+			UICORE_API void addSeparator(
+				ak::UID							_textEditUID
+			);
+
+			//! @brief Will remove all context menu items from the context menu
+			//! @param _textEditUID The UID of the text edit
+			UICORE_API void clear(
+				ak::UID							_textEditUID
+			);
+
+		}
+
+		// ###############################################################################################################################################
+
 		// Dock
 
 		namespace dock {
@@ -1068,47 +1123,6 @@ namespace ak {
 			UICORE_API void setText(
 				ak::UID				_textEditUID,
 				const QString &		_text
-			);
-
-			//! @brief Will add a context menu item and return its ID
-			//! @param _textEditUID The UID of the text edit
-			//! @param _text The text of the new item
-			//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
-			UICORE_API ak::ID addContextMenuItem(
-				ak::UID							_textEditUID,
-				const QString &					_text,
-				ui::core::contextMenuRole		_role = ui::core::contextMenuRole::crNone
-			);
-
-			//! @brief Will add a context menu item and return its ID
-			//! @param _textEditUID The UID of the text edit
-			//! @param _icon The icon of the new item
-			//! @param _text The text of the new item
-			//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
-			UICORE_API ak::ID addContextMenuItem(
-				ak::UID							_textEditUID,
-				const QIcon &					_icon,
-				const QString &					_text,
-				ui::core::contextMenuRole		_role = ui::core::contextMenuRole::crNone
-			);
-
-			//! @brief Will add a context menu item and return its ID
-			//! @param _textEditUID The UID of the text edit
-			//! @param _icon The icon of the new item
-			//! @param _text The text of the new item
-			//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
-			UICORE_API ak::ID addContextMenuItem(
-				ak::UID							_textEditUID,
-				const QString &					_text,
-				const QString &					_iconName,
-				const QString &					_iconSize,
-				ui::core::contextMenuRole		_role = ui::core::contextMenuRole::crNone
-			);
-
-			//! @brief Will remove all context menu items from the context menu
-			//! @param _textEditUID The UID of the text edit
-			UICORE_API void clearContextMenu(
-				ak::UID							_textEditUID
 			);
 
 		}

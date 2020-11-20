@@ -81,22 +81,13 @@ namespace ak {
 				// Context menu
 
 				//! @brief Will add a context menu item and return its ID
-				//! @param _text The text of the new item
-				//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
+				//! @param _item The item to add
 				ak::ID addContextMenuItem(
-					const QString &						_text,
-					ui::core::contextMenuRole			_role = ui::core::contextMenuRole::crNone
+					contextMenuItem *			_item
 				);
 
-				//! @brief Will add a context menu item and return its ID
-				//! @param _icon The icon of the new item
-				//! @param _text The text of the new item
-				//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
-				ak::ID addContextMenuItem(
-					const QIcon &						_icon,
-					const QString &						_text,
-					ui::core::contextMenuRole			_role = ui::core::contextMenuRole::crNone
-				);
+				//! @brief Will add a sparator at the context menu
+				void addContextMenuSeparator(void);
 
 				//! @brief Will remove all context menu items from the context menu
 				void clearContextMenu(void);
@@ -134,12 +125,6 @@ namespace ak {
 
 				// Initialize the textEdit
 				void ini(void);
-
-				//! @brief Will add a context menu item and return its ID
-				//! @param _item The item to add
-				ak::ID addContextMenuItem(
-					contextMenuItem *			_item
-				);
 
 				textEdit(const textEdit &) = delete;
 				textEdit & operator = (const textEdit &) = delete;
