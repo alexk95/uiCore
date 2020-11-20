@@ -21,6 +21,7 @@
 #include <qstring.h>					//
 #include <qcolor.h>						// QColor
 #include <qtablewidget.h>				// QTableWidgetItem
+#include <qicon.h>
 
 // AK header
 #include <ak_ui_core_aWidgetManager.h>	// Base class
@@ -184,6 +185,11 @@ namespace ak {
 					ak::ID											_itemID
 				);
 
+				void setGroupStateIcons(
+					const QIcon &									_groupExpanded,
+					const QIcon &									_groupCollapsed
+				);
+
 				// ##############################################################################################################
 
 				// Clear items
@@ -270,6 +276,9 @@ namespace ak {
 				QColor									my_itemDefaultBackgroundColor;
 				QColor									my_itemTextColorError;
 				QColor									my_itemTextColorNormal;
+
+				QIcon									my_groupIconExpanded;
+				QIcon									my_groupIconCollapsed;
 
 				//QTableWidgetItem *						my_verticalHeaderItemName;
 				//QTableWidgetItem *						my_verticalHeaderItemValue;
@@ -365,6 +374,11 @@ namespace ak {
 
 				void deselect(void);
 
+				void setStateIcons(
+					QIcon *											_expanded,
+					QIcon *											_collapsed
+				);
+
 			private slots:
 				void slotDoubleClicked(QTableWidgetItem *);
 
@@ -373,6 +387,8 @@ namespace ak {
 				void checkVisibility(void);
 
 				void repaint(void);
+
+				void refreshIcon(void);
 
 				std::list<propertyGridItem *>			my_items;
 				qt::table *								my_propertyGridTable;
@@ -383,13 +399,16 @@ namespace ak {
 				bool									my_isActivated;
 				bool									my_isVisible;
 				bool									my_isAlternateBackground;
-
+				
 				QColor									my_foreColor;
 				QColor									my_backColor;
 				QColor									my_colorTextError;
 				QColor									my_colorTextNormal;
 				QColor									my_colorItemBackground;
 				QColor									my_colorItemBackgroundAlternate;
+
+				QIcon *									my_iconExpanded;
+				QIcon *									my_iconCollapsed;
 
 				propertyGridGroup() = delete;
 				propertyGridGroup(const propertyGridGroup &) = delete;

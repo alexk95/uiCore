@@ -332,10 +332,13 @@ void Example::setupUi(void) {
 			ak::uiAPI::toolButton::setEnabled(my_ui.ttb_aTest2, false);
 			
 			ak::uiAPI::textEdit::setReadOnly(my_ui.outputWidget);
+
 			ak::uiAPI::contextMenu::clear(my_ui.outputWidget);
 			ak::uiAPI::contextMenu::addSeparator(my_ui.outputWidget);
 			ak::uiAPI::contextMenu::addItem(my_ui.outputWidget, "Clear", "Clear", "32", ak::ui::core::contextMenuRole::crClear);
 			ak::uiAPI::contextMenu::addSeparator(my_ui.outputWidget);
+
+			ak::uiAPI::propertyGrid::setGroupStateIcons(my_ui.propertiesWidget, "ArrowGreenDown", "32", "ArrowBlueRight", "32");
 
 			// Set central widget
 			ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);

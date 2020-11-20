@@ -1402,6 +1402,34 @@ void ak::uiAPI::propertyGrid::setItemIsReadOnly(
 	actualPropertyGrid->setItemReadOnly(_itemID, _readOnly);
 }
 
+void ak::uiAPI::propertyGrid::setGroupStateIcons(
+	ak::UID											_propertyGridUID,
+	const QIcon &									_groupExpanded,
+	const QIcon &									_groupCollapsed
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->setGroupStateIcons(_groupExpanded, _groupCollapsed);
+}
+
+void ak::uiAPI::propertyGrid::setGroupStateIcons(
+	ak::UID											_propertyGridUID,
+	const QString &									_groupExpandedIconName,
+	const QString &									_groupExpandedIconSize,
+	const QString &									_groupCollapsedIconName,
+	const QString &									_groupCollapsedIconSize
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->setGroupStateIcons(*my_iconManager->icon(_groupExpandedIconName, _groupExpandedIconSize),
+		*my_iconManager->icon(_groupCollapsedIconName, _groupCollapsedIconSize));
+}
+
 // propertyGrid
 
 // ###############################################################################################################################################

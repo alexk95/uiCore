@@ -150,6 +150,7 @@ void ak::ui::widget::propertyGrid::addGroup(
 	propertyGridGroup * newGroup = new propertyGridGroup(my_table, _group);
 	newGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
 	newGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
+	newGroup->setStateIcons(&my_groupIconExpanded, &my_groupIconCollapsed);
 	newGroup->activate();
 	my_groups.insert_or_assign(_group, newGroup);
 }
@@ -164,6 +165,7 @@ void ak::ui::widget::propertyGrid::addGroup(
 	propertyGridGroup * newGroup = new propertyGridGroup(my_table, _group);
 	newGroup->setItemsBackColor(_color);
 	newGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
+	newGroup->setStateIcons(&my_groupIconExpanded, &my_groupIconCollapsed);
 	newGroup->activate();
 	my_groups.insert_or_assign(_group, newGroup);
 }
@@ -399,6 +401,18 @@ bool ak::ui::widget::propertyGrid::itemIsReadOnly(
 	return itm->second->isReadOnly();
 }
 
+void ak::ui::widget::propertyGrid::setGroupStateIcons(
+	const QIcon &									_groupExpanded,
+	const QIcon &									_groupCollapsed
+) {
+	my_groupIconCollapsed = _groupCollapsed;
+	my_groupIconExpanded = _groupExpanded;
+
+	for (auto itm : my_groups) {
+		itm.second->setStateIcons(&my_groupIconExpanded, &my_groupIconCollapsed);
+	}
+}
+
 // ##############################################################################################################
 
 // Clear items
@@ -588,8 +602,11 @@ ak::ui::widget::propertyGridGroup::propertyGridGroup(
 	font.setBold(true);
 	my_item->setFont(font);
 
-	setItemsBackColor(my_colorItemBackground);
+	// Initialize icons
+	my_iconCollapsed = nullptr;
+	my_iconExpanded = nullptr;
 
+	setItemsBackColor(my_colorItemBackground);
 	connect(my_propertyGridTable, SIGNAL(itemDoubleClicked(QTableWidgetItem *)), this, SLOT(slotDoubleClicked(QTableWidgetItem *)));
 
 }
@@ -806,6 +823,17 @@ void ak::ui::widget::propertyGridGroup::deselect(void) {
 	my_item->setSelected(false);
 }
 
+void ak::ui::widget::propertyGridGroup::setStateIcons(
+	QIcon *											_expanded,
+	QIcon *											_collapsed
+) {
+	assert(_expanded != nullptr); // Nullptr provided
+	assert(_collapsed != nullptr); // Nullptr provided
+	my_iconCollapsed = _collapsed;
+	my_iconExpanded = _expanded;
+	refreshIcon();
+}
+
 // ##############################################################################################################
 
 // slots
@@ -816,6 +844,7 @@ void ak::ui::widget::propertyGridGroup::slotDoubleClicked(QTableWidgetItem * _it
 			my_propertyGridTable->setRowHidden(itm->row(), my_isVisible);
 		}
 		my_isVisible = !my_isVisible;
+		refreshIcon();
 	}
 }
 
@@ -845,6 +874,14 @@ void ak::ui::widget::propertyGridGroup::repaint(void) {
 		else { itm->setBackgroundColor(my_colorItemBackground); }
 		itm->setTextColors(my_colorTextNormal, my_colorTextError);
 		my_isAlternateBackground = !my_isAlternateBackground;
+	}
+}
+
+void ak::ui::widget::propertyGridGroup::refreshIcon(void) {
+	if (my_iconCollapsed != nullptr) {
+		assert(my_iconExpanded != nullptr); // This should never happen
+		if (my_isVisible) { my_item->setIcon(*my_iconExpanded); }
+		else { my_item->setIcon(*my_iconCollapsed); }
 	}
 }
 

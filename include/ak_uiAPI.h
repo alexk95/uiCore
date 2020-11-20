@@ -988,6 +988,20 @@ namespace ak {
 				bool											_readOnly = true
 			);
 
+			UICORE_API void setGroupStateIcons(
+				ak::UID											_propertyGridUID,
+				const QIcon &									_groupExpanded,
+				const QIcon &									_groupCollapsed
+			);
+
+			UICORE_API void setGroupStateIcons(
+				ak::UID											_propertyGridUID,
+				const QString &									_groupExpandedIconName,
+				const QString &									_groupExpandedIconSize,
+				const QString &									_groupCollapsedIconName,
+				const QString &									_groupCollapsedIconSize
+			);
+
 		}
 
 		// ###############################################################################################################################################
