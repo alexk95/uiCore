@@ -1,7 +1,7 @@
 /*
- * ak_ui_qt_contextMenuItem.cpp
+ * ak_ui_qt_contextMenuItem.h
  *
- *  Created on: March 19, 2020
+ *  Created on: November 19, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
  *	This file is part of the uiCore component.
