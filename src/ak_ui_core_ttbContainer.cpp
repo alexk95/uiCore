@@ -31,4 +31,11 @@ my_messenger(nullptr)
 
 ak::ui::core::ttbContainer::~ttbContainer() {}
 
+ak::ui::core::ttbContainer * ak::ui::core::ttbContainer::getSubContainer(
+	const QString &				_text
+) {
+	for (auto itm : my_subContainer) { if (itm->text() == _text) { return itm; } }
+	return nullptr;
+}
+
 int ak::ui::core::ttbContainer::subContainerCount(void) const { return my_subContainer.size(); }

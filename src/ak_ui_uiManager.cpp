@@ -180,11 +180,6 @@ void ak::ui::uiManager::setColorStyle(
 	my_tabToolBar->SetTabBarStylesheet(sheet);
 	my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
 		TYPE_COLORAREA::caBackgroundColorWindow));
-	for (my_mapTabToolBarContainerIterator itm = my_mapTabToolBarContainer.begin(); itm != my_mapTabToolBarContainer.end(); itm++) {
-		assert(itm->second != nullptr); // Nullptr stored
-		//itm->second->setColorStyle(my_colorStyle);
-	}
-
 }
 
 void ak::ui::uiManager::removeChildObject(
@@ -196,6 +191,11 @@ void ak::ui::uiManager::removeChildObject(
 		page = dynamic_cast<ttb::page *>(_child);
 		assert(page != nullptr); // Cast failed
 		my_tabToolBar->DestroyPage(page->index());
+		for (int i = my_tabToolBarContainer.size() - 1; i >= 0; i--) {
+			if (my_tabToolBarContainer[i] == page) {
+				my_tabToolBarContainer.erase(my_tabToolBarContainer.begin() + i);
+			}
+		}
 	}
 	else {
 		my_window->takeCentralWidget();
@@ -469,17 +469,6 @@ void ak::ui::uiManager::showMinimized(void) { my_window->showMinimized(); }
 
 void ak::ui::uiManager::close(void) { my_window->close(); }
 
-void ak::ui::uiManager::deleteObject(
-	ak::UID													_objectUid
-) {
-	try {
-		assert(0); // not implemented yet
-	}
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::removeObject()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::removeObject()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::ui::uiManager::removeObject()"); }
-}
-
 void ak::ui::uiManager::setShowStatusObjectDelayTimerInterval(int _interval) {
 	bool labelShow = false;
 	bool progressShow = false;
@@ -530,7 +519,19 @@ ak::ui::ttb::page * ak::ui::uiManager::createTabToolbarSubContainer(
 	tt::Page * page = my_tabToolBar->AddPage(_text);
 	ak::ui::ttb::page * p = new ak::ui::ttb::page(my_messenger, page, _text);
 	if (my_colorStyle != nullptr) { p->setColorStyle(my_colorStyle); setColorStyle(my_colorStyle); }
+	my_tabToolBarContainer.push_back(p);
 	return p;
+}
+
+ak::ui::core::ttbContainer * ak::ui::uiManager::getTabToolBarSubContainer(
+	const QString &				_text
+) {
+	for (auto itm : my_tabToolBarContainer) {
+		if (itm->text() == _text) {
+			return itm;
+		}
+	}
+	return nullptr;
 }
 
 void ak::ui::uiManager::addTabToolbarWidget(

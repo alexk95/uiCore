@@ -14,6 +14,9 @@
 // C++ header
 #include <vector>
 
+// Qt header
+#include <qstring.h>
+
 // AK header
 #include <ak_ui_core_aPaintable.h>	// base class
 #include <ak_globalDataTypes.h>		// UID and ID type
@@ -70,11 +73,22 @@ namespace ak {
 					const QString &				_text = QString("")
 				) = 0;
 
+				//! @brief Will return the sub container with the specified text
+				//! Returns nullptr if no sub container with the specified text exists
+				//! @param _text The text of the sub container to find
+				ak::ui::core::ttbContainer * getSubContainer(
+					const QString &				_text
+				);
+
 				virtual void destroyAllSubContainer(void) = 0;
+
+				//! @brief Will return the text of this ttb container
+				QString text(void) const { return my_text; }
 
 			protected:
 				ak::messenger *					my_messenger;
 				std::vector<ttbContainer *>		my_subContainer;
+				QString							my_text;
 
 			private:
 				// Block default constructor

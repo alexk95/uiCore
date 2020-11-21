@@ -230,6 +230,13 @@ namespace ak {
 				const QString &				_text = QString("")
 			);
 
+			//! @brief Will return the sub container with the specified text
+			//! Returns nullptr if no sub container with the specified text exists
+			//! @param _text The text of the sub container to find
+			ak::ui::core::ttbContainer * getTabToolBarSubContainer(
+				const QString &				_text
+			);
+
 			//! @brief Will add the object with the provided uid to the specified parent object
 			//! The object must have been creted by the objectManager used in this tab toolbar manager.
 			//! Valid objects are actions or any object derived from ak::widget
@@ -296,11 +303,6 @@ namespace ak {
 			//! @brief Will close the window
 			void close(void);
 
-			//! @brief Will remove the provided object, if the object has childs, they will be removed aswell
-			void deleteObject(
-				ak::UID										_obejctUid
-			);
-
 		private slots:
 			void slotRestoreSetting(const QByteArray & _actualState);
 			void slotTabToolbarTabClicked(int _index);
@@ -327,9 +329,7 @@ namespace ak {
 			QTimer *													my_timerLabelHide;				//! The timer used to hide the status label delayed
 			QTimer *													my_timerShowMainWindow;			//! The timer used to show the main window upon creation
 
-			std::map<ak::UID, ak::ui::core::ttbContainer *>				my_mapTabToolBarContainer;
-			typedef std::map<ak::UID,
-				ak::ui::core::ttbContainer *>::iterator					my_mapTabToolBarContainerIterator;
+			std::vector<ak::ui::core::ttbContainer *>					my_tabToolBarContainer;
 		};
 	} // namespace ui
 } // namespace ak

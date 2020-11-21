@@ -87,7 +87,6 @@ namespace ak {
 
 			private:
 				tt::Page *							my_page;
-				QString								my_text;
 				//std::vector<ak::ui::ttb::group *>	my_groups;
 
 				// Block default constructor

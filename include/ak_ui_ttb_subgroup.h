@@ -82,7 +82,6 @@ namespace ak {
 
 			private:
 				tt::SubGroup *			my_subGroup;
-				QString					my_text;
 				
 				// Block default constructor
 				subGroup() = delete;

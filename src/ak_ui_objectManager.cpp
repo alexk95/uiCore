@@ -432,18 +432,22 @@ ak::UID ak::ui::objectManager::createTabToolBarSubContainer(
 	ak::ui::core::ttbContainer * cont = nullptr;
 	cont = dynamic_cast<ak::ui::core::ttbContainer *>(itm->second);
 	assert(cont != nullptr); // Cast failed
-	// Create subcontainer
-	ak::ui::core::ttbContainer * sub = cont->createSubContainer(_text);
-	assert(sub != nullptr); // Invalid information received
-	sub->setUid(my_uidManager->getId());
-	// Store data
-	if (my_currentColorStyle != nullptr) { sub->setColorStyle(my_currentColorStyle); }
-	my_mapObjects.insert_or_assign(sub->uid(), sub);
-	addCreatedUid(_creatorUid, sub->uid());
-	
-	sub->setParentObject(cont);
-	cont->addChildObject(sub);
-	
+
+	ak::ui::core::ttbContainer * sub = cont->getSubContainer(_text);
+
+	if (sub == nullptr) {
+		// Create subcontainer
+		sub = cont->createSubContainer(_text);
+		assert(sub != nullptr); // Invalid information received
+		sub->setUid(my_uidManager->getId());
+		// Store data
+		if (my_currentColorStyle != nullptr) { sub->setColorStyle(my_currentColorStyle); }
+		my_mapObjects.insert_or_assign(sub->uid(), sub);
+		addCreatedUid(_creatorUid, sub->uid());
+
+		sub->setParentObject(cont);
+		cont->addChildObject(sub);
+	}
 	return sub->uid();
 }
 
@@ -461,18 +465,21 @@ ak::UID ak::ui::objectManager::createTabToolBarPage(
 	ak::ui::uiManager * ui = nullptr;
 	ui = dynamic_cast<ak::ui::uiManager *>(itm->second);
 	assert(ui != nullptr); // Cast failed
-	// Create container
-	ak::ui::core::ttbContainer * cont = ui->createTabToolbarSubContainer(_text);
-	assert(cont != nullptr); // Invalid information received
-	cont->setUid(my_uidManager->getId());
-	// Store data
-	if (my_currentColorStyle != nullptr) { cont->setColorStyle(my_currentColorStyle); }
-	my_mapObjects.insert_or_assign(cont->uid(), cont);
-	addCreatedUid(_creatorUid, cont->uid());
 
-	cont->setParentObject(ui);
-	ui->addChildObject(cont);
+	ak::ui::core::ttbContainer * cont = ui->getTabToolBarSubContainer(_text);
+	if (cont == nullptr) {
+		// Create container
+		cont = ui->createTabToolbarSubContainer(_text);
+		assert(cont != nullptr); // Invalid information received
+		cont->setUid(my_uidManager->getId());
+		// Store data
+		if (my_currentColorStyle != nullptr) { cont->setColorStyle(my_currentColorStyle); }
+		my_mapObjects.insert_or_assign(cont->uid(), cont);
+		addCreatedUid(_creatorUid, cont->uid());
 
+		cont->setParentObject(ui);
+		ui->addChildObject(cont);
+	}
 	return cont->uid();
 }
 
@@ -683,7 +690,7 @@ std::string ak::ui::objectManager::saveStateWindow(
 	rapidjson::Value appV(_applicationVersion.c_str(), allocator);
 	doc.AddMember(SETTING_VERSION_APPLICATION, appV, allocator);
 
-	// Add object type
+	// Add uiCore settings version string
 	rapidjson::Value cfgV(CONFIG_VERSION_WINDOWSTATE, allocator);
 	doc.AddMember(SETTING_VERSION_WINDOWSTATE, cfgV, allocator);
 
@@ -720,6 +727,14 @@ std::string ak::ui::objectManager::saveStateColorStyle(
 	rapidjson::Document doc;
 	doc.SetObject();
 	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+	// Add app version string
+	rapidjson::Value appV(_applicationVersion.c_str(), allocator);
+	doc.AddMember(SETTING_VERSION_APPLICATION, appV, allocator);
+
+	// Add uiCore settings version string
+	rapidjson::Value cfgV(CONFIG_VERSION_WINDOWSTATE, allocator);
+	doc.AddMember(SETTING_VERSION_WINDOWSTATE, cfgV, allocator);
 
 	// Create array value
 	rapidjson::Value items(rapidjson::kArrayType);

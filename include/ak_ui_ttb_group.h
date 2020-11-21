@@ -85,7 +85,6 @@ namespace ak {
 
 			private:
 				tt::Group *								my_group;
-				QString									my_text;
 				//std::vector<ak::ui::ttb::subGroup *>	my_subgroups;
 
 				// Block default constructor

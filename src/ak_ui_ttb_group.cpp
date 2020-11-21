@@ -86,7 +86,7 @@ void ak::ui::ttb::group::addChild(
 	}
 	_child->setParentObject(this);
 	addChildObject(_child);
-	// Store object0
+	// Store object
 	my_childObjects.insert_or_assign(_child->uid(), _child);
 }
 
