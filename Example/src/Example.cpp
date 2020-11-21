@@ -279,6 +279,13 @@ void Example::setupUi(void) {
 			ak::uiAPI::container::addObject(my_ui.ttb_gNONE, my_ui.ttb_aTest);
 			ak::uiAPI::container::addObject(my_ui.ttb_gNONE, my_ui.ttb_aTest2);
 
+			ak::uiAPI::toolButton::addMenuItem(my_ui.ttb_aTest, "testing 1");
+			ak::uiAPI::toolButton::addMenuItem(my_ui.ttb_aTest, "testing 2");
+			ak::uiAPI::toolButton::addMenuSeperator(my_ui.ttb_aTest);
+			ak::uiAPI::toolButton::setMenuItemChecked(my_ui.ttb_aTest, 
+				ak::uiAPI::toolButton::addMenuItem(my_ui.ttb_aTest, "testing 3")
+			);
+
 			// Create widgets
 			my_ui.treeWidget = ak::uiAPI::createTree(my_uid);
 			my_ui.propertiesWidget = ak::uiAPI::createPropertyGrid(my_uid);

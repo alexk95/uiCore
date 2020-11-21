@@ -1938,6 +1938,105 @@ void ak::uiAPI::toolButton::setIcon(
 	actualToolButton->getAction()->setIcon(*my_iconManager->icon(_iconName, _iconFolder));
 }
 
+ak::ID ak::uiAPI::toolButton::addMenuItem(
+	ak::UID							_toolButtonUID,
+	const QString &					_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	ui::qt::contextMenuItem * itm = new ui::qt::contextMenuItem(_text, ui::core::contextMenuRole::crNone);
+	return actualToolButton->addMenuItem(itm);
+}
+
+ak::ID ak::uiAPI::toolButton::addMenuItem(
+	ak::UID							_toolButtonUID,
+	const QIcon &					_icon,
+	const QString &					_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	ui::qt::contextMenuItem * itm = new ui::qt::contextMenuItem(_icon ,_text, ui::core::contextMenuRole::crNone);
+	return actualToolButton->addMenuItem(itm);
+}
+
+ak::ID ak::uiAPI::toolButton::addMenuItem(
+	ak::UID							_toolButtonUID,
+	const QString &					_text,
+	const QString &					_iconName,
+	const QString &					_iconFolder
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	ui::qt::contextMenuItem * itm = new ui::qt::contextMenuItem(*my_iconManager->icon(_iconName, _iconFolder), _text, ui::core::contextMenuRole::crNone);
+	return actualToolButton->addMenuItem(itm);
+}
+
+void ak::uiAPI::toolButton::addMenuSeperator(
+	ak::UID							_toolButtonUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	actualToolButton->addMenuSeperator();
+}
+
+void ak::uiAPI::toolButton::clearMenu(
+	ak::UID							_toolButtonUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	actualToolButton->clearMenu();
+}
+
+void ak::uiAPI::toolButton::setMenuItemChecked(
+	ak::UID							_toolButtonUID,
+	ak::ID							_itemID,
+	bool							_checked
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	actualToolButton->setMenuItemChecked(_itemID, _checked);
+}
+
+void ak::uiAPI::toolButton::setMenuItemNotCheckable(
+	ak::UID							_toolButtonUID,
+	ak::ID							_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	actualToolButton->setMenuItemNotCheckable(_itemID);
+}
+
+QString ak::uiAPI::toolButton::getMenuItemText(
+	ak::UID							_toolButtonUID,
+	ak::ID							_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::qt::toolButton * actualToolButton = nullptr;
+	actualToolButton = dynamic_cast<ui::qt::toolButton *>(my_objManager->object(_toolButtonUID));
+	assert(actualToolButton != nullptr); // Invalid object type
+	return actualToolButton->getMenuItemText(_itemID);
+}
+
 // ###############################################################################################################################################
 
 // Tree

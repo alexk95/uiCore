@@ -44,6 +44,7 @@ QString ak::core::toQString(
 	case ak::core::eToggeledChecked: return QString("ToggeledToChecked");
 	case ak::core::eToggeledUnchecked: return QString("ToggeledToUnchecked");
 	case ak::core::eContextMenuItemClicked: return QString("ContextMenuItemClicked");
+	case ak::core::eContextMenuItemCheckedChanged: return QString("ContextMenuItemCheckedChanged");
 	default: assert(0); // not implemented yet
 	}
 	return QString("");

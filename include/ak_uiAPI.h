@@ -1258,6 +1258,70 @@ namespace ak {
 				const QString &					_iconFolder
 			);
 
+			//! @brief Will add a new menu item to the menu
+			//! @param _toolButtonUID The UID of the tool button
+			//! @param _text The text of the new item
+			UICORE_API ak::ID addMenuItem(
+				ak::UID							_toolButtonUID,
+				const QString &					_text
+			);
+
+			//! @brief Will add a new menu item to the menu
+			//! @param _toolButtonUID The UID of the tool button
+			//! @param _text The text of the new item
+			UICORE_API ak::ID addMenuItem(
+				ak::UID							_toolButtonUID,
+				const QIcon &					_icon,
+				const QString &					_text
+			);
+
+			//! @brief Will add a new menu item to the menu
+			//! @param _toolButtonUID The UID of the tool button
+			//! @param _text The text of the new item
+			UICORE_API ak::ID addMenuItem(
+				ak::UID							_toolButtonUID,
+				const QString &					_text,
+				const QString &					_iconName,
+				const QString &					_iconFolder
+			);
+
+			//! @brief Will add a menu seperator to the menu
+			//! @param _toolButtonUID The UID of the tool button
+			UICORE_API void addMenuSeperator(
+				ak::UID							_toolButtonUID
+			);
+
+			//! @brief Will clear the menu
+			//! @param _toolButtonUID The UID of the tool button
+			UICORE_API void clearMenu(
+				ak::UID							_toolButtonUID
+			);
+
+			//! @brief Will set the checked state of the specified menu item
+			//! @param _toolButtonUID The UID of the tool button
+			//! @param _itemID The ID of the item
+			//! @param _checked The checked state to set
+			UICORE_API void setMenuItemChecked(
+				ak::UID							_toolButtonUID,
+				ak::ID							_itemID,
+				bool							_checked = true
+			);
+
+			//! @brief Will disable the ability to check and uncheck the item (can be reenabled with setChecked)
+			//! @param _toolButtonUID The UID of the tool button
+			//! @param _itemID The ID of the item
+			UICORE_API void setMenuItemNotCheckable(
+				ak::UID							_toolButtonUID,
+				ak::ID							_itemID
+			);
+
+			//! @brief Will return the text of the specified menu item
+			//! @param _itemID The ID of the menu item
+			UICORE_API QString getMenuItemText(
+				ak::UID							_toolButtonUID,
+				ak::ID							_itemID
+			);
+
 		} // namespace toolButton
 
 		// ###############################################################################################################################################

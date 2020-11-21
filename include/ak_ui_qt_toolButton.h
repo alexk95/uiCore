@@ -19,6 +19,8 @@
 #include <qstring.h>					// QString
 #include <qicon.h>						// QIcon
 
+class QMenu;
+
 namespace ak {
 	namespace ui {
 
@@ -28,6 +30,7 @@ namespace ak {
 		namespace qt {
 
 			class action;
+			class contextMenuItem;
 
 			class toolButton : public QToolButton, public ui::core::aWidget {
 				Q_OBJECT
@@ -83,19 +86,58 @@ namespace ak {
 				//! @brief Will return the current toolTip of this toolButton
 				QString ToolTip(void) const;
 
+				//! @brief Will add a new menu item to the menu
+				//! This toolButton will take over control over the contextMenuItem
+				//! @param _item The item to add
+				ak::ID addMenuItem(
+					contextMenuItem *					_item
+				);
+
+				//! @brief Will add a menu seperator to the menu
+				void addMenuSeperator(void);
+
+				//! @brief Will clear the menu
+				void clearMenu(void);
+
+				//! @brief Will set the checked state of the specified menu item
+				//! @param _itemID The ID of the item
+				//! @param _checked The checked state to set
+				void setMenuItemChecked(
+					ak::ID								_itemID,
+					bool								_checked = true
+				);
+
+				//! @brief Will disable the ability to check and uncheck the item (can be reenabled with setChecked)
+				//! @param _itemID The ID of the item
+				void setMenuItemNotCheckable(
+					ak::ID								_itemID
+				);
+
+				//! @brief Will return the text of the specified menu item
+				//! @param _itemID The ID of the menu item
+				QString getMenuItemText(
+					ak::ID								_itemID
+				);
+
 			signals:
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);
 				void clicked();
+				void menuItemClicked(ak::ID);
+				void menuItemCheckedChanged(ak::ID, bool);
 
 			private slots:
 				void slotClicked();
+				void slotMenuItemClicked();
+				void slotMenuItemCheckedChanged();
 
 			private:
 
 				//! @brief Initializes the components of this toolButton
 				void ini(void);
 
+				QMenu *								my_menu;
+				std::vector<contextMenuItem *>		my_menuItems;
 				qt::action *						my_action;
 
 			};

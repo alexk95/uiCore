@@ -127,6 +127,8 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(menuItemClicked(ak::ID)), this, SLOT(slotContextMenuItemClicked(ak::ID)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(menuItemCheckedChanged(ak::ID, bool)), this, SLOT(slotContextMenuItemCheckedChanged(ak::ID, bool)));
 			break;
 		default:
 			assert(0); // Not implemented object type
@@ -313,6 +315,8 @@ ak::UID ak::ui::signalLinker::addLink(
 	_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
 	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	_object->connect(_object, SIGNAL(menuItemClicked(ak::ID)), this, SLOT(slotContextMenuItemClicked(ak::ID)));
+	_object->connect(_object, SIGNAL(menuItemCheckedChanged(ak::ID, bool)), this, SLOT(slotContextMenuItemCheckedChanged(ak::ID, bool)));
 	return _objectUid;
 }
 
@@ -396,6 +400,10 @@ void ak::ui::signalLinker::slotToggled(bool _checked)
 void ak::ui::signalLinker::slotTimeout(void) { raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eTimeout, 0, 0); }
 
 void ak::ui::signalLinker::slotContextMenuItemClicked(ak::ID _itemId) { raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eContextMenuItemClicked, _itemId, 0); }
+
+void ak::ui::signalLinker::slotContextMenuItemCheckedChanged(ak::ID _itemId, bool _isChecked) {
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eContextMenuItemCheckedChanged, _itemId, _isChecked);
+}
 
 // ##### Table
 
