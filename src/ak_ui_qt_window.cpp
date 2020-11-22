@@ -132,6 +132,7 @@ ak::ui::qt::windowCentralWidget::~windowCentralWidget() {
 void ak::ui::qt::windowCentralWidget::setChild(
 	QWidget *		_widget
 ) {
+	if (my_childWidget != nullptr) { my_childWidget->hide(); }
 	my_childWidget = _widget;
 	if (my_childWidget != nullptr) {
 		_widget->setParent(this);
