@@ -89,6 +89,8 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oDock:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(closing()), this, SLOT(slotClosing()));
 			break;
 		case ak::ui::core::objectType::oLineEdit:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
@@ -239,6 +241,8 @@ ak::UID ak::ui::signalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oDock });
+	_object->connect(_object, SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
+	_object->connect(_object, SIGNAL(closing()), this, SLOT(slotClosing()));
 	return _objectUid;
 }
 
@@ -403,6 +407,14 @@ void ak::ui::signalLinker::slotContextMenuItemClicked(ak::ID _itemId) { raiseEve
 
 void ak::ui::signalLinker::slotContextMenuItemCheckedChanged(ak::ID _itemId, bool _isChecked) {
 	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eContextMenuItemCheckedChanged, _itemId, _isChecked);
+}
+
+void ak::ui::signalLinker::slotVisibilityChanged(bool _visibility) {
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eContextMenuItemCheckedChanged, _visibility, 0);
+}
+
+void ak::ui::signalLinker::slotClosing(void) {
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eClosing, 0, 0);
 }
 
 // ##### Table

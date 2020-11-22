@@ -804,6 +804,18 @@ void ak::uiAPI::dock::setVisible(
 	actualDock->setVisible(_visible);
 }
 
+bool ak::uiAPI::dock::isVisible(
+	ak::UID												_dockUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::qt::dock * actualDock = nullptr;
+	actualDock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_dockUID));
+	assert(actualDock != nullptr); // Invalid object type
+
+	return actualDock->isVisible();
+}
+
 // Dock
 
 // ###############################################################################################################################################

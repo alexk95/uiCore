@@ -68,12 +68,13 @@ my_timerShowMainWindow(nullptr)
 
 	// Create main window
 	my_window = new qt::window();
-
 	my_window->setAutoFillBackground(true);
+	my_window->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
 
 	// Create tab Toolbar
 	my_tabToolBar = new tt::TabToolbar();
 	my_tabToolBar->setVisible(false);
+	my_tabToolBar->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
 	my_window->addToolBar(my_tabToolBar);
 
 	// Connect tab Toolbar tab signals

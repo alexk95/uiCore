@@ -50,6 +50,7 @@ TabToolbar::TabToolbar(QWidget* parent, unsigned _groupMaxHeight, unsigned _grou
     setMovable(false);
     setAllowedAreas(Qt::TopToolBarArea);
     tabBar = new QTabWidget(this);
+	tabBar->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
     tabBar->setProperty("TTWidget", QVariant(true));
     tabBar->tabBar()->setProperty("TTTab", QVariant(true));
     tabBarHandle = addWidget(tabBar);

@@ -26,6 +26,7 @@
 
 // Forward declaration
 class QKeyEvent;
+class QCloseEvent;
 
 namespace ak {
 	namespace ui {
@@ -66,6 +67,10 @@ namespace ak {
 					aObject *									_child
 				) override;
 
+				virtual void closeEvent(
+					QCloseEvent *								_event
+				) override;
+
 				// #######################################################################################################
 
 				//! @brief Will set the alias for this object
@@ -89,6 +94,9 @@ namespace ak {
 				virtual void restoreSettings(
 					const rapidjson::Value &				_settings
 				) override;
+
+			signals:
+				void closing();
 
 			private slots:
 				void slotDockLocationChanged(

@@ -92,6 +92,13 @@ void ak::ui::qt::dock::removeChildObject(
 	setWidget(nullptr);
 }
 
+void ak::ui::qt::dock::closeEvent(
+	QCloseEvent *								_event
+) {
+	emit closing();
+	QDockWidget::closeEvent(_event);
+}
+
 // #######################################################################################################
 
 void ak::ui::qt::dock::setAlias(
