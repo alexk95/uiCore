@@ -16,13 +16,22 @@
 
 // Qt header
 #include <qevent.h>
+#include <qwidget.h>
+#include <qframe.h>
 #include <qstatusbar.h>
+#include <qlabel.h>
+#include <qmovie.h>
 
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
+
 ak::ui::qt::window::window()
-	: QMainWindow(), ui::core::aPaintable(ui::core::objectType::oMainWindow)
-{}
+	: QMainWindow(), ui::core::aPaintable(ui::core::objectType::oMainWindow), my_waitingWidget(nullptr), my_centralWidget(nullptr)
+{
+	my_waitingWidget = new QLabel();
+	my_centralWidget = new windowCentralWidget();
+	setCentralWidget(my_centralWidget);
+}
 
 ak::ui::qt::window::~window() {}
 
@@ -84,3 +93,85 @@ void ak::ui::qt::window::addEventHandler(
 void ak::ui::qt::window::removeEventHandler(
 	windowEventHandler *					_eventHandler
 ) { my_eventHandler.erase(_eventHandler); }
+
+void ak::ui::qt::window::SetCentralWidget(
+	QWidget *								_widget
+) {
+	setCentralWidget(my_centralWidget);
+	my_centralWidget->setChild(_widget);
+}
+
+void ak::ui::qt::window::setWaitingAnimationVisible(
+	bool									_visible
+) {
+	my_centralWidget->setWaitingAnimationVisible(_visible);
+}
+
+void ak::ui::qt::window::setWaitingAnimation(
+	QMovie *							_movie
+) {
+	my_centralWidget->setWaitingAnimation(_movie);
+}
+
+// ###########################################################################################################################################################
+
+ak::ui::qt::windowCentralWidget::windowCentralWidget()
+	: my_waitingLabelSize(20,20), my_waitingAnimation(nullptr)
+{
+	my_childWidget = nullptr;
+	my_waitingLabel = new QLabel("Test");
+	my_waitingLabel->setAttribute(Qt::WA_NoSystemBackground);
+	my_waitingLabel->setParent(this);
+	my_waitingLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
+}
+
+ak::ui::qt::windowCentralWidget::~windowCentralWidget() {
+
+}
+
+void ak::ui::qt::windowCentralWidget::setChild(
+	QWidget *		_widget
+) {
+	my_childWidget = _widget;
+	if (my_childWidget != nullptr) {
+		_widget->setParent(this);
+		_widget->show();
+	}
+}
+
+void ak::ui::qt::windowCentralWidget::resizeEvent(QResizeEvent * _event) {
+	if (my_childWidget != nullptr) {
+		my_childWidget->resize(size());
+	}
+	my_waitingLabel->resize(size());
+}
+
+void ak::ui::qt::windowCentralWidget::setWaitingAnimationVisible(
+	bool			_visible
+) {
+	assert(my_waitingAnimation != nullptr); // No waiting animation set yet
+	if (_visible) {
+		if (my_childWidget == nullptr) {
+			my_waitingLabel->setParent(this);
+		}
+		else {
+			my_waitingLabel->setParent(my_childWidget);
+		}
+		my_waitingLabel->setMovie(my_waitingAnimation);
+		my_waitingAnimation->start();
+		my_waitingLabel->setGeometry(rect());
+		my_waitingLabel->show();
+	}
+	else {
+		my_waitingAnimation->stop();
+		my_waitingLabel->setParent(nullptr);
+		my_waitingLabel->hide();
+	}
+}
+
+void ak::ui::qt::windowCentralWidget::setWaitingAnimation(
+	QMovie *							_movie
+) {
+	assert(_movie != nullptr); // Nullptr provided
+	my_waitingAnimation = _movie;
+}

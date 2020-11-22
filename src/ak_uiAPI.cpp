@@ -49,6 +49,7 @@
 #include <qsurfaceformat.h>					// QSurfaceFormat
 #include <qfiledialog.h>					// Open/Save file dialog
 #include <qfile.h>
+#include <qmovie.h>
 
 static ak::uiAPI::apiManager		my_apiManager;					//! The API manager
 static ak::ui::objectManager *		my_objManager = nullptr;					//! The object manager used in this API
@@ -2988,6 +2989,40 @@ QSize ak::uiAPI::window::size(
 	assert(actualWindow != nullptr); // Invalid object type
 	return actualWindow->window()->size();
 }
+
+void ak::uiAPI::window::setWaitingAnimationVisible(
+	ak::UID												_windowUID,
+	bool												_visible
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setWaitingAnimationVisible(_visible);
+}
+
+void ak::uiAPI::window::setWaitingAnimation(
+	ak::UID												_windowUID,
+	QMovie *											_movie
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setWaitingAnimation(_movie);
+}
+
+void ak::uiAPI::window::setWaitingAnimation(
+	ak::UID												_windowUID,
+	const QString &										_animationName
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setWaitingAnimation(my_iconManager->movie(_animationName));
+ }
 
 // ###############################################################################################################################################
 

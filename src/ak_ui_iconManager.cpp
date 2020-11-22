@@ -18,11 +18,13 @@
 #include <qdir.h>					// Check directories
 #include <qfile.h>					// Check file
 #include <qpixmap.h>
+#include <qmovie.h>
 
 // C++ header
 #include <mutex>					// Thread protection
 
 #define PATH_PIXMAPS "Images/"
+#define PATH_MOVIES "Animations/"
 
 ak::ui::iconManager::iconManager(
 	const QString &					_mainDirectory
@@ -161,9 +163,26 @@ const QPixmap * ak::ui::iconManager::pixmap(
 		my_mutex->unlock();
 		return pix;
 	}
-	catch (const ak::Exception & e) { my_mutex->unlock(); throw ak::Exception(e, "ak::ui::iconManager::icon()"); }
-	catch (const std::exception & e) { my_mutex->unlock(); throw ak::Exception(e.what(), "ak::ui::iconManager::icon()"); }
-	catch (...) { my_mutex->unlock(); throw ak::Exception("Unknown error", "ak::ui::iconManager::icon()"); }
+	catch (const ak::Exception & e) { my_mutex->unlock(); throw ak::Exception(e, "ak::ui::iconManager::pixmap()"); }
+	catch (const std::exception & e) { my_mutex->unlock(); throw ak::Exception(e.what(), "ak::ui::iconManager::pixmap()"); }
+	catch (...) { my_mutex->unlock(); throw ak::Exception("Unknown error", "ak::ui::iconManager::pixmap()"); }
+}
+
+QMovie * ak::ui::iconManager::movie(
+	const QString &									_imageName
+) {
+	try {
+		my_mutex->lock();
+		my_moviesIterator itm = my_movies.find(_imageName);
+		if (itm != my_movies.end()) { return itm->second; }
+		QMovie * mv = createMovie(_imageName);
+		my_movies.insert_or_assign(_imageName, mv);
+		my_mutex->unlock();
+		return mv;
+	}
+	catch (const ak::Exception & e) { my_mutex->unlock(); throw ak::Exception(e, "ak::ui::iconManager::movie()"); }
+	catch (const std::exception & e) { my_mutex->unlock(); throw ak::Exception(e.what(), "ak::ui::iconManager::movie()"); }
+	catch (...) { my_mutex->unlock(); throw ak::Exception("Unknown error", "ak::ui::iconManager::movie()"); }
 }
 
 void ak::ui::iconManager::setFileExtension(
@@ -224,6 +243,28 @@ QPixmap * ak::ui::iconManager::createPixmap(
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::iconManager::createPixmap()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::iconManager::createPixmap()"); }
 	catch (...) { throw ak::Exception("Unknown error", "ak::ui::iconManager::createPixmap()"); }
+}
+
+QMovie * ak::ui::iconManager::createMovie(
+	const QString &									_imageName
+) {
+	// Mutex not required, caller must take care of the mutex
+	try {
+		for (int i = 0; i < my_directories.size(); i++) {
+			QFile file(my_directories.at(i) + PATH_MOVIES + _imageName + ".gif");
+			// Check if the file exist
+			if (file.exists()) {
+				QMovie * mv = nullptr;
+				mv = new (std::nothrow) QMovie(file.fileName());
+				if (mv == nullptr) { throw ak::Exception("Failed to create", "Create movie"); }
+				return mv;
+			}
+		}
+		throw ak::Exception("Movie does not exist", "Check status");
+	}
+	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::iconManager::createMovie()"); }
+	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::iconManager::createMovie()"); }
+	catch (...) { throw ak::Exception("Unknown error", "ak::ui::iconManager::createMovie()"); }
 }
 
 std::vector<QString> ak::ui::iconManager::searchDirectories(void) const { return my_directories; }

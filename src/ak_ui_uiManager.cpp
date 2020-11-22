@@ -28,7 +28,6 @@
 #include <TabToolbar/Page.h>					// tt::Page
 
 // Qt header
-
 #include <qwidget.h>							// QWidget
 #include <qprogressbar.h>						// QProgressBar
 #include <qstatusbar.h>							// QStatusBar
@@ -36,6 +35,7 @@
 #include <qtimer.h>								// QTimer
 #include <qmessagebox.h>						// QMessageBox
 #include <qbytearray.h>							// QByteArray
+#include <qmovie.h>	
 
 // my_window->resizeDocks({ dock }, { 0 }, Qt::Horizontal); // This is the hack
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
@@ -200,7 +200,7 @@ void ak::ui::uiManager::removeChildObject(
 	}
 	else {
 		my_window->takeCentralWidget();
-		my_window->setCentralWidget(nullptr);
+		my_window->SetCentralWidget(nullptr);
 	}
 }
 
@@ -222,7 +222,7 @@ void ak::ui::uiManager::addObjectSettingsToValue(
 	rapidjson::Document::AllocatorType &	_allocator
 ) {
 	assert(_array.GetType() == rapidjson::Type::kArrayType); // Value is not an array type
-
+	
 	// Initialize object
 	rapidjson::Value root;
 	root.SetObject();
@@ -280,7 +280,7 @@ void ak::ui::uiManager::setCentralWidget(
 ) {
 	assert(_centralWidget != nullptr); // nullptr provided
 	my_window->takeCentralWidget();
-	my_window->setCentralWidget(_centralWidget);
+	my_window->SetCentralWidget(_centralWidget);
 }
 
 // #############################################################################################################
@@ -505,6 +505,14 @@ int ak::ui::uiManager::getShowStatusObjectDelayTimerInterval(void) const {
 int ak::ui::uiManager::getHideStatusObjectDelayTimerInterval(void) const {
 	return my_timerLabelHide->interval();
 }
+
+void ak::ui::uiManager::setWaitingAnimationVisible(
+	bool									_visible
+) { my_window->setWaitingAnimationVisible(_visible); }
+
+void ak::ui::uiManager::setWaitingAnimation(
+	QMovie *							_movie
+) { my_window->setWaitingAnimation(_movie); }
 
 // #############################################################################################################
 

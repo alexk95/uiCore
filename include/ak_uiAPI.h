@@ -33,6 +33,7 @@
 // Forward declaration
 class QSurfaceFormat;
 class QWidget;
+class QMovie;
 
 namespace ak {
 
@@ -1855,6 +1856,21 @@ namespace ak {
 
 			UICORE_API QSize size(
 				ak::UID												_windowUID
+			);
+
+			UICORE_API void setWaitingAnimationVisible(
+				ak::UID												_windowUID,
+				bool												_visible = true
+			);
+
+			UICORE_API void setWaitingAnimation(
+				ak::UID												_windowUID,
+				QMovie *											_movie
+			);
+
+			UICORE_API void setWaitingAnimation(
+				ak::UID												_windowUID,
+				const QString &										_animationName
 			);
 
 		} // namespace window

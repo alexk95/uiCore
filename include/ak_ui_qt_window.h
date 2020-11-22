@@ -16,12 +16,16 @@
 
 // Qt header
 #include <qmainwindow.h>				// Base class
+#include <qwidget.h>
+#include <qsize.h>
 
 // C++ header
 #include <map>
 
 // Forward declaration
 class QCloseEvent;
+class QLabel;
+class QResizeEvent;
 
 namespace ak {
 	namespace ui {
@@ -31,6 +35,8 @@ namespace ak {
 		class windowEventHandler;
 
 		namespace qt {
+
+			class windowCentralWidget;
 
 			class window : public QMainWindow, public ui::core::aPaintable {
 				Q_OBJECT
@@ -66,12 +72,56 @@ namespace ak {
 					windowEventHandler *					_eventHandler
 				);
 
+				void SetCentralWidget(
+					QWidget *								_widget
+				);
+
+				void setWaitingAnimationVisible(
+					bool									_visible
+				);
+
+				void setWaitingAnimation(
+					QMovie *							_movie
+				);
+
 			private:
+
+				windowCentralWidget *						my_centralWidget;
+				QLabel *									my_waitingWidget;
 
 				std::map<windowEventHandler *, bool>		my_eventHandler;
 				typedef std::map<windowEventHandler *,
 					bool>::iterator							my_eventHandlerIterator;
 
+			};
+
+			// ###########################################################################################################################################################
+
+			class windowCentralWidget : public QWidget {
+			public:
+				windowCentralWidget();
+				virtual ~windowCentralWidget();
+
+				void setChild(
+					QWidget *		_widget
+				);
+
+				void setWaitingAnimationVisible(
+					bool			_visible
+				);
+
+				void setWaitingAnimation(
+					QMovie *							_movie
+				);
+
+			private:
+
+				virtual void resizeEvent(QResizeEvent *event) override;
+
+				QMovie *			my_waitingAnimation;
+				QLabel *			my_waitingLabel;
+				QWidget *			my_childWidget;
+				QSize				my_waitingLabelSize;
 			};
 
 		}

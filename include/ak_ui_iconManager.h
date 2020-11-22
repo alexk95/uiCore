@@ -21,6 +21,8 @@
 // Forward declaration
 class QIcon;
 class QPixmap;
+class QMovie;
+
 namespace std { class mutex; }
 
 namespace ak {
@@ -73,6 +75,13 @@ namespace ak {
 				const QString &									_imageName
 			);
 
+			//! @brief Will return the movie loaded from the files location
+			//! @param _imageName The name of the image (without extension)
+			//! @throw ak::Exception if the map creation failed
+			QMovie * movie(
+				const QString &									_imageName
+			);
+
 			//! @brief Will set the file extension for the files
 			//! @param _extension The filename extension (must contain the separator (i.e. ".png"))
 			void setFileExtension(
@@ -96,6 +105,9 @@ namespace ak {
 			std::map<QString, QPixmap *>						my_pixmaps;
 			typedef std::map<QString, QPixmap *>::iterator		my_pixmapsIterator;
 
+			std::map<QString, QMovie *>							my_movies;
+			typedef std::map<QString, QMovie *>::iterator		my_moviesIterator;
+
 			std::vector<QString>								my_directories;				//! Contains all set directories
 			QString												my_fileExtension;			//! The currently set file extension
 
@@ -113,9 +125,17 @@ namespace ak {
 
 			//! @brief Imports an pixmap according to its name and size
 			//! Mutex will not be locked. Caller must take care of it
-			//! @param _imageName The name of the requested icon (Without extension)
+			//! @param _imageName The name of the requested pixmap (Without extension)
 			//! @throw ak::Exception if the icon creation failed
 			QPixmap * createPixmap(
+				const QString &									_imageName
+			);
+
+			//! @brief Imports a movie according to its name and size
+			//! Mutex will not be locked. Caller must take care of it
+			//! @param _imageName The name of the requested movie (gif file without extension)
+			//! @throw ak::Exception if the icon creation failed
+			QMovie * createMovie(
 				const QString &									_imageName
 			);
 

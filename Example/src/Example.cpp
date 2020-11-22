@@ -170,25 +170,10 @@ void Example::eventCallback(
 					my_notifier->enable();
 				}
 				else if (_sender == my_ui.ttb_aTest) {
-					ak::uiAPI::propertyGrid::clear(my_ui.propertiesWidget);
-					ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 70, 200, 200), "Test group111");
-
-					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group111", "Test int", 13);
-					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group111", "Test string", "Some text");
-
-					ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(200, 70, 70, 200), "Test group 222");
-					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group 222", "Test double", 10.0);
-					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, true, "Test group 222", "Test bool", true);
-					std::vector<QString> v;
-					v.push_back("Test");
-					v.push_back("Some other item");
-					v.push_back("And another setting");
-					ak::uiAPI::propertyGrid::addGroup(my_ui.propertiesWidget, QColor(70, 200, 70, 200), "Test group 333");
-					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 333", "Test selection", v, "Test");
-					ak::uiAPI::propertyGrid::addItem(my_ui.propertiesWidget, false, "Test group 333", "Test color", my_settingColor);
+					ak::uiAPI::window::setWaitingAnimationVisible(my_ui.mainWindow, true);
 				}
 				else if (_sender == my_ui.ttb_aTest2) {
-					
+					ak::uiAPI::window::setWaitingAnimationVisible(my_ui.mainWindow, false);
 				}
 			}
 			else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {
@@ -279,13 +264,6 @@ void Example::setupUi(void) {
 			ak::uiAPI::container::addObject(my_ui.ttb_gNONE, my_ui.ttb_aTest);
 			ak::uiAPI::container::addObject(my_ui.ttb_gNONE, my_ui.ttb_aTest2);
 
-			ak::uiAPI::toolButton::addMenuItem(my_ui.ttb_aTest, "testing 1");
-			ak::uiAPI::toolButton::addMenuItem(my_ui.ttb_aTest, "testing 2");
-			ak::uiAPI::toolButton::addMenuSeperator(my_ui.ttb_aTest);
-			ak::uiAPI::toolButton::setMenuItemChecked(my_ui.ttb_aTest, 
-				ak::uiAPI::toolButton::addMenuItem(my_ui.ttb_aTest, "testing 3")
-			);
-
 			// Create widgets
 			my_ui.treeWidget = ak::uiAPI::createTree(my_uid);
 			my_ui.propertiesWidget = ak::uiAPI::createPropertyGrid(my_uid);
@@ -337,8 +315,6 @@ void Example::setupUi(void) {
 			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.welcomeScreen, "Welcome");
 			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
 			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
-			
-			ak::uiAPI::toolButton::setEnabled(my_ui.ttb_aTest2, false);
 			
 			ak::uiAPI::textEdit::setReadOnly(my_ui.outputWidget);
 
@@ -394,6 +370,8 @@ void Example::setupUi(void) {
 			my_testingData.push_back(g1);
 			my_testingData.push_back(g2);
 			my_testingData.push_back(p);
+
+			ak::uiAPI::window::setWaitingAnimation(my_ui.mainWindow, "Test");
 
 		}
 		catch (const ak::Exception & e) { throw ak::Exception(e, "Example::Example()"); }

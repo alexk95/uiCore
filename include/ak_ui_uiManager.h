@@ -30,6 +30,7 @@ class QWidget;
 class QLabel;
 class QProgressBar;
 class QTimer;
+class QMovie;
 namespace tt { class TabToolbar; }
 
 namespace ak {
@@ -213,6 +214,14 @@ namespace ak {
 
 			//! @brief Will return the currently set interval for the status label and progress bar hide timer
 			int getHideStatusObjectDelayTimerInterval(void) const;
+
+			void setWaitingAnimationVisible(
+				bool									_visible
+			);
+
+			void setWaitingAnimation(
+				QMovie *							_movie
+			);
 
 			// #############################################################################################################
 			
