@@ -608,6 +608,27 @@ void ak::uiAPI::container::addObject(
 	actualContainer->addChild(my_objManager->object(_objectUID));
 }
 
+void ak::uiAPI::container::setEnabled(
+	ak::UID												_containerUID,
+	bool												_isEnabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::core::ttbContainer * actualContainer = nullptr;
+	actualContainer = dynamic_cast<ui::core::ttbContainer *>(my_objManager->object(_containerUID));
+	assert(actualContainer != nullptr); // Invalid object type
+	actualContainer->setEnabled(_isEnabled);
+}
+
+bool ak::uiAPI::container::isEnabled(
+	ak::UID												_containerUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::core::ttbContainer * actualContainer = nullptr;
+	actualContainer = dynamic_cast<ui::core::ttbContainer *>(my_objManager->object(_containerUID));
+	assert(actualContainer != nullptr); // Invalid object type
+	return actualContainer->enabled();
+}
+
 // Container
 
 // ###############################################################################################################################################

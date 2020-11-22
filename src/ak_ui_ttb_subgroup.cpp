@@ -99,3 +99,10 @@ void ak::ui::ttb::subGroup::removeChildObject(
 		my_subGroup->removeAction(action);
 	}
 }
+
+void ak::ui::ttb::subGroup::setEnabled(
+	bool						_enabled
+) {
+	ui::core::ttbContainer::setEnabled(_enabled);
+	my_subGroup->setEnabled(my_isEnabled);
+}

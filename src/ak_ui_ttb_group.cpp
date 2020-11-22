@@ -144,3 +144,10 @@ void ak::ui::ttb::group::removeChildObject(
 		my_group->RemoveAction(action);
 	}
 }
+
+void ak::ui::ttb::group::setEnabled(
+	bool						_enabled
+) {
+	ui::core::ttbContainer::setEnabled(_enabled);
+	my_group->setEnabled(my_isEnabled);
+}

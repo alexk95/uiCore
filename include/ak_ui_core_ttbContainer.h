@@ -73,6 +73,15 @@ namespace ak {
 					const QString &				_text = QString("")
 				) = 0;
 
+				//! @brief Will set the enabled state of this container
+				//! @param _enbaled The enabled state to set
+				virtual void setEnabled(
+					bool						_enabled
+				) { my_isEnabled = _enabled; }
+
+				//! @brief Will return the enabled state of this container
+				bool enabled(void) const { return my_isEnabled; }
+
 				//! @brief Will return the sub container with the specified text
 				//! Returns nullptr if no sub container with the specified text exists
 				//! @param _text The text of the sub container to find
@@ -89,6 +98,7 @@ namespace ak {
 				ak::messenger *					my_messenger;
 				std::vector<ttbContainer *>		my_subContainer;
 				QString							my_text;
+				bool							my_isEnabled;
 
 			private:
 				// Block default constructor

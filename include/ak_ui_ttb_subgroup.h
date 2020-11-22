@@ -80,6 +80,12 @@ namespace ak {
 					aObject *								_child
 				) override;
 
+				//! @brief Will set the enabled state of this container
+				//! @param _enbaled The enabled state to set
+				virtual void setEnabled(
+					bool						_enabled
+				) override;
+
 			private:
 				tt::SubGroup *			my_subGroup;
 				

@@ -374,6 +374,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::window::setStatusProgressVisible(my_ui.mainWindow, true);
 			ak::uiAPI::window::setStatusLabelVisible(my_ui.mainWindow, false);
 
+			// Tester
 			ak::UID p = ak::uiAPI::createTabToolBarSubContainer(my_uid, my_ui.mainWindow, "Tester1");
 			ak::UID g1 = ak::uiAPI::createTabToolBarSubContainer(my_uid, p, "Tester1");
 			ak::UID g2 = ak::uiAPI::createTabToolBarSubContainer(my_uid, p, "Tester2");

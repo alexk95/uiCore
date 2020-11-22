@@ -531,6 +531,14 @@ namespace ak {
 				ak::UID												_objectUID
 			);
 
+			UICORE_API void setEnabled(
+				ak::UID												_containerUID,
+				bool												_isEnabled = true
+			);
+
+			UICORE_API bool isEnabled(
+				ak::UID												_containerUID
+			);
 		}
 
 		// ###############################################################################################################################################

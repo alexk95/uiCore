@@ -85,6 +85,12 @@ namespace ak {
 				//! @brief Will return the index of this page
 				int index(void) const;
 
+				//! @brief Will set the enabled state of this container
+				//! @param _enbaled The enabled state to set
+				virtual void setEnabled(
+					bool						_enabled
+				) override;
+
 			private:
 				tt::Page *							my_page;
 				//std::vector<ak::ui::ttb::group *>	my_groups;

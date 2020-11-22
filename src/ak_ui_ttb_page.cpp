@@ -101,3 +101,10 @@ void ak::ui::ttb::page::removeChildObject(
 }
 
 int ak::ui::ttb::page::index(void) const { return my_page->getIndex(); }
+
+void ak::ui::ttb::page::setEnabled(
+	bool						_enabled
+) {
+	ui::core::ttbContainer::setEnabled(_enabled);
+	my_page->setEnabled(my_isEnabled);
+}
