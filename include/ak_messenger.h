@@ -102,9 +102,17 @@ namespace ak {
 		//! @brief Will remove all notifiers from the messaging system
 		void clearAll(void);
 
+		//! @brief Will enable the messenger
+		void enable(void) { my_isEnabled = true; }
+
+		//! @brief Will disable the messenger
+		void disable(void) { my_isEnabled = false; }
+
 	private:
 
 		ak::uidManager *						my_uidManager;						//! The uid manager this messenger is using
+
+		bool									my_isEnabled;						//! If true, messages will be send to the notifiers
 
 		std::map<
 			ak::UID,

@@ -15,15 +15,9 @@
 #include <ak_notifier.h>		// Notifier class
 #include <ak_uidMangager.h>		// UID manager
 
-ak::messenger::messenger() {
-	try {
-		my_uidManager = nullptr;
-		my_uidManager = new ak::uidManager();
-		if (my_uidManager == nullptr) { throw ak::Exception("Failed to create", "Create UID manager"); }
-	} 
-	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::messenger::messenger()"); }
-	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::messenger::messenger()"); }
-	catch (...) { throw ak::Exception("Unknown error", "ak::messenger::messenger()"); }
+ak::messenger::messenger() : my_isEnabled(true) {
+	my_uidManager = nullptr;
+	my_uidManager = new ak::uidManager();
 }
 
 ak::messenger::~messenger() {}
@@ -36,6 +30,7 @@ void ak::messenger::sendMessage(
 	int						_info1,
 	int						_info2
 ) {
+	if (!my_isEnabled) { return; }
 	try {
 		// Find recievers for the senders UID
 		my_uidReceiversIterator uidItem = my_uidReceivers.find(_senderId);

@@ -221,6 +221,14 @@ void ak::uiAPI::disableEventTypes(
 	ak::core::eventType									_types
 ) { ak::singletonAllowedMessages::instance()->removeFlag(_types); }
 
+void ak::uiAPI::setMessengerEnabled(
+	bool													_enabled
+) {
+	assert(my_messenger != nullptr);	// Not initialized yet
+	if (_enabled) { my_messenger->enable(); }
+	else { my_messenger->disable(); }
+}
+
 std::vector<ak::core::eventType> ak::uiAPI::enabledEventTypes(void) { return ak::singletonAllowedMessages::instance()->enabledMessages(); }
 
 std::vector<ak::core::eventType> ak::uiAPI::disabledEventTypes(void) { return ak::singletonAllowedMessages::instance()->disabledMessages(); }

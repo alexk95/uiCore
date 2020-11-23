@@ -154,6 +154,12 @@ namespace ak {
 			ak::core::eventType										_types
 		);
 
+		//! @brief Will set the enabled state of the messenger
+		//! @param _enabled The enabled state to set. If false, no messages will be sent
+		UICORE_API void setMessengerEnabled(
+			bool													_enabled
+		);
+
 		//! @brief Will return the enabled event types that will be send
 		UICORE_API std::vector<ak::core::eventType> enabledEventTypes(void);
 
