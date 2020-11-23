@@ -43,16 +43,17 @@ public:
     void        AddWidget(QWidget* widget);
 
 	void	    RemoveAction(QAction* action);		// Added by Alexander Kuester
-	void		SetToolButtonStylesheet(const QString & sheet);	// Added by Alexander Kuester
-
+	void		SetToolButtonStylesheet(const QString & sheet); // Added by Alexander Kuester
+	void		SetSeparatorStyleSheet(const QString & sheet); // Added by Alexander Kuester
 private:
-    QFrame*     CreateSeparator();
+    QFrame*     CreateSeparator();		// Modified by Alexander Kuester
 
     QHBoxLayout* innerLayout;
 
-	std::map<QAction *, QToolButton *>	actionButtonMap;
+	std::vector<QFrame *>				my_separators;// Added by Alexander Kuester
+	std::map<QAction *, QToolButton *>	actionButtonMap;// Added by Alexander Kuester
 	typedef std::map<QAction *,
-		QToolButton *>::iterator		actionButtonMapIterator;
+		QToolButton *>::iterator		actionButtonMapIterator;// Added by Alexander Kuester
 };
 
 }

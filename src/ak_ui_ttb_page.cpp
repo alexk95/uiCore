@@ -25,6 +25,7 @@
 #include <TabToolbar/Page.h>			// tt::Page
 
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
+#define TABTOOLBAR_GROUPSEPERATOR_OBJECTNAME "#TabToolBarGroupSeperatorLine"
 
 ak::ui::ttb::page::page(
 	ak::messenger *				_messenger,
@@ -73,8 +74,9 @@ void ak::ui::ttb::page::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	my_page->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
-		TYPE_COLORAREA::caBackgroundColorWindow));
+	QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorWindow |
+		TYPE_COLORAREA::caBackgroundColorWindow));;
+	my_page->setStyleSheet(sheet);
 }
 
 void ak::ui::ttb::page::removeChildObject(

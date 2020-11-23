@@ -36,7 +36,7 @@ public:
     explicit Page(int index, const QString& pageName, QWidget* parent = nullptr);
     virtual ~Page() = default;
 
-    Group*   AddGroup(const QString& name);
+    Group*   AddGroup(const QString& name);	// Modified by Alexander Kuester
     void     hide();
     void     show();
 	int		 getIndex(void) const;	// Created by Alexander Kuester
@@ -47,7 +47,7 @@ signals:
     void     Showing(int index);
 
 private:
-    int		     myIndex;			// Changed by Alexander Kuester
+    int		     myIndex;			// Modified by Alexander Kuester
     QHBoxLayout* innerLayout;
     QWidget*     innerArea;
 };

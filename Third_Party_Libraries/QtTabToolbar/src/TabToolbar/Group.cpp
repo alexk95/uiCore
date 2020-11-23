@@ -109,15 +109,18 @@ SubGroup* Group::AddSubGroup(SubGroup::Align align)
     return sgrp;
 }
 
+// Modified by Alexander Kuester
 QFrame* Group::CreateSeparator()
 {
     QFrame* separator = new QFrame(this);
+	separator->setObjectName("TabToolBarGroupSeperatorLine");	// Added by Alexander Kuester
     separator->setProperty("TTSeparator", QVariant(true));
     separator->setAutoFillBackground(false);
     separator->setFrameShadow(QFrame::Plain);
     separator->setLineWidth(1);
     separator->setMidLineWidth(0);
     separator->setFrameShape(QFrame::VLine);
+	my_separators.push_back(separator);
     return separator;
 }
 
@@ -163,6 +166,11 @@ void Group::RemoveAction(QAction* action) {
 // Added by Alexander Kuester
 void Group::SetToolButtonStylesheet(const QString & sheet) {
 	for (auto itm : actionButtonMap) { itm.second->setStyleSheet(sheet); }
+}
+
+// Added by Alexander Kuester
+void Group::SetSeparatorStyleSheet(const QString & sheet) {
+	for (auto itm : my_separators) { itm->setStyleSheet(sheet); }
 }
 
 void Group::AddWidget(QWidget* widget)

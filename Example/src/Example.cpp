@@ -322,7 +322,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::contextMenu::addSeparator(my_ui.outputWidget);
 			ak::uiAPI::contextMenu::addItem(my_ui.outputWidget, "Clear", "Clear", "32", ak::ui::core::contextMenuRole::crClear);
 			ak::uiAPI::contextMenu::addSeparator(my_ui.outputWidget);
-
+			
 			ak::uiAPI::propertyGrid::setGroupStateIcons(my_ui.propertiesWidget, "ArrowGreenDown", "32", "ArrowBlueRight", "32");
 
 			// Set central widget
@@ -370,6 +370,8 @@ void Example::setupUi(void) {
 			my_testingData.push_back(g1);
 			my_testingData.push_back(g2);
 			my_testingData.push_back(p);
+
+			ak::uiAPI::container::setEnabled(p, false);
 
 			ak::uiAPI::window::setWaitingAnimation(my_ui.mainWindow, "SpinnerSun");
 

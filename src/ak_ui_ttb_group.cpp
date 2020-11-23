@@ -116,7 +116,8 @@ void ak::ui::ttb::group::setColorStyle(
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorSelected | TYPE_COLORAREA::caBackgroundColorSelected, "QToolButton:pressed{", "}"));
 	//sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls | TYPE_COLORAREA::caBackgroundColorControls, "QToolButton QToolTip{", "}"));
 	my_group->SetToolButtonStylesheet(sheet);
-	my_group->SetToolButtonStylesheet("QToolButton QToolTip{color: black;}");
+	sheet = my_colorStyle->toStyleSheet(TYPE_COLORAREA::caTabToolBarGroupSeperatorLine);
+	my_group->SetSeparatorStyleSheet(sheet);
 }
 
 void ak::ui::ttb::group::removeChildObject(

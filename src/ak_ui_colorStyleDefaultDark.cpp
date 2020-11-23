@@ -70,6 +70,7 @@ QString ak::ui::colorStyleDefaultDark::getColorStyleName(void) const { return QS
 #define STYLE_COLOR_BORDER_CONTROLS "border-color: #707070;"
 #define STYLE_COLOR_BORDER_HEADER "border-color: #707070;"
 #define STYLE_COLOR_BORDER_WINDOW "border-color: #707070;"
+#define STYLE_COLOR_BORDER_AS_COLOR "color: #707070;"
 
 #define STYLE_DEFAULT_BORDER_CONTROLS "border: 1px solid;"
 #define STYLE_DEFAULT_BORDER_HEADER "border: 1px solid;"
@@ -108,6 +109,7 @@ QString ak::ui::colorStyleDefaultDark::toStyleSheet(
 	CHECK_IF_FLAG::caBackgroundColorButton THEN_ADD_STYLE(STYLE_COLOR_BACK_PUSHBUTTON);
 	CHECK_IF_FLAG::caForegroundColorDialogWindow THEN_ADD_STYLE(STYLE_COLOR_FORE_DIALOGWINDOW);
 	CHECK_IF_FLAG::caForegroundColorButton THEN_ADD_STYLE(STYLE_COLOR_FORE_PUSHBUTTON);
+	CHECK_IF_FLAG::caTabToolBarGroupSeperatorLine THEN_ADD_STYLE(STYLE_COLOR_BORDER_AS_COLOR);
 
 	ret.append(_suffix);
 	return ret;

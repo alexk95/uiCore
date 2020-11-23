@@ -151,7 +151,8 @@ namespace ak {
 				caBackgroundColorDialogWindow	= 1 << 21,
 				caForegroundColorDialogWindow	= 1 << 22,
 				caBackgroundColorButton			= 1 << 23,
-				caForegroundColorButton			= 1 << 24
+				caForegroundColorButton			= 1 << 24,
+				caTabToolBarGroupSeperatorLine	= 1 << 25
 			};
 
 			enum contextMenuRole {

@@ -170,7 +170,7 @@ void ak::ui::uiManager::setColorStyle(
 		"QTabBar::tab:hover{", "}\n"));
 	sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorSelected | TYPE_COLORAREA::caForegroundColorSelected,
 		"QTabBar::tab:selected{", "}"));
-
+	
 	if (sheet.length() == 0) {
 		// Provide manual stylesheet to fix styling issue in toolBar
 		sheet = "QTabWidget{}\n"
