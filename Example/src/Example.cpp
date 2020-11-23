@@ -371,7 +371,7 @@ void Example::setupUi(void) {
 			my_testingData.push_back(g2);
 			my_testingData.push_back(p);
 
-			ak::uiAPI::window::setWaitingAnimation(my_ui.mainWindow, "Test");
+			ak::uiAPI::window::setWaitingAnimation(my_ui.mainWindow, "SpinnerSun");
 
 		}
 		catch (const ak::Exception & e) { throw ak::Exception(e, "Example::Example()"); }
