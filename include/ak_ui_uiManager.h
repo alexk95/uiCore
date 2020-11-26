@@ -18,6 +18,7 @@
 #include <qobject.h>
 #include <qstring.h>					// QString
 #include <qbytearray.h>
+#include <qsize.h>
 
 // AK header
 #include <ak_ui_core_aPaintable.h>		// base class
@@ -267,6 +268,12 @@ namespace ak {
 			//! @param _tabID The tab to set as current
 			void setCurrentTabToolBarTab(
 				ak::ID						_tabID
+			);
+
+			//! @brief Will set the minimum size of the central widget
+			//! @param _size The size to set as minimum size
+			void setCentralWidgetMinimumSize(
+				const QSize &				_size
 			);
 
 			// #############################################################################################################

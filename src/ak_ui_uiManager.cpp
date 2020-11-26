@@ -308,9 +308,9 @@ void ak::ui::uiManager::addDock(
 			assert(0); // Not implemented yet
 			break;
 		}
-		//_dock->resize(200, 200);
 		my_window->resizeDocks({ _dock }, { 0 }, Qt::Orientation::Vertical);
 		my_window->resizeDocks({ _dock }, { 0 }, Qt::Orientation::Horizontal);
+		//_dock->resize(200, 200);
 	}
 	catch (const ak::Exception & e) { throw ak::Exception(e, "ak::ui::uiManager::addDock()"); }
 	catch (const std::exception & e) { throw ak::Exception(e.what(), "ak::ui::uiManager::addDock()"); }
@@ -329,6 +329,7 @@ void ak::ui::uiManager::tabifyDock(
 	//_subDock->resize(200, 200);
 	my_window->resizeDocks({ _subDock }, { 0 }, Qt::Orientation::Vertical);
 	my_window->resizeDocks({ _subDock }, { 0 }, Qt::Orientation::Horizontal);
+	//_subDock->resize(200, 200);
 	_mainDock->raise();
 }
 
@@ -560,6 +561,15 @@ void ak::ui::uiManager::setCurrentTabToolBarTab(
 ) {
 	assert(_tabID >= 0 && _tabID < my_tabToolBar->TabCount());	// Index out of range
 	my_tabToolBar->SetCurrentTab(_tabID);
+}
+
+void ak::ui::uiManager::setCentralWidgetMinimumSize(
+	const QSize &				_size
+) {
+	QWidget * w = my_window->centralWidget();
+	if (w != nullptr) {
+		w->setMinimumSize(_size);
+	}
 }
 
 // #############################################################################################################

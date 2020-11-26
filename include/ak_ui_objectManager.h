@@ -340,6 +340,12 @@ namespace ak {
 				const QString &										_alias
 			);
 
+			//! @brief Will return the creator UID of the specified object
+			//! @param _objectUID The UID of the object to get its cretor from
+			ak::UID objectCreator(
+				ak::UID												_objectUID
+			);
+
 		private:
 
 			void setColorStyle(
@@ -378,6 +384,9 @@ namespace ak {
 
 			std::map<QString, ak::UID>						my_mapAliases;				//! Contains the UIDs for a specified alias
 			typedef std::map<QString, ak::UID>::iterator	my_mapAliasesIterator;		//! Iterator used to iterate trough the aliases
+
+			std::map<ak::UID, ak::UID>						my_mapOwners;				//! Contains the UIDs of the owener of the objects
+			typedef std::map<ak::UID, ak::UID>::iterator	my_mapOwnersIterator;		//! Iterator used to iterate trough the owners
 
 			std::vector<ui::colorStyle *>					my_colorStyles;
 

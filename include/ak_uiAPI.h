@@ -199,6 +199,12 @@ namespace ak {
 			ak::UID													_objectUid
 		);
 
+		//! @brief Will return the creator UID of the specified object
+		//! @param _objectUID The UID of the object to get its cretor from
+		UICORE_API ak::UID getObjectCreator(
+			ak::UID												_objectUID
+		);
+
 		// ###############################################################################################################################################
 		
 		// message functions
@@ -1856,63 +1862,109 @@ namespace ak {
 				ak::UID												_windowUID
 			);
 
+			//! @brief Will add a dock at the specified location to the window
+			//! @param _windowUID The UID of the window
+			//! @param _dockUid The UID of the dock to add
+			//! @param _dockLocation The dock location to add the dock at
 			UICORE_API void addDock(
 				ak::UID												_windowUID,
 				ak::UID												_dockUid,
 				ak::ui::core::dockLocation							_dockLocation
 			);
 
+			//! @brief Will tabify two docks
+			//! The parent dock will be raised
+			//! @param _windowUID The UID of the window
+			//! @param _parentDockUid The UID of the parent dock
+			//! @param _dockUid The UID of the dock to add as a tabbed dock
 			UICORE_API void tabifyDock(
 				ak::UID												_windowUID,
 				ak::UID												_parentDockUid,
 				ak::UID												_dockUid
 			);
 
+			//! @brief Will set the dock priority in the bottom left corner
+			//! @param _windowUID The UID of the window
+			//! @param _dockLocation The dock location that will have the higher priority
 			UICORE_API void setDockBottomLeftPriority(
 				ak::UID												_windowUID,
 				ak::ui::core::dockLocation							_dockLocation
 			);
 
+			//! @brief Will set the dock priority in the bottom right corner
+			//! @param _windowUID The UID of the window
+			//! @param _dockLocation The dock location that will have the higher priority
 			UICORE_API void setDockBottomRightPriority(
 				ak::UID												_windowUID,
 				ak::ui::core::dockLocation							_dockLocation
 			);
 
+			//! @brief Will set the windows central widget (The widget will be added to a container, the actual central widget differs)
+			//! @param _windowUID The UID of the window
+			//! @param _widgetUID The widget UID of the widget to set as central widget
 			UICORE_API void setCentralWidget(
 				ak::UID												_windowUID,
 				ak::UID												_widgetUID
 			);
 
+			//! @brief Will set the windows central widget (The widget will be added to a container, the actual central widget differs)
+			//! @param _windowUID The UID of the window
+			//! @param _widget The widget to set as central widget
 			UICORE_API void setCentralWidget(
 				ak::UID												_windowUID,
 				QWidget *											_widget
 			);
 
+			//! @brief Will show the window as maximized
+			//! @param _windowUID The UID of the window
 			UICORE_API void showMaximized(
 				ak::UID												_windowUID
 			);
 
+			//! @brief Will show the window as minimized
+			//! @param _windowUID The UID of the window
 			UICORE_API void showMinimized(
 				ak::UID												_windowUID
 			);
 
+			//! @brief Will return the size of the window
+			//! @param _windowUID The UID of the window
 			UICORE_API QSize size(
 				ak::UID												_windowUID
 			);
 
+			//! @brief Will set the visible state of the waiting animation
+			//! @param _windowUID The UID of the window
+			//! @param _visible The visible state to set
 			UICORE_API void setWaitingAnimationVisible(
 				ak::UID												_windowUID,
 				bool												_visible = true
 			);
 
+			//! @brief Will set the movie as waiting animation in the window
+			//! @param _windowUID The UID of the window
+			//! @param _movie The movie to set
 			UICORE_API void setWaitingAnimation(
 				ak::UID												_windowUID,
 				QMovie *											_movie
 			);
 
+			//! @brief Will set the animation as waiting animation in the window
+			//! @param _windowUID The UID of the window
+			//! @param _animationName The name of the animation
 			UICORE_API void setWaitingAnimation(
 				ak::UID												_windowUID,
 				const QString &										_animationName
+			);
+
+			//! @brief Will set the central widget minimum size
+			//! @param _windowUID The UID of the window
+			//! @param _width The width to set
+			//! @param _height The height to set
+			UICORE_API void setCentralWidgetMinimumSize(
+				ak::UID												_windowUID,
+				int													_width,
+				int													_height
 			);
 
 		} // namespace window

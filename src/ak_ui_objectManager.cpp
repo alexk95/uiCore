@@ -589,11 +589,11 @@ void ak::ui::objectManager::destroy(
 	}
 
 	my_mapAliases.erase(actualObject->alias());
-	
-	// Destroy object
-	delete actualObject;
+	my_mapOwners.erase(_objectUID);
 	my_mapObjects.erase(_objectUID);
 
+	// Destroy object
+	delete actualObject;
 	my_notifier->enable();
 }
 
@@ -876,6 +876,14 @@ void ak::ui::objectManager::removeAlias(
 	const QString &										_alias
 ) { my_mapAliases.erase(_alias); }
 
+ak::UID ak::ui::objectManager::objectCreator(
+	ak::UID												_objectUID
+) {
+	my_mapOwnersIterator owner = my_mapOwners.find(_objectUID);
+	assert(owner != my_mapOwners.end());	// Invalid UID
+	return owner->second;
+}
+
 // ###############################################################################################################################################
 
 void ak::ui::objectManager::setColorStyle(
@@ -920,6 +928,11 @@ void ak::ui::objectManager::addCreatedUid(
 		// Store data
 		itm->second->push_back(_createdUid);
 	}
+
+	// Store owner information
+	assert(my_mapOwners.find(_createdUid) == my_mapOwners.end());	// Created UID already stored
+	my_mapOwners.insert_or_assign(_createdUid, _creatorUid);
+
 }
 
 QWidget * ak::ui::objectManager::castToWidget(

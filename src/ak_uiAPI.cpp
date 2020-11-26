@@ -271,7 +271,7 @@ ak::core::settingsRestoreErrorCode ak::uiAPI::restoreStateColorStyle(
 }
 
 QWidget * ak::uiAPI::getWidget(
-	ak::UID													_objectUid
+	ak::UID												_objectUid
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	ui::core::aObject * obj = my_objManager->object(_objectUid);
@@ -281,6 +281,13 @@ QWidget * ak::uiAPI::getWidget(
 	widget = dynamic_cast<ui::core::aWidget *>(obj);
 	assert(widget != nullptr); // Cast failed
 	return widget->widget();
+}
+
+ak::UID ak::uiAPI::getObjectCreator(
+	ak::UID												_objectUID
+) {
+	assert(my_objManager != nullptr);	// API not initialized
+	return my_objManager->objectCreator(_objectUID);
 }
 
 // ###############################################################################################################################################
@@ -3036,6 +3043,19 @@ void ak::uiAPI::window::setWaitingAnimation(
 	assert(actualWindow != nullptr); // Invalid object type
 	actualWindow->setWaitingAnimation(my_iconManager->movie(_animationName));
  }
+
+void ak::uiAPI::window::setCentralWidgetMinimumSize(
+	ak::UID												_windowUID,
+	int													_width,
+	int													_height
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setCentralWidgetMinimumSize(QSize(_width, _height));
+}
 
 // ###############################################################################################################################################
 
