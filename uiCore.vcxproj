@@ -112,6 +112,7 @@
     <ClInclude Include="include\ak_file.h" />
     <ClInclude Include="include\ak_globalDataTypes.h" />
     <ClInclude Include="include\ak_messenger.h" />
+    <ClInclude Include="include\ak_mutex.h" />
     <ClInclude Include="include\ak_notifier.h" />
     <ClInclude Include="include\ak_notifierForwardMessage.h" />
     <ClInclude Include="include\ak_notifierObjectManager.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="src\ak_exception.cpp" />
     <ClCompile Include="src\ak_file.cpp" />
     <ClCompile Include="src\ak_messenger.cpp" />
+    <ClCompile Include="src\ak_mutex.cpp" />
     <ClCompile Include="src\ak_notifier.cpp" />
     <ClCompile Include="src\ak_notifierForwardMessage.cpp" />
     <ClCompile Include="src\ak_notifierObjectManager.cpp" />

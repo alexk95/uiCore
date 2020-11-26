@@ -22,6 +22,7 @@
 
 // AK header
 #include <ak_globalDataTypes.h>			// UID and ID type
+#include <ak_core.h>					// restoreSettingsErrorCode
 #include <ak_ui_color.h>				// color
 
 namespace ak {
@@ -318,14 +319,14 @@ namespace ak {
 			//! @brief Will setup the UI with the settings provided in the settings JSON string
 			//! @param _json The JSON string containing the settings
 			//! @throw ak::Exception on syntax mismatch
-			settingsRestoreErrorCode restoreStateWindow(
+			ak::core::settingsRestoreErrorCode restoreStateWindow(
 				const char *										_json,
 				const std::string &									_applicationVersion
 			);
 
 			//! @brief Will setup the UI with the settings provided in the settings JSON string
 			//! @param _json The JSON string containing the settings
-			settingsRestoreErrorCode restoreStateColorStyle(
+			ak::core::settingsRestoreErrorCode restoreStateColorStyle(
 				const char *										_json,
 				const std::string &									_applicationVersion
 			);

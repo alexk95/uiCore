@@ -17,6 +17,7 @@
 
 // AK header
 #include <ak_core.h>				// eventType
+#include <ak_mutex.h>				// Thread protection
 #include <ak_globalDataTypes.h>		// UID and ID type
 
 namespace ak {
@@ -107,6 +108,15 @@ namespace ak {
 
 		//! @brief Will disable the messenger
 		void disable(void) { my_isEnabled = false; }
+
+		//! @brief Will set the messengers enabled state
+		//! @param _enabled The enabled state to set
+		void setEnabled(
+			bool							_enabled
+		) { my_isEnabled = _enabled; }
+
+		//! @brief Will return the current enabled state of the messenger
+		bool isEnabled(void) const { return my_isEnabled; }
 
 	private:
 

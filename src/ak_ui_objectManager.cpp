@@ -763,7 +763,7 @@ std::string ak::ui::objectManager::saveStateColorStyle(
 	return info;
 }
 
-ak::settingsRestoreErrorCode ak::ui::objectManager::restoreStateWindow(
+ak::core::settingsRestoreErrorCode ak::ui::objectManager::restoreStateWindow(
 	const char *										_json,
 	const std::string &									_applicationVersion
 ) {
@@ -773,14 +773,14 @@ ak::settingsRestoreErrorCode ak::ui::objectManager::restoreStateWindow(
 	// Check version
 	if (!doc.HasMember(SETTING_VERSION_APPLICATION) ||
 		!doc.HasMember(SETTING_VERSION_WINDOWSTATE)) {
-		return srecSettingsVersionMismatch;
+		return ak::core::settingsRestoreErrorCode::srecSettingsVersionMismatch;
 	}
 	assert(doc[SETTING_VERSION_APPLICATION].IsString());
 	assert(doc[SETTING_VERSION_WINDOWSTATE].IsString());
 	std::string settingVersionApp(doc[SETTING_VERSION_APPLICATION].GetString());
 	std::string settingVersionWindowState(doc[SETTING_VERSION_WINDOWSTATE].GetString());
-	if (_applicationVersion != settingVersionApp) { return srecAppVersionMismatch; }
-	if (CONFIG_VERSION_WINDOWSTATE != settingVersionWindowState) { return srecSettingsVersionMismatch; }
+	if (_applicationVersion != settingVersionApp) { return ak::core::settingsRestoreErrorCode::srecAppVersionMismatch; }
+	if (CONFIG_VERSION_WINDOWSTATE != settingVersionWindowState) { return ak::core::settingsRestoreErrorCode::srecSettingsVersionMismatch; }
 
 	// Check document
 	assert(doc.HasMember(RESTORABLE_UI_SETTINGS));	// Member missing
@@ -823,10 +823,10 @@ ak::settingsRestoreErrorCode ak::ui::objectManager::restoreStateWindow(
 		restorable->restoreSettings(settings);
 
 	}
-	return srecNone;
+	return ak::core::settingsRestoreErrorCode::srecNone;
 }
 
-ak::settingsRestoreErrorCode ak::ui::objectManager::restoreStateColorStyle(
+ak::core::settingsRestoreErrorCode ak::ui::objectManager::restoreStateColorStyle(
 	const char *										_json,
 	const std::string &									_applicationVersion
 ) {
@@ -836,14 +836,14 @@ ak::settingsRestoreErrorCode ak::ui::objectManager::restoreStateColorStyle(
 	// Check version
 	if (!doc.HasMember(SETTING_VERSION_APPLICATION) ||
 		!doc.HasMember(SETTING_VERSION_WINDOWSTATE)) {
-		return srecSettingsVersionMismatch;
+		return ak::core::settingsRestoreErrorCode::srecSettingsVersionMismatch;
 	}
 	assert(doc[SETTING_VERSION_APPLICATION].IsString());
 	assert(doc[SETTING_VERSION_WINDOWSTATE].IsString());
 	std::string settingVersionApp(doc[SETTING_VERSION_APPLICATION].GetString());
 	std::string settingVersionWindowState(doc[SETTING_VERSION_WINDOWSTATE].GetString());
-	if (_applicationVersion != settingVersionApp) { return srecAppVersionMismatch; }
-	if (CONFIG_VERSION_WINDOWSTATE != settingVersionWindowState) { return srecSettingsVersionMismatch; }
+	if (_applicationVersion != settingVersionApp) { return ak::core::settingsRestoreErrorCode::srecAppVersionMismatch; }
+	if (CONFIG_VERSION_WINDOWSTATE != settingVersionWindowState) { return ak::core::settingsRestoreErrorCode::srecSettingsVersionMismatch; }
 
 	// Check document
 	assert(doc.HasMember(RESTORABLE_UI_SETTINGS));	// Member missing
@@ -860,7 +860,7 @@ ak::settingsRestoreErrorCode ak::ui::objectManager::restoreStateColorStyle(
 			setColorStyle(colorStyleName);
 		}
 	}
-	return srecNone;
+	return ak::core::settingsRestoreErrorCode::srecNone;
 }
 
 void ak::ui::objectManager::addAlias(

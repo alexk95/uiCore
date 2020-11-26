@@ -52,6 +52,20 @@ QString ak::core::toQString(
 }
 
 QString ak::core::toQString(
+	settingsRestoreErrorCode				_settingsRestoreErrorCode
+) {
+	switch (_settingsRestoreErrorCode)
+	{
+	case ak::core::srecNone: return QString("None");
+	case ak::core::srecAppVersionMismatch: return QString("AppVersionMismatch");
+	case ak::core::srecSettingsVersionMismatch: return QString("SettingsVersionMismatch");
+	case ak::core::srecEmptySettingsString: return QString("EmptySettingsString");
+	default: assert(0); // not implemented yet
+		return QString("");
+	}
+}
+
+QString ak::core::toQString(
 	valueType				_valueType
 ) {
 	switch (_valueType)

@@ -229,6 +229,11 @@ void ak::uiAPI::setMessengerEnabled(
 	else { my_messenger->disable(); }
 }
 
+bool ak::uiAPI::messengerIsEnabled(void) {
+	assert(my_messenger != nullptr);	// Not initialized yet
+	return my_messenger->isEnabled();
+}
+
 std::vector<ak::core::eventType> ak::uiAPI::enabledEventTypes(void) { return ak::singletonAllowedMessages::instance()->enabledMessages(); }
 
 std::vector<ak::core::eventType> ak::uiAPI::disabledEventTypes(void) { return ak::singletonAllowedMessages::instance()->disabledMessages(); }
@@ -247,21 +252,21 @@ std::string ak::uiAPI::saveStateColorStyle(
 	return my_objManager->saveStateColorStyle(_applicationVersion);
 }
 
-ak::settingsRestoreErrorCode ak::uiAPI::restoreStateWindow(
+ak::core::settingsRestoreErrorCode ak::uiAPI::restoreStateWindow(
 	const std::string &									_json,
 	const std::string &									_applicationVersion
 ) {
 	assert(my_objManager != nullptr); // Not initialized
-	if (_json.length() == 0) { return srecNone; }
+	if (_json.length() == 0) { return ak::core::settingsRestoreErrorCode::srecEmptySettingsString; }
 	return my_objManager->restoreStateWindow(_json.c_str(), _applicationVersion);
 }
 
-ak::settingsRestoreErrorCode ak::uiAPI::restoreStateColorStyle(
+ak::core::settingsRestoreErrorCode ak::uiAPI::restoreStateColorStyle(
 	const std::string &									_json,
 	const std::string &									_applicationVersion
 ) {
 	assert(my_objManager != nullptr); // Not initialized
-	if (_json.length() == 0) { return srecNone; }
+	if (_json.length() == 0) { return ak::core::settingsRestoreErrorCode::srecEmptySettingsString; }
 	return my_objManager->restoreStateColorStyle(_json.c_str(), _applicationVersion);
 }
 
@@ -3163,6 +3168,12 @@ QString ak::uiAPI::special::toString(
 	ak::ui::core::objectType							_type
 ) {
 	return ak::ui::core::toQString(_type);
+}
+
+QString ak::uiAPI::special::toString(
+	ak::core::settingsRestoreErrorCode					_settingsRestoreErrorCode
+) {
+	return ak::core::toQString(_settingsRestoreErrorCode);
 }
 
 QString ak::uiAPI::special::toEventText(

@@ -160,6 +160,9 @@ namespace ak {
 			bool													_enabled
 		);
 
+		//! @brief Will return the current enabled state for the messenger
+		UICORE_API bool messengerIsEnabled(void);
+
 		//! @brief Will return the enabled event types that will be send
 		UICORE_API std::vector<ak::core::eventType> enabledEventTypes(void);
 
@@ -178,14 +181,14 @@ namespace ak {
 
 		//! @brief Will setup the UI with the settings provided in the settings JSON string
 		//! @param _json The JSON string containing the settings
-		UICORE_API settingsRestoreErrorCode restoreStateWindow(
+		UICORE_API ak::core::settingsRestoreErrorCode restoreStateWindow(
 			const std::string &										_json,
 			const std::string &										_applicationVersion
 		);
 
 		//! @brief Will restore tthe color style from the settings JSON string
 		//! @param _json The JSON string containing the settings
-		UICORE_API settingsRestoreErrorCode restoreStateColorStyle(
+		UICORE_API ak::core::settingsRestoreErrorCode restoreStateColorStyle(
 			const std::string &										_json,
 			const std::string &										_applicationVersion
 		);
@@ -500,27 +503,42 @@ namespace ak {
 
 		namespace action {
 
+			//! @brief Will set the enabled state of the action
+			//! @param _actionUID The UID of the action
+			//! @param _enabled The enabled state to set
 			UICORE_API void setEnabled(
 				ak::UID												_actionUID,
 				bool												_enabled
 			);
 
+			//! @brief Will set the text of the action
+			//! @param _actionUID The UID of the action
+			//! @param _text The text to set
 			UICORE_API void setText(
 				ak::UID												_actionUID,
 				const QString &										_text
 			);
 
+			//! @brief Will set the icon of the action
+			//! @param _actionUID The UID of the action
+			//! @param _icon The icon to set
 			UICORE_API void setIcon(
 				ak::UID												_actionUID,
 				const QIcon &										_icon
 			);
 
+			//! @brief Will set the icon of the action
+			//! @param _actionUID The UID of the action
+			//! @param _iconName The name of the icon
+			//! @param _iconFolder The folder the icon is located at
 			UICORE_API void setIcon(
 				ak::UID												_actionUID,
 				const QString &										_iconName,
 				const QString &										_iconFolder
 			);
 
+			//! @brief Will return the text of the action
+			//! @param _actionUID The UID of the action
 			UICORE_API QString getText(
 				ak::UID												_actionUID
 			);
@@ -533,16 +551,24 @@ namespace ak {
 
 		namespace container {
 
+			//! @brief Will add an object to the specified container
+			//! @param _containerUID The UID of the container
+			//! @param _objectUID The UID of the object to add
 			UICORE_API void addObject(
 				ak::UID												_containerUID,
 				ak::UID												_objectUID
 			);
 
+			//! @brief Will set the enabled state of the specified container
+			//! @param _containerUID The UID of the container
+			//! @param _isEnabled The enabled state to set
 			UICORE_API void setEnabled(
 				ak::UID												_containerUID,
 				bool												_isEnabled = true
 			);
 
+			//! @brief Will return the enabled state of the specified container
+			//! @param _containerUID The UID of the container
 			UICORE_API bool isEnabled(
 				ak::UID												_containerUID
 			);
@@ -609,21 +635,31 @@ namespace ak {
 
 		namespace dock {
 
+			//! @brief Will set the widget as central widget of the dock
+			//! @param _dockUID The UID of the dock
+			//! @param _widgetUID The UID of the widget to set as central widget
 			UICORE_API void setCentralWidget(
 				ak::UID												_dockUID,
 				ak::UID												_widgetUID
 			);
 
+			//! @brief Will set the provided widget as central widget of the dock
+			//! @param _dockUID The UID of the dock
+			//! @param _widget The widget to set as central widget
 			UICORE_API void setCentralWidget(
 				ak::UID												_dockUID,
 				QWidget *											_widget
 			);
 
+			//! @brief Will set the visible state of the specified dock
+			//! @param _dockUID The UID of the dock
+			//! @param _visible The visible state to set
 			UICORE_API void setVisible(
 				ak::UID												_dockUID,
 				bool												_visible = true
 			);
 
+			//! @brief Will return the currently set visible state of the 
 			UICORE_API bool isVisible(
 				ak::UID												_dockUID
 			);
@@ -1972,37 +2008,43 @@ namespace ak {
 			//! @brief Will return a string representation of the provided valtextAlignmentueType
 			//! @param _type The text alignment that should be represented
 			UICORE_API QString toString(
-				ak::ui::core::textAlignment							_type
+				ui::core::textAlignment								_type
 			);
 
 			//! @brief Will return a string representation of the provided dockLocation
 			//! @param _type The dock location that should be represented
 			UICORE_API QString toString(
-				ak::ui::core::dockLocation							_dockLocation
+				ui::core::dockLocation								_dockLocation
 			);
 
 			//! @brief Will return a string representation of the provided tab location
 			//! @param _type The tab location that should be represented
 			UICORE_API QString toString(
-				ak::ui::core::tabLocation							_tabLocation
+				ui::core::tabLocation								_tabLocation
 			);
 
 			//! @brief Create a string representation of the provided dialog result
 			//! @param _dialogResult The dialog result to be converted
 			UICORE_API QString toQString(
-				ak::ui::core::dialogResult							_dialogResult
+				ui::core::dialogResult								_dialogResult
 			);
 
 			//! @brief Will return a string representation of the provided keyType
 			//! @param _type The key type that should be represented
 			UICORE_API QString toString(
-				ak::ui::core::keyType								_type
+				ui::core::keyType									_type
 			);
 
 			//! @brief Will return a string representation of the provided objectType
 			//! @param _type The object type that should be represented
 			UICORE_API QString toString(
-				ak::ui::core::objectType							_type
+				ui::core::objectType								_type
+			);
+
+			//! @brief Will return a string representation of the provided settingsRestoreErrorCode
+			//! @param _type The error code that should be represented
+			UICORE_API QString toString(
+				ak::core::settingsRestoreErrorCode					_settingsRestoreErrorCode
 			);
 
 			//! @brief Will create a JSON type representation of the event

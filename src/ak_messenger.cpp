@@ -37,7 +37,9 @@ void ak::messenger::sendMessage(
 		if (uidItem != my_uidReceivers.end()) {
 			// Go trough all notifiers
 			for (auto n : *uidItem->second) {
-				if (n->isEnabled()) { n->notify(_senderId, _event, _info1, _info2); }
+				if (n->isEnabled()) {
+					n->notify(_senderId, _event, _info1, _info2);
+				}
 			}
 		}
 

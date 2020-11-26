@@ -326,6 +326,7 @@ void ak::ui::uiManager::tabifyDock(
 
 	// tabify dock
 	my_window->tabifyDockWidget(_mainDock, _subDock);
+	//_subDock->resize(200, 200);
 	my_window->resizeDocks({ _subDock }, { 0 }, Qt::Orientation::Vertical);
 	my_window->resizeDocks({ _subDock }, { 0 }, Qt::Orientation::Horizontal);
 	_mainDock->raise();

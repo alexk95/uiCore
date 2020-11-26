@@ -36,10 +36,4 @@ namespace ak {
 	//! @brief Represents the invalid ID for an item
 	const ID invalidID = -1;
 
-	enum settingsRestoreErrorCode {
-		srecNone,
-		srecAppVersionMismatch,
-		srecSettingsVersionMismatch
-	};
-
 }

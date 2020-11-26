@@ -46,6 +46,14 @@ namespace ak {
 			vUint64
 		};
 
+		//! Describes the error type of the settings restore function
+		enum settingsRestoreErrorCode {
+			srecNone,
+			srecAppVersionMismatch,
+			srecSettingsVersionMismatch,
+			srecEmptySettingsString
+		};
+
 		//! Describes the type of an event
 		enum eventType {
 			eUnknownEvent					= 1 << 0,
@@ -99,6 +107,12 @@ namespace ak {
 		//! @param _valueType The value type to be converted
 		QString toQString(
 			valueType								_valueType
+		);
+
+		//! @brief Create a string representation of the provided ak::core::settingsRestoreErrorCode
+		//! @param _settingsRestoreErrorCode The value type to be converted
+		QString toQString(
+			settingsRestoreErrorCode				_settingsRestoreErrorCode
 		);
 
 		// ############################################################################################################################################
