@@ -122,6 +122,7 @@ namespace ak {
 				QLabel *			my_waitingLabel;
 				QWidget *			my_childWidget;
 				QSize				my_waitingLabelSize;
+				bool				my_waitingAnimationVisible;
 			};
 
 		}

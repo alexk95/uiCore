@@ -103,10 +103,15 @@ namespace ak {
 			//! @brief Will delete all files created
 			void deleteAllFiles();
 
+			ui::application * app();
+
+			QDesktopWidget * desktop();
+
 		protected:
 			ui::application *			my_app;							//! The core application
 			bool						my_appIsRunning;				//! True if the core application is already running
 			QSurfaceFormat *			my_defaultSurfaceFormat;
+			QDesktopWidget *			my_desktop;
 
 			bool						my_objManagerIsExtern;			//! If true, then the object manager was created externally
 			bool						my_messengerIsExtern;			//! If true, then the messenger was created externally
@@ -824,6 +829,23 @@ namespace ak {
 			UICORE_API void showToolTipAtPassword(
 				ak::UID												_dialogUID,
 				const QString &										_text
+			);
+
+			UICORE_API void showToolTipAtCustomField(
+				ak::UID												_dialogUID,
+				ak::ID												_inputID,
+				const QString &										_text
+			);
+
+			UICORE_API ak::ID addCustomInputField(
+				ak::UID												_dialogUID,
+				const QString &										_labelText,
+				const QString &										_inputFieldInitialText = QString("")
+			);
+
+			UICORE_API QString getCustomFieldText(
+				ak::UID												_dialogUID,
+				ak::ID												_fieldID
 			);
 
 		} // namespace logInDialog
@@ -1966,6 +1988,9 @@ namespace ak {
 				int													_width,
 				int													_height
 			);
+
+			//! @brief Will return the device pixel ratio of the currently used device
+			UICORE_API int devicePixelRatio(void);
 
 		} // namespace window
 

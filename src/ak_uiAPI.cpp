@@ -50,6 +50,7 @@
 #include <qfiledialog.h>					// Open/Save file dialog
 #include <qfile.h>
 #include <qmovie.h>
+#include <qdesktopwidget.h>
 
 static ak::uiAPI::apiManager		my_apiManager;					//! The API manager
 static ak::ui::objectManager *		my_objManager = nullptr;					//! The object manager used in this API
@@ -111,6 +112,7 @@ void ak::uiAPI::apiManager::ini(
 ) {
 	assert(!my_isInitialized); // Is already initialized
 	my_app = new ui::application();
+	my_desktop = my_app->desktop();
 	
 	// messenger
 	if (_messenger == nullptr) {
@@ -201,6 +203,10 @@ void ak::uiAPI::apiManager::deleteAllFiles() {
 	}
 	my_mapFiles.clear();
 }
+
+ak::ui::application * ak::uiAPI::apiManager::app() { return my_app; }
+
+QDesktopWidget * ak::uiAPI::apiManager::desktop() { return my_desktop; }
 
 // ###############################################################################################################################################
 
@@ -1049,6 +1055,41 @@ void ak::uiAPI::logInDialog::showToolTipAtPassword(
 	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
 	assert(actualObject != nullptr); // Invalid object type
 	actualObject->showToolTipAtPassword(_text);
+}
+
+void ak::uiAPI::logInDialog::showToolTipAtCustomField(
+	ak::UID												_dialogUID,
+	ak::ID												_inputID,
+	const QString &										_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::logIn * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
+	assert(actualObject != nullptr); // Invalid object type
+	actualObject->showToolTipAtCustomInput(_inputID, _text);
+}
+
+ak::ID ak::uiAPI::logInDialog::addCustomInputField(
+	ak::UID												_dialogUID,
+	const QString &										_labelText,
+	const QString &										_inputFieldInitialText
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::logIn * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->addCustomInput(_labelText, _inputFieldInitialText);
+}
+
+QString ak::uiAPI::logInDialog::getCustomFieldText(
+	ak::UID												_dialogUID,
+	ak::ID												_fieldID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::logIn * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->customInputText(_fieldID);
 }
 
 // Log in dialog
@@ -3056,6 +3097,8 @@ void ak::uiAPI::window::setCentralWidgetMinimumSize(
 	assert(actualWindow != nullptr); // Invalid object type
 	actualWindow->setCentralWidgetMinimumSize(QSize(_width, _height));
 }
+
+int ak::uiAPI::window::devicePixelRatio(void) { return my_apiManager.desktop()->devicePixelRatio(); }
 
 // ###############################################################################################################################################
 

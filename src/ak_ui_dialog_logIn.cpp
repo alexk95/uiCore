@@ -36,47 +36,37 @@ ak::ui::dialog::logIn::logIn(
 	const QString &								_username,
 	const QString &								_hashedPassword,
 	QWidget *									_parent
-)	: ui::core::aDialog(_parent), ak::ui::core::aPaintable(ui::core::objectType::oLogInDialog), my_hashedPw(_hashedPassword),
+) : ui::core::aDialog(_parent), ak::ui::core::aPaintable(ui::core::objectType::oLogInDialog), my_hashedPw(_hashedPassword),
 	my_buttonLogIn(nullptr), my_layout(nullptr), my_spacer(nullptr), my_layoutWidget(nullptr), my_gridLayout(nullptr), my_savePassword(nullptr),
-	my_messenger(_messenger), my_mainLayout(nullptr), my_controlLayout(nullptr), my_controlLayoutWidget(nullptr)
+	my_messenger(_messenger), my_mainLayout(nullptr), my_controlLayout(nullptr), my_controlLayoutWidget(nullptr), my_inputPassword(nullptr), my_inputUsername(nullptr),
+	my_currentID(ak::invalidID), my_rowCounter(0), my_showSavePassword(_showSavePassword)
 {
 	assert(my_messenger != nullptr);
 
 	// Initialize entries
-	my_inputPassword.label = nullptr;
-	my_inputPassword.edit = nullptr;
-
-	my_inputUsername.label = nullptr;
-	my_inputUsername.edit = nullptr;
-
 	my_gridWidget = new QWidget();
 	my_gridLayout = new QGridLayout(my_gridWidget);
 
-	int rowCounter = 0;
-
 	// Create username objects
-	my_inputUsername.label = new qt::label("Username:");
-	my_inputUsername.edit = new qt::lineEdit(_username);
-	my_inputUsername.label->setBuddy(my_inputUsername.edit);
+	my_inputUsername = new logInInputField(new qt::lineEdit(_username), new qt::label("Username:"));
 
 	// Create password objects
-	my_inputPassword.label = new qt::label("Password:");
-	my_inputPassword.edit = new ak::ui::qt::lineEdit();
-	my_inputPassword.edit->setEchoMode(QLineEdit::EchoMode::Password);
-	if (_hashedPassword.length() > 0) { my_inputPassword.edit->setText("xxxxxxxxxx"); }
-	my_inputPassword.label->setBuddy(my_inputPassword.edit);
+	qt::lineEdit * pwInput = new ak::ui::qt::lineEdit();
+	my_inputPassword = new logInInputField(pwInput, new qt::label("Password:"));
+	pwInput->setEchoMode(QLineEdit::EchoMode::Password);
+	if (_hashedPassword.length() > 0) { pwInput->setText("xxxxxxxxxx"); }
 
 	// Add inputs to layout
-	my_gridLayout->addWidget(my_inputUsername.label, rowCounter, 0);
-	my_gridLayout->addWidget(my_inputUsername.edit, rowCounter++, 1);
-	my_gridLayout->addWidget(my_inputPassword.label, rowCounter, 0);
-	my_gridLayout->addWidget(my_inputPassword.edit, rowCounter++, 1);
+	my_gridLayout->addWidget(my_inputUsername->getLabel(), my_rowCounter, 0);
+	my_gridLayout->addWidget(my_inputUsername->getInput(), my_rowCounter++, 1);
+	my_gridLayout->addWidget(my_inputPassword->getLabel(), my_rowCounter, 0);
+	my_gridLayout->addWidget(my_inputPassword->getInput(), my_rowCounter++, 1);
 
 	// Check if required to create save password
-	if (_showSavePassword) {
+	if (my_showSavePassword) {
 		my_savePassword = new qt::checkBox("Save password");
 		my_savePassword->setChecked(true);
-		my_gridLayout->addWidget(my_savePassword, rowCounter++, 1);
+		my_gridLayout->addWidget(my_savePassword, my_rowCounter++, 1);
 	}
 
 	// Create log in button
@@ -84,8 +74,8 @@ ak::ui::dialog::logIn::logIn(
 	
 	// Connect signals
 	connect(my_buttonLogIn, SIGNAL(clicked()), this, SLOT(slotClicked()));
-	connect(my_inputPassword.edit, SIGNAL(textChanged(const QString &)), this, SLOT(slotPasswordChanged(const QString &)));
-	connect(my_inputUsername.edit, SIGNAL(textChanged(const QString &)), this, SLOT(slotUsernameChanged(const QString &)));
+	connect(my_inputPassword->getInput(), SIGNAL(textChanged(const QString &)), this, SLOT(slotPasswordChanged(const QString &)));
+	connect(my_inputUsername->getInput(), SIGNAL(textChanged(const QString &)), this, SLOT(slotUsernameChanged(const QString &)));
 
 	// Create main layout and display data
 	my_controlLayout = new QVBoxLayout(this);
@@ -129,11 +119,13 @@ ak::ui::dialog::logIn::logIn(
 ak::ui::dialog::logIn::~logIn() {
 	A_OBJECT_DESTROYING
 
-	if (my_inputPassword.label != nullptr) { delete my_inputPassword.label; }
-	if (my_inputPassword.edit != nullptr) { delete my_inputPassword.edit; }
+	delete my_inputPassword;
+	delete my_inputUsername;
 
-	if (my_inputUsername.label != nullptr) { delete my_inputUsername.label; }
-	if (my_inputUsername.edit != nullptr) { delete my_inputUsername.edit; }
+	for (auto itm : my_customInputFields) {
+		delete itm.second;
+	}
+	my_customInputFields.clear();
 
 	if (my_savePassword != nullptr) { delete my_savePassword; }
 
@@ -154,19 +146,13 @@ void ak::ui::dialog::logIn::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow, "#" + my_alias + "{", "}"));
-	}
-	else {
-		setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow));
-	}
+
+	setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caBackgroundColorWindow | TYPE_COLORAREA::caForegroundColorWindow));
+	
 	my_buttonLogIn->setColorStyle(my_colorStyle);
 
-	my_inputUsername.label->setColorStyle(my_colorStyle);
-	my_inputUsername.edit->setColorStyle(my_colorStyle);
-
-	my_inputPassword.label->setColorStyle(my_colorStyle);
-	my_inputPassword.edit->setColorStyle(my_colorStyle);
+	my_inputUsername->setColorStyle(my_colorStyle);
+	my_inputPassword->setColorStyle(my_colorStyle);
 
 	my_controlLayoutWidget->setStyleSheet("#LogInDialogControlLayoutWidget{"
 		"background-color:#90000000;"
@@ -191,22 +177,62 @@ void ak::ui::dialog::logIn::close(
 	ui::core::dialogResult				_result
 ) { setResult(_result); QDialog::close(); }
 
-// ####################################################################
+ak::ID ak::ui::dialog::logIn::addCustomInput(
+	const QString &						_labelText,
+	const QString &						_initialInputText
+) {
+	// Reset grid layout
+	assert(my_gridLayout != nullptr);
+	delete my_gridLayout;
+	my_gridLayout = nullptr;
+	my_gridLayout = new QGridLayout(my_gridWidget);
+	my_rowCounter = 0;
+	
+	// Create new item
+	logInInputField * newItem = new logInInputField(new qt::lineEdit(_initialInputText), new qt::label(_labelText));
+	my_customInputFields.insert_or_assign(++my_currentID, newItem);
+	
+	// Place all widgets
+	for (auto itm : my_customInputFields) {
+		my_gridLayout->addWidget(itm.second->getLabel(), my_rowCounter, 0);
+		my_gridLayout->addWidget(itm.second->getInput(), my_rowCounter++, 1);
+	}
+
+	my_gridLayout->addWidget(my_inputUsername->getLabel(), my_rowCounter, 0);
+	my_gridLayout->addWidget(my_inputUsername->getInput(), my_rowCounter++, 1);
+
+	my_gridLayout->addWidget(my_inputPassword->getLabel(), my_rowCounter, 0);
+	my_gridLayout->addWidget(my_inputPassword->getInput(), my_rowCounter++, 1);
+
+	if (my_showSavePassword) {
+		my_gridLayout->addWidget(my_savePassword, my_rowCounter++, 1);
+	}
+
+	return my_currentID;
+}
+
+// #######################################################################################################################################################################
 
 // Getter
 
-QString ak::ui::dialog::logIn::username(void) const { return my_inputUsername.edit->text(); }
+QString ak::ui::dialog::logIn::username(void) const { return my_inputUsername->text(); }
 
 QString ak::ui::dialog::logIn::password(void) const {
 	if (my_hashedPw.length() > 0) { return my_hashedPw; }
 	QCryptographicHash hash(QCryptographicHash::Algorithm::Sha256);
-	QString txt(my_inputPassword.edit->text());
+	QString txt(my_inputPassword->text());
 	std::string str(txt.toStdString());
 	hash.addData(str.c_str(), str.length());
 	QByteArray arr(hash.result());
 	QByteArray result(arr.toHex());
 	std::string ret(result.toStdString());
 	return QString(ret.c_str());
+}
+
+QString ak::ui::dialog::logIn::customInputText(ak::ID _id) {
+	my_customInputFieldsIterator itm = my_customInputFields.find(_id);
+	assert(itm != my_customInputFields.end());	// Invalid id
+	return itm->second->text();
 }
 
 bool ak::ui::dialog::logIn::savePassword(void) const {
@@ -216,26 +242,34 @@ bool ak::ui::dialog::logIn::savePassword(void) const {
 
 void ak::ui::dialog::logIn::showToolTipAtUsername(
 	const QString &							_text
-) { createToolTip(my_inputUsername.edit, _text); }
+) { createToolTip(my_inputUsername->getInput(), _text); }
 
 void ak::ui::dialog::logIn::showToolTipAtPassword(
 	const QString &							_text
-) { createToolTip(my_inputPassword.edit, _text); }
+) {  }
+
+void ak::ui::dialog::logIn::showToolTipAtCustomInput(
+	ak::ID									_inputID,
+	const QString &							_text
+) {
+	my_customInputFieldsIterator itm = my_customInputFields.find(_inputID);
+	assert(itm != my_customInputFields.end());	// Invalid id
+	createToolTip(itm->second->getInput(), _text);
+}
+
+// #######################################################################################################################################################################
 
 void ak::ui::dialog::logIn::slotClicked(void) {
-	assert(my_inputPassword.edit != nullptr);
-	assert(my_inputUsername.edit != nullptr);
-
-	QString pw(my_inputPassword.edit->text());
-	QString user(my_inputUsername.edit->text());
+	QString pw(my_inputPassword->text());
+	QString user(my_inputUsername->text());
 	
 	// Check if something was entered
 	if (user.length() == 0) {
-		createToolTip(my_inputUsername.edit, "Please enter a username");
+		createToolTip(my_inputUsername->getInput(), "Please enter a username");
 		return;
 	}
 	if (pw.length() == 0) {
-		createToolTip(my_inputPassword.edit, "Please enter a password");
+		createToolTip(my_inputPassword->getInput(), "Please enter a password");
 		return;
 	}
 
@@ -244,25 +278,57 @@ void ak::ui::dialog::logIn::slotClicked(void) {
 }
 
 void ak::ui::dialog::logIn::slotUsernameChanged(const QString & _text) {
-	if (my_hashedPw.length() > 0) { my_hashedPw.clear(); my_inputPassword.edit->clear(); }
+	if (my_hashedPw.length() > 0) { my_hashedPw.clear(); my_inputPassword->clearInput(); }
 }
 
 void ak::ui::dialog::logIn::slotPasswordChanged(const QString &	_text) {
 	if (my_hashedPw.length() > 0) {
 		my_hashedPw.clear();
-		if (my_inputPassword.edit->text().length() == 0) { return; }
+		if (my_inputPassword->text().length() == 0) { return; }
 		for (auto c : _text) {
 			if (c != 'x') {
-				my_inputPassword.edit->setText(c); return;
+				my_inputPassword->getInput()->setText(c);
+				return;
 			}
 		}
-		my_inputPassword.edit->setText("x");
+		my_inputPassword->getInput()->setText("x");
 	}
 }
+
+// #######################################################################################################################################################################
 
 void ak::ui::dialog::logIn::createToolTip(
 	QWidget *				_parent,
 	const QString &			_text
 ) const {
 	QToolTip::showText(_parent->mapToGlobal(QPoint(0, 0)), _text, nullptr, QRect(), 3000);
+}
+
+// #######################################################################################################################################################################
+
+ak::ui::dialog::logInInputField::logInInputField(
+	qt::lineEdit *					_input,
+	qt::label *						_label
+) : my_input(_input), my_label(_label)
+{
+	assert(my_input != nullptr);
+	assert(my_label != nullptr);
+	my_label->setBuddy(my_input);
+}
+
+void ak::ui::dialog::logInInputField::clearInput(void) {
+	assert(my_input != nullptr);
+	my_input->clear();
+}
+
+QString ak::ui::dialog::logInInputField::text(void) const {
+	assert(my_input != nullptr);
+	return my_input->text();
+}
+
+void ak::ui::dialog::logInInputField::setColorStyle(
+	const ak::ui::colorStyle *			_colorStyle
+) {
+	my_input->setColorStyle(_colorStyle);
+	my_label->setColorStyle(_colorStyle);
 }

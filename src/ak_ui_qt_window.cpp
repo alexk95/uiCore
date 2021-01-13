@@ -118,7 +118,7 @@ void ak::ui::qt::window::setWaitingAnimation(
 // ###########################################################################################################################################################
 
 ak::ui::qt::windowCentralWidget::windowCentralWidget()
-	: my_waitingLabelSize(20,20), my_waitingAnimation(nullptr)
+	: my_waitingLabelSize(20,20), my_waitingAnimation(nullptr), my_waitingAnimationVisible(false)
 {
 	my_childWidget = nullptr;
 	my_waitingLabel = new QLabel("Test");
@@ -140,6 +140,7 @@ void ak::ui::qt::windowCentralWidget::setChild(
 		_widget->setParent(this);
 		_widget->show();
 	}
+	if (my_waitingAnimationVisible) { setWaitingAnimationVisible(true); }
 }
 
 void ak::ui::qt::windowCentralWidget::resizeEvent(QResizeEvent * _event) {
@@ -153,7 +154,8 @@ void ak::ui::qt::windowCentralWidget::setWaitingAnimationVisible(
 	bool			_visible
 ) {
 	assert(my_waitingAnimation != nullptr); // No waiting animation set yet
-	if (_visible) {
+	my_waitingAnimationVisible = _visible;
+	if (my_waitingAnimationVisible) {
 		if (my_childWidget == nullptr) {
 			my_waitingLabel->setParent(this);
 		}

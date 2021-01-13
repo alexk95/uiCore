@@ -14,6 +14,7 @@
 // C++ header
 #include <vector>
 #include <array>
+#include <map>
 
 // Qt header
 #include <qstring.h>
@@ -42,6 +43,8 @@ namespace ak {
 		namespace qt { class lineEdit; class checkBox; class label; class pushButton; }
 
 		namespace dialog {
+
+			class logInInputField;
 
 			class logIn : public ak::ui::core::aDialog, public ak::ui::core::aPaintable {
 				
@@ -92,7 +95,13 @@ namespace ak {
 					ui::core::dialogResult				_result
 				);
 
-				// ####################################################################
+				ak::ID addCustomInput(
+					const QString &						_labelText,
+					const QString &						_initialInputText = QString("")
+				);
+
+
+				// #########################################################################################################################
 
 				// Getter
 
@@ -101,6 +110,10 @@ namespace ak {
 
 				//! @brief Returns the current password
 				QString password(void) const;
+
+				//! @brief Will return the text of the custom input with the specified ID
+				//! @param _id The ID of the custom input
+				QString customInputText(ak::ID _id);
 
 				//! @brief Returns the save password state
 				bool savePassword(void) const;
@@ -114,6 +127,11 @@ namespace ak {
 				//! @brief Will display a invalid log in popup message at this dialogs password input
 				//! @param _text The text to set as a tooltip
 				void showToolTipAtPassword(
+					const QString &							_text
+				);
+
+				void showToolTipAtCustomInput(
+					ak::ID									_inputID,
 					const QString &							_text
 				);
 
@@ -131,40 +149,76 @@ namespace ak {
 					const QString &			_text
 				) const;
 
-				struct structInput
-				{
-					qt::label *				label;
-					qt::lineEdit *			edit;
-				};
 
-				QString				my_hashedPw;
+				std::map<ak::ID,
+					logInInputField *>				my_customInputFields;
 
-				ak::messenger *		my_messenger;
+				typedef std::map<ak::ID,
+					logInInputField *>::iterator	my_customInputFieldsIterator;
 
-				QPixmap *			my_bgImage;
-				QPixmap				my_currentImage;
+				int									my_rowCounter;
+				ak::ID								my_currentID;
+				bool								my_showSavePassword;
 
-				QVBoxLayout *		my_mainLayout;
-				QSpacerItem *		my_spacer;
+				QString								my_hashedPw;
+
+				ak::messenger *						my_messenger;
+
+				QPixmap *							my_bgImage;
+				QPixmap								my_currentImage;
+
+				QVBoxLayout *						my_mainLayout;
+				QSpacerItem *						my_spacer;
 
 
-				QGridLayout *		my_gridLayout;
-				QWidget *			my_gridWidget;
+				QGridLayout *						my_gridLayout;
+				QWidget *							my_gridWidget;
 
-				QHBoxLayout *		my_layout;
-				QWidget *			my_layoutWidget;
+				QHBoxLayout *						my_layout;
+				QWidget *							my_layoutWidget;
 
-				qt::checkBox *		my_savePassword;
-				structInput			my_inputUsername;
-				structInput			my_inputPassword;
-				qt::pushButton *	my_buttonLogIn;
-				QVBoxLayout *		my_controlLayout;
-				QWidget *			my_controlLayoutWidget;
+				qt::checkBox *						my_savePassword;
+				logInInputField *					my_inputUsername;
+				logInInputField *					my_inputPassword;
+				qt::pushButton *					my_buttonLogIn;
+				QVBoxLayout *						my_controlLayout;
+				QWidget *							my_controlLayoutWidget;
 
 				logIn(const logIn &) = delete;
 				logIn & operator = (const logIn &) = delete;
 			};
 
-		}
+			// #########################################################################################################################
+
+			class logInInputField {
+			public:
+				logInInputField(
+					qt::lineEdit *					_input,
+					qt::label *						_label
+				);
+
+				qt::lineEdit * getInput(void) const { return my_input; }
+
+				qt::label * getLabel(void) const { return my_label; }
+
+				void clearInput(void);
+
+				QString text(void) const;
+				
+				//! @brief Will set the current color style for this combination
+				void setColorStyle(
+					const ak::ui::colorStyle *			_colorStyle
+				);
+
+			private:
+				qt::lineEdit *						my_input;
+				qt::label *							my_label;
+
+				logInInputField() = delete;
+				logInInputField(const logInInputField &) = delete;
+
+			};
+
+		} // namespace dialog
 	}
 }
