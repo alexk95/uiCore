@@ -1513,10 +1513,6 @@ namespace ak {
 				ak::UID							_treeUID
 			);
 
-			UICORE_API bool getAutoExpandSelectedItemsEnabled(
-				ak::UID							_treeUID
-			);
-
 			UICORE_API ak::ID getItemID(
 				ak::UID							_treeUID,
 				const QString &					_itemPath,
@@ -1549,11 +1545,6 @@ namespace ak {
 
 			UICORE_API std::vector<ak::ID> selectedItems(
 				ak::UID							_treeUID
-			);
-
-			UICORE_API void setAutoExpandSelectedItemsEnabled(
-				ak::UID							_treeUID,
-				bool							_enabled = true
 			);
 
 			UICORE_API void setAutoSelectAndDeselectChildrenEnabled(

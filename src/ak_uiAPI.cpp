@@ -2256,16 +2256,6 @@ void ak::uiAPI::tree::expandAllItems(
 	actualTree->expandAllItems();
 }
 
-bool ak::uiAPI::tree::getAutoExpandSelectedItemsEnabled(
-	ak::UID							_treeUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
-	return actualTree->autoExpandSelectedItemsEnabled();
-}
-
 ak::ID ak::uiAPI::tree::getItemID(
 	ak::UID							_treeUID,
 	const QString &					_itemPath,
@@ -2340,17 +2330,6 @@ std::vector<ak::ID> ak::uiAPI::tree::selectedItems(
 	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
 	assert(actualTree != nullptr); // Invalid object type
 	return actualTree->selectedItems();
-}
-
-void ak::uiAPI::tree::setAutoExpandSelectedItemsEnabled(
-	ak::UID							_treeUID,
-	bool							_enabled
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
-	actualTree->setAutoExpandSelectedItemsEnabled(_enabled);
 }
 
 void ak::uiAPI::tree::setAutoSelectAndDeselectChildrenEnabled(

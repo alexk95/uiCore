@@ -36,7 +36,7 @@ ak::ui::widget::tree::tree(
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTree, _messenger, _uidManager, _colorStyle),
 my_tree(nullptr), my_filter(nullptr), my_layout(nullptr), my_multiWidget(nullptr), my_treeSignalLinker(nullptr), my_filterSignalLinker(nullptr),
 my_notifierFilter(nullptr), my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0),
-my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false), my_expandSelectedItems(true)
+my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false)
 {
 	// Set my UID
 	my_uid = my_uidManager->getId();
@@ -234,7 +234,7 @@ void ak::ui::widget::tree::setItemVisible(
 	assert(itm != my_items.end()); // Invalid item ID
 	my_treeSignalLinker->disable();
 	itm->second->setVisible(_visible);
-	if (my_selectAndDeselectChildren) { itm->second->setChildsVisible(_visible); }
+	//if (my_selectAndDeselectChildren) { itm->second->setChildsVisible(_visible); }
 }
 
 void ak::ui::widget::tree::setSingleItemSelected(
@@ -274,13 +274,6 @@ void ak::ui::widget::tree::setEnabled(
 void ak::ui::widget::tree::setVisible(
 	bool							_visible
 ) { my_tree->setVisible(_visible); }
-
-void ak::ui::widget::tree::setAutoExpandSelectedItemsEnabled(
-	bool							_autoExpand
-) {
-	my_expandSelectedItems = _autoExpand;
-	if (my_expandSelectedItems) { selectionChangedEvent(false); }
-}
 
 void ak::ui::widget::tree::setItemText(
 	ak::ID							_itemId,
@@ -434,8 +427,6 @@ bool ak::ui::widget::tree::enabled() const { return my_tree->isEnabled(); }
 
 int ak::ui::widget::tree::itemCount(void) const { return my_items.size(); }
 
-bool ak::ui::widget::tree::autoExpandSelectedItemsEnabled(void) const { return my_expandSelectedItems; }
-
 // ###########################################################################################################################
 
 // Events
@@ -520,11 +511,11 @@ void ak::ui::widget::tree::selectionChangedEvent(
 			i = dynamic_cast<ak::ui::qt::treeItem *>(itm);
 			assert(i != nullptr); // Cast failed
 			i->setChildsSelected(true);
-			if (my_expandSelectedItems) { i->expandAllParents(false); }
+			i->ensureTopLevelSelectionVisible();
 		}
 		my_treeSignalLinker->enable();
 	}
-	else if (my_expandSelectedItems) {
+	else {
 		my_treeSignalLinker->disable();
 		// Get selected items
 		QList<QTreeWidgetItem *> selected = my_tree->selectedItems();
@@ -533,7 +524,7 @@ void ak::ui::widget::tree::selectionChangedEvent(
 			ak::ui::qt::treeItem * i = nullptr;
 			i = dynamic_cast<ak::ui::qt::treeItem *>(itm);
 			assert(i != nullptr); // Cast failed
-			i->expandAllParents(false);
+			i->ensureTopLevelSelectionVisible();
 		}
 		my_treeSignalLinker->enable();
 	}

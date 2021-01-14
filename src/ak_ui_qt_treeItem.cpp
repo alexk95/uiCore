@@ -108,6 +108,17 @@ void ak::ui::qt::treeItem::setChildsVisible(
 	}
 }
 
+void ak::ui::qt::treeItem::ensureTopLevelSelectionVisible() {
+	if (my_parent != nullptr) {
+		if (my_parent->isSelected()) { my_parent->ensureTopLevelSelectionVisible(); }
+		else if (isSelected()) {
+			setExpanded(true);
+			my_parent->expandAllParents(true);
+		}
+	}
+	else if (isSelected()) { setExpanded(true); }
+}
+
 void ak::ui::qt::treeItem::expandAllParents(
 	bool							_expandThis
 ) {

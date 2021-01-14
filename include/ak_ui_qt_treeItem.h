@@ -88,8 +88,11 @@ namespace ak {
 					bool							_visible
 				);
 
-				//! @brief Will expand all parent items of this item.
-				//! @param _expandThis If true this item will be expanded aswell
+				//! @brief Will expand the most top level item that is selected and is a parent of this item. If this is the top level item, this item will be expanded
+				void ensureTopLevelSelectionVisible();
+
+				//! @brief Will expand all parent items of this item
+				//! @param _expandThis If true, this item will be expanded
 				void expandAllParents(
 					bool							_expandThis
 				);

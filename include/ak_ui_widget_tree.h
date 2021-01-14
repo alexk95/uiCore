@@ -170,12 +170,6 @@ namespace ak {
 					bool							_visible = true
 				);
 
-				//! @brief Will set the auto expand selected items enabled option
-				//! @param _autoExpand If true, all parent items of a selected item will be expanded so the selected item will be visible
-				void setAutoExpandSelectedItemsEnabled(
-					bool							_autoExpand = true
-				);
-
 				//! @brief Will set the item text of the specified item
 				//! @param _itemId The ID of the item to set the text at
 				//! @param _text The text to set
@@ -293,9 +287,6 @@ namespace ak {
 				//! @brief Will return the count of items in this tree
 				int itemCount(void) const;
 
-				//! @brief Will return the current auto expand selected items option
-				bool autoExpandSelectedItemsEnabled(void) const;
-
 				// ###########################################################################################################################################
 
 				// Events
@@ -381,9 +372,7 @@ namespace ak {
 				typedef std::map<ak::ID,
 					ak::ui::qt::treeItem *>::iterator		my_itemsIterator;
 
-
 				bool										my_selectAndDeselectChildren;
-				bool										my_expandSelectedItems;
 
 			};
 
