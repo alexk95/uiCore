@@ -56,7 +56,7 @@ namespace ak {
 		//! Every added widget will get all its possible/most important signals connected to slots.
 		//! In case of an inbound signal a message will be generated and sent to the messaging system.
 		//! Every object requires a uid which should be generated with the global uid manager.
-		class signalLinker : public QObject {
+		class UICORE_API_EXPORT signalLinker : public QObject {
 			Q_OBJECT
 		public:
 

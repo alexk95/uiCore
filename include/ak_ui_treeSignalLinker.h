@@ -31,9 +31,9 @@ namespace ak {
 		// Forward declaration
 		namespace qt { class tree; }
 		namespace widget { class tree; }
-
+		
 		//! This class is used to link the signals of the tree items to the corresponding tree
-		class treeSignalLinker : public QObject {
+		class UICORE_API_EXPORT treeSignalLinker : public QObject {
 			Q_OBJECT
 		public:
 			//! @brief Constructor

@@ -102,6 +102,13 @@ ak::ID ak::ui::qt::textEdit::addContextMenuItem(
 	my_contextMenuItems.push_back(_item);
 	connect(_item, SIGNAL(triggered(bool)), this, SLOT(slotContextMenuItemClicked()));
 	my_contextMenu->addAction(_item);
+	if (my_colorStyle != nullptr) {
+		QString sheet{ my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorDialogWindow | TYPE_COLORAREA::caBackgroundColorDialogWindow, "QMenu{", "}") };
+		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorDialogWindow | TYPE_COLORAREA::caBackgroundColorDialogWindow, "QMenu::item{", "}"));
+		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorFocus | TYPE_COLORAREA::caBackgroundColorFocus, "QMenu::item:selected{", "}"));
+		sheet.append(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorSelected | TYPE_COLORAREA::caBackgroundColorSelected, "QMenu::item:pressed{", "}"));
+		my_contextMenu->setStyleSheet(sheet);
+	}
 	return _item->id();
 }
 

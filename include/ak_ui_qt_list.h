@@ -38,7 +38,7 @@ namespace ak {
 			// Forward declaration
 			class listItem;
 
-			class list : public QListWidget, public ak::ui::core::aWidget {
+			class UICORE_API_EXPORT list : public QListWidget, public ak::ui::core::aWidget {
 				Q_OBJECT
 			public:
 				// Constructor

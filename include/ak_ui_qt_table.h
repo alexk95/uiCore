@@ -32,7 +32,7 @@ namespace ak {
 		namespace qt {
 
 			//! @brief This class combines the functionallity of a QTableWidget and a ak::ui::core::aWidget
-			class UICORE_API table : public QTableWidget, public ak::ui::core::aWidget
+			class UICORE_API_EXPORT table : public QTableWidget, public ak::ui::core::aWidget
 			{
 				Q_OBJECT
 			public:

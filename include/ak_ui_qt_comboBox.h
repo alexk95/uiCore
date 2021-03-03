@@ -16,6 +16,7 @@
 
 // AK header
 #include <ak_ui_core_aWidget.h>		// base class
+#include <ak_globalDataTypes.h>
 
 // Forward declaration
 class QKeyEvent;
@@ -29,7 +30,7 @@ namespace ak {
 		namespace qt {
 
 			//! @brief This class combines the functionallity of a QComboBox and a ak::ui::core::aObject
-			class comboBox : public QComboBox, public ak::ui::core::aWidget
+			class UICORE_API_EXPORT comboBox : public QComboBox, public ak::ui::core::aWidget
 			{
 				Q_OBJECT
 			public:

@@ -34,7 +34,7 @@ namespace ak {
 
 			//! This class is a interface representing a manager class that is managing an aWidget object.
 			//! This class provides the main functionallity for such a manager class like the messenger, the uidManager or the objectManager
-			class UICORE_API aWidgetManager : public ak::ui::core::aWidget {
+			class UICORE_API_EXPORT aWidgetManager : public ak::ui::core::aWidget {
 			public:
 				
 				//! @brief Constructor

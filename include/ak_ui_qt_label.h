@@ -17,17 +17,17 @@
 
 // AK header
 #include <ak_ui_core_aWidget.h>		// Base class
-
-class QWidget;
+#include <ak_globalDataTypes.h>
 
 namespace ak {
 	namespace ui {
 		namespace qt {
 
 			class label : public QLabel, ui::core::aWidget {
+				Q_OBJECT
 			public:
-				label(QWidget * _parent = nullptr);
-				label(const QString & _text, QWidget * _parent = nullptr);
+				label(QWidget * _parent = (QWidget *) nullptr);
+				label(const QString & _text, QWidget * _parent = (QWidget *) nullptr);
 				virtual ~label();
 
 				// #############################################################################################################################
@@ -46,6 +46,7 @@ namespace ak {
 			private:
 				label() = delete;
 				label(const label &) = delete;
+				label & operator = (const label &) = delete;
 			};
 
 		} // namespace qt

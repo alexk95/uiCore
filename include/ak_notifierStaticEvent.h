@@ -18,7 +18,7 @@
 
 namespace ak {
 
-	class UICORE_API notifierStaticEvent : public notifier {
+	class UICORE_API_EXPORT notifierStaticEvent : public notifier {
 	public:
 		typedef void eventCallback(ak::UID, ak::core::eventType, int, int);
 

@@ -21,6 +21,7 @@
 #include <ak_ui_core.h>						// objectType
 #include <ak_globalDataTypes.h>				// UID and ID type
 #include <ak_ui_color.h>					// color
+#include <ak_globalDataTypes.h>
 
 // Forward declaration
 class QHBoxLayout;
@@ -43,7 +44,7 @@ namespace ak {
 			
 			class pushButton; class graphicsView;
 
-			class colorEditButton : public QObject, public ak::ui::core::aWidget {
+			class UICORE_API_EXPORT colorEditButton : public QObject, public ak::ui::core::aWidget {
 				Q_OBJECT
 			public:
 

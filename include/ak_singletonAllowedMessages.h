@@ -13,13 +13,14 @@
 
 // AK header
 #include <ak_core.h>
+#include <ak_globalDataTypes.h>
 
 // C++ header
 #include <vector>
 
 namespace ak {
 	
-	class singletonAllowedMessages
+	class UICORE_API_EXPORT singletonAllowedMessages
 	{
 	public:
 

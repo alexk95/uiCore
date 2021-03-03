@@ -15,6 +15,7 @@
 #include <map>
 
 // Qt header
+#include <qobject.h>						// Base class
 #include <qlayout.h>						// layout for the VBoxLayout
 #include <qicon.h>							// QIcon
 #include <qcolor.h>							// QColor
@@ -28,6 +29,7 @@
 
 // Forward declaration
 class QTreeWidgetItem;
+class QKeyEvent;
 
 namespace ak {
 
@@ -46,7 +48,8 @@ namespace ak {
 
 		namespace widget {
 
-			class tree : public ak::ui::core::aWidgetManager {
+			class UICORE_API_EXPORT tree : public QObject, public ak::ui::core::aWidgetManager {
+				Q_OBJECT
 			public:
 				//! @brief Default constructor
 				//! @param _messenger The globally used messenger
@@ -66,7 +69,6 @@ namespace ak {
 
 				//! @brief Will set the objects color style
 				//! @param _colorStyle The color style to set
-				//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 				virtual void setColorStyle(
 					const ak::ui::colorStyle *		_colorStyle
 				) override;
@@ -110,7 +112,6 @@ namespace ak {
 				//! @brief Will set enabled state of the provided item
 				//! @param _itemId The ID of the item
 				//! @param _enabled The enabled state of the item
-				//! @throw ak::Exception if the ID is invalid
 				void setItemEnabled(
 					ak::ID							_itemId,
 					bool							_enabled
@@ -120,7 +121,6 @@ namespace ak {
 				//! Will also set the selected state of the items childs if the selectAndDeselectChilds option is true
 				//! @param _itemId The ID of the item
 				//! @param _selected The selected state of the item
-				//! @throw ak::Exception if the ID is invalid
 				void setItemSelected(
 					ak::ID							_itemId,
 					bool							_selected
@@ -129,17 +129,23 @@ namespace ak {
 				//! @brief Will set enabled state of the provided item
 				//! @param _itemId The ID of the item
 				//! @param _enabled The enabled state of the item
-				//! @throw ak::Exception if the ID is invalid
 				void setItemVisible(
 					ak::ID							_itemId,
 					bool							_visible
+				);
+
+				//! @brief Will set the text of the provided item
+				//! @param _itemId The ID of the item
+				//! @param _text The text to set
+				void setItemText(
+					ak::ID							_itemId,
+					const QString &					_text
 				);
 
 				//! @brief Will set the selected state of the provided item.
 				//! Will not change the selected state of the childs item even if the selectAndDeselectChilds option is true
 				//! @param _itemId The ID of the item
 				//! @param _selected The selected state of the item
-				//! @throw ak::Exception if the ID is invalid
 				void setSingleItemSelected(
 					ak::ID							_itemId,
 					bool							_selected
@@ -149,7 +155,6 @@ namespace ak {
 				//! Will also set the selected state of the items childs if the selectAndDeselectChilds option is true
 				//! @param _itemId The ID of the item
 				//! @param _selected The selected state of the item
-				//! @throw ak::Exception if the ID is invalid
 				void toggleItemSelection(
 					ak::ID							_itemId
 				);
@@ -168,14 +173,6 @@ namespace ak {
 				//! @brief Will set the visible state of this tree
 				void setVisible(
 					bool							_visible = true
-				);
-
-				//! @brief Will set the item text of the specified item
-				//! @param _itemId The ID of the item to set the text at
-				//! @param _text The text to set
-				void setItemText(
-					ak::ID							_itemId,
-					const QString &					_text
 				);
 
 				//! @brief Will set the item icon of the specified item
@@ -244,6 +241,30 @@ namespace ak {
 					const std::vector<ak::ID> &							_itemIDs
 				);
 
+				//! @brief Will set the items are editable flag
+				//! @param _editable If true, the items can be modified by the user
+				//! @param _applyToAll If true, then the new state will be applied to all existing items, otherwise this chane will only affect items created after this point
+				void setItemsAreEditable(
+					bool												_editable = true,
+					bool												_applyToAll = true
+				);
+
+				//! @brief Will set the editable flag of one item
+				//! @param _item The item id
+				//! @param _editable If true, the item can be modified by the user
+				void setItemIsEditable(
+					ak::ID												_itemID,
+					bool												_editable
+				);
+
+				//! @brief Will set the editable flag of the provided items item
+				//! @param _item The item id
+				//! @param _editable If true, the item can be modified by the user
+				void setItemIsEditable(
+					const std::vector<ak::ID> &							_itemIDs,
+					bool												_editable
+				);
+
 				// ###########################################################################################################################################
 
 				// Information gathering
@@ -253,7 +274,6 @@ namespace ak {
 
 				//! @brief Will return all items from root to specified item as a vector where the first item is the root item
 				//! @param _itemId The ID of the requested item
-				//! @throw ak::Exception if the provided item ID is invalid
 				std::vector<QString> getItemPath(
 					ak::ID									_itemId
 				);
@@ -261,7 +281,6 @@ namespace ak {
 				//! @brief Will return all items from root to specified item as a string seperated with the provided delimiter where the first item is the root item
 				//! @param _itemId The ID of the requested item
 				//! @param _delimiter The delimiter between the items
-				//! @throw ak::Exception if the provided item ID is invalid
 				QString getItemPathString(
 					ak::ID									_itemId,
 					char									_delimiter = '|'
@@ -299,12 +318,6 @@ namespace ak {
 					bool							_keyDown
 				);
 
-				//! @brief Will perform actions on the filter text changed event
-				void performFilterTextChanged(void);
-
-				//! @brief Will perform actions on the filter enter pressed event
-				void performFilterEnterPressed(void);
-
 				//! @brief Will send a event message to the messaging system in the name of the provided tree widget item
 				//! @param _item The sender
 				//! @param _eventType The type of the event
@@ -324,6 +337,14 @@ namespace ak {
 				void selectionChangedEvent(
 					bool							_sendMessage = true
 				);
+
+			private slots:
+
+				//! @brief Will perform actions on the filter text changed event
+				void slotFilterTextChanged(void);
+
+				//! @brief Will perform actions on the filter enter pressed event
+				void slotFilterKeyPressed(QKeyEvent * _event);
 
 			private:
 
@@ -361,8 +382,8 @@ namespace ak {
 
 				ak::messenger *								my_internalMessenger;		//! The internally used messenger
 				ak::uidManager *							my_internalUidManager;		//! The internally used UID manager
-				ak::ui::signalLinker *						my_filterSignalLinker;		//! The signal linker used to connect the filter signals
-				ak::notifierTreeFilter *					my_notifierFilter;			//! The notifier used to catch the filter signals
+//				ak::ui::signalLinker *						my_filterSignalLinker;		//! The signal linker used to connect the filter signals
+//				ak::notifierTreeFilter *					my_notifierFilter;			//! The notifier used to catch the filter signals
 
 				QString										my_headerText;				//! The header text of the tree
 
@@ -373,7 +394,7 @@ namespace ak {
 					ak::ui::qt::treeItem *>::iterator		my_itemsIterator;
 
 				bool										my_selectAndDeselectChildren;
-
+				bool										my_itemsAreEditable;		//! If true then the items in this tree are editable
 			};
 
 		} // namespace widget

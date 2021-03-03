@@ -24,6 +24,7 @@
 // AK header
 #include <ak_ui_core_ttbContainer.h>	// base class
 #include <ak_ui_core.h>					// objectType
+#include <ak_globalDataTypes.h>
 
 // Forward declaraion
 namespace tt { class Page; }
@@ -43,7 +44,7 @@ namespace ak {
 			// Forward declaration
 			class group;
 
-			class page : public ak::ui::core::ttbContainer {
+			class UICORE_API_EXPORT page : public ak::ui::core::ttbContainer {
 			public:
 				page(
 					ak::messenger *				_messenger,

@@ -26,7 +26,7 @@ namespace ak {
 
 			//! This class represents a object that can be painted.
 			//! More specific a object where the color style may be applied to, either by using a stylesheet or simply by using setBack- or setForeColor
-			class UICORE_API aPaintable : public ak::ui::core::aObject {
+			class UICORE_API_EXPORT aPaintable : public ak::ui::core::aObject {
 			public:
 
 				//! @brief Constructor

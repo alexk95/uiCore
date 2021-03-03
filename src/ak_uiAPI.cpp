@@ -51,6 +51,7 @@
 #include <qfile.h>
 #include <qmovie.h>
 #include <qdesktopwidget.h>
+#include <qfiledialog.h>
 
 static ak::uiAPI::apiManager		my_apiManager;					//! The API manager
 static ak::ui::objectManager *		my_objManager = nullptr;					//! The object manager used in this API
@@ -794,6 +795,14 @@ void ak::uiAPI::contextMenu::clear(
 
 // ###############################################################################################################################################
 
+// Dialog
+
+QString ak::uiAPI::dialog::openDirectory(const QString & _title, const QString & _initialDir) {
+	return QFileDialog::getExistingDirectory(nullptr, _title, _initialDir, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+}
+
+// ###############################################################################################################################################
+
 // Dock
 
 void ak::uiAPI::dock::setCentralWidget(
@@ -1117,6 +1126,15 @@ void ak::uiAPI::object::setAlias(
 	actualObject->setAlias(_alias);
 	if (_alias.length() != 0) { my_objManager->addAlias(_alias, _objectUID); }
 }
+
+void ak::uiAPI::object::setObjectUniqueName(
+	ak::UID												_objectUID,
+	const QString &										_name
+) { my_objManager->setObjectUniqueName(_objectUID, _name); }
+
+ak::UID ak::uiAPI::object::getUidFromObjectUniqueName(
+	const QString &										_name
+) { return my_objManager->object(_name)->uid(); }
 
 // Object
 
@@ -1545,6 +1563,57 @@ void ak::uiAPI::propertyGrid::setGroupStateIcons(
 		*my_iconManager->icon(_groupCollapsedIconName, _groupCollapsedIconSize));
 }
 
+void ak::uiAPI::propertyGrid::resetItemAsError(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID,
+	const QString &									_valueToReset
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->resetItemAsError(_itemID, _valueToReset);
+}
+
+void ak::uiAPI::propertyGrid::resetItemAsError(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID,
+	int												_valueToReset
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->resetItemAsError(_itemID, _valueToReset);
+}
+
+void ak::uiAPI::propertyGrid::resetItemAsError(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID,
+	double											_valueToReset
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->resetItemAsError(_itemID, _valueToReset);
+}
+
+void ak::uiAPI::propertyGrid::showItemAsError(
+	ak::UID											_propertyGridUID,
+	ak::ID											_itemID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->showItemAsError(_itemID);
+}
+
 // propertyGrid
 
 // ###############################################################################################################################################
@@ -1767,6 +1836,20 @@ void ak::uiAPI::tabView::setTabsCloseable(
 	assert(actualTabView != nullptr); // Invalid object type
 
 	actualTabView->setTabsCloseable(_closeable);
+}
+
+void ak::uiAPI::tabView::setTabText(
+	ak::UID								_tabViewUID,
+	ak::ID								_tab,
+	const QString &						_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+
+	actualTabView->setTabText(_tab, _text);
 }
 
 void ak::uiAPI::tabView::setVisible(
@@ -2235,6 +2318,42 @@ void ak::uiAPI::tree::deleteItems(
 	actualTree->deleteItems(_itemIDs);
 }
 
+void ak::uiAPI::tree::setItemsAreEditable(
+	ak::UID							_treeUID,
+	bool							_editable,
+	bool							_applyToAll
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setItemsAreEditable(_editable, _applyToAll);
+}
+
+void ak::uiAPI::tree::setItemIsEditable(
+	ak::UID							_treeUID,
+	ak::ID							_itemID,
+	bool							_editable
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setItemIsEditable(_itemID, _editable);
+}
+
+void ak::uiAPI::tree::setItemIsEditable(
+	ak::UID							_treeUID,
+	const std::vector<ak::ID> &		_itemIDs,
+	bool							_editable
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setItemIsEditable(_itemIDs, _editable);
+}
+
 void ak::uiAPI::tree::deselectAllItems(
 	ak::UID							_treeUID,
 	bool							_sendSelectionChangedEvent
@@ -2439,18 +2558,6 @@ void ak::uiAPI::tree::setItemSelected(
 	else { actualTree->setItemSelected(_itemID, _selected); }
 }
 
-void ak::uiAPI::tree::setItemText(
-	ak::UID							_treeUID,
-	ak::ID							_itemID,
-	const QString &					_text
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
-	actualTree->setItemText(_itemID, _text);
-}
-
 void ak::uiAPI::tree::setItemVisible(
 	ak::UID							_treeUID,
 	ak::ID							_itemID,
@@ -2461,6 +2568,18 @@ void ak::uiAPI::tree::setItemVisible(
 	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
 	assert(actualTree != nullptr); // Invalid object type
 	actualTree->setItemVisible(_itemID, _visible);
+}
+
+void ak::uiAPI::tree::setItemText(
+	ak::UID							_treeUID,
+	ak::ID							_itemId,
+	const QString &					_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::tree * actualTree = nullptr;
+	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
+	assert(actualTree != nullptr); // Invalid object type
+	actualTree->setItemText(_itemId, _text);
 }
 
 void ak::uiAPI::tree::setMultiSelectionEnabled(

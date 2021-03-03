@@ -24,6 +24,7 @@
 // AK header
 #include <ak_ui_core_ttbContainer.h>	// base class
 #include <ak_ui_core.h>					// objectType
+#include <ak_globalDataTypes.h>
 
 // Forward declaration
 namespace tt { class SubGroup; }
@@ -41,7 +42,7 @@ namespace ak {
 
 		namespace ttb {
 
-			class subGroup : public ak::ui::core::ttbContainer {
+			class UICORE_API_EXPORT subGroup : public ak::ui::core::ttbContainer {
 			public:
 				subGroup(
 					ak::messenger *				_messenger,

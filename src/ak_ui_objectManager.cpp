@@ -412,7 +412,7 @@ ak::UID ak::ui::objectManager::createTabToolBarSubContainer(
 	const QString &										_text
 ) {
 	// Find parent object
-	my_mapObjectsIterator itm = my_mapObjects.find(_parentUid);
+	auto itm = my_mapObjects.find(_parentUid);
 	assert(itm != my_mapObjects.end()); // Invalid object UID provided
 	// Check object type
 	if (itm->second->objectType() != ak::ui::core::objectType::oTabToolbarPage &&
@@ -457,7 +457,7 @@ ak::UID ak::ui::objectManager::createTabToolBarPage(
 	const QString &										_text
 ) {
 	// Find object
-	my_mapObjectsIterator itm = my_mapObjects.find(_uiManagerUid);
+	auto itm = my_mapObjects.find(_uiManagerUid);
 	assert(itm != my_mapObjects.end()); // Invalid object UID provided
 	// Check object type
 	assert(itm->second->objectType() == ui::core::objectType::oMainWindow); // Invalid object type provided
@@ -515,8 +515,16 @@ ak::UID ak::ui::objectManager::createWindow(
 ak::ui::core::aObject * ak::ui::objectManager::object(
 	ak::UID												_objectUid
 ) {
-	my_mapObjectsIterator itm = my_mapObjects.find(_objectUid);
+	auto itm = my_mapObjects.find(_objectUid);
 	assert(itm != my_mapObjects.end());	// Invalid object UID provided
+	return itm->second;
+}
+
+ak::ui::core::aObject * ak::ui::objectManager::object(
+	const QString &										_objectUniqueName
+) {
+	auto itm = my_mapUniqueNames.find(_objectUniqueName);
+	assert(itm != my_mapUniqueNames.end());	// Invalid object UID provided
 	return itm->second;
 }
 
@@ -528,15 +536,21 @@ void ak::ui::objectManager::creatorDestroyed(
 	try {
 		my_notifier->disable();
 		// Get all UIDs created by this creator
-		my_mapCreatorsIterator itm = my_mapCreators.find(_creatorUid);
+		auto itm = my_mapCreators.find(_creatorUid);
 		if (itm != my_mapCreators.end()) {
 			// Get and destroy every single object created by this creator
 			for (int i = 0; i < itm->second->size(); i++) {
-				my_mapObjectsIterator obj = my_mapObjects.find(itm->second->at(i));
+				auto obj = my_mapObjects.find(itm->second->at(i));
 				if (obj != my_mapObjects.end()) {
 					ak::ui::core::aObject * actualObject = obj->second;
 					// Check if object is a restorable type and remove it from the map
 					my_mapAliases.erase(actualObject->alias());
+
+					// Remove the unique name access to this object
+					if (!actualObject->uniqueName().isEmpty()) {
+						my_mapUniqueNames.erase(actualObject->uniqueName());
+					}
+
 					// Delete object
 					delete actualObject;
 					obj->second = nullptr;
@@ -566,7 +580,7 @@ void ak::ui::objectManager::destroy(
 ) {
 	my_notifier->disable();
 
-	my_mapObjectsIterator object = my_mapObjects.find(_objectUID);
+	auto object = my_mapObjects.find(_objectUID);
 	assert(object != my_mapObjects.end());	// Invalid object UID
 	
 	ui::core::aObject * actualObject = object->second;
@@ -591,6 +605,11 @@ void ak::ui::objectManager::destroy(
 	my_mapAliases.erase(actualObject->alias());
 	my_mapOwners.erase(_objectUID);
 	my_mapObjects.erase(_objectUID);
+
+	// Remove the unique name access to this object
+	if (!actualObject->uniqueName().isEmpty()) {
+		my_mapUniqueNames.erase(actualObject->uniqueName());
+	}
 
 	// Destroy object
 	delete actualObject;
@@ -653,7 +672,7 @@ void ak::ui::objectManager::destroyAll(void) {
 	if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
 	my_signalLinker = new ak::ui::signalLinker(my_messenger, my_uidManager);
 
-	my_mapObjectsIterator itm = my_mapObjects.begin();
+	auto itm = my_mapObjects.begin();
 
 	// Destroy all objects that are not a main window
 	while (itm != my_mapObjects.end()) {
@@ -676,6 +695,7 @@ void ak::ui::objectManager::destroyAll(void) {
 	}
 	my_mapCreators.clear();
 	my_mapObjects.clear();
+	my_mapUniqueNames.clear();
 }
 
 std::string ak::ui::objectManager::saveStateWindow(
@@ -698,8 +718,8 @@ std::string ak::ui::objectManager::saveStateWindow(
 	rapidjson::Value items(rapidjson::kArrayType);
 
 	// Collect data for objects that have to be restored
-	for (my_mapAliasesIterator itm = my_mapAliases.begin(); itm != my_mapAliases.end(); itm++) {
-		my_mapObjectsIterator obj = my_mapObjects.find(itm->second);
+	for (auto itm = my_mapAliases.begin(); itm != my_mapAliases.end(); itm++) {
+		auto obj = my_mapObjects.find(itm->second);
 		ak::ui::core::aRestorable * restorable = nullptr;
 		restorable = dynamic_cast<ak::ui::core::aRestorable *>(obj->second);
 		assert(restorable != nullptr); // Upps
@@ -802,11 +822,11 @@ ak::core::settingsRestoreErrorCode ak::ui::objectManager::restoreStateWindow(
 		QString objType = QString(obj[RESTORABLE_NAME_TYPE].GetString());
 
 		// Check if an object with the provided alias exist
-		my_mapAliasesIterator oAlias = my_mapAliases.find(objAlias);
+		auto oAlias = my_mapAliases.find(objAlias);
 		assert(oAlias != my_mapAliases.end()); // No object with specified alias exists
 
 		// Get the object
-		my_mapObjectsIterator object = my_mapObjects.find(oAlias->second);
+		auto object = my_mapObjects.find(oAlias->second);
 		assert(object != my_mapObjects.end()); // Registered alias is not stored
 
 		// Check the object type
@@ -867,9 +887,32 @@ void ak::ui::objectManager::addAlias(
 	const QString &										_alias,
 	ak::UID												_UID
 ) {
-	my_mapAliasesIterator obj = my_mapAliases.find(_alias);
+	auto obj = my_mapAliases.find(_alias);
 	assert(obj == my_mapAliases.end()); // Object with the specified alias already exists
 	my_mapAliases.insert_or_assign(_alias, _UID);
+}
+
+void ak::ui::objectManager::setObjectUniqueName(
+	ak::UID												_objectUid,
+	const QString &										_uniqueName
+) {
+	auto actualObject{ object(_objectUid) };
+	assert(actualObject != nullptr);	// The object was not created
+
+	auto duplicateEntry{ my_mapUniqueNames.find(_uniqueName) };
+	if (duplicateEntry != my_mapUniqueNames.end()) {
+		if (duplicateEntry->second == actualObject) { return; }
+		assert(0); // Another object with the same unique name does already exist
+	}
+
+	// Remove the old unique name
+	if (!actualObject->uniqueName().isEmpty()) { my_mapUniqueNames.erase(actualObject->uniqueName()); }
+	
+	// Store information
+	actualObject->setUniqueName(_uniqueName);
+	if (!_uniqueName.isEmpty()) {
+		my_mapUniqueNames.insert_or_assign(_uniqueName, actualObject);
+	}
 }
 
 void ak::ui::objectManager::removeAlias(
@@ -879,7 +922,7 @@ void ak::ui::objectManager::removeAlias(
 ak::UID ak::ui::objectManager::objectCreator(
 	ak::UID												_objectUID
 ) {
-	my_mapOwnersIterator owner = my_mapOwners.find(_objectUID);
+	auto owner = my_mapOwners.find(_objectUID);
 	assert(owner != my_mapOwners.end());	// Invalid UID
 	return owner->second;
 }
@@ -892,7 +935,7 @@ void ak::ui::objectManager::setColorStyle(
 	assert(_colorStyle != nullptr); // Nullptr provided
 	my_currentColorStyle = _colorStyle;
 
-	for (my_mapObjectsIterator obj = my_mapObjects.begin(); obj != my_mapObjects.end(); obj++) {
+	for (auto obj = my_mapObjects.begin(); obj != my_mapObjects.end(); obj++) {
 		assert(obj->second != nullptr); // nullptr stored
 		if (obj->second->isPaintableType()) {
 			// Cast paintable
@@ -908,7 +951,7 @@ void ak::ui::objectManager::addCreatedUid(
 	ak::UID												_creatorUid,
 	ak::UID												_createdUid
 ) {
-	my_mapCreatorsIterator itm = my_mapCreators.find(_creatorUid);
+	auto itm = my_mapCreators.find(_creatorUid);
 	if (itm == my_mapCreators.end()) {
 		// First object created by this creator
 		std::vector<ak::UID> *	v = nullptr;
@@ -939,7 +982,7 @@ QWidget * ak::ui::objectManager::castToWidget(
 	ak::UID												_objectUid
 ) {
 	// Get widget
-	my_mapObjectsIterator obj = my_mapObjects.find(_objectUid);
+	auto obj = my_mapObjects.find(_objectUid);
 	assert(obj != my_mapObjects.end()); // Invalid object UID
 	assert(obj->second->isWidgetType()); // Object is not a widget
 	ak::ui::core::aWidget * widget = nullptr;

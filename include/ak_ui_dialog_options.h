@@ -42,7 +42,7 @@ namespace ak {
 			class optionsGroup;
 			class optionsCategory;
 
-			class options : public ui::core::aDialog, public ak::ui::core::aPaintable {
+			class UICORE_API_EXPORT options : public ui::core::aDialog, public ak::ui::core::aPaintable {
 				Q_OBJECT
 			public:
 

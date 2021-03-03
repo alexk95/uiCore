@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <ak_globalDataTypes.h>
+
 // C++ header
 #include <map>						// Icon storage
 #include <vector>					// Directory name storage
@@ -33,7 +35,7 @@ namespace ak {
 		//! The icons will be searched inside the provided directories.
 		//! The directories will be searched in the order they have been added.
 		//! The icon found first will be returned
-		class iconManager {
+		class UICORE_API_EXPORT iconManager {
 		public:
 			//! @brief Constructor will initialize the file extension with png
 			//! @param _mainDirectory The main directory for the icon manager

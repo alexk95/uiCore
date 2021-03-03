@@ -19,6 +19,7 @@
 
 // AK header
 #include <ak_ui_core_aWidget.h>
+#include <ak_globalDataTypes.h>
 
 // Forward declaration
 class QWidget;
@@ -31,7 +32,7 @@ namespace ak {
 
 		namespace qt{
 
-			class tabView : public QTabWidget, public core::aWidget {
+			class UICORE_API_EXPORT tabView : public QTabWidget, public core::aWidget {
 			public:
 				
 				//! @brief Constructor

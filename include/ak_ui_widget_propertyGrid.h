@@ -49,7 +49,7 @@ namespace ak {
 			class propertyGridGroup;
 			class propertyGridItem;
 
-			class propertyGrid : public QObject, public ui::core::aWidgetManager {
+			class UICORE_API_EXPORT propertyGrid : public QObject, public ui::core::aWidgetManager {
 				Q_OBJECT
 			public:
 				propertyGrid(
@@ -190,6 +190,36 @@ namespace ak {
 					const QIcon &									_groupCollapsed
 				);
 
+				//! @brief Will set the provided value to the specified item
+				//! @param _itemID The ID of the item
+				//! @param _valueToReset The value to set to the item
+				void resetItemAsError(
+					ak::ID											_itemID,
+					const QString &									_valueToReset
+				);
+
+				//! @brief Will set the provided value to the specified item
+				//! @param _itemID The ID of the item
+				//! @param _valueToReset The value to set to the item
+				void resetItemAsError(
+					ak::ID											_itemID,
+					int												_valueToReset
+				);
+
+				//! @brief Will set the provided value to the specified item
+				//! @param _itemID The ID of the item
+				//! @param _valueToReset The value to set to the item
+				void resetItemAsError(
+					ak::ID											_itemID,
+					double											_valueToReset
+				);
+
+				//! @brief Will show the specified item as an error
+				//! @param _itemID The item to set as error
+				void showItemAsError(
+					ak::ID											_itemID
+				);
+
 				// ##############################################################################################################
 
 				// Clear items
@@ -260,12 +290,7 @@ namespace ak {
 				bool									my_checkItemVisibilityRequired;
 
 				std::map<QString, propertyGridGroup *>	my_groups;
-				typedef std::map<QString,
-					propertyGridGroup *>::iterator		my_groupsIterator;
-
 				std::map<ak::ID, propertyGridItem *>	my_items;
-				typedef std::map<ak::ID,
-					propertyGridItem *>::iterator		my_itemsIterator;
 
 				propertyGridGroup *						my_defaultGroup;
 
@@ -291,7 +316,7 @@ namespace ak {
 
 			// ##############################################################################################################
 
-			class propertyGridGroup : public QObject {
+			class UICORE_API_EXPORT propertyGridGroup : public QObject {
 				Q_OBJECT
 			public:
 				propertyGridGroup(
@@ -421,7 +446,7 @@ namespace ak {
 
 			// ##############################################################################################################
 
-			class propertyGridItem : public QObject {
+			class UICORE_API_EXPORT propertyGridItem : public QObject {
 				Q_OBJECT
 			public:
 				propertyGridItem(
@@ -539,6 +564,27 @@ namespace ak {
 				void setColorStyle(
 					const ui::colorStyle *	_style
 				);
+
+				//! @brief Will set the provided value to this item
+				//! @param _valueToReset The value to set
+				void resetAsError(
+					const QString &									_valueToReset
+				);
+
+				//! @brief Will set the provided value to this item
+				//! @param _valueToReset The value to set
+				void resetAsError(
+					int												_valueToReset
+				);
+
+				//! @brief Will set the provided value to this item
+				//! @param _valueToReset The value to set
+				void resetAsError(
+					double											_valueToReset
+				);
+
+				//! @brief Will show the item as an error
+				void showAsError(void);
 
 			signals:
 				void changed(void);

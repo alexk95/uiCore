@@ -21,7 +21,7 @@ namespace ak {
 
 	//! This class is used to manage UIDs.
 	//! This UID manager is incrementing the UID on each getId call.
-	class UICORE_API uidManager {
+	class UICORE_API_EXPORT uidManager {
 	public:
 
 		//! @brief Default construcor. Initialize the first id with 1

@@ -55,7 +55,7 @@ namespace ak {
 		//! @brief This class is used to manage a QMainWindow
 		//! It provides several functions to create and manipulate the UI
 		//! Also it will connect all created objects to the messaging system and will manage the UIDs of those objects.
-		class uiManager : public QObject, public ui::core::aPaintable, public ui::core::aRestorable {
+		class UICORE_API_EXPORT uiManager : public QObject, public ui::core::aPaintable, public ui::core::aRestorable {
 			Q_OBJECT
 		public:
 			// #############################################################################################################

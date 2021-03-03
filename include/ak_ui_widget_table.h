@@ -45,7 +45,7 @@ namespace ak {
 		namespace widget {
 
 			//! @brief This class is used to manage a ak::qt::table
-			class table : public core::aWidgetManager {
+			class UICORE_API_EXPORT table : public core::aWidgetManager {
 			public:
 
 				//! @brief The ak::ui::table class is used to create a table widget

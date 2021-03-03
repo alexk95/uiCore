@@ -12,7 +12,7 @@
 #pragma once
 
 // AK header
-#include <ak_globalDataTypes.h>		// UICORE_API, UID and ID types
+#include <ak_globalDataTypes.h>		// UICORE_API_EXPORT, UID and ID types
 
 // Qt header
 #include <qstring.h>				// QString
@@ -21,7 +21,7 @@
 namespace ak {
 
 	//! Represents a file and its information
-	class UICORE_API file {
+	class UICORE_API_EXPORT file {
 	public:
 
 		//! @brief Constructor

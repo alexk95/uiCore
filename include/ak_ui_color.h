@@ -16,13 +16,13 @@
 #include <qcolor.h>					// QColor
 
 // AK header
-#include <ak_globalDataTypes.h>		// UICORE_API
+#include <ak_globalDataTypes.h>		// UICORE_API_EXPORT
 
 namespace ak {
 	namespace ui {
 
 		//! This class is used to discribe a color
-		class UICORE_API color {
+		class UICORE_API_EXPORT color {
 		public:
 
 			//! @brief Default constructor

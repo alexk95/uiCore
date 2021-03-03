@@ -13,6 +13,7 @@
 
 // AK header
 #include <ak_ui_core_aObject.h>			// Base class
+#include <ak_globalDataTypes.h>
 
 // Qt header
 #include <qaction.h>				// Base class
@@ -23,7 +24,7 @@ namespace ak {
 	namespace ui {
 		namespace qt {
 
-			class contextMenuItem : public QAction, public ui::core::aObject {
+			class UICORE_API_EXPORT contextMenuItem : public QAction, public ui::core::aObject {
 				Q_OBJECT
 			public:
 				contextMenuItem(

@@ -12,6 +12,7 @@
 #pragma once
 
 // AK header
+#include <ak_globalDataTypes.h>
 #include <ak_ui_core_aWidget.h>		// Base class
 
 // Qt header
@@ -32,7 +33,7 @@ namespace ak {
 			class dock;
 
 			//! @brief This class combines the functionallity of a QTextEdit and a ak::ui::core::aWidget
-			class lineEdit : public QLineEdit, public ak::ui::core::aWidget
+			class UICORE_API_EXPORT lineEdit : public QLineEdit, public ak::ui::core::aWidget
 			{
 				Q_OBJECT
 			public:

@@ -52,6 +52,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>%QDIR%\include\QtCore\;%QDIR%\include\QtGui\;%QDIR%\include\QtWidgets\;%QT_TT_ROOT%\include\;%R_JSON_ROOT%\include\;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>UICORE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%QT_TT_ROOT%\src\TabToolbar\Debug;%QDIR%\lib;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -61,6 +62,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>%QDIR%\include\QtCore\;%QDIR%\include\QtGui\;%QDIR%\include\QtWidgets\;%QT_TT_ROOT%\include\;%R_JSON_ROOT%\include\;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>UICORE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%QT_TT_ROOT%\src\TabToolbar\Release;%QDIR%\lib;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -117,7 +119,6 @@
     <ClInclude Include="include\ak_notifierForwardMessage.h" />
     <ClInclude Include="include\ak_notifierObjectManager.h" />
     <ClInclude Include="include\ak_notifierStaticEvent.h" />
-    <ClInclude Include="include\ak_notifierTreeFilter.h" />
     <ClInclude Include="include\ak_singletonAllowedMessages.h" />
     <ClInclude Include="include\ak_uiAPI.h" />
     <ClInclude Include="include\ak_uidMangager.h" />
@@ -145,7 +146,7 @@
     <QtMoc Include="include\ak_ui_qt_lineEdit.h" />
     <QtMoc Include="include\ak_ui_qt_list.h" />
     <QtMoc Include="include\ak_ui_qt_graphicsView.h" />
-    <ClInclude Include="include\ak_ui_qt_label.h" />
+    <QtMoc Include="include\ak_ui_qt_label.h" />
     <ClInclude Include="include\ak_ui_qt_tabView.h" />
     <ClInclude Include="include\ak_ui_qt_timer.h" />
     <QtMoc Include="include\ak_ui_qt_toolButton.h" />
@@ -160,7 +161,7 @@
     <QtMoc Include="include\ak_ui_widget_propertyGrid.h" />
     <ClInclude Include="include\ak_ui_widget_table.h" />
     <QtMoc Include="include\ak_ui_widget_tabView.h" />
-    <ClInclude Include="include\ak_ui_widget_tree.h" />
+    <QtMoc Include="include\ak_ui_widget_tree.h" />
     <QtMoc Include="include\ak_ui_uiManagerTimerSignalLinker.h" />
     <QtMoc Include="include\ak_ui_treeSignalLinker.h" />
     <QtMoc Include="include\ak_ui_signalLinker.h" />
@@ -184,7 +185,6 @@
     <ClCompile Include="src\ak_notifierForwardMessage.cpp" />
     <ClCompile Include="src\ak_notifierObjectManager.cpp" />
     <ClCompile Include="src\ak_notifierStaticEvent.cpp" />
-    <ClCompile Include="src\ak_notifierTreeFilter.cpp" />
     <ClCompile Include="src\ak_singletonAllowedMessages.cpp" />
     <ClCompile Include="src\ak_uiAPI.cpp" />
     <ClCompile Include="src\ak_uidManager.cpp" />

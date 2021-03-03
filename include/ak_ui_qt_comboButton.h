@@ -36,7 +36,7 @@ namespace ak {
 
 			//! @brief This class represents a combo button which consists of a QPushButton and it's Menu
 			//! This class behaves like a combo box
-			class comboButton : public QPushButton, public ak::ui::core::aWidget
+			class UICORE_API_EXPORT comboButton : public QPushButton, public ak::ui::core::aWidget
 			{
 				Q_OBJECT
 			public:

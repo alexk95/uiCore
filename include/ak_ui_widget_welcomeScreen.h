@@ -45,7 +45,7 @@ namespace ak {
 
 		namespace widget {
 
-			class welcomeScreen : public ui::core::aWidgetManager {
+			class UICORE_API_EXPORT welcomeScreen : public ui::core::aWidgetManager {
 			public:
 				welcomeScreen(
 					ak::messenger *			_messenger,
@@ -241,7 +241,8 @@ namespace ak {
 
 		// ########################################################################################
 
-		class welcomeScreenSignalLinker : public QObject {
+		//NOTE, remove and change to lcl signal/slot in welcome screen
+		class UICORE_API_EXPORT welcomeScreenSignalLinker : public QObject {
 			Q_OBJECT
 		public:
 

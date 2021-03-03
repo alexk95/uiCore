@@ -15,6 +15,8 @@
 #include <qstring.h>		// QString
 #include <qflags.h>			// QFlags
 
+#include <ak_globalDataTypes.h>
+
 // Forward declaration
 class QKeyEvent;
 
@@ -167,60 +169,60 @@ namespace ak {
 
 			//! @brief Create a string representation of the provided elementType
 			//! @param _elementType The elementtype to be converted
-			QString toQString(
+			UICORE_API_EXPORT QString toQString(
 				objectType								_objectType
 			);
 
 			//! @brief Create a string representation of the provided textAlignment
 			//! @param _textAlignment The text alignment to be converted
-			QString toQString(
+			UICORE_API_EXPORT QString toQString(
 				textAlignment							_textAlignment
 			);
 
 			//! @brief Create a string representation of the provided tabLocation
 			//! @param _tabLocation The tab location to be converted
-			QString toQString(
+			UICORE_API_EXPORT QString toQString(
 				tabLocation								_tabLocation
 			);
 
 			//! @brief Create a string representation of the provided dockLocation
 			//! @param _dockLocation The dock location to be converted
-			QString toQString(
+			UICORE_API_EXPORT QString toQString(
 				dockLocation							_dockLocation
 			);
 
 			//! @brief Create a string representation of the provided dialog result
 			//! @param _dialogResult The dialog result to be converted
-			QString toQString(
+			UICORE_API_EXPORT QString toQString(
 				dialogResult							_dialogResult
 			);
 
 			//! @brief Create a string representation of the provided prompt type
 			//! @param _promptType The prompt type to be converted
-			QString toQString(
+			UICORE_API_EXPORT QString toQString(
 				promptType								_promptType
 			);
 
 			//! @brief Create a string representation of the provided keyType
-			QString toQString(
+			UICORE_API_EXPORT QString toQString(
 				keyType									_keyType
 			);
 
 			//! @brief Create a string representation of the provided contextMenuRole
-			QString toQString(
+			UICORE_API_EXPORT QString toQString(
 				contextMenuRole							_role
 			);
 
 			//! @brief Will return the key type of the provided QKeyEvent
 			//! If the key is not included in the keyType type a keyType::key_Unknown will be returned
 			//! @param _event The event to extract the keyType from
-			keyType getKey(
+			UICORE_API_EXPORT keyType getKey(
 				QKeyEvent *								_event
 			);
 
 			//! @brief Will return the corresponding Qt text alignment
 			//! @param _textAlignment The text alignment to convert
-			Qt::AlignmentFlag toQtAlignment(
+			UICORE_API_EXPORT Qt::AlignmentFlag toQtAlignment(
 				textAlignment							_textAlignment
 			);
 

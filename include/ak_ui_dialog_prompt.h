@@ -15,6 +15,7 @@
 #include <ak_ui_core_aDialog.h>		// base class
 #include <ak_ui_core_aPaintable.h>	// base class
 #include <ak_ui_core.h>				// promtType type
+#include <ak_globalDataTypes.h>
 
 // Qt header
 #include <qobject.h>				// QObject
@@ -32,7 +33,7 @@ namespace ak {
 
 		namespace dialog {
 			
-			class prompt : public ui::core::aDialog, public ak::ui::core::aPaintable {
+			class UICORE_API_EXPORT prompt : public ui::core::aDialog, public ak::ui::core::aPaintable {
 				Q_OBJECT
 			public:
 				prompt(

@@ -30,7 +30,7 @@ namespace ak {
 	//! This class is used to forward a message to receivers.
 	//! A message will only be forwared to registered receivers.
 	//! Receivers will only get messages from the senders and message types they want to be notified
-	class UICORE_API messenger {
+	class UICORE_API_EXPORT messenger {
 	public:
 
 		//! @brief Default constructor

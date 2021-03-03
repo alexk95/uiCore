@@ -12,20 +12,19 @@
 // AK header
 #include <ak_ui_widget_tree.h>				// corresponding class
 #include <ak_messenger.h>					// messenger
-#include <ak_ui_signalLinker.h>				// filter signal to messaging system connection
 #include <ak_ui_treeSignalLinker.h>			// tree signal to messaging system connection
 #include <ak_ui_qt_lineEdit.h>				// textEdit for the filter
 #include <ak_ui_qt_tree.h>					// object this tree widget is managing
 #include <ak_ui_qt_treeItem.h>				// treeItem
 #include <ak_ui_colorStyle.h>				// colorStyle 
 #include <ak_ui_color.h>					// color
-#include <ak_notifierTreeFilter.h>			// notify the tree that the filter has changed
 #include <ak_ui_core.h>						// objectType, convet textAlignment
 #include <ak_uidMangager.h>					// UID manager
 
 // Qt header
 #include <qmessagebox.h>
 #include <qmargins.h>
+#include <qevent.h>
 
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
@@ -34,9 +33,9 @@ ak::ui::widget::tree::tree(
 	ak::uidManager *		_uidManager,
 	const ak::ui::colorStyle *	_colorStyle
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTree, _messenger, _uidManager, _colorStyle),
-my_tree(nullptr), my_filter(nullptr), my_layout(nullptr), my_multiWidget(nullptr), my_treeSignalLinker(nullptr), my_filterSignalLinker(nullptr),
-my_notifierFilter(nullptr), my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0),
-my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false)
+	my_tree(nullptr), my_filter(nullptr), my_layout(nullptr), my_multiWidget(nullptr), my_treeSignalLinker(nullptr), 
+	my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0), my_itemsAreEditable(false),
+	my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false)
 {
 	// Set my UID
 	my_uid = my_uidManager->getId();
@@ -50,6 +49,8 @@ my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDesel
 	my_filter = new ak::ui::qt::lineEdit();
 	assert(my_filter != nullptr); // Failed to create
 	my_filter->setVisible(false);
+	connect(my_filter, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotFilterKeyPressed(QKeyEvent *)));
+	connect(my_filter, SIGNAL(textChanged(const QString &)), this, SLOT(slotFilterTextChanged()));
 
 	// Create widget
 	my_multiWidget = new QWidget();
@@ -75,21 +76,11 @@ my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDesel
 	my_internalMessenger = new ak::messenger();
 	assert(my_internalMessenger != nullptr); // Failed to create
 
-	// Create filter signal linker
-	my_filterSignalLinker = new ak::ui::signalLinker(my_internalMessenger, my_internalUidManager);
-	assert(my_filterSignalLinker != nullptr); // Failed to create
-	my_filterSignalLinker->addLink(my_filter);
-
-	// Create notifier filter
-	my_notifierFilter = new ak::notifierTreeFilter(this);
-	assert(my_notifierFilter != nullptr); // Failed to create
-
 	my_tree->setHeaderLabel(QString(""));
 
 	my_tree->setMouseTracking(true);
 	my_tree->setHeaderHidden(true);
 
-	my_internalMessenger->registerUidReceiver(my_filter->uid(), my_notifierFilter);
 }
 
 ak::ui::widget::tree::~tree() {
@@ -237,6 +228,17 @@ void ak::ui::widget::tree::setItemVisible(
 	//if (my_selectAndDeselectChildren) { itm->second->setChildsVisible(_visible); }
 }
 
+void ak::ui::widget::tree::setItemText(
+	ak::ID							_itemId,
+	const QString &					_text
+) {
+	my_itemsIterator itm = my_items.find(_itemId);
+	assert(itm != my_items.end()); // Invalid item ID
+	my_treeSignalLinker->disable();
+	itm->second->setText(0, _text);
+	my_treeSignalLinker->enable();
+}
+
 void ak::ui::widget::tree::setSingleItemSelected(
 	ak::ID							_itemId,
 	bool							_selected
@@ -275,15 +277,6 @@ void ak::ui::widget::tree::setVisible(
 	bool							_visible
 ) { my_tree->setVisible(_visible); }
 
-void ak::ui::widget::tree::setItemText(
-	ak::ID							_itemId,
-	const QString &					_text
-) {
-	my_itemsIterator itm = my_items.find(_itemId);
-	assert(itm != my_items.end()); // Invalid item ID
-	itm->second->setText(0, _text);
-}
-
 void  ak::ui::widget::tree::setItemIcon(
 	ak::ID							_itemId,
 	const QIcon &					_icon
@@ -302,7 +295,24 @@ void ak::ui::widget::tree::setFilterVisible(
 ) { my_filter->setVisible(_visible); }
 
 void ak::ui::widget::tree::applyCurrentFilter(void) {
-	assert(0); // Not implemented yet
+	QString filter = my_filter->text();
+	if (filter.length() == 0) {
+		// Show all items
+		my_treeSignalLinker->disable();
+		for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) { itm->second->setHidden(false); }
+		collapseAllItems();
+		selectionChangedEvent(false);
+		my_treeSignalLinker->enable();
+	}
+	else {
+		// Check filter
+		Qt::CaseSensitivity sens = Qt::CaseSensitivity::CaseInsensitive;
+		if (my_filterCaseSensitive) { sens = Qt::CaseSensitivity::CaseSensitive; }
+		for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
+			if (itm->second->text(0).toLower().contains(filter, sens)) { itm->second->setVisible(true); }
+			else { itm->second->setHidden(true); }
+		}
+	}
 }
 
 void ak::ui::widget::tree::setFilterCaseSensitive(
@@ -368,6 +378,38 @@ void ak::ui::widget::tree::deleteItems(
 	}
 	my_treeSignalLinker->enable();
 	selectionChangedEvent(true);
+}
+
+void ak::ui::widget::tree::setItemsAreEditable(
+	bool												_editable,
+	bool												_applyToAll
+) {
+	my_itemsAreEditable = _editable;
+	if (_applyToAll) {
+		for (auto itm : my_items) {
+			auto f = itm.second->flags();
+			f.setFlag(Qt::ItemIsEditable, my_itemsAreEditable);
+			itm.second->setFlags(f);
+		}
+	}
+}
+
+void ak::ui::widget::tree::setItemIsEditable(
+	ak::ID												_itemID,
+	bool												_editable
+) {
+	my_itemsIterator itm = my_items.find(_itemID);
+	assert(itm != my_items.end()); // Invalid item ID
+	auto f = itm->second->flags();
+	f.setFlag(Qt::ItemIsEditable, _editable);
+	itm->second->setFlags(f);
+}
+
+void ak::ui::widget::tree::setItemIsEditable(
+	const std::vector<ak::ID> &							_itemIDs,
+	bool												_editable
+) {
+	for (auto id : _itemIDs) { setItemIsEditable(id, _editable); }
 }
 
 // ###########################################################################################################################
@@ -439,27 +481,6 @@ void ak::ui::widget::tree::raiseKeyEvent(
 	else { my_messenger->sendMessage(my_uid, ak::core::eventType::eKeyReleased, 0, _key); }
 }
 
-void ak::ui::widget::tree::performFilterTextChanged(void) {
-	if (my_filterRefreshOnChange) { performFilterEnterPressed(); }
-}
-
-void ak::ui::widget::tree::performFilterEnterPressed(void) {
-	QString filter = my_filter->text();
-	if (filter.length() == 0) {
-		// Show all items
-		for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) { itm->second->setHidden(false); }
-	}
-	else {
-		// Check filter
-		Qt::CaseSensitivity sens = Qt::CaseSensitivity::CaseInsensitive;
-		if (my_filterCaseSensitive) { sens = Qt::CaseSensitivity::CaseSensitive; }
-		for (my_itemsIterator itm = my_items.begin(); itm != my_items.end(); itm++) {
-			if (itm->second->text(0).toLower().contains(filter, sens)) { itm->second->setVisible(true); }
-			else { itm->second->setHidden(true); }
-		}
-	}
-}
-
 void ak::ui::widget::tree::raiseItemEvent(
 	ak::ID							_itemId,
 	ak::core::eventType				_eventType,
@@ -475,6 +496,7 @@ void ak::ui::widget::tree::raiseItemEvent(
 	case ak::core::eventType::eDoubleClicked: break;
 	case ak::core::eventType::eFocused: break;
 	case ak::core::eventType::eExpanded: break;
+	case ak::core::eventType::eItemTextChanged: break;
 	case ak::core::eventType::eLocationChanged: break;
 	default:
 		assert(0); // Invalid event type
@@ -533,6 +555,19 @@ void ak::ui::widget::tree::selectionChangedEvent(
 
 // ###########################################################################################################################
 
+void ak::ui::widget::tree::slotFilterTextChanged(void) {
+	if (my_filterRefreshOnChange) { applyCurrentFilter(); }
+}
+
+void ak::ui::widget::tree::slotFilterKeyPressed(QKeyEvent * _event) {
+	if (ak::ui::core::getKey(_event) == ui::core::keyType::key_Return) {
+		applyCurrentFilter();
+	}
+}
+
+
+// ###########################################################################################################################
+
 ak::ui::qt::treeItem * ak::ui::widget::tree::createItem(
 	const QString &					_text,
 	ak::ui::core::textAlignment		_textAlignment,
@@ -545,6 +580,10 @@ ak::ui::qt::treeItem * ak::ui::widget::tree::createItem(
 	itm->setTextAlignment(0, ak::ui::core::toQtAlignment(_textAlignment));
 	itm->setText(0, _text);
 	itm->setIcon(0, _icon);
+	itm->setStoredText(_text);
+	if (my_itemsAreEditable) {
+		itm->setFlags(itm->flags() | Qt::ItemIsEditable);
+	}
 	//if (my_colorStyle != nullptr) {
 		//itm->setTextColor(0, my_colorStyle->getControlsMainForecolor().toQColor());
 		//itm->setBackgroundColor(0, my_colorStyle->getControlsMainBackcolor().toQColor());
@@ -567,12 +606,10 @@ void ak::ui::widget::tree::memFree(void) {
 	}
 
 	// Delete members
-	if (my_filterSignalLinker != nullptr) { delete my_filterSignalLinker; my_filterSignalLinker = nullptr; }
 	if (my_filter != nullptr) { delete my_filter; my_filter = nullptr; }
 	if (my_tree != nullptr) { delete my_tree; my_tree = nullptr; }
 	if (my_multiWidget != nullptr) { delete my_multiWidget; my_multiWidget = nullptr; }
 	if (my_layout != nullptr) { delete my_layout; my_layout = nullptr; }
-	if (my_notifierFilter != nullptr) { delete my_notifierFilter; my_notifierFilter = nullptr; }
 	if (my_internalMessenger != nullptr) { delete my_internalMessenger; my_internalMessenger = nullptr; }
 	if (my_internalUidManager != nullptr) { delete my_internalUidManager; my_internalUidManager = nullptr; }
 }

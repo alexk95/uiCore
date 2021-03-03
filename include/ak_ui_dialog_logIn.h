@@ -21,6 +21,7 @@
 #include <qpixmap.h>
 
 // AK header
+#include <ak_globalDataTypes.h>
 #include <ak_ui_core_aPaintable.h>
 #include <ak_ui_core_aDialog.h>
 
@@ -46,7 +47,7 @@ namespace ak {
 
 			class logInInputField;
 
-			class logIn : public ak::ui::core::aDialog, public ak::ui::core::aPaintable {
+			class UICORE_API_EXPORT logIn : public ak::ui::core::aDialog, public ak::ui::core::aPaintable {
 				
 				Q_OBJECT
 

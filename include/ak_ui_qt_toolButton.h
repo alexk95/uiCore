@@ -13,6 +13,7 @@
 
 // AK header
 #include <ak_ui_core_aWidget.h>			// Base class
+#include <ak_globalDataTypes.h>
 
 // Qt header
 #include <qtoolbutton.h>				// Base class
@@ -32,7 +33,7 @@ namespace ak {
 			class action;
 			class contextMenuItem;
 
-			class toolButton : public QToolButton, public ui::core::aWidget {
+			class UICORE_API_EXPORT toolButton : public QToolButton, public ui::core::aWidget {
 				Q_OBJECT
 			public:
 				toolButton();

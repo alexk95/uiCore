@@ -28,8 +28,7 @@ ak::ui::ttb::subGroup::subGroup(
 	ak::messenger *				_messenger,
 	tt::SubGroup *				_group,
 	const QString &				_text
-) : ak::ui::core::ttbContainer(_messenger, ak::ui::core::objectType::oTabToolbarSubgroup),
-my_subGroup(_group)
+) : ak::ui::core::ttbContainer(_messenger, ak::ui::core::objectType::oTabToolbarSubgroup), my_subGroup(_group)
 {
 	assert(my_subGroup != nullptr); // Nullptr provided
 	assert(_messenger != nullptr); // Nullptr provided
@@ -66,7 +65,7 @@ void ak::ui::ttb::subGroup::addChild(
 	}
 	_child->setParentObject(this);
 	addChildObject(_child);
-	// Store object0
+	// Store object
 	my_childObjects.insert_or_assign(_child->uid(), _child);
 }
 

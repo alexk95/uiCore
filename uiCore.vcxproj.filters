@@ -120,9 +120,6 @@
     <ClInclude Include="include\ak_notifierStaticEvent.h">
       <Filter>Header Files\ak\notifier</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_notifierTreeFilter.h">
-      <Filter>Header Files\ak\notifier</Filter>
-    </ClInclude>
     <ClInclude Include="include\ak_ui_core_aObject.h">
       <Filter>Header Files\ak\ui\core</Filter>
     </ClInclude>
@@ -142,9 +139,6 @@
       <Filter>Header Files\ak\ui\qt</Filter>
     </ClInclude>
     <ClInclude Include="include\ak_ui_widget_table.h">
-      <Filter>Header Files\ak\ui\widget</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ak_ui_widget_tree.h">
       <Filter>Header Files\ak\ui\widget</Filter>
     </ClInclude>
     <ClInclude Include="include\ak_ui_ttb_group.h">
@@ -179,9 +173,6 @@
     </ClInclude>
     <ClInclude Include="include\ak_ui_application.h">
       <Filter>Header Files\ak\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ak_ui_qt_label.h">
-      <Filter>Header Files\ak\ui\qt</Filter>
     </ClInclude>
     <ClInclude Include="include\ak_ui_windowEventHandler.h">
       <Filter>Header Files\ak\ui</Filter>
@@ -270,6 +261,12 @@
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
     <QtMoc Include="include\ak_ui_qt_contextMenuItem.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_widget_tree.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_label.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
   </ItemGroup>
@@ -398,9 +395,6 @@
       <Filter>Source Files\ak\notifier</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_notifierStaticEvent.cpp">
-      <Filter>Source Files\ak\notifier</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ak_notifierTreeFilter.cpp">
       <Filter>Source Files\ak\notifier</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_singletonAllowedMessages.cpp">

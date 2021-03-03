@@ -29,7 +29,7 @@ namespace ak {
 
 			//! This class provides a interface that represents a widget.
 			//! Every class derived from this class must be able to provide a QWidget that is representing it
-			class UICORE_API aWidget : public ak::ui::core::aPaintable {
+			class UICORE_API_EXPORT aWidget : public ak::ui::core::aPaintable {
 			public:
 
 				//! @brief Constructor

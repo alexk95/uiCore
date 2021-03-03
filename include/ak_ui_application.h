@@ -13,11 +13,12 @@
 
 // Qt header
 #include <qapplication.h>				// base class
+#include <ak_globalDataTypes.h>
 
 namespace ak {
 	namespace ui {
 
-		class application : public QApplication {
+		class UICORE_API_EXPORT application : public QApplication {
 		public:
 			application();
 			virtual ~application();

@@ -32,7 +32,7 @@ namespace ak {
 
 			//! This class is used to store the main information of any object used
 			//! Information contained is the UID and the reference counter
-			class UICORE_API aObject {
+			class UICORE_API_EXPORT aObject {
 			public:
 
 				//! @brief Constructor
@@ -80,6 +80,12 @@ namespace ak {
 					const QString &							_alias
 				);
 
+				//! @brief Will set this objects unique name
+				//! @param _name The name of this object
+				void setUniqueName(
+					const QString &							_name
+				) { my_uniqueName = _name; }
+
 				//! @brief Will set the parent object of this object
 				virtual void setParentObject(
 					aObject *								_parentObject
@@ -89,6 +95,9 @@ namespace ak {
 
 				//! @brief Will return the alias of this object
 				QString alias(void) const;
+
+				//! @brief Will return the unique name of this object
+				QString uniqueName(void) const { return my_uniqueName; }
 
 				//! @brief Will return a pointer to the parent object
 				aObject * parentObject(void) const;
@@ -149,6 +158,7 @@ namespace ak {
 				int									my_references;		//! The objects references
 				ak::ui::core::objectType			my_objectType;		//! The object type of this object
 				QString								my_alias;			//! The alias of this object
+				QString								my_uniqueName;
 				aObject *							my_parentObject;
 				aObject *							my_owner;
 				std::map<ak::UID, aObject *>		my_childObjects;

@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <ak_globalDataTypes.h>
+
 // C++ header
 #include <map>							// map
 
@@ -40,7 +42,7 @@ namespace ak {
 
 		//! @brief The objectManager is used for creating and manipulating objects and widgets
 		//! All objects created here a derived from ak::core::aObject or child
-		class objectManager {
+		class UICORE_API_EXPORT objectManager {
 		public:
 			//! @brief Constructor
 			//! @param _messenger The globally used messaging system
@@ -267,6 +269,12 @@ namespace ak {
 				ak::UID												_objectUid
 			);
 
+			//! @brief Will return the object with the specified object unique name
+			//! @param _objectUniqueName The unique name of the requested object
+			ui::core::aObject * object(
+				const QString &										_objectUniqueName
+			);
+
 			// ###############################################################################################################################################
 
 			// Special events
@@ -336,6 +344,16 @@ namespace ak {
 				ak::UID												_UID
 			);
 
+			//! @brief Will set the unique name for the specified object.
+			//! With the set name the object can be accessed later instead of the unique name.
+			//! Should the unique name be empty, the object will not be acessable trough the name anymore.
+			//! @param _objectUid The UID of the object
+			//! @param _uniqueName The unique name to set
+			void setObjectUniqueName(
+				ak::UID												_objectUid,
+				const QString &										_uniqueName
+			);
+
 			void removeAlias(
 				const QString &										_alias
 			);
@@ -374,19 +392,11 @@ namespace ak {
 			// Object storing
 
 			std::map<ak::UID, ak::ui::core::aObject *>		my_mapObjects;
-			typedef std::map<ak::UID,
-				ak::ui::core::aObject *>::iterator			my_mapObjectsIterator;
+			std::map<QString, ak::ui::core::aObject *>		my_mapUniqueNames;			//! Contains the UIDs for a specified unique name
 
-			std::map<ak::UID,
-				std::vector<ak::UID> *>						my_mapCreators;				//! Contains all creators
-			typedef std::map<ak::UID,
-				std::vector<ak::UID> *>::iterator			my_mapCreatorsIterator;		//! Iterator used to iterate trough the creators
-
+			std::map<ak::UID, std::vector<ak::UID> *>		my_mapCreators;				//! Contains all creators
 			std::map<QString, ak::UID>						my_mapAliases;				//! Contains the UIDs for a specified alias
-			typedef std::map<QString, ak::UID>::iterator	my_mapAliasesIterator;		//! Iterator used to iterate trough the aliases
-
 			std::map<ak::UID, ak::UID>						my_mapOwners;				//! Contains the UIDs of the owener of the objects
-			typedef std::map<ak::UID, ak::UID>::iterator	my_mapOwnersIterator;		//! Iterator used to iterate trough the owners
 
 			std::vector<ui::colorStyle *>					my_colorStyles;
 

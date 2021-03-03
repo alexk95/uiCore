@@ -137,7 +137,7 @@ namespace ak {
 		//! @param _uidManager The UID manager that will be used in the aplication, if nullptr a new one will be created
 		//! @param _iconManager The icon manager that will be used in the aplication, if nullptr a new one will be created
 		//! @param _objectManager The object manager that will be used in the aplication, if nullptr a new one will be created
-		UICORE_API void ini(
+		UICORE_API_EXPORT void ini(
 			ak::messenger *											_messenger = nullptr,
 			ak::uidManager *										_uidManager = nullptr,
 			ak::ui::iconManager *									_iconManager = nullptr,
@@ -145,68 +145,68 @@ namespace ak {
 		);
 
 		//! @brief Will destroy all objects created by this API
-		UICORE_API void destroy(void);
+		UICORE_API_EXPORT void destroy(void);
 
 		//! @brief Will enable the provided event types to be send
 		//! @param _types The types to allow
-		UICORE_API void enableEventTypes(
+		UICORE_API_EXPORT void enableEventTypes(
 			ak::core::eventType										_types
 		);
 
 		//! @brief Will disable the provided event types to be send
 		//! @param _types The types to disable
-		UICORE_API void disableEventTypes(
+		UICORE_API_EXPORT void disableEventTypes(
 			ak::core::eventType										_types
 		);
 
 		//! @brief Will set the enabled state of the messenger
 		//! @param _enabled The enabled state to set. If false, no messages will be sent
-		UICORE_API void setMessengerEnabled(
+		UICORE_API_EXPORT void setMessengerEnabled(
 			bool													_enabled
 		);
 
 		//! @brief Will return the current enabled state for the messenger
-		UICORE_API bool messengerIsEnabled(void);
+		UICORE_API_EXPORT bool messengerIsEnabled(void);
 
 		//! @brief Will return the enabled event types that will be send
-		UICORE_API std::vector<ak::core::eventType> enabledEventTypes(void);
+		UICORE_API_EXPORT std::vector<ak::core::eventType> enabledEventTypes(void);
 
 		//! @brief Will return the disabled event types that will be send
-		UICORE_API std::vector<ak::core::eventType> disabledEventTypes(void);
+		UICORE_API_EXPORT std::vector<ak::core::eventType> disabledEventTypes(void);
 
 		//! @brief Will create and return a JSON string representing the UI
-		UICORE_API std::string saveStateWindow(
+		UICORE_API_EXPORT std::string saveStateWindow(
 			const std::string &										_applicationVersion
 		);
 
 		//! @brief Will create and return a JSON string representing the currently set ColorStyle
-		UICORE_API std::string saveStateColorStyle(
+		UICORE_API_EXPORT std::string saveStateColorStyle(
 			const std::string &										_applicationVersion
 		);
 
 		//! @brief Will setup the UI with the settings provided in the settings JSON string
 		//! @param _json The JSON string containing the settings
-		UICORE_API ak::core::settingsRestoreErrorCode restoreStateWindow(
+		UICORE_API_EXPORT ak::core::settingsRestoreErrorCode restoreStateWindow(
 			const std::string &										_json,
 			const std::string &										_applicationVersion
 		);
 
 		//! @brief Will restore tthe color style from the settings JSON string
 		//! @param _json The JSON string containing the settings
-		UICORE_API ak::core::settingsRestoreErrorCode restoreStateColorStyle(
+		UICORE_API_EXPORT ak::core::settingsRestoreErrorCode restoreStateColorStyle(
 			const std::string &										_json,
 			const std::string &										_applicationVersion
 		);
 
 		//! @brief Will return the QWidget of the specifed object
 		//! @param _objectUid The UID of the object
-		UICORE_API QWidget * getWidget(
+		UICORE_API_EXPORT QWidget * getWidget(
 			ak::UID													_objectUid
 		);
 
 		//! @brief Will return the creator UID of the specified object
 		//! @param _objectUID The UID of the object to get its cretor from
-		UICORE_API ak::UID getObjectCreator(
+		UICORE_API_EXPORT ak::UID getObjectCreator(
 			ak::UID												_objectUID
 		);
 
@@ -220,7 +220,7 @@ namespace ak {
 		//! @param _senderUid The sender UID for which to register the provided notifier
 		//! @param _notifier The notifier which to register
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID registerUidNotifier(
+		UICORE_API_EXPORT ak::UID registerUidNotifier(
 			ak::UID													_senderUid,
 			ak::notifier *											_notifier
 		);
@@ -231,7 +231,7 @@ namespace ak {
 		//! @param _event The event type for which to register the provided notifier
 		//! @param _notifier The notifier which to register
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID registerEventTypeNotifier(
+		UICORE_API_EXPORT ak::UID registerEventTypeNotifier(
 			ak::core::eventType										_event,
 			ak::notifier *											_notifier
 		);
@@ -241,7 +241,7 @@ namespace ak {
 		//! Returns the UID of the notifier
 		//! @param _notifier The notifier which to register
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID registerAllMessagesNotifier(
+		UICORE_API_EXPORT ak::UID registerAllMessagesNotifier(
 			ak::notifier *											_notifier
 		);
 
@@ -253,7 +253,7 @@ namespace ak {
 		//! @param _info2 Additional information 2
 		//! @throw ak::Exception if the API is not initialized
 		//! @throw ak::Exception At any kind of error that may occur in any subroutine call when calling the receivers
-		UICORE_API void sendMessage(
+		UICORE_API_EXPORT void sendMessage(
 			ak::UID													_senderUid,
 			ak::core::eventType										_event,
 			int														_info1 = 0,
@@ -262,7 +262,7 @@ namespace ak {
 
 		//! @brief Will set the samples count for the default surface formt
 		//! @param _count The count of samples
-		UICORE_API void setSurfaceFormatDefaultSamplesCount(
+		UICORE_API_EXPORT void setSurfaceFormatDefaultSamplesCount(
 			int														_count
 		);
 
@@ -276,7 +276,7 @@ namespace ak {
 		//! @param _iconSize The size of the icon to display in the action (requires also the icon name to be provided)
 		//! @param _iconName The name of the icon to display in the action (requires also the icon size to be provided)
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID createAction(
+		UICORE_API_EXPORT ak::UID createAction(
 			ak::UID													_creatorUid,
 			const QString &											_text,
 			const QString &											_iconName,
@@ -288,7 +288,7 @@ namespace ak {
 		//! @param _text The text of the action
 		//! @param _icon The icon of the action
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID createAction(
+		UICORE_API_EXPORT ak::UID createAction(
 			ak::UID													_craetorUid,
 			const QString &											_text,
 			const QIcon &											_icon
@@ -299,7 +299,7 @@ namespace ak {
 		//! @param _text The initial text of the CheckBox
 		//! @param _checked The initial checked state of the checkbox
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID createCheckbox(
+		UICORE_API_EXPORT ak::UID createCheckbox(
 			ak::UID													_creatorUid,
 			const QString &											_text,
 			bool													_checked = false
@@ -313,7 +313,7 @@ namespace ak {
 		//! @param _a The Alpha-Channel value of the ColorEditButton color
 		//! @param _textOverride If provided the RGB-text representation of the provided color will be overwritten by the text provided
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID createColorEditButton(
+		UICORE_API_EXPORT ak::UID createColorEditButton(
 			ak::UID													_creatorUid,
 			int														_r,
 			int														_g,
@@ -327,7 +327,7 @@ namespace ak {
 		//! @param _color The color of the ColorEditButton
 		//! @param _textOverride If provided the RGB-text representation of the provided color will be overwritten by the text provided
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID createColorEditButton(
+		UICORE_API_EXPORT ak::UID createColorEditButton(
 			ak::UID													_creatorUid,
 			const ak::ui::color &									_color,
 			const QString &											_textOverride = QString("")
@@ -336,7 +336,7 @@ namespace ak {
 		//! @brief Will create a new ComboBox and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID createComboBox(
+		UICORE_API_EXPORT ak::UID createComboBox(
 			ak::UID													_creatorUid
 		);
 
@@ -345,7 +345,7 @@ namespace ak {
 		//! @param _text The initial text of the ComboButton
 		//! @param _possibleSelection The items the ComboButton will display when showing the drop-down menu
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID createComboButton(
+		UICORE_API_EXPORT ak::UID createComboButton(
 			ak::UID													_creatorUid,
 			const QString &											_text = QString(""),
 			const std::vector<QString> &							_possibleSelection = std::vector<QString>()
@@ -353,7 +353,7 @@ namespace ak {
 
 		//! @brief Will create a defaultWelcomeScreen and return its UID
 		//! @param _creatorUid The UID of the creator
-		UICORE_API ak::UID createWelcomeScreen(
+		UICORE_API_EXPORT ak::UID createWelcomeScreen(
 			ak::UID												_creatorUid
 		);
 
@@ -361,7 +361,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the Dock
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		UICORE_API ak::UID createDock(
+		UICORE_API_EXPORT ak::UID createDock(
 			ak::UID													_creatorUid,
 			const QString &											_text = QString("")
 		);
@@ -371,7 +371,7 @@ namespace ak {
 		//! @param _showSavePassword if true the save password checkbox will be displayed
 		//! @param _username The initial username
 		//! @param _password The initial password
-		UICORE_API ak::UID createLogInDialog(
+		UICORE_API_EXPORT ak::UID createLogInDialog(
 			ak::UID													_creatorUid,
 			bool													_showSavePassword,
 			const QString &											_imageName,
@@ -382,7 +382,7 @@ namespace ak {
 		//! @brief Will create a new PropertyGrid and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		UICORE_API ak::UID createPropertyGrid(
+		UICORE_API_EXPORT ak::UID createPropertyGrid(
 			ak::UID													_creatorUid
 		);
 
@@ -390,7 +390,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The initial text of the PushButton
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		UICORE_API ak::UID createPushButton(
+		UICORE_API_EXPORT ak::UID createPushButton(
 			ak::UID													_creatorUid,
 			const QString &											_text = QString("")
 		);
@@ -400,7 +400,7 @@ namespace ak {
 		//! @param _icon The icon of the PushButton
 		//! @param _text The initial text of the PushButton
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		UICORE_API ak::UID createPushButton(
+		UICORE_API_EXPORT ak::UID createPushButton(
 			ak::UID													_creatorUid,
 			const QIcon &											_icon,
 			const QString &											_text = QString("")
@@ -408,7 +408,7 @@ namespace ak {
 
 		//! @brief Will create a new options dialog and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
-		UICORE_API ak::UID createOptionsDialog(
+		UICORE_API_EXPORT ak::UID createOptionsDialog(
 			ak::UID													_creatorUid
 		);
 
@@ -417,7 +417,7 @@ namespace ak {
 		//! @param _rows The initial row count of the Table
 		//! @param _columns The initial column count of the Table
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		UICORE_API ak::UID createTable(
+		UICORE_API_EXPORT ak::UID createTable(
 			ak::UID													_creatorUid,
 			int														_rows,
 			int														_columns
@@ -428,7 +428,7 @@ namespace ak {
 		//! @param _parentUid The UID of the parent TabToolBar object (may be a uiManager, TabToolBarPage or TabToolBarGroup)
 		//! @param _text The text of the SubContainer
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		UICORE_API ak::UID createTabToolBarSubContainer(
+		UICORE_API_EXPORT ak::UID createTabToolBarSubContainer(
 			ak::UID													_creatorUid,
 			ak::UID													_parentUid,
 			const QString &											_text = QString("")
@@ -438,27 +438,27 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _initialText The initial text of the TextEdit
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		UICORE_API ak::UID createTextEdit(
+		UICORE_API_EXPORT ak::UID createTextEdit(
 			ak::UID													_creatorUid,
 			const QString &											_initialText = QString("")
 		);
 
 		//! @brief Will create a new timer and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
-		UICORE_API ak::UID createTimer(
+		UICORE_API_EXPORT ak::UID createTimer(
 			ak::UID													_creatorUid
 		);
 
 		//! @brief Will create a toolButton and return its UID
 		//! @param _creatorUid The UID of the creator
-		UICORE_API ak::UID createToolButton(
+		UICORE_API_EXPORT ak::UID createToolButton(
 			ak::UID													_creatorUid
 		);
 
 		//! @brief Will create a toolButton and return its UID
 		//! @param _creatorUid The UID of the creator
 		//! @param _text The initial text of the toolButton
-		UICORE_API ak::UID createToolButton(
+		UICORE_API_EXPORT ak::UID createToolButton(
 			ak::UID													_creatorUid,
 			const QString &											_text
 		);
@@ -467,7 +467,7 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator
 		//! @param _text The initial text of the toolButton
 		//! @param _icon The initial icon of the toolButton
-		UICORE_API ak::UID createToolButton(
+		UICORE_API_EXPORT ak::UID createToolButton(
 			ak::UID													_creatorUid,
 			const QString &											_text,
 			const QIcon &											_icon
@@ -478,7 +478,7 @@ namespace ak {
 		//! @param _text The initial text of the toolButton
 		//! @param _iconName The name of the initial icon for the toolButton
 		//! @param _iconFolder The folder of the initial icon for the toolButton
-		UICORE_API ak::UID createToolButton(
+		UICORE_API_EXPORT ak::UID createToolButton(
 			ak::UID													_creatorUid,
 			const QString &											_text,
 			const QString &											_iconName,
@@ -488,21 +488,21 @@ namespace ak {
 		//! @brief Will create a new Tree and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		UICORE_API ak::UID createTree(
+		UICORE_API_EXPORT ak::UID createTree(
 			ak::UID													_creatorUid
 		);
 
 		//! @brief Will create a new tab view and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		UICORE_API ak::UID createTabView(
+		UICORE_API_EXPORT ak::UID createTabView(
 			ak::UID													_creatorUid
 		);
 
 		//! @brief Will create a new UI manager and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the provided UID is invalid or the API is not initialized
-		UICORE_API ak::UID createWindow(
+		UICORE_API_EXPORT ak::UID createWindow(
 			ak::UID													_creatorUid
 		);
 
@@ -517,7 +517,7 @@ namespace ak {
 			//! @brief Will set the enabled state of the action
 			//! @param _actionUID The UID of the action
 			//! @param _enabled The enabled state to set
-			UICORE_API void setEnabled(
+			UICORE_API_EXPORT void setEnabled(
 				ak::UID												_actionUID,
 				bool												_enabled
 			);
@@ -525,7 +525,7 @@ namespace ak {
 			//! @brief Will set the text of the action
 			//! @param _actionUID The UID of the action
 			//! @param _text The text to set
-			UICORE_API void setText(
+			UICORE_API_EXPORT void setText(
 				ak::UID												_actionUID,
 				const QString &										_text
 			);
@@ -533,7 +533,7 @@ namespace ak {
 			//! @brief Will set the icon of the action
 			//! @param _actionUID The UID of the action
 			//! @param _icon The icon to set
-			UICORE_API void setIcon(
+			UICORE_API_EXPORT void setIcon(
 				ak::UID												_actionUID,
 				const QIcon &										_icon
 			);
@@ -542,7 +542,7 @@ namespace ak {
 			//! @param _actionUID The UID of the action
 			//! @param _iconName The name of the icon
 			//! @param _iconFolder The folder the icon is located at
-			UICORE_API void setIcon(
+			UICORE_API_EXPORT void setIcon(
 				ak::UID												_actionUID,
 				const QString &										_iconName,
 				const QString &										_iconFolder
@@ -550,7 +550,7 @@ namespace ak {
 
 			//! @brief Will return the text of the action
 			//! @param _actionUID The UID of the action
-			UICORE_API QString getText(
+			UICORE_API_EXPORT QString getText(
 				ak::UID												_actionUID
 			);
 
@@ -565,7 +565,7 @@ namespace ak {
 			//! @brief Will add an object to the specified container
 			//! @param _containerUID The UID of the container
 			//! @param _objectUID The UID of the object to add
-			UICORE_API void addObject(
+			UICORE_API_EXPORT void addObject(
 				ak::UID												_containerUID,
 				ak::UID												_objectUID
 			);
@@ -573,14 +573,14 @@ namespace ak {
 			//! @brief Will set the enabled state of the specified container
 			//! @param _containerUID The UID of the container
 			//! @param _isEnabled The enabled state to set
-			UICORE_API void setEnabled(
+			UICORE_API_EXPORT void setEnabled(
 				ak::UID												_containerUID,
 				bool												_isEnabled = true
 			);
 
 			//! @brief Will return the enabled state of the specified container
 			//! @param _containerUID The UID of the container
-			UICORE_API bool isEnabled(
+			UICORE_API_EXPORT bool isEnabled(
 				ak::UID												_containerUID
 			);
 		}
@@ -595,7 +595,7 @@ namespace ak {
 			//! @param _textEditUID The UID of the text edit
 			//! @param _text The text of the new item
 			//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID							_textEditUID,
 				const QString &					_text,
 				ui::core::contextMenuRole		_role = ui::core::contextMenuRole::crNone
@@ -606,7 +606,7 @@ namespace ak {
 			//! @param _icon The icon of the new item
 			//! @param _text The text of the new item
 			//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID							_textEditUID,
 				const QIcon &					_icon,
 				const QString &					_text,
@@ -618,7 +618,7 @@ namespace ak {
 			//! @param _icon The icon of the new item
 			//! @param _text The text of the new item
 			//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID							_textEditUID,
 				const QString &					_text,
 				const QString &					_iconName,
@@ -628,15 +628,26 @@ namespace ak {
 
 			//! @brief Will add a sperator at the context menu of the textEdit
 			//! @param _textEditUID The UID of the text edit
-			UICORE_API void addSeparator(
+			UICORE_API_EXPORT void addSeparator(
 				ak::UID							_textEditUID
 			);
 
 			//! @brief Will remove all context menu items from the context menu
 			//! @param _textEditUID The UID of the text edit
-			UICORE_API void clear(
+			UICORE_API_EXPORT void clear(
 				ak::UID							_textEditUID
 			);
+
+		}
+
+		// ###############################################################################################################################################
+
+		// Dialog
+
+		namespace dialog {
+
+			//! @brief Will show an open directory dialog and return the selected directory
+			UICORE_API_EXPORT QString openDirectory(const QString & _title, const QString & _initialDir);
 
 		}
 
@@ -649,7 +660,7 @@ namespace ak {
 			//! @brief Will set the widget as central widget of the dock
 			//! @param _dockUID The UID of the dock
 			//! @param _widgetUID The UID of the widget to set as central widget
-			UICORE_API void setCentralWidget(
+			UICORE_API_EXPORT void setCentralWidget(
 				ak::UID												_dockUID,
 				ak::UID												_widgetUID
 			);
@@ -657,7 +668,7 @@ namespace ak {
 			//! @brief Will set the provided widget as central widget of the dock
 			//! @param _dockUID The UID of the dock
 			//! @param _widget The widget to set as central widget
-			UICORE_API void setCentralWidget(
+			UICORE_API_EXPORT void setCentralWidget(
 				ak::UID												_dockUID,
 				QWidget *											_widget
 			);
@@ -665,13 +676,13 @@ namespace ak {
 			//! @brief Will set the visible state of the specified dock
 			//! @param _dockUID The UID of the dock
 			//! @param _visible The visible state to set
-			UICORE_API void setVisible(
+			UICORE_API_EXPORT void setVisible(
 				ak::UID												_dockUID,
 				bool												_visible = true
 			);
 
 			//! @brief Will return the currently set visible state of the 
-			UICORE_API bool isVisible(
+			UICORE_API_EXPORT bool isVisible(
 				ak::UID												_dockUID
 			);
 
@@ -686,14 +697,14 @@ namespace ak {
 			// File setter
 
 			//! @brief Will load informations from the specifiied file
-			UICORE_API ak::UID load(
+			UICORE_API_EXPORT ak::UID load(
 				const QString &										_filePath
 			);
 
 			//! @brief Will load informations from the specified file
 			//! @param _fileUid The UID of the file
 			//! @param _filePath If provided this path will be set as current file path
-			UICORE_API void load(
+			UICORE_API_EXPORT void load(
 				ak::UID												_fileUid,
 				const QString &										_filePath = QString("")
 			);
@@ -701,7 +712,7 @@ namespace ak {
 			//! @brief Will save the current set lines to the current set file path
 			//! @param _fileUid The UID of the file
 			//! @param _append If true, the file will be opened on append mode
-			UICORE_API void save(
+			UICORE_API_EXPORT void save(
 				ak::UID												_fileUid,
 				bool												_append = false
 			);
@@ -710,7 +721,7 @@ namespace ak {
 			//! @param _fileUid The UID of the file
 			//! @param _filePath The fule path to set as current file
 			//! @param _append If true, the file will be opened on append mode
-			UICORE_API void save(
+			UICORE_API_EXPORT void save(
 				ak::UID												_fileUid,
 				const QString &										_filePath,
 				bool												_append = false
@@ -719,7 +730,7 @@ namespace ak {
 			//! @brief Will set the current path for the file
 			//! @param _fileUid The UID of the file
 			//! @param _path The file path to set
-			UICORE_API void setPath(
+			UICORE_API_EXPORT void setPath(
 				ak::UID												_fileUid,
 				const QString &										_path
 			);
@@ -727,7 +738,7 @@ namespace ak {
 			//! @brief Will set the current lines for the file
 			//! @param _fileUid The UID of the file
 			//! @param _lines The lines to set
-			UICORE_API void setLines(
+			UICORE_API_EXPORT void setLines(
 				ak::UID												_fileUid,
 				const QStringList &									_lines
 			);
@@ -735,7 +746,7 @@ namespace ak {
 			//! @brief Will append the provided line to the current lines
 			//! @param _fileUid The UID of the file
 			//! @param _line The line to add
-			UICORE_API void addLine(
+			UICORE_API_EXPORT void addLine(
 				ak::UID												_fileUid,
 				const QString &										_line
 			);
@@ -743,7 +754,7 @@ namespace ak {
 			//! @brief Will append the provided lines to the current lines
 			//! @param _fileUid The UID of the file
 			//! @param _lines The lines to add
-			UICORE_API void addLine(
+			UICORE_API_EXPORT void addLine(
 				ak::UID												_fileUid,
 				const QStringList &									_lines
 			);
@@ -754,37 +765,37 @@ namespace ak {
 
 			//! @brief Will return the files name
 			//! @param _fileUid The UID of the file
-			UICORE_API QString name(
+			UICORE_API_EXPORT QString name(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return the files path
 			//! @param _fileUid The UID of the file
-			UICORE_API QString path(
+			UICORE_API_EXPORT QString path(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return the files extension
 			//! @param _fileUid The UID of the file
-			UICORE_API QString extension(
+			UICORE_API_EXPORT QString extension(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return the lines in this file
 			//! @param _fileUid The UID of the file
-			UICORE_API QStringList lines(
+			UICORE_API_EXPORT QStringList lines(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return the count of the lines in this file
 			//! @param _fileUid The UID of the file
-			UICORE_API int linesCount(
+			UICORE_API_EXPORT int linesCount(
 				ak::UID												_fileUid
 			);
 
 			//! @brief Will return true if the file has changed after it was loaded or saved the last time
 			//! @param _fileUid The UID of the file
-			UICORE_API bool hasChanged(
+			UICORE_API_EXPORT bool hasChanged(
 				ak::UID												_fileUid
 			);
 
@@ -796,54 +807,54 @@ namespace ak {
 
 		namespace logInDialog {
 
-			UICORE_API ui::core::dialogResult showDialog(
+			UICORE_API_EXPORT ui::core::dialogResult showDialog(
 				ak::UID												_dialogUID
 			);
 
-			UICORE_API void close(
+			UICORE_API_EXPORT void close(
 				ak::UID												_dialogUID,
 				ui::core::dialogResult								_result = ui::core::dialogResult::resultNone
 			);
 
-			UICORE_API QString getUsername(
+			UICORE_API_EXPORT QString getUsername(
 				ak::UID												_dialogUID
 			);
 
-			UICORE_API QString getPassword(
+			UICORE_API_EXPORT QString getPassword(
 				ak::UID												_dialogUID
 			);
 
-			UICORE_API bool getSavePassword(
+			UICORE_API_EXPORT bool getSavePassword(
 				ak::UID												_dialogUID
 			);
 
 			//! @brief Will display a invalid log in popup message at this dialogs username input
 			//! @param _text The text to set as a tooltip
-			UICORE_API void showToolTipAtUsername(
+			UICORE_API_EXPORT void showToolTipAtUsername(
 				ak::UID												_dialogUID,
 				const QString &										_text
 			);
 
 			//! @brief Will display a invalid log in popup message at this dialogs password input
 			//! @param _text The text to set as a tooltip
-			UICORE_API void showToolTipAtPassword(
+			UICORE_API_EXPORT void showToolTipAtPassword(
 				ak::UID												_dialogUID,
 				const QString &										_text
 			);
 
-			UICORE_API void showToolTipAtCustomField(
+			UICORE_API_EXPORT void showToolTipAtCustomField(
 				ak::UID												_dialogUID,
 				ak::ID												_inputID,
 				const QString &										_text
 			);
 
-			UICORE_API ak::ID addCustomInputField(
+			UICORE_API_EXPORT ak::ID addCustomInputField(
 				ak::UID												_dialogUID,
 				const QString &										_labelText,
 				const QString &										_inputFieldInitialText = QString("")
 			);
 
-			UICORE_API QString getCustomFieldText(
+			UICORE_API_EXPORT QString getCustomFieldText(
 				ak::UID												_dialogUID,
 				ak::ID												_fieldID
 			);
@@ -859,14 +870,30 @@ namespace ak {
 			//! @brief Will destroy the specifed object
 			//! @param _objectUID The UID of the object to destroy
 			//! @param _ignoreIfObjectHasChildObjects If true, will not destroy the specified object if it still has child objects
-			UICORE_API void destroy(
+			UICORE_API_EXPORT void destroy(
 				ak::UID												_objectUID,
 				bool												_ignoreIfObjectHasChildObjects = false
 			);
 
-			UICORE_API void setAlias(
+			UICORE_API_EXPORT void setAlias(
 				ak::UID												_objectUID,
 				const QString &										_alias
+			);
+
+			//! @brief Will set an object name to the specified object so it can be accessed later.
+			//! The name must be unique!
+			//! @param _objectUID The UID of the object to set the name at
+			//! @param _name The name to set
+			UICORE_API_EXPORT void setObjectUniqueName(
+				ak::UID												_objectUID,
+				const QString &										_name
+			);
+
+			//! @brief Will return the UID of the object with the specified name
+			//! Will return ak::invalidUID if there is no object with the specified name
+			//! @param _name The name of the object
+			UICORE_API_EXPORT ak::UID getUidFromObjectUniqueName(
+				const QString &										_name
 			);
 
 		}
@@ -877,13 +904,13 @@ namespace ak {
 
 		namespace promptDialog {
 
-			UICORE_API ak::ui::core::dialogResult show(
+			UICORE_API_EXPORT ak::ui::core::dialogResult show(
 				const QString &				_message,
 				const QString &				_title,
 				ak::ui::core::promptType	_type
 			);
 
-			UICORE_API ak::ui::core::dialogResult show(
+			UICORE_API_EXPORT ak::ui::core::dialogResult show(
 				const QString &				_message,
 				const QString &				_title
 			);
@@ -896,46 +923,46 @@ namespace ak {
 
 		namespace propertyGrid {
 
-			UICORE_API void addGroup(
+			UICORE_API_EXPORT void addGroup(
 				ak::UID											_propertyGridUID,
 				const QString &									_groupName
 			);
 
-			UICORE_API void addGroup(
+			UICORE_API_EXPORT void addGroup(
 				ak::UID											_propertyGridUID,
 				const QColor &									_color,
 				const QString &									_groupName
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_itemName,
 				bool											_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_itemName,
 				const ui::color &								_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_itemName,
 				double											_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_itemName,
 				int												_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_itemName,
@@ -943,21 +970,21 @@ namespace ak {
 				const QString &									_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_itemName,
 				const char *									_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_itemName,
 				const QString &									_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_groupName,
@@ -965,7 +992,7 @@ namespace ak {
 				bool											_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_groupName,
@@ -973,7 +1000,7 @@ namespace ak {
 				const ui::color &								_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_groupName,
@@ -981,7 +1008,7 @@ namespace ak {
 				double											_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_groupName,
@@ -989,7 +1016,7 @@ namespace ak {
 				int												_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_groupName,
@@ -998,7 +1025,7 @@ namespace ak {
 				const QString &									_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_groupName,
@@ -1006,7 +1033,7 @@ namespace ak {
 				const char *									_value
 			);
 
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID											_propertyGridUID,
 				bool											_isMultipleValues,
 				const QString &									_groupName,
@@ -1014,88 +1041,126 @@ namespace ak {
 				const QString &									_value
 			);
 
-			UICORE_API void clear(
+			UICORE_API_EXPORT void clear(
 				ak::UID											_propertyGridUID
 			);
 
-			UICORE_API bool getItemIsReadOnly(
+			UICORE_API_EXPORT bool getItemIsReadOnly(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API QString getItemGroup(
+			UICORE_API_EXPORT QString getItemGroup(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API bool getItemIsMultipleValues(
+			UICORE_API_EXPORT bool getItemIsMultipleValues(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API QString getItemName(
+			UICORE_API_EXPORT QString getItemName(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API std::vector<QString> getItemPossibleSelection(
+			UICORE_API_EXPORT std::vector<QString> getItemPossibleSelection(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API bool getItemValueBool(
+			UICORE_API_EXPORT bool getItemValueBool(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API ui::color getItemValueColor(
+			UICORE_API_EXPORT ui::color getItemValueColor(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API double getItemValueDouble(
+			UICORE_API_EXPORT double getItemValueDouble(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API int getItemValueInteger(
+			UICORE_API_EXPORT int getItemValueInteger(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API QString getItemValueSelection(
+			UICORE_API_EXPORT QString getItemValueSelection(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 			
-			UICORE_API QString getItemValueString(
+			UICORE_API_EXPORT QString getItemValueString(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API ak::core::valueType getItemValueType(
+			UICORE_API_EXPORT ak::core::valueType getItemValueType(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID
 			);
 
-			UICORE_API void setItemIsReadOnly(
+			UICORE_API_EXPORT void setItemIsReadOnly(
 				ak::UID											_propertyGridUID,
 				ak::ID											_itemID,
 				bool											_readOnly = true
 			);
 
-			UICORE_API void setGroupStateIcons(
+			UICORE_API_EXPORT void setGroupStateIcons(
 				ak::UID											_propertyGridUID,
 				const QIcon &									_groupExpanded,
 				const QIcon &									_groupCollapsed
 			);
 
-			UICORE_API void setGroupStateIcons(
+			UICORE_API_EXPORT void setGroupStateIcons(
 				ak::UID											_propertyGridUID,
 				const QString &									_groupExpandedIconName,
 				const QString &									_groupExpandedIconSize,
 				const QString &									_groupCollapsedIconName,
 				const QString &									_groupCollapsedIconSize
+			);
+
+			//! @brief Will set the provided value to the specified item
+			//! @param _propertyGridUID The UID of the property grid
+			//! @param _itemID The ID of the item
+			//! @param _valueToReset The value to set to the item
+			UICORE_API_EXPORT void resetItemAsError(
+				ak::UID											_propertyGridUID,
+				ak::ID											_itemID,
+				const QString &									_valueToReset
+			);
+
+			//! @brief Will set the provided value to the specified item
+			//! @param _propertyGridUID The UID of the property grid
+			//! @param _itemID The ID of the item
+			//! @param _valueToReset The value to set to the item
+			UICORE_API_EXPORT void resetItemAsError(
+				ak::UID											_propertyGridUID,
+				ak::ID											_itemID,
+				int												_valueToReset
+			);
+
+			//! @brief Will set the provided value to the specified item
+			//! @param _propertyGridUID The UID of the property grid
+			//! @param _itemID The ID of the item
+			//! @param _valueToReset The value to set to the item
+			UICORE_API_EXPORT void resetItemAsError(
+				ak::UID											_propertyGridUID,
+				ak::ID											_itemID,
+				double											_valueToReset
+			);
+
+			//! @brief Will show the specified item as an error
+			//! @param _propertyGridUID The UID of the property grid
+			//! @param _itemID The item to set as error
+			UICORE_API_EXPORT void showItemAsError(
+				ak::UID											_propertyGridUID,
+				ak::ID											_itemID
 			);
 
 		}
@@ -1106,13 +1171,13 @@ namespace ak {
 
 		namespace tabView {
 
-			UICORE_API ak::ID addTab(
+			UICORE_API_EXPORT ak::ID addTab(
 				ak::UID				_tabViewUID,
 				ak::UID				_widgetUID,
 				const QString &		_title
 			);
 
-			UICORE_API ak::ID addTab(
+			UICORE_API_EXPORT ak::ID addTab(
 				ak::UID				_tabViewUID,
 				ak::UID				_widgetUID,
 				const QString &		_title,
@@ -1120,20 +1185,20 @@ namespace ak {
 				const QString &		_iconFolder
 			);
 
-			UICORE_API ak::ID addTab(
+			UICORE_API_EXPORT ak::ID addTab(
 				ak::UID				_tabViewUID,
 				ak::UID				_widgetUID,
 				const QString &		_title,
 				const QIcon &		_icon
 			);
 
-			UICORE_API ak::ID addTab(
+			UICORE_API_EXPORT ak::ID addTab(
 				ak::UID				_tabViewUID,
 				QWidget *			_widget,
 				const QString &		_title
 			);
 
-			UICORE_API ak::ID addTab(
+			UICORE_API_EXPORT ak::ID addTab(
 				ak::UID				_tabViewUID,
 				QWidget *			_widget,
 				const QString &		_title,
@@ -1141,7 +1206,7 @@ namespace ak {
 				const QString &		_iconFolder
 			);
 
-			UICORE_API ak::ID addTab(
+			UICORE_API_EXPORT ak::ID addTab(
 				ak::UID				_tabViewUID,
 				QWidget *			_widget,
 				const QString &		_title,
@@ -1149,56 +1214,66 @@ namespace ak {
 			);
 
 			//! @brief Will close all tabs of the specified tabView
-			UICORE_API void closeAllTabs(
+			UICORE_API_EXPORT void closeAllTabs(
 				ak::UID				_tabViewUID
 			);
 
-			UICORE_API void closeTab(
+			UICORE_API_EXPORT void closeTab(
 				ak::UID				_tabViewUID,
 				ak::ID				_tabID
 			);
 
-			UICORE_API ak::ID getFocusedTab(
+			UICORE_API_EXPORT ak::ID getFocusedTab(
 				ak::UID				_tabViewUID
 			);
 
-			UICORE_API bool getTabsCloseable(
+			UICORE_API_EXPORT bool getTabsCloseable(
 				ak::UID				_tabViewUID
 			);
 
-			UICORE_API QString getTabText(
+			UICORE_API_EXPORT QString getTabText(
 				ak::UID				_tabViewUID,
 				ak::ID				_tabID
 			);
 
-			UICORE_API void setEnabled(
+			UICORE_API_EXPORT void setEnabled(
 				ak::UID				_tabViewUID,
 				bool				_enabled
 			);
 
-			UICORE_API void setTabbarLocation(
+			UICORE_API_EXPORT void setTabbarLocation(
 				ak::UID								_tabViewUID,
 				ak::ui::core::tabLocation			_location
 			);
 
-			UICORE_API void setTabFocused(
+			UICORE_API_EXPORT void setTabFocused(
 				ak::UID				_tabViewUID,
 				ak::ID				_tabID
 			);
 
 			//! @brief Will set the closeabled state for the tabs in this tabView
 			//! @param _closeable If true the tabs can be closed by the user
-			UICORE_API void setTabsCloseable(
+			UICORE_API_EXPORT void setTabsCloseable(
 				ak::UID								_tabViewUID,
 				bool								_closeable
 			);
 
-			UICORE_API void setVisible(
+			//! @brief Will set the text of the specified tab
+			//! @param _tabViewUID The UID of the tab view
+			//! @param _tab The tab to set the text at
+			//! @param _text The text to set
+			UICORE_API_EXPORT void setTabText(
+				ak::UID								_tabViewUID,
+				ak::ID								_tab,
+				const QString &						_text
+			);
+
+			UICORE_API_EXPORT void setVisible(
 				ak::UID				_tabViewUID,
 				bool				_visible
 			);
 
-			UICORE_API void setObjectName(
+			UICORE_API_EXPORT void setObjectName(
 				ak::UID							_tabViewUID,
 				const QString &					_name
 			);
@@ -1211,26 +1286,26 @@ namespace ak {
 
 		namespace textEdit {
 
-			UICORE_API void appendText(
+			UICORE_API_EXPORT void appendText(
 				ak::UID				_textEditUID,
 				const QString &		_text
 			);
 
-			UICORE_API void clear(
+			UICORE_API_EXPORT void clear(
 				ak::UID				_textEditUID
 			);
 
-			UICORE_API void setAutoScrollToBottomEnabled(
+			UICORE_API_EXPORT void setAutoScrollToBottomEnabled(
 				ak::UID				_textEditUID,
 				bool				_enabled = true
 			);
 
-			UICORE_API void setReadOnly(
+			UICORE_API_EXPORT void setReadOnly(
 				ak::UID				_textEditUID,
 				bool				_readOnly = true
 			);
 
-			UICORE_API void setText(
+			UICORE_API_EXPORT void setText(
 				ak::UID				_textEditUID,
 				const QString &		_text
 			);
@@ -1243,34 +1318,34 @@ namespace ak {
 
 		namespace timer {
 
-			UICORE_API int getInterval(
+			UICORE_API_EXPORT int getInterval(
 				ak::UID							_timerUID
 			);
 
-			UICORE_API void setInterval(
+			UICORE_API_EXPORT void setInterval(
 				ak::UID							_timerUID,
 				int								_interval
 			);
 
-			UICORE_API void shoot(
+			UICORE_API_EXPORT void shoot(
 				ak::UID							_timerUID
 			);
 
-			UICORE_API void shoot(
+			UICORE_API_EXPORT void shoot(
 				ak::UID							_timerUID,
 				int								_interval
 			);
 
-			UICORE_API void start(
+			UICORE_API_EXPORT void start(
 				ak::UID							_timerUID
 			);
 
-			UICORE_API void start(
+			UICORE_API_EXPORT void start(
 				ak::UID							_timerUID,
 				int								_interval
 			);
 
-			UICORE_API void stop(
+			UICORE_API_EXPORT void stop(
 				ak::UID							_timerUID
 			);
 
@@ -1283,26 +1358,26 @@ namespace ak {
 		namespace toolButton {
 
 			//! @brief Will return the current enabled state of the toolButton
-			UICORE_API bool getIsEnabled(
+			UICORE_API_EXPORT bool getIsEnabled(
 				ak::UID							_toolButtonUID
 			);
 
 			//! @brief Will get the text of the toolButton
 			//! @param _toolButtonUID The UID of the tool button
-			UICORE_API QString getText(
+			UICORE_API_EXPORT QString getText(
 				ak::UID							_toolButtonUID
 			);
 
 			//! @brief Will get the current ToolTip of the toolButton
 			//! @param _toolButtonUID The UID of the tool button
-			UICORE_API QString getToolTip(
+			UICORE_API_EXPORT QString getToolTip(
 				ak::UID							_toolButtonUID
 			);
 
 			//! @brief Will set the enabled state of the toolButton
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _enabled If true, the toolButton will be enabled
-			UICORE_API void setEnabled(
+			UICORE_API_EXPORT void setEnabled(
 				ak::UID							_toolButtonUID,
 				bool							_enabled = true
 			);
@@ -1310,7 +1385,7 @@ namespace ak {
 			//! @brief Will set the text of the toolButton
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _text The text to set
-			UICORE_API void setText(
+			UICORE_API_EXPORT void setText(
 				ak::UID							_toolButtonUID,
 				const QString &					_text
 			);
@@ -1318,7 +1393,7 @@ namespace ak {
 			//! @brief Will set the ToolTip of the toolButton
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _text The text to set
-			UICORE_API void setToolTip(
+			UICORE_API_EXPORT void setToolTip(
 				ak::UID							_toolButtonUID,
 				const QString &					_text
 			);
@@ -1326,7 +1401,7 @@ namespace ak {
 			//! @brief Will set the icon of the toolButton
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _icon The icon to set
-			UICORE_API void setIcon(
+			UICORE_API_EXPORT void setIcon(
 				ak::UID							_toolButtonUID,
 				const QIcon &					_icon
 			);
@@ -1335,7 +1410,7 @@ namespace ak {
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _iconName The name of the icon to set
 			//! @param _iconFolder The folder of the icon to set
-			UICORE_API void setIcon(
+			UICORE_API_EXPORT void setIcon(
 				ak::UID							_toolButtonUID,
 				const QString &					_iconName,
 				const QString &					_iconFolder
@@ -1344,7 +1419,7 @@ namespace ak {
 			//! @brief Will add a new menu item to the menu
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _text The text of the new item
-			UICORE_API ak::ID addMenuItem(
+			UICORE_API_EXPORT ak::ID addMenuItem(
 				ak::UID							_toolButtonUID,
 				const QString &					_text
 			);
@@ -1352,7 +1427,7 @@ namespace ak {
 			//! @brief Will add a new menu item to the menu
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _text The text of the new item
-			UICORE_API ak::ID addMenuItem(
+			UICORE_API_EXPORT ak::ID addMenuItem(
 				ak::UID							_toolButtonUID,
 				const QIcon &					_icon,
 				const QString &					_text
@@ -1361,7 +1436,7 @@ namespace ak {
 			//! @brief Will add a new menu item to the menu
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _text The text of the new item
-			UICORE_API ak::ID addMenuItem(
+			UICORE_API_EXPORT ak::ID addMenuItem(
 				ak::UID							_toolButtonUID,
 				const QString &					_text,
 				const QString &					_iconName,
@@ -1370,13 +1445,13 @@ namespace ak {
 
 			//! @brief Will add a menu seperator to the menu
 			//! @param _toolButtonUID The UID of the tool button
-			UICORE_API void addMenuSeperator(
+			UICORE_API_EXPORT void addMenuSeperator(
 				ak::UID							_toolButtonUID
 			);
 
 			//! @brief Will clear the menu
 			//! @param _toolButtonUID The UID of the tool button
-			UICORE_API void clearMenu(
+			UICORE_API_EXPORT void clearMenu(
 				ak::UID							_toolButtonUID
 			);
 
@@ -1384,7 +1459,7 @@ namespace ak {
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _itemID The ID of the item
 			//! @param _checked The checked state to set
-			UICORE_API void setMenuItemChecked(
+			UICORE_API_EXPORT void setMenuItemChecked(
 				ak::UID							_toolButtonUID,
 				ak::ID							_itemID,
 				bool							_checked = true
@@ -1393,14 +1468,14 @@ namespace ak {
 			//! @brief Will disable the ability to check and uncheck the item (can be reenabled with setChecked)
 			//! @param _toolButtonUID The UID of the tool button
 			//! @param _itemID The ID of the item
-			UICORE_API void setMenuItemNotCheckable(
+			UICORE_API_EXPORT void setMenuItemNotCheckable(
 				ak::UID							_toolButtonUID,
 				ak::ID							_itemID
 			);
 
 			//! @brief Will return the text of the specified menu item
 			//! @param _itemID The ID of the menu item
-			UICORE_API QString getMenuItemText(
+			UICORE_API_EXPORT QString getMenuItemText(
 				ak::UID							_toolButtonUID,
 				ak::ID							_itemID
 			);
@@ -1418,7 +1493,7 @@ namespace ak {
 			//! @param _text The text of the item
 			//! @param _parentUid The ID of the parent item. If ID is -1, the item will be added as top level item
 			//! @param _textAlignment The text alignment
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID							_treeUID,
 				const QString &					_text,
 				ak::ID							_parentId = -1,
@@ -1431,7 +1506,7 @@ namespace ak {
 			//! @param _parentUid The ID of the parent item. If ID is -1, the item will be added as top level item
 			//! @param _textAlignment The text alignment
 			//! @param _icon The icon for the item
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID							_treeUID,
 				const QString &					_text,
 				const QString &					_iconName,
@@ -1455,7 +1530,7 @@ namespace ak {
 			//! @param _itemPath The item path
 			//! @param _delimiter The delimiter used in the command which seperates the items
 			//! @param _textAlignment The text alignment
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID							_treeUID,
 				const QString &					_itemPath,
 				char							_delimiter,
@@ -1477,7 +1552,7 @@ namespace ak {
 			//! @param _cmd The item path
 			//! @param _delimiter The delimiter used in the command which seperates the items
 			//! @param _textAlignment The text alignment
-			UICORE_API ak::ID addItem(
+			UICORE_API_EXPORT ak::ID addItem(
 				ak::UID							_treeUID,
 				const QString &					_itemPath,
 				char							_delimiter,
@@ -1486,141 +1561,171 @@ namespace ak {
 				ak::ui::core::textAlignment		_textAlignment = ak::ui::core::textAlignment::align_alignLeft
 			);
 
-			UICORE_API void clear(
+			UICORE_API_EXPORT void clear(
 				ak::UID							_treeUID
 			);
 
-			UICORE_API void collapseAllItems(
+			UICORE_API_EXPORT void collapseAllItems(
 				ak::UID							_treeUID
 			);
 
-			UICORE_API void deleteItem(
+			UICORE_API_EXPORT void deleteItem(
 				ak::UID							_treeUID,
 				ak::ID							_itemID
 			);
 
-			UICORE_API void deleteItems(
+			UICORE_API_EXPORT void deleteItems(
 				ak::UID							_treeUID,
 				const std::vector<ak::ID> &		_itemIDs
 			);
 
-			UICORE_API void deselectAllItems(
+			//! @brief Will set the items are editable flag
+			//! @param _editable If true, the items can be modified by the user
+			//! @param _applyToAll If true, then the new state will be applied to all existing items, otherwise this chane will only affect items created after this point
+			UICORE_API_EXPORT void setItemsAreEditable(
+				ak::UID							_treeUID,
+				bool							_editable = true,
+				bool							_applyToAll = true
+			);
+
+			//! @brief Will set the editable flag of one item
+			//! @param _item The item id
+			//! @param _editable If true, the item can be modified by the user
+			UICORE_API_EXPORT void setItemIsEditable(
+				ak::UID							_treeUID,
+				ak::ID							_itemID,
+				bool							_editable = true
+			);
+
+			//! @brief Will set the editable flag of the provided items item
+			//! @param _item The item id
+			//! @param _editable If true, the item can be modified by the user
+			UICORE_API_EXPORT void setItemIsEditable(
+				ak::UID							_treeUID,
+				const std::vector<ak::ID> &		_itemIDs,
+				bool							_editable = true
+			);
+
+			UICORE_API_EXPORT void deselectAllItems(
 				ak::UID							_treeUID,
 				bool							_sendSelectionChangedEvent = true
 			);
 
-			UICORE_API void expandAllItems(
+			UICORE_API_EXPORT void expandAllItems(
 				ak::UID							_treeUID
 			);
 
-			UICORE_API ak::ID getItemID(
+			UICORE_API_EXPORT ak::ID getItemID(
 				ak::UID							_treeUID,
 				const QString &					_itemPath,
 				char							_delimiter
 			);
 
-			UICORE_API std::vector<QString> getItemPath(
+			UICORE_API_EXPORT std::vector<QString> getItemPath(
 				ak::UID							_treeUID,
 				ak::ID							_itemID
 			);
 
-			UICORE_API QString getItemPathString(
+			UICORE_API_EXPORT QString getItemPathString(
 				ak::UID							_treeUID,
 				ak::ID							_itemID,
 				char							_delimiter = '|'
 			);
 
-			UICORE_API QString getItemText(
+			UICORE_API_EXPORT QString getItemText(
 				ak::UID							_treeUID,
 				ak::ID							_itemID
 			);
 
-			UICORE_API bool isEnabled(
+			UICORE_API_EXPORT bool isEnabled(
 				ak::UID							_treeUID
 			);
 
-			UICORE_API int itemCount(
+			UICORE_API_EXPORT int itemCount(
 				ak::UID							_treeUID
 			);
 
-			UICORE_API std::vector<ak::ID> selectedItems(
+			UICORE_API_EXPORT std::vector<ak::ID> selectedItems(
 				ak::UID							_treeUID
 			);
 
-			UICORE_API void setAutoSelectAndDeselectChildrenEnabled(
+			UICORE_API_EXPORT void setAutoSelectAndDeselectChildrenEnabled(
 				ak::UID							_treeUID,
 				bool							_enabled = true
 			);
 
-			UICORE_API void setEnabled(
+			UICORE_API_EXPORT void setEnabled(
 				ak::UID							_treeUID,
 				bool							_enabled = true
 			);
 
-			UICORE_API void setFilterCaseSensitiveEnabled(
+			UICORE_API_EXPORT void setFilterCaseSensitiveEnabled(
 				ak::UID							_treeUID,
 				bool							_caseSensitiveEnabled = true
 			);
 
-			UICORE_API void setFilterRefreshOnChangeEnabled(
+			UICORE_API_EXPORT void setFilterRefreshOnChangeEnabled(
 				ak::UID							_treeUID,
 				bool							_refreshOnChangeEnabled
 			);
 
-			UICORE_API void setFilterVisible(
+			UICORE_API_EXPORT void setFilterVisible(
 				ak::UID							_treeUID,
 				bool							_visible = true
 			);
 		
-			UICORE_API void setItemIcon(
+			UICORE_API_EXPORT void setItemIcon(
 				ak::UID							_treeUID,
 				ak::ID							_itemID,
 				const QIcon &					_icon
 			);
 
-			UICORE_API void setItemIcon(
+			UICORE_API_EXPORT void setItemIcon(
 				ak::UID							_treeUID,
 				ak::ID							_itemID,
 				const QString &					_iconName,
 				const QString &					_iconFolder
 			);
 
-			UICORE_API void setItemEnabled(
+			UICORE_API_EXPORT void setItemEnabled(
 				ak::UID							_treeUID,
 				ak::ID							_itemID,
 				bool							_enabled = true
 			);
 
-			UICORE_API void setItemSelected(
+			UICORE_API_EXPORT void setItemSelected(
 				ak::UID							_treeUID,
 				ak::ID							_itemID,
 				bool							_selected = true,
 				bool							_singleSelection = false
 			);
 
-			UICORE_API void setItemText(
-				ak::UID							_treeUID,
-				ak::ID							_itemID,
-				const QString &					_text
-			);
-
-			UICORE_API void setItemVisible(
+			UICORE_API_EXPORT void setItemVisible(
 				ak::UID							_treeUID,
 				ak::ID							_itemID,
 				bool							_visible = true
 			);
 
-			UICORE_API void setMultiSelectionEnabled(
+			//! @brief Will set the text of the provided item
+			//! @param _itemId The ID of the item
+			//! @param _text The text to set
+			UICORE_API_EXPORT void setItemText(
+				ak::UID							_treeUID,
+				ak::ID							_itemId,
+				const QString &					_text
+			);
+
+			UICORE_API_EXPORT void setMultiSelectionEnabled(
 				ak::UID							_treeUID,
 				bool							_enabled = true
 			);
 
-			UICORE_API void setVisible(
+			UICORE_API_EXPORT void setVisible(
 				ak::UID							_treeUID,
 				bool							_visible = true
 			);
 
-			UICORE_API void toggleItemSelection(
+			UICORE_API_EXPORT void toggleItemSelection(
 				ak::UID							_treeUID,
 				ak::ID							_itemID
 			);
@@ -1633,13 +1738,13 @@ namespace ak {
 
 		namespace welcomeScreen {
 
-			UICORE_API void addItem(
+			UICORE_API_EXPORT void addItem(
 				ak::UID							_welcomeScreen,
 				ak::ID							_group,
 				const QString &					_text
 			);
 
-			UICORE_API void addItem(
+			UICORE_API_EXPORT void addItem(
 				ak::UID							_welcomeScreen,
 				ak::ID							_group,
 				const QString &					_text,
@@ -1647,94 +1752,94 @@ namespace ak {
 				const QString &					_iconFolder
 			);
 
-			UICORE_API void addItem(
+			UICORE_API_EXPORT void addItem(
 				ak::UID							_welcomeScreen,
 				ak::ID							_group,
 				const QString &					_text,
 				const QIcon &					_icon
 			);
 
-			UICORE_API void addItemAtReecent(
+			UICORE_API_EXPORT void addItemAtReecent(
 				ak::UID							_welcomeScreen,
 				const QString &					_text
 			);
 
-			UICORE_API void addItemAtReecent(
+			UICORE_API_EXPORT void addItemAtReecent(
 				ak::UID							_welcomeScreen,
 				const QString &					_text,
 				const QString &					_iconName,
 				const QString &					_iconFolder
 			);
 
-			UICORE_API void addItemAtReecent(
+			UICORE_API_EXPORT void addItemAtReecent(
 				ak::UID							_welcomeScreen,
 				const QString &					_text,
 				const QIcon &					_icon
 			);
 
-			UICORE_API void addItemAtOpen(
+			UICORE_API_EXPORT void addItemAtOpen(
 				ak::UID							_welcomeScreen,
 				const QString &					_text
 			);
 
-			UICORE_API void addItemAtOpen(
+			UICORE_API_EXPORT void addItemAtOpen(
 				ak::UID							_welcomeScreen,
 				const QString &					_text,
 				const QString &					_iconName,
 				const QString &					_iconFolder
 			);
 
-			UICORE_API void addItemAtOpen(
+			UICORE_API_EXPORT void addItemAtOpen(
 				ak::UID							_welcomeScreen,
 				const QString &					_text,
 				const QIcon &					_icon
 			);
 
-			UICORE_API void addItemAtNew(
+			UICORE_API_EXPORT void addItemAtNew(
 				ak::UID							_welcomeScreen,
 				const QString &					_text
 			);
 
-			UICORE_API void addItemAtNew(
+			UICORE_API_EXPORT void addItemAtNew(
 				ak::UID							_welcomeScreen,
 				const QString &					_text,
 				const QString &					_iconName,
 				const QString &					_iconFolder
 			);
 
-			UICORE_API void addItemAtNew(
+			UICORE_API_EXPORT void addItemAtNew(
 				ak::UID							_welcomeScreen,
 				const QString &					_text,
 				const QIcon &					_icon
 			);
 
-			UICORE_API QString getItemText(
+			UICORE_API_EXPORT QString getItemText(
 				ak::UID							_welcomeScreenUID,
 				ak::ID							_group,
 				ak::ID							_itemID
 			);
 
-			UICORE_API QString getItemTextAtRecent(
+			UICORE_API_EXPORT QString getItemTextAtRecent(
 				ak::UID							_welcomeScreenUID,
 				ak::ID							_itemID
 			);
 
-			UICORE_API QString getItemTextAtOpen(
+			UICORE_API_EXPORT QString getItemTextAtOpen(
 				ak::UID							_welcomeScreenUID,
 				ak::ID							_itemID
 			);
 
-			UICORE_API QString getItemTextAtNew(
+			UICORE_API_EXPORT QString getItemTextAtNew(
 				ak::UID							_welcomeScreenUID,
 				ak::ID							_itemID
 			);
 
-			UICORE_API QString getGroupName(
+			UICORE_API_EXPORT QString getGroupName(
 				ak::UID							_welcomeScreenUID,
 				ak::ID							_group
 			);
 
-			UICORE_API void setObjectName(
+			UICORE_API_EXPORT void setObjectName(
 				ak::UID							_welcomeScreenUID,
 				const QString &					_name
 			);
@@ -1750,21 +1855,21 @@ namespace ak {
 			//! @brief Will add the provided event handler to the window
 			//! @param _windowUID The UID of the window
 			//! @param _eventHandler The event handler to add
-			UICORE_API void addEventHandler(
+			UICORE_API_EXPORT void addEventHandler(
 				ak::UID												_windowUID,
 				ui::windowEventHandler *							_eventHandler
 			);
 
 			//! @brief Will close the provided window
 			//! @param _windowUID The UID of the uiManager to close
-			UICORE_API void close(
+			UICORE_API_EXPORT void close(
 				ak::UID												_windowUID
 			);
 
 			//! @brief Will remove the provided event handler from the window
 			//! @param _windowUID The UID of the window
 			//! @param _eventHandler The event handler to remove
-			UICORE_API void removeEventHandler(
+			UICORE_API_EXPORT void removeEventHandler(
 				ak::UID												_windowUID,
 				ui::windowEventHandler *							_eventHandler
 			);
@@ -1772,7 +1877,7 @@ namespace ak {
 			//! @brief Will set the visible state of the status label of the provided window.
 			//! @param _windowUID The UID of the window
 			//! @param _visible If true the status label will be visible
-			UICORE_API void setStatusLabelVisible(
+			UICORE_API_EXPORT void setStatusLabelVisible(
 				ak::UID												_windowUID,
 				bool												_visible = true
 			);
@@ -1780,7 +1885,7 @@ namespace ak {
 			//! @brief Will set the visible state of the status progress bar of the provided window.
 			//! @param _windowUID The UID of the window
 			//! @param _visible If true the status progress bar will be visible
-			UICORE_API void setStatusProgressVisible(
+			UICORE_API_EXPORT void setStatusProgressVisible(
 				ak::UID												_windowUID,
 				bool												_visible = true
 			);
@@ -1788,7 +1893,7 @@ namespace ak {
 			//! @brief Will set the status label text at the provided window
 			//! @param _windowUID The UID of the window
 			//! @param _text The text to set
-			UICORE_API void setStatusLabelText(
+			UICORE_API_EXPORT void setStatusLabelText(
 				ak::UID												_windowUID,
 				const QString &										_text
 			);
@@ -1796,7 +1901,7 @@ namespace ak {
 			//! @brief Will set the value of the status progress bar at the provided window
 			//! @param _windowUID The UID of the window
 			//! @param _value The value to set (0 - 100)
-			UICORE_API void setStatusProgressValue(
+			UICORE_API_EXPORT void setStatusProgressValue(
 				ak::UID												_windowUID,
 				int													_value
 			);
@@ -1804,7 +1909,7 @@ namespace ak {
 			//! @brief Will set the continuous option of the status progress bar at the provided window
 			//! @param _windowUID The UID of the window
 			//! @param _continuous If true the status progress bar will be displayed as a continuous bar
-			UICORE_API void setStatusProgressContinuous(
+			UICORE_API_EXPORT void setStatusProgressContinuous(
 				ak::UID												_windowUID,
 				bool												_continuous = true
 			);
@@ -1812,27 +1917,27 @@ namespace ak {
 			//! @brief Will set the visible state of the tabToolbar in the specified window
 			//! @param _windowUID The UID of the window
 			//! @param _visible If true the tabToolbar will be visible
-			UICORE_API void setTabToolBarVisible(
+			UICORE_API_EXPORT void setTabToolBarVisible(
 				ak::UID												_windowUID,
 				bool												_visible = true
 			);
 
 			//! @brief Will return the current tab of the tab tool bar at the specified window
 			//! @param _windowUID The UID of the window
-			UICORE_API ak::ID getCurrentTabToolBarTab(
+			UICORE_API_EXPORT ak::ID getCurrentTabToolBarTab(
 				ak::UID												_windowUID
 			);
 
 			//! @brief Will return the tab count of the tab tool bar at the specified window
 			//! @param _windowUID The UID of the window
-			UICORE_API int getTabToolBarTabCount(
+			UICORE_API_EXPORT int getTabToolBarTabCount(
 				ak::UID												_windowUID
 			);
 
 			//! @brief Will set the specified tab toolbar tab as current at the specified window
 			//! @param _windowUID The UID of the window
 			//! @param _tabID The tab to set as current
-			UICORE_API void setCurrentTabToolBarTab(
+			UICORE_API_EXPORT void setCurrentTabToolBarTab(
 				ak::UID												_windowUID,
 				ak::ID												_tabID
 			);
@@ -1840,38 +1945,38 @@ namespace ak {
 			//! @brief Will set the title at the specified window
 			//! @param _windowUID The UID of the window
 			//! @param _title The title to set
-			UICORE_API void setTitle(
+			UICORE_API_EXPORT void setTitle(
 				ak::UID												_windowUID,
 				const QString &										_title
 			);
 
 			//! @brief Will return true if the status label is visible at the provided window
 			//! @param _windowUID The UID of the window
-			UICORE_API bool getStatusLabelVisible(
+			UICORE_API_EXPORT bool getStatusLabelVisible(
 				ak::UID												_windowUID
 			);
 
 			//! @brief Will return true if the status progress bar is visible at the provided window
 			//! @param _windowUID The UID of the window
-			UICORE_API bool getStatusProgressVisible(
+			UICORE_API_EXPORT bool getStatusProgressVisible(
 				ak::UID												_windowUID
 			);
 
 			//! @brief Will return the status label text at the provided window
 			//! @param _windowUID The UID of the window
-			UICORE_API QString getStatusLabelText(
+			UICORE_API_EXPORT QString getStatusLabelText(
 				ak::UID												_windowUID
 			);
 
 			//! @brief Will return the status progress bar value at the provided window
 			//! @param _windowUID The UID of the window
-			UICORE_API int getStatusProgressValue(
+			UICORE_API_EXPORT int getStatusProgressValue(
 				ak::UID												_windowUID
 			);
 
 			//! @brief Will return the continuous option of the status progress bar at the provided window
 			//! @param _windowUID The UID of the window
-			UICORE_API bool getStatusProgressContinuous(
+			UICORE_API_EXPORT bool getStatusProgressContinuous(
 				ak::UID												_windowUID
 			);
 
@@ -1879,7 +1984,7 @@ namespace ak {
 			//! @param _windowUID The UID of the window
 			//! @param _dockUid The UID of the dock to add
 			//! @param _dockLocation The dock location to add the dock at
-			UICORE_API void addDock(
+			UICORE_API_EXPORT void addDock(
 				ak::UID												_windowUID,
 				ak::UID												_dockUid,
 				ak::ui::core::dockLocation							_dockLocation
@@ -1890,7 +1995,7 @@ namespace ak {
 			//! @param _windowUID The UID of the window
 			//! @param _parentDockUid The UID of the parent dock
 			//! @param _dockUid The UID of the dock to add as a tabbed dock
-			UICORE_API void tabifyDock(
+			UICORE_API_EXPORT void tabifyDock(
 				ak::UID												_windowUID,
 				ak::UID												_parentDockUid,
 				ak::UID												_dockUid
@@ -1899,7 +2004,7 @@ namespace ak {
 			//! @brief Will set the dock priority in the bottom left corner
 			//! @param _windowUID The UID of the window
 			//! @param _dockLocation The dock location that will have the higher priority
-			UICORE_API void setDockBottomLeftPriority(
+			UICORE_API_EXPORT void setDockBottomLeftPriority(
 				ak::UID												_windowUID,
 				ak::ui::core::dockLocation							_dockLocation
 			);
@@ -1907,7 +2012,7 @@ namespace ak {
 			//! @brief Will set the dock priority in the bottom right corner
 			//! @param _windowUID The UID of the window
 			//! @param _dockLocation The dock location that will have the higher priority
-			UICORE_API void setDockBottomRightPriority(
+			UICORE_API_EXPORT void setDockBottomRightPriority(
 				ak::UID												_windowUID,
 				ak::ui::core::dockLocation							_dockLocation
 			);
@@ -1915,7 +2020,7 @@ namespace ak {
 			//! @brief Will set the windows central widget (The widget will be added to a container, the actual central widget differs)
 			//! @param _windowUID The UID of the window
 			//! @param _widgetUID The widget UID of the widget to set as central widget
-			UICORE_API void setCentralWidget(
+			UICORE_API_EXPORT void setCentralWidget(
 				ak::UID												_windowUID,
 				ak::UID												_widgetUID
 			);
@@ -1923,33 +2028,33 @@ namespace ak {
 			//! @brief Will set the windows central widget (The widget will be added to a container, the actual central widget differs)
 			//! @param _windowUID The UID of the window
 			//! @param _widget The widget to set as central widget
-			UICORE_API void setCentralWidget(
+			UICORE_API_EXPORT void setCentralWidget(
 				ak::UID												_windowUID,
 				QWidget *											_widget
 			);
 
 			//! @brief Will show the window as maximized
 			//! @param _windowUID The UID of the window
-			UICORE_API void showMaximized(
+			UICORE_API_EXPORT void showMaximized(
 				ak::UID												_windowUID
 			);
 
 			//! @brief Will show the window as minimized
 			//! @param _windowUID The UID of the window
-			UICORE_API void showMinimized(
+			UICORE_API_EXPORT void showMinimized(
 				ak::UID												_windowUID
 			);
 
 			//! @brief Will return the size of the window
 			//! @param _windowUID The UID of the window
-			UICORE_API QSize size(
+			UICORE_API_EXPORT QSize size(
 				ak::UID												_windowUID
 			);
 
 			//! @brief Will set the visible state of the waiting animation
 			//! @param _windowUID The UID of the window
 			//! @param _visible The visible state to set
-			UICORE_API void setWaitingAnimationVisible(
+			UICORE_API_EXPORT void setWaitingAnimationVisible(
 				ak::UID												_windowUID,
 				bool												_visible = true
 			);
@@ -1957,7 +2062,7 @@ namespace ak {
 			//! @brief Will set the movie as waiting animation in the window
 			//! @param _windowUID The UID of the window
 			//! @param _movie The movie to set
-			UICORE_API void setWaitingAnimation(
+			UICORE_API_EXPORT void setWaitingAnimation(
 				ak::UID												_windowUID,
 				QMovie *											_movie
 			);
@@ -1965,7 +2070,7 @@ namespace ak {
 			//! @brief Will set the animation as waiting animation in the window
 			//! @param _windowUID The UID of the window
 			//! @param _animationName The name of the animation
-			UICORE_API void setWaitingAnimation(
+			UICORE_API_EXPORT void setWaitingAnimation(
 				ak::UID												_windowUID,
 				const QString &										_animationName
 			);
@@ -1974,14 +2079,14 @@ namespace ak {
 			//! @param _windowUID The UID of the window
 			//! @param _width The width to set
 			//! @param _height The height to set
-			UICORE_API void setCentralWidgetMinimumSize(
+			UICORE_API_EXPORT void setCentralWidgetMinimumSize(
 				ak::UID												_windowUID,
 				int													_width,
 				int													_height
 			);
 
 			//! @brief Will return the device pixel ratio of the currently used device
-			UICORE_API int devicePixelRatio(void);
+			UICORE_API_EXPORT int devicePixelRatio(void);
 
 		} // namespace window
 
@@ -1990,33 +2095,33 @@ namespace ak {
 		//! @brief Will destroy all objects created by this creator
 		//! @param _creatorUid The UID of the creator
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API void creatorDestroyed(
+		UICORE_API_EXPORT void creatorDestroyed(
 			ak::UID									_creatorUid
 		);
 
 		//! @brief Will add the color style to the API
 		//! @param _colorStyle The color style to add
 		//! @param _activate If true, the provided color style will be set as current color style
-		UICORE_API void addColorStyle(
+		UICORE_API_EXPORT void addColorStyle(
 			ak::ui::colorStyle *					_colorStyle,
 			bool									_activate
 		);
 
 		//! @brief Will set the color style with the specified name as current color style
-		UICORE_API void setColorStyle(
+		UICORE_API_EXPORT void setColorStyle(
 			const QString &				_colorStyleName
 		);
 
 		//! @brief Will return the current color style
-		UICORE_API const ak::ui::colorStyle * getCurrentColorStyle(void);
+		UICORE_API_EXPORT const ak::ui::colorStyle * getCurrentColorStyle(void);
 
-		UICORE_API QString getCurrentColorStyleName(void);
+		UICORE_API_EXPORT QString getCurrentColorStyleName(void);
 
 		//! @brief Will set the current color style to the default dark color style
-		UICORE_API void setDefaultDarkColorStyle(void);
+		UICORE_API_EXPORT void setDefaultDarkColorStyle(void);
 
 		//! @brief Will set the current color style to the default bright color style
-		UICORE_API void setDefaultColorStyle(void);
+		UICORE_API_EXPORT void setDefaultColorStyle(void);
 
 		// ###############################################################################################################################################
 
@@ -2025,28 +2130,28 @@ namespace ak {
 		//! @brief Will add the provided search path to the icon manager
 		//! @param _path The search path to add
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API void addIconSearchPath(
+		UICORE_API_EXPORT void addIconSearchPath(
 			const QString &											_path
 		);
 
 		//! @brief Will remove the provided search path from the icon manager
 		//! @param _path The existing search path to remove
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API void removeIconSearchPath(
+		UICORE_API_EXPORT void removeIconSearchPath(
 			const QString &											_path
 		);
 
 		//! @brief Will generate a new UID and return it
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::UID createUid(void);
+		UICORE_API_EXPORT ak::UID createUid(void);
 
 		//! @brief Will return the messenger
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API ak::messenger * getMessenger(void);
+		UICORE_API_EXPORT ak::messenger * getMessenger(void);
 
 		//! @brief WIll return the icon with the specified name and path
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API const QIcon & getIcon(
+		UICORE_API_EXPORT const QIcon & getIcon(
 			const QString &											_name,
 			const QString &											_size
 		);
@@ -2057,66 +2162,66 @@ namespace ak {
 
 		//! @brief Will run a QApplication to start the event callback routine
 		//! The return value will be returned as soon as the application is closing
-		UICORE_API int exec(void);
+		UICORE_API_EXPORT int exec(void);
 
 		namespace special {
 
 			//! @brief Will return a string representation of the provided eventType
 		//! @param _type The event type that should be represented
-			UICORE_API QString toString(
+			UICORE_API_EXPORT QString toString(
 				ak::core::eventType									_type
 			);
 
 			//! @brief Will return a string representation of the provided valueType
 			//! @param _type The value type that should be represented
-			UICORE_API QString toString(
+			UICORE_API_EXPORT QString toString(
 				ak::core::valueType									_type
 			);
 
 			//! @brief Will return a string representation of the provided valtextAlignmentueType
 			//! @param _type The text alignment that should be represented
-			UICORE_API QString toString(
+			UICORE_API_EXPORT QString toString(
 				ui::core::textAlignment								_type
 			);
 
 			//! @brief Will return a string representation of the provided dockLocation
 			//! @param _type The dock location that should be represented
-			UICORE_API QString toString(
+			UICORE_API_EXPORT QString toString(
 				ui::core::dockLocation								_dockLocation
 			);
 
 			//! @brief Will return a string representation of the provided tab location
 			//! @param _type The tab location that should be represented
-			UICORE_API QString toString(
+			UICORE_API_EXPORT QString toString(
 				ui::core::tabLocation								_tabLocation
 			);
 
 			//! @brief Create a string representation of the provided dialog result
 			//! @param _dialogResult The dialog result to be converted
-			UICORE_API QString toQString(
+			UICORE_API_EXPORT QString toQString(
 				ui::core::dialogResult								_dialogResult
 			);
 
 			//! @brief Will return a string representation of the provided keyType
 			//! @param _type The key type that should be represented
-			UICORE_API QString toString(
+			UICORE_API_EXPORT QString toString(
 				ui::core::keyType									_type
 			);
 
 			//! @brief Will return a string representation of the provided objectType
 			//! @param _type The object type that should be represented
-			UICORE_API QString toString(
+			UICORE_API_EXPORT QString toString(
 				ui::core::objectType								_type
 			);
 
 			//! @brief Will return a string representation of the provided settingsRestoreErrorCode
 			//! @param _type The error code that should be represented
-			UICORE_API QString toString(
+			UICORE_API_EXPORT QString toString(
 				ak::core::settingsRestoreErrorCode					_settingsRestoreErrorCode
 			);
 
 			//! @brief Will create a JSON type representation of the event
-			UICORE_API QString toEventText(
+			UICORE_API_EXPORT QString toEventText(
 				ak::UID												_senderUID,
 				ak::core::eventType									_eventType,
 				int													_info1,

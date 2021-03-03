@@ -16,12 +16,13 @@
 
 // AK header
 #include <ak_ui_core_aObject.h>		// Base class
+#include <ak_globalDataTypes.h>
 
 namespace ak {
 	namespace ui {
 		namespace qt {
 
-			class timer : public QTimer, public ak::ui::core::aObject {
+			class UICORE_API_EXPORT timer : public QTimer, public ak::ui::core::aObject {
 			public:
 				timer();
 				virtual ~timer();

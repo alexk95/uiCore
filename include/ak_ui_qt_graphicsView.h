@@ -13,6 +13,7 @@
 
 // AK header
 #include <ak_ui_core_aWidget.h>
+#include <ak_globalDataTypes.h>
 
 // Qt header
 #include <qgraphicsview.h>		// Base class
@@ -23,7 +24,7 @@ namespace ak {
 	namespace ui {
 		namespace qt {
 
-			class graphicsView : public QGraphicsView, ui::core::aWidget {
+			class UICORE_API_EXPORT graphicsView : public QGraphicsView, ui::core::aWidget {
 				Q_OBJECT
 			public:
 				graphicsView();

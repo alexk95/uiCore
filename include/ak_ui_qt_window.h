@@ -13,6 +13,7 @@
 
 // AK header
 #include <ak_ui_core_aPaintable.h>		// Base class
+#include <ak_globalDataTypes.h>
 
 // Qt header
 #include <qmainwindow.h>				// Base class
@@ -38,7 +39,7 @@ namespace ak {
 
 			class windowCentralWidget;
 
-			class window : public QMainWindow, public ui::core::aPaintable {
+			class UICORE_API_EXPORT window : public QMainWindow, public ui::core::aPaintable {
 				Q_OBJECT
 			public:
 				window();

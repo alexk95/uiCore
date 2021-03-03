@@ -25,7 +25,7 @@ namespace ak {
 	namespace ui {
 		namespace core {
 
-			class UICORE_API aDialog : public QDialog {
+			class UICORE_API_EXPORT aDialog : public QDialog {
 			public:
 				//! @brief Constructor
 				//! @param _parent The parent widget

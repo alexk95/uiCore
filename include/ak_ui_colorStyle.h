@@ -28,7 +28,7 @@ namespace ak {
 		//! @brief This class is used for storing color information used to paint the UI
 		//! This class is an abstract class. It defines the main functions used by the UI_manager and all its childs
 		//! This object provides the main foreground color and background color for the window and the controls
-		class UICORE_API colorStyle {
+		class UICORE_API_EXPORT colorStyle {
 		public:
 
 			//! @brief Will return the name of this styleSheet

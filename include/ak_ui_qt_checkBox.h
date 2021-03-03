@@ -18,6 +18,7 @@
 // AK header
 #include <ak_ui_core_aWidget.h>		// base class
 #include <ak_ui_core_aRestorable.h>	// base class
+#include <ak_globalDataTypes.h>
 
 #include <rapidjson/document.h>		// RJSON document
 
@@ -33,7 +34,7 @@ namespace ak {
 		namespace qt {
 
 			//! @brief This class combines the functionallity of a QCheckBox and a ak::object
-			class checkBox : public QCheckBox, public ak::ui::core::aWidget, public ak::ui::core::aRestorable
+			class UICORE_API_EXPORT checkBox : public QCheckBox, public ak::ui::core::aWidget, public ak::ui::core::aRestorable
 			{
 				Q_OBJECT
 			public:

@@ -17,7 +17,7 @@
 namespace ak {
 	namespace ui {
 
-		class UICORE_API windowEventHandler {
+		class UICORE_API_EXPORT windowEventHandler {
 		public:
 			windowEventHandler() {}
 

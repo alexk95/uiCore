@@ -40,7 +40,7 @@ namespace ak {
 
 			//! This class provides a interface that represents a tab toolbar container.
 			
-			class ttbContainer : public ak::ui::core::aPaintable {
+			class UICORE_API_EXPORT ttbContainer : public ak::ui::core::aPaintable {
 			public:
 
 				//! @brief Constructor, initializes the uid of this container

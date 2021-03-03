@@ -17,6 +17,8 @@
 // Qt header
 #include <qobject.h>			// QObject
 
+#include <ak_globalDataTypes.h>
+
 // Forward declaration
 class QTimer;
 
@@ -27,7 +29,7 @@ namespace ak {
 		class uiManager;
 
 		//! This class is used to link the timer signals of the ui manager to the corresponding callback functions
-		class uiManagerTimerSignalLinker : public QObject {
+		class UICORE_API_EXPORT uiManagerTimerSignalLinker : public QObject {
 			Q_OBJECT
 		public:
 

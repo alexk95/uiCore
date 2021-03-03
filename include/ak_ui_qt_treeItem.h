@@ -28,7 +28,7 @@ namespace ak {
 
 			class tree;
 
-			class treeItem : public ak::ui::core::aObject, public QTreeWidgetItem {
+			class UICORE_API_EXPORT treeItem : public ak::ui::core::aObject, public QTreeWidgetItem {
 			public:
 				
 				//! @brief Constructor
@@ -150,6 +150,12 @@ namespace ak {
 				//! Returns -1 if there is no parent item
 				ak::ID parentId(void) const;
 
+				//! @brief Will set the stored text, this value is only used to evaluate the changed event
+				void setStoredText(const QString & _text) { my_text = _text; }
+
+				//! @brief Will return the stored text
+				QString storedText(void) const { return my_text; }
+
 				//! @brief Will unhide this item if hidden
 				//! @param _expandParents If true all parent objects will be expanded
 				void setVisible(
@@ -174,6 +180,7 @@ namespace ak {
 				std::list<treeItem *>		my_allChilds;
 				std::list<ak::ID>			my_allChildsIDs;
 				ak::ID						my_id;
+				QString						my_text;
 
 				treeItem(treeItem &) = delete;
 				treeItem & operator = (treeItem &) = delete;

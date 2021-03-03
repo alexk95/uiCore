@@ -16,12 +16,13 @@
 
 // AK header
 #include <ak_ui_colorStyle.h>	// base class and stylableObject type
+#include <ak_globalDataTypes.h>
 
 namespace ak {
 	namespace ui {
 
 		//! @brief This class provides the default bright color style
-		class colorStyleDefault : public ak::ui::colorStyle {
+		class UICORE_API_EXPORT colorStyleDefault : public ak::ui::colorStyle {
 		public:
 			//! @brief Constructor
 			colorStyleDefault();

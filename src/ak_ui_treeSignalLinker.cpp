@@ -91,7 +91,17 @@ void ak::ui::treeSignalLinker::treeItemActivated(QTreeWidgetItem *item, int colu
 }
 
 void ak::ui::treeSignalLinker::treeItemChanged(QTreeWidgetItem *item, int column) {
-	if (my_enabled) { my_treeManager->raiseItemEvent(ak::ui::qt::tree::getItemId(item), ak::core::eventType::eChanged, column); }
+	qt::treeItem * itm = nullptr;
+	itm = dynamic_cast<qt::treeItem *>(item);
+	assert(itm != nullptr);		// Cast failed
+	if (itm->text(0) != itm->storedText()) {
+		itm->setStoredText(itm->text(0));
+		if (my_enabled) {
+			my_treeManager->raiseItemEvent(ak::ui::qt::tree::getItemId(item), ak::core::eventType::eItemTextChanged, column);
+		}
+	} else if (my_enabled) {
+		my_treeManager->raiseItemEvent(ak::ui::qt::tree::getItemId(item), ak::core::eventType::eChanged, column);
+	}
 }
 
 void ak::ui::treeSignalLinker::treeItemClicked(QTreeWidgetItem *item, int column) {

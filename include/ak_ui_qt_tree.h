@@ -39,7 +39,7 @@ namespace ak {
 			class treeItem;
 
 			//! This class represents a tree
-			class tree : public QTreeWidget, public ak::ui::core::aWidget {
+			class UICORE_API_EXPORT tree : public QTreeWidget, public ak::ui::core::aWidget {
 				Q_OBJECT
 			public:
 				//! @brief Constructor

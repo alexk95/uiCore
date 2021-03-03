@@ -16,7 +16,7 @@
 #include <string>				// std::string
 
 // AK header
-#include <ak_globalDataTypes.h>	// UICORE_API
+#include <ak_globalDataTypes.h>	// UICORE_API_EXPORT
 
 namespace ak {
 
@@ -30,7 +30,7 @@ namespace ak {
 	//!			@ Inner function
 	//!			@ Outter function
 	//!			@ Initial calling function
-	class UICORE_API Exception : public std::exception {
+	class UICORE_API_EXPORT Exception : public std::exception {
 	public:
 
 		//! Used to determine the type of the exception

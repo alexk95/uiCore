@@ -145,7 +145,7 @@ void ak::ui::widget::propertyGrid::addGroup(
 	const QString &									_group
 ) {
 	assert(_group.length() > 0); // Empty group name provided
-	my_groupsIterator itm = my_groups.find(_group);
+	auto itm = my_groups.find(_group);
 	assert(itm == my_groups.end());	// Group already exists
 	propertyGridGroup * newGroup = new propertyGridGroup(my_table, _group);
 	newGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
@@ -160,7 +160,7 @@ void ak::ui::widget::propertyGrid::addGroup(
 	const QString &									_group
 ) {
 	assert(_group.length() > 0); // Empty group name provided
-	my_groupsIterator itm = my_groups.find(_group);
+	auto itm = my_groups.find(_group);
 	assert(itm == my_groups.end());	// Group already exists
 	propertyGridGroup * newGroup = new propertyGridGroup(my_table, _group);
 	newGroup->setItemsBackColor(_color);
@@ -275,7 +275,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	const QString &									_settingName,
 	bool											_value
 ) {
-	my_groupsIterator group = my_groups.find(_groupName);
+	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
@@ -294,7 +294,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	const QString &									_settingName,
 	const ui::color &									_value
 ) {
-	my_groupsIterator group = my_groups.find(_groupName);
+	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
@@ -313,7 +313,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	const QString &									_settingName,
 	double											_value
 ) {
-	my_groupsIterator group = my_groups.find(_groupName);
+	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
@@ -332,7 +332,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	const QString &									_settingName,
 	int												_value
 ) {
-	my_groupsIterator group = my_groups.find(_groupName);
+	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
@@ -352,7 +352,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	const std::vector<QString> &					_possibleSelection,
 	const QString &									_value
 ) {
-	my_groupsIterator group = my_groups.find(_groupName);
+	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _possibleSelection, _value);
@@ -371,7 +371,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	const QString &									_settingName,
 	const QString &									_value
 ) {
-	my_groupsIterator group = my_groups.find(_groupName);
+	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
 	my_currentID++;
 	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
@@ -388,7 +388,7 @@ void ak::ui::widget::propertyGrid::setItemReadOnly(
 	ak::ID											_itemID,
 	bool											_readOnly
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	itm->second->setReadOnly(_readOnly);
 }
@@ -396,7 +396,7 @@ void ak::ui::widget::propertyGrid::setItemReadOnly(
 bool ak::ui::widget::propertyGrid::itemIsReadOnly(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->isReadOnly();
 }
@@ -411,6 +411,41 @@ void ak::ui::widget::propertyGrid::setGroupStateIcons(
 	for (auto itm : my_groups) {
 		itm.second->setStateIcons(&my_groupIconExpanded, &my_groupIconCollapsed);
 	}
+}
+
+void ak::ui::widget::propertyGrid::resetItemAsError(
+	ak::ID											_itemID,
+	const QString &									_valueToReset
+) {
+	auto itm = my_items.find(_itemID);
+	assert(itm != my_items.end()); // Invalid item ID
+	itm->second->resetAsError(_valueToReset);
+}
+
+void ak::ui::widget::propertyGrid::resetItemAsError(
+	ak::ID											_itemID,
+	int												_valueToReset
+) {
+	auto itm = my_items.find(_itemID);
+	assert(itm != my_items.end()); // Invalid item ID
+	itm->second->resetAsError(_valueToReset);
+}
+
+void ak::ui::widget::propertyGrid::resetItemAsError(
+	ak::ID											_itemID,
+	double											_valueToReset
+) {
+	auto itm = my_items.find(_itemID);
+	assert(itm != my_items.end()); // Invalid item ID
+	itm->second->resetAsError(_valueToReset);
+}
+
+void ak::ui::widget::propertyGrid::showItemAsError(
+	ak::ID											_itemID
+) {
+	auto itm = my_items.find(_itemID);
+	assert(itm != my_items.end()); // Invalid item ID
+	itm->second->showAsError();
 }
 
 // ##############################################################################################################
@@ -437,7 +472,7 @@ void ak::ui::widget::propertyGrid::clear(void) {
 QString ak::ui::widget::propertyGrid::getItemGroup(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getGroup();
 }
@@ -445,7 +480,7 @@ QString ak::ui::widget::propertyGrid::getItemGroup(
 bool ak::ui::widget::propertyGrid::getItemIsMultipleValues(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getIsMultipleValues();
 }
@@ -453,7 +488,7 @@ bool ak::ui::widget::propertyGrid::getItemIsMultipleValues(
 QString ak::ui::widget::propertyGrid::getItemName(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getName();
 }
@@ -461,7 +496,7 @@ QString ak::ui::widget::propertyGrid::getItemName(
 std::vector<QString> ak::ui::widget::propertyGrid::getItemPossibleSelection(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getPossibleSelection();
 }
@@ -469,7 +504,7 @@ std::vector<QString> ak::ui::widget::propertyGrid::getItemPossibleSelection(
 bool ak::ui::widget::propertyGrid::getItemValueBool(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getValueBool();
 }
@@ -477,7 +512,7 @@ bool ak::ui::widget::propertyGrid::getItemValueBool(
 ak::ui::color ak::ui::widget::propertyGrid::getItemValueColor(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getValueColor();
 }
@@ -485,7 +520,7 @@ ak::ui::color ak::ui::widget::propertyGrid::getItemValueColor(
 double ak::ui::widget::propertyGrid::getItemValueDouble(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getValueDouble();
 }
@@ -493,7 +528,7 @@ double ak::ui::widget::propertyGrid::getItemValueDouble(
 int ak::ui::widget::propertyGrid::getItemValueInteger(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getValueInteger();
 }
@@ -501,7 +536,7 @@ int ak::ui::widget::propertyGrid::getItemValueInteger(
 QString ak::ui::widget::propertyGrid::getItemValueSelection(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getValueSelection();
 }
@@ -509,7 +544,7 @@ QString ak::ui::widget::propertyGrid::getItemValueSelection(
 QString ak::ui::widget::propertyGrid::getItemValueString(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getValueString();
 }
@@ -517,7 +552,7 @@ QString ak::ui::widget::propertyGrid::getItemValueString(
 ak::core::valueType ak::ui::widget::propertyGrid::getItemValueType(
 	ak::ID											_itemID
 ) {
-	my_itemsIterator itm = my_items.find(_itemID);
+	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getValueType();
 }
@@ -650,9 +685,15 @@ void ak::ui::widget::propertyGridGroup::setItemsBackColor(
 	int g = my_colorItemBackground.green() + ALTERNATE_ROW_COLOR_VALUE;
 	int b = my_colorItemBackground.blue() + ALTERNATE_ROW_COLOR_VALUE;
 	int a = my_colorItemBackground.alpha() - ALTERNATE_ROW_COLOR_VALUE;
-	if (r > 255) { r = my_colorItemBackground.red() - ALTERNATE_ROW_COLOR_VALUE; }
-	if (g > 255) { g = my_colorItemBackground.green() - ALTERNATE_ROW_COLOR_VALUE; }
-	if (b > 255) { b = my_colorItemBackground.blue() - ALTERNATE_ROW_COLOR_VALUE; }
+
+	if (r > 255 || g > 255 || b > 255) {
+		r = my_colorItemBackground.red() - ALTERNATE_ROW_COLOR_VALUE;
+		g = my_colorItemBackground.green() - ALTERNATE_ROW_COLOR_VALUE;
+		b = my_colorItemBackground.blue() - ALTERNATE_ROW_COLOR_VALUE;
+	}
+	if (r < 0) { r = 0; }
+	if (g < 0) { g = 0; }
+	if (b < 0) { b = 0; }
 	if (a < 0) { a = 0; }
 	if (a > 255) { a = 255; }
 	my_colorItemBackgroundAlternate.setRgb(r, g, b, a);
@@ -910,6 +951,7 @@ ak::ui::widget::propertyGridItem::propertyGridItem(
 	my_widgetBool = new ui::qt::checkBox();
 	if (my_isMultipleValues) {
 		my_widgetBool->setTristate(true);
+		my_widgetBool->setCheckState(Qt::PartiallyChecked);
 	}
 	else {
 		my_widgetBool->setChecked(_value);
@@ -1238,6 +1280,52 @@ void ak::ui::widget::propertyGridItem::setColorStyle(
 	repaint();
 }
 
+void ak::ui::widget::propertyGridItem::resetAsError(
+	const QString &									_valueToReset
+) {
+	assert(my_valueType == ak::core::valueType::vString);
+	my_ignoreCellEvent = true;
+	my_valueString = _valueToReset;
+	my_isCurrentlyError = true;
+	my_cellValue->setText(my_valueString);
+	repaint();
+	my_cellValue->setSelected(false);
+	my_ignoreCellEvent = false;
+}
+void ak::ui::widget::propertyGridItem::resetAsError(
+	int												_valueToReset
+) {
+	assert(my_valueType == ak::core::valueType::vInt);
+	my_ignoreCellEvent = true;
+	my_valueInteger = _valueToReset;
+	my_isCurrentlyError = true;
+	my_cellValue->setText(QString::number(my_valueInteger));
+	repaint();
+	my_cellValue->setSelected(false);
+	my_ignoreCellEvent = false;
+}
+
+void ak::ui::widget::propertyGridItem::resetAsError(
+	double											_valueToReset
+) {
+	assert(my_valueType == ak::core::valueType::vDouble);
+	my_ignoreCellEvent = true;
+	my_valueDouble = _valueToReset;
+	my_isCurrentlyError = true;
+	my_cellValue->setText(QString::number(my_valueDouble));
+	repaint();
+	my_cellValue->setSelected(false);
+	my_ignoreCellEvent = false;
+}
+
+void ak::ui::widget::propertyGridItem::showAsError(void) {
+	my_ignoreCellEvent = true;
+	my_isCurrentlyError = true;
+	my_cellValue->setSelected(false);
+	repaint();
+	my_ignoreCellEvent = false;
+}
+
 // #################################################################################
 
 // Slots
@@ -1279,6 +1367,12 @@ void ak::ui::widget::propertyGridItem::slotTableCellChanged(
 ) {
 	if (my_ignoreCellEvent) { return; }
 	if (_item == my_cellValue) {
+
+		if (my_isCurrentlyError) {
+			my_isCurrentlyError = false;
+			repaint();
+		}
+
 		QString theText(_item->text());
 		switch (my_valueType)
 		{

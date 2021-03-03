@@ -19,6 +19,7 @@
 #include <ak_ui_core.h>				// Key type
 #include <ak_ui_core_aWidget.h>		// base class
 #include <ak_ui_core_aRestorable.h>	// base class
+#include <ak_globalDataTypes.h>
 
 // Forward declaration
 class QKeyEvent;
@@ -38,7 +39,7 @@ namespace ak {
 			class contextMenuItem;
 
 			//! @brief This class combines the functionallity of a QTextEdit and a ak::ui::core::aWidget
-			class textEdit : public QTextEdit, public ak::ui::core::aWidget
+			class UICORE_API_EXPORT textEdit : public QTextEdit, public ak::ui::core::aWidget
 			{
 				Q_OBJECT
 			public:

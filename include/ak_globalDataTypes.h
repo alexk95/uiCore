@@ -15,12 +15,15 @@
 
 #if  defined(_WIN32) || defined (_WIN64)
 #define OS_WINDOWS 1
-
-#define UICORE_API Q_DECL_EXPORT
-
 #elif defined(__unix__) || defined (unix) || defined(__unix)
 #define OS_UNIX 1
 #endif
+
+#if defined(UICORE_EXPORT) // inside DLL
+#   define UICORE_API_EXPORT   Q_DECL_EXPORT
+#else // outside DLL
+#   define UICORE_API_EXPORT   Q_DECL_IMPORT
+#endif  // XYZLIBRARY_EXPORT
 
 namespace ak {
 

@@ -18,6 +18,7 @@
 #include <qtoolbutton.h>				// ToolButtonPopupMode
 
 // AK header
+#include <ak_globalDataTypes.h>
 #include <ak_ui_core_aPaintable.h>		// base class
 
 class QWidget;
@@ -29,7 +30,7 @@ namespace ak {
 		namespace qt {
 
 			//! @brief This class combines the functionallity of a QAction and a ak::ui::core::aPaintable
-			class action : public QAction, public ak::ui::core::aPaintable
+			class UICORE_API_EXPORT action : public QAction, public ak::ui::core::aPaintable
 			{
 				Q_OBJECT
 			public:

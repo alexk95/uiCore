@@ -42,7 +42,7 @@ namespace ak {
 
 		namespace widget {
 
-			class tabView : public QObject, public ui::core::aWidgetManager, public ui::core::aRestorable {
+			class UICORE_API_EXPORT tabView : public QObject, public ui::core::aWidgetManager, public ui::core::aRestorable {
 				Q_OBJECT
 			public:
 				tabView(

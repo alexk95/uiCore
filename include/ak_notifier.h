@@ -19,7 +19,7 @@
 namespace ak {
 	
 	//! This abstract class is used to provide the receiver functionallity used in the messaging class.
-	class UICORE_API notifier : public ak::ui::core::aObject {
+	class UICORE_API_EXPORT notifier : public ak::ui::core::aObject {
 	public:
 		//! @brief Will initialize the notifier
 		notifier();

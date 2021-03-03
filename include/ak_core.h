@@ -21,7 +21,7 @@
 #include <qstring.h>				// QString
 
 // AK header
-#include <ak_globalDataTypes.h>		// UICORE_API
+#include <ak_globalDataTypes.h>		// UICORE_API_EXPORT
 
 namespace ak {
 
@@ -71,20 +71,21 @@ namespace ak {
 			eFocusLeft						= 1 << 12,
 			eInvalidEntry					= 1 << 13,
 			eIndexChanged					= 1 << 14,
-			eKeyPressed						= 1	 << 15,
-			eKeyReleased					= 1 << 16,
-			eLocationChanged				= 1 << 17,
-			eReleased						= 1 << 18,
-			eSelectionChanged				= 1 << 19,
-			eStateChanged					= 1 << 20,
-			eTabToolbarChanged				= 1 << 21,
-			eTabToolbarClicked				= 1 << 22,
-			eTimeout						= 1 << 23,
-			eToggeledChecked				= 1 << 24,
-			eToggeledUnchecked				= 1 << 25,
-			eContextMenuItemClicked			= 1 << 26,
-			eContextMenuItemCheckedChanged	= 1 << 27,
-			eVisibilityChanged				= 1 << 28
+			eItemTextChanged				= 1 << 15,
+			eKeyPressed						= 1	<< 16,
+			eKeyReleased					= 1 << 17,
+			eLocationChanged				= 1 << 18,
+			eReleased						= 1 << 19,
+			eSelectionChanged				= 1 << 20,
+			eStateChanged					= 1 << 21,
+			eTabToolbarChanged				= 1 << 22,
+			eTabToolbarClicked				= 1 << 23,
+			eTimeout						= 1 << 24,
+			eToggeledChecked				= 1 << 25,
+			eToggeledUnchecked				= 1 << 26,
+			eContextMenuItemClicked			= 1 << 27,
+			eContextMenuItemCheckedChanged	= 1 << 28,
+			eVisibilityChanged				= 1 << 29
 		};
 
 		inline eventType operator | (eventType a, eventType b)
@@ -99,19 +100,19 @@ namespace ak {
 
 		//! @brief Create a string representation of the provided ak::core::eventType
 		//! @param _eventType The event type to be converted
-		QString toQString(
+		UICORE_API_EXPORT QString toQString(
 			eventType								_eventType
 		);
 
 		//! @brief Create a string representation of the provided ak::core::valueType
 		//! @param _valueType The value type to be converted
-		QString toQString(
+		UICORE_API_EXPORT QString toQString(
 			valueType								_valueType
 		);
 
 		//! @brief Create a string representation of the provided ak::core::settingsRestoreErrorCode
 		//! @param _settingsRestoreErrorCode The value type to be converted
-		QString toQString(
+		UICORE_API_EXPORT QString toQString(
 			settingsRestoreErrorCode				_settingsRestoreErrorCode
 		);
 
@@ -120,7 +121,7 @@ namespace ak {
 
 		namespace graphics {
 
-			template <class T, class U> class UICORE_API point2d {
+			template <class T, class U> class point2d {
 			public:
 				//! @brief Constructor
 				//! @param _x The initial X value
@@ -176,7 +177,7 @@ namespace ak {
 
 			};
 
-			template <class T, class U, class V> class UICORE_API point3d {
+			template <class T, class U, class V> class point3d {
 			public:
 				//! @brief Constructor
 				//! @param _x The initial X value
@@ -272,39 +273,39 @@ namespace ak {
 
 			//! @brief Returns true if the provided C-String is in a format ready to be converted to a double or float
 			//! @param str The C-String to be checked
-			bool isDecimal(const char *str);
+			UICORE_API_EXPORT bool isDecimal(const char *str);
 
 			//! @brief Returns true if the provided C++ String is in a format ready to be converted to a double or float
 			//! @param str The C++ String to be checked
-			bool isDecimal(const std::string &str);
+			UICORE_API_EXPORT bool isDecimal(const std::string &str);
 
 			//! @brief Returns true if the provided Qt String is in a format ready to be converted to a double or float
 			//! @param str The Qt String to be checked
-			bool isDecimal(const QString &str);
+			UICORE_API_EXPORT bool isDecimal(const QString &str);
 
 			//! @brief Returns true if the provided C-String is in a format ready to be converted to an integer
 			//! @param str The C-String to be checked
-			bool isInteger(const char *str);
+			UICORE_API_EXPORT bool isInteger(const char *str);
 
 			//! @brief Returns true if the provided C++ String is in a format ready to be converted to an integer
 			//! @param str The C++ String to be checked
-			bool isInteger(const std::string &str);
+			UICORE_API_EXPORT bool isInteger(const std::string &str);
 
 			//! @brief Returns true if the provided Qt String is in a format ready to be converted to an integer
 			//! @param str The Qt String to be checked
-			bool isInteger(const QString &str);
+			UICORE_API_EXPORT bool isInteger(const QString &str);
 
 			//! @brief Returns true if the provided C-String consists only of numerical characters
 			//! @param str The C-String to be checked
-			bool isNumericOnly(const char *str);
+			UICORE_API_EXPORT bool isNumericOnly(const char *str);
 
 			//! @brief Returns true if the provided C++ String consists only of numerical characters
 			//! @param str The C++ String to be checked
-			bool isNumericOnly(const std::string &str);
+			UICORE_API_EXPORT bool isNumericOnly(const std::string &str);
 
 			//! @brief Returns true if the provided Qt String consists only of numerical characters
 			//! @param str The Qt String to be checked
-			bool isNumericOnly(const QString &str);
+			UICORE_API_EXPORT bool isNumericOnly(const QString &str);
 
 		} // namespace numbers
 
@@ -314,14 +315,14 @@ namespace ak {
 #elif (OS_UNIX)
 			const char charNewLine = '\n';
 #endif
-			std::vector<int> toCharIndex(
+			UICORE_API_EXPORT std::vector<int> toCharIndex(
 				const char *					str
 			);
 		}
 
 	} // namespace core
 
-	template <class T> UICORE_API std::vector<T> toVector(const std::list<T> & _list) {
+	template <class T> std::vector<T> toVector(const std::list<T> & _list) {
 		std::vector<T> ret;
 		ret.reserve(_list.size());
 		for (auto itm : _list) { ret.push_back(itm); }

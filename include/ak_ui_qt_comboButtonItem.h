@@ -18,13 +18,14 @@
 
 // AK header
 #include <ak_ui_core_aObject.h>		// base class
+#include <ak_globalDataTypes.h>
 
 namespace ak {
 	namespace ui {
 		namespace qt {
 
 			//! @brief This class represents a menu item of a combo button
-			class comboButtonItem : public QAction, public ak::ui::core::aObject
+			class UICORE_API_EXPORT comboButtonItem : public QAction, public ak::ui::core::aObject
 			{
 				Q_OBJECT
 			public:

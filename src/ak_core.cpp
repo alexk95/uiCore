@@ -32,6 +32,7 @@ QString ak::core::toQString(
 	case ak::core::eFocusLeft: return QString("FocusLeft");
 	case ak::core::eIndexChanged: return QString("IndexChanged");
 	case ak::core::eInvalidEntry: return QString("InvalidEntry");
+	case ak::core::eItemTextChanged: return QString("ItemTextChanged");
 	case ak::core::eKeyPressed: return QString("KeyPressed");
 	case ak::core::eKeyReleased: return QString("KeyReleased");
 	case ak::core::eLocationChanged: return QString("LocationChanged");
@@ -92,76 +93,62 @@ QString ak::core::toQString(
 }
 
 bool ak::core::numbers::isDecimal(const char *str) {
-	if (str != nullptr) {
-		int i = 0;
-		bool gotSign = false;
-		bool gotDecimal = false;
-		for (; str[i] != 0; i++) {
-			if (str[i] == '-' || str[i] == '+') {
-				// sign
-				if (i != 0) { return false; }
-				gotSign = true;
-			}
-			else if (str[i] == '.') {
-				if (gotDecimal) { return false; }
-				if (gotSign && i == 1) { return false; }
-				if (i == 0) { return false; }
-				gotDecimal = true;
-			}
-			else if (str[i] < '0' || str[i] > '9') { return false; }
-		}
-		if (gotSign && i == 1) { return false; }
-	}
-	return true;
+	bool failed;
+	validateNumber<double>(str, failed);
+	return !failed;
 }
 
 bool ak::core::numbers::isDecimal(const std::string &str) {
-	return isDecimal(str.c_str());
+	bool failed;
+	validateNumber<double>(str, failed);
+	return !failed;
 }
 
 bool ak::core::numbers::isDecimal(const QString &str) {
-	return isDecimal(str.toStdString());
+	bool failed;
+	validateNumber<double>(str.toStdString(), failed);
+	return !failed;
 }
 
 bool ak::core::numbers::isInteger(const char *str) {
-	if (str != nullptr) {
-		bool gotSign = false;
-		int i = 0;
-		for (; str[i] != 0; i++) {
-			if (str[i] == '+' || str[i] == '-') {
-				if (i != 0) { return false; }
-				gotSign = true;
-			}
-			else if (str[i] < '0' || str[i] > '9') { return false; }
-		}
-		if (gotSign && i == 1) { return false; }
-	}
-	return true;
+	bool failed;
+	validateNumber<int>(str, failed);
+	return !failed;
 }
 
 bool ak::core::numbers::isInteger(const std::string &str) {
-	return isInteger(str.c_str());
+	bool failed;
+	validateNumber<int>(str, failed);
+	return !failed;
 }
 
 bool ak::core::numbers::isInteger(const QString &str) {
-	return isInteger(str.toStdString());
+	bool failed;
+	validateNumber<int>(str.toStdString(), failed);
+	return !failed;
 }
 
 bool ak::core::numbers::isNumericOnly(const char *str) {
-	if (str != nullptr) {
-		for (int i = 0; str[i] != 0; i++) {
-			if (str[i] < '0' || str[i] > '9') { return false; }
-		}
+	QString s{ str };
+	for (auto c : s) {
+		if (!c.isNumber()) { return false; }
 	}
 	return true;
 }
 
 bool ak::core::numbers::isNumericOnly(const std::string &str) {
-	return isNumericOnly(str.c_str());
+	QString s{ str.c_str() };
+	for (auto c : s) {
+		if (!c.isNumber()) { return false; }
+	}
+	return true;
 }
 
 bool ak::core::numbers::isNumericOnly(const QString &str) {
-	return isNumericOnly(str.toStdString());
+	for (auto c : str) {
+		if (!c.isNumber()) { return false; }
+	}
+	return true;
 }
 
 // ########################################################################################

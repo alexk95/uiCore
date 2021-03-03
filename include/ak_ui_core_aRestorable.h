@@ -31,13 +31,12 @@
 #define RESTORABLE_CFG_CHECKED "Checked"
 #define RESTORABLE_CFG_STATE "State"
 
-
 namespace ak {
 	namespace ui {
 		namespace core {
 
 			//! Represents an object that can save and restore its settings
-			class UICORE_API aRestorable {
+			class UICORE_API_EXPORT aRestorable {
 			public:
 
 				//! @brief Default constructor
