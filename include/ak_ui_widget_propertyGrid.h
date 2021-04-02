@@ -284,7 +284,7 @@ namespace ak {
 					ak::ID											_itemID
 				);
 
-				bool isEnabled(void) const;
+				bool isEnabled(void) const { return my_isEnabled; }
 
 			private slots:
 				void slotItemChanged(void);
@@ -294,6 +294,7 @@ namespace ak {
 			private:
 
 				void itemCountChanged(void);
+				ak::ID newItemCreated(propertyGridItem * _item);
 
 				QWidget *								my_widget;
 				QVBoxLayout *							my_layout;
@@ -303,10 +304,12 @@ namespace ak {
 
 				std::map<QString, propertyGridGroup *>	my_groups;
 				std::map<ak::ID, propertyGridItem *>	my_items;
+				std::map<propertyGridItem *, bool>		my_itemStateMap;
 
 				propertyGridGroup *						my_defaultGroup;
 
 				ak::ID									my_currentID;
+				bool									my_isEnabled;
 
 				QColor									my_groupHeaderForeColor;
 				QColor									my_groupHeaderBackColor;
@@ -573,6 +576,12 @@ namespace ak {
 
 				bool isReadOnly();
 
+				void setEnabled(
+					bool					_enabled = true
+				);
+
+				bool isEnabled(void) const { return my_isEnabled; }
+
 				void setColorStyle(
 					const ui::colorStyle *	_style
 				);
@@ -616,6 +625,7 @@ namespace ak {
 				bool							my_ignoreCellEvent;
 				bool							my_isCurrentlyError;
 				bool							my_isReadOnly;
+				bool							my_isEnabled;
 
 				qt::table *						my_propertyGridTable;
 				QString							my_group;

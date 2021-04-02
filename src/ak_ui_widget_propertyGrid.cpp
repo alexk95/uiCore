@@ -39,7 +39,7 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	: ak::ui::core::aWidgetManager(ak::ui::core::oPropertyGrid, _messenger, _uidManager), my_currentID(ak::invalidID),
 	my_groupHeaderBackColor(80,80,80), my_groupHeaderForeColor(0,0,0), my_itemDefaultBackgroundColor(230,230,230),
 	my_itemTextColorError(255,0,0), my_itemTextColorNormal(0,0,0),
-	my_widget(nullptr), my_layout(nullptr), my_infoTextEdit(nullptr)
+	my_widget(nullptr), my_layout(nullptr), my_infoTextEdit(nullptr), my_isEnabled(false)
 {
 	assert(_messenger != nullptr); // nullptr provided
 	assert(_uidManager != nullptr); // nullptr provided
@@ -174,98 +174,38 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	bool											_value
-) {
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
-}
+) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	const ui::color &								_value
-) {
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
-}
+) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	double											_value
-) {
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
-}
+) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	int												_value
-) {
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
-}
+) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	const std::vector<QString> &					_possibleSelection,
 	const QString &									_value
-) {
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _possibleSelection, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
-}
+) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	const QString &									_value
-) {
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = my_defaultGroup->addItem(my_currentID, _isMultipleValues, _settingName, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
-}
+) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 // ++++++++++++++++++++++++++++++++++++++++++
 
@@ -277,15 +217,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
+	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
@@ -296,15 +228,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
+	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
@@ -315,15 +239,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
+	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
@@ -334,15 +250,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
+	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
@@ -354,15 +262,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _possibleSelection, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
+	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
@@ -373,15 +273,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
-	my_currentID++;
-	ui::widget::propertyGridItem * newItem = group->second->addItem(my_currentID, _isMultipleValues, _settingName, _value);
-	if (my_colorStyle != nullptr) { newItem->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, newItem);
-
-	itemCountChanged();
-
-	connect(newItem, SIGNAL(changed()), this, SLOT(slotItemChanged()));
-	return my_currentID;
+	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
 void ak::ui::widget::propertyGrid::setItemReadOnly(
@@ -450,7 +342,15 @@ void ak::ui::widget::propertyGrid::showItemAsError(
 
 void ak::ui::widget::propertyGrid::setEnabled(
 	bool											_enabled
-) { my_table->setEnabled(_enabled); }
+) {
+	my_isEnabled = _enabled;
+	if (my_isEnabled) {
+		for (auto itm : my_itemStateMap) { itm.first->setEnabled(itm.second); }
+	}
+	else {
+		for (auto itm : my_itemStateMap) { itm.first->setEnabled(false); }
+	}
+}
 
 // ##############################################################################################################
 
@@ -565,8 +465,6 @@ ak::core::valueType ak::ui::widget::propertyGrid::getItemValueType(
 	return itm->second->getValueType();
 }
 
-bool ak::ui::widget::propertyGrid::isEnabled(void) const { return my_table->isEnabled(); }
-
 // ##############################################################################################################
 
 // Slots
@@ -616,6 +514,19 @@ void ak::ui::widget::propertyGrid::itemCountChanged(void) {
 	my_checkItemVisibilityRequired = true;
 	// Queue the request to avoid flickering when clearing property grid and refilling it with new items
 	QMetaObject::invokeMethod(this, "slotCheckItemVisibility", Qt::QueuedConnection);
+}
+
+ak::ID ak::ui::widget::propertyGrid::newItemCreated(propertyGridItem * _item) {
+	_item->setId(++my_currentID);
+	if (my_colorStyle != nullptr) { _item->setColorStyle(my_colorStyle); }
+	my_items.insert_or_assign(my_currentID, _item);
+	my_itemStateMap.insert_or_assign(_item, true);
+	_item->setEnabled(my_isEnabled);
+
+	itemCountChanged();
+
+	connect(_item, SIGNAL(changed()), this, SLOT(slotItemChanged()));
+	return my_currentID;
 }
 
 // ##############################################################################################################********************************************************
@@ -1251,29 +1162,30 @@ void ak::ui::widget::propertyGridItem::setReadOnly(
 	bool					_readOnly
 ) {
 	my_ignoreCellEvent = true;
+	my_isReadOnly = _readOnly;
 	switch (my_valueType)
 	{
 	case ak::core::vBool:
 		assert(my_widgetBool != nullptr); // This should not happen
-		my_widgetBool->setEnabled(!_readOnly);
+		my_widgetBool->setEnabled(!my_isReadOnly && my_isEnabled);
 		break;
 	case ak::core::vColor:
 		assert(my_widgetColor != nullptr); // This should not happen
-		my_widgetColor->SetEnabled(!_readOnly);
+		my_widgetColor->SetEnabled(!my_isReadOnly && my_isEnabled);
 		break;
 	case ak::core::vSelection:
 		assert(my_widgetSelection != nullptr); // This should not happen
-		my_widgetSelection->setEnabled(!_readOnly);
+		my_widgetSelection->setEnabled(!my_isReadOnly && my_isEnabled);
 		break;
 	case ak::core::vDouble:
 	case ak::core::vInt:
 	case ak::core::vString:
 	{
 		Qt::ItemFlags f = my_cellValue->flags();
-		f.setFlag(Qt::ItemFlag::ItemIsEditable, !_readOnly);
+		f.setFlag(Qt::ItemFlag::ItemIsEditable, !my_isReadOnly && my_isEnabled);
 		my_cellValue->setFlags(f);
 	}
-		break;
+	break;
 	default:
 		assert(0); // Invalid value type
 		break;
@@ -1282,6 +1194,41 @@ void ak::ui::widget::propertyGridItem::setReadOnly(
 }
 
 bool ak::ui::widget::propertyGridItem::isReadOnly() { return my_isReadOnly; }
+
+void ak::ui::widget::propertyGridItem::setEnabled(
+	bool					_enabled
+) {
+	my_ignoreCellEvent = true;
+	my_isEnabled = _enabled;
+	switch (my_valueType)
+	{
+	case ak::core::vBool:
+		assert(my_widgetBool != nullptr); // This should not happen
+		my_widgetBool->setEnabled(!my_isReadOnly && my_isEnabled);
+		break;
+	case ak::core::vColor:
+		assert(my_widgetColor != nullptr); // This should not happen
+		my_widgetColor->SetEnabled(!my_isReadOnly && my_isEnabled);
+		break;
+	case ak::core::vSelection:
+		assert(my_widgetSelection != nullptr); // This should not happen
+		my_widgetSelection->setEnabled(!my_isReadOnly && my_isEnabled);
+		break;
+	case ak::core::vDouble:
+	case ak::core::vInt:
+	case ak::core::vString:
+	{
+		Qt::ItemFlags f = my_cellValue->flags();
+		f.setFlag(Qt::ItemFlag::ItemIsEditable, !my_isReadOnly && my_isEnabled);
+		my_cellValue->setFlags(f);
+	}
+	break;
+	default:
+		assert(0); // Invalid value type
+		break;
+	}
+	my_ignoreCellEvent = false;
+}
 
 void ak::ui::widget::propertyGridItem::setColorStyle(
 	const ui::colorStyle *	_style
@@ -1468,6 +1415,8 @@ void ak::ui::widget::propertyGridItem::ini(void) {
 	my_widgetSelection = nullptr;
 	my_ignoreCellEvent = false;
 	my_isCurrentlyError = false;
+	my_isEnabled = true;
+	my_isReadOnly = false;
 	my_colorErrorForeground = QColor(255, 0, 0);
 	my_colorNormalForeground = QColor(0, 0, 0);
 }
