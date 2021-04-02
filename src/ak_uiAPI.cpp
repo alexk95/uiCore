@@ -1893,7 +1893,8 @@ void ak::uiAPI::textEdit::appendText(
 	ui::qt::textEdit * actualTextEdit = nullptr;
 	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
 	assert(actualTextEdit != nullptr); // Invalid object type
-	return actualTextEdit->append(_text);
+	actualTextEdit->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+	return actualTextEdit->insertPlainText(_text);
 }
 
 void ak::uiAPI::textEdit::clear(
@@ -1936,7 +1937,7 @@ void ak::uiAPI::textEdit::setText(
 	ui::qt::textEdit * actualTextEdit = nullptr;
 	actualTextEdit = dynamic_cast<ui::qt::textEdit *>(my_objManager->object(_textEditUID));
 	assert(actualTextEdit != nullptr); // Invalid object type
-	return actualTextEdit->setText(_text);
+	return actualTextEdit->setPlainText(_text);
 }
 
 // TextEdit
@@ -2874,24 +2875,26 @@ void ak::uiAPI::window::removeEventHandler(
 
 void ak::uiAPI::window::setStatusLabelVisible(
 	ak::UID												_windowUID,
-	bool												_visible
+	bool												_visible,
+	bool												_delayed
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	ui::uiManager * actualWindow = nullptr;
 	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
 	assert(actualWindow != nullptr); // Invalid object type
-	actualWindow->setStatusLabelVisible(_visible);
+	actualWindow->setStatusLabelVisible(_visible, _delayed);
 }
 
 void ak::uiAPI::window::setStatusProgressVisible(
 	ak::UID												_windowUID,
-	bool												_visible
+	bool												_visible,
+	bool												_delayed
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	ui::uiManager * actualWindow = nullptr;
 	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
 	assert(actualWindow != nullptr); // Invalid object type
-	actualWindow->setStatusBarVisible(_visible);
+	actualWindow->setStatusBarVisible(_visible, _delayed);
 }
 
 void ak::uiAPI::window::setStatusLabelText(

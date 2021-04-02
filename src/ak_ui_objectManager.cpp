@@ -314,7 +314,8 @@ ak::UID ak::ui::objectManager::createTextEdit(
 	const QString &										_initialText
 ) {
 	// Create object
-	ak::ui::qt::textEdit * obj = new ak::ui::qt::textEdit(_initialText);
+	ak::ui::qt::textEdit * obj = new ak::ui::qt::textEdit();
+	obj->setPlainText(_initialText);
 	// Set parameter
 	my_signalLinker->addLink(obj);
 	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }

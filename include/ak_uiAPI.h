@@ -1882,7 +1882,8 @@ namespace ak {
 			//! @param _visible If true the status label will be visible
 			UICORE_API_EXPORT void setStatusLabelVisible(
 				ak::UID												_windowUID,
-				bool												_visible = true
+				bool												_visible = true,
+				bool												_delayed = true
 			);
 
 			//! @brief Will set the visible state of the status progress bar of the provided window.
@@ -1890,7 +1891,8 @@ namespace ak {
 			//! @param _visible If true the status progress bar will be visible
 			UICORE_API_EXPORT void setStatusProgressVisible(
 				ak::UID												_windowUID,
-				bool												_visible = true
+				bool												_visible = true,
+				bool												_delayed = true
 			);
 
 			//! @brief Will set the status label text at the provided window
