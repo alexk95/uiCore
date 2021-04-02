@@ -19,15 +19,22 @@
 #include <ak_ui_core_aWidget.h>		// Base class
 #include <ak_globalDataTypes.h>
 
+class QWidget;
+
 namespace ak {
 	namespace ui {
+
+		class colorStyle;
+
 		namespace qt {
 
 			class label : public QLabel, ui::core::aWidget {
 				Q_OBJECT
 			public:
-				label(QWidget * _parent = (QWidget *) nullptr);
-				label(const QString & _text, QWidget * _parent = (QWidget *) nullptr);
+				label(QWidget * _parent = nullptr);
+
+				label(const QString & _text, QWidget * _parent = nullptr);
+
 				virtual ~label();
 
 				// #############################################################################################################################

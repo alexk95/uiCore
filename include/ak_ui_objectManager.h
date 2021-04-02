@@ -124,6 +124,14 @@ namespace ak {
 				const QString &										_text = QString()
 			);
 
+			//! @brief Will create a line edit and return its UID
+			//! param _creatorUid The UID of the creator
+			//! @param _initialText The initial text to display
+			ak::UID createLineEdit(
+				ak::UID													_creatorUid,
+				const QString &											_initialText = QString("")
+			);
+
 			//! @brief Will create a log in dialog and return its UID
 			//! @param _creatorUid The UID of the creator
 			//! @param _showSavePassword if true the save password checkbox will be displayed
@@ -135,6 +143,15 @@ namespace ak {
 				const QPixmap &										_backgroundImage,
 				const QString &										_username = QString(),
 				const QString &										_password = QString()
+			);
+
+			//! @brief Will create a nice line edit
+			//! @param _initialText The initial text of the edit field
+			//! @param _infoLabelText The initial text of the information label
+			ak::UID createNiceLineEdit(
+				ak::UID												_creatorUid,
+				const QString &										_initialText,
+				const QString &										_infoLabelText
 			);
 
 			//! @brief Will create a push button and return its UID

@@ -366,6 +366,14 @@ namespace ak {
 			const QString &											_text = QString("")
 		);
 
+		//! @brief Will create a line edit and return its UID
+		//! param _creatorUid The UID of the creator
+		//! @param _initialText The initial text to display
+		UICORE_API_EXPORT ak::UID createLineEdit(
+			ak::UID													_creatorUid,
+			const QString &											_initialText = QString("")
+		);
+
 		//! @brief Will create a log in dialog and return its UID
 		//! @param _creatorUid The UID of the creator
 		//! @param _showSavePassword if true the save password checkbox will be displayed
@@ -377,6 +385,15 @@ namespace ak {
 			const QString &											_imageName,
 			const QString &											_username = QString(),
 			const QString &											_password = QString()
+		);
+
+		//! @brief Will create a nice line edit
+		//! @param _initialText The initial text of the edit field
+		//! @param _infoLabelText The initial text of the information label
+		UICORE_API_EXPORT ak::UID createNiceLineEdit(
+			ak::UID												_creatorUid,
+			const QString &										_initialText,
+			const QString &										_infoLabelText
 		);
 
 		//! @brief Will create a new PropertyGrid and return its UID
@@ -803,6 +820,41 @@ namespace ak {
 
 		// ###############################################################################################################################################
 
+		// Line edit
+
+		namespace lineEdit {
+			
+			//! @brief Will set the line edit text
+			//! @param _lineEditUid The UID of the line edit
+			//! @param _text The text to set
+			UICORE_API_EXPORT void setText(
+				ak::UID												_lineEditUid,
+				const QString &										_text
+			);
+
+			//! @brief Will set the line edit enabled state
+			//! @param _lineEditUid The UID of the line edit
+			//! @param _enabled The enabled state to set
+			UICORE_API_EXPORT void setEnabled(
+				ak::UID												_lineEditUid,
+				bool												_enabled
+			);
+
+			//! @brief Will return the line edit text
+			//! @param _lineEditUid The UID of the line edit
+			UICORE_API_EXPORT QString text(
+				ak::UID												_lineEditUid
+			);
+
+			//! @brief Will return the line edit enabled state
+			//! @param _lineEditUid The UID of the line edit
+			UICORE_API_EXPORT bool isEnabled(
+				ak::UID												_lineEditUid
+			);
+		}
+
+		// ###############################################################################################################################################
+
 		// Log in dialog
 
 		namespace logInDialog {
@@ -860,6 +912,55 @@ namespace ak {
 			);
 
 		} // namespace logInDialog
+
+		// ###############################################################################################################################################
+
+		// Nice line edit
+
+		namespace niceLineEdit {
+
+			//! @brief Will set the nice line edit text
+			//! @param _lineEditUid The UID of the line edit
+			//! @param _text The text to set
+			UICORE_API_EXPORT void setText(
+				ak::UID												_lineEditUid,
+				const QString &										_text
+			);
+
+			//! @brief Will set the nice line edit info label text
+			//! @param _lineEditUid The UID of the line edit
+			//! @param _text The text to set
+			UICORE_API_EXPORT void setInfoLabelText(
+				ak::UID												_lineEditUid,
+				const QString &										_text
+			);
+
+			//! @brief Will set the nice line edit enabled state
+			//! @param _lineEditUid The UID of the line edit
+			//! @param _enabled The enabled state to set
+			UICORE_API_EXPORT void setEnabled(
+				ak::UID												_lineEditUid,
+				bool												_enabled
+			);
+
+			//! @brief Will return the nice line edit text
+			//! @param _lineEditUid The UID of the line edit
+			UICORE_API_EXPORT QString text(
+				ak::UID												_lineEditUid
+			);
+
+			//! @brief Will return the nice line edit info label text
+			//! @param _lineEditUid The UID of the line edit
+			UICORE_API_EXPORT QString infoLabelText(
+				ak::UID												_lineEditUid
+			);
+
+			//! @brief Will return the nice line edit enabled state
+			//! @param _lineEditUid The UID of the line edit
+			UICORE_API_EXPORT bool isEnabled(
+				ak::UID												_lineEditUid
+			);
+		}
 
 		// ###############################################################################################################################################
 

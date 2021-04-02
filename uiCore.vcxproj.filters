@@ -269,6 +269,9 @@
     <QtMoc Include="include\ak_ui_qt_label.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
+    <QtMoc Include="include\ak_ui_widget_niceLineEdit.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -462,6 +465,9 @@
     </ClCompile>
     <ClCompile Include="src\ak_mutex.cpp">
       <Filter>Source Files\ak</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_widget_niceLineEdit.cpp">
+      <Filter>Source Files\ak\ui\widget</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

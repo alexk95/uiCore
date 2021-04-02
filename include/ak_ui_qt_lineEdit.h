@@ -73,7 +73,6 @@ namespace ak {
 
 				// #######################################################################################################
 
-
 			signals:
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);

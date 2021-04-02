@@ -42,6 +42,7 @@
 #include <ak_ui_qt_textEdit.h>				// textEdit
 #include <ak_ui_qt_timer.h>					// timer
 #include <ak_ui_qt_toolButton.h>			// toolButton
+#include <ak_ui_qt_lineEdit.h>				// lineEdit
 
 // AK widget objects
 #include <ak_ui_widget_propertyGrid.h>		// propertyGrid
@@ -49,6 +50,7 @@
 #include <ak_ui_widget_table.h>				// table
 #include <ak_ui_widget_tabView.h>			// tabView
 #include <ak_ui_widget_tree.h>				// tree
+#include <ak_ui_widget_niceLineEdit.h>		// niceLineEdit
 
 // AK ttb objects
 #include <ak_ui_ttb_group.h>				// ttb Group
@@ -215,6 +217,21 @@ ak::UID ak::ui::objectManager::createDock(
 	return obj->uid();
 }
 
+ak::UID ak::ui::objectManager::createLineEdit(
+	ak::UID													_creatorUid,
+	const QString &											_initialText
+) {
+	// Create object
+	ak::ui::qt::lineEdit * obj = new ak::ui::qt::lineEdit(_initialText);
+	// Connect to signal linker
+	my_signalLinker->addLink(obj);
+	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
+}
+
 ak::UID ak::ui::objectManager::createLogInDialog(
 	ak::UID												_creatorUid,
 	bool												_showSavePassword,
@@ -234,6 +251,22 @@ ak::UID ak::ui::objectManager::createLogInDialog(
 	addCreatedUid(_creatorUid, obj->uid());
 	return obj->uid();
 	QWidget *d;
+}
+
+ak::UID ak::ui::objectManager::createNiceLineEdit(
+	ak::UID												_creatorUid,
+	const QString &										_initialText,
+	const QString &										_infoLabelText
+) {
+	// Create object
+	widget::niceLineEdit * obj = new widget::niceLineEdit(_initialText, _infoLabelText);
+	// Set parameter
+	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
+	obj->setUid(my_uidManager->getId());
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
 }
 
 ak::UID ak::ui::objectManager::createPropertyGrid(

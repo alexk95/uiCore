@@ -32,8 +32,10 @@
 #include <ak_ui_core_ttbContainer.h>
 #include <ak_ui_qt_action.h>
 #include <ak_ui_qt_dock.h>					// dock
+#include <ak_ui_qt_lineEdit.h>				// line edit
 #include <ak_ui_widget_tree.h>				// tree
 #include <ak_ui_widget_propertyGrid.h>		// propertyGrid
+#include <ak_ui_widget_niceLineEdit.h>		// nice line edit
 #include <ak_ui_qt_textEdit.h>
 #include <ak_ui_widget_welcomeScreen.h>
 #include <ak_ui_widget_tabView.h>
@@ -425,6 +427,14 @@ ak::UID ak::uiAPI::createDock(
 	return my_objManager->createDock(_creatorUid, _text);
 }
 
+ak::UID ak::uiAPI::createLineEdit(
+	ak::UID													_creatorUid,
+	const QString &											_initialText
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createLineEdit(_creatorUid, _initialText);
+}
+
 ak::UID ak::uiAPI::createLogInDialog(
 	ak::UID												_creatorUid,
 	bool												_showSavePassword,
@@ -435,6 +445,15 @@ ak::UID ak::uiAPI::createLogInDialog(
 	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
 	return my_objManager->createLogInDialog(_creatorUid, _showSavePassword, *my_iconManager->pixmap(_imageName), _username, _password);
+}
+
+ak::UID ak::uiAPI::createNiceLineEdit(
+	ak::UID												_creatorUid,
+	const QString &										_initialText,
+	const QString &										_infoLabelText
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createNiceLineEdit(_creatorUid, _initialText, _infoLabelText);
 }
 
 ak::UID ak::uiAPI::createPropertyGrid(
@@ -991,6 +1010,52 @@ bool ak::uiAPI::file::hasChanged(
 
 // ###############################################################################################################################################
 
+// Line edit
+
+void ak::uiAPI::lineEdit::setText(
+	ak::UID												_lineEditUid,
+	const QString &										_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::lineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::qt::lineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	actualObject->setText(_text);
+}
+
+void ak::uiAPI::lineEdit::setEnabled(
+	ak::UID												_lineEditUid,
+	bool												_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::lineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::qt::lineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	actualObject->setEnabled(_enabled);
+}
+
+QString ak::uiAPI::lineEdit::text(
+	ak::UID												_lineEditUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::lineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::qt::lineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->text();
+}
+
+bool ak::uiAPI::lineEdit::isEnabled(
+	ak::UID												_lineEditUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::qt::lineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::qt::lineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->isEnabled();
+}
+
+// ###############################################################################################################################################
+
 // Log in dialog
 
 ak::ui::core::dialogResult ak::uiAPI::logInDialog::showDialog(
@@ -1102,6 +1167,73 @@ QString ak::uiAPI::logInDialog::getCustomFieldText(
 }
 
 // Log in dialog
+
+// ###############################################################################################################################################
+
+// Nice line edit
+
+void ak::uiAPI::niceLineEdit::setText(
+	ak::UID												_lineEditUid,
+	const QString &										_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	actualObject->setText(_text);
+}
+
+void ak::uiAPI::niceLineEdit::setInfoLabelText(
+	ak::UID												_lineEditUid,
+	const QString &										_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	actualObject->setInfoLabelText(_text);
+}
+
+void ak::uiAPI::niceLineEdit::setEnabled(
+	ak::UID												_lineEditUid,
+	bool												_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	actualObject->setEnabled(_enabled);
+}
+
+QString ak::uiAPI::niceLineEdit::text(
+	ak::UID												_lineEditUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->text();
+}
+
+QString ak::uiAPI::niceLineEdit::infoLabelText(
+	ak::UID												_lineEditUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->infoLabelText();
+}
+
+bool ak::uiAPI::niceLineEdit::isEnabled(
+	ak::UID												_lineEditUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::widget::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	return actualObject->isEnabled();
+}
 
 // ###############################################################################################################################################
 
