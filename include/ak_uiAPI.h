@@ -1166,6 +1166,20 @@ namespace ak {
 				ak::ID											_itemID
 			);
 
+			//! @brief Will set the property grids enabeld state
+			//! @param _propertyGridUID The UID of the property grid
+			//! @param _enabled The enabled state to set
+			UICORE_API_EXPORT void setEnabled(
+				ak::UID											_propertyGridUID,
+				bool											_enabled
+			);
+
+			//! @brief Will return the property grids enabeld state
+			//! @param _propertyGridUID The UID of the property grid
+			UICORE_API_EXPORT bool isEnabled(
+				ak::UID											_propertyGridUID
+			);
+
 		}
 
 		// ###############################################################################################################################################

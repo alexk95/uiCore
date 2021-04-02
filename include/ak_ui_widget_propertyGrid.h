@@ -220,6 +220,12 @@ namespace ak {
 					ak::ID											_itemID
 				);
 
+				//! @brief Will set the enabled state of the property grid
+				//! @param _enabled The enabled state to set
+				void setEnabled(
+					bool											_enabled
+				);
+
 				// ##############################################################################################################
 
 				// Clear items
@@ -277,6 +283,8 @@ namespace ak {
 				ak::core::valueType getItemValueType(
 					ak::ID											_itemID
 				);
+
+				bool isEnabled(void) const;
 
 			private slots:
 				void slotItemChanged(void);

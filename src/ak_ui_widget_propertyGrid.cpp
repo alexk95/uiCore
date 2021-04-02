@@ -448,6 +448,10 @@ void ak::ui::widget::propertyGrid::showItemAsError(
 	itm->second->showAsError();
 }
 
+void ak::ui::widget::propertyGrid::setEnabled(
+	bool											_enabled
+) { my_table->setEnabled(_enabled); }
+
 // ##############################################################################################################
 
 // Clear items
@@ -560,6 +564,8 @@ ak::core::valueType ak::ui::widget::propertyGrid::getItemValueType(
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getValueType();
 }
+
+bool ak::ui::widget::propertyGrid::isEnabled(void) const { return my_table->isEnabled(); }
 
 // ##############################################################################################################
 

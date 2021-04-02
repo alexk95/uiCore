@@ -1615,6 +1615,29 @@ void ak::uiAPI::propertyGrid::showItemAsError(
 	actualPropertyGrid->showItemAsError(_itemID);
 }
 
+void ak::uiAPI::propertyGrid::setEnabled(
+	ak::UID											_propertyGridUID,
+	bool											_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	actualPropertyGrid->setEnabled(_enabled);
+}
+
+bool ak::uiAPI::propertyGrid::isEnabled(
+	ak::UID											_propertyGridUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	assert(actualPropertyGrid != nullptr); // Invalid object type
+	return actualPropertyGrid->isEnabled();
+}
+
 // propertyGrid
 
 // ###############################################################################################################################################
