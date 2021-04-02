@@ -153,9 +153,6 @@
     <ClInclude Include="include\ak_singletonAllowedMessages.h">
       <Filter>Header Files\ak</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_ui_qt_tabView.h">
-      <Filter>Header Files\ak\ui\qt</Filter>
-    </ClInclude>
     <ClInclude Include="include\ak_ui_qt_timer.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </ClInclude>
@@ -271,6 +268,9 @@
     </QtMoc>
     <QtMoc Include="include\ak_ui_widget_niceLineEdit.h">
       <Filter>Header Files\ak\ui\widget</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_tabView.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

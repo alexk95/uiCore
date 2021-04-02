@@ -13,6 +13,8 @@
 #include <ak_ui_qt_tabView.h>		// Corresponding header
 #include <ak_exception.h>			// Error handling
 #include <ak_ui_colorStyle.h>
+#include <qstylepainter.h>
+#include <QStyleOptionTab>
 
 // Qt header
 #include <qwidget.h>				// QWidget
@@ -61,4 +63,49 @@ void ak::ui::qt::tabView::setColorStyle(
 		"QTabBar::tab:selected{", "}"));
 	
 	this->setStyleSheet(sheet);
+}
+
+// #######################################################################################################
+
+// #######################################################################################################
+
+// #######################################################################################################
+
+ak::ui::qt::tabViewTabBar::tabViewTabBar(color _defaultColor)
+	: my_defaultColor{ _defaultColor }, my_repaintIsBlocked{ false }
+{}
+
+ak::ui::qt::tabViewTabBar::~tabViewTabBar() {}
+
+void ak::ui::qt::tabViewTabBar::paintEvent(QPaintEvent * _event) {
+
+	QStylePainter painter(this);
+	QStyleOptionTab opt;
+
+	for (int i = 0; i < count(); i++)
+	{
+		initStyleOption(&opt, i);
+		auto itm = my_colors.find(i);
+		if (itm != my_colors.end()) {
+			opt.palette.setColor(QPalette::Button, itm->second.toQColor());
+		}
+		painter.drawControl(QStyle::CE_TabBarTabShape, opt);
+		painter.drawControl(QStyle::CE_TabBarTabLabel, opt);
+	}
+
+}
+
+void ak::ui::qt::tabViewTabBar::clearColors(bool _repaint) {
+	my_colors.clear();
+	if (_repaint && !my_repaintIsBlocked) { repaint(); }
+}
+
+void ak::ui::qt::tabViewTabBar::clearColor(int _index, bool _repaint) {
+	my_colors.erase(_index);
+	if (_repaint && !my_repaintIsBlocked) { repaint(); }
+}
+
+void ak::ui::qt::tabViewTabBar::addColor(int _index, color _color, bool _repaint) {
+	my_colors.insert_or_assign(_index, _color);
+	if (_repaint && !my_repaintIsBlocked) { repaint(); }
 }

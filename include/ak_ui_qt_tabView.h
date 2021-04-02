@@ -16,10 +16,12 @@
 
 // Qt header
 #include <qtabwidget.h>
+#include <qtabbar.h>
 
 // AK header
 #include <ak_ui_core_aWidget.h>
 #include <ak_globalDataTypes.h>
+#include <ak_ui_color.h>
 
 // Forward declaration
 class QWidget;
@@ -61,6 +63,42 @@ namespace ak {
 			private:
 				
 			};
+
+			// #######################################################################################################
+
+			// #######################################################################################################
+
+			// #######################################################################################################
+
+			class UICORE_API_EXPORT tabViewTabBar : QTabBar {
+				Q_OBJECT
+			public:
+				tabViewTabBar(color _defaultColor);
+				virtual ~tabViewTabBar();
+
+				virtual void paintEvent(QPaintEvent * _event) override;
+
+				void clearColors(bool _repaint = true);
+
+				void clearColor(int _index, bool _repaint = true);
+
+				void addColor(int _index, color _color, bool _repaint = true);
+
+				void setRepaintBlocked(bool _blocked = true) { my_repaintIsBlocked = _blocked; }
+
+			private:
+				color						my_defaultColor;
+
+				std::map<int, color>		my_colors;
+
+				bool						my_repaintIsBlocked;
+
+				tabViewTabBar() = delete;
+				tabViewTabBar(const tabViewTabBar&) = delete;
+				tabViewTabBar & operator = (const tabViewTabBar&) = delete;
+
+			};
+
 
 		} // namespace qt
 	} // namespace ui
