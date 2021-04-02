@@ -452,14 +452,18 @@ void ak::ui::widget::propertyGrid::showItemAsError(
 
 // Clear items
 
-void ak::ui::widget::propertyGrid::clear(void) {
-	for (auto itm : my_groups) {
-		propertyGridGroup * group = itm.second;
-		delete group;
+void ak::ui::widget::propertyGrid::clear(
+	bool											_keepGroups
+) {
+	if (_keepGroups) {
+		for (auto itm : my_groups) { itm.second->clear(); }
+	}
+	else {
+		for (auto itm : my_groups) { delete itm.second; }
+		my_groups.clear();
 	}
 	my_defaultGroup->clear();
 	my_items.clear();
-	my_groups.clear();
 	my_currentID = ak::invalidID;
 	itemCountChanged();
 	my_messenger->sendMessage(my_uid, ak::core::eventType::eCleared);
@@ -595,7 +599,7 @@ void ak::ui::widget::propertyGrid::slotCheckItemVisibility(void) {
 }
 
 void ak::ui::widget::propertyGrid::slotFocusLost(void) {
-	for (auto group : my_groups) { group.second->deselect(); }
+	//for (auto group : my_groups) { group.second->deselect(); }
 }
 
 // ##############################################################################################################
@@ -899,12 +903,13 @@ void ak::ui::widget::propertyGridGroup::checkVisibility(void) {
 		// Show group header (if is setVisible) and items
 		my_propertyGridTable->setRowHidden(my_item->row(), !my_headerIsVisible);
 		for (auto itm : my_items) {
-			my_propertyGridTable->setRowHidden(itm->row(), false);
+			my_propertyGridTable->setRowHidden(itm->row(), !my_isVisible);
 		}
 	}
 	else {
 		// Hide group header
 		my_propertyGridTable->setRowHidden(my_item->row(), true);
+		my_isVisible = true;
 	}
 }
 

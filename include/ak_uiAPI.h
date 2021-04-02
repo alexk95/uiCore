@@ -1041,8 +1041,11 @@ namespace ak {
 				const QString &									_value
 			);
 
+			//! @brief Will clear the property grid
+			//! @param _keepGroups The groups will be cleared but not deleted
 			UICORE_API_EXPORT void clear(
-				ak::UID											_propertyGridUID
+				ak::UID											_propertyGridUID,
+				bool											_keepGroups = false
 			);
 
 			UICORE_API_EXPORT bool getItemIsReadOnly(

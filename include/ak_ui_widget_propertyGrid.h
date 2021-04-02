@@ -224,7 +224,11 @@ namespace ak {
 
 				// Clear items
 
-				void clear(void);
+				//! @brief Will clear the property grid
+				//! @param _keepGroups If true, the groups will be cleared but not deleted
+				void clear(
+					bool											_keepGroups = false
+				);
 
 				// ##############################################################################################################
 

@@ -31,6 +31,106 @@
 #include <rapidjson/writer.h>			// Writer
 #include <rapidjson/stringbuffer.h>		// String buffer
 
+
+// #################################################################################################
+
+#include <ak_ui_qt_label.h>
+#include <ak_ui_qt_lineEdit.h>
+#include <ak_ui_qt_pushButton.h>
+#include <qlayout.h>
+
+QWidget * foo() {
+	QWidget * w = new QWidget;
+	// Create main layout
+	QVBoxLayout * mainLayout = new QVBoxLayout(w);
+
+	// ###################################################################
+
+	// Create 3 horizontal layouts
+	QWidget * dealerWidget = new QWidget;
+	QHBoxLayout * dealerLayout = new QHBoxLayout(dealerWidget);
+	
+	QWidget * middleWidget = new QWidget;
+	QHBoxLayout * middleLayout = new QHBoxLayout(middleWidget);
+	
+	QWidget * playerWidget = new QWidget;
+	QHBoxLayout * playerLayout = new QHBoxLayout(playerWidget);
+	
+	mainLayout->addWidget(dealerWidget);
+	mainLayout->addWidget(middleWidget);
+	mainLayout->addWidget(playerWidget);
+
+	// ###################################################################
+	// Action input
+
+	// Create main input layout
+	QWidget * actionWidget = new QWidget;
+	QVBoxLayout * actionLayout = new QVBoxLayout(actionWidget);
+
+	// Layout for controls
+	QWidget * actionInputWidget = new QWidget;
+	QHBoxLayout * actionInputLayout = new QHBoxLayout(actionInputWidget);
+
+	// Create controls
+	QLabel * actionLabel = new QLabel("Text");
+	QPushButton * pushButtonYes = new QPushButton("Yes");
+	QPushButton * pushButtonNo = new QPushButton("No");
+
+	// Add controls to layout
+	actionLayout->addWidget(actionLabel);
+	actionLayout->addWidget(actionInputWidget);
+
+	actionInputLayout->addWidget(pushButtonYes);
+	actionInputLayout->addWidget(pushButtonNo);
+
+	middleLayout->addWidget(actionWidget);
+	middleLayout->addStretch();
+
+	// ###################################################################
+	// Bet input
+
+	QWidget * betWidget = new QWidget;
+	QVBoxLayout * betLayout = new QVBoxLayout(betWidget);
+
+	// Layout for controls
+	QWidget * betInputWidget = new QWidget;
+	QHBoxLayout * betInputLayout = new QHBoxLayout(betInputWidget);
+
+	// Create controls
+	QLabel * betLabel = new QLabel("Bet");
+	QLabel * currentBetLabel = new QLabel("0.00 Euro");
+	QPushButton * incrBetButton = new QPushButton("+");
+	QPushButton * decrBetButton = new QPushButton("-");
+	QPushButton * confirmBetButton = new QPushButton("Place bet");
+
+	// Add controls to layout
+	betInputLayout->addWidget(decrBetButton);
+	betInputLayout->addWidget(currentBetLabel);
+	betInputLayout->addWidget(incrBetButton);
+
+	betLayout->addWidget(betLabel);
+	betLayout->addWidget(betInputWidget);
+	betLayout->addWidget(confirmBetButton);
+
+	playerLayout->addWidget(betWidget);
+	
+
+	// ###################################################################
+
+	// Card info
+
+	QWidget * dealerCards = new QWidget;
+	QWidget * playerCards = new QWidget;
+
+	dealerLayout->addWidget(dealerCards);
+	playerLayout->addWidget(playerCards);
+
+	return w;
+}
+
+
+// #################################################################################################
+
 Example::Example()
 	: my_settingColor(255,255,0)
 {
@@ -326,7 +426,8 @@ void Example::setupUi(void) {
 			ak::uiAPI::propertyGrid::setGroupStateIcons(my_ui.propertiesWidget, "ArrowGreenDown", "32", "ArrowBlueRight", "32");
 
 			// Set central widget
-			ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
+			//ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
+			ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, foo());
 
 			// Register notifier
 			ak::uiAPI::registerUidNotifier(my_ui.propertiesWidget, my_notifier);

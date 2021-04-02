@@ -1382,13 +1382,14 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 }
 
 void ak::uiAPI::propertyGrid::clear(
-	ak::UID											_propertyGridUID
+	ak::UID											_propertyGridUID,
+	bool											_keepGroups
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
 	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
-	actualPropertyGrid->clear();
+	actualPropertyGrid->clear(_keepGroups);
 }
 
 bool ak::uiAPI::propertyGrid::getItemIsReadOnly(
