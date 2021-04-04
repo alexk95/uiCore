@@ -37,6 +37,7 @@
 #include <ak_ui_widget_propertyGrid.h>		// propertyGrid
 #include <ak_ui_widget_niceLineEdit.h>		// nice line edit
 #include <ak_ui_qt_textEdit.h>
+#include <ak_ui_qt_specialTabBar.h>
 #include <ak_ui_widget_welcomeScreen.h>
 #include <ak_ui_widget_tabView.h>
 #include <ak_file.h>						// file
@@ -487,6 +488,13 @@ ak::UID ak::uiAPI::createPushButton(
 	return my_objManager->createPushButton(_creatorUid, _icon, _text);
 }
 
+ak::UID ak::uiAPI::createSpecialTabBar(
+	ak::UID												_creatorUid
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createSpecialTabBar(_creatorUid);
+}
+
 ak::UID ak::uiAPI::createTable(
 	ak::UID												_creatorUid,
 	int													_rows,
@@ -521,34 +529,34 @@ ak::UID ak::uiAPI::createTimer(
 }
 
 ak::UID ak::uiAPI::createToolButton(
-	ak::UID													_creatorUid
+	ak::UID												_creatorUid
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	return my_objManager->createToolButton(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createToolButton(
-	ak::UID													_creatorUid,
-	const QString &											_text
+	ak::UID												_creatorUid,
+	const QString &										_text
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	return my_objManager->createToolButton(_creatorUid, _text);
 }
 
 ak::UID ak::uiAPI::createToolButton(
-	ak::UID													_creatorUid,
-	const QString &											_text,
-	const QIcon &											_icon
+	ak::UID												_creatorUid,
+	const QString &										_text,
+	const QIcon &										_icon
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	return my_objManager->createToolButton(_creatorUid, _text, _icon);
 }
 
 ak::UID ak::uiAPI::createToolButton(
-	ak::UID													_creatorUid,
-	const QString &											_text,
-	const QString &											_iconName,
-	const QString &											_iconFolder
+	ak::UID												_creatorUid,
+	const QString &										_text,
+	const QString &										_iconName,
+	const QString &										_iconFolder
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
@@ -1774,6 +1782,67 @@ bool ak::uiAPI::propertyGrid::isEnabled(
 
 // ###############################################################################################################################################
 
+// Special tab bar
+
+void ak::uiAPI::specialTabBar::clearColors(
+	ak::UID			_specialTabBarUID,
+	bool			_repaint
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::qt::specialTabBar * actualTabBar = nullptr;
+	actualTabBar = dynamic_cast<ui::qt::specialTabBar *>(my_objManager->object(_specialTabBarUID));
+	assert(actualTabBar != nullptr); // Invalid object type
+
+	actualTabBar->clearColors(_repaint);
+}
+
+void ak::uiAPI::specialTabBar::clearColor(
+	ak::UID			_specialTabBarUID,
+	int				_index,
+	bool			_repaint
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::qt::specialTabBar * actualTabBar = nullptr;
+	actualTabBar = dynamic_cast<ui::qt::specialTabBar *>(my_objManager->object(_specialTabBarUID));
+	assert(actualTabBar != nullptr); // Invalid object type
+
+	actualTabBar->clearColor(_index, _repaint);
+}
+
+void ak::uiAPI::specialTabBar::addColor(
+	ak::UID			_specialTabBarUID,
+	int				_index,
+	ui::color		_color,
+	bool			_repaint
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::qt::specialTabBar * actualTabBar = nullptr;
+	actualTabBar = dynamic_cast<ui::qt::specialTabBar *>(my_objManager->object(_specialTabBarUID));
+	assert(actualTabBar != nullptr); // Invalid object type
+
+	actualTabBar->addColor(_index, _color, _repaint);
+}
+
+void ak::uiAPI::specialTabBar::setRepaintBlocked(
+	ak::UID			_specialTabBarUID,
+	bool			_blocked
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::qt::specialTabBar * actualTabBar = nullptr;
+	actualTabBar = dynamic_cast<ui::qt::specialTabBar *>(my_objManager->object(_specialTabBarUID));
+	assert(actualTabBar != nullptr); // Invalid object type
+
+	actualTabBar->setRepaintBlocked(_blocked);
+}
+
+// Special tab bar
+	
+// ###############################################################################################################################################
+
 // TabView
 
 ak::ID ak::uiAPI::tabView::addTab(
@@ -2006,6 +2075,30 @@ void ak::uiAPI::tabView::setTabText(
 	assert(actualTabView != nullptr); // Invalid object type
 
 	actualTabView->setTabText(_tab, _text);
+}
+
+void ak::uiAPI::tabView::setSpecialTabBar(
+	ak::UID								_tabViewUID,
+	ak::UID								_specialTabBarUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::qt::specialTabBar * actualTabBar = nullptr;
+	actualTabBar = dynamic_cast<ui::qt::specialTabBar *>(my_objManager->object(_specialTabBarUID));
+	assert(actualTabBar != nullptr); // Invalid object type
+	setSpecialTabBar(_tabViewUID, actualTabBar);
+}
+
+void ak::uiAPI::tabView::setSpecialTabBar(
+	ak::UID								_tabViewUID,
+	QTabBar *							_specialTabBar
+) {
+	assert(my_objManager != nullptr); // API not initialized
+
+	ui::widget::tabView * actualTabView = nullptr;
+	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
+	assert(actualTabView != nullptr); // Invalid object type
+	actualTabView->setCustomBarBar(_specialTabBar);
 }
 
 void ak::uiAPI::tabView::setVisible(

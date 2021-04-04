@@ -39,6 +39,7 @@
 #include <ak_ui_qt_comboButton.h>			// comboButton
 #include <ak_ui_qt_dock.h>					// dock
 #include <ak_ui_qt_pushButton.h>			// pushButton
+#include <ak_ui_qt_specialTabBar.h>			// special TabBar
 #include <ak_ui_qt_textEdit.h>				// textEdit
 #include <ak_ui_qt_timer.h>					// timer
 #include <ak_ui_qt_toolButton.h>			// toolButton
@@ -325,6 +326,18 @@ ak::UID ak::ui::objectManager::createOptionsDialog(
 	addCreatedUid(_creatorUid, obj->uid());
 	return obj->uid();
 
+}
+
+ak::UID ak::ui::objectManager::createSpecialTabBar(
+	ak::UID												_creatorUid
+) {
+	// Create object
+	qt::specialTabBar * obj = new qt::specialTabBar;
+	obj->setUid(my_uidManager->getId());
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
 }
 
 ak::UID ak::ui::objectManager::createTable(

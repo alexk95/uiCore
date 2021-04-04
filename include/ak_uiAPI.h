@@ -34,6 +34,7 @@
 class QSurfaceFormat;
 class QWidget;
 class QMovie;
+class QTabBar;
 
 namespace ak {
 
@@ -427,6 +428,12 @@ namespace ak {
 		//! @param _creatorUid The UID of the creator who creates this object
 		UICORE_API_EXPORT ak::UID createOptionsDialog(
 			ak::UID													_creatorUid
+		);
+
+		//! @brief Will create a new special TabBar and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		UICORE_API_EXPORT ak::UID createSpecialTabBar(
+			ak::UID												_creatorUid
 		);
 
 		//! @brief Will create a new Table and return its UID
@@ -1285,6 +1292,37 @@ namespace ak {
 
 		// ###############################################################################################################################################
 
+		// Special tab bar
+
+		namespace specialTabBar {
+
+			UICORE_API_EXPORT void clearColors(
+				ak::UID			_specialTabBarUID,
+				bool			_repaint = true
+			);
+
+			UICORE_API_EXPORT void clearColor(
+				ak::UID			_specialTabBarUID,
+				int				_index,
+				bool			_repaint = true
+			);
+
+			UICORE_API_EXPORT void addColor(
+				ak::UID			_specialTabBarUID,
+				int				_index,
+				ui::color		_color,
+				bool			_repaint = true
+			);
+
+			UICORE_API_EXPORT void setRepaintBlocked(
+				ak::UID			_specialTabBarUID,
+				bool			_blocked = true
+			);
+
+		} // namespace specialTabBar
+
+		// ###############################################################################################################################################
+
 		// TabView
 
 		namespace tabView {
@@ -1384,6 +1422,22 @@ namespace ak {
 				ak::UID								_tabViewUID,
 				ak::ID								_tab,
 				const QString &						_text
+			);
+
+			//! @brief Will set the provided tab bar to the tab view
+			//! @param _tabViewUID The UID of the tab view to set the tab bar at
+			//! @param _specialTabBarUID The UID of the special tab bar to set
+			UICORE_API_EXPORT void setSpecialTabBar(
+				ak::UID								_tabViewUID,
+				ak::UID								_specialTabBarUID
+			);
+
+			//! @brief Will set the provided tab bar to the tab view
+			//! @param _tabViewUID The UID of the tab view to set the tab bar at
+			//! @param _specialTabBar The special tab bar to set
+			UICORE_API_EXPORT void setSpecialTabBar(
+				ak::UID								_tabViewUID,
+				QTabBar *							_specialTabBar
 			);
 
 			UICORE_API_EXPORT void setVisible(

@@ -184,6 +184,12 @@ namespace ak {
 				ak::UID												_creatorUid
 			);
 
+			//! @brief Will create a new special TabBar and return its UID
+			//! @param _creatorUid The UID of the creator who creates this object
+			ak::UID createSpecialTabBar(
+				ak::UID												_creatorUid
+			);
+
 			//! @brief Will create a table and return its UID
 			//! @param _creatorUid The UID of the creator
 			//! @param _rows The initial row count of the table

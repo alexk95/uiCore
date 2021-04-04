@@ -69,6 +69,7 @@ private:
 		ak::UID				ttb_aTest2;
 		ak::UID				logInDialog;
 		ak::UID				welcomeScreen;
+		ak::UID				specialTabBar;
 	};
 
 	ak::UID						my_timerRestoreSettings;

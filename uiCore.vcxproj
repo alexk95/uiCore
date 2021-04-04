@@ -137,6 +137,7 @@
     <ClInclude Include="include\ak_ui_core_ttbContainer.h" />
     <QtMoc Include="include\ak_ui_qt_contextMenuItem.h" />
     <QtMoc Include="include\ak_ui_widget_niceLineEdit.h" />
+    <QtMoc Include="include\ak_ui_qt_specialTabBar.h" />
     <ClInclude Include="include\ak_ui_windowEventHandler.h" />
     <QtMoc Include="include\ak_ui_dialog_logIn.h" />
     <QtMoc Include="include\ak_ui_dialog_prompt.h" />
@@ -148,7 +149,7 @@
     <QtMoc Include="include\ak_ui_qt_list.h" />
     <QtMoc Include="include\ak_ui_qt_graphicsView.h" />
     <QtMoc Include="include\ak_ui_qt_label.h" />
-    <QtMoc Include="include\ak_ui_qt_tabView.h" />
+    <ClInclude Include="include\ak_ui_qt_tabView.h" />
     <ClInclude Include="include\ak_ui_qt_timer.h" />
     <QtMoc Include="include\ak_ui_qt_toolButton.h" />
     <ClInclude Include="include\ak_ui_qt_treeItem.h" />
@@ -224,6 +225,7 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_qt_list.cpp" />
     <ClCompile Include="src\ak_ui_qt_pushButton.cpp" />
+    <ClCompile Include="src\ak_ui_qt_specialTabBar.cpp" />
     <ClCompile Include="src\ak_ui_qt_table.cpp" />
     <ClCompile Include="src\ak_ui_qt_tabView.cpp" />
     <ClCompile Include="src\ak_ui_qt_textEdit.cpp" />

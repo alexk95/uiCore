@@ -25,6 +25,8 @@
 // C++ header
 #include <vector>
 
+class QTabBar;
+
 namespace ak {
 
 	// Forward declaration
@@ -144,13 +146,18 @@ namespace ak {
 				//! @brief Will set the enabled state of this tabView
 				//! @param _enabled If true it will be enabled
 				void setEnabled(
-					bool															_enabled
+					bool								_enabled
 				);
 
 				//! @brief Will set the visible state of this tabView
 				//! @param _enabled If true it will be visible
 				void setVisible(
-					bool															_visible
+					bool								_visible
+				);
+
+				//! @brief Will set the provided tabBar as the tabViews tabBar
+				void setCustomBarBar(
+					QTabBar *							_tabBar
 				);
 
 				// #######################################################################################################

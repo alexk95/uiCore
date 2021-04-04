@@ -187,6 +187,10 @@ void ak::ui::widget::tabView::setVisible(
 	bool															_visible
 ) { my_tabView->setVisible(_visible); }
 
+void ak::ui::widget::tabView::setCustomBarBar(
+	QTabBar *							_tabBar
+) { my_tabView->setTabBar(_tabBar); }
+
 // #######################################################################################################
 
 // Getter
