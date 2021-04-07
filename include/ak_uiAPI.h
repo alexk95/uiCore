@@ -1010,6 +1010,22 @@ namespace ak {
 				const QString &										_name
 			);
 
+			//! @brief Will set the objects enabeld state
+			//! For the list of suitable objects refer to the documentation
+			//! @param _objectUID The UID of the object
+			//! @param _enabled The enabled state to set
+			UICORE_API_EXPORT void setEnabled(
+				UID													_objectUID,
+				bool												_enabled = true
+			);
+
+			//! @brief Will return the objects enabeld state
+			//! For the list of suitable objects refer to the documentation
+			//! @param _objectUID The UID of the object
+			UICORE_API_EXPORT bool getIsEnabled(
+				UID													_objectUID
+			);
+
 		}
 
 		// ###############################################################################################################################################

@@ -24,29 +24,51 @@
 #include <ak_uidMangager.h>					// UID manager
 #include <ak_singletonAllowedMessages.h>	// allowed messages
 #include <ak_ui_windowEventHandler.h>
+#include <ak_file.h>						// file
 
-// AK object and widgets
+
+// AK object core headers
 #include <ak_ui_core_aObject.h>
 #include <ak_ui_core_aWidget.h>
 #include <ak_ui_core_aRestorable.h>
 #include <ak_ui_core_ttbContainer.h>
+
+// AK dialog objects
+#include <ak_ui_dialog_prompt.h>			// prompt dialog
+#include <ak_ui_dialog_logIn.h>
+#include <ak_ui_dialog_options.h>
+
+// AK qt objects
 #include <ak_ui_qt_action.h>
+#include <ak_ui_qt_colorEditButton.h>
+#include <ak_ui_qt_contextMenuItem.h>
+#include <ak_ui_qt_checkBox.h>
+#include <ak_ui_qt_comboBox.h>
+#include <ak_ui_qt_comboButton.h>
 #include <ak_ui_qt_dock.h>					// dock
+#include <ak_ui_qt_graphicsView.h>
+#include <ak_ui_qt_label.h>
 #include <ak_ui_qt_lineEdit.h>				// line edit
+#include <ak_ui_qt_list.h>
+#include <ak_ui_qt_pushButton.h>			// push button
+#include <ak_ui_qt_textEdit.h>
+#include <ak_ui_qt_specialTabBar.h>
+#include <ak_ui_qt_timer.h>
+#include <ak_ui_qt_toolButton.h>
+#include <ak_ui_qt_window.h>
+
+// AK widget objects
 #include <ak_ui_widget_tree.h>				// tree
 #include <ak_ui_widget_propertyGrid.h>		// propertyGrid
 #include <ak_ui_widget_niceLineEdit.h>		// nice line edit
-#include <ak_ui_qt_textEdit.h>
-#include <ak_ui_qt_specialTabBar.h>
 #include <ak_ui_widget_welcomeScreen.h>
 #include <ak_ui_widget_tabView.h>
-#include <ak_file.h>						// file
-#include <ak_ui_dialog_prompt.h>			// prompt dialog
-#include <ak_ui_dialog_logIn.h>
-#include <ak_ui_qt_timer.h>
-#include <ak_ui_qt_toolButton.h>
-#include <ak_ui_qt_contextMenuItem.h>
-#include <ak_ui_qt_window.h>
+#include <ak_ui_widget_table.h>
+
+// AK ttb objects
+#include <ak_ui_ttb_group.h>
+#include <ak_ui_ttb_page.h>
+#include <ak_ui_ttb_subgroup.h>
 
 // Qt header
 #include <qsurfaceformat.h>					// QSurfaceFormat
@@ -1279,6 +1301,469 @@ QString ak::uiAPI::object::getObjectUniqueName(
 ak::UID ak::uiAPI::object::getUidFromObjectUniqueName(
 	const QString &										_name
 ) { return my_objManager->object(_name)->uid(); }
+
+void ak::uiAPI::object::setEnabled(
+	UID													_objectUID,
+	bool												_enabled
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	auto obj{ my_objManager->object(_objectUID) };
+	switch (obj->objectType())
+	{
+	case ak::ui::core::oAction:
+	{
+		ui::qt::action * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::action *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oColorEditButton:
+	{
+		ui::qt::colorEditButton * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::colorEditButton *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->SetEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oComboBox:
+	{
+		ui::qt::comboBox * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::comboBox *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oComboButton:
+	{
+		ui::qt::comboButton * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::comboButton *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oCheckBox:
+	{
+		ui::qt::checkBox * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::checkBox *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oDock:
+	{
+		ui::qt::dock * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::dock *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oGraphicsView:
+	{
+		ui::qt::graphicsView * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::graphicsView *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oLabel:
+	{
+		ui::qt::label * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::label *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oLineEdit:
+	{
+		ui::qt::lineEdit * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::lineEdit *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oList:
+	{
+		ui::qt::list * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::list *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oLogInDialog:
+	{
+		ui::dialog::logIn * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::dialog::logIn *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oMainWindow:
+	{
+		ui::qt::window * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::window *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oNiceLineEdit:
+	{
+		ui::widget::niceLineEdit * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::widget::niceLineEdit *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oOptionsDialog:
+	{
+		ui::dialog::options * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::dialog::options *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oPrompt:
+	{
+		ui::dialog::prompt * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::dialog::prompt *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oPropertyGrid:
+	{
+		ui::widget::propertyGrid * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::widget::propertyGrid *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oPushButton:
+	{
+		ui::qt::pushButton * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::pushButton *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oSpecialTabBar:
+	{
+		ui::qt::specialTabBar * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::specialTabBar *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oTable:
+	{
+		ui::widget::table * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::widget::table *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oTabToolbarGroup:
+	{
+		ui::ttb::group * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::ttb::group *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oTabToolbarPage:
+	{
+		ui::ttb::page * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::ttb::page *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oTabToolbarSubgroup:
+	{
+		ui::ttb::subGroup * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::ttb::subGroup *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oTabView:
+	{
+		ui::widget::tabView * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::widget::tabView *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oTextEdit:
+	{
+		ui::qt::textEdit * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::textEdit *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oToolButton:
+	{
+		ui::qt::toolButton * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::toolButton *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oTree:
+	{
+		ui::widget::tree * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::widget::tree *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		actualObject->setEnabled(_enabled);
+	}
+		break;
+	case ak::ui::core::oNone:
+	case ak::ui::core::oComboButtonItem:
+	case ak::ui::core::oDefaultWelcomeScreen:
+	case ak::ui::core::oMenu:
+	case ak::ui::core::oPropertyGridItem:
+	case ak::ui::core::oTabToolbar:
+	case ak::ui::core::oTimer:
+	case ak::ui::core::oTreeItem:
+		assert(0); // This object does not support setEnabled()
+		break;
+	default:
+		assert(0);	// Invalid object type
+		break;
+	}
+}
+
+bool ak::uiAPI::object::getIsEnabled(
+	UID													_objectUID
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	auto obj{ my_objManager->object(_objectUID) };
+	switch (obj->objectType())
+	{
+	case ak::ui::core::oAction:
+	{
+		ui::qt::action * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::action *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oColorEditButton:
+	{
+		ui::qt::colorEditButton * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::colorEditButton *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->Enabled();
+	}
+		break;
+	case ak::ui::core::oComboBox:
+	{
+		ui::qt::comboBox * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::comboBox *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oComboButton:
+	{
+		ui::qt::comboButton * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::comboButton *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oCheckBox:
+	{
+		ui::qt::checkBox * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::checkBox *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oDock:
+	{
+		ui::qt::dock * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::dock *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oGraphicsView:
+	{
+		ui::qt::graphicsView * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::graphicsView *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oLabel:
+	{
+		ui::qt::label * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::label *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oLineEdit:
+	{
+		ui::qt::lineEdit * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::lineEdit *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oList:
+	{
+		ui::qt::list * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::list *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oLogInDialog:
+	{
+		ui::dialog::logIn * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::dialog::logIn *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oMainWindow:
+	{
+		ui::qt::window * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::window *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oNiceLineEdit:
+	{
+		ui::widget::niceLineEdit * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::widget::niceLineEdit *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oOptionsDialog:
+	{
+		ui::dialog::options * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::dialog::options *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oPrompt:
+	{
+		ui::dialog::prompt * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::dialog::prompt *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oPropertyGrid:
+	{
+		ui::widget::propertyGrid * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::widget::propertyGrid *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oPushButton:
+	{
+		ui::qt::pushButton * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::pushButton *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oSpecialTabBar:
+	{
+		ui::qt::specialTabBar * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::specialTabBar *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oTable:
+	{
+		ui::widget::table * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::widget::table *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->enabled();
+	}
+		break;
+	case ak::ui::core::oTabToolbarGroup:
+	{
+		ui::ttb::group * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::ttb::group *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->enabled();
+	}
+		break;
+	case ak::ui::core::oTabToolbarPage:
+	{
+		ui::ttb::page * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::ttb::page *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->enabled();
+	}
+		break;
+	case ak::ui::core::oTabToolbarSubgroup:
+	{
+		ui::ttb::subGroup * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::ttb::subGroup *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->enabled();
+	}
+		break;
+	case ak::ui::core::oTabView:
+	{
+		ui::widget::tabView * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::widget::tabView *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oTextEdit:
+	{
+		ui::qt::textEdit * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::textEdit *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oToolButton:
+	{
+		ui::qt::toolButton * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::toolButton *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->isEnabled();
+	}
+		break;
+	case ak::ui::core::oTree:
+	{
+		ui::widget::tree * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::widget::tree *>(obj);
+		assert(actualObject != nullptr); // Cast failed
+		return actualObject->enabled();
+	}
+		break;
+	case ak::ui::core::oNone:
+	case ak::ui::core::oComboButtonItem:
+	case ak::ui::core::oDefaultWelcomeScreen:
+	case ak::ui::core::oMenu:
+	case ak::ui::core::oPropertyGridItem:
+	case ak::ui::core::oTabToolbar:
+	case ak::ui::core::oTimer:
+	case ak::ui::core::oTreeItem:
+		assert(0); // This object does not support setEnabled()
+		return false;
+	default:
+		assert(0);	// Invalid object type
+		return false;
+	}
+}
 
 // Object
 
