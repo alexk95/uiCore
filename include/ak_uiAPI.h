@@ -26,6 +26,7 @@
 #include <ak_ui_core.h>					// object type
 #include <ak_ui_color.h>				// color
 #include <ak_ui_application.h>
+#include <ak_ui_objectManager.h>		// objectManager
 
 #include <ak_globalDataTypes.h>			// UID and ID type
 #include <ak_ui_qt_comboButtonItem.h>	// comboButtonItem
@@ -210,6 +211,9 @@ namespace ak {
 		UICORE_API_EXPORT ak::UID getObjectCreator(
 			ak::UID												_objectUID
 		);
+
+		//! @brief Will return the object manager used in this API
+		UICORE_API_EXPORT ui::objectManager * getObjectManager(void);
 
 		// ###############################################################################################################################################
 		
@@ -427,7 +431,8 @@ namespace ak {
 		//! @brief Will create a new options dialog and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		UICORE_API_EXPORT ak::UID createOptionsDialog(
-			ak::UID													_creatorUid
+			ak::UID													_creatorUid,
+			const QString &											_title = QString("Options")
 		);
 
 		//! @brief Will create a new special TabBar and return its UID
@@ -1026,7 +1031,221 @@ namespace ak {
 				UID													_objectUID
 			);
 
+			//! @brief Will cast and return the object with the specified id
+			//! @param _objectUID The UID of the object
+			template<class T> T * get(
+				UID													_objectUID
+			) {
+				T * obj = nullptr;
+				obj = dynamic_cast<T *>(getObjectManager()->object(_objectUID));
+				assert(obj != nullptr); // Invalid object type
+				return obj;
+			}
+
 		}
+
+		// ###############################################################################################################################################
+
+		// Options dialog
+
+		namespace optionsDialog {
+
+			//! @brief Will show the options dialog
+			//! @param _dialogUID The UID of the options dialog
+			UICORE_API_EXPORT void show(
+				UID												_dialogUID
+			);
+
+			//! @brief Will create a new category at the options dialog
+			//! Each category can hold individual settings
+			//! @param _parentID The id of the parent category. If ak::invalidID is provided the category is a top level category
+			//! @param _text The text of the category that will be displayed to the user
+			UICORE_API_EXPORT ID createCategory(
+				UID												_dialogUID,
+				ID												_parentID,
+				const QString &									_text
+			);
+
+			//! @brief Will create a new category at the options dialog
+			//! Each category can hold individual settings
+			//! @param _parentID The id of the parent category. If ak::invalidID is provided the category is a top level category
+			//! @param _text The text of the category that will be displayed to the user
+			//! @param _icon The icon that will be displayed to the user in the navigation
+			UICORE_API_EXPORT ID createCategory(
+				UID												_dialogUID,
+				ID												_parentID,
+				const QString &									_text,
+				const QIcon &									_icon
+			);
+
+			//! @brief Will create a new category at the options dialog
+			//! Each category can hold individual settings
+			//! @param _parentID The id of the parent category. If ak::invalidID is provided the category is a top level category
+			//! @param _text The text of the category that will be displayed to the user
+			//! @param _iconName The name of the icon. Icon will be imported via the icon manager
+			//! @param _iconPath The path of the icon. Icon will be imported via the icon manager
+			UICORE_API_EXPORT ID createCategory(
+				UID												_dialogUID,
+				ID												_parentID,
+				const QString &									_text,
+				const QString &									_iconName,
+				const QString &									_iconPath
+			);
+
+			//! @brief Will create a group at the specified category
+			//! A group can be accessed via the group name and the category ID
+			UICORE_API_EXPORT void createGroup(
+				UID												_dialogUID,
+				ID												_categoryID,
+				const QString &									_name,
+				const ui::color &								_color
+			);
+
+			//! @brief Will set the state icons for the groups
+			//! @param _groupExpanded The expanded icon to set
+			//! @param _groupCollapsed The collapsed icon to set
+			UICORE_API_EXPORT void setGroupStateIcons(
+				UID												_dialogUID,
+				const QIcon &									_groupExpanded,
+				const QIcon &									_groupCollapsed
+			);
+
+			//! @brief Will set the state icons for the groups
+			//! @param _groupExpanded The expanded icon to set
+			//! @param _groupCollapsed The collapsed icon to set
+			UICORE_API_EXPORT void setGroupStateIcons(
+				UID												_dialogUID,
+				const QString &									_groupExpandedIconName,
+				const QString &									_groupExpandedIconPath,
+				const QString &									_groupCollapsedIconName,
+				const QString &									_groupCollapsedIconPath
+			);
+
+			// Add item to default group
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_settingName,
+				bool											_value
+			);
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_settingName,
+				const ui::color &								_value
+			);
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_settingName,
+				double											_value
+			);
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_settingName,
+				int												_value
+			);
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_settingName,
+				const std::vector<QString> &					_possibleSelection,
+				const QString &									_value
+			);
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_settingName,
+				const QString &									_value
+			);
+
+			// Add item to specified group
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_groupName,
+				const QString &									_settingName,
+				bool											_value
+			);
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_groupName,
+				const QString &									_settingName,
+				const ui::color &									_value
+			);
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_groupName,
+				const QString &									_settingName,
+				double											_value
+			);
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_groupName,
+				const QString &									_settingName,
+				int												_value
+			);
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_groupName,
+				const QString &									_settingName,
+				const std::vector<QString> &					_possibleSelection,
+				const QString &									_value
+			);
+
+			UICORE_API_EXPORT ak::ID addItem(
+				UID												_dialogUID,
+				ID												_categoryID,
+				bool											_isMultipleValues,
+				const QString &									_groupName,
+				const QString &									_settingName,
+				const QString &									_value
+			);
+			
+			//! @brief Will clear the whole options dialog
+			UICORE_API_EXPORT void clear(
+				UID												_dialogUID
+			);
+
+			//! @brief Will return true if a least one setting has changed
+			UICORE_API_EXPORT bool settingsChanged(
+				UID												_dialogUID
+			);
+
+			//! @brief Will add the specified event handler to the options dialog
+			UICORE_API_EXPORT void addWindowEventHandler(
+				UID												_dialogUID,
+				ui::windowEventHandler *						_handler
+			);
+
+		} // namespace optionsDialog
 
 		// ###############################################################################################################################################
 

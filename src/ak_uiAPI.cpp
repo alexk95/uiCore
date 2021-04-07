@@ -12,7 +12,6 @@
 // AK main header
 #include <ak_uiAPI.h>						// corresponding header
 #include <ak_messenger.h>					// messenger
-#include <ak_ui_objectManager.h>			// objectManager
 #include <ak_notifierStaticEvent.h>			// notifierStaticEvent
 #include <ak_notifier.h>					// notifier
 #include <ak_exception.h>					// error handling
@@ -25,7 +24,6 @@
 #include <ak_singletonAllowedMessages.h>	// allowed messages
 #include <ak_ui_windowEventHandler.h>
 #include <ak_file.h>						// file
-
 
 // AK object core headers
 #include <ak_ui_core_aObject.h>
@@ -322,6 +320,11 @@ ak::UID ak::uiAPI::getObjectCreator(
 	return my_objManager->objectCreator(_objectUID);
 }
 
+ak::ui::objectManager * ak::uiAPI::getObjectManager(void) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager;
+}
+
 // ###############################################################################################################################################
 
 ak::UID ak::uiAPI::registerUidNotifier(
@@ -495,10 +498,11 @@ ak::UID ak::uiAPI::createPushButton(
 }
 
 ak::UID ak::uiAPI::createOptionsDialog(
-	ak::UID												_creatorUid
+	ak::UID												_creatorUid,
+	const QString &										_title
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createOptionsDialog(_creatorUid);
+	return my_objManager->createOptionsDialog(_creatorUid, _title);
 }
 
 ak::UID ak::uiAPI::createPushButton(
@@ -1766,6 +1770,236 @@ bool ak::uiAPI::object::getIsEnabled(
 }
 
 // Object
+
+// ###############################################################################################################################################
+
+// Options dialog
+
+void ak::uiAPI::optionsDialog::show(
+	UID				_dialogUID
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	actualDialog->showDialog();
+}
+
+ak::ID ak::uiAPI::optionsDialog::createCategory(
+	UID												_dialogUID,
+	ID												_parentID,
+	const QString &									_text
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->createCategory(_parentID, _text);
+}
+
+ak::ID ak::uiAPI::optionsDialog::createCategory(
+	UID												_dialogUID,
+	ID												_parentID,
+	const QString &									_text,
+	const QIcon &									_icon
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->createCategory(_parentID, _text, _icon);
+}
+
+void ak::uiAPI::optionsDialog::createGroup(
+	UID												_dialogUID,
+	ID												_categoryID,
+	const QString &									_name,
+	const ui::color &								_color
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	actualDialog->createGroup(_categoryID, _name, _color.toQColor());
+}
+
+void ak::uiAPI::optionsDialog::setGroupStateIcons(
+	UID												_dialogUID,
+	const QIcon &									_groupExpanded,
+	const QIcon &									_groupCollapsed
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	actualDialog->setGroupStateIcons(_groupExpanded, _groupCollapsed);
+}
+
+void ak::uiAPI::optionsDialog::setGroupStateIcons(
+	UID												_dialogUID,
+	const QString &									_groupExpandedIconName,
+	const QString &									_groupExpandedIconPath,
+	const QString &									_groupCollapsedIconName,
+	const QString &									_groupCollapsedIconPath
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	assert(my_iconManager != nullptr); // API not initialized
+	actualDialog->setGroupStateIcons(*my_iconManager->icon(_groupExpandedIconName, _groupExpandedIconPath),
+		*my_iconManager->icon(_groupCollapsedIconName, _groupExpandedIconPath));
+}
+
+// Add item to default group
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_settingName,
+	bool											_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _settingName, _value);
+}
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_settingName,
+	const ui::color &								_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _settingName, _value);
+}
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_settingName,
+	double											_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _settingName, _value);
+}
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_settingName,
+	int												_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _settingName, _value);
+}
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_settingName,
+	const std::vector<QString> &					_possibleSelection,
+	const QString &									_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _settingName, _possibleSelection, _value);
+}
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_settingName,
+	const QString &									_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _settingName, _value);
+}
+
+// Add item to specified group
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_settingName,
+	bool											_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _groupName, _settingName, _value);
+}
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_settingName,
+	const ui::color &								_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _groupName, _settingName, _value);
+}
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_settingName,
+	double											_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _groupName, _settingName, _value);
+}
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_settingName,
+	int												_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _groupName, _settingName, _value);
+}
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_settingName,
+	const std::vector<QString> &					_possibleSelection,
+	const QString &									_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _groupName, _settingName, _possibleSelection, _value);
+}
+
+ak::ID ak::uiAPI::optionsDialog::addItem(
+	UID												_dialogUID,
+	ID												_categoryID,
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_settingName,
+	const QString &									_value
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->addItem(_categoryID, _isMultipleValues, _groupName, _settingName, _value);
+}
+
+void ak::uiAPI::optionsDialog::clear(
+	UID												_dialogUID
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	actualDialog->clear();
+}
+
+bool ak::uiAPI::optionsDialog::settingsChanged(
+	UID												_dialogUID
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	return actualDialog->settingsChanged();
+}
+
+void ak::uiAPI::optionsDialog::addWindowEventHandler(
+	UID												_dialogUID,
+	ui::windowEventHandler *						_handler
+) {
+	auto actualDialog = object::get<ui::dialog::options>(_dialogUID);
+	actualDialog->addWindowEventHandler(_handler);
+}
+
+// Options dialog
 
 // ###############################################################################################################################################
 

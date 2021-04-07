@@ -316,16 +316,17 @@ ak::UID ak::ui::objectManager::createPushButton(
 }
 
 ak::UID ak::ui::objectManager::createOptionsDialog(
-	ak::UID												_creatorUid
+	ak::UID												_creatorUid,
+	const QString &										_title
 ) {
 	// Create object
-	dialog::options * obj = new dialog::options(my_messenger);
+	dialog::options * obj = new dialog::options{ _title };
 	obj->setUid(my_uidManager->getId());
 	// Store data
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
 	addCreatedUid(_creatorUid, obj->uid());
+	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 	return obj->uid();
-
 }
 
 ak::UID ak::ui::objectManager::createSpecialTabBar(

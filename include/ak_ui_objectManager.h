@@ -181,7 +181,8 @@ namespace ak {
 			//! @brief Will create a new options dialog and return its UID
 			//! @param _creatorUid The UID of the creator who creates this object
 			ak::UID createOptionsDialog(
-				ak::UID												_creatorUid
+				ak::UID												_creatorUid,
+				const QString &										_title
 			);
 
 			//! @brief Will create a new special TabBar and return its UID
