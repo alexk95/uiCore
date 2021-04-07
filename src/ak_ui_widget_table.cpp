@@ -29,9 +29,10 @@ ak::ui::widget::table::table(
 	int																_rows,
 	int																_columns
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTable, _messenger, _uidManager, _colorStyle),
-my_table(nullptr),
-my_cellsWithWidget(nullptr), my_signalLinker(nullptr)
+	my_table(nullptr), my_cellsWithWidget(nullptr), my_signalLinker(nullptr)
 {
+	assert(_messenger != nullptr);	// nullptr provided
+
 	// Create new table
 	my_table = new ak::ui::qt::table();
 	my_signalLinker = new ui::signalLinker(my_messenger, my_uidManager);

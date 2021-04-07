@@ -37,6 +37,8 @@ ak::ui::widget::tree::tree(
 	my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0), my_itemsAreEditable(false),
 	my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false)
 {
+	assert(_messenger != nullptr); // nullptr provided
+
 	// Set my UID
 	my_uid = my_uidManager->getId();
 

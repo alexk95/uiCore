@@ -382,8 +382,6 @@ namespace ak {
 
 				ak::messenger *								my_internalMessenger;		//! The internally used messenger
 				ak::uidManager *							my_internalUidManager;		//! The internally used UID manager
-//				ak::ui::signalLinker *						my_filterSignalLinker;		//! The signal linker used to connect the filter signals
-//				ak::notifierTreeFilter *					my_notifierFilter;			//! The notifier used to catch the filter signals
 
 				QString										my_headerText;				//! The header text of the tree
 

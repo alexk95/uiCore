@@ -63,23 +63,20 @@ namespace ak {
 
 			//! @brief Will return the icon loaded from the files location
 			//! @param _iconName The name of the icon (without extension)
-			//! @param _the size of the icon
-			//! @throw ak::Exception if the map creation failed
+			//! @param _iconPath The path of the icon. The path will decribes the subfolders in the set search directories
 			const QIcon * icon(
 				const QString &									_iconName,
-				const QString &									_iconSize
+				const QString &									_iconPath
 			);
 
 			//! @brief Will return the pixmap loaded from the files location
 			//! @param _imageName The name of the image (without extension)
-			//! @throw ak::Exception if the map creation failed
 			const QPixmap * pixmap(
 				const QString &									_imageName
 			);
 
 			//! @brief Will return the movie loaded from the files location
 			//! @param _imageName The name of the image (without extension)
-			//! @throw ak::Exception if the map creation failed
 			QMovie * movie(
 				const QString &									_imageName
 			);

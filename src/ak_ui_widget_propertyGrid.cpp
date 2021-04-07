@@ -42,7 +42,6 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	my_widget(nullptr), my_layout(nullptr), my_infoTextEdit(nullptr), my_isEnabled(true)
 {
 	assert(_messenger != nullptr); // nullptr provided
-	assert(_uidManager != nullptr); // nullptr provided
 
 	// Create central widget
 	my_widget = new QWidget();
