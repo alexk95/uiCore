@@ -39,7 +39,7 @@ ak::ui::widget::propertyGrid::propertyGrid(
 	: ak::ui::core::aWidgetManager(ak::ui::core::oPropertyGrid, _messenger, _uidManager), my_currentID(ak::invalidID),
 	my_groupHeaderBackColor(80,80,80), my_groupHeaderForeColor(0,0,0), my_itemDefaultBackgroundColor(230,230,230),
 	my_itemTextColorError(255,0,0), my_itemTextColorNormal(0,0,0),
-	my_widget(nullptr), my_layout(nullptr), my_infoTextEdit(nullptr), my_isEnabled(false)
+	my_widget(nullptr), my_layout(nullptr), my_infoTextEdit(nullptr), my_isEnabled(true)
 {
 	assert(_messenger != nullptr); // nullptr provided
 	assert(_uidManager != nullptr); // nullptr provided
@@ -262,7 +262,7 @@ ak::ID ak::ui::widget::propertyGrid::addItem(
 ) {
 	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
-	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
+	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _possibleSelection, _value));
 }
 
 ak::ID ak::ui::widget::propertyGrid::addItem(
@@ -368,6 +368,7 @@ void ak::ui::widget::propertyGrid::clear(
 	}
 	my_defaultGroup->clear();
 	my_items.clear();
+	my_itemStateMap.clear();
 	my_currentID = ak::invalidID;
 	itemCountChanged();
 	my_messenger->sendMessage(my_uid, ak::core::eventType::eCleared);
