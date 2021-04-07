@@ -123,7 +123,6 @@ namespace ak {
 			signals:
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);
-				void clicked();
 				void menuItemClicked(ak::ID);
 				void menuItemCheckedChanged(ak::ID, bool);
 
