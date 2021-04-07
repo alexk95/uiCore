@@ -36,7 +36,6 @@ QString ak::ui::core::toQString(
 	case ui::core::oLogInDialog: return QString("LogInDialog");
 	case ui::core::oMainWindow: return QString("Window");
 	case ui::core::oOptionsDialog: return QString("OptionsDialog");
-	case ui::core::oPictureBox: return QString("PictureBox");
 	case ui::core::oPrompt: return QString("Prompt");
 	case ui::core::oPropertyGrid: return QString("PropertyGrid");
 	case ui::core::oPushButton: return QString("PushButton");
@@ -51,7 +50,6 @@ QString ak::ui::core::toQString(
 	case ui::core::oToolButton: return QString("ToolButton");
 	case ui::core::oTree: return QString("Tree");
 	case ui::core::objectType::oTreeItem: return QString("TreeItem");
-	case ui::core::objectType::oWidget: return QString("Widget");
 	default: assert(0); // Not implemented yet
 	}
 	return QString("");

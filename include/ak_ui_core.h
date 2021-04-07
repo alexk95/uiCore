@@ -66,7 +66,6 @@ namespace ak {
 				oMenu,
 				oNiceLineEdit,
 				oOptionsDialog,
-				oPictureBox,
 				oPrompt,
 				oPropertyGrid,
 				oPropertyGridItem,
@@ -82,8 +81,7 @@ namespace ak {
 				oTimer,
 				oToolButton,
 				oTree,
-				oTreeItem,
-				oWidget
+				oTreeItem
 			};
 
 			//! Describes the dialog result
