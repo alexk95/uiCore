@@ -1272,6 +1272,10 @@ void ak::uiAPI::object::setObjectUniqueName(
 	const QString &										_name
 ) { my_objManager->setObjectUniqueName(_objectUID, _name); }
 
+QString ak::uiAPI::object::getObjectUniqueName(
+	ak::UID												_objectUID
+) { return my_objManager->object(_objectUID)->uniqueName(); }
+
 ak::UID ak::uiAPI::object::getUidFromObjectUniqueName(
 	const QString &										_name
 ) { return my_objManager->object(_name)->uid(); }

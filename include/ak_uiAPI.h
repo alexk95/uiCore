@@ -997,6 +997,12 @@ namespace ak {
 				const QString &										_name
 			);
 
+			//! @brief Will return the unique name set to the object
+			//! @param _objectUID The UID of the object
+			UICORE_API_EXPORT QString getObjectUniqueName(
+				ak::UID												_objectUID
+			);
+
 			//! @brief Will return the UID of the object with the specified name
 			//! Will return ak::invalidUID if there is no object with the specified name
 			//! @param _name The name of the object
