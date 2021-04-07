@@ -214,6 +214,8 @@ QString ak::ui::widget::tabView::tabText(
 	return my_tabView->tabText(_tab);
 }
 
+bool ak::ui::widget::tabView::isEnabled(void) const { return my_tabView->isEnabled(); }
+
 // #######################################################################################################
 
 // Slots

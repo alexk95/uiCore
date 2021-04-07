@@ -184,6 +184,9 @@ namespace ak {
 					ak::ID								_tab
 				) const;
 
+				//! @brief Will return the enabled state of the tab view
+				bool isEnabled(void) const;
+
 			private slots:
 				void slotCurrentTabChanged(int index);
 				void slotItemClicked(int index);
