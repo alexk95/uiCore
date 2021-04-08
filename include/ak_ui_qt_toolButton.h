@@ -121,6 +121,7 @@ namespace ak {
 				);
 
 			signals:
+				void btnClicked();
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);
 				void menuItemClicked(ak::ID);

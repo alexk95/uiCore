@@ -180,7 +180,7 @@ void ak::ui::qt::toolButton::slotClicked() {
 	if (my_menuItems.size() != 0) {
 		showMenu();
 	}
-	else { emit clicked(); }
+	else { emit btnClicked(); }
 }
 
 void ak::ui::qt::toolButton::slotMenuItemClicked() {
