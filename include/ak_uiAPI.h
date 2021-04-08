@@ -1031,6 +1031,12 @@ namespace ak {
 				UID													_objectUID
 			);
 
+			//! @brief Will return true if the specified object exists
+			//! @param _objectUID The UID of the object
+			UICORE_API_EXPORT bool exists(
+				UID													_objectUID
+			);
+
 			//! @brief Will cast and return the object with the specified id
 			//! @param _objectUID The UID of the object
 			template<class T> T * get(

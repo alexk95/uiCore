@@ -388,6 +388,12 @@ namespace ak {
 				ak::UID												_objectUID
 			);
 
+			//! @brief Will return true if the specified object exists
+			//! @param _objectUID The UID of the object
+			bool objectExists(
+				ak::UID												_objectUID
+			);
+
 		private:
 
 			void setColorStyle(

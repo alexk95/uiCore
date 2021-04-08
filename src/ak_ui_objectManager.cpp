@@ -975,6 +975,13 @@ ak::UID ak::ui::objectManager::objectCreator(
 	return owner->second;
 }
 
+bool ak::ui::objectManager::objectExists(
+	ak::UID												_objectUID
+) {
+	auto itm{ my_mapObjects.find(_objectUID) };
+	return !(itm == my_mapObjects.end());
+}
+
 // ###############################################################################################################################################
 
 void ak::ui::objectManager::setColorStyle(

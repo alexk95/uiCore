@@ -1769,6 +1769,10 @@ bool ak::uiAPI::object::getIsEnabled(
 	}
 }
 
+bool ak::uiAPI::object::exists(
+	UID													_objectUID
+) { return my_objManager->objectExists(_objectUID); }
+
 // Object
 
 // ###############################################################################################################################################
