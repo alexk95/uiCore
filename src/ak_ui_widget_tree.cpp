@@ -364,19 +364,21 @@ void ak::ui::widget::tree::deleteItem(
 }
 
 void ak::ui::widget::tree::deleteItems(
-	const std::vector<ak::ID> &				_itemIDs
+	const std::vector<ak::ID> &							_itemIDs
 ) {
 	my_treeSignalLinker->disable();
+
 	for (auto id : _itemIDs) {
 		my_itemsIterator itm = my_items.find(id);
-		assert(itm != my_items.end());		// Invalid item id
-		qt::treeItem * item = itm->second;
-		for (auto cId : item->allChildsIDs()) { my_items.erase(cId); }
-		if (item->parentId() == ak::invalidID) {
-			my_tree->removeTopLevelItem(item->id());
+		if (itm != my_items.end()) {
+			qt::treeItem * item = itm->second;
+			for (auto cId : item->allChildsIDs()) { my_items.erase(cId); }
+			if (item->parentId() == ak::invalidID) {
+				my_tree->removeTopLevelItem(item->id());
+			}
+			delete item;
+			my_items.erase(id);
 		}
-		delete item;
-		my_items.erase(id);
 	}
 	my_treeSignalLinker->enable();
 	selectionChangedEvent(true);
