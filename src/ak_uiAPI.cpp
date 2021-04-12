@@ -619,58 +619,30 @@ ak::UID ak::uiAPI::createWindow(
 void ak::uiAPI::action::setEnabled(
 	ak::UID												_actionUID,
 	bool												_enabled
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::action * actualAction = nullptr;
-	actualAction = dynamic_cast<ui::qt::action *>(my_objManager->object(_actionUID));
-	assert(actualAction != nullptr); // Invalid object type
-	actualAction->setEnabled(_enabled);
-}
+) { object::get<ui::qt::action>(_actionUID)->setEnabled(_enabled); }
 
 void ak::uiAPI::action::setText(
 	ak::UID												_actionUID,
 	const QString &										_text
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::action * actualAction = nullptr;
-	actualAction = dynamic_cast<ui::qt::action *>(my_objManager->object(_actionUID));
-	assert(actualAction != nullptr); // Invalid object type
-	actualAction->setText(_text);
-}
+) { object::get<ui::qt::action>(_actionUID)->setText(_text); }
 
 void ak::uiAPI::action::setIcon(
 	ak::UID												_actionUID,
 	const QIcon &										_icon
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::action * actualAction = nullptr;
-	actualAction = dynamic_cast<ui::qt::action *>(my_objManager->object(_actionUID));
-	assert(actualAction != nullptr); // Invalid object type
-	actualAction->setIcon(_icon);
-}
+) { object::get<ui::qt::action>(_actionUID)->setIcon(_icon); }
 
 void ak::uiAPI::action::setIcon(
 	ak::UID												_actionUID,
 	const QString &										_iconName,
 	const QString &										_iconFolder
 ) {
-	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	ui::qt::action * actualAction = nullptr;
-	actualAction = dynamic_cast<ui::qt::action *>(my_objManager->object(_actionUID));
-	assert(actualAction != nullptr); // Invalid object type
-	actualAction->setIcon(*my_iconManager->icon(_iconName, _iconFolder));
+	object::get<ui::qt::action>(_actionUID)->setIcon(*my_iconManager->icon(_iconName, _iconFolder));
 }
 
 QString ak::uiAPI::action::getText(
 	ak::UID												_actionUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::action * actualAction = nullptr;
-	actualAction = dynamic_cast<ui::qt::action *>(my_objManager->object(_actionUID));
-	assert(actualAction != nullptr); // Invalid object type
-	return actualAction->text();
-}
+) { return object::get<ui::qt::action>(_actionUID)->text(); }
 
 // Action
 
@@ -681,34 +653,16 @@ QString ak::uiAPI::action::getText(
 void ak::uiAPI::container::addObject(
 	ak::UID												_containerUID,
 	ak::UID												_objectUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::core::ttbContainer * actualContainer = nullptr;
-	actualContainer = dynamic_cast<ui::core::ttbContainer *>(my_objManager->object(_containerUID));
-	assert(actualContainer != nullptr); // Invalid object type
-	actualContainer->addChild(my_objManager->object(_objectUID));
-}
+) { object::get<ui::core::ttbContainer>(_containerUID)->addChild(my_objManager->object(_objectUID)); }
 
 void ak::uiAPI::container::setEnabled(
 	ak::UID												_containerUID,
 	bool												_isEnabled
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::core::ttbContainer * actualContainer = nullptr;
-	actualContainer = dynamic_cast<ui::core::ttbContainer *>(my_objManager->object(_containerUID));
-	assert(actualContainer != nullptr); // Invalid object type
-	actualContainer->setEnabled(_isEnabled);
-}
+) { object::get<ui::core::ttbContainer>(_containerUID)->setEnabled(_isEnabled); }
 
 bool ak::uiAPI::container::isEnabled(
 	ak::UID												_containerUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::core::ttbContainer * actualContainer = nullptr;
-	actualContainer = dynamic_cast<ui::core::ttbContainer *>(my_objManager->object(_containerUID));
-	assert(actualContainer != nullptr); // Invalid object type
-	return actualContainer->enabled();
-}
+) { return object::get<ui::core::ttbContainer>(_containerUID)->enabled(); }
 
 // Container
 
@@ -723,7 +677,6 @@ ak::ID ak::uiAPI::contextMenu::addItem(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	ui::core::aObject * obj = my_objManager->object(_widgetUID);
-	assert(obj != nullptr); // Invalid UID
 	ui::qt::contextMenuItem * newItem = new ui::qt::contextMenuItem(_text, _role);
 
 	switch (obj->objectType())
@@ -862,15 +815,8 @@ void ak::uiAPI::dock::setCentralWidget(
 	ak::UID												_dockUID,
 	ak::UID												_widgetUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	
-	ui::qt::dock * actualDock = nullptr;
-	actualDock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_dockUID));
-	assert(actualDock != nullptr); // Invalid object type
-
-	ui::core::aWidget * actualWidget = nullptr;
-	actualWidget = dynamic_cast<ui::core::aWidget *>(my_objManager->object(_widgetUID));
-	assert(actualWidget != nullptr); // Invalid object type
+	auto actualDock{ object::get<ui::qt::dock>(_dockUID) };
+	auto actualWidget{ object::get<ui::core::aWidget>(_dockUID) };
 	
 	QWidget * currentCentralWidget = actualDock->widget();
 	if (currentCentralWidget != nullptr) {
@@ -891,40 +837,16 @@ void ak::uiAPI::dock::setCentralWidget(
 void ak::uiAPI::dock::setCentralWidget(
 	ak::UID												_dockUID,
 	QWidget *											_widget
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::qt::dock * actualDock = nullptr;
-	actualDock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_dockUID));
-	assert(actualDock != nullptr); // Invalid object type
-
-	actualDock->setWidget(_widget);
-}
+) { object::get<ui::qt::dock>(_dockUID)->setWidget(_widget); }
 
 void ak::uiAPI::dock::setVisible(
 	ak::UID												_dockUID,
 	bool												_visible
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::qt::dock * actualDock = nullptr;
-	actualDock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_dockUID));
-	assert(actualDock != nullptr); // Invalid object type
-
-	actualDock->setVisible(_visible);
-}
+) { object::get<ui::qt::dock>(_dockUID)->setVisible(_visible); }
 
 bool ak::uiAPI::dock::isVisible(
 	ak::UID												_dockUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::qt::dock * actualDock = nullptr;
-	actualDock = dynamic_cast<ui::qt::dock *>(my_objManager->object(_dockUID));
-	assert(actualDock != nullptr); // Invalid object type
-
-	return actualDock->isVisible();
-}
+) { return object::get<ui::qt::dock>(_dockUID)->isVisible(); }
 
 // Dock
 
@@ -1049,44 +971,20 @@ bool ak::uiAPI::file::hasChanged(
 void ak::uiAPI::lineEdit::setText(
 	ak::UID												_lineEditUid,
 	const QString &										_text
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::lineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::qt::lineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	actualObject->setText(_text);
-}
+) { object::get<ui::qt::lineEdit>(_lineEditUid)->setText(_text); }
 
 void ak::uiAPI::lineEdit::setEnabled(
 	ak::UID												_lineEditUid,
 	bool												_enabled
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::lineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::qt::lineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	actualObject->setEnabled(_enabled);
-}
+) { object::get<ui::qt::lineEdit>(_lineEditUid)->setEnabled(_enabled); }
 
 QString ak::uiAPI::lineEdit::text(
 	ak::UID												_lineEditUid
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::lineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::qt::lineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->text();
-}
+) { return object::get<ui::qt::lineEdit>(_lineEditUid)->text(); }
 
 bool ak::uiAPI::lineEdit::isEnabled(
 	ak::UID												_lineEditUid
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::qt::lineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::qt::lineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->isEnabled();
-}
+) { return object::get<ui::qt::lineEdit>(_lineEditUid)->isEnabled(); }
 
 // ###############################################################################################################################################
 
@@ -1094,111 +992,51 @@ bool ak::uiAPI::lineEdit::isEnabled(
 
 ak::ui::core::dialogResult ak::uiAPI::logInDialog::showDialog(
 	ak::UID												_dialogUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::dialog::logIn * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->showDialog();
-}
+) { return object::get<ui::dialog::logIn>(_dialogUID)->showDialog(); }
 
 void ak::uiAPI::logInDialog::close(
 	ak::UID												_dialogUID,
 	ui::core::dialogResult								_result
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::dialog::logIn * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
-	assert(actualObject != nullptr); // Invalid object type
-	actualObject->close(_result);
-}
+) { object::get<ui::dialog::logIn>(_dialogUID)->close(_result); }
 
 QString ak::uiAPI::logInDialog::getUsername(
 	ak::UID												_dialogUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::dialog::logIn * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->username();
-}
+) { return object::get<ui::dialog::logIn>(_dialogUID)->username(); }
 
 QString ak::uiAPI::logInDialog::getPassword(
 	ak::UID												_dialogUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::dialog::logIn * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->password();
-}
+) { return object::get<ui::dialog::logIn>(_dialogUID)->password(); }
 
 bool ak::uiAPI::logInDialog::getSavePassword(
 	ak::UID												_dialogUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::dialog::logIn * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->savePassword();
-}
+) { return object::get<ui::dialog::logIn>(_dialogUID)->savePassword(); }
 
 void ak::uiAPI::logInDialog::showToolTipAtUsername(
 	ak::UID												_dialogUID,
 	const QString &										_text
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::dialog::logIn * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
-	assert(actualObject != nullptr); // Invalid object type
-	actualObject->showToolTipAtUsername(_text);
-}
+) { object::get<ui::dialog::logIn>(_dialogUID)->showToolTipAtUsername(_text); }
 
 void ak::uiAPI::logInDialog::showToolTipAtPassword(
 	ak::UID												_dialogUID,
 	const QString &										_text
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::dialog::logIn * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
-	assert(actualObject != nullptr); // Invalid object type
-	actualObject->showToolTipAtPassword(_text);
-}
+) { object::get<ui::dialog::logIn>(_dialogUID)->showToolTipAtPassword(_text); }
 
 void ak::uiAPI::logInDialog::showToolTipAtCustomField(
 	ak::UID												_dialogUID,
 	ak::ID												_inputID,
 	const QString &										_text
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::dialog::logIn * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
-	assert(actualObject != nullptr); // Invalid object type
-	actualObject->showToolTipAtCustomInput(_inputID, _text);
-}
+) { object::get<ui::dialog::logIn>(_dialogUID)->showToolTipAtCustomInput(_inputID, _text); }
 
 ak::ID ak::uiAPI::logInDialog::addCustomInputField(
 	ak::UID												_dialogUID,
 	const QString &										_labelText,
 	const QString &										_inputFieldInitialText
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::dialog::logIn * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->addCustomInput(_labelText, _inputFieldInitialText);
-}
+) { return object::get<ui::dialog::logIn>(_dialogUID)->addCustomInput(_labelText, _inputFieldInitialText); }
 
 QString ak::uiAPI::logInDialog::getCustomFieldText(
 	ak::UID												_dialogUID,
 	ak::ID												_fieldID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::dialog::logIn * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::dialog::logIn *>(my_objManager->object(_dialogUID));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->customInputText(_fieldID);
-}
+) { return object::get<ui::dialog::logIn>(_dialogUID)->customInputText(_fieldID); }
 
 // Log in dialog
 
@@ -3202,10 +3040,7 @@ ak::ID ak::uiAPI::tree::addItem(
 	ak::ID							_parentId,
 	ak::ui::core::textAlignment		_textAlignment
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->add(_parentId, _text, _textAlignment);
 }
 
@@ -3217,10 +3052,7 @@ ak::ID ak::uiAPI::tree::addItem(
 	ak::ID							_parentId,
 	ak::ui::core::textAlignment		_textAlignment
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->add(_parentId, _text, _textAlignment, *my_iconManager->icon(_iconName, _iconSize));
 }
 
@@ -3230,10 +3062,7 @@ ak::ID ak::uiAPI::tree::addItem(
 	char							_delimiter,
 	ak::ui::core::textAlignment		_textAlignment
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->add(_cmd, _delimiter, _textAlignment);
 }
 
@@ -3245,31 +3074,22 @@ ak::ID ak::uiAPI::tree::addItem(
 	const QString &					_iconSize,
 	ak::ui::core::textAlignment		_textAlignment
 ) {
-	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->add(_cmd, _delimiter, _textAlignment, *my_iconManager->icon(_iconName, _iconSize));
 }
 
 void ak::uiAPI::tree::clear(
 	ak::UID							_treeUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->clear();
 }
 
 void ak::uiAPI::tree::collapseAllItems(
 	ak::UID							_treeUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->collapseAllItems();
 }
 
@@ -3277,10 +3097,7 @@ void ak::uiAPI::tree::deleteItem(
 	ak::UID							_treeUID,
 	ak::ID							_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->deleteItem(_itemID);
 }
 
@@ -3288,10 +3105,7 @@ void ak::uiAPI::tree::deleteItems(
 	ak::UID							_treeUID,
 	const std::vector<ak::ID> &		_itemIDs
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->deleteItems(_itemIDs);
 }
 
@@ -3300,10 +3114,7 @@ void ak::uiAPI::tree::setItemsAreEditable(
 	bool							_editable,
 	bool							_applyToAll
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setItemsAreEditable(_editable, _applyToAll);
 }
 
@@ -3312,10 +3123,7 @@ void ak::uiAPI::tree::setItemIsEditable(
 	ak::ID							_itemID,
 	bool							_editable
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setItemIsEditable(_itemID, _editable);
 }
 
@@ -3324,10 +3132,7 @@ void ak::uiAPI::tree::setItemIsEditable(
 	const std::vector<ak::ID> &		_itemIDs,
 	bool							_editable
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setItemIsEditable(_itemIDs, _editable);
 }
 
@@ -3335,20 +3140,14 @@ void ak::uiAPI::tree::deselectAllItems(
 	ak::UID							_treeUID,
 	bool							_sendSelectionChangedEvent
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->deselectAllItems(_sendSelectionChangedEvent);
 }
 
 void ak::uiAPI::tree::expandAllItems(
 	ak::UID							_treeUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->expandAllItems();
 }
 
@@ -3357,10 +3156,7 @@ ak::ID ak::uiAPI::tree::getItemID(
 	const QString &					_itemPath,
 	char							_delimiter
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->getItemID(_itemPath, _delimiter);
 }
 
@@ -3368,10 +3164,7 @@ std::vector<QString> ak::uiAPI::tree::getItemPath(
 	ak::UID							_treeUID,
 	ak::ID							_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->getItemPath(_itemID);
 }
 
@@ -3380,10 +3173,7 @@ QString ak::uiAPI::tree::getItemPathString(
 	ak::ID							_itemID,
 	char							_delimiter
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->getItemPathString(_itemID, _delimiter);
 }
 
@@ -3391,40 +3181,28 @@ QString ak::uiAPI::tree::getItemText(
 	ak::UID							_treeUID,
 	ak::ID							_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->getItemText(_itemID);
 }
 
 bool ak::uiAPI::tree::isEnabled(
 	ak::UID							_treeUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->enabled();
 }
 
 int ak::uiAPI::tree::itemCount(
 	ak::UID							_treeUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->itemCount();
 }
 
 std::vector<ak::ID> ak::uiAPI::tree::selectedItems(
 	ak::UID							_treeUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	return actualTree->selectedItems();
 }
 
@@ -3432,10 +3210,7 @@ void ak::uiAPI::tree::setAutoSelectAndDeselectChildrenEnabled(
 	ak::UID							_treeUID,
 	bool							_enabled
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setAutoSelectAndDeselectChildrenEnabled(_enabled);
 }
 
@@ -3443,10 +3218,7 @@ void ak::uiAPI::tree::setEnabled(
 	ak::UID							_treeUID,
 	bool							_enabled
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setEnabled(_enabled);
 }
 
@@ -3454,10 +3226,7 @@ void ak::uiAPI::tree::setFilterCaseSensitiveEnabled(
 	ak::UID							_treeUID,
 	bool							_caseSensitiveEnabled
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setFilterCaseSensitive(_caseSensitiveEnabled);
 }
 
@@ -3465,10 +3234,7 @@ void ak::uiAPI::tree::setFilterRefreshOnChangeEnabled(
 	ak::UID							_treeUID,
 	bool							_refreshOnChangeEnabled
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setFilterRefreshOnChange(_refreshOnChangeEnabled);
 }
 
@@ -3476,10 +3242,7 @@ void ak::uiAPI::tree::setFilterVisible(
 	ak::UID							_treeUID,
 	bool							_visible
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setFilterVisible(_visible);
 }
 
@@ -3488,10 +3251,7 @@ void ak::uiAPI::tree::setItemIcon(
 	ak::ID							_itemID,
 	const QIcon &					_icon
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setItemIcon(_itemID, _icon);
 }
 
@@ -3501,11 +3261,8 @@ void ak::uiAPI::tree::setItemIcon(
 	const QString &					_iconName,
 	const QString &					_iconFolder
 ) {
-	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setItemIcon(_itemID, *my_iconManager->icon(_iconName, _iconFolder));
 }
 
@@ -3514,10 +3271,7 @@ void ak::uiAPI::tree::setItemEnabled(
 	ak::ID							_itemID,
 	bool							_enabled
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setItemEnabled(_itemID, _enabled);
 }
 
@@ -3527,12 +3281,14 @@ void ak::uiAPI::tree::setItemSelected(
 	bool							_selected,
 	bool							_singleSelection
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
-	if (_singleSelection) { actualTree->setSingleItemSelected(_itemID, _selected); }
-	else { actualTree->setItemSelected(_itemID, _selected); }
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	if (_singleSelection) {
+		actualTree->setItemSelected(_itemID, _selected);
+	}
+	else {
+		actualTree->setSingleItemSelected(_itemID, _selected);
+	}
+	
 }
 
 void ak::uiAPI::tree::setItemVisible(
@@ -3540,10 +3296,7 @@ void ak::uiAPI::tree::setItemVisible(
 	ak::ID							_itemID,
 	bool							_visible
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setItemVisible(_itemID, _visible);
 }
 
@@ -3552,10 +3305,7 @@ void ak::uiAPI::tree::setItemText(
 	ak::ID							_itemId,
 	const QString &					_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setItemText(_itemId, _text);
 }
 
@@ -3563,10 +3313,7 @@ void ak::uiAPI::tree::setMultiSelectionEnabled(
 	ak::UID							_treeUID,
 	bool							_enabled
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setMultiSelectionEnabled(_enabled);
 }
 
@@ -3574,10 +3321,7 @@ void ak::uiAPI::tree::setVisible(
 	ak::UID							_treeUID,
 	bool							_visible
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->setVisible(_visible);
 }
 
@@ -3585,11 +3329,23 @@ void ak::uiAPI::tree::toggleItemSelection(
 	ak::UID							_treeUID,
 	ak::ID							_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::tree * actualTree = nullptr;
-	actualTree = dynamic_cast<ui::widget::tree *>(my_objManager->object(_treeUID));
-	assert(actualTree != nullptr); // Invalid object type
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	actualTree->toggleItemSelection(_itemID);
+}
+
+void ak::uiAPI::tree::setSortingEnabled(
+	ak::UID							_treeUID,
+	bool							_enabled
+) {
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	actualTree->setSortingEnabled(_enabled);
+}
+
+bool ak::uiAPI::tree::isSortingEnabled(
+	ak::UID							_treeUID
+) {
+	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	return actualTree->isSortingEnabled();
 }
 
 // Tree

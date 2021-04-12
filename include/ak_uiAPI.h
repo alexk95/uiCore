@@ -2149,6 +2149,15 @@ namespace ak {
 				ak::ID							_itemID
 			);
 
+			UICORE_API_EXPORT void setSortingEnabled(
+				ak::UID							_treeUID,
+				bool							_enabled = true
+			);
+
+			UICORE_API_EXPORT bool isSortingEnabled(
+				ak::UID							_treeUID
+			);
+
 		} // namespace tree
 
 		// ###############################################################################################################################################

@@ -219,14 +219,7 @@ QString ak::ui::dialog::logIn::username(void) const { return my_inputUsername->t
 
 QString ak::ui::dialog::logIn::password(void) const {
 	if (my_hashedPw.length() > 0) { return my_hashedPw; }
-	QCryptographicHash hash(QCryptographicHash::Algorithm::Sha256);
-	QString txt(my_inputPassword->text());
-	std::string str(txt.toStdString());
-	hash.addData(str.c_str(), str.length());
-	QByteArray arr(hash.result());
-	QByteArray result(arr.toHex());
-	std::string ret(result.toStdString());
-	return QString(ret.c_str());
+	return ak::core::crypto::hash(my_inputPassword->text(), ak::core::crypto::caSha_256);
 }
 
 QString ak::ui::dialog::logIn::customInputText(ak::ID _id) {

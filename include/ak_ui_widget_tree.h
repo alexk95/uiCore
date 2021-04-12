@@ -183,6 +183,12 @@ namespace ak {
 					const QIcon &					_icon
 				);
 
+				//! @brief Will set the sorting enabled flag for this tree
+				//! @param _enabled The enabled state to set
+				void setSortingEnabled(
+					bool							_enabled
+				);
+
 				// ###########################################################################################################################################
 
 				// Filter
@@ -305,6 +311,9 @@ namespace ak {
 
 				//! @brief Will return the count of items in this tree
 				int itemCount(void) const;
+
+				//! @brief Will return the sorting enabled state
+				bool isSortingEnabled(void) const;
 
 				// ###########################################################################################################################################
 

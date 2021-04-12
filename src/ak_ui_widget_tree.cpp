@@ -38,7 +38,7 @@ ak::ui::widget::tree::tree(
 	my_internalMessenger(nullptr), my_internalUidManager(nullptr), my_selectAndDeselectChildren(false)
 {
 	assert(_messenger != nullptr); // nullptr provided
-
+	
 	// Set my UID
 	my_uid = my_uidManager->getId();
 
@@ -279,7 +279,7 @@ void ak::ui::widget::tree::setVisible(
 	bool							_visible
 ) { my_tree->setVisible(_visible); }
 
-void  ak::ui::widget::tree::setItemIcon(
+void ak::ui::widget::tree::setItemIcon(
 	ak::ID							_itemId,
 	const QIcon &					_icon
 ) {
@@ -287,6 +287,10 @@ void  ak::ui::widget::tree::setItemIcon(
 	assert(itm != my_items.end()); // Invalid item ID
 	itm->second->setIcon(0, _icon);
 }
+
+void ak::ui::widget::tree::setSortingEnabled(
+	bool							_enabled
+) { my_tree->setSortingEnabled(_enabled); }
 
 // ###########################################################################################################################################
 
@@ -472,6 +476,8 @@ QString ak::ui::widget::tree::getItemText(
 bool ak::ui::widget::tree::enabled() const { return my_tree->isEnabled(); }
 
 int ak::ui::widget::tree::itemCount(void) const { return my_items.size(); }
+
+bool ak::ui::widget::tree::isSortingEnabled(void) const { return my_tree->isSortingEnabled(); }
 
 // ###########################################################################################################################
 

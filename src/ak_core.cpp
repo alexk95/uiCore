@@ -151,7 +151,46 @@ bool ak::core::numbers::isNumericOnly(const QString &str) {
 	return true;
 }
 
+QCryptographicHash::Algorithm ak::core::crypto::getQCryptographicHashAlgorithm(ak::core::crypto::algorithm _algorhitm) {
+	switch (_algorhitm)
+	{
+	case ak::core::crypto::caKeccak_224: return QCryptographicHash::Algorithm::Keccak_224;
+	case ak::core::crypto::caKeccak_256: return QCryptographicHash::Algorithm::Keccak_256;
+	case ak::core::crypto::caKeccak_384: return QCryptographicHash::Algorithm::Keccak_384;
+	case ak::core::crypto::caKeccak_512: return QCryptographicHash::Algorithm::Keccak_512;
+	case ak::core::crypto::caMd4: return QCryptographicHash::Algorithm::Md4;
+	case ak::core::crypto::caMd5: return QCryptographicHash::Algorithm::Md5;
+	case ak::core::crypto::caRealSha3_224: return QCryptographicHash::Algorithm::RealSha3_224;
+	case ak::core::crypto::caRealSha3_256: return QCryptographicHash::Algorithm::RealSha3_256;
+	case ak::core::crypto::caRealSha3_384: return QCryptographicHash::Algorithm::RealSha3_384;
+	case ak::core::crypto::caRealSha3_512: return QCryptographicHash::Algorithm::RealSha3_512;
+	case ak::core::crypto::caSha1: return QCryptographicHash::Algorithm::Sha1;
+	case ak::core::crypto::caSha_224: return QCryptographicHash::Algorithm::Sha224;
+	case ak::core::crypto::caSha_256: return QCryptographicHash::Algorithm::Sha256;
+	case ak::core::crypto::caSha_384: return QCryptographicHash::Algorithm::Sha384;
+	case ak::core::crypto::caSha3_224: return QCryptographicHash::Algorithm::Sha3_224;
+	case ak::core::crypto::caSha3_256: return QCryptographicHash::Algorithm::Sha3_256;
+	case ak::core::crypto::caSha3_384: return QCryptographicHash::Algorithm::Sha3_384;
+	case ak::core::crypto::caSha3_512: return QCryptographicHash::Algorithm::Sha3_512;
+	case ak::core::crypto::caSha512: return QCryptographicHash::Algorithm::Sha512;
+	default:
+		assert(0);	// No such algorithm
+		throw std::exception("No such algorithm");
+	}
+}
+
+QString ak::core::crypto::hash(const QString & _str, algorithm _algorhitm) {
+	QCryptographicHash hash(getQCryptographicHashAlgorithm(_algorhitm));
+	std::string str(_str.toStdString());
+	hash.addData(str.c_str(), str.length());
+	QByteArray arr(hash.result());
+	QByteArray result(arr.toHex());
+	std::string ret(result.toStdString());
+	return QString(ret.c_str());
+}
+
 // ########################################################################################
+
 // String
 
 std::vector<int> ak::core::str::toCharIndex(

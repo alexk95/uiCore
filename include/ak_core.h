@@ -19,6 +19,7 @@
 
 // Qt header
 #include <qstring.h>				// QString
+#include <qcryptographichash.h>
 
 // AK header
 #include <ak_globalDataTypes.h>		// UICORE_API_EXPORT
@@ -318,6 +319,38 @@ namespace ak {
 			UICORE_API_EXPORT std::vector<int> toCharIndex(
 				const char *					str
 			);
+		}
+
+		namespace crypto {
+
+			enum algorithm
+			{
+				caKeccak_224,
+				caKeccak_256,
+				caKeccak_384,
+				caKeccak_512,
+				caMd4,
+				caMd5,
+				caRealSha3_224,
+				caRealSha3_256,
+				caRealSha3_384,
+				caRealSha3_512,
+				caSha1,
+				caSha_224,
+				caSha_256,
+				caSha_384,
+				caSha3_224,
+				caSha3_256,
+				caSha3_384,
+				caSha3_512,
+				caSha512
+			};
+
+			UICORE_API_EXPORT QCryptographicHash::Algorithm getQCryptographicHashAlgorithm(ak::core::crypto::algorithm _algorhitm);
+
+			//! @brief Will return a hashed string that was hashed by the specified algorhitm
+			UICORE_API_EXPORT QString hash(const QString & _str, algorithm _algorhitm);
+
 		}
 
 	} // namespace core
