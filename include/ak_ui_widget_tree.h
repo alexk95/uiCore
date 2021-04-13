@@ -386,7 +386,7 @@ namespace ak {
 				bool										my_filterCaseSensitive;		//! If true, the filter is case sensitive
 				bool										my_filterRefreshOnChange;	//! If true, the filter will always be applied when the text changes
 				ak::ui::treeSignalLinker *					my_treeSignalLinker;		//! The signal linker used to connect the tree signals to the messaging system
-				
+
 				// Internal message system
 
 				ak::messenger *								my_internalMessenger;		//! The internally used messenger

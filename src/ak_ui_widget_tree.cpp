@@ -26,6 +26,7 @@
 #include <qmargins.h>
 #include <qevent.h>
 
+#include <qheaderview.h>
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::widget::tree::tree(
@@ -82,7 +83,7 @@ ak::ui::widget::tree::tree(
 
 	my_tree->setMouseTracking(true);
 	my_tree->setHeaderHidden(true);
-
+	my_tree->header()->setSortIndicator(0, Qt::SortOrder::AscendingOrder);
 }
 
 ak::ui::widget::tree::~tree() {
@@ -290,7 +291,12 @@ void ak::ui::widget::tree::setItemIcon(
 
 void ak::ui::widget::tree::setSortingEnabled(
 	bool							_enabled
-) { my_tree->setSortingEnabled(_enabled); }
+) { 
+	my_tree->setSortingEnabled(_enabled);
+	if (_enabled) {
+		my_tree->sortByColumn(0);
+	}
+}
 
 // ###########################################################################################################################################
 

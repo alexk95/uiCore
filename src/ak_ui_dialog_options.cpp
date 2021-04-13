@@ -66,6 +66,7 @@ ak::ui::dialog::options::options(
 	my_tree = new widget::tree{ my_messenger, nullptr, my_colorStyle };
 	my_tree->setUid(1);
 	my_tree->setMultiSelectionEnabled(false);
+	my_tree->setSortingEnabled(true);
 	if (my_colorStyle != nullptr) { my_tree->setColorStyle(my_colorStyle); }
 
 	my_dummy = new widget::propertyGrid{ my_messenger, nullptr };
@@ -115,8 +116,6 @@ void ak::ui::dialog::options::setColorStyle(
 		setStyleSheet(sheet);
 		sheet = my_colorStyle->toStyleSheet(core::colorAreaFlag::caBackgroundColorButton |
 			core::colorAreaFlag::caForegroundColorButton, "QSplitter[orientation=\"1\"]::handle {", "}");
-		//sheet.append(my_colorStyle->toStyleSheet(core::colorAreaFlag::caBackgroundColorButton |
-			//core::colorAreaFlag::caForegroundColorButton, "QSplitter[orientation=\"1\"]::handle {", "}"));
 		my_centralWidget->setStyleSheet(sheet);
 	}
 	else {

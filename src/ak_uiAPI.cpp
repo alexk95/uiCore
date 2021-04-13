@@ -816,7 +816,7 @@ void ak::uiAPI::dock::setCentralWidget(
 	ak::UID												_widgetUID
 ) {
 	auto actualDock{ object::get<ui::qt::dock>(_dockUID) };
-	auto actualWidget{ object::get<ui::core::aWidget>(_dockUID) };
+	auto actualWidget{ object::get<ui::core::aWidget>(_widgetUID) };
 	
 	QWidget * currentCentralWidget = actualDock->widget();
 	if (currentCentralWidget != nullptr) {
