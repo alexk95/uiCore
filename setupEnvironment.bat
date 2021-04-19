@@ -2,7 +2,7 @@
 REM This script requires the following environment variables to be set:
 REM 1. UI_CORE_ROOT
 REM 2. DEVENV_ROOT
-REM 3. QTDIR
+REM 3. QTDIR_ROOT
 
 REM Ensure that the setup will only be performed once
 if "%UI_CORE_LIB_ENV_DEFINED%"=="1" (
@@ -23,11 +23,12 @@ IF "%DEVENV_ROOT%" == "" (
 	goto END
 )
 
-IF "%QTDIR%" == "" (
-	ECHO Please specify the following environment variables: QTDIR
+IF "%QTDIR_ROOT%" == "" (
+	ECHO Please specify the following environment variables: QTDIR_ROOT
 	goto END
 )
 
+SET QTDIR=%QTDIR_ROOT%
 SET QDIR=%QTDIR%
 
 REM Set Tab Toolbar Root Directory

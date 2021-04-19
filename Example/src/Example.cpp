@@ -41,6 +41,8 @@
 
 // #################################################################################################
 
+#include <ak_ui_dialog_options.h>
+
 Example::Example()
 	: my_settingColor(255,255,0)
 {
@@ -99,6 +101,15 @@ Example::Example()
 		// Show the window
 		ak::uiAPI::window::showMaximized(my_ui.mainWindow);
 		
+		ak::UID test = ak::uiAPI::createOptionsDialog(my_uid);
+		ak::uiAPI::optionsDialog::setGroupStateIcons(test, "ArrowGreenDown", "32", "ArrowBlueRight", "32");
+		auto t1 = ak::uiAPI::optionsDialog::createCategory(test, -1, "test1");
+		auto t2 = ak::uiAPI::optionsDialog::createCategory(test, -1, "test2");
+		ak::uiAPI::optionsDialog::createGroup(test, t1, "Test Group", QColor(180, 140, 110));
+		ak::uiAPI::optionsDialog::addItem(test, t1, false, "Test Group", "Some color", QColor(180, 140, 110));
+		ak::uiAPI::optionsDialog::addItem(test, t1, false, "Test Group", "Some int", 100);
+		ak::uiAPI::optionsDialog::show(test);
+
 		// Run the main application
 		ak::uiAPI::exec();
 

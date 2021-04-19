@@ -2522,6 +2522,19 @@ namespace ak {
 
 		// ###############################################################################################################################################
 
+		// Crypto
+
+		namespace crypto {
+
+			UICORE_API_EXPORT QString hash(
+				const QString &				_orig,
+				core::crypto::algorithm		_algorithm
+			);
+
+		}
+
+		// ###############################################################################################################################################
+
 		//! @brief Will destroy all objects created by this creator
 		//! @param _creatorUid The UID of the creator
 		//! @throw ak::Exception if the API is not initialized

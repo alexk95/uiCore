@@ -131,6 +131,7 @@ ak::ID ak::ui::widget::tree::add(
 		if (itm == nullptr) {
 			itm = createItem(_text, _textAlignment, _icon);
 			parent->second->AddChild(itm);
+			if (parent->second->isSelected()) { itm->setSelected(true); }
 			my_items.insert_or_assign(itm->id(), itm);
 		}
 		return itm->id();
@@ -166,6 +167,8 @@ ak::ID ak::ui::widget::tree::add(
 		my_items.insert_or_assign(currentItem->id(), currentItem);
 	}
 
+	my_treeSignalLinker->disable();
+
 	for (int i = 1; i < items.count(); i++) {
 		ak::ui::qt::treeItem * nItm = currentItem->findChild(items.at(i));
 		if (nItm == nullptr) {
@@ -175,11 +178,16 @@ ak::ID ak::ui::widget::tree::add(
 			assert(nItm != nullptr); // Failed to create
 			// Add item
 			currentItem->AddChild(nItm);
+			if (currentItem->isSelected()) { nItm->setSelected(true); }
+
 			// Store data
 			my_items.insert_or_assign(nItm->id(), nItm);
 		}
 		currentItem = nItm;
 	}
+
+	my_treeSignalLinker->enable();
+	selectionChangedEvent(false);
 
 	return currentItem->id();
 }

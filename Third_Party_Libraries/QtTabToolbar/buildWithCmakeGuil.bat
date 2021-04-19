@@ -4,11 +4,11 @@ REM The first argument of the shell defines whether a release or debug build sha
 REM The second argument of hte shell defines whetehr a full rebuild or just a build is performed. "BUILD" (default), "REBUILD"
 
 REM This script requires the following environment variables to be set:
-REM 1. SIM_PLAT_ROOT
+REM 1. UI_CORE_ROOT
 REM 2. DEVENV_ROOT
 
-IF "%SIM_PLAT_ROOT%"=="" (
-	ECHO Please specify the following environment variables: SIM_PLAT_ROOT
+IF "%UI_CORE_ROOT%"=="" (
+	ECHO Please specify the following environment variables: UI_CORE_ROOT
 	goto END
 )
 
@@ -19,7 +19,7 @@ IF "%DEVENV_ROOT%"=="" (
 
 REM Setup eviroment
 
-CALL "%SIM_PLAT_ROOT%\MasterBuild\set_env.bat"
+CALL "%UI_CORE_ROOT%\setupEnvironment.bat"
 
 ECHO Setup Qt5 enviroment
 

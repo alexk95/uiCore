@@ -3283,10 +3283,10 @@ void ak::uiAPI::tree::setItemSelected(
 ) {
 	auto actualTree = object::get<ui::widget::tree>(_treeUID);
 	if (_singleSelection) {
-		actualTree->setItemSelected(_itemID, _selected);
+		actualTree->setSingleItemSelected(_itemID, _selected);
 	}
 	else {
-		actualTree->setSingleItemSelected(_itemID, _selected);
+		actualTree->setItemSelected(_itemID, _selected);
 	}
 	
 }
@@ -3932,6 +3932,16 @@ void ak::uiAPI::window::setCentralWidgetMinimumSize(
 }
 
 int ak::uiAPI::window::devicePixelRatio(void) { return my_apiManager.desktop()->devicePixelRatio(); }
+
+// ###############################################################################################################################################
+
+// Crypto
+
+QString ak::uiAPI::crypto::hash(
+	const QString &				_orig,
+	core::crypto::algorithm		_algorithm
+) { return ak::core::crypto::hash(_orig, _algorithm); }
+
 
 // ###############################################################################################################################################
 

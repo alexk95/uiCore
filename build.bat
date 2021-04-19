@@ -3,7 +3,7 @@
 REM This script requires the following environment variables to be set:
 REM 1. UI_CORE_ROOT
 REM 2. DEVENV_ROOT
-REM 3. QTDIR
+REM 3. QTDIR_ROOT
 
 IF "%UI_CORE_ROOT%" == "" (
 	ECHO Please specify the following environment variables: UI_CORE_ROOT
@@ -15,8 +15,8 @@ IF "%DEVENV_ROOT%" == "" (
 	goto END
 )
 
-IF "%QTDIR%" == "" (
-	ECHO Please specify the following environment variables: QTDIR
+IF "%QTDIR_ROOT%" == "" (
+	ECHO Please specify the following environment variables: QTDIR_ROOT
 	goto END
 )
 
