@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\TabToolbar_autogen\mocs_compilation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\TabToolbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\Page.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\Builder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\CompactToolButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\Group.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\SubGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\StyleTools.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\Styles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\ToolButtonStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\TabToolbar_autogen\EWIEGA46WW\qrc_StyleTemplate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\include\TabToolbar\API.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\include\TabToolbar\TabToolbar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\include\TabToolbar\Page.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\include\TabToolbar\Builder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\CompactToolButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\include\TabToolbar\Group.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\include\TabToolbar\SubGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\include\TabToolbar\StyleTools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\include\TabToolbar\Styles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\ToolButtonStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\CMakeFiles\9ac3f3c1e9f0ea37f3fadbdc54ea6be3\qrc_StyleTemplate.cpp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\uiCore\Third_Party_Libraries\QtTabToolbar\src\TabToolbar\StyleTemplate.qrc">
+      <Filter>resources</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{40E8890F-6CEE-318B-8652-FE50762BA515}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{4A3EEFE8-D968-3C4E-94CE-BD9DCC71FB17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{5E29B5BA-27DA-360A-A0C4-9D39FCCA7CE6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{9D6AE296-601A-352A-B518-F569C51DC1B6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
