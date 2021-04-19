@@ -3701,6 +3701,17 @@ void ak::uiAPI::window::setCurrentTabToolBarTab(
 	actualWindow->setCurrentTabToolBarTab(_tabID);
 }
 
+void ak::uiAPI::window::setCurrentTabToolBarTab(
+	ak::UID												_windowUID,
+	const std::string								   &_tabName
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::uiManager * actualWindow = nullptr;
+	actualWindow = dynamic_cast<ui::uiManager *>(my_objManager->object(_windowUID));
+	assert(actualWindow != nullptr); // Invalid object type
+	actualWindow->setCurrentTabToolBarTab(_tabName);
+}
+
 void ak::uiAPI::window::setTitle(
 	ak::UID												_windowUID,
 	const QString &										_title

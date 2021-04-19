@@ -270,6 +270,10 @@ namespace ak {
 				ak::ID						_tabID
 			);
 
+			void setCurrentTabToolBarTab(
+				const std::string					&_tabName
+			);
+
 			//! @brief Will set the minimum size of the central widget
 			//! @param _size The size to set as minimum size
 			void setCentralWidgetMinimumSize(

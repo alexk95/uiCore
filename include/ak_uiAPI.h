@@ -2372,6 +2372,11 @@ namespace ak {
 				ak::ID												_tabID
 			);
 
+			UICORE_API_EXPORT void setCurrentTabToolBarTab(
+				ak::UID												_windowUID,
+				const std::string								   &_tabName
+			);
+
 			//! @brief Will set the title at the specified window
 			//! @param _windowUID The UID of the window
 			//! @param _title The title to set

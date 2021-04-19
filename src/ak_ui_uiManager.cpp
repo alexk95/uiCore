@@ -563,6 +563,19 @@ void ak::ui::uiManager::setCurrentTabToolBarTab(
 	my_tabToolBar->SetCurrentTab(_tabID);
 }
 
+void ak::ui::uiManager::setCurrentTabToolBarTab(
+	const std::string					&_tabName
+) {
+	int index = 0;
+	for (auto itm : my_tabToolBarContainer) {
+		if (itm->text() == _tabName.c_str()) {
+			my_tabToolBar->SetCurrentTab(index);
+			break;
+		}
+		index++;
+	}
+}
+
 void ak::ui::uiManager::setCentralWidgetMinimumSize(
 	const QSize &				_size
 ) {
