@@ -1854,17 +1854,15 @@ ak::ui::core::dialogResult ak::uiAPI::promptDialog::show(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	ui::dialog::prompt dialog(_message, _title, _type);
-	dialog.setColorStyle(my_objManager->getCurrentColorStyle());
+	auto cs{ my_objManager->getCurrentColorStyle() };
+	if (cs != nullptr) { dialog.setColorStyle(cs); }
 	return dialog.showDialog();
 }
 
 ak::ui::core::dialogResult ak::uiAPI::promptDialog::show(
 	const QString &				_message,
 	const QString &				_title
-) {
-	ui::dialog::prompt dialog(_message, _title, ak::ui::core::promptType::promptOk);
-	return dialog.showDialog();
-}
+) { return show(_message, _title, ak::ui::core::promptType::promptOk); }
 
 // promptDialog
 
