@@ -648,6 +648,37 @@ QString ak::uiAPI::action::getText(
 
 // ###############################################################################################################################################
 
+// CheckBox
+
+void ak::uiAPI::checkBox::setChecked(
+	ak::UID												_checkBoxUID,
+	bool												_checked
+) { object::get<ui::qt::checkBox>(_checkBoxUID)->setChecked(_checked); }
+
+void ak::uiAPI::checkBox::setText(
+	ak::UID												_checkBoxUID,
+	const QString &										_text
+) { object::get<ui::qt::checkBox>(_checkBoxUID)->setText(_text); }
+
+void ak::uiAPI::checkBox::setEnabled(
+	ak::UID												_checkBoxUID,
+	bool												_enabled
+) { object::get<ui::qt::checkBox>(_checkBoxUID)->setEnabled(_enabled); }
+
+QString ak::uiAPI::checkBox::text(
+	ak::UID												_checkBoxUID
+) { return object::get<ui::qt::checkBox>(_checkBoxUID)->text(); }
+
+bool ak::uiAPI::checkBox::isChecked(
+	ak::UID												_checkBoxUID
+) { return object::get<ui::qt::checkBox>(_checkBoxUID)->isChecked(); }
+
+bool ak::uiAPI::checkBox::isEnabled(
+	ak::UID												_checkBoxUID
+) { return object::get<ui::qt::checkBox>(_checkBoxUID)->isEnabled(); }
+
+// ###############################################################################################################################################
+
 // Container
 
 void ak::uiAPI::container::addObject(

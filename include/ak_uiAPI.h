@@ -587,6 +587,41 @@ namespace ak {
 
 		// ###############################################################################################################################################
 
+		// CheckBox
+
+		namespace checkBox {
+
+			UICORE_API_EXPORT void setChecked(
+				ak::UID												_checkBoxUID,
+				bool												_checked
+			);
+
+			UICORE_API_EXPORT void setText(
+				ak::UID												_checkBoxUID,
+				const QString &										_text
+			);
+
+			UICORE_API_EXPORT void setEnabled(
+				ak::UID												_checkBoxUID,
+				bool												_enabled
+			);
+
+			UICORE_API_EXPORT QString text(
+				ak::UID												_checkBoxUID
+			);
+
+			UICORE_API_EXPORT bool isChecked(
+				ak::UID												_checkBoxUID
+			);
+
+			UICORE_API_EXPORT bool isEnabled(
+				ak::UID												_checkBoxUID
+			);
+
+		}
+
+		// ###############################################################################################################################################
+
 		// Container
 
 		namespace container {
