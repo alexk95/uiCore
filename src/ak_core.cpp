@@ -47,6 +47,8 @@ QString ak::core::toQString(
 	case ak::core::eContextMenuItemClicked: return QString("ContextMenuItemClicked");
 	case ak::core::eContextMenuItemCheckedChanged: return QString("ContextMenuItemCheckedChanged");
 	case ak::core::eVisibilityChanged: return QString("VisibilityChanged");
+	case ak::core::eReturnPressed: return QString("ReturnPressed");
+	case ak::core::eEditingFinished: return QString("EditingFinished");
 	default: assert(0); // not implemented yet
 	}
 	return QString("");

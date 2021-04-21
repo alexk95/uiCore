@@ -25,9 +25,6 @@ namespace ak {
 		namespace qt {
 			class lineEdit;
 			class label;
-		}
-
-		namespace widget {
 
 			class UICORE_API_EXPORT niceLineEdit : public QWidget, public ui::core::aWidget {
 				Q_OBJECT
@@ -58,12 +55,22 @@ namespace ak {
 				QString infoLabelText(void) const;
 
 			private slots:
+				void slotCursorPositionChanged(int, int);
+				void slotSelectionChanged();
 				void slotKeyPressed(QKeyEvent * _event);
 				void slotKeyReleased(QKeyEvent * _event);
+				void slotEditingFinished(void);
+				void slotTextChanged(const QString & _text);
+				void slotReturnPressed();
 
 			signals:
+				void cursorPositionChanged(int, int);
+				void selectionChanged();
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);
+				void editingFinished();
+				void textChanged(const QString & _text);
+				void returnPressed();
 
 			private:
 				QHBoxLayout *			my_layout;

@@ -136,7 +136,7 @@
     <ClInclude Include="include\ak_ui_core_aWidgetManager.h" />
     <ClInclude Include="include\ak_ui_core_ttbContainer.h" />
     <QtMoc Include="include\ak_ui_qt_contextMenuItem.h" />
-    <QtMoc Include="include\ak_ui_widget_niceLineEdit.h" />
+    <QtMoc Include="include\ak_ui_qt_niceLineEdit.h" />
     <QtMoc Include="include\ak_ui_qt_specialTabBar.h" />
     <ClInclude Include="include\ak_ui_windowEventHandler.h" />
     <QtMoc Include="include\ak_ui_dialog_logIn.h" />
@@ -242,7 +242,7 @@
     <ClCompile Include="src\ak_ui_uiManager.cpp" />
     <ClCompile Include="src\ak_ui_uiManagerTimerSignalLinker.cpp" />
     <ClCompile Include="src\ak_ui_qt_colorEditButton.cpp" />
-    <ClCompile Include="src\ak_ui_widget_niceLineEdit.cpp" />
+    <ClCompile Include="src\ak_ui_qt_niceLineEdit.cpp" />
     <ClCompile Include="src\ak_ui_widget_welcomeScreen.cpp" />
     <ClCompile Include="src\ak_ui_widget_propertyGrid.cpp" />
     <ClCompile Include="src\ak_ui_widget_table.cpp" />

@@ -48,6 +48,7 @@
 #include <ak_ui_qt_label.h>
 #include <ak_ui_qt_lineEdit.h>				// line edit
 #include <ak_ui_qt_list.h>
+#include <ak_ui_qt_niceLineEdit.h>			// nice line edit
 #include <ak_ui_qt_pushButton.h>			// push button
 #include <ak_ui_qt_textEdit.h>
 #include <ak_ui_qt_specialTabBar.h>
@@ -58,7 +59,7 @@
 // AK widget objects
 #include <ak_ui_widget_tree.h>				// tree
 #include <ak_ui_widget_propertyGrid.h>		// propertyGrid
-#include <ak_ui_widget_niceLineEdit.h>		// nice line edit
+
 #include <ak_ui_widget_welcomeScreen.h>
 #include <ak_ui_widget_tabView.h>
 #include <ak_ui_widget_table.h>
@@ -1080,8 +1081,8 @@ void ak::uiAPI::niceLineEdit::setText(
 	const QString &										_text
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	ak::ui::qt::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
 	assert(actualObject != nullptr); // Invalid object type
 	actualObject->setText(_text);
 }
@@ -1091,8 +1092,8 @@ void ak::uiAPI::niceLineEdit::setInfoLabelText(
 	const QString &										_text
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	ak::ui::qt::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
 	assert(actualObject != nullptr); // Invalid object type
 	actualObject->setInfoLabelText(_text);
 }
@@ -1102,8 +1103,8 @@ void ak::uiAPI::niceLineEdit::setEnabled(
 	bool												_enabled
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	ak::ui::qt::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
 	assert(actualObject != nullptr); // Invalid object type
 	actualObject->setEnabled(_enabled);
 }
@@ -1112,8 +1113,8 @@ QString ak::uiAPI::niceLineEdit::text(
 	ak::UID												_lineEditUid
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	ak::ui::qt::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
 	assert(actualObject != nullptr); // Invalid object type
 	return actualObject->text();
 }
@@ -1122,8 +1123,8 @@ QString ak::uiAPI::niceLineEdit::infoLabelText(
 	ak::UID												_lineEditUid
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	ak::ui::qt::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
 	assert(actualObject != nullptr); // Invalid object type
 	return actualObject->infoLabelText();
 }
@@ -1132,8 +1133,8 @@ bool ak::uiAPI::niceLineEdit::isEnabled(
 	ak::UID												_lineEditUid
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ui::widget::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	ak::ui::qt::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
 	assert(actualObject != nullptr); // Invalid object type
 	return actualObject->isEnabled();
 }
@@ -1281,8 +1282,8 @@ void ak::uiAPI::object::setEnabled(
 		break;
 	case ak::ui::core::oNiceLineEdit:
 	{
-		ui::widget::niceLineEdit * actualObject = nullptr;
-		actualObject = dynamic_cast<ui::widget::niceLineEdit *>(obj);
+		ak::ui::qt::niceLineEdit * actualObject = nullptr;
+		actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(obj);
 		assert(actualObject != nullptr); // Cast failed
 		actualObject->setEnabled(_enabled);
 	}
@@ -1512,8 +1513,8 @@ bool ak::uiAPI::object::getIsEnabled(
 		break;
 	case ak::ui::core::oNiceLineEdit:
 	{
-		ui::widget::niceLineEdit * actualObject = nullptr;
-		actualObject = dynamic_cast<ui::widget::niceLineEdit *>(obj);
+		ak::ui::qt::niceLineEdit * actualObject = nullptr;
+		actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(obj);
 		assert(actualObject != nullptr); // Cast failed
 		return actualObject->isEnabled();
 	}

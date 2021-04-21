@@ -44,6 +44,7 @@
 #include <ak_ui_qt_timer.h>					// timer
 #include <ak_ui_qt_toolButton.h>			// toolButton
 #include <ak_ui_qt_lineEdit.h>				// lineEdit
+#include <ak_ui_qt_niceLineEdit.h>			// niceLineEdit
 
 // AK widget objects
 #include <ak_ui_widget_propertyGrid.h>		// propertyGrid
@@ -51,7 +52,6 @@
 #include <ak_ui_widget_table.h>				// table
 #include <ak_ui_widget_tabView.h>			// tabView
 #include <ak_ui_widget_tree.h>				// tree
-#include <ak_ui_widget_niceLineEdit.h>		// niceLineEdit
 
 // AK ttb objects
 #include <ak_ui_ttb_group.h>				// ttb Group
@@ -260,8 +260,9 @@ ak::UID ak::ui::objectManager::createNiceLineEdit(
 	const QString &										_infoLabelText
 ) {
 	// Create object
-	widget::niceLineEdit * obj = new widget::niceLineEdit(_initialText, _infoLabelText);
+	qt::niceLineEdit * obj = new qt::niceLineEdit(_initialText, _infoLabelText);
 	// Set parameter
+	my_signalLinker->addLink(obj);
 	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 	obj->setUid(my_uidManager->getId());
 	// Store data

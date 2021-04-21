@@ -86,7 +86,9 @@ namespace ak {
 			eToggeledUnchecked				= 1 << 26,
 			eContextMenuItemClicked			= 1 << 27,
 			eContextMenuItemCheckedChanged	= 1 << 28,
-			eVisibilityChanged				= 1 << 29
+			eVisibilityChanged				= 1 << 29,
+			eReturnPressed					= 1 << 30,
+			eEditingFinished				= 1 << 31
 		};
 
 		inline eventType operator | (eventType a, eventType b)
