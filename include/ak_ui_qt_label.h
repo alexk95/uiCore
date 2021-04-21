@@ -19,8 +19,6 @@
 #include <ak_ui_core_aWidget.h>		// Base class
 #include <ak_globalDataTypes.h>
 
-class QWidget;
-
 namespace ak {
 	namespace ui {
 
@@ -28,7 +26,8 @@ namespace ak {
 
 		namespace qt {
 
-			class label : public QLabel, ui::core::aWidget {
+			class UICORE_API_EXPORT label : public QLabel, public ui::core::aWidget
+			{
 				Q_OBJECT
 			public:
 				label(QWidget * _parent = nullptr);
@@ -51,7 +50,6 @@ namespace ak {
 				) override;
 
 			private:
-				label() = delete;
 				label(const label &) = delete;
 				label & operator = (const label &) = delete;
 			};
