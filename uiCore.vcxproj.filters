@@ -275,6 +275,9 @@
     <QtMoc Include="include\ak_ui_qt_niceLineEdit.h">
       <Filter>Header Files\ak\ui\qt</Filter>
     </QtMoc>
+    <QtMoc Include="include\ak_ui_qt_radioButton.h">
+      <Filter>Header Files\ak\ui\qt</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -473,6 +476,9 @@
       <Filter>Source Files\ak\ui\qt</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_ui_qt_niceLineEdit.cpp">
+      <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_radioButton.cpp">
       <Filter>Source Files\ak\ui\qt</Filter>
     </ClCompile>
   </ItemGroup>

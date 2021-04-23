@@ -39,6 +39,7 @@ QString ak::ui::core::toQString(
 	case ui::core::oPrompt: return QString("Prompt");
 	case ui::core::oPropertyGrid: return QString("PropertyGrid");
 	case ui::core::oPushButton: return QString("PushButton");
+	case ui::core::oRadioButton: return QString("RadioButton");
 	case ui::core::oTable: return QString("Table");
 	case ui::core::oTabToolbar: return QString("TabToolBar");
 	case ui::core::oTabToolbarGroup: return QString("TabToolBarGroup");

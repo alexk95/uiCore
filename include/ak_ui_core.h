@@ -70,6 +70,7 @@ namespace ak {
 				oPropertyGrid,
 				oPropertyGridItem,
 				oPushButton,
+				oRadioButton,
 				oSpecialTabBar,
 				oTable,
 				oTabToolbar,
