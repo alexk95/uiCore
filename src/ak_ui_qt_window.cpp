@@ -121,10 +121,11 @@ ak::ui::qt::windowCentralWidget::windowCentralWidget()
 	: my_waitingLabelSize(20,20), my_waitingAnimation(nullptr), my_waitingAnimationVisible(false)
 {
 	my_childWidget = nullptr;
-	my_waitingLabel = new QLabel("Test");
+	my_waitingLabel = new QLabel("");
 	my_waitingLabel->setAttribute(Qt::WA_NoSystemBackground);
 	my_waitingLabel->setParent(this);
 	my_waitingLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	my_waitingLabel->hide();
 }
 
 ak::ui::qt::windowCentralWidget::~windowCentralWidget() {
