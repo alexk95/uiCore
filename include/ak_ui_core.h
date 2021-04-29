@@ -96,6 +96,21 @@ namespace ak {
 				resultNone
 			};
 
+			//! Describes the date format
+			enum dateFormat {
+				dfDDMMYYYY,
+				dfMMDDYYYY,
+				dfYYYYMMDD,
+				dfYYYYDDMM
+			};
+
+			//! Describes the time format
+			enum timeFormat {
+				tfHHMM,
+				tfHHMMSS,
+				tfHHMMSSMMMM
+			};
+
 			//! Describes the promt type
 			enum promptType {
 				promptOk,

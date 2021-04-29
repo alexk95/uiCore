@@ -125,7 +125,7 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		case ak::ui::core::objectType::oTextEdit:
-			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int , int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
@@ -235,7 +235,7 @@ ak::UID ak::ui::signalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oLineEdit });
-	_object->connect(_object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged()));
+	_object->connect(_object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int, int)));
 	_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 	_object->connect(_object, SIGNAL(textChanged(const QString &)), this, SLOT(slotChanged()));
 	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
@@ -251,7 +251,7 @@ ak::UID ak::ui::signalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oNiceLineEdit });
-	_object->connect(_object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged()));
+	_object->connect(_object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int, int)));
 	_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 	_object->connect(_object, SIGNAL(textChanged(const QString &)), this, SLOT(slotChanged()));
 	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
@@ -315,7 +315,7 @@ ak::UID ak::ui::signalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTextEdit });
-	_object->connect(_object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
+	_object->connect(_object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int, int)));
 	_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 	_object->connect(_object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));

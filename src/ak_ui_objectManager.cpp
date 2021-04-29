@@ -631,6 +631,7 @@ void ak::ui::objectManager::destroy(
 
 	auto object = my_mapObjects.find(_objectUID);
 	assert(object != my_mapObjects.end());	// Invalid object UID
+	if (object == my_mapObjects.end()) return; // Avoid a UI crash if something goes wrong here
 	
 	ui::core::aObject * actualObject = object->second;
 
