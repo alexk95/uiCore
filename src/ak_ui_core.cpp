@@ -27,6 +27,8 @@ QString ak::ui::core::toQString(
 	case ui::core::oComboBox: return QString("ComboBox");
 	case ui::core::oComboButton: return QString("ComboButton");
 	case ui::core::oCheckBox: return QString("CheckBox");
+	case ui::core::oDatePicker: return QString("DatePicker");
+	case ui::core::oDatePickerDialog: return QString("DatePickerDialog");
 	case ui::core::oDefaultWelcomeScreen: return ("DefaultWelcomeScreen");
 	case ui::core::oDock: return QString("Dock");
 	case ui::core::oGraphicsView: return QString("GraphicsView");
@@ -47,6 +49,8 @@ QString ak::ui::core::toQString(
 	case ui::core::oTabToolbarSubgroup: return QString("TabToolBarSubGroup");
 	case ui::core::oTabView: return QString("TabView");
 	case ui::core::oTextEdit: return QString("TextEdit");
+	case ui::core::oTimePicker: return QString("TimePicker");
+	case ui::core::oTimePickerDialog: return QString("TimePickerDialog");
 	case ui::core::oTimer: return QString("Timer");
 	case ui::core::oToolButton: return QString("ToolButton");
 	case ui::core::oTree: return QString("Tree");
