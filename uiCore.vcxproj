@@ -112,6 +112,7 @@
     <ClInclude Include="include\ak_core.h" />
     <ClInclude Include="include\ak_exception.h" />
     <ClInclude Include="include\ak_file.h" />
+    <ClInclude Include="include\ak_flags.h" />
     <ClInclude Include="include\ak_globalDataTypes.h" />
     <ClInclude Include="include\ak_messenger.h" />
     <ClInclude Include="include\ak_mutex.h" />
@@ -119,6 +120,7 @@
     <ClInclude Include="include\ak_notifierForwardMessage.h" />
     <ClInclude Include="include\ak_notifierObjectManager.h" />
     <ClInclude Include="include\ak_notifierStaticEvent.h" />
+    <ClInclude Include="include\ak_rJSON.h" />
     <ClInclude Include="include\ak_singletonAllowedMessages.h" />
     <ClInclude Include="include\ak_uiAPI.h" />
     <ClInclude Include="include\ak_uidMangager.h" />
@@ -188,6 +190,7 @@
     <ClCompile Include="src\ak_notifierForwardMessage.cpp" />
     <ClCompile Include="src\ak_notifierObjectManager.cpp" />
     <ClCompile Include="src\ak_notifierStaticEvent.cpp" />
+    <ClCompile Include="src\ak_rJSON.cpp" />
     <ClCompile Include="src\ak_singletonAllowedMessages.cpp" />
     <ClCompile Include="src\ak_uiAPI.cpp" />
     <ClCompile Include="src\ak_uidManager.cpp" />
