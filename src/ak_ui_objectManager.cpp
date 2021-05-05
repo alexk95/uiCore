@@ -575,6 +575,7 @@ ak::ui::core::aObject * ak::ui::objectManager::object(
 ) {
 	auto itm = my_mapUniqueNames.find(_objectUniqueName);
 	assert(itm != my_mapUniqueNames.end());	// Invalid object UID provided
+	if (itm == my_mapUniqueNames.end()) return ak::invalidUID;
 	return itm->second;
 }
 

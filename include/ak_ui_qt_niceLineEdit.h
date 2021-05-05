@@ -49,6 +49,7 @@ namespace ak {
 				// #######################################################################################################
 
 				void setText(const QString & _text);
+				void setErrorState(bool _error);
 				void setInfoLabelText(const QString & _text);
 
 				QString text(void) const;
@@ -76,6 +77,7 @@ namespace ak {
 				QHBoxLayout *			my_layout;
 				qt::lineEdit *			my_lineEdit;
 				qt::label *				my_label;
+				QString					my_styleSheet;
 
 			};
 

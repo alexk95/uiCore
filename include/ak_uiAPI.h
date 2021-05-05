@@ -974,6 +974,14 @@ namespace ak {
 				const QString &										_text
 			);
 
+			//! @brief Will set the nice line edit error state
+			//! @param _lineEditUid The UID of the line edit
+			//! @param _error The error state
+			UICORE_API_EXPORT void setErrorState(
+				ak::UID												_lineEditUid,
+				bool												_error
+			);
+
 			//! @brief Will set the nice line edit info label text
 			//! @param _lineEditUid The UID of the line edit
 			//! @param _text The text to set

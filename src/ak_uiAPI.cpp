@@ -1087,6 +1087,17 @@ void ak::uiAPI::niceLineEdit::setText(
 	actualObject->setText(_text);
 }
 
+void ak::uiAPI::niceLineEdit::setErrorState(
+	ak::UID												_lineEditUid,
+	bool												_error
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ak::ui::qt::niceLineEdit * actualObject = nullptr;
+	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
+	assert(actualObject != nullptr); // Invalid object type
+	actualObject->setErrorState(_error);
+}
+
 void ak::uiAPI::niceLineEdit::setInfoLabelText(
 	ak::UID												_lineEditUid,
 	const QString &										_text

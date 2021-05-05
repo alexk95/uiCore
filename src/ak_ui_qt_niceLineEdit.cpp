@@ -53,9 +53,23 @@ void ak::ui::qt::niceLineEdit::setColorStyle(
 ) {
 	my_label->setColorStyle(_colorStyle);
 	my_lineEdit->setColorStyle(_colorStyle);
+
+	my_styleSheet = my_lineEdit->styleSheet();
 }
 
 void ak::ui::qt::niceLineEdit::setText(const QString & _text) { my_lineEdit->setText(_text); }
+
+void ak::ui::qt::niceLineEdit::setErrorState(bool _error)
+{
+	if (_error)
+	{
+		my_lineEdit->setStyleSheet("QLineEdit {background-color: red;}");
+	}
+	else
+	{
+		my_lineEdit->setStyleSheet(my_styleSheet);
+	}
+}
 
 void ak::ui::qt::niceLineEdit::setInfoLabelText(const QString & _text) { my_label->setText(_text); }
 
