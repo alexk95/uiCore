@@ -16,7 +16,7 @@
 #include <qstring.h>
 
 // AK header
-#include <ak_ui_core_aWidgetManager.h>		// base class
+#include <ak_ui_core_aWidget.h>				// base class
 #include <ak_core.h>						// eventType
 #include <ak_ui_core.h>						// objectType
 #include <ak_globalDataTypes.h>				// UID and ID type

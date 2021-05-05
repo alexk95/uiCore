@@ -33,6 +33,9 @@
     <ClCompile Include="src\Example.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ak_ui_qt_dockWatcherToolButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Example.h">
@@ -41,5 +44,10 @@
     <ClInclude Include="include\ExampleNotifier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="include\ak_ui_qt_dockWatcherToolButton.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

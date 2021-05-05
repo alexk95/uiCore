@@ -17,7 +17,7 @@
 #include <vector>
 
 // Qt header
-#include <qobject.h>					// Base class
+#include <qwidget.h>					// Base class
 #include <qstring.h>					//
 #include <qcolor.h>						// QColor
 #include <qtablewidget.h>				// QTableWidgetItem
@@ -30,7 +30,6 @@
 #include <ak_ui_color.h>
 
 // Forward declaration
-class QWidget;
 class QHBoxLayout;
 class QVBoxLayout;
 
@@ -42,20 +41,22 @@ namespace ak {
 	namespace ui {
 		
 		class colorStyle;
-		namespace qt { class table; class checkBox; class colorEditButton; class comboButton; class textEdit; }
+		namespace qt {  }
 
-		namespace widget {
+		namespace qt {
 
+			class table;
+			class checkBox;
+			class colorEditButton;
+			class comboButton;
+			class textEdit;
 			class propertyGridGroup;
 			class propertyGridItem;
 
-			class UICORE_API_EXPORT propertyGrid : public QObject, public ui::core::aWidgetManager {
+			class UICORE_API_EXPORT propertyGrid : public QWidget, public ui::core::aWidget {
 				Q_OBJECT
 			public:
-				propertyGrid(
-					messenger *				_messenger,
-					uidManager *			_uidManager
-				);
+				propertyGrid();
 
 				virtual ~propertyGrid();
 
@@ -286,6 +287,10 @@ namespace ak {
 
 				bool isEnabled(void) const { return my_isEnabled; }
 
+			signals:
+				void cleared(void);
+				void itemChanged(int _itemId);
+
 			private slots:
 				void slotItemChanged(void);
 				void slotCheckItemVisibility(void);
@@ -296,7 +301,6 @@ namespace ak {
 				void itemCountChanged(void);
 				ak::ID newItemCreated(propertyGridItem * _item);
 
-				QWidget *								my_widget;
 				QVBoxLayout *							my_layout;
 				qt::textEdit *							my_infoTextEdit;
 				qt::table *								my_table;
@@ -323,6 +327,8 @@ namespace ak {
 				//QTableWidgetItem *						my_verticalHeaderItemName;
 				//QTableWidgetItem *						my_verticalHeaderItemValue;
 
+				propertyGrid(propertyGrid &) = delete;
+				propertyGrid& operator = (propertyGrid &) = delete;
 			};
 
 			// ##############################################################################################################

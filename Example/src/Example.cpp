@@ -37,11 +37,14 @@
 #include <ak_ui_qt_label.h>
 #include <ak_ui_qt_lineEdit.h>
 #include <ak_ui_qt_pushButton.h>
+#include <ak_ui_qt_dock.h>
 #include <qlayout.h>
 
 // #################################################################################################
 
 #include <ak_ui_dialog_options.h>
+
+#include <ak_ui_qt_dockWatcherToolButton.h>
 
 Example::Example()
 	: my_settingColor(255,255,0)
@@ -77,8 +80,7 @@ Example::Example()
 		
 		// Restore last color style settings
 		QSettings settings("AK", "uiCoreExample");
-		QString lastConfigString = settings.value("UI.ColorStyle", "").toString();
-		ak::uiAPI::restoreStateColorStyle(lastConfigString.toStdString(), APP_SETTINGS_VERSION);
+		ak::uiAPI::restoreStateColorStyle(settings.value("UI.ColorStyle", "").toString().toStdString(), APP_SETTINGS_VERSION);
 
 		// Check the current color style (after it was restored)
 		const ak::ui::colorStyle * currentColorStyle = ak::uiAPI::getCurrentColorStyle();
@@ -93,22 +95,16 @@ Example::Example()
 			ak::uiAPI::toolButton::setToolTip(my_ui.ttb_aColorStyle, "Set the color Style to Bright");
 		}
 
+		// Show the window
+		ak::uiAPI::window::showMaximized(my_ui.mainWindow);
+		
 		// Create and start the timer to restore the last window state
 		my_timerRestoreSettings = ak::uiAPI::createTimer(my_uid);
 		ak::uiAPI::registerUidNotifier(my_timerRestoreSettings, my_notifier);
 		ak::uiAPI::timer::shoot(my_timerRestoreSettings, 0);
-		
-		// Show the window
-		ak::uiAPI::window::showMaximized(my_ui.mainWindow);
-		
-		ak::UID test = ak::uiAPI::createOptionsDialog(my_uid);
-		ak::uiAPI::optionsDialog::setGroupStateIcons(test, "ArrowGreenDown", "32", "ArrowBlueRight", "32");
-		auto t1 = ak::uiAPI::optionsDialog::createCategory(test, -1, "test1");
-		auto t2 = ak::uiAPI::optionsDialog::createCategory(test, -1, "test2");
-		ak::uiAPI::optionsDialog::createGroup(test, t1, "Test Group", QColor(180, 140, 110));
-		ak::uiAPI::optionsDialog::addItem(test, t1, false, "Test Group", "Some color", QColor(180, 140, 110));
-		ak::uiAPI::optionsDialog::addItem(test, t1, false, "Test Group", "Some int", 100);
-		ak::uiAPI::optionsDialog::show(test);
+
+		my_testButton->setEnabled(true);
+		my_testButton->refreshData();
 
 		// Run the main application
 		ak::uiAPI::exec();
@@ -141,7 +137,7 @@ void Example::eventCallback(
 				str.append("\"; Info2=\"");
 				if (_eventType == ak::core::eKeyPressed) { str.append(ak::uiAPI::special::toString((ak::ui::core::keyType)_info2)); }
 				else { str.append(QString::number(_info2)); }
-				str.append("\"; }");
+				str.append("\"; }\n");
 				ak::uiAPI::textEdit::appendText(my_ui.outputWidget, str);
 				if (_sender == my_ui.welcomeScreen) {
 					str = "    -> Item text: ";
@@ -312,6 +308,13 @@ void Example::setupUi(void) {
 			ak::uiAPI::dock::setCentralWidget(my_ui.dockTester, my_ui.tester);
 			ak::uiAPI::dock::setCentralWidget(my_ui.dockTree, my_ui.treeWidget);
 
+			my_testButton = new ak::ui::qt::dockWatcherToolButton{ ak::uiAPI::getIcon("Test", "32"), "Docks" };
+			my_testButton->setEnabled(false);
+			my_testButton->addWatch(ak::uiAPI::object::get<ak::ui::qt::dock>(my_ui.dockOutput), "Output");
+			my_testButton->addWatch(ak::uiAPI::object::get<ak::ui::qt::dock>(my_ui.dockProperties), "Properties");
+			my_testButton->addWatch(ak::uiAPI::object::get<ak::ui::qt::dock>(my_ui.dockTester), "Tester");
+			my_testButton->addWatch(ak::uiAPI::object::get<ak::ui::qt::dock>(my_ui.dockTree), "Tree");
+
 			// Display docks
 			ak::uiAPI::window::addDock(my_ui.mainWindow, my_ui.dockOutput, ak::ui::core::dock_dockBottom);
 			ak::uiAPI::window::addDock(my_ui.mainWindow, my_ui.dockTree, ak::ui::core::dock_dockLeft);
@@ -351,7 +354,8 @@ void Example::setupUi(void) {
 			ak::uiAPI::propertyGrid::setGroupStateIcons(my_ui.propertiesWidget, "ArrowGreenDown", "32", "ArrowBlueRight", "32");
 
 			// Set central widget
-			ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
+			//ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
+			ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, my_testButton);
 
 			// Register notifier
 			ak::uiAPI::registerUidNotifier(my_ui.propertiesWidget, my_notifier);

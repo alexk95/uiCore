@@ -12,8 +12,8 @@
 // AK header
 #include <ak_ui_dialog_options.h>		// Corresponding header
 
-#include <ak_ui_widget_tree.h>
-#include <ak_ui_widget_propertyGrid.h>
+#include <ak_ui_qt_tree.h>
+#include <ak_ui_qt_propertyGrid.h>
 
 #include <ak_ui_qt_pushButton.h>
 
@@ -33,7 +33,7 @@ ak::ui::dialog::options::options(
 	my_mainLayout{ nullptr }, my_buttonsLayout{ nullptr },
 	my_buttonsWidget{ nullptr }, my_centralWidget{ nullptr }, my_tree{ nullptr }, my_dummy{ nullptr },
 	my_btnApply{ nullptr }, my_btnCancel{ nullptr }, my_btnOk{ nullptr }, my_groupIconsSet{ false },
-	my_settingsChanged{ false }, my_messenger{ nullptr }, my_notifier{ nullptr }
+	my_settingsChanged{ false }
 {
 	// Create layouts
 	my_mainLayout = new QVBoxLayout{ this };
@@ -56,20 +56,15 @@ ak::ui::dialog::options::options(
 	connect(my_btnApply, SIGNAL(clicked()), this, SLOT(slotApply()));
 	connect(my_btnCancel, SIGNAL(clicked()), this, SLOT(slotCancel()));
 	connect(my_btnOk, SIGNAL(clicked()), this, SLOT(slotOk()));
-
-	// Create event handling components
-	my_notifier = new optionsNotifier{ this };
-	my_messenger = new messenger;
-	my_messenger->registerNotifierForAllMessages(my_notifier);
-
+	
 	// Create central components
-	my_tree = new widget::tree{ my_messenger, nullptr, my_colorStyle };
-	my_tree->setUid(1);
+	my_tree = new qt::tree;
 	my_tree->setMultiSelectionEnabled(false);
 	my_tree->setSortingEnabled(true);
 	if (my_colorStyle != nullptr) { my_tree->setColorStyle(my_colorStyle); }
+	connect(my_tree, &qt::tree::selectionChanged, this, &options::slotSelectionChanged);
 
-	my_dummy = new widget::propertyGrid{ my_messenger, nullptr };
+	my_dummy = new qt::propertyGrid;
 	my_dummy->setUid(2);
 	if (my_colorStyle != nullptr) { my_dummy->setColorStyle(my_colorStyle); }
 
@@ -95,8 +90,6 @@ ak::ui::dialog::options::~options() {
 	delete my_buttonsWidget;
 	delete my_centralWidget;
 	delete my_mainLayout;
-	delete my_messenger;
-	delete my_notifier;
 }
 
 void ak::ui::dialog::options::setColorStyle(
@@ -144,7 +137,7 @@ ak::ID ak::ui::dialog::options::createCategory(
 	const QString &						_text
 ) {
 	ID id = my_tree->add(_parentID, _text);
-	optionsCategory * newCategory = new optionsCategory{ this, id, my_messenger };
+	optionsCategory * newCategory = new optionsCategory{ this, id };
 	my_categories.insert_or_assign(id, newCategory);
 	if (my_groupIconsSet) {
 		newCategory->getPropertyGrid()->setGroupStateIcons(my_iconGroupExpanded, my_iconGroupCollapsed);
@@ -160,7 +153,7 @@ ak::ID ak::ui::dialog::options::createCategory(
 ) {
 	ID id = my_tree->add(_parentID, _text);
 	my_tree->setItemIcon(id, _icon);
-	optionsCategory * newCategory = new optionsCategory{ this, id, my_messenger };
+	optionsCategory * newCategory = new optionsCategory{ this, id };
 	my_categories.insert_or_assign(id, newCategory);
 	if (my_groupIconsSet) {
 		newCategory->getPropertyGrid()->setGroupStateIcons(my_iconGroupExpanded, my_iconGroupCollapsed);
@@ -356,39 +349,29 @@ void ak::ui::dialog::options::clear(void) {
 
 // Event handling
 
-void ak::ui::dialog::options::notify(
-	ak::UID									_senderId,
-	ak::core::eventType						_event,
-	int										_info1,
-	int										_info2
-) {
-	if (_senderId == 1) {
-		if (_event == ak::core::eSelectionChanged) {
-			auto selection{ my_tree->selectedItems() };
-			if (selection.size() == 0) {
-				my_centralWidget->replaceWidget(1, my_dummy->widget());
-			}
-			else if (selection.size() == 1) {
-				auto category{ my_categories.find(selection.at(0)) };
-				assert(category != my_categories.end()); // That should not happen. Invalid category selected
-				my_centralWidget->replaceWidget(1, category->second->widget());
-			}
-			else {
-				assert(0);	// To many items selected
-			}
-		}
+void ak::ui::dialog::options::slotSelectionChanged() {
+	auto selection{ my_tree->selectedItems() };
+	if (selection.size() == 0) {
+		my_centralWidget->replaceWidget(1, my_dummy->widget());
 	}
-	else if (_senderId == 2) {
-		if (_event == ak::core::eChanged) {
-			my_settingsChanged = true;
-			my_result = ui::core::resultCancel;
-		}
+	else if (selection.size() == 1) {
+		auto category{ my_categories.find(selection.at(0)) };
+		assert(category != my_categories.end()); // That should not happen. Invalid category selected
+		my_centralWidget->replaceWidget(1, category->second->widget());
+	}
+	else {
+		assert(0);	// To many items selected
 	}
 }
 
 void ak::ui::dialog::options::addWindowEventHandler(
 	windowEventHandler *					_handler
 ) { my_windowEventHandler.push_back(_handler); }
+
+void ak::ui::dialog::options::slotChanged(int _itemId) {
+	my_settingsChanged = true;
+	my_result = ui::core::resultCancel;
+}
 
 void ak::ui::dialog::options::slotOk() {
 	slotApply();
@@ -412,11 +395,10 @@ void ak::ui::dialog::options::slotCancel() {
 
 ak::ui::dialog::optionsCategory::optionsCategory(
 	options *			_optionsDialog,
-	ID					_treeItemId,
-	messenger *			_messenger
-) : core::aWidget{ core::oNone }, my_treeItemId{ _treeItemId }, my_propertyGrid{ nullptr }, my_messenger{ _messenger }, my_optionsDialog{ _optionsDialog }
+	ID					_treeItemId
+) : core::aWidget{ core::oNone }, my_treeItemId{ _treeItemId }, my_propertyGrid{ nullptr }, my_optionsDialog{ _optionsDialog }
 {
-	my_propertyGrid = new widget::propertyGrid{ my_messenger, nullptr };
+	my_propertyGrid = new qt::propertyGrid;
 	my_propertyGrid->setUid(2);
 }
 
@@ -433,22 +415,3 @@ QWidget * ak::ui::dialog::optionsCategory::widget(void) { return my_propertyGrid
 void ak::ui::dialog::optionsCategory::setColorStyle(
 	const ak::ui::colorStyle *					_colorStyle
 ) { my_propertyGrid->setColorStyle(_colorStyle); }
-
-// ###################################################################################################################################################
-
-// ###################################################################################################################################################
-
-// ###################################################################################################################################################
-
-
-ak::ui::dialog::optionsNotifier::optionsNotifier(
-	options *			_options
-) : my_options{ _options }
-{}
-
-void ak::ui::dialog::optionsNotifier::notify(
-	ak::UID									_senderId,
-	ak::core::eventType						_event,
-	int										_info1,
-	int										_info2
-) { my_options->notify(_senderId, _event, _info1, _info2); }

@@ -155,7 +155,6 @@
     <ClInclude Include="include\ak_ui_qt_tabView.h" />
     <ClInclude Include="include\ak_ui_qt_timer.h" />
     <QtMoc Include="include\ak_ui_qt_toolButton.h" />
-    <ClInclude Include="include\ak_ui_qt_treeItem.h" />
     <QtMoc Include="include\ak_ui_qt_window.h" />
     <ClInclude Include="include\ak_ui_ttb_group.h" />
     <ClInclude Include="include\ak_ui_ttb_page.h" />
@@ -163,14 +162,12 @@
     <QtMoc Include="include\ak_ui_uiManager.h" />
     <QtMoc Include="include\ak_ui_qt_colorEditButton.h" />
     <QtMoc Include="include\ak_ui_widget_welcomeScreen.h" />
-    <QtMoc Include="include\ak_ui_widget_propertyGrid.h" />
+    <QtMoc Include="include\ak_ui_qt_propertyGrid.h" />
     <ClInclude Include="include\ak_ui_widget_table.h" />
     <QtMoc Include="include\ak_ui_widget_tabView.h" />
-    <QtMoc Include="include\ak_ui_widget_tree.h" />
-    <QtMoc Include="include\ak_ui_uiManagerTimerSignalLinker.h" />
-    <QtMoc Include="include\ak_ui_treeSignalLinker.h" />
-    <QtMoc Include="include\ak_ui_signalLinker.h" />
     <QtMoc Include="include\ak_ui_qt_tree.h" />
+    <QtMoc Include="include\ak_ui_uiManagerTimerSignalLinker.h" />
+    <QtMoc Include="include\ak_ui_signalLinker.h" />
     <QtMoc Include="include\ak_ui_qt_textEdit.h" />
     <QtMoc Include="include\ak_ui_qt_table.h" />
     <QtMoc Include="include\ak_ui_qt_pushButton.h" />
@@ -236,11 +233,8 @@
     <ClCompile Include="src\ak_ui_qt_textEdit.cpp" />
     <ClCompile Include="src\ak_ui_qt_timer.cpp" />
     <ClCompile Include="src\ak_ui_qt_toolButton.cpp" />
-    <ClCompile Include="src\ak_ui_qt_tree.cpp" />
-    <ClCompile Include="src\ak_ui_qt_treeItem.cpp" />
     <ClCompile Include="src\ak_ui_qt_window.cpp" />
     <ClCompile Include="src\ak_ui_signalLinker.cpp" />
-    <ClCompile Include="src\ak_ui_treeSignalLinker.cpp" />
     <ClCompile Include="src\ak_ui_ttb_group.cpp" />
     <ClCompile Include="src\ak_ui_ttb_page.cpp" />
     <ClCompile Include="src\ak_ui_ttb_subgroup.cpp" />
@@ -249,10 +243,10 @@
     <ClCompile Include="src\ak_ui_qt_colorEditButton.cpp" />
     <ClCompile Include="src\ak_ui_qt_niceLineEdit.cpp" />
     <ClCompile Include="src\ak_ui_widget_welcomeScreen.cpp" />
-    <ClCompile Include="src\ak_ui_widget_propertyGrid.cpp" />
+    <ClCompile Include="src\ak_ui_qt_propertyGrid.cpp" />
     <ClCompile Include="src\ak_ui_widget_table.cpp" />
     <ClCompile Include="src\ak_ui_widget_tabView.cpp" />
-    <ClCompile Include="src\ak_ui_widget_tree.cpp" />
+    <ClCompile Include="src\ak_ui_qt_tree.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

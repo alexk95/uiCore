@@ -34,21 +34,16 @@ class QSplitter;
 class QCloseEvent;
 
 namespace ak {
-
-	// Forward declaration
-	class messenger;
-
+	
 	namespace ui {
 
 		// Forward declaration
 		class windowEventHandler;
-		namespace qt { class pushButton; }
-		namespace widget { class tree; class propertyGrid; }
+		namespace qt { class pushButton; class propertyGrid; class tree; }
 
 		namespace dialog {
 
 			class optionsCategory;
-			class optionsNotifier;
 
 			//! The options dialog is used to manage any kind of settings.
 			//! If the user selects ok or apply, a changed signal will be emitted
@@ -223,7 +218,7 @@ namespace ak {
 				// Getter
 
 				//! @brief Will return the tree used in this options dialog
-				widget::tree * getTree(void) const { return my_tree; }
+				qt::tree * getTree(void) const { return my_tree; }
 
 				//! @brief Will return true if a least one setting has changed
 				bool settingsChanged(void) const { return my_settingsChanged; }
@@ -231,18 +226,6 @@ namespace ak {
 				// ###################################################################################################################################################
 
 				// Event handling
-
-				//! @brief Will notify the options dialog about the occuring central component event
-				//! @param _senderId The sender ID the message was send from
-				//! @param _event The event message
-				//! @param _info1 Message addition 1
-				//! @param _info2 Message addition 2
-				void notify(
-					ak::UID									_senderId,
-					ak::core::eventType						_event,
-					int										_info1,
-					int										_info2
-				);
 
 				//! @brief Will add the specified event handler to the options dialog
 				void addWindowEventHandler(
@@ -253,6 +236,8 @@ namespace ak {
 				void changed();
 
 			private slots:
+				void slotSelectionChanged();
+				void slotChanged(int);
 				void slotOk();
 				void slotApply();
 				void slotCancel();
@@ -268,8 +253,8 @@ namespace ak {
 				qt::pushButton *						my_btnApply;
 				qt::pushButton *						my_btnCancel;
 
-				widget::tree *							my_tree;
-				widget::propertyGrid *					my_dummy;
+				qt::tree *								my_tree;
+				qt::propertyGrid *						my_dummy;
 				std::map<ID, optionsCategory *>			my_categories;
 				bool									my_settingsChanged;
 				ID										my_currentCategory;
@@ -279,9 +264,6 @@ namespace ak {
 				bool									my_groupIconsSet;
 
 				std::vector<windowEventHandler *>		my_windowEventHandler;
-
-				messenger *								my_messenger;
-				optionsNotifier *						my_notifier;
 
 				options() = delete;
 				options(const options&) = delete;
@@ -298,8 +280,7 @@ namespace ak {
 			public:
 				optionsCategory(
 					options *			_optionsDialog,
-					ID					_treeItemId,
-					messenger *			_messenger
+					ID					_treeItemId
 				);
 
 				virtual ~optionsCategory();
@@ -323,55 +304,17 @@ namespace ak {
 				// Getter
 
 				//! @brief Will return the property grid of this category
-				widget::propertyGrid * getPropertyGrid(void) const { return my_propertyGrid; }
+				qt::propertyGrid * getPropertyGrid(void) const { return my_propertyGrid; }
 
 			private:
-
 				ID						my_treeItemId;
-				widget::propertyGrid *	my_propertyGrid;
-				messenger *				my_messenger;
+				qt::propertyGrid *		my_propertyGrid;
 				options *				my_optionsDialog;
 
 				optionsCategory() = delete;
 				optionsCategory(const optionsCategory &) = delete;
 				optionsCategory & operator = (const optionsCategory&) = delete;
 			};
-
-			// ###################################################################################################################################################
-
-			// ###################################################################################################################################################
-
-			// ###################################################################################################################################################
-
-			class optionsNotifier : public notifier {
-			public:
-				optionsNotifier(
-					options *			_options
-				);
-
-				virtual ~optionsNotifier() {}
-
-				//! @brief Will call the callback function with the provided parameters
-				//! @param _senderId The sender ID the message was send from
-				//! @param _event The event message
-				//! @param _info1 Message addition 1
-				//! @param _info2 Message addition 2
-				virtual void notify(
-					ak::UID									_senderId,
-					ak::core::eventType						_event,
-					int										_info1,
-					int										_info2
-				) override;
-
-			private:
-
-				options *									my_options;
-
-				optionsNotifier() = delete;
-				optionsNotifier(const optionsNotifier &) = delete;
-				optionsNotifier & operator = (const optionsNotifier &) = delete;
-			};
-
 		}
 	}
 }

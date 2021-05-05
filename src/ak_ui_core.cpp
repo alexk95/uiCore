@@ -31,6 +31,7 @@ QString ak::ui::core::toQString(
 	case ui::core::oDatePickerDialog: return QString("DatePickerDialog");
 	case ui::core::oDefaultWelcomeScreen: return ("DefaultWelcomeScreen");
 	case ui::core::oDock: return QString("Dock");
+	case core::oDockWatcherToolButton: return QString("DockWatcherToolButton");
 	case ui::core::oGraphicsView: return QString("GraphicsView");
 	case ui::core::oLabel: return QString("Label");
 	case ui::core::oLineEdit: return QString("LineEdit");

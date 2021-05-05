@@ -59,6 +59,7 @@ namespace ak {
 				oDatePickerDialog,
 				oDefaultWelcomeScreen,
 				oDock,
+				oDockWatcherToolButton,
 				oGraphicsView,
 				oLabel,
 				oLineEdit,

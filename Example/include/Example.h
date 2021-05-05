@@ -17,6 +17,13 @@
 
 // Forward declaration
 class ExampleNotifier;
+namespace ak {
+	namespace ui {
+		namespace qt {
+			class dockWatcherToolButton;
+		}
+	}
+}
 
 //! This class is managing the UI
 class Example
@@ -81,5 +88,7 @@ private:
 	std::string					my_JSONSettingsString;
 
 	std::vector <ak::UID>		my_testingData;
+
+	ak::ui::qt::dockWatcherToolButton *	my_testButton;
 
 };

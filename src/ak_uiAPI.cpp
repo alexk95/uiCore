@@ -55,10 +55,10 @@
 #include <ak_ui_qt_timer.h>
 #include <ak_ui_qt_toolButton.h>
 #include <ak_ui_qt_window.h>
+#include <ak_ui_qt_propertyGrid.h>			// propertyGrid
 
 // AK widget objects
-#include <ak_ui_widget_tree.h>				// tree
-#include <ak_ui_widget_propertyGrid.h>		// propertyGrid
+#include <ak_ui_qt_tree.h>					// tree
 
 #include <ak_ui_widget_welcomeScreen.h>
 #include <ak_ui_widget_tabView.h>
@@ -1306,8 +1306,8 @@ void ak::uiAPI::object::setEnabled(
 		break;
 	case ak::ui::core::oPropertyGrid:
 	{
-		ui::widget::propertyGrid * actualObject = nullptr;
-		actualObject = dynamic_cast<ui::widget::propertyGrid *>(obj);
+		ui::qt::propertyGrid * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::propertyGrid *>(obj);
 		assert(actualObject != nullptr); // Cast failed
 		actualObject->setEnabled(_enabled);
 	}
@@ -1386,8 +1386,8 @@ void ak::uiAPI::object::setEnabled(
 		break;
 	case ak::ui::core::oTree:
 	{
-		ui::widget::tree * actualObject = nullptr;
-		actualObject = dynamic_cast<ui::widget::tree *>(obj);
+		ui::qt::tree * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::tree *>(obj);
 		assert(actualObject != nullptr); // Cast failed
 		actualObject->setEnabled(_enabled);
 	}
@@ -1537,8 +1537,8 @@ bool ak::uiAPI::object::getIsEnabled(
 		break;
 	case ak::ui::core::oPropertyGrid:
 	{
-		ui::widget::propertyGrid * actualObject = nullptr;
-		actualObject = dynamic_cast<ui::widget::propertyGrid *>(obj);
+		ui::qt::propertyGrid * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::propertyGrid *>(obj);
 		assert(actualObject != nullptr); // Cast failed
 		return actualObject->isEnabled();
 	}
@@ -1617,8 +1617,8 @@ bool ak::uiAPI::object::getIsEnabled(
 		break;
 	case ak::ui::core::oTree:
 	{
-		ui::widget::tree * actualObject = nullptr;
-		actualObject = dynamic_cast<ui::widget::tree *>(obj);
+		ui::qt::tree * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::tree *>(obj);
 		assert(actualObject != nullptr); // Cast failed
 		return actualObject->enabled();
 	}
@@ -1907,8 +1907,8 @@ void ak::uiAPI::propertyGrid::addGroup(
 	const QString &									_groupName
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->addGroup(_groupName);
 }
@@ -1919,8 +1919,8 @@ void ak::uiAPI::propertyGrid::addGroup(
 	const QString &									_groupName
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->addGroup(_color, _groupName);
 }
@@ -1932,8 +1932,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	bool											_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
 }
@@ -1945,8 +1945,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const ui::color &								_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
 }
@@ -1958,8 +1958,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	double											_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
 }
@@ -1971,8 +1971,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	int												_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
 }
@@ -1985,8 +1985,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _possibleSelection, _value);
 }
@@ -1998,8 +1998,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const char *									_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, QString(_value));
 }
@@ -2011,8 +2011,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
 }
@@ -2025,8 +2025,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	bool											_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
@@ -2039,8 +2039,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const ui::color &								_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
@@ -2053,8 +2053,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	double											_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
@@ -2067,8 +2067,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	int												_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
@@ -2082,8 +2082,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _possibleSelection, _value);
 }
@@ -2096,8 +2096,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const char *									_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, QString(_value));
 }
@@ -2110,8 +2110,8 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_value
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
@@ -2121,8 +2121,8 @@ void ak::uiAPI::propertyGrid::clear(
 	bool											_keepGroups
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->clear(_keepGroups);
 }
@@ -2132,8 +2132,8 @@ bool ak::uiAPI::propertyGrid::getItemIsReadOnly(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->itemIsReadOnly(_itemID);
 }
@@ -2143,8 +2143,8 @@ QString ak::uiAPI::propertyGrid::getItemGroup(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemGroup(_itemID);
 }
@@ -2154,8 +2154,8 @@ bool ak::uiAPI::propertyGrid::getItemIsMultipleValues(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemIsMultipleValues(_itemID);
 }
@@ -2165,8 +2165,8 @@ QString ak::uiAPI::propertyGrid::getItemName(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemName(_itemID);
 }
@@ -2176,8 +2176,8 @@ std::vector<QString> ak::uiAPI::propertyGrid::getItemPossibleSelection(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemPossibleSelection(_itemID);
 }
@@ -2187,8 +2187,8 @@ bool ak::uiAPI::propertyGrid::getItemValueBool(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueBool(_itemID);
 }
@@ -2198,8 +2198,8 @@ ak::ui::color ak::uiAPI::propertyGrid::getItemValueColor(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueColor(_itemID);
 }
@@ -2209,8 +2209,8 @@ double ak::uiAPI::propertyGrid::getItemValueDouble(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueDouble(_itemID);
 }
@@ -2220,8 +2220,8 @@ int ak::uiAPI::propertyGrid::getItemValueInteger(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueInteger(_itemID);
 }
@@ -2231,8 +2231,8 @@ QString ak::uiAPI::propertyGrid::getItemValueSelection(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueSelection(_itemID);
 }
@@ -2242,8 +2242,8 @@ QString ak::uiAPI::propertyGrid::getItemValueString(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueString(_itemID);
 }
@@ -2253,8 +2253,8 @@ ak::core::valueType ak::uiAPI::propertyGrid::getItemValueType(
 	ak::ID											_itemID
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueType(_itemID);
 }
@@ -2265,8 +2265,8 @@ void ak::uiAPI::propertyGrid::setItemIsReadOnly(
 	bool											_readOnly
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->setItemReadOnly(_itemID, _readOnly);
 }
@@ -2277,8 +2277,8 @@ void ak::uiAPI::propertyGrid::setGroupStateIcons(
 	const QIcon &									_groupCollapsed
 ) {
 	assert(my_objManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->setGroupStateIcons(_groupExpanded, _groupCollapsed);
 }
@@ -2292,8 +2292,8 @@ void ak::uiAPI::propertyGrid::setGroupStateIcons(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->setGroupStateIcons(*my_iconManager->icon(_groupExpandedIconName, _groupExpandedIconSize),
 		*my_iconManager->icon(_groupCollapsedIconName, _groupCollapsedIconSize));
@@ -2306,8 +2306,8 @@ void ak::uiAPI::propertyGrid::resetItemAsError(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->resetItemAsError(_itemID, _valueToReset);
 }
@@ -2319,8 +2319,8 @@ void ak::uiAPI::propertyGrid::resetItemAsError(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->resetItemAsError(_itemID, _valueToReset);
 }
@@ -2332,8 +2332,8 @@ void ak::uiAPI::propertyGrid::resetItemAsError(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->resetItemAsError(_itemID, _valueToReset);
 }
@@ -2344,8 +2344,8 @@ void ak::uiAPI::propertyGrid::showItemAsError(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->showItemAsError(_itemID);
 }
@@ -2356,8 +2356,8 @@ void ak::uiAPI::propertyGrid::setEnabled(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->setEnabled(_enabled);
 }
@@ -2367,8 +2367,8 @@ bool ak::uiAPI::propertyGrid::isEnabled(
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-	ui::widget::propertyGrid * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<ui::widget::propertyGrid *>(my_objManager->object(_propertyGridUID));
+	ui::qt::propertyGrid * actualPropertyGrid = nullptr;
+	actualPropertyGrid = dynamic_cast<ui::qt::propertyGrid *>(my_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->isEnabled();
 }
@@ -3070,7 +3070,7 @@ ak::ID ak::uiAPI::tree::addItem(
 	ak::ID							_parentId,
 	ak::ui::core::textAlignment		_textAlignment
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->add(_parentId, _text, _textAlignment);
 }
 
@@ -3082,7 +3082,7 @@ ak::ID ak::uiAPI::tree::addItem(
 	ak::ID							_parentId,
 	ak::ui::core::textAlignment		_textAlignment
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->add(_parentId, _text, _textAlignment, *my_iconManager->icon(_iconName, _iconSize));
 }
 
@@ -3092,7 +3092,7 @@ ak::ID ak::uiAPI::tree::addItem(
 	char							_delimiter,
 	ak::ui::core::textAlignment		_textAlignment
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->add(_cmd, _delimiter, _textAlignment);
 }
 
@@ -3105,21 +3105,21 @@ ak::ID ak::uiAPI::tree::addItem(
 	ak::ui::core::textAlignment		_textAlignment
 ) {
 	assert(my_iconManager != nullptr); // API not initialized
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->add(_cmd, _delimiter, _textAlignment, *my_iconManager->icon(_iconName, _iconSize));
 }
 
 void ak::uiAPI::tree::clear(
 	ak::UID							_treeUID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->clear();
 }
 
 void ak::uiAPI::tree::collapseAllItems(
 	ak::UID							_treeUID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->collapseAllItems();
 }
 
@@ -3127,7 +3127,7 @@ void ak::uiAPI::tree::deleteItem(
 	ak::UID							_treeUID,
 	ak::ID							_itemID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->deleteItem(_itemID);
 }
 
@@ -3135,7 +3135,7 @@ void ak::uiAPI::tree::deleteItems(
 	ak::UID							_treeUID,
 	const std::vector<ak::ID> &		_itemIDs
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->deleteItems(_itemIDs);
 }
 
@@ -3144,7 +3144,7 @@ void ak::uiAPI::tree::setItemsAreEditable(
 	bool							_editable,
 	bool							_applyToAll
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setItemsAreEditable(_editable, _applyToAll);
 }
 
@@ -3153,7 +3153,7 @@ void ak::uiAPI::tree::setItemIsEditable(
 	ak::ID							_itemID,
 	bool							_editable
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setItemIsEditable(_itemID, _editable);
 }
 
@@ -3162,7 +3162,7 @@ void ak::uiAPI::tree::setItemIsEditable(
 	const std::vector<ak::ID> &		_itemIDs,
 	bool							_editable
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setItemIsEditable(_itemIDs, _editable);
 }
 
@@ -3170,14 +3170,14 @@ void ak::uiAPI::tree::deselectAllItems(
 	ak::UID							_treeUID,
 	bool							_sendSelectionChangedEvent
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->deselectAllItems(_sendSelectionChangedEvent);
 }
 
 void ak::uiAPI::tree::expandAllItems(
 	ak::UID							_treeUID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->expandAllItems();
 }
 
@@ -3186,7 +3186,7 @@ ak::ID ak::uiAPI::tree::getItemID(
 	const QString &					_itemPath,
 	char							_delimiter
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->getItemID(_itemPath, _delimiter);
 }
 
@@ -3194,7 +3194,7 @@ std::vector<QString> ak::uiAPI::tree::getItemPath(
 	ak::UID							_treeUID,
 	ak::ID							_itemID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->getItemPath(_itemID);
 }
 
@@ -3203,7 +3203,7 @@ QString ak::uiAPI::tree::getItemPathString(
 	ak::ID							_itemID,
 	char							_delimiter
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->getItemPathString(_itemID, _delimiter);
 }
 
@@ -3211,28 +3211,28 @@ QString ak::uiAPI::tree::getItemText(
 	ak::UID							_treeUID,
 	ak::ID							_itemID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->getItemText(_itemID);
 }
 
 bool ak::uiAPI::tree::isEnabled(
 	ak::UID							_treeUID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->enabled();
 }
 
 int ak::uiAPI::tree::itemCount(
 	ak::UID							_treeUID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->itemCount();
 }
 
 std::vector<ak::ID> ak::uiAPI::tree::selectedItems(
 	ak::UID							_treeUID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->selectedItems();
 }
 
@@ -3240,7 +3240,7 @@ void ak::uiAPI::tree::setAutoSelectAndDeselectChildrenEnabled(
 	ak::UID							_treeUID,
 	bool							_enabled
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setAutoSelectAndDeselectChildrenEnabled(_enabled);
 }
 
@@ -3248,7 +3248,7 @@ void ak::uiAPI::tree::setEnabled(
 	ak::UID							_treeUID,
 	bool							_enabled
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setEnabled(_enabled);
 }
 
@@ -3256,7 +3256,7 @@ void ak::uiAPI::tree::setFilterCaseSensitiveEnabled(
 	ak::UID							_treeUID,
 	bool							_caseSensitiveEnabled
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setFilterCaseSensitive(_caseSensitiveEnabled);
 }
 
@@ -3264,7 +3264,7 @@ void ak::uiAPI::tree::setFilterRefreshOnChangeEnabled(
 	ak::UID							_treeUID,
 	bool							_refreshOnChangeEnabled
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setFilterRefreshOnChange(_refreshOnChangeEnabled);
 }
 
@@ -3272,7 +3272,7 @@ void ak::uiAPI::tree::setFilterVisible(
 	ak::UID							_treeUID,
 	bool							_visible
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setFilterVisible(_visible);
 }
 
@@ -3281,7 +3281,7 @@ void ak::uiAPI::tree::setItemIcon(
 	ak::ID							_itemID,
 	const QIcon &					_icon
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setItemIcon(_itemID, _icon);
 }
 
@@ -3292,7 +3292,7 @@ void ak::uiAPI::tree::setItemIcon(
 	const QString &					_iconFolder
 ) {
 	assert(my_iconManager != nullptr); // API not initialized
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setItemIcon(_itemID, *my_iconManager->icon(_iconName, _iconFolder));
 }
 
@@ -3301,7 +3301,7 @@ void ak::uiAPI::tree::setItemEnabled(
 	ak::ID							_itemID,
 	bool							_enabled
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setItemEnabled(_itemID, _enabled);
 }
 
@@ -3311,7 +3311,7 @@ void ak::uiAPI::tree::setItemSelected(
 	bool							_selected,
 	bool							_singleSelection
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	if (_singleSelection) {
 		actualTree->setSingleItemSelected(_itemID, _selected);
 	}
@@ -3326,7 +3326,7 @@ void ak::uiAPI::tree::setItemVisible(
 	ak::ID							_itemID,
 	bool							_visible
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setItemVisible(_itemID, _visible);
 }
 
@@ -3335,7 +3335,7 @@ void ak::uiAPI::tree::setItemText(
 	ak::ID							_itemId,
 	const QString &					_text
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setItemText(_itemId, _text);
 }
 
@@ -3343,7 +3343,7 @@ void ak::uiAPI::tree::setMultiSelectionEnabled(
 	ak::UID							_treeUID,
 	bool							_enabled
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setMultiSelectionEnabled(_enabled);
 }
 
@@ -3351,7 +3351,7 @@ void ak::uiAPI::tree::setVisible(
 	ak::UID							_treeUID,
 	bool							_visible
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setVisible(_visible);
 }
 
@@ -3359,7 +3359,7 @@ void ak::uiAPI::tree::toggleItemSelection(
 	ak::UID							_treeUID,
 	ak::ID							_itemID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->toggleItemSelection(_itemID);
 }
 
@@ -3367,14 +3367,14 @@ void ak::uiAPI::tree::setSortingEnabled(
 	ak::UID							_treeUID,
 	bool							_enabled
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	actualTree->setSortingEnabled(_enabled);
 }
 
 bool ak::uiAPI::tree::isSortingEnabled(
 	ak::UID							_treeUID
 ) {
-	auto actualTree = object::get<ui::widget::tree>(_treeUID);
+	auto actualTree = object::get<ui::qt::tree>(_treeUID);
 	return actualTree->isSortingEnabled();
 }
 

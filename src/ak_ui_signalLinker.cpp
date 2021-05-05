@@ -22,18 +22,22 @@
 #include <ak_ui_qt_comboBox.h>
 #include <ak_ui_qt_comboButton.h>
 #include <ak_ui_qt_dock.h>
+#include <ak_ui_qt_propertyGrid.h>
 #include <ak_ui_qt_lineEdit.h>
 #include <ak_ui_qt_pushButton.h>
 #include <ak_ui_qt_table.h>
 #include <ak_ui_qt_textEdit.h>
 #include <ak_ui_qt_timer.h>
 #include <ak_ui_qt_toolButton.h>
+#include <ak_ui_qt_tree.h>
 #include <ak_ui_qt_niceLineEdit.h>
 
 // Qt header
 #include <qmessagebox.h>			// QMessageBox
 #include <qdockwidget.h>
+#include <qtreewidget.h>
 #include <qstring.h>
+#include <qevent.h>
 
 ak::ui::signalLinker::signalLinker(
 	ak::messenger *								_messanger,
@@ -93,6 +97,10 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(closing()), this, SLOT(slotClosing()));
 			break;
+		case ak::ui::core::oPropertyGrid:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(cleared()), this, SLOT(slotCleared()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(itemChanged(int)), this, SLOT(slotItemChanged(int)));
+			break;
 		case ak::ui::core::objectType::oLineEdit:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int, int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
@@ -141,6 +149,22 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(menuItemClicked(ak::ID)), this, SLOT(slotContextMenuItemClicked(ak::ID)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(menuItemCheckedChanged(ak::ID, bool)), this, SLOT(slotContextMenuItemCheckedChanged(ak::ID, bool)));
+			break;
+		case core::oTree:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(cleared()), this, SLOT(slotCleared()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(focusLost()), this, SLOT(slotFocusLost()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(itemActivated(QTreeWidgetItem *, int)), this, SLOT(slotTreeItemActivated(QTreeWidgetItem *, int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(slotTreeItemChanged(QTreeWidgetItem *, int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(slotTreeItemClicked(QTreeWidgetItem *, int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(itemCollapsed(QTreeWidgetItem *)), this, SLOT(slotTreeItemCollapsed(QTreeWidgetItem *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(slotTreeItemDoubleClicked(QTreeWidgetItem *, int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(itemFocused(QTreeWidgetItem *)), this, SLOT(slotTreeItemFocused(QTreeWidgetItem *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(itemExpanded(QTreeWidgetItem *)), this, SLOT(slotTreeItemExpanded(QTreeWidgetItem *)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(itemTextChanged(QTreeWidgetItem *, int)), this, SLOT(slotTreeItemChanged(QTreeWidgetItem *, int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(itemLocationChanged(QTreeWidgetItem *, int)), this, SLOT(slotTreeItemLocationChanged(QTreeWidgetItem *, int)));
 			break;
 		default:
 			assert(0); // Not implemented object type
@@ -257,7 +281,7 @@ ak::UID ak::ui::signalLinker::addLink(
 	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 	_object->connect(_object, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-	_object->connect(_object, SIGNAL(returnPressed()), this, SLOT(slotReturnPressed()));
+	_object->connect(_object, &qt::niceLineEdit::returnPressed, this, &signalLinker::slotReturnPressed);
 	return _objectUid;
 }
 
@@ -271,6 +295,19 @@ ak::UID ak::ui::signalLinker::addLink(
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oDock });
 	_object->connect(_object, SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
 	_object->connect(_object, SIGNAL(closing()), this, SLOT(slotClosing()));
+	return _objectUid;
+}
+
+ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::propertyGrid *							_object,
+	ak::UID												_objectUid
+) {
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oPropertyGrid });
+	_object->connect(_object, &qt::propertyGrid::cleared, this, &signalLinker::slotCleared);
+	_object->connect(_object, &qt::propertyGrid::itemChanged, this, &signalLinker::slotItemChanged);
 	return _objectUid;
 }
 
@@ -352,6 +389,31 @@ ak::UID ak::ui::signalLinker::addLink(
 	return _objectUid;
 }
 
+ak::UID ak::ui::signalLinker::addLink(
+	ak::ui::qt::tree *									_object,
+	ak::UID												_objectUid
+) {
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTree });
+	_object->connect(_object, &qt::tree::keyPressed, this, &signalLinker::slotKeyPressed);
+	_object->connect(_object, &qt::tree::keyReleased, this, &signalLinker::slotKeyReleased);
+	_object->connect(_object, &qt::tree::cleared, this, &signalLinker::slotCleared);
+	_object->connect(_object, &qt::tree::focusLost, this, &signalLinker::slotFocusLost);
+	_object->connect(_object, &qt::tree::selectionChanged, this, &signalLinker::slotSelectionChanged);
+	_object->connect(_object, &qt::tree::itemActivated, this, &signalLinker::slotTreeItemActivated);
+	_object->connect(_object, &qt::tree::itemChanged, this, &signalLinker::slotTreeItemChanged);
+	_object->connect(_object, &qt::tree::itemClicked, this, &signalLinker::slotTreeItemClicked);
+	_object->connect(_object, &qt::tree::itemCollapsed, this, &signalLinker::slotTreeItemCollapsed);
+	_object->connect(_object, &qt::tree::itemDoubleClicked, this, &signalLinker::slotTreeItemDoubleClicked);
+	_object->connect(_object, &qt::tree::itemFocused, this, &signalLinker::slotTreeItemFocused);
+	_object->connect(_object, &qt::tree::itemExpanded, this, &signalLinker::slotTreeItemExpanded);
+	_object->connect(_object, &qt::tree::itemTextChanged, this, &signalLinker::slotTreeItemChanged);
+	_object->connect(_object, &qt::tree::itemLocationChanged, this, &signalLinker::slotTreeItemLocationChanged);
+	return _objectUid;
+}
+
 // ###################################################################################
 
 // SLOTS
@@ -363,6 +425,24 @@ void ak::ui::signalLinker::slotChanged() {
 	obj = dynamic_cast<ak::ui::core::aObject *>(sender());
 	assert(obj != nullptr); // Cast failed
 	raiseEventProtected(obj->uid(), ak::core::eventType::eChanged, 0, 0);
+}
+
+void ak::ui::signalLinker::slotCleared() {
+	if (!ak::singletonAllowedMessages::instance()->clearedEvent()) { return; }
+	// Cast object
+	ak::ui::core::aObject * obj = nullptr;
+	obj = dynamic_cast<ak::ui::core::aObject *>(sender());
+	assert(obj != nullptr); // Cast failed
+	raiseEventProtected(obj->uid(), ak::core::eventType::eCleared, 0, 0);
+}
+
+void ak::ui::signalLinker::slotItemChanged(ak::ID _itemID) {
+	if (!ak::singletonAllowedMessages::instance()->changedEvent()) { return; }
+	// Cast object
+	ak::ui::core::aObject * obj = nullptr;
+	obj = dynamic_cast<ak::ui::core::aObject *>(sender());
+	assert(obj != nullptr); // Cast failed
+	raiseEventProtected(obj->uid(), ak::core::eventType::eChanged, _itemID, 0);
 }
 
 void ak::ui::signalLinker::slotClicked() {
@@ -378,6 +458,11 @@ void ak::ui::signalLinker::slotCursorPositionChanged(int _oldPos, int _newPos) {
 void ak::ui::signalLinker::slotFocused() {
 	if (!ak::singletonAllowedMessages::instance()->focusedEvent()) { return; }
 	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eFocused, 0, 0);
+}
+
+void ak::ui::signalLinker::slotFocusLost() {
+	if (!ak::singletonAllowedMessages::instance()->focusedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eFocusLeft, 0, 0);
 }
 
 void ak::ui::signalLinker::slotIndexActivated(int _index) {
@@ -480,6 +565,48 @@ void ak::ui::signalLinker::tableCellEntered(int _row, int _coloumn) {
 	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eFocused, _row, _coloumn);
 }
 
+// ##### Tree
+
+void ak::ui::signalLinker::slotTreeItemActivated(QTreeWidgetItem * _item, int _column) {
+	if (!ak::singletonAllowedMessages::instance()->activatedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eActivated, qt::treeBase::getItemId(_item), _column);
+}
+
+void ak::ui::signalLinker::slotTreeItemChanged(QTreeWidgetItem * _item, int _column) {
+	if (!ak::singletonAllowedMessages::instance()->changedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eChanged, qt::treeBase::getItemId(_item), _column);
+}
+
+void ak::ui::signalLinker::slotTreeItemClicked(QTreeWidgetItem * _item, int _column) {
+	if (!ak::singletonAllowedMessages::instance()->clickedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eClicked, qt::treeBase::getItemId(_item), _column);
+}
+
+void ak::ui::signalLinker::slotTreeItemCollapsed(QTreeWidgetItem * _item) {
+	if (!ak::singletonAllowedMessages::instance()->collapsedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eCollpased, qt::treeBase::getItemId(_item), 0);
+}
+
+void ak::ui::signalLinker::slotTreeItemDoubleClicked(QTreeWidgetItem * _item, int _column) {
+	if (!ak::singletonAllowedMessages::instance()->doubleClickedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eDoubleClicked, qt::treeBase::getItemId(_item), _column);
+}
+
+void ak::ui::signalLinker::slotTreeItemExpanded(QTreeWidgetItem * _item) {
+	if (!ak::singletonAllowedMessages::instance()->expandedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eExpanded, qt::treeBase::getItemId(_item), 0);
+}
+
+void ak::ui::signalLinker::slotTreeItemFocused(QTreeWidgetItem * _item) {
+	if (!ak::singletonAllowedMessages::instance()->focusedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eFocused, qt::treeBase::getItemId(_item), 0);
+}
+
+void ak::ui::signalLinker::slotTreeItemLocationChanged(QTreeWidgetItem * _item) {
+	if (!ak::singletonAllowedMessages::instance()->locationChangedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eLocationChanged, qt::treeBase::getItemId(_item), 0);
+}
+
 // ###################################################################################
 
 // Private members
@@ -506,19 +633,15 @@ void ak::ui::signalLinker::raiseEventProtected(
 	int															_info2
 ) {
 	try { raiseEvent(_senderUid, _eventType, _info1, _info2); }
-	catch (const ak::Exception & e) {
-		QMessageBox msg;
-		msg.setWindowTitle("Signal error");
-		msg.setText(e.what());
-		msg.exec();
-	}
 	catch (const std::exception & e) {
+		assert(0);
 		QMessageBox msg;
 		msg.setWindowTitle("Signal error");
 		msg.setText(e.what());
 		msg.exec();
 	}
 	catch (...) {
+		assert(0);
 		QMessageBox msg;
 		msg.setWindowTitle("Signal error");
 		msg.setText("Unknown error at ak::ui::signalLinker::raiseEventProtected()");

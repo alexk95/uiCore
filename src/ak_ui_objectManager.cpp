@@ -38,6 +38,7 @@
 #include <ak_ui_qt_comboBox.h>				// comboBox
 #include <ak_ui_qt_comboButton.h>			// comboButton
 #include <ak_ui_qt_dock.h>					// dock
+#include <ak_ui_qt_propertyGrid.h>			// propertyGrid
 #include <ak_ui_qt_pushButton.h>			// pushButton
 #include <ak_ui_qt_specialTabBar.h>			// special TabBar
 #include <ak_ui_qt_textEdit.h>				// textEdit
@@ -47,11 +48,10 @@
 #include <ak_ui_qt_niceLineEdit.h>			// niceLineEdit
 
 // AK widget objects
-#include <ak_ui_widget_propertyGrid.h>		// propertyGrid
 #include <ak_ui_widget_welcomeScreen.h>
 #include <ak_ui_widget_table.h>				// table
 #include <ak_ui_widget_tabView.h>			// tabView
-#include <ak_ui_widget_tree.h>				// tree
+#include <ak_ui_qt_tree.h>				// tree
 
 // AK ttb objects
 #include <ak_ui_ttb_group.h>				// ttb Group
@@ -275,10 +275,10 @@ ak::UID ak::ui::objectManager::createPropertyGrid(
 	ak::UID												_creatorUid
 ) {
 	// Create object
-	widget::propertyGrid * obj = new widget::propertyGrid(my_messenger, my_uidManager);
+	qt::propertyGrid * obj = new qt::propertyGrid;
 	// Set parameter
 	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
-	obj->setUid(my_uidManager->getId());
+	my_signalLinker->addLink(obj);
 	// Store data
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
 	addCreatedUid(_creatorUid, obj->uid());
@@ -435,9 +435,10 @@ ak::UID ak::ui::objectManager::createTree(
 	ak::UID												_creatorUid
 ) {
 	// Create object
-	ak::ui::widget::tree * obj = new ak::ui::widget::tree(my_messenger, my_uidManager, my_currentColorStyle);
+	ak::ui::qt::tree * obj = new ak::ui::qt::tree(my_currentColorStyle);
 	// Set parameter
 	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
+	my_signalLinker->addLink(obj);
 	// Store data
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
 	addCreatedUid(_creatorUid, obj->uid());
@@ -631,38 +632,41 @@ void ak::ui::objectManager::destroy(
 
 	auto object = my_mapObjects.find(_objectUID);
 	assert(object != my_mapObjects.end());	// Invalid object UID
-	if (object == my_mapObjects.end()) return; // Avoid a UI crash if something goes wrong here
-	
-	ui::core::aObject * actualObject = object->second;
 
-	if (_ignoreIfObjectHasChildObjects) {
-		if (actualObject->childObjectCount() != 0) { return; }
-		switch (actualObject->objectType())
-		{
-		case ui::core::objectType::oTabToolbarPage:
-		case ui::core::objectType::oTabToolbarGroup:
-		case ui::core::objectType::oTabToolbarSubgroup:
-		{
-			ui::core::ttbContainer * container = nullptr;
-			container = dynamic_cast<ui::core::ttbContainer *>(actualObject);
-			assert(container != nullptr); // Cast failed
-			if (container->subContainerCount() != 0) { return; }
+	if (object != my_mapObjects.end()) // Avoid a UI crash if something goes wrong here
+	{
+		ui::core::aObject * actualObject = object->second;
+
+		if (_ignoreIfObjectHasChildObjects) {
+			if (actualObject->childObjectCount() != 0) { return; }
+			switch (actualObject->objectType())
+			{
+			case ui::core::objectType::oTabToolbarPage:
+			case ui::core::objectType::oTabToolbarGroup:
+			case ui::core::objectType::oTabToolbarSubgroup:
+			{
+				ui::core::ttbContainer * container = nullptr;
+				container = dynamic_cast<ui::core::ttbContainer *>(actualObject);
+				assert(container != nullptr); // Cast failed
+				if (container->subContainerCount() != 0) { return; }
+			}
+			break;
+			}
 		}
-		break;
+
+		my_mapAliases.erase(actualObject->alias());
+		my_mapOwners.erase(_objectUID);
+		my_mapObjects.erase(_objectUID);
+
+		// Remove the unique name access to this object
+		if (!actualObject->uniqueName().isEmpty()) {
+			my_mapUniqueNames.erase(actualObject->uniqueName());
 		}
+
+		// Destroy object
+		delete actualObject;
 	}
 
-	my_mapAliases.erase(actualObject->alias());
-	my_mapOwners.erase(_objectUID);
-	my_mapObjects.erase(_objectUID);
-
-	// Remove the unique name access to this object
-	if (!actualObject->uniqueName().isEmpty()) {
-		my_mapUniqueNames.erase(actualObject->uniqueName());
-	}
-
-	// Destroy object
-	delete actualObject;
 	my_notifier->enable();
 }
 
