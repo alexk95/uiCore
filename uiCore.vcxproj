@@ -152,7 +152,7 @@
     <QtMoc Include="include\ak_ui_qt_list.h" />
     <QtMoc Include="include\ak_ui_qt_graphicsView.h" />
     <QtMoc Include="include\ak_ui_qt_label.h" />
-    <ClInclude Include="include\ak_ui_qt_tabView.h" />
+    <QtMoc Include="include\ak_ui_qt_tabView.h" />
     <ClInclude Include="include\ak_ui_qt_timer.h" />
     <QtMoc Include="include\ak_ui_qt_toolButton.h" />
     <QtMoc Include="include\ak_ui_qt_window.h" />
@@ -163,7 +163,6 @@
     <QtMoc Include="include\ak_ui_qt_colorEditButton.h" />
     <QtMoc Include="include\ak_ui_widget_welcomeScreen.h" />
     <QtMoc Include="include\ak_ui_qt_propertyGrid.h" />
-    <QtMoc Include="include\ak_ui_widget_tabView.h" />
     <QtMoc Include="include\ak_ui_qt_tree.h" />
     <QtMoc Include="include\ak_ui_uiManagerTimerSignalLinker.h" />
     <QtMoc Include="include\ak_ui_signalLinker.h" />
@@ -243,7 +242,6 @@
     <ClCompile Include="src\ak_ui_qt_niceLineEdit.cpp" />
     <ClCompile Include="src\ak_ui_widget_welcomeScreen.cpp" />
     <ClCompile Include="src\ak_ui_qt_propertyGrid.cpp" />
-    <ClCompile Include="src\ak_ui_widget_tabView.cpp" />
     <ClCompile Include="src\ak_ui_qt_tree.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
   </ItemGroup>

@@ -28,6 +28,7 @@ ak::ui::qt::tabView::tabView(
 ak::ui::qt::tabView::~tabView() { A_OBJECT_DESTROYING }
 
 // #######################################################################################################
+
 // Base class functions
 
 QWidget * ak::ui::qt::tabView::widget(void) { return this; }
@@ -37,7 +38,7 @@ void ak::ui::qt::tabView::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-
+	
 	/*QString sheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
 		TYPE_COLORAREA::caBackgroundColorControls, "QWidget{", "}\n"));*/
 	QString sheet;
@@ -61,4 +62,38 @@ void ak::ui::qt::tabView::setColorStyle(
 		"QTabBar::tab:selected{", "}"));
 	
 	this->setStyleSheet(sheet);
+}
+
+// #######################################################################################################
+
+// Setter
+
+void ak::ui::qt::tabView::setTabLocation(
+	ak::ui::core::tabLocation			_location
+) {
+	switch (_location)
+	{
+	case ak::ui::core::tabLocation::tab_locationDown: setTabPosition(QTabWidget::TabPosition::South); break;
+	case ak::ui::core::tabLocation::tab_locationLeft: setTabPosition(QTabWidget::TabPosition::West); break;
+	case ak::ui::core::tabLocation::tab_locationRight: setTabPosition(QTabWidget::TabPosition::East); break;
+	case ak::ui::core::tabLocation::tab_locationUp: setTabPosition(QTabWidget::TabPosition::North); break;
+	default:
+		assert(0); // Unknown tab location
+		break;
+	}
+}
+
+void ak::ui::qt::tabView::setCustomTabBar(
+	QTabBar *			_tabBar
+) { setTabBar(_tabBar); }
+
+// #######################################################################################################
+
+// Getter
+
+QStringList ak::ui::qt::tabView::tabTitles(void) const {
+	QStringList ret;
+	ret.reserve(count());
+	for (int i = 0; i < count(); i++) { ret.push_back(tabText(i)); }
+	return ret;
 }

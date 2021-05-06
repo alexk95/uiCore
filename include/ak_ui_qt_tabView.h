@@ -16,6 +16,9 @@
 
 // Qt header
 #include <qtabwidget.h>
+#include <qstring.h>
+#include <qstringlist.h>
+
 
 // AK header
 #include <ak_ui_core_aWidget.h>
@@ -23,6 +26,7 @@
 
 // Forward declaration
 class QWidget;
+class QTabBar;
 
 namespace ak {
 	namespace ui {
@@ -34,6 +38,7 @@ namespace ak {
 		namespace qt{
 
 			class UICORE_API_EXPORT tabView : public QTabWidget, public core::aWidget {
+				Q_OBJECT
 			public:
 				
 				//! @brief Constructor
@@ -47,6 +52,7 @@ namespace ak {
 				virtual ~tabView();
 
 				// #######################################################################################################
+				
 				// Base class functions
 
 				//! @brief Will return the widgets widget to display it
@@ -59,8 +65,26 @@ namespace ak {
 					const ak::ui::colorStyle *			_colorStyle
 				) override;
 				
-			private:
-				friend ak::ui::widget::tabView;
+				// #######################################################################################################
+
+				// Setter
+
+				//! @brief Will set the tab location of the tab view
+				//! @param _location The location to set
+				void setTabLocation(
+					ak::ui::core::tabLocation			_location
+				);
+
+				void setCustomTabBar(
+					QTabBar *							_tabBar
+				);
+
+				// #######################################################################################################
+
+				// Getter
+
+				QStringList tabTitles(void) const;
+
 			};
 
 		} // namespace qt

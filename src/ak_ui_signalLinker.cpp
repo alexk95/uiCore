@@ -26,6 +26,7 @@
 #include <ak_ui_qt_lineEdit.h>
 #include <ak_ui_qt_pushButton.h>
 #include <ak_ui_qt_table.h>
+#include <ak_ui_qt_tabView.h>
 #include <ak_ui_qt_textEdit.h>
 #include <ak_ui_qt_timer.h>
 #include <ak_ui_qt_toolButton.h>
@@ -102,14 +103,14 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(itemChanged(int)), this, SLOT(slotItemChanged(int)));
 			break;
 		case ak::ui::core::objectType::oLineEdit:
-			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int, int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChangedIndex(int, int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		case core::objectType::oNiceLineEdit:
-			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int, int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChangedIndex(int, int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged(const QString &)), this, SLOT(slotChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
@@ -132,8 +133,14 @@ ak::ui::signalLinker::~signalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
+		case core::oTabView:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(currentChanged(int)), this, SLOT(slotItemChanged(int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(tabBarClicked(int)), this, SLOT(slotItemClicked(int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(tabCloseRequested(int)), this, SLOT(slotItemClicked(int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(slotItemDoubleClicked(int)));
+			break;
 		case ak::ui::core::objectType::oTextEdit:
-			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int , int)));
+			itm->second.object->disconnect(itm->second.object, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
@@ -259,11 +266,11 @@ ak::UID ak::ui::signalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oLineEdit });
-	_object->connect(_object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int, int)));
-	_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-	_object->connect(_object, SIGNAL(textChanged(const QString &)), this, SLOT(slotChanged()));
-	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	_object->connect(_object, &QLineEdit::cursorPositionChanged, this, &signalLinker::slotCursorPositionChangedIndex);
+	_object->connect(_object, &QLineEdit::selectionChanged, this, &signalLinker::slotSelectionChanged);
+	_object->connect(_object, &QLineEdit::textChanged, this, &signalLinker::slotChanged);
+	_object->connect(_object, &qt::lineEdit::keyPressed, this, &signalLinker::slotKeyPressed);
+	_object->connect(_object, &qt::lineEdit::keyReleased, this, &signalLinker::slotKeyReleased);
 	return _objectUid;
 }
 
@@ -275,12 +282,12 @@ ak::UID ak::ui::signalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oNiceLineEdit });
-	_object->connect(_object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int, int)));
-	_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-	_object->connect(_object, SIGNAL(textChanged(const QString &)), this, SLOT(slotChanged()));
-	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
+	_object->connect(_object, &qt::niceLineEdit::cursorPositionChanged, this, &signalLinker::slotCursorPositionChangedIndex);
+	_object->connect(_object, &qt::niceLineEdit::selectionChanged, this, &signalLinker::slotSelectionChanged);
+	_object->connect(_object, &qt::niceLineEdit::textChanged, this, &signalLinker::slotChanged);
+	_object->connect(_object, &qt::niceLineEdit::keyPressed, this, &signalLinker::slotKeyPressed);
+	_object->connect(_object, &qt::niceLineEdit::keyReleased, this, &signalLinker::slotKeyReleased);
+	_object->connect(_object, &qt::niceLineEdit::editingFinished, this, &signalLinker::slotEditingFinished);
 	_object->connect(_object, &qt::niceLineEdit::returnPressed, this, &signalLinker::slotReturnPressed);
 	return _objectUid;
 }
@@ -345,6 +352,21 @@ ak::UID ak::ui::signalLinker::addLink(
 }
 
 ak::UID ak::ui::signalLinker::addLink(
+	qt::tabView *										_object,
+	UID													_objectUid
+) {
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTabView });
+	_object->connect(_object, &QTabWidget::currentChanged, this, &signalLinker::slotItemChanged);
+	_object->connect(_object, &QTabWidget::tabBarClicked, this, &signalLinker::slotItemClicked);
+	_object->connect(_object, &QTabWidget::tabCloseRequested, this, &signalLinker::slotItemClicked);
+	_object->connect(_object, &QTabWidget::tabBarDoubleClicked, this, &signalLinker::slotItemDoubleClicked);
+	return _objectUid;
+}
+
+ak::UID ak::ui::signalLinker::addLink(
 	ak::ui::qt::textEdit *								_object,
 	ak::UID												_objectUid
 ) {
@@ -352,12 +374,12 @@ ak::UID ak::ui::signalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTextEdit });
-	_object->connect(_object, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(slotCursorPositionChanged(int, int)));
-	_object->connect(_object, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-	_object->connect(_object, SIGNAL(textChanged()), this, SLOT(slotChanged()));
-	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(contextMenuItemClicked(ak::ID)), this, SLOT(slotContextMenuItemClicked(ak::ID)));
+	_object->connect(_object, &QTextEdit::cursorPositionChanged, this, &signalLinker::slotCursorPositionChanged);
+	_object->connect(_object, &QTextEdit::selectionChanged, this, &signalLinker::slotSelectionChanged);
+	_object->connect(_object, &QTextEdit::textChanged, this, &signalLinker::slotChanged);
+	_object->connect(_object, &qt::textEdit::keyPressed, this, &signalLinker::slotKeyPressed);
+	_object->connect(_object, &qt::textEdit::keyReleased, this, &signalLinker::slotKeyReleased);
+	_object->connect(_object, &qt::textEdit::contextMenuItemClicked, this, &signalLinker::slotContextMenuItemClicked);
 	return _objectUid;
 }
 
@@ -436,21 +458,17 @@ void ak::ui::signalLinker::slotCleared() {
 	raiseEventProtected(obj->uid(), ak::core::eventType::eCleared, 0, 0);
 }
 
-void ak::ui::signalLinker::slotItemChanged(ak::ID _itemID) {
-	if (!ak::singletonAllowedMessages::instance()->changedEvent()) { return; }
-	// Cast object
-	ak::ui::core::aObject * obj = nullptr;
-	obj = dynamic_cast<ak::ui::core::aObject *>(sender());
-	assert(obj != nullptr); // Cast failed
-	raiseEventProtected(obj->uid(), ak::core::eventType::eChanged, _itemID, 0);
-}
-
 void ak::ui::signalLinker::slotClicked() {
 	if (!ak::singletonAllowedMessages::instance()->clickedEvent()) { return; }
 	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eClicked, 0, 0);
 }
 
-void ak::ui::signalLinker::slotCursorPositionChanged(int _oldPos, int _newPos) {
+void ak::ui::signalLinker::slotCursorPositionChanged() {
+	if (!ak::singletonAllowedMessages::instance()->cursorPositionChangedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eCursorPosotionChanged, 0, 0);
+}
+
+void ak::ui::signalLinker::slotCursorPositionChangedIndex(int _oldPos, int _newPos) {
 	if (!ak::singletonAllowedMessages::instance()->cursorPositionChangedEvent()) { return; }
 	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eCursorPosotionChanged, _oldPos, _newPos);
 }
@@ -536,6 +554,28 @@ void ak::ui::signalLinker::slotReturnPressed(void) {
 
 void ak::ui::signalLinker::slotEditingFinished(void) {
 	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eEditingFinished, 0, 0);
+}
+
+// ##### Items
+
+void ak::ui::signalLinker::slotItemChanged(ak::ID _itemID) {
+	if (!ak::singletonAllowedMessages::instance()->changedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eChanged, _itemID, 0);
+}
+
+void ak::ui::signalLinker::slotItemClicked(ak::ID _itemID) {
+	if (!ak::singletonAllowedMessages::instance()->clickedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eClicked, _itemID, 0);
+}
+
+void ak::ui::signalLinker::slotItemCloseRequested(ak::ID _itemID) {
+	if (!ak::singletonAllowedMessages::instance()->closeRequestedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eClosing, _itemID, 0);
+}
+
+void ak::ui::signalLinker::slotItemDoubleClicked(ak::ID _itemID) {
+	if (!ak::singletonAllowedMessages::instance()->doubleClickedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eDoubleClicked, _itemID, 0);
 }
 
 // ##### Table

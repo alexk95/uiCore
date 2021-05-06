@@ -1673,7 +1673,7 @@ namespace ak {
 				ak::UID				_tabViewUID
 			);
 
-			UICORE_API_EXPORT bool getTabsCloseable(
+			UICORE_API_EXPORT bool getTabsClosable(
 				ak::UID				_tabViewUID
 			);
 
@@ -1699,7 +1699,7 @@ namespace ak {
 
 			//! @brief Will set the closeabled state for the tabs in this tabView
 			//! @param _closeable If true the tabs can be closed by the user
-			UICORE_API_EXPORT void setTabsCloseable(
+			UICORE_API_EXPORT void setTabsClosable(
 				ak::UID								_tabViewUID,
 				bool								_closeable
 			);

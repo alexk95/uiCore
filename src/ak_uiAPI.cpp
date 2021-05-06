@@ -51,6 +51,7 @@
 #include <ak_ui_qt_niceLineEdit.h>			// nice line edit
 #include <ak_ui_qt_pushButton.h>			// push button
 #include <ak_ui_qt_table.h>
+#include <ak_ui_qt_tabView.h>
 #include <ak_ui_qt_textEdit.h>
 #include <ak_ui_qt_specialTabBar.h>
 #include <ak_ui_qt_timer.h>
@@ -62,7 +63,6 @@
 #include <ak_ui_qt_tree.h>					// tree
 
 #include <ak_ui_widget_welcomeScreen.h>
-#include <ak_ui_widget_tabView.h>
 
 // AK ttb objects
 #include <ak_ui_ttb_group.h>
@@ -1373,8 +1373,8 @@ void ak::uiAPI::object::setEnabled(
 		break;
 	case ak::ui::core::oTabView:
 	{
-		ui::widget::tabView * actualObject = nullptr;
-		actualObject = dynamic_cast<ui::widget::tabView *>(obj);
+		ui::qt::tabView * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::tabView *>(obj);
 		assert(actualObject != nullptr); // Cast failed
 		actualObject->setEnabled(_enabled);
 	}
@@ -1604,8 +1604,8 @@ bool ak::uiAPI::object::getIsEnabled(
 		break;
 	case ak::ui::core::oTabView:
 	{
-		ui::widget::tabView * actualObject = nullptr;
-		actualObject = dynamic_cast<ui::widget::tabView *>(obj);
+		ui::qt::tabView * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::tabView *>(obj);
 		assert(actualObject != nullptr); // Cast failed
 		return actualObject->isEnabled();
 	}
@@ -2455,19 +2455,7 @@ ak::ID ak::uiAPI::tabView::addTab(
 	ak::UID				_tabViewUID,
 	ak::UID				_widgetUID,
 	const QString &		_title
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	ui::core::aWidget * actualWidget = nullptr;
-	actualWidget = dynamic_cast<ui::core::aWidget *>(my_objManager->object(_widgetUID));
-	assert(actualWidget != nullptr); // Invalid object type
-
-	return actualTabView->createTab(actualWidget->widget(), _title);
-}
+) { return object::get<ui::qt::tabView>(_tabViewUID)->addTab(object::get<ui::core::aWidget>(_widgetUID)->widget(), _title); }
 
 ak::ID ak::uiAPI::tabView::addTab(
 	ak::UID				_tabViewUID,
@@ -2476,18 +2464,8 @@ ak::ID ak::uiAPI::tabView::addTab(
 	const QString &		_iconName,
 	const QString &		_iconFolder
 ) {
-	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	ui::core::aWidget * actualWidget = nullptr;
-	actualWidget = dynamic_cast<ui::core::aWidget *>(my_objManager->object(_widgetUID));
-	assert(actualWidget != nullptr); // Invalid object type
-
-	return actualTabView->createTab(actualWidget->widget(), _title, *my_iconManager->icon(_iconName, _iconFolder));
+	return object::get<ui::qt::tabView>(_tabViewUID)->addTab(object::get<ui::core::aWidget>(_widgetUID)->widget(), *my_iconManager->icon(_iconName, _iconFolder), _title);
 }
 
 ak::ID ak::uiAPI::tabView::addTab(
@@ -2495,32 +2473,14 @@ ak::ID ak::uiAPI::tabView::addTab(
 	ak::UID				_widgetUID,
 	const QString &		_title,
 	const QIcon &		_icon
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	ui::core::aWidget * actualWidget = nullptr;
-	actualWidget = dynamic_cast<ui::core::aWidget *>(my_objManager->object(_widgetUID));
-	assert(actualWidget != nullptr); // Invalid object type
-
-	return actualTabView->createTab(actualWidget->widget(), _title, _icon);
-}
+) { return object::get<ui::qt::tabView>(_tabViewUID)->addTab(object::get<ui::core::aWidget>(_widgetUID)->widget(), _icon, _title); }
 
 ak::ID ak::uiAPI::tabView::addTab(
 	ak::UID				_tabViewUID,
 	QWidget *			_widget,
 	const QString &		_title
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	return actualTabView->createTab(_widget, _title);
+	return object::get<ui::qt::tabView>(_tabViewUID)->addTab(_widget, _title);
 }
 
 ak::ID ak::uiAPI::tabView::addTab(
@@ -2530,14 +2490,8 @@ ak::ID ak::uiAPI::tabView::addTab(
 	const QString &		_iconName,
 	const QString &		_iconFolder
 ) {
-	assert(my_objManager != nullptr); // API not initialized
 	assert(my_iconManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	return actualTabView->createTab(_widget, _title, *my_iconManager->icon(_iconName, _iconFolder));
+	return object::get<ui::qt::tabView>(_tabViewUID)->addTab(_widget, *my_iconManager->icon(_iconName, _iconFolder), _title);
 }
 
 ak::ID ak::uiAPI::tabView::addTab(
@@ -2545,193 +2499,75 @@ ak::ID ak::uiAPI::tabView::addTab(
 	QWidget *			_widget,
 	const QString &		_title,
 	const QIcon &		_icon
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	return actualTabView->createTab(_widget, _title, _icon);
-}
+) { return object::get<ui::qt::tabView>(_tabViewUID)->addTab(_widget, _icon, _title); }
 
 void ak::uiAPI::tabView::closeAllTabs(
 	ak::UID				_tabViewUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	actualTabView->closeAllTabs();
-}
+) { object::get<ui::qt::tabView>(_tabViewUID)->clear(); }
 
 void ak::uiAPI::tabView::closeTab(
 	ak::UID				_tabViewUID,
 	ak::ID				_tabID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	return actualTabView->closeTab(_tabID);
-}
+) { return object::get<ui::qt::tabView>(_tabViewUID)->removeTab(_tabID); }
 
 ak::ID ak::uiAPI::tabView::getFocusedTab(
 	ak::UID				_tabViewUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
+) { return object::get<ui::qt::tabView>(_tabViewUID)->currentIndex(); }
 
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	return actualTabView->focusedTab();
-}
-
-bool ak::uiAPI::tabView::getTabsCloseable(
+bool ak::uiAPI::tabView::getTabsClosable(
 	ak::UID				_tabViewUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	return actualTabView->tabsCloseable();
-}
+) { return object::get<ui::qt::tabView>(_tabViewUID)->tabsClosable(); }
 
 QString ak::uiAPI::tabView::getTabText(
 	ak::UID				_tabViewUID,
 	ak::ID				_tabID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	return actualTabView->tabText(_tabID);
-}
+) { return object::get<ui::qt::tabView>(_tabViewUID)->tabText(_tabID); }
 
 void ak::uiAPI::tabView::setEnabled(
 	ak::UID				_tabViewUID,
 	bool				_enabled
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	actualTabView->setEnabled(_enabled);
-}
+) { object::get<ui::qt::tabView>(_tabViewUID)->setEnabled(_enabled); }
 
 void ak::uiAPI::tabView::setTabbarLocation(
 	ak::UID								_tabViewUID,
 	ak::ui::core::tabLocation			_location
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	actualTabView->setTabLocation(_location);
-}
+) { object::get<ui::qt::tabView>(_tabViewUID)->setTabLocation(_location); }
 
 void ak::uiAPI::tabView::setTabFocused(
 	ak::UID				_tabViewUID,
 	ak::ID				_tabID
-) {
-	assert(my_objManager != nullptr); // API not initialized
+) { object::get<ui::qt::tabView>(_tabViewUID)->setCurrentIndex(_tabID); }
 
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	actualTabView->focusTab(_tabID);
-}
-
-void ak::uiAPI::tabView::setTabsCloseable(
+void ak::uiAPI::tabView::setTabsClosable(
 	ak::UID								_tabViewUID,
 	bool								_closeable
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	actualTabView->setTabsCloseable(_closeable);
-}
+) { object::get<ui::qt::tabView>(_tabViewUID)->setTabsClosable(_closeable); }
 
 void ak::uiAPI::tabView::setTabText(
 	ak::UID								_tabViewUID,
 	ak::ID								_tab,
 	const QString &						_text
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	actualTabView->setTabText(_tab, _text);
-}
+) { object::get<ui::qt::tabView>(_tabViewUID)->setTabText(_tab, _text); }
 
 void ak::uiAPI::tabView::setSpecialTabBar(
 	ak::UID								_tabViewUID,
 	ak::UID								_specialTabBarUID
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::qt::specialTabBar * actualTabBar = nullptr;
-	actualTabBar = dynamic_cast<ui::qt::specialTabBar *>(my_objManager->object(_specialTabBarUID));
-	assert(actualTabBar != nullptr); // Invalid object type
-	setSpecialTabBar(_tabViewUID, actualTabBar);
-}
+) { setSpecialTabBar(_tabViewUID, object::get<ui::qt::specialTabBar>(_specialTabBarUID)); }
 
 void ak::uiAPI::tabView::setSpecialTabBar(
 	ak::UID								_tabViewUID,
 	QTabBar *							_specialTabBar
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-	actualTabView->setCustomBarBar(_specialTabBar);
-}
+) { object::get<ui::qt::tabView>(_tabViewUID)->setCustomTabBar(_specialTabBar); }
 
 void ak::uiAPI::tabView::setVisible(
 	ak::UID				_tabViewUID,
 	bool				_visible
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	actualTabView->setVisible(_visible);
-}
+) { object::get<ui::qt::tabView>(_tabViewUID)->setVisible(_visible); }
 
 void ak::uiAPI::tabView::setObjectName(
 	ak::UID							_tabViewUID,
 	const QString &					_name
-) {
-	assert(my_objManager != nullptr); // API not initialized
-
-	ui::widget::tabView * actualTabView = nullptr;
-	actualTabView = dynamic_cast<ui::widget::tabView *>(my_objManager->object(_tabViewUID));
-	assert(actualTabView != nullptr); // Invalid object type
-
-	actualTabView->setObjectName(_name);
-}
+) {	object::get<ui::qt::tabView>(_tabViewUID)->setObjectName(_name); }
 
 // TabView
 

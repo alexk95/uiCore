@@ -42,6 +42,7 @@
 #include <ak_ui_qt_pushButton.h>			// pushButton
 #include <ak_ui_qt_specialTabBar.h>			// special TabBar
 #include <ak_ui_qt_table.h>					// table
+#include <ak_ui_qt_tabView.h>				// tabView
 #include <ak_ui_qt_textEdit.h>				// textEdit
 #include <ak_ui_qt_timer.h>					// timer
 #include <ak_ui_qt_toolButton.h>			// toolButton
@@ -50,7 +51,6 @@
 
 // AK widget objects
 #include <ak_ui_widget_welcomeScreen.h>
-#include <ak_ui_widget_tabView.h>			// tabView
 #include <ak_ui_qt_tree.h>				// tree
 
 // AK ttb objects
@@ -450,7 +450,10 @@ ak::UID ak::ui::objectManager::createTabView(
 	ak::UID												_creatorUid
 ) {
 	// Create object
-	ak::ui::widget::tabView * obj = new ak::ui::widget::tabView(my_messenger, my_uidManager, this, my_currentColorStyle);
+	ak::ui::qt::tabView * obj = new ak::ui::qt::tabView;
+	// Set parameter
+	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
+	my_signalLinker->addLink(obj);
 	// Store data
 	my_mapObjects.insert_or_assign(obj->uid(), obj);
 	addCreatedUid(_creatorUid, obj->uid());
