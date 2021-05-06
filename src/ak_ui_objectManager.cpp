@@ -537,6 +537,7 @@ ak::UID ak::ui::objectManager::createTabToolBarPage(
 	return cont->uid();
 }
 
+/*
 ak::UID ak::ui::objectManager::createWelcomeScreen(
 	ak::UID												_creatorUid
 ) {
@@ -551,6 +552,7 @@ ak::UID ak::ui::objectManager::createWelcomeScreen(
 	addCreatedUid(_creatorUid, obj->uid());
 	return obj->uid();
 }
+*/
 
 ak::UID ak::ui::objectManager::createWindow(
 	ak::UID												_creatorUid

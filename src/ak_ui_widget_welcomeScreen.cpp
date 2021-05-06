@@ -9,8 +9,10 @@
  *	file 'LICENSE', which is part of this source code package.
  */
 
+/*
+
 // AK header
-#include <ak_ui_widget_welcomeScreen.h>	// Corresponding header
+#include <ak_ui_widget_welcomeScreen.h>			// Corresponding header
 #include <ak_messenger.h>						// messenger
 #include <ak_uidMangager.h>						// UID manager
 #include <ak_ui_colorStyle.h>					// color style
@@ -32,13 +34,10 @@
 #define MY_ID_NEW 2
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
-ak::ui::widget::welcomeScreen::welcomeScreen(
-	messenger *				_messenger,
-	uidManager *			_uidManager,
+ak::ui::qt::welcomeScreen::welcomeScreen(
 	ak::ui::colorStyle *	_colorStyle
 )
-	: aWidgetManager(ak::ui::core::oDefaultWelcomeScreen, _messenger, _uidManager, _colorStyle), my_signalLinker(nullptr),
-	my_headerLabelTextSize(24)
+	: aWidget(ak::ui::core::oDefaultWelcomeScreen, _colorStyle), my_headerLabelTextSize(24)
 {
 	my_new.List = nullptr;
 	my_new.Label = nullptr;
@@ -55,9 +54,6 @@ ak::ui::widget::welcomeScreen::welcomeScreen(
 	my_screen.OpenNewCentral = toLayoutWidgetCombo(nullptr, nullptr);
 	my_screen.Recents = toLayoutWidgetCombo(nullptr, nullptr);
 	my_screen.RecentsCentralDummy = toLayoutWidgetCombo(nullptr, nullptr);
-
-	// Create signal linker
-	my_signalLinker = new welcomeScreenSignalLinker(this);
 
 	// Create central widget
 	my_screen.Central = toLayoutWidgetCombo(new QHBoxLayout, new QWidget);
@@ -77,7 +73,6 @@ ak::ui::widget::welcomeScreen::welcomeScreen(
 		"QScrollBar::sub-line:vertical{border: 0px; background-color: #00000000; width: 0px; height: 0px;}"
 	);
 	my_recents.List->setVerticalScrollbarAlwaysVisible(false);
-	my_signalLinker->addLink(my_recents.List);
 	my_recents.Label = new QLabel("Recent");
 	my_recents.Label->setBuddy(my_recents.List);
 	QFont font = my_recents.Label->font();
@@ -99,7 +94,6 @@ ak::ui::widget::welcomeScreen::welcomeScreen(
 	my_open.List->setUid(MY_ID_OPEN);
 	my_open.List->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
 	my_open.List->setVerticalScrollbarAlwaysVisible(false);
-	my_signalLinker->addLink(my_open.List);
 	my_open.Label = new QLabel("Open");
 	my_open.Label->setBuddy(my_open.List);
 	font = my_open.Label->font();
@@ -117,7 +111,6 @@ ak::ui::widget::welcomeScreen::welcomeScreen(
 	my_new.List->setUid(MY_ID_NEW);
 	my_new.List->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
 	my_new.List->setVerticalScrollbarAlwaysVisible(false);
-	my_signalLinker->addLink(my_new.List);
 	my_new.Label = new QLabel("New");
 	my_new.Label->setBuddy(my_new.List);
 	font = my_new.Label->font();
@@ -134,16 +127,25 @@ ak::ui::widget::welcomeScreen::welcomeScreen(
 			"}\n");
 	}
 
+	// Connect signals
+	connect(my_recents.List, &QListWidget::itemClicked, this, &welcomeScreen::slotItemClicked);
+	connect(my_recents.List, &QListWidget::itemDoubleClicked, this, &welcomeScreen::slotItemDoubleClicked);
+
+	connect(my_open.List, &QListWidget::itemClicked, this, &welcomeScreen::slotItemClicked);
+	connect(my_open.List, &QListWidget::itemDoubleClicked, this, &welcomeScreen::slotItemDoubleClicked);
+
+	connect(my_new.List, &QListWidget::itemClicked, this, &welcomeScreen::slotItemClicked);
+	connect(my_new.List, &QListWidget::itemDoubleClicked, this, &welcomeScreen::slotItemDoubleClicked);
 }
 
-ak::ui::widget::welcomeScreen::~welcomeScreen() {
+ak::ui::qt::welcomeScreen::~welcomeScreen() {
 	A_OBJECT_DESTROYING
 	memFree();
 }
 
-QWidget * ak::ui::widget::welcomeScreen::widget(void) { return my_screen.Central.widget; }
+QWidget * ak::ui::qt::welcomeScreen::widget(void) { return my_screen.Central.widget; }
 
-void ak::ui::widget::welcomeScreen::setColorStyle(
+void ak::ui::qt::welcomeScreen::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
 
@@ -183,7 +185,7 @@ void ak::ui::widget::welcomeScreen::setColorStyle(
 	if (my_recents.Label != nullptr) { my_recents.Label->setStyleSheet(sheet); }
 }
 
-ak::ID ak::ui::widget::welcomeScreen::addItem(
+ak::ID ak::ui::qt::welcomeScreen::addItem(
 	ak::ID							_group,
 	const QString &					_text
 ) {
@@ -198,7 +200,7 @@ ak::ID ak::ui::widget::welcomeScreen::addItem(
 	}
 }
 
-ak::ID ak::ui::widget::welcomeScreen::addItem(
+ak::ID ak::ui::qt::welcomeScreen::addItem(
 	ak::ID							_group,
 	const QIcon &					_icon,
 	const QString &					_text
@@ -214,40 +216,40 @@ ak::ID ak::ui::widget::welcomeScreen::addItem(
 	}
 }
 
-ak::ID ak::ui::widget::welcomeScreen::addItemAtRecents(
+ak::ID ak::ui::qt::welcomeScreen::addItemAtRecents(
 	const QString &					_text
 ) { return my_recents.List->AddItem(_text); }
 
-ak::ID ak::ui::widget::welcomeScreen::addItemAtRecents(
+ak::ID ak::ui::qt::welcomeScreen::addItemAtRecents(
 	const QIcon &					_icon,
 	const QString &					_text
 ) { return my_recents.List->AddItem(_icon, _text); }
 
-ak::ID ak::ui::widget::welcomeScreen::addItemAtOpen(
+ak::ID ak::ui::qt::welcomeScreen::addItemAtOpen(
 	const QString &					_text
 ) { return my_open.List->AddItem(_text); }
 
-ak::ID ak::ui::widget::welcomeScreen::addItemAtOpen(
+ak::ID ak::ui::qt::welcomeScreen::addItemAtOpen(
 	const QIcon &					_icon,
 	const QString &					_text
 ) { return my_open.List->AddItem(_icon, _text); }
 
-ak::ID ak::ui::widget::welcomeScreen::addItemAtNew(
+ak::ID ak::ui::qt::welcomeScreen::addItemAtNew(
 	const QString &					_text
 ) { return my_new.List->AddItem(_text); }
 
-ak::ID ak::ui::widget::welcomeScreen::addItemAtNew(
+ak::ID ak::ui::qt::welcomeScreen::addItemAtNew(
 	const QIcon &					_icon,
 	const QString &					_text
 ) { return my_new.List->AddItem(_icon, _text); }
 
-void ak::ui::widget::welcomeScreen::clear(void) {
+void ak::ui::qt::welcomeScreen::clear(void) {
 	if (my_recents.List != nullptr) { my_recents.List->Clear(); }
 	if (my_open.List != nullptr) { my_open.List->Clear(); }
 	if (my_new.List != nullptr) { my_new.List->Clear(); }
 }
 
-void ak::ui::widget::welcomeScreen::clear(
+void ak::ui::qt::welcomeScreen::clear(
 	ak::ID							_group
 ) {
 	switch (_group)
@@ -261,7 +263,7 @@ void ak::ui::widget::welcomeScreen::clear(
 	}
 }
 
-QString ak::ui::widget::welcomeScreen::itemText(
+QString ak::ui::qt::welcomeScreen::itemText(
 	ak::ID							_group,
 	ak::ID							_item
 ) {
@@ -277,28 +279,28 @@ QString ak::ui::widget::welcomeScreen::itemText(
 	return "";
 }
 
-QString ak::ui::widget::welcomeScreen::itemTextAtRecent(
+QString ak::ui::qt::welcomeScreen::itemTextAtRecent(
 	ak::ID							_item
 ) {
 	assert(my_recents.List != nullptr);
 	return my_recents.List->itemText(_item);
 }
 
-QString ak::ui::widget::welcomeScreen::itemTextAtOpen(
+QString ak::ui::qt::welcomeScreen::itemTextAtOpen(
 	ak::ID							_item
 ) {
 	assert(my_open.List != nullptr);
 	return my_open.List->itemText(_item);
 }
 
-QString ak::ui::widget::welcomeScreen::itemTextAtNew(
+QString ak::ui::qt::welcomeScreen::itemTextAtNew(
 	ak::ID							_item
 ) {
 	assert(my_new.List != nullptr);
 	return my_new.List->itemText(_item);
 }
 
-void ak::ui::widget::welcomeScreen::setItemText(
+void ak::ui::qt::welcomeScreen::setItemText(
 	ak::ID							_group,
 	ak::ID							_item,
 	const QString &					_text
@@ -314,7 +316,7 @@ void ak::ui::widget::welcomeScreen::setItemText(
 	}
 }
 
-void ak::ui::widget::welcomeScreen::setItemIcon(
+void ak::ui::qt::welcomeScreen::setItemIcon(
 	ak::ID							_group,
 	ak::ID							_item,
 	const QIcon &					_icon
@@ -330,7 +332,7 @@ void ak::ui::widget::welcomeScreen::setItemIcon(
 	}
 }
 
-QString ak::ui::widget::welcomeScreen::groupName(
+QString ak::ui::qt::welcomeScreen::groupName(
 	ak::ID							_group
 ) {
 	switch (_group)
@@ -344,21 +346,21 @@ QString ak::ui::widget::welcomeScreen::groupName(
 	}
 }
 
-void ak::ui::widget::welcomeScreen::setObjectName(
+void ak::ui::qt::welcomeScreen::setObjectName(
 	const QString &					_name
 ) {
 	my_screen.Central.widget->setObjectName(_name);
 }
 
-QString ak::ui::widget::welcomeScreen::objectName(void) const {
+QString ak::ui::qt::welcomeScreen::objectName(void) const {
 	return my_screen.Central.widget->objectName();
 }
 
 // #############################################################################################################
 
-				// Event handling
+// Event handling
 
-void ak::ui::widget::welcomeScreen::handleEvent(
+void ak::ui::qt::welcomeScreen::handleEvent(
 	ak::UID							_group,
 	ak::ID							_item,
 	ak::core::eventType				_event
@@ -377,14 +379,21 @@ void ak::ui::widget::welcomeScreen::handleEvent(
 	}
 }
 
+void ak::ui::qt::welcomeScreen::slotItemClicked(QListWidgetItem * _item) {
+	list * actualList = nullptr;
+	actualList = dynamic_cast<list *>(sender());
+	assert(actualList != nullptr); // Cast failed
+
+
+}
+void ak::ui::qt::welcomeScreen::slotItemDoubleClicked(QListWidgetItem * _item) {
+
+}
+
 // ##############################################################################################
 // Private functions
 
-void ak::ui::widget::welcomeScreen::memFree(void) {
-
-	// Destroy signal linker first to disconnect all signals
-	if (my_signalLinker != nullptr) { delete my_signalLinker; my_signalLinker = nullptr; }
-
+void ak::ui::qt::welcomeScreen::memFree(void) {
 	memFree(my_new);
 	memFree(my_open);
 	memFree(my_recents);
@@ -396,21 +405,21 @@ void ak::ui::widget::welcomeScreen::memFree(void) {
 	memFree(my_screen.Recents);
 }
 
-void ak::ui::widget::welcomeScreen::memFree(
+void ak::ui::qt::welcomeScreen::memFree(
 	structLayoutWidget &		_layoutWidget
 ) {
 	if (_layoutWidget.layout != nullptr) { delete _layoutWidget.layout; _layoutWidget.layout = nullptr; }
 	if (_layoutWidget.widget != nullptr) { delete _layoutWidget.widget; _layoutWidget.widget = nullptr; }
 }
 
-void ak::ui::widget::welcomeScreen::memFree(
+void ak::ui::qt::welcomeScreen::memFree(
 	structEntries &				_entry
 ) {
 	if (_entry.List != nullptr) { _entry.List->Clear(); delete _entry.List; _entry.List = nullptr; }
 	if (_entry.Label != nullptr) { delete _entry.Label; _entry.Label = nullptr; }
 }
 
-ak::ui::widget::welcomeScreen::structLayoutWidget ak::ui::widget::welcomeScreen::toLayoutWidgetCombo(
+ak::ui::qt::welcomeScreen::structLayoutWidget ak::ui::qt::welcomeScreen::toLayoutWidgetCombo(
 	QLayout *					_layout,
 	QWidget *					_widget
 ) {
@@ -427,19 +436,6 @@ ak::ui::widget::welcomeScreen::structLayoutWidget ak::ui::widget::welcomeScreen:
 
 // ########################################################################################
 
-ak::ui::welcomeScreenSignalLinker::welcomeScreenSignalLinker(
-	widget::welcomeScreen *	_screen
-) {
-	assert(_screen != nullptr);
-	my_screen = _screen;
-}
-
-ak::ui::welcomeScreenSignalLinker::~welcomeScreenSignalLinker() {
-	for (auto itm : my_lists) {
-		disconnect(itm, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotItemClicked(QListWidgetItem *)));
-		disconnect(itm, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(slotItemDoubleClicked(QListWidgetItem *)));
-	}
-}
 
 void ak::ui::welcomeScreenSignalLinker::addLink(
 	qt::list *						_object
@@ -476,3 +472,5 @@ ak::ui::qt::listItem * ak::ui::welcomeScreenSignalLinker::castListItem(
 	assert(item != nullptr); // Cast failed
 	return item;
 }
+
+*/

@@ -356,11 +356,13 @@ namespace ak {
 			const std::vector<QString> &							_possibleSelection = std::vector<QString>()
 		);
 
+		/*
 		//! @brief Will create a defaultWelcomeScreen and return its UID
 		//! @param _creatorUid The UID of the creator
 		UICORE_API_EXPORT ak::UID createWelcomeScreen(
 			ak::UID												_creatorUid
 		);
+		*/
 
 		//! @brief Will create a new Dock and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
@@ -2207,6 +2209,7 @@ namespace ak {
 
 		// welcomeScreen
 
+		/*
 		namespace welcomeScreen {
 
 			UICORE_API_EXPORT void addItem(
@@ -2316,6 +2319,7 @@ namespace ak {
 			);
 
 		} // namespace welcomeScreen
+		*/
 
 		// ###############################################################################################################################################
 

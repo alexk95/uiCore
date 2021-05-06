@@ -271,11 +271,13 @@ namespace ak {
 				const QString &										_text = QString("")
 			);
 
+			/*
 			//! @brief Will create a defaultWelcomeScreen and return its UID
 			//! @param _creatorUid The UID of the creator
 			ak::UID createWelcomeScreen(
 				ak::UID												_creatorUid
 			);
+			*/
 
 			//! @brief Will create a window and return its UID
 			//! @param _creatorUid The UID of the creator

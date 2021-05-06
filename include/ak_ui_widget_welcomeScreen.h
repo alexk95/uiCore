@@ -11,8 +11,10 @@
 
 #pragma once
 
+/*
+
 // AK header
-#include <ak_ui_core_aWidgetManager.h>	// base class (welcomeScreen)
+#include <ak_ui_core_aWidget.h>			// base class (welcomeScreen)
 #include <ak_core.h>					// eventType
 #include <ak_globalDataTypes.h>			// ak::ID and ak::UID types
 
@@ -40,16 +42,14 @@ namespace ak {
 
 		// Forward declaration
 		class colorStyle;
-		class welcomeScreenSignalLinker;
-		namespace qt { class list; class listItem; }
+		
+		namespace qt {
+			class list; class listItem;
 
-		namespace widget {
-
-			class UICORE_API_EXPORT welcomeScreen : public ui::core::aWidgetManager {
+			class UICORE_API_EXPORT welcomeScreen : public QObject, public ui::core::aWidget {
+				Q_OBJECT
 			public:
 				welcomeScreen(
-					ak::messenger *			_messenger,
-					ak::uidManager *		_uidManager,
 					ak::ui::colorStyle *	_colorStyle = nullptr
 
 				);
@@ -133,44 +133,44 @@ namespace ak {
 				//! @brief Will remove all items from the specified group
 				//! @param _group The group to remove all items from
 				void clear(
-					ak::ID							_group
+					ID							_group
 				);
 
 				QString itemText(
-					ak::ID							_group,
-					ak::ID							_item
+					ID							_group,
+					ID							_item
 				);
 
 				QString itemTextAtRecent(
-					ak::ID							_item
+					ID							_item
 				);
 
 				QString itemTextAtOpen(
-					ak::ID							_item
+					ID							_item
 				);
 
 				QString itemTextAtNew(
-					ak::ID							_item
+					ID							_item
 				);
 
 				void setItemText(
-					ak::ID							_group,
-					ak::ID							_item,
-					const QString &					_text
+					ID							_group,
+					ID							_item,
+					const QString &				_text
 				);
 
 				void setItemIcon(
-					ak::ID							_group,
-					ak::ID							_item,
-					const QIcon &					_icon
+					ID							_group,
+					ID							_item,
+					const QIcon &				_icon
 				);
 
 				static QString groupName(
-					ak::ID							_group
+					ID							_group
 				);
 
 				void setObjectName(
-					const QString &					_name
+					const QString &				_name
 				);
 
 				QString objectName(void) const;
@@ -180,10 +180,17 @@ namespace ak {
 				// Event handling
 
 				void handleEvent(
-					ak::UID							_group,
-					ak::ID							_item,
-					ak::core::eventType				_event
+					UID							_group,
+					ID							_item,
+					ak::core::eventType			_event
 				);
+
+			signals:
+
+
+			private slots:
+				void slotItemClicked(QListWidgetItem *);
+				void slotItemDoubleClicked(QListWidgetItem *);
 
 			private:
 
@@ -230,56 +237,10 @@ namespace ak {
 
 				int									my_headerLabelTextSize;
 
-				welcomeScreenSignalLinker *			my_signalLinker;
-
 			}; // class defaultWelcomeScreen;
-		} // namespace widget
-
-		// ########################################################################################
-
-		// ****************************************************************************************
-
-		// ########################################################################################
-
-		//NOTE, remove and change to lcl signal/slot in welcome screen
-		class UICORE_API_EXPORT welcomeScreenSignalLinker : public QObject {
-			Q_OBJECT
-		public:
-
-			welcomeScreenSignalLinker(
-				widget::welcomeScreen *	_screen
-			);
-
-			virtual ~welcomeScreenSignalLinker();
-
-			void addLink(
-				qt::list *						_object
-			);
-
-			// ########################################################################################
-
-		private slots:
-			void slotItemClicked(QListWidgetItem *);
-			void slotItemDoubleClicked(QListWidgetItem *);
-
-		private:
-
-			widget::welcomeScreen *				my_screen;
-			std::vector<qt::list *>				my_lists;
-
-			qt::list * castList(
-				QObject *						_sender
-			);
-
-			qt::listItem * castListItem(
-				QListWidgetItem *				_item
-			);
-
-			welcomeScreenSignalLinker() = delete;
-			welcomeScreenSignalLinker(const welcomeScreenSignalLinker &) = delete;
-			welcomeScreenSignalLinker & operator = (const welcomeScreenSignalLinker &) = delete;
-
-		};
+		} // namespace qt
 
 	}
 }
+
+*/

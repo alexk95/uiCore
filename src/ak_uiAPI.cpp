@@ -439,12 +439,14 @@ ak::UID ak::uiAPI::createComboButton(
 	return my_objManager->createComboButton(_creatorUid, _text, _possibleSelection);
 }
 
+/*
 ak::UID ak::uiAPI::createWelcomeScreen(
 	ak::UID												_creatorUid
 ) {
 	assert(my_objManager != nullptr); // API not initialized
 	return my_objManager->createWelcomeScreen(_creatorUid);
 }
+*/
 
 ak::UID ak::uiAPI::createDock(
 	ak::UID												_creatorUid,
@@ -3231,6 +3233,7 @@ bool ak::uiAPI::tree::isSortingEnabled(
 
 // Welcome screen
 
+/*
 void ak::uiAPI::welcomeScreen::addItem(
 	ak::UID							_welcomeScreenUID,
 	ak::ID							_group,
@@ -3444,6 +3447,8 @@ void ak::uiAPI::welcomeScreen::setObjectName(
 }
 
 // Welcome screen
+
+*/
 
 // ###############################################################################################################################################
 

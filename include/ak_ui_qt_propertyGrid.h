@@ -24,7 +24,7 @@
 #include <qicon.h>
 
 // AK header
-#include <ak_ui_core_aWidgetManager.h>	// Base class
+#include <ak_ui_core_aWidget.h>			// Base class
 #include <ak_globalDataTypes.h>			// AK ID type
 #include <ak_core.h>					// numberValidation
 #include <ak_ui_color.h>

@@ -129,9 +129,6 @@
     <ClInclude Include="include\ak_ui_core_aWidget.h">
       <Filter>Header Files\ak\ui\core</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_ui_core_aWidgetManager.h">
-      <Filter>Header Files\ak\ui\core</Filter>
-    </ClInclude>
     <ClInclude Include="include\ak_ui_core_ttbContainer.h">
       <Filter>Header Files\ak\ui\core</Filter>
     </ClInclude>
@@ -176,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="include\ak_flags.h">
       <Filter>Header Files\ak</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ak_ui_widget_welcomeScreen.h">
+      <Filter>Header Files\ak\ui\widget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -229,9 +229,6 @@
     </QtMoc>
     <QtMoc Include="include\ak_ui_qt_colorEditButton.h">
       <Filter>Header Files\ak\ui\qt</Filter>
-    </QtMoc>
-    <QtMoc Include="include\ak_ui_widget_welcomeScreen.h">
-      <Filter>Header Files\ak\ui\widget</Filter>
     </QtMoc>
     <QtMoc Include="include\ak_ui_qt_table.h">
       <Filter>Header Files\ak\ui\qt</Filter>
@@ -323,9 +320,6 @@
       <Filter>Source Files\ak\ui\core</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_ui_core_aWidget.cpp">
-      <Filter>Source Files\ak\ui\core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ak_ui_core_aWidgetManager.cpp">
       <Filter>Source Files\ak\ui\core</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_ui_core_ttbContainer.cpp">

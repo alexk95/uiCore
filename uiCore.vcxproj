@@ -135,7 +135,6 @@
     <ClInclude Include="include\ak_ui_core_aPaintable.h" />
     <ClInclude Include="include\ak_ui_core_aRestorable.h" />
     <ClInclude Include="include\ak_ui_core_aWidget.h" />
-    <ClInclude Include="include\ak_ui_core_aWidgetManager.h" />
     <ClInclude Include="include\ak_ui_core_ttbContainer.h" />
     <QtMoc Include="include\ak_ui_qt_contextMenuItem.h" />
     <QtMoc Include="include\ak_ui_qt_niceLineEdit.h" />
@@ -161,7 +160,7 @@
     <ClInclude Include="include\ak_ui_ttb_subgroup.h" />
     <QtMoc Include="include\ak_ui_uiManager.h" />
     <QtMoc Include="include\ak_ui_qt_colorEditButton.h" />
-    <QtMoc Include="include\ak_ui_widget_welcomeScreen.h" />
+    <ClInclude Include="include\ak_ui_widget_welcomeScreen.h" />
     <QtMoc Include="include\ak_ui_qt_propertyGrid.h" />
     <QtMoc Include="include\ak_ui_qt_tree.h" />
     <QtMoc Include="include\ak_ui_uiManagerTimerSignalLinker.h" />
@@ -200,7 +199,6 @@
     <ClCompile Include="src\ak_ui_core_aPaintable.cpp" />
     <ClCompile Include="src\ak_ui_core_aRestorable.cpp" />
     <ClCompile Include="src\ak_ui_core_aWidget.cpp" />
-    <ClCompile Include="src\ak_ui_core_aWidgetManager.cpp" />
     <ClCompile Include="src\ak_ui_core_ttbContainer.cpp" />
     <ClCompile Include="src\ak_ui_dialog_logIn.cpp" />
     <ClCompile Include="src\ak_ui_dialog_options.cpp" />
