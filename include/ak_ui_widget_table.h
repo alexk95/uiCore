@@ -276,7 +276,6 @@ namespace ak {
 
 			private:
 				ak::ui::qt::table *													my_table;							//! The table this object is managing
-				std::vector<std::vector<bool *> *> *								my_cellsWithWidget;
 				ui::signalLinker *													my_signalLinker;
 
 				//! @brief will throw an exception if the row or column index is out of range

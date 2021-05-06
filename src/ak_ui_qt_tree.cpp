@@ -567,14 +567,15 @@ void ak::ui::qt::tree::slotTreeItemDoubleClicked(QTreeWidgetItem * _item, int _c
 	if (my_ignoreEvents) { return; }
 	emit itemDoubleClicked(_item, _column);
 }
-#
+
 void ak::ui::qt::tree::slotTreeItemExpanded(QTreeWidgetItem * _item) {
 	if (my_ignoreEvents) { return; }
 	emit itemExpanded(_item);
 }
 
 void ak::ui::qt::tree::slotTreeSelectionChanged() {
-	selectionChangedEvent(!my_ignoreEvents);
+	if (my_ignoreEvents) { return; }
+	selectionChangedEvent(true);
 }
 
 void ak::ui::qt::tree::slotTreeMouseMove(QMouseEvent * _event) {

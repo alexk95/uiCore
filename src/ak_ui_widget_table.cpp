@@ -29,7 +29,7 @@ ak::ui::widget::table::table(
 	int																_rows,
 	int																_columns
 ) : ak::ui::core::aWidgetManager(ak::ui::core::objectType::oTable, _messenger, _uidManager, _colorStyle),
-	my_table(nullptr), my_cellsWithWidget(nullptr), my_signalLinker(nullptr)
+	my_table(nullptr), my_signalLinker(nullptr)
 {
 	assert(_messenger != nullptr);	// nullptr provided
 
@@ -45,25 +45,6 @@ ak::ui::widget::table::table(
 	if (_columns > 0) { my_table->setColumnCount(_columns); }
 	my_signalLinker->addLink(my_table);
 	my_uid = my_table->uid();
-
-	// Create information storage for the cell widgets
-	my_cellsWithWidget = new std::vector<std::vector<bool *> * >();
-
-	if (my_table->columnCount() > 0) {
-		for (int i = 0; i < my_table->columnCount(); i++) {
-			std::vector<bool *> * v = new std::vector<bool *>();
-			my_cellsWithWidget->push_back(v);
-		}
-	}
-	if (my_table->rowCount() > 0) {
-		for (int i = 0; i < my_cellsWithWidget->size(); i++) {
-			for (int a = 0; a < my_table->rowCount(); a++) {
-				bool * b = new bool();
-				*b = false;
-				my_cellsWithWidget->at(i)->push_back(b);
-			}
-		}
-	}
 }
 
 ak::ui::widget::table::~table() {
@@ -73,20 +54,6 @@ ak::ui::widget::table::~table() {
 
 	my_table->clear();
 	if (my_table != nullptr) { delete my_table; my_table = nullptr; }
-
-	// Destroy widget information
-	for (int x = 0; x < my_cellsWithWidget->size(); x++) {
-		std::vector<bool *> * v = my_cellsWithWidget->at(x);
-		for (int y = 0; y < v->size(); y++) {
-			bool *b = v->at(y);
-			delete b;
-		}
-		v->clear();
-		delete v;
-	}
-	delete my_cellsWithWidget;
-
-	// The dock widget is managed by the creator of this object
 }
 
 // ##############################################################################################################
@@ -108,25 +75,10 @@ void ak::ui::widget::table::setColorStyle(
 
 void ak::ui::widget::table::addRow(void) {
 	my_table->insertRow(my_table->rowCount());
-	for (int x = 0; x < my_cellsWithWidget->size(); x++) {
-		std::vector<bool *> * v = my_cellsWithWidget->at(x);
-		bool * b = new bool();
-		*b = false;
-		v->push_back(b);
-	}
 }
 
 void ak::ui::widget::table::addColumn(void) {
 	my_table->insertColumn(my_table->columnCount());
-	std::vector<bool *> * v = new std::vector<bool *>();
-	my_cellsWithWidget->push_back(v);
-
-	for (int r = 0; r < my_table->rowCount(); r++) {
-		// Initialize entries
-		bool * b = new bool();
-		*b = false;
-		v->push_back(b);
-	}
 }
 
 void ak::ui::widget::table::setCellText(
@@ -383,14 +335,6 @@ QTableWidgetItem * ak::ui::widget::table::getCell(
 	return my_table->item(_row, _column);
 }
 
-bool ak::ui::widget::table::hasCellWidget(
-	int																_row,
-	int																_column
-) const {
-	checkIndex(_row, _column);
-	return *my_cellsWithWidget->at(_column)->at(_row);
-}
-
 void ak::ui::widget::table::setCellWidget(
 	QWidget *														_widget,
 	int																_row,
@@ -398,7 +342,6 @@ void ak::ui::widget::table::setCellWidget(
 ) {
 	checkIndex(_row, _column);
 	my_table->setCellWidget(_row, _column, _widget);
-	*my_cellsWithWidget->at(_column)->at(_row) = true;
 }
 
 bool ak::ui::widget::table::enabled(void) { return my_table->isEnabled(); }
