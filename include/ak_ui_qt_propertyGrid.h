@@ -302,8 +302,8 @@ namespace ak {
 				ak::ID newItemCreated(propertyGridItem * _item);
 
 				QVBoxLayout *							my_layout;
-				qt::textEdit *							my_infoTextEdit;
-				qt::table *								my_table;
+				textEdit *								my_infoTextEdit;
+				table *									my_table;
 				bool									my_checkItemVisibilityRequired;
 
 				std::map<QString, propertyGridGroup *>	my_groups;

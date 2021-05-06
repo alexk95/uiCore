@@ -334,13 +334,13 @@ ak::UID ak::ui::signalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, ak::ui::core::objectType::oTable });
-	_object->connect(_object, SIGNAL(cellActivated(int, int)), this, SLOT(tableCellActivated(int, int)));
-	_object->connect(_object, SIGNAL(cellChanged(int, int)), this, SLOT(tableCellChanged(int, int)));
-	_object->connect(_object, SIGNAL(cellClicked(int, int)), this, SLOT(tableCellClicked(int, int)));
-	_object->connect(_object, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(tableCellDoubleClicked(int, int)));
-	_object->connect(_object, SIGNAL(cellEntered(int, int)), this, SLOT(tableCellEntered(int, int)));
-	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+	_object->connect(_object, &QTableWidget::cellActivated, this, &signalLinker::tableCellActivated);
+	_object->connect(_object, &QTableWidget::cellChanged, this, &signalLinker::tableCellChanged);
+	_object->connect(_object, &QTableWidget::cellClicked, this, &signalLinker::tableCellClicked);
+	_object->connect(_object, &QTableWidget::cellDoubleClicked, this, &signalLinker::tableCellDoubleClicked);
+	_object->connect(_object, &QTableWidget::cellEntered, this, &signalLinker::tableCellEntered);
+	_object->connect(_object, &qt::table::keyPressed, this, &signalLinker::slotKeyPressed);
+	_object->connect(_object, &qt::table::keyReleased, this, &signalLinker::slotKeyReleased);
 	return _objectUid;
 }
 

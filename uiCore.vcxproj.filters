@@ -135,9 +135,6 @@
     <ClInclude Include="include\ak_ui_core_ttbContainer.h">
       <Filter>Header Files\ak\ui\core</Filter>
     </ClInclude>
-    <ClInclude Include="include\ak_ui_widget_table.h">
-      <Filter>Header Files\ak\ui\widget</Filter>
-    </ClInclude>
     <ClInclude Include="include\ak_ui_ttb_group.h">
       <Filter>Header Files\ak\ui\ttb</Filter>
     </ClInclude>
@@ -363,9 +360,6 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_qt_textEdit.cpp">
       <Filter>Source Files\ak\ui\qt</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ak_ui_widget_table.cpp">
-      <Filter>Source Files\ak\ui\widget</Filter>
     </ClCompile>
     <ClCompile Include="src\ak_ui_ttb_group.cpp">
       <Filter>Source Files\ak\ui\ttb</Filter>

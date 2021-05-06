@@ -50,6 +50,7 @@
 #include <ak_ui_qt_list.h>
 #include <ak_ui_qt_niceLineEdit.h>			// nice line edit
 #include <ak_ui_qt_pushButton.h>			// push button
+#include <ak_ui_qt_table.h>
 #include <ak_ui_qt_textEdit.h>
 #include <ak_ui_qt_specialTabBar.h>
 #include <ak_ui_qt_timer.h>
@@ -62,7 +63,6 @@
 
 #include <ak_ui_widget_welcomeScreen.h>
 #include <ak_ui_widget_tabView.h>
-#include <ak_ui_widget_table.h>
 
 // AK ttb objects
 #include <ak_ui_ttb_group.h>
@@ -1341,8 +1341,8 @@ void ak::uiAPI::object::setEnabled(
 		break;
 	case ak::ui::core::oTable:
 	{
-		ui::widget::table * actualObject = nullptr;
-		actualObject = dynamic_cast<ui::widget::table *>(obj);
+		ui::qt::table * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::table *>(obj);
 		assert(actualObject != nullptr); // Cast failed
 		actualObject->setEnabled(_enabled);
 	}
@@ -1572,10 +1572,10 @@ bool ak::uiAPI::object::getIsEnabled(
 		break;
 	case ak::ui::core::oTable:
 	{
-		ui::widget::table * actualObject = nullptr;
-		actualObject = dynamic_cast<ui::widget::table *>(obj);
+		ui::qt::table * actualObject = nullptr;
+		actualObject = dynamic_cast<ui::qt::table *>(obj);
 		assert(actualObject != nullptr); // Cast failed
-		return actualObject->enabled();
+		return actualObject->isEnabled();
 	}
 		break;
 	case ak::ui::core::oTabToolbarGroup:
