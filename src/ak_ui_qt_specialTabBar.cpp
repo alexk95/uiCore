@@ -18,7 +18,7 @@ ak::ui::qt::specialTabBar::specialTabBar()
 	: core::aObject{ core::objectType::oSpecialTabBar }, my_repaintIsBlocked{ false }
 {}
 
-ak::ui::qt::specialTabBar::~specialTabBar() {}
+ak::ui::qt::specialTabBar::~specialTabBar() { A_OBJECT_DESTROYING }
 
 void ak::ui::qt::specialTabBar::paintEvent(QPaintEvent * _event) {
 

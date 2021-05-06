@@ -33,7 +33,7 @@ ak::ui::qt::window::window()
 	setCentralWidget(my_centralWidget);
 }
 
-ak::ui::qt::window::~window() {}
+ak::ui::qt::window::~window() { A_OBJECT_DESTROYING }
 
 // #######################################################################################################
 

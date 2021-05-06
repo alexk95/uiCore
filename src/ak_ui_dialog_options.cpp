@@ -78,6 +78,8 @@ ak::ui::dialog::options::options(
 }
 
 ak::ui::dialog::options::~options() {
+	A_OBJECT_DESTROYING
+
 	for (auto itm : my_categories) {
 		delete itm.second;
 	}

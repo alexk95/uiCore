@@ -24,7 +24,7 @@ ak::ui::qt::contextMenuItem::contextMenuItem(
 ) : QAction(_icon, _text), ui::core::aObject(ui::core::objectType::oAction), my_role(_role), my_id(ak::invalidID)
 {}
 
-ak::ui::qt::contextMenuItem::~contextMenuItem() {}
+ak::ui::qt::contextMenuItem::~contextMenuItem() { A_OBJECT_DESTROYING }
 
 ak::ui::core::contextMenuRole ak::ui::qt::contextMenuItem::role(void) const { return my_role; }
 

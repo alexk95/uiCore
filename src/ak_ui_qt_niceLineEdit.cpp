@@ -41,6 +41,8 @@ ak::ui::qt::niceLineEdit::niceLineEdit(const QString & _initialText, const QStri
 }
 
 ak::ui::qt::niceLineEdit::~niceLineEdit() {
+	A_OBJECT_DESTROYING
+
 	delete my_label;
 	delete my_lineEdit;
 	delete my_layout;
