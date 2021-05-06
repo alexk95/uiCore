@@ -46,47 +46,49 @@ namespace ak {
 
 		std::vector<ak::core::eventType> disabledMessages(void) const;
 
-		bool unknownEvent(void) const;
+		bool unknownEvent(void) const { return my_unknownEvent; }
 
-		bool activatedEvent(void) const;
+		bool activatedEvent(void) const { return my_activated; }
 
-		bool changedEvent(void) const;
+		bool changedEvent(void) const { return my_changed; }
 
-		bool clearedEvent(void) const;
+		bool clearedEvent(void) const { return my_cleared; }
 
-		bool clickedEvent(void) const;
+		bool clickedEvent(void) const { return my_clicked; }
 
-		bool collapsedEvent(void) const;
+		bool closeRequestedEvent(void) const { return my_closeRequested; }
 
-		bool cursorPositionChangedEvent(void) const;
+		bool collapsedEvent(void) const { return my_collpased; }
 
-		bool destroyedEvent(void) const;
+		bool cursorPositionChangedEvent(void) const { return my_cursorPosotionChanged; }
 
-		bool doubleClickedEvent(void) const;
+		bool destroyedEvent(void) const { return my_destroyed; }
 
-		bool expandedEvent(void) const;
+		bool doubleClickedEvent(void) const { return my_doubleClicked; }
 
-		bool focusedEvent(void) const;
+		bool expandedEvent(void) const { return my_expanded; }
 
-		bool invalidEntryEvent(void) const;
+		bool focusedEvent(void) const { return my_focused; }
 
-		bool indexChangedEvent(void) const;
+		bool invalidEntryEvent(void) const { return my_invalidEntry; }
 
-		bool keyPressedEvent(void) const;
+		bool indexChangedEvent(void) const { return my_indexChanged; }
 
-		bool locationChangedEvent(void) const;
+		bool keyPressedEvent(void) const { return my_keyPressed; }
 
-		bool releasedEvent(void) const;
+		bool locationChangedEvent(void) const { return my_locationChanged; }
 
-		bool selectionChangedEvent(void) const;
+		bool releasedEvent(void) const { return my_released; }
 
-		bool stateChangedEvent(void) const;
+		bool selectionChangedEvent(void) const { return my_selectionChanged; }
 
-		bool textChangedEvent(void) const;
+		bool stateChangedEvent(void) const { return my_stateChanged; }
 
-		bool toggledCheckedEvent(void) const;
+		bool textChangedEvent(void) const { return my_textChanged; }
 
-		bool toggledUncheckedEvent(void) const;
+		bool toggledCheckedEvent(void) const { return my_toggeledChecked; }
+
+		bool toggledUncheckedEvent(void) const { return my_toggeledUnchecked; }
 
 	protected:
 		singletonAllowedMessages();
@@ -98,6 +100,7 @@ namespace ak {
 		bool						my_changed;
 		bool						my_cleared;
 		bool						my_clicked;
+		bool						my_closeRequested;
 		bool						my_collpased;
 		bool						my_cursorPosotionChanged;
 		bool						my_destroyed;

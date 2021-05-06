@@ -12,7 +12,7 @@
 // AK header
 #include <ak_singletonAllowedMessages.h>
 
-ak::singletonAllowedMessages * ak::singletonAllowedMessages::my_singleton = nullptr;;
+ak::singletonAllowedMessages * ak::singletonAllowedMessages::my_singleton = nullptr;
 
 ak::singletonAllowedMessages::singletonAllowedMessages(void)
 	: my_unknownEvent(true),
@@ -60,6 +60,9 @@ void ak::singletonAllowedMessages::setFlag(ak::core::eventType		_type) {
 	}
 	if (_type & ak::core::eClicked) {
 		my_clicked = true;
+	}
+	if (_type & ak::core::eClosing) {
+		my_closeRequested = true;
 	}
 	if (_type & ak::core::eCollpased) {
 		my_collpased = true;
@@ -129,6 +132,9 @@ void ak::singletonAllowedMessages::removeFlag(
 	if (_type & ak::core::eClicked) {
 		my_clicked = false;
 	}
+	if (_type & ak::core::eClosing) {
+		my_closeRequested = false;
+	}
 	if (_type & ak::core::eCollpased) {
 		my_collpased = false;
 	}
@@ -185,6 +191,7 @@ std::vector<ak::core::eventType> ak::singletonAllowedMessages::enabledMessages(v
 	if (my_changed) { ret.push_back(ak::core::eventType::eChanged); }
 	if (my_cleared) { ret.push_back(ak::core::eventType::eCleared); }
 	if (my_clicked) { ret.push_back(ak::core::eventType::eClicked); }
+	if (my_closeRequested) { ret.push_back(ak::core::eventType::eClosing); }
 	if (my_collpased) { ret.push_back(ak::core::eventType::eCollpased); }
 	if (my_cursorPosotionChanged) { ret.push_back(ak::core::eventType::eCursorPosotionChanged); }
 	if (my_destroyed) { ret.push_back(ak::core::eventType::eDestroyed); }
@@ -211,6 +218,7 @@ std::vector<ak::core::eventType> ak::singletonAllowedMessages::disabledMessages(
 	if (!my_changed) { ret.push_back(ak::core::eventType::eChanged); }
 	if (!my_cleared) { ret.push_back(ak::core::eventType::eCleared); }
 	if (!my_clicked) { ret.push_back(ak::core::eventType::eClicked); }
+	if (!my_closeRequested) { ret.push_back(ak::core::eventType::eClosing); }
 	if (!my_collpased) { ret.push_back(ak::core::eventType::eCollpased); }
 	if (!my_cursorPosotionChanged) { ret.push_back(ak::core::eventType::eCursorPosotionChanged); }
 	if (!my_destroyed) { ret.push_back(ak::core::eventType::eDestroyed); }
@@ -230,45 +238,3 @@ std::vector<ak::core::eventType> ak::singletonAllowedMessages::disabledMessages(
 	if (!my_unknownEvent) { ret.push_back(ak::core::eventType::eUnknownEvent); }
 	return ret;
 }
-
-bool ak::singletonAllowedMessages::unknownEvent(void) const { return my_unknownEvent; }
-
-bool ak::singletonAllowedMessages::activatedEvent(void) const { return my_activated; }
-
-bool ak::singletonAllowedMessages::changedEvent(void) const { return my_changed; }
-
-bool ak::singletonAllowedMessages::clearedEvent(void) const { return my_cleared; }
-
-bool ak::singletonAllowedMessages::clickedEvent(void) const { return my_clicked; }
-
-bool ak::singletonAllowedMessages::collapsedEvent(void) const { return my_collpased; }
-
-bool ak::singletonAllowedMessages::cursorPositionChangedEvent(void) const { return my_cursorPosotionChanged; }
-
-bool ak::singletonAllowedMessages::destroyedEvent(void) const { return my_destroyed; }
-
-bool ak::singletonAllowedMessages::doubleClickedEvent(void) const { return my_doubleClicked; }
-
-bool ak::singletonAllowedMessages::expandedEvent(void) const { return my_expanded; }
-
-bool ak::singletonAllowedMessages::focusedEvent(void) const { return my_focused; }
-
-bool ak::singletonAllowedMessages::indexChangedEvent(void) const { return my_indexChanged; }
-
-bool ak::singletonAllowedMessages::invalidEntryEvent(void) const { return my_invalidEntry; }
-
-bool ak::singletonAllowedMessages::locationChangedEvent(void) const { return my_locationChanged; }
-
-bool ak::singletonAllowedMessages::releasedEvent(void) const { return my_released; }
-
-bool ak::singletonAllowedMessages::keyPressedEvent(void) const { return my_keyPressed; }
-
-bool ak::singletonAllowedMessages::selectionChangedEvent(void) const { return my_selectionChanged; }
-
-bool ak::singletonAllowedMessages::stateChangedEvent(void) const { return my_stateChanged; }
-
-bool ak::singletonAllowedMessages::textChangedEvent(void) const { return my_textChanged; }
-
-bool ak::singletonAllowedMessages::toggledCheckedEvent(void) const { return my_toggeledChecked; }
-
-bool ak::singletonAllowedMessages::toggledUncheckedEvent(void) const { return my_toggeledUnchecked; }
