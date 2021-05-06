@@ -485,6 +485,7 @@ void ak::ui::qt::tree::selectionChangedEvent(
 	bool							_emitEvent
 ) {
 	if (my_selectAndDeselectChildren) {
+		bool ignoreBackup = my_ignoreEvents;
 		my_ignoreEvents = true;
 		// Get selected items
 		QList<QTreeWidgetItem *> selected = my_tree->selectedItems();
@@ -497,9 +498,10 @@ void ak::ui::qt::tree::selectionChangedEvent(
 			i->setChildsSelected(true);
 			i->ensureTopLevelSelectionVisible();
 		}
-		my_ignoreEvents = false;
+		my_ignoreEvents = ignoreBackup;
 	}
 	else {
+		bool ignoreBackup = my_ignoreEvents;
 		my_ignoreEvents = true;
 		// Get selected items
 		QList<QTreeWidgetItem *> selected = my_tree->selectedItems();
@@ -510,7 +512,7 @@ void ak::ui::qt::tree::selectionChangedEvent(
 			assert(i != nullptr); // Cast failed
 			i->ensureTopLevelSelectionVisible();
 		}
-		my_ignoreEvents = false;
+		my_ignoreEvents = ignoreBackup;
 	}
 	if (_emitEvent) { emit selectionChanged(); }
 }
