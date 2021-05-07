@@ -16,34 +16,6 @@
 #include <qdir.h>					// QDir
 #include <qfile.h>					// QFile
 
-ak::ui::color ak::ui::colorStyle::getWindowMainForecolor(void) const { return my_windowMainForecolor; }
-
-ak::ui::color ak::ui::colorStyle::getWindowMainBackcolor(void) const { return my_windowMainBackcolor; }
-
-ak::ui::color ak::ui::colorStyle::getControlsMainForecolor(void) const { return my_controlsMainForecolor; }
-
-ak::ui::color ak::ui::colorStyle::getControlsMainBackcolor(void) const { return my_controlsMainBackcolor; }
-
-ak::ui::color ak::ui::colorStyle::getControlsErrorForecolor(void) const { return my_controlsErrorForecolor; }
-
-ak::ui::color ak::ui::colorStyle::getControlsFocusedBackColor(void) const { return my_controlsFocusBackColor; }
-
-ak::ui::color ak::ui::colorStyle::getControlsFocusedForeColor(void) const { return my_controlsFocusForeColor; }
-
-ak::ui::color ak::ui::colorStyle::getAlternateForeColor(void) const { return my_alternateForeColor; }
-
-ak::ui::color ak::ui::colorStyle::getAlternateBackColor(void) const { return my_alternateBackColor; }
-
-ak::ui::color ak::ui::colorStyle::getHeaderForegroundColor(void) const { return my_headerForeColor; }
-
-ak::ui::color ak::ui::colorStyle::getHeaderBackgroundColor(void) const { return my_headerBackColor; }
-
-void ak::ui::colorStyle::setDirectories(
-	const std::vector<QString> &	_directories
-) {
-	my_directories = _directories;
-}
-
 QString ak::ui::colorStyle::getFilePath(
 	const QString &			_fileName
 ) const {

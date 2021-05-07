@@ -96,9 +96,9 @@ void ak::ui::qt::propertyGrid::setColorStyle(
 	//my_table->setStyleSheet(my_colorStyle->getStylesheet(ak::ui::colorStyle::styleableObject::sTable));
 	my_groupHeaderBackColor = my_colorStyle->getHeaderBackgroundColor().toQColor();
 	my_groupHeaderForeColor = my_colorStyle->getHeaderForegroundColor().toQColor();
-	my_itemDefaultBackgroundColor = my_colorStyle->getControlsMainBackcolor().toQColor();
-	my_itemTextColorNormal = my_colorStyle->getControlsMainForecolor().toQColor();
-	my_itemTextColorError = my_colorStyle->getControlsErrorForecolor().toQColor();
+	my_itemDefaultBackgroundColor = my_colorStyle->getControlsMainBackgroundColor().toQColor();
+	my_itemTextColorNormal = my_colorStyle->getControlsMainForegroundColor().toQColor();
+	my_itemTextColorError = my_colorStyle->getControlsErrorFrontForegroundColor().toQColor();
 
 	for (auto itm : my_groups) { itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor); }
 

@@ -16,9 +16,9 @@
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::qt::lineEdit::lineEdit(QWidget * _parent)
-	: QLineEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oLineEdit), my_autoScrollToBottom(false) {}
+	: QLineEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oLineEdit), my_isError(false), my_errorIsForeground(true) {}
 ak::ui::qt::lineEdit::lineEdit(const QString & _text, QWidget * _parent)
-	: QLineEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oLineEdit), my_autoScrollToBottom(false) {}
+	: QLineEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oLineEdit), my_isError(false), my_errorIsForeground(true) {}
 
 ak::ui::qt::lineEdit::~lineEdit() { A_OBJECT_DESTROYING }
 
@@ -43,10 +43,47 @@ void ak::ui::qt::lineEdit::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	QString Color = my_colorStyle->getControlsBorderColor().toHexString(true);
-	this->setStyleSheet(my_colorStyle->toStyleSheet(TYPE_COLORAREA::caForegroundColorControls |
-		TYPE_COLORAREA::caBackgroundColorControls | TYPE_COLORAREA::caBorderColorControls, "QLineEdit{", "border: 1px solid #" + Color + ";}"));
+	setErrorState(my_isError);
 }
 
 // #######################################################################################################
 
+void ak::ui::qt::lineEdit::setErrorState(bool _error) {
+	my_isError = _error;
+	if (my_isError)
+	{
+		if (my_colorStyle != nullptr) {
+			QString sheet{ "color: #" };
+			if (my_errorIsForeground) { sheet.append(my_colorStyle->getControlsErrorFrontForegroundColor().toHexString()); }
+			else { sheet.append(my_colorStyle->getControlsErrorBackForegroundColor().toHexString()); }
+			sheet.append("; background-color: #");
+			if (my_errorIsForeground) { sheet.append(my_colorStyle->getControlsMainBackgroundColor().toHexString()); }
+			else { sheet.append(my_colorStyle->getControlsErrorBackBackgroundColor().toHexString()); }
+			sheet.append("; border: 1px solid #").append(my_colorStyle->getControlsBorderColor().toHexString(true));
+			sheet.append(";}");
+			setStyleSheet(sheet);
+		}
+		else if (my_errorIsForeground) {
+			setStyleSheet("color: #ff0000;");
+		}
+		else {
+			setStyleSheet("color: #000000; background-color: #ff0000;");
+		}
+
+	}
+	else if (my_colorStyle != nullptr)
+	{
+		QString Color = my_colorStyle->getControlsBorderColor().toHexString(true);
+		setStyleSheet(my_colorStyle->toStyleSheet(core::caForegroundColorControls |
+			core::caBackgroundColorControls | core::caBorderColorControls, "", "border: 1px solid #" + Color + ";"));
+	}
+	else {
+		setStyleSheet("");
+	}
+}
+
+void ak::ui::qt::lineEdit::setErrorStateIsForeground(bool _isForeground) {
+	if (_isForeground == my_errorIsForeground) { return; }	// Ignore if did not change
+	my_errorIsForeground = _isForeground;
+	setErrorState(my_isError);		// Repaint
+}

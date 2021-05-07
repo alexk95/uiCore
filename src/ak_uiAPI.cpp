@@ -1007,6 +1007,16 @@ void ak::uiAPI::lineEdit::setText(
 	const QString &										_text
 ) { object::get<ui::qt::lineEdit>(_lineEditUid)->setText(_text); }
 
+void ak::uiAPI::lineEdit::setErrorState(
+	ak::UID												_lineEditUid,
+	bool												_error
+) { object::get<ui::qt::lineEdit>(_lineEditUid)->setErrorState(_error); }
+
+void ak::uiAPI::lineEdit::setErrorStateIsForeground(
+	UID													_lineEditUid,
+	bool												_isForeground
+) { object::get<ui::qt::lineEdit>(_lineEditUid)->setErrorStateIsForeground(_isForeground); }
+
 void ak::uiAPI::lineEdit::setEnabled(
 	ak::UID												_lineEditUid,
 	bool												_enabled
@@ -1081,76 +1091,39 @@ QString ak::uiAPI::logInDialog::getCustomFieldText(
 void ak::uiAPI::niceLineEdit::setText(
 	ak::UID												_lineEditUid,
 	const QString &										_text
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ak::ui::qt::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	actualObject->setText(_text);
-}
+) { object::get<ak::ui::qt::niceLineEdit>(_lineEditUid)->setText(_text); }
 
 void ak::uiAPI::niceLineEdit::setErrorState(
 	ak::UID												_lineEditUid,
 	bool												_error
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ak::ui::qt::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	actualObject->setErrorState(_error);
-}
+) { object::get<ak::ui::qt::niceLineEdit>(_lineEditUid)->setErrorState(_error); }
+
+void ak::uiAPI::niceLineEdit::setErrorStateIsForeground(
+	UID													_lineEditUid,
+	bool												_isForeground
+) { object::get<ui::qt::niceLineEdit>(_lineEditUid)->setErrorStateIsForeground(_isForeground); }
 
 void ak::uiAPI::niceLineEdit::setInfoLabelText(
 	ak::UID												_lineEditUid,
 	const QString &										_text
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ak::ui::qt::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	actualObject->setInfoLabelText(_text);
-}
+) { object::get<ak::ui::qt::niceLineEdit>(_lineEditUid)->setInfoLabelText(_text); }
 
 void ak::uiAPI::niceLineEdit::setEnabled(
 	ak::UID												_lineEditUid,
 	bool												_enabled
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ak::ui::qt::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	actualObject->setEnabled(_enabled);
-}
+) { object::get<ak::ui::qt::niceLineEdit>(_lineEditUid)->setEnabled(_enabled); }
 
 QString ak::uiAPI::niceLineEdit::text(
 	ak::UID												_lineEditUid
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ak::ui::qt::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->text();
-}
+) { return object::get<ak::ui::qt::niceLineEdit>(_lineEditUid)->text(); }
 
 QString ak::uiAPI::niceLineEdit::infoLabelText(
 	ak::UID												_lineEditUid
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ak::ui::qt::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->infoLabelText();
-}
+) { return object::get<ak::ui::qt::niceLineEdit>(_lineEditUid)->infoLabelText(); }
 
 bool ak::uiAPI::niceLineEdit::isEnabled(
 	ak::UID												_lineEditUid
-) {
-	assert(my_objManager != nullptr); // API not initialized
-	ak::ui::qt::niceLineEdit * actualObject = nullptr;
-	actualObject = dynamic_cast<ak::ui::qt::niceLineEdit *>(my_objManager->object(_lineEditUid));
-	assert(actualObject != nullptr); // Invalid object type
-	return actualObject->isEnabled();
-}
+) { return object::get<ak::ui::qt::niceLineEdit>(_lineEditUid)->isEnabled(); }
 
 // ###############################################################################################################################################
 

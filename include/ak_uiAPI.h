@@ -877,28 +877,44 @@ namespace ak {
 			//! @param _lineEditUid The UID of the line edit
 			//! @param _text The text to set
 			UICORE_API_EXPORT void setText(
-				ak::UID												_lineEditUid,
+				UID													_lineEditUid,
 				const QString &										_text
+			);
+
+			//! @brief Will set the nice line edit error state
+			//! @param _lineEditUid The UID of the line edit
+			//! @param _error The error state
+			UICORE_API_EXPORT void setErrorState(
+				UID													_lineEditUid,
+				bool												_error
+			);
+
+			//! @brief Will set wather the error state will have an impact on the foreground or the background
+			//! @param _lineEditUid The UID of the line edit
+			//! @param _isForeground If true, the error state will change the text foreground color, otherwise back and foreground
+			UICORE_API_EXPORT void setErrorStateIsForeground(
+				UID													_lineEditUid,
+				bool												_isForeground
 			);
 
 			//! @brief Will set the line edit enabled state
 			//! @param _lineEditUid The UID of the line edit
 			//! @param _enabled The enabled state to set
 			UICORE_API_EXPORT void setEnabled(
-				ak::UID												_lineEditUid,
+				UID													_lineEditUid,
 				bool												_enabled
 			);
 
 			//! @brief Will return the line edit text
 			//! @param _lineEditUid The UID of the line edit
 			UICORE_API_EXPORT QString text(
-				ak::UID												_lineEditUid
+				UID													_lineEditUid
 			);
 
 			//! @brief Will return the line edit enabled state
 			//! @param _lineEditUid The UID of the line edit
 			UICORE_API_EXPORT bool isEnabled(
-				ak::UID												_lineEditUid
+				UID													_lineEditUid
 			);
 		}
 
@@ -982,6 +998,14 @@ namespace ak {
 			UICORE_API_EXPORT void setErrorState(
 				ak::UID												_lineEditUid,
 				bool												_error
+			);
+
+			//! @brief Will set wather the error state will have an impact on the foreground or the background
+			//! @param _lineEditUid The UID of the line edit
+			//! @param _isForeground If true, the error state will change the text foreground color, otherwise back and foreground
+			UICORE_API_EXPORT void setErrorStateIsForeground(
+				UID													_lineEditUid,
+				bool												_isForeground
 			);
 
 			//! @brief Will set the nice line edit info label text

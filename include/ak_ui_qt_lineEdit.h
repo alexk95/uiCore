@@ -73,12 +73,19 @@ namespace ak {
 
 				// #######################################################################################################
 
+				void setErrorState(bool _error);
+
+				//! @brief Will set wather the error state will have an impact on the foreground or the background
+				//! @param _isForeground If true, the error state will change the text foreground color, otherwise back and foreground
+				void setErrorStateIsForeground(bool _isForeground);
+
 			signals:
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);
 
 			private:
-				bool							my_autoScrollToBottom;		//! If true, the textbox will automatically scroll down on text change
+				bool					my_isError; 
+				bool					my_errorIsForeground;
 
 				lineEdit(const lineEdit &) = delete;
 				lineEdit & operator = (const lineEdit &) = delete;

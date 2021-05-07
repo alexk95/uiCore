@@ -52,6 +52,10 @@ namespace ak {
 				void setErrorState(bool _error);
 				void setInfoLabelText(const QString & _text);
 
+				//! @brief Will set wather the error state will have an impact on the foreground or the background
+				//! @param _isForeground If true, the error state will change the text foreground color, otherwise back and foreground
+				void setErrorStateIsForeground(bool _isForeground);
+
 				QString text(void) const;
 				QString infoLabelText(void) const;
 
@@ -77,7 +81,6 @@ namespace ak {
 				QHBoxLayout *			my_layout;
 				qt::lineEdit *			my_lineEdit;
 				qt::label *				my_label;
-				QString					my_styleSheet;
 
 			};
 

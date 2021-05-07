@@ -37,9 +37,6 @@
     <Filter Include="Header Files\ak\ui\ttb">
       <UniqueIdentifier>{366068b2-c828-4eaf-b175-0a6a2888f627}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\ak\ui\widget">
-      <UniqueIdentifier>{66e73c4e-5a0e-4e05-813b-946991d40e74}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ak\ui\core">
       <UniqueIdentifier>{a5464064-4516-4317-9f2f-651b6201be0c}</UniqueIdentifier>
     </Filter>
@@ -67,8 +64,11 @@
     <Filter Include="Source Files\ak\ui\dialog">
       <UniqueIdentifier>{3a664e3f-b0ee-41b1-916e-a2df39157180}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ak\ui\widget">
-      <UniqueIdentifier>{2b8929e1-747b-434d-9b14-5f493d57e5e8}</UniqueIdentifier>
+    <Filter Include="Source Files\temp">
+      <UniqueIdentifier>{5555d0fe-22fb-42be-86d7-b0793682ca2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\temp">
+      <UniqueIdentifier>{c3cef09e-9f45-4760-8d6b-a7e50dd7efec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -175,7 +175,7 @@
       <Filter>Header Files\ak</Filter>
     </ClInclude>
     <ClInclude Include="include\ak_ui_widget_welcomeScreen.h">
-      <Filter>Header Files\ak\ui\widget</Filter>
+      <Filter>Header Files\temp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -415,9 +415,6 @@
     <ClCompile Include="src\ak_ui_application.cpp">
       <Filter>Source Files\ak\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\ak_ui_widget_welcomeScreen.cpp">
-      <Filter>Source Files\ak\ui\widget</Filter>
-    </ClCompile>
     <ClCompile Include="src\ak_ui_qt_label.cpp">
       <Filter>Source Files\ak\ui\qt</Filter>
     </ClCompile>
@@ -453,6 +450,9 @@
     </ClCompile>
     <ClCompile Include="src\ak_ui_qt_tree.cpp">
       <Filter>Source Files\ak\ui\qt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ak_ui_widget_welcomeScreen.cpp">
+      <Filter>Source Files\temp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

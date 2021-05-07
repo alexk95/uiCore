@@ -10,6 +10,7 @@
  */
 
 #include <ak_ui_qt_niceLineEdit.h>
+#include <ak_ui_colorStyle.h>
 
 #include <ak_ui_qt_label.h>
 #include <ak_ui_qt_lineEdit.h>
@@ -53,27 +54,21 @@ QWidget * ak::ui::qt::niceLineEdit::widget(void) { return this; }
 void ak::ui::qt::niceLineEdit::setColorStyle(
 	const ak::ui::colorStyle *			_colorStyle
 ) {
-	my_label->setColorStyle(_colorStyle);
-	my_lineEdit->setColorStyle(_colorStyle);
-
-	my_styleSheet = my_lineEdit->styleSheet();
+	my_colorStyle = _colorStyle;
+	my_label->setColorStyle(my_colorStyle);
+	my_lineEdit->setColorStyle(my_colorStyle);
 }
 
 void ak::ui::qt::niceLineEdit::setText(const QString & _text) { my_lineEdit->setText(_text); }
 
 void ak::ui::qt::niceLineEdit::setErrorState(bool _error)
-{
-	if (_error)
-	{
-		my_lineEdit->setStyleSheet("QLineEdit {background-color: red;}");
-	}
-	else
-	{
-		my_lineEdit->setStyleSheet(my_styleSheet);
-	}
-}
+{ my_lineEdit->setErrorState(_error); }
 
 void ak::ui::qt::niceLineEdit::setInfoLabelText(const QString & _text) { my_label->setText(_text); }
+
+void ak::ui::qt::niceLineEdit::setErrorStateIsForeground(bool _isForeground) {
+	my_lineEdit->setErrorStateIsForeground(_isForeground);
+}
 
 QString ak::ui::qt::niceLineEdit::text(void) const { return my_lineEdit->text(); }
 
