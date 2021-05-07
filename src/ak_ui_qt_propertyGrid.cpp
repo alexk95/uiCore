@@ -72,8 +72,7 @@ ak::ui::qt::propertyGrid::propertyGrid()
 	my_defaultGroup->setGroupHeaderVisible(false);
 	my_defaultGroup->activate();
 
-	connect(my_table, SIGNAL(focusLost()), this, SLOT(slotFocusLost()));
-
+	connect(my_table, &table::focusLost, this, &propertyGrid::slotFocusLost);
 }
 
 ak::ui::qt::propertyGrid::~propertyGrid() {
@@ -494,7 +493,7 @@ void ak::ui::qt::propertyGrid::slotCheckItemVisibility(void) {
 }
 
 void ak::ui::qt::propertyGrid::slotFocusLost(void) {
-	//for (auto group : my_groups) { group.second->deselect(); }
+	for (auto group : my_groups) { group.second->deselect(); }
 }
 
 // ##############################################################################################################
@@ -516,7 +515,7 @@ ak::ID ak::ui::qt::propertyGrid::newItemCreated(propertyGridItem * _item) {
 
 	itemCountChanged();
 
-	connect(_item, SIGNAL(changed()), this, SLOT(slotItemChanged()));
+	connect(_item, &propertyGridItem::changed, this, &propertyGrid::slotItemChanged);
 	return my_currentID;
 }
 

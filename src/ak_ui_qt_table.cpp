@@ -51,10 +51,13 @@ void ak::ui::qt::table::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
+	QString sheet{ my_colorStyle->toStyleSheet(core::caForegroundColorControls |
+		core::caBackgroundColorControls | core::caBackgroundColorAlternate, "QTableWidget{", "}\n") };
 	this->setStyleSheet(my_colorStyle->toStyleSheet(core::caForegroundColorControls |
 		core::caBackgroundColorControls | core::caBackgroundColorAlternate));
-	QString sheet(my_colorStyle->toStyleSheet(core::caForegroundColorHeader | core::caBackgroundColorHeader,
-		"QHeaderView{border: none;", "}\n"));
+
+	sheet = my_colorStyle->toStyleSheet(core::caForegroundColorHeader | core::caBackgroundColorHeader,
+		"QHeaderView{border: none;", "}\n");
 	sheet.append(my_colorStyle->toStyleSheet(core::caForegroundColorHeader |
 		core::caBackgroundColorHeader |
 		core::caDefaultBorderHeader | core::caBorderColorHeader
