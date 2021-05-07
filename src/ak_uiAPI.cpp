@@ -2948,36 +2948,29 @@ void ak::uiAPI::tree::collapseAllItems(
 void ak::uiAPI::tree::deleteItem(
 	ak::UID							_treeUID,
 	ak::ID							_itemID
-) {
-	auto actualTree = object::get<ui::qt::tree>(_treeUID);
-	actualTree->deleteItem(_itemID);
-}
+) { object::get<ui::qt::tree>(_treeUID)->deleteItem(_itemID); }
 
 void ak::uiAPI::tree::deleteItems(
 	ak::UID							_treeUID,
 	const std::vector<ak::ID> &		_itemIDs
-) {
-	auto actualTree = object::get<ui::qt::tree>(_treeUID);
-	actualTree->deleteItems(_itemIDs);
-}
+) { object::get<ui::qt::tree>(_treeUID)->deleteItems(_itemIDs); }
 
 void ak::uiAPI::tree::setItemsAreEditable(
 	ak::UID							_treeUID,
 	bool							_editable,
 	bool							_applyToAll
-) {
-	auto actualTree = object::get<ui::qt::tree>(_treeUID);
-	actualTree->setItemsAreEditable(_editable, _applyToAll);
-}
+) { object::get<ui::qt::tree>(_treeUID)->setItemsAreEditable(_editable, _applyToAll); }
 
 void ak::uiAPI::tree::setItemIsEditable(
 	ak::UID							_treeUID,
 	ak::ID							_itemID,
 	bool							_editable
-) {
-	auto actualTree = object::get<ui::qt::tree>(_treeUID);
-	actualTree->setItemIsEditable(_itemID, _editable);
-}
+) { object::get<ui::qt::tree>(_treeUID)->setItemIsEditable(_itemID, _editable); }
+
+void ak::uiAPI::tree::setIsReadOnly(
+	ak::UID							_treeUID,
+	bool							_readOnly
+) { object::get<ui::qt::tree>(_treeUID)->setIsReadOnly(_readOnly); }
 
 void ak::uiAPI::tree::setItemIsEditable(
 	ak::UID							_treeUID,
@@ -3195,10 +3188,11 @@ void ak::uiAPI::tree::setSortingEnabled(
 
 bool ak::uiAPI::tree::isSortingEnabled(
 	ak::UID							_treeUID
-) {
-	auto actualTree = object::get<ui::qt::tree>(_treeUID);
-	return actualTree->isSortingEnabled();
-}
+) { return object::get<ui::qt::tree>(_treeUID)->isSortingEnabled(); }
+
+bool ak::uiAPI::tree::isReadOnly(
+	ak::UID							_treeUID
+) { return object::get<ui::qt::tree>(_treeUID)->isReadOnly(); }
 
 // Tree
 

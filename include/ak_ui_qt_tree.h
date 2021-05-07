@@ -117,7 +117,14 @@ namespace ak {
 				//! @param _enabled The enabled state of the item
 				void setItemEnabled(
 					ak::ID							_itemId,
-					bool							_enabled
+					bool							_enabled = true
+				);
+
+				//! @brief Will set the read only state of the tree
+				//! If read only, the items can not be edited
+				//! @param _readOnly The read only state to set
+				void setIsReadOnly(
+					bool							_readOnly = true
 				);
 
 				//! @brief Will set the selected state of the provided item.
@@ -126,7 +133,7 @@ namespace ak {
 				//! @param _selected The selected state of the item
 				void setItemSelected(
 					ak::ID							_itemId,
-					bool							_selected
+					bool							_selected = true
 				);
 
 				//! @brief Will set enabled state of the provided item
@@ -318,6 +325,8 @@ namespace ak {
 				//! @brief Will return the sorting enabled state
 				bool isSortingEnabled(void) const;
 
+				bool isReadOnly(void) const { return my_isReadOnly; }
+
 				// ###########################################################################################################################################
 
 				// Events
@@ -406,6 +415,7 @@ namespace ak {
 				bool										my_filterCaseSensitive;		//! If true, the filter is case sensitive
 				bool										my_filterRefreshOnChange;	//! If true, the filter will always be applied when the text changes
 				bool										my_ignoreEvents;
+				bool										my_isReadOnly;
 
 				ID											my_focusedItem;
 
@@ -513,8 +523,9 @@ namespace ak {
 
 			private:
 				std::map<ak::ID, treeItem *>			my_topLevelItems;
-				typedef std::map<ak::ID,
-					treeItem *>::iterator			my_topLevelItemsIterator;
+
+				treeBase(treeBase &) = delete;
+				treeBase& operator = (treeBase &) = delete;
 			};
 
 			// #########################################################################################################################################
@@ -595,6 +606,10 @@ namespace ak {
 				//! @brief Will collapse this item and all of its childs
 				void collapse(void);
 
+				void setEditable(bool _editable = true);
+				
+				void setLocked(bool _locked = true);
+
 				// ##############################################################################################
 
 				// Getter
@@ -670,13 +685,19 @@ namespace ak {
 				);
 
 			private:
+
+				void refreshEditableState(void);
+
 				treeItem *					my_parent;
 				std::list<treeItem *>		my_childs;			//! Contains all childs of this item
 				std::list<treeItem *>		my_allChilds;
 				std::list<ak::ID>			my_allChildsIDs;
 				ak::ID						my_id;
 				QString						my_text;
+				bool						my_isEditable;
+				bool						my_isLockedForEdit;
 
+				treeItem() = delete;
 				treeItem(treeItem &) = delete;
 				treeItem & operator = (treeItem &) = delete;
 

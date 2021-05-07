@@ -2085,6 +2085,15 @@ namespace ak {
 				bool							_editable = true
 			);
 
+			//! @brief Will set the read only state of the tree
+			//! If read only, the items can not be edited
+			//! @param _treeUID The tree UID
+			//! @param _readOnly The read only state to set
+			UICORE_API_EXPORT void setIsReadOnly(
+				ak::UID							_treeUID,
+				bool							_readOnly = true
+			);
+
 			//! @brief Will set the editable flag of the provided items item
 			//! @param _item The item id
 			//! @param _editable If true, the item can be modified by the user
@@ -2224,6 +2233,10 @@ namespace ak {
 			);
 
 			UICORE_API_EXPORT bool isSortingEnabled(
+				ak::UID							_treeUID
+			);
+
+			UICORE_API_EXPORT bool isReadOnly(
 				ak::UID							_treeUID
 			);
 

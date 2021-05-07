@@ -28,7 +28,7 @@ ak::ui::qt::tree::tree(
 ) : ak::ui::core::aWidget(ak::ui::core::objectType::oTree, _colorStyle),
 	my_tree(nullptr), my_filter(nullptr), my_layout(nullptr),
 	my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0), my_itemsAreEditable(false),
-	my_selectAndDeselectChildren(false), my_ignoreEvents(false), my_focusedItem(invalidID)
+	my_selectAndDeselectChildren(false), my_ignoreEvents(false), my_focusedItem(invalidID), my_isReadOnly(false)
 {
 	// Create tree
 	my_tree = new ak::ui::qt::treeBase(my_colorStyle);
@@ -195,6 +195,15 @@ void ak::ui::qt::tree::setItemEnabled(
 	itm->second->setDisabled(!_enabled);
 	if (my_selectAndDeselectChildren) { itm->second->setChildsEnabled(_enabled); }
 	my_ignoreEvents = false;
+}
+
+void ak::ui::qt::tree::setIsReadOnly(
+	bool							_readOnly
+) {
+	my_isReadOnly = _readOnly;
+	for (auto itm : my_items) {
+		itm.second->setLocked(my_isReadOnly);
+	}
 }
 
 void ak::ui::qt::tree::setItemSelected(
@@ -393,9 +402,7 @@ void ak::ui::qt::tree::setItemsAreEditable(
 	my_itemsAreEditable = _editable;
 	if (_applyToAll) {
 		for (auto itm : my_items) {
-			auto f = itm.second->flags();
-			f.setFlag(Qt::ItemIsEditable, my_itemsAreEditable);
-			itm.second->setFlags(f);
+			itm.second->setEditable(_editable);
 		}
 	}
 }
@@ -406,9 +413,7 @@ void ak::ui::qt::tree::setItemIsEditable(
 ) {
 	my_itemsIterator itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
-	auto f = itm->second->flags();
-	f.setFlag(Qt::ItemIsEditable, _editable);
-	itm->second->setFlags(f);
+	itm->second->setEditable(_editable);
 }
 
 void ak::ui::qt::tree::setItemIsEditable(
@@ -633,9 +638,9 @@ ak::ui::qt::treeItem * ak::ui::qt::tree::createItem(
 	itm->setText(0, _text);
 	itm->setIcon(0, _icon);
 	itm->setStoredText(_text);
-	if (my_itemsAreEditable) {
-		itm->setFlags(itm->flags() | Qt::ItemIsEditable);
-	}
+	itm->setEditable(my_itemsAreEditable);
+	itm->setLocked(my_isReadOnly);
+
 	//if (my_colorStyle != nullptr) {
 		//itm->setTextColor(0, my_colorStyle->getControlsMainForecolor().toQColor());
 		//itm->setBackgroundColor(0, my_colorStyle->getControlsMainBackcolor().toQColor());
@@ -786,7 +791,7 @@ ak::ui::qt::treeItem * ak::ui::qt::treeBase::topLevelItem(
 	const QString &					_text
 ) {
 	try {
-		for (my_topLevelItemsIterator itm = my_topLevelItems.begin(); itm != my_topLevelItems.end(); itm++) {
+		for (auto itm{ my_topLevelItems.begin() }; itm != my_topLevelItems.end(); itm++) {
 			assert(itm->second != nullptr); // That should not happen..
 			if (itm->second->text(0) == _text) { return itm->second; }
 		}
@@ -801,7 +806,7 @@ ak::ui::qt::treeItem * ak::ui::qt::treeBase::topLevelItem(
 	ak::ID							_id
 ) {
 	try {
-		for (my_topLevelItemsIterator itm = my_topLevelItems.begin(); itm != my_topLevelItems.end(); itm++) {
+		for (auto itm{ my_topLevelItems.begin() }; itm != my_topLevelItems.end(); itm++) {
 			if (itm->second->id() == _id) { return itm->second; }
 		}
 		return nullptr;
@@ -813,7 +818,7 @@ ak::ui::qt::treeItem * ak::ui::qt::treeBase::topLevelItem(
 
 std::vector<QString> ak::ui::qt::treeBase::topLevelItemsText(void) {
 	std::vector<QString> r;
-	for (my_topLevelItemsIterator itm = my_topLevelItems.begin(); itm != my_topLevelItems.end(); itm++) {
+	for (auto itm{ my_topLevelItems.begin() }; itm != my_topLevelItems.end(); itm++) {
 		r.push_back(itm->second->text(0));
 	}
 	return r;
@@ -853,7 +858,7 @@ ak::ui::qt::treeItem::treeItem(
 	treeItem *						_parent,
 	int								_type
 ) : ak::ui::core::aObject(ak::ui::core::objectType::oTreeItem), QTreeWidgetItem(_type),
-my_id(_newId), my_parent(_parent) {}
+my_id(_newId), my_parent(_parent), my_isEditable(false), my_isLockedForEdit(false) {}
 
 ak::ui::qt::treeItem::treeItem(
 	ak::ui::qt::treeBase *			_view,
@@ -861,7 +866,7 @@ ak::ui::qt::treeItem::treeItem(
 	treeItem *						_parent,
 	int								_type
 ) : ak::ui::core::aObject(ak::ui::core::objectType::oTreeItem), QTreeWidgetItem(_view, _type),
-my_id(_newId), my_parent(_parent) {}
+my_id(_newId), my_parent(_parent), my_isEditable(false), my_isLockedForEdit(false) {}
 
 ak::ui::qt::treeItem::~treeItem() {
 	A_OBJECT_DESTROYING
@@ -960,6 +965,17 @@ void ak::ui::qt::treeItem::collapse(void) {
 	if (isExpanded()) { setExpanded(false); }
 	for (auto itm : my_childs) { itm->collapse(); }
 }
+
+void ak::ui::qt::treeItem::setEditable(bool _editable) {
+	my_isEditable = _editable;
+	refreshEditableState();
+}
+
+void ak::ui::qt::treeItem::setLocked(bool _locked) {
+	my_isLockedForEdit = _locked;
+	refreshEditableState();
+}
+
 
 // ##############################################################################################
 
@@ -1074,4 +1090,14 @@ QString ak::ui::qt::treeItem::getItemPathString(
 		return ret;
 	}
 	else { return text(0); }
+}
+
+// ##############################################################################################
+
+// Private functions
+
+void ak::ui::qt::treeItem::refreshEditableState(void) {
+	auto f = flags();
+	f.setFlag(Qt::ItemIsEditable, my_isEditable && !my_isLockedForEdit);
+	setFlags(f);
 }
