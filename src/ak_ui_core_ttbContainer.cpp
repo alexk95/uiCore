@@ -20,9 +20,8 @@ ak::ui::core::ttbContainer::ttbContainer(
 	ak::messenger *				_messenger,
 	ak::ui::core::objectType	_type,
 	const ak::ui::colorStyle *	_colorStyle,
-	ak::UID						_uid,
-	int							_references
-) : ak::ui::core::aPaintable(_type, _colorStyle, _uid, _references),
+	ak::UID						_uid
+) : ak::ui::core::aPaintable(_type, _colorStyle, _uid),
 	my_messenger(nullptr)
 {
 	assert(_messenger != nullptr); // Is nullptr

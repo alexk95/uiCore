@@ -51,8 +51,7 @@ namespace ak {
 					ak::messenger *				_messenger,
 					ak::ui::core::objectType	_type,
 					const ak::ui::colorStyle *	_colorStyle = nullptr,
-					ak::UID						 _UID = ak::invalidUID,
-					int							_references = 1
+					ak::UID						 _UID = ak::invalidUID
 				);
 
 				//! @brief Deconstructor

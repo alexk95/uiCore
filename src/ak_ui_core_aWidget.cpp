@@ -17,9 +17,8 @@
 ak::ui::core::aWidget::aWidget(
 	ak::ui::core::objectType	_type,
 	const ak::ui::colorStyle *	_colorStyle,
-	ak::UID						_UID,
-	int							_references
-) : ak::ui::core::aPaintable(_type, _colorStyle, _UID, _references) {}
+	ak::UID						_UID
+) : ak::ui::core::aPaintable(_type, _colorStyle, _UID) {}
 
 ak::ui::core::aWidget::~aWidget() {}
 

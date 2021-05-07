@@ -40,8 +40,8 @@ namespace ak {
 				//! @param _references The initial reference count for this object
 				aObject(
 					ak::ui::core::objectType				_type,
-					ak::UID									_UID = ak::invalidUID,
-					int										_references = 1
+					ak::UID									_UID = ak::invalidUID
+					//int										_references = 1
 				);
 
 				//! @brief Copy constructor
@@ -129,20 +129,6 @@ namespace ak {
 
 				//! @brief Returns the objects UID
 				ak::UID uid(void) const;
-
-				//! @brief Will set the objects references
-				void setReferences(
-					int										_references
-				);
-
-				//! @brief Returns the objects references
-				int references(void) const;
-
-				//! @brief Inkrements the objects references
-				int incrReferences(void);
-
-				//! @brief Decrements the objects references
-				int decrReferences(void);
 
 				//! @brief Returns the objects type
 				ak::ui::core::objectType objectType(void) const;

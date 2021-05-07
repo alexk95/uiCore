@@ -31,13 +31,11 @@ namespace ak {
 
 				//! @brief Constructor
 				//! @param _UID The initial UID of this object
-				//! @param _references The initial reference count for this object
 				//! @param _colorStyle The initial color style used in this paintable
 				aPaintable(
 					ak::ui::core::objectType		_type,
 					const ak::ui::colorStyle *		_colorStyle = nullptr,
-					ak::UID							_UID = ak::invalidUID,
-					int								_references = 1
+					ak::UID							_UID = ak::invalidUID
 				);
 
 				//! @brief Deconstructor
