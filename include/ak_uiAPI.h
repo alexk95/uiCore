@@ -1084,6 +1084,15 @@ namespace ak {
 				const QString &										_name
 			);
 
+			//! @brief Will set the objects ToolTip
+			//! For the list of suitable objects refer to the documentation
+			//! @param _objectUID The UID of the object
+			//! @param _toolTip The toop tip to set
+			UICORE_API_EXPORT void setToolTip(
+				UID													_objectUID,
+				const QString &										_toolTip
+			);
+
 			//! @brief Will set the objects enabeld state
 			//! For the list of suitable objects refer to the documentation
 			//! @param _objectUID The UID of the object
@@ -1103,6 +1112,12 @@ namespace ak {
 			//! @brief Will return true if the specified object exists
 			//! @param _objectUID The UID of the object
 			UICORE_API_EXPORT bool exists(
+				UID													_objectUID
+			);
+
+			//! @brief Will return the object type of the specified object
+			//! @param _objectUID The UID of the object
+			UICORE_API_EXPORT ui::core::objectType type(
 				UID													_objectUID
 			);
 
