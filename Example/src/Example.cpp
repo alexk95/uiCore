@@ -106,6 +106,8 @@ Example::Example()
 		my_testButton->setEnabled(true);
 		my_testButton->refreshData();
 
+		ak::uiAPI::promptDialog::show("Test message tada aa ad ad awd kladg ad adjada dafsadf a dasfd kasdfkasdf adsk afsd afdkaf ksdf adg faksdka dkaf d", "Title", ak::ui::core::promptIconLeft, "Test", "32");
+
 		// Run the main application
 		ak::uiAPI::exec();
 
@@ -139,11 +141,6 @@ void Example::eventCallback(
 				else { str.append(QString::number(_info2)); }
 				str.append("\"; }\n");
 				ak::uiAPI::textEdit::appendText(my_ui.outputWidget, str);
-				if (_sender == my_ui.welcomeScreen) {
-					str = "    -> Item text: ";
-					str.append(ak::uiAPI::welcomeScreen::getItemText(_sender, _info1, _info2));
-					ak::uiAPI::textEdit::appendText(my_ui.outputWidget, str);
-				}
 			}
 			if (_eventType == ak::core::eventType::eClicked) {
 				if (_sender == my_ui.logInDialog) {
@@ -289,7 +286,6 @@ void Example::setupUi(void) {
 			my_ui.tester = ak::uiAPI::createTextEdit(my_uid);
 			my_ui.table1 = ak::uiAPI::createTable(my_uid, 2, 2);
 			my_ui.table2 = ak::uiAPI::createTable(my_uid, 3, 3);
-			my_ui.welcomeScreen = ak::uiAPI::createWelcomeScreen(my_uid);
 			my_ui.specialTabBar = ak::uiAPI::createSpecialTabBar(my_uid);
 
 			// Create docks
@@ -325,22 +321,10 @@ void Example::setupUi(void) {
 			ak::uiAPI::tree::setAutoSelectAndDeselectChildrenEnabled(my_ui.treeWidget, true);
 			ak::uiAPI::tree::setMultiSelectionEnabled(my_ui.treeWidget, true);
 			ak::uiAPI::tree::setFilterVisible(my_ui.treeWidget);
-			
-			for (int fill = 0; fill < 30; fill++) {
-				QString txt("Test ");
-				if (fill > 0) {
-					txt.append(QString::number(fill));
-				}
-				ak::uiAPI::welcomeScreen::addItemAtReecent(my_ui.welcomeScreen, txt, "Test", "32");
-			}
 		
-			ak::uiAPI::welcomeScreen::addItemAtOpen(my_ui.welcomeScreen, "Open", "Test", "32");
-			ak::uiAPI::welcomeScreen::addItemAtNew(my_ui.welcomeScreen, "Create new", "Test", "32");
-
 			ak::uiAPI::tabView::setSpecialTabBar(my_ui.tabViewWidget, my_ui.specialTabBar);
 			ak::uiAPI::specialTabBar::addColor(my_ui.specialTabBar, 1, ak::ui::color(255, 0, 0));
 
-			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.welcomeScreen, "Welcome");
 			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
 			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
 
@@ -367,7 +351,6 @@ void Example::setupUi(void) {
 			ak::uiAPI::registerUidNotifier(my_ui.tester, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.ttb_aTest, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.ttb_aTest2, my_notifier);
-			ak::uiAPI::registerUidNotifier(my_ui.welcomeScreen, my_notifier);
 			ak::uiAPI::registerUidNotifier(my_ui.mainWindow, my_notifier);
 
 			// Create default data

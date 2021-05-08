@@ -19,12 +19,15 @@
 
 // Qt header
 #include <qobject.h>				// QObject
+#include <qstring.h>
+#include <qicon.h>
 
 // Forward declaration
 class QWidget;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGridLayout;
+class QResizeEvent;
 
 namespace ak {
 	namespace ui {
@@ -39,7 +42,15 @@ namespace ak {
 				prompt(
 					const QString &				_message,
 					const QString &				_title,
-					ak::ui::core::promptType	_type,
+					core::promptType			_type,
+					QWidget *					_parent = nullptr
+				);
+
+				prompt(
+					const QString &				_message,
+					const QString &				_title,
+					core::promptType			_type,
+					const QIcon &				_icon,
 					QWidget *					_parent = nullptr
 				);
 
@@ -49,6 +60,9 @@ namespace ak {
 				virtual void setColorStyle(
 					const ak::ui::colorStyle *	_colorStyle
 				) override;
+
+			protected:
+				virtual void resizeEvent(QResizeEvent * _event) override;
 
 			private slots:
 				void slotOk(void);
@@ -60,6 +74,15 @@ namespace ak {
 
 			private:
 
+				void setupDialog(
+					const QString &				_message,
+					const QString &				_title,
+					core::promptType			_type,
+					const QIcon &				_icon
+				);
+				
+				QIcon				my_currentIcon;
+				core::promptType	my_type;
 				QVBoxLayout *		my_layout;
 
 				QHBoxLayout *		my_buttonsLayout;
@@ -68,6 +91,7 @@ namespace ak {
 				QHBoxLayout *		my_infoLayout;
 				QWidget *			my_infoWidget;
 				
+				qt::label *			my_iconLabel;
 				qt::label *			my_label;
 				qt::pushButton *	my_button1;
 				qt::pushButton *	my_button2;

@@ -75,7 +75,6 @@ private:
 		ak::UID				ttb_aTest;
 		ak::UID				ttb_aTest2;
 		ak::UID				logInDialog;
-		ak::UID				welcomeScreen;
 		ak::UID				specialTabBar;
 	};
 

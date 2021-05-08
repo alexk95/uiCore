@@ -1516,6 +1516,30 @@ void ak::uiAPI::optionsDialog::addWindowEventHandler(
 ak::ui::core::dialogResult ak::uiAPI::promptDialog::show(
 	const QString &				_message,
 	const QString &				_title,
+	ak::ui::core::promptType	_type,
+	const QString &				_iconName,
+	const QString &				_iconPath
+) {
+	assert(my_iconManager != nullptr); // API not initialized
+	return show(_message, _title, _type, *my_iconManager->icon(_iconName, _iconPath));
+}
+
+ak::ui::core::dialogResult ak::uiAPI::promptDialog::show(
+	const QString &				_message,
+	const QString &				_title,
+	ak::ui::core::promptType	_type,
+	const QIcon &				_icon
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	ui::dialog::prompt dialog(_message, _title, _type, _icon);
+	auto cs{ my_objManager->getCurrentColorStyle() };
+	if (cs != nullptr) { dialog.setColorStyle(cs); }
+	return dialog.showDialog();
+}
+
+ak::ui::core::dialogResult ak::uiAPI::promptDialog::show(
+	const QString &				_message,
+	const QString &				_title,
 	ak::ui::core::promptType	_type
 ) {
 	assert(my_objManager != nullptr); // API not initialized

@@ -123,7 +123,8 @@ namespace ak {
 				promptYesNoCancel,
 				promptOkCancel,
 				promptRetryCancel,
-				promptIgnoreRetryCancel
+				promptIgnoreRetryCancel,
+				promptIconLeft
 			};
 
 			enum keyType {

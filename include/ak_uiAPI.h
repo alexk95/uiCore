@@ -1346,6 +1346,21 @@ namespace ak {
 			UICORE_API_EXPORT ak::ui::core::dialogResult show(
 				const QString &				_message,
 				const QString &				_title,
+				ak::ui::core::promptType	_type,
+				const QString &				_iconName,
+				const QString &				_iconPath
+			);
+
+			UICORE_API_EXPORT ak::ui::core::dialogResult show(
+				const QString &				_message,
+				const QString &				_title,
+				ak::ui::core::promptType	_type,
+				const QIcon &				_icon
+			);
+
+			UICORE_API_EXPORT ak::ui::core::dialogResult show(
+				const QString &				_message,
+				const QString &				_title,
 				ak::ui::core::promptType	_type
 			);
 
