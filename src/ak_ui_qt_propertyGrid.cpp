@@ -553,7 +553,7 @@ ak::ui::qt::propertyGridGroup::propertyGridGroup(
 	my_iconExpanded = nullptr;
 
 	setItemsBackColor(my_colorItemBackground);
-	connect(my_propertyGridTable, SIGNAL(itemDoubleClicked(QTableWidgetItem *)), this, SLOT(slotDoubleClicked(QTableWidgetItem *)));
+	connect(my_propertyGridTable, &QTableWidget::itemDoubleClicked, this, &propertyGridGroup::slotDoubleClicked);
 
 }
 
@@ -883,7 +883,7 @@ ak::ui::qt::propertyGridItem::propertyGridItem(
 	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
 	my_propertyGridTable->setCellWidget(_row, 1, my_widgetBool);
 
-	connect(my_widgetBool, SIGNAL(stateChanged(int)), this, SLOT(slotValueWidgetEvent()));
+	connect(my_widgetBool, &QCheckBox::stateChanged, this, &propertyGridItem::slotValueWidgetEvent);
 }
 
 ak::ui::qt::propertyGridItem::propertyGridItem(
@@ -916,7 +916,7 @@ ak::ui::qt::propertyGridItem::propertyGridItem(
 	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
 	my_propertyGridTable->setCellWidget(_row, 1, my_widgetColor->widget());
 
-	connect(my_widgetColor, SIGNAL(changed()), this, SLOT(slotValueWidgetEvent()));
+	connect(my_widgetColor, &colorEditButton::changed, this, &propertyGridItem::slotValueWidgetEvent);
 }
 
 ak::ui::qt::propertyGridItem::propertyGridItem(
@@ -949,7 +949,7 @@ ak::ui::qt::propertyGridItem::propertyGridItem(
 	// Add cell items to the main propertyGrid table
 	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
 	my_propertyGridTable->setItem(_row, 1, my_cellValue);
-	connect(my_propertyGridTable, SIGNAL(itemChanged(QTableWidgetItem *)), this, SLOT(slotTableCellChanged(QTableWidgetItem *)));
+	connect(my_propertyGridTable, &QTableWidget::itemChanged, this, &propertyGridItem::slotTableCellChanged);
 }
 
 ak::ui::qt::propertyGridItem::propertyGridItem(
@@ -982,7 +982,7 @@ ak::ui::qt::propertyGridItem::propertyGridItem(
 	// Add cell items to the main propertyGrid table
 	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
 	my_propertyGridTable->setItem(_row, 1, my_cellValue);
-	connect(my_propertyGridTable, SIGNAL(itemChanged(QTableWidgetItem *)), this, SLOT(slotTableCellChanged(QTableWidgetItem *)));
+	connect(my_propertyGridTable, &QTableWidget::itemChanged, this, &propertyGridItem::slotTableCellChanged);
 }
 
 ak::ui::qt::propertyGridItem::propertyGridItem(
@@ -1022,7 +1022,7 @@ ak::ui::qt::propertyGridItem::propertyGridItem(
 	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
 	my_propertyGridTable->setCellWidget(_row, 1, my_widgetSelection);
 
-	connect(my_widgetSelection, SIGNAL(changed()), this, SLOT(slotValueWidgetEvent()));
+	connect(my_widgetSelection, &comboButton::changed, this, &propertyGridItem::slotValueWidgetEvent);
 }
 
 ak::ui::qt::propertyGridItem::propertyGridItem(
@@ -1055,7 +1055,7 @@ ak::ui::qt::propertyGridItem::propertyGridItem(
 	// Add cell items to the main propertyGrid table
 	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
 	my_propertyGridTable->setItem(_row, 1, my_cellValue);
-	connect(my_propertyGridTable, SIGNAL(itemChanged(QTableWidgetItem *)), this, SLOT(slotTableCellChanged(QTableWidgetItem *)));
+	connect(my_propertyGridTable, &QTableWidget::itemChanged, this, &propertyGridItem::slotTableCellChanged);
 }
 
 ak::ui::qt::propertyGridItem::~propertyGridItem() {
