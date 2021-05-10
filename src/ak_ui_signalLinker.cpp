@@ -72,7 +72,6 @@ ak::ui::signalLinker::~signalLinker()
 			break;
 		case ak::ui::core::objectType::oCheckBox:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-			itm->second.object->disconnect(itm->second.object, SIGNAL(released()), this, SLOT(slotReleased()));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
@@ -269,6 +268,7 @@ ak::UID ak::ui::signalLinker::addLink(
 	_object->connect(_object, &QLineEdit::cursorPositionChanged, this, &signalLinker::slotCursorPositionChangedIndex);
 	_object->connect(_object, &QLineEdit::selectionChanged, this, &signalLinker::slotSelectionChanged);
 	_object->connect(_object, &QLineEdit::textChanged, this, &signalLinker::slotChanged);
+	_object->connect(_object, &qt::lineEdit::editingFinished, this, &signalLinker::slotEditingFinished);
 	_object->connect(_object, &qt::lineEdit::keyPressed, this, &signalLinker::slotKeyPressed);
 	_object->connect(_object, &qt::lineEdit::keyReleased, this, &signalLinker::slotKeyReleased);
 	return _objectUid;
@@ -412,8 +412,8 @@ ak::UID ak::ui::signalLinker::addLink(
 }
 
 ak::UID ak::ui::signalLinker::addLink(
-	ak::ui::qt::tree *									_object,
-	ak::UID												_objectUid
+	qt::tree *											_object,
+	UID													_objectUid
 ) {
 	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
@@ -426,12 +426,12 @@ ak::UID ak::ui::signalLinker::addLink(
 	_object->connect(_object, &qt::tree::selectionChanged, this, &signalLinker::slotSelectionChanged);
 	_object->connect(_object, &qt::tree::itemActivated, this, &signalLinker::slotTreeItemActivated);
 	_object->connect(_object, &qt::tree::itemChanged, this, &signalLinker::slotTreeItemChanged);
+	_object->connect(_object, &qt::tree::itemTextChanged, this, &signalLinker::slotTreeItemTextChanged);
 	_object->connect(_object, &qt::tree::itemClicked, this, &signalLinker::slotTreeItemClicked);
 	_object->connect(_object, &qt::tree::itemCollapsed, this, &signalLinker::slotTreeItemCollapsed);
 	_object->connect(_object, &qt::tree::itemDoubleClicked, this, &signalLinker::slotTreeItemDoubleClicked);
 	_object->connect(_object, &qt::tree::itemFocused, this, &signalLinker::slotTreeItemFocused);
 	_object->connect(_object, &qt::tree::itemExpanded, this, &signalLinker::slotTreeItemExpanded);
-	_object->connect(_object, &qt::tree::itemTextChanged, this, &signalLinker::slotTreeItemChanged);
 	_object->connect(_object, &qt::tree::itemLocationChanged, this, &signalLinker::slotTreeItemLocationChanged);
 	return _objectUid;
 }
@@ -491,11 +491,6 @@ void ak::ui::signalLinker::slotIndexActivated(int _index) {
 void ak::ui::signalLinker::slotIndexChanged(int _index) {
 	if (!ak::singletonAllowedMessages::instance()->indexChangedEvent()) { return; }
 	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eIndexChanged, _index, 0);
-}
-
-void ak::ui::signalLinker::slotReleased() {
-	if (!ak::singletonAllowedMessages::instance()->releasedEvent()) { return; }
-	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eReleased, 0, 0);
 }
 
 void ak::ui::signalLinker::slotKeyPressed(QKeyEvent * _key) {
@@ -614,7 +609,12 @@ void ak::ui::signalLinker::slotTreeItemActivated(QTreeWidgetItem * _item, int _c
 
 void ak::ui::signalLinker::slotTreeItemChanged(QTreeWidgetItem * _item, int _column) {
 	if (!ak::singletonAllowedMessages::instance()->changedEvent()) { return; }
-	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eChanged, qt::treeBase::getItemId(_item), _column);
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eItemChanged, qt::treeBase::getItemId(_item), _column);
+}
+
+void ak::ui::signalLinker::slotTreeItemTextChanged(QTreeWidgetItem * _item, int _column) {
+	if (!ak::singletonAllowedMessages::instance()->textChangedEvent()) { return; }
+	raiseEventProtected(getSenderUid(sender()), ak::core::eventType::eItemTextChanged, qt::treeBase::getItemId(_item), _column);
 }
 
 void ak::ui::signalLinker::slotTreeItemClicked(QTreeWidgetItem * _item, int _column) {

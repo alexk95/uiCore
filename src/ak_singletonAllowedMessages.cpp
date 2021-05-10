@@ -90,9 +90,6 @@ void ak::singletonAllowedMessages::setFlag(ak::core::eventType		_type) {
 	}
 	if (_type & ak::core::eLocationChanged) {
 		my_locationChanged = true;
-	}	
-	if (_type & ak::core::eReleased) {
-		my_released = true;
 	}
 	if (_type & ak::core::eKeyPressed) {
 		my_keyPressed = true;
@@ -162,9 +159,6 @@ void ak::singletonAllowedMessages::removeFlag(
 	if (_type & ak::core::eLocationChanged) {
 		my_locationChanged = false;
 	}
-	if (_type & ak::core::eReleased) {
-		my_released = false;
-	}
 	if (_type & ak::core::eKeyPressed) {
 		my_keyPressed = false;
 	}
@@ -202,7 +196,6 @@ std::vector<ak::core::eventType> ak::singletonAllowedMessages::enabledMessages(v
 	if (my_invalidEntry) { ret.push_back(ak::core::eventType::eInvalidEntry); }
 	if (my_keyPressed) { ret.push_back(ak::core::eventType::eKeyPressed); }
 	if (my_locationChanged) { ret.push_back(ak::core::eventType::eLocationChanged); }
-	if (my_released) { ret.push_back(ak::core::eventType::eReleased); }
 	if (my_selectionChanged) { ret.push_back(ak::core::eventType::eSelectionChanged); }
 	if (my_stateChanged) { ret.push_back(ak::core::eventType::eStateChanged); }
 	//if (my_textChanged) { ret.push_back(ak::core::eventType::eTextChanged); }
@@ -229,7 +222,6 @@ std::vector<ak::core::eventType> ak::singletonAllowedMessages::disabledMessages(
 	if (!my_invalidEntry) { ret.push_back(ak::core::eventType::eInvalidEntry); }
 	if (!my_keyPressed) { ret.push_back(ak::core::eventType::eKeyPressed); }
 	if (!my_locationChanged) { ret.push_back(ak::core::eventType::eLocationChanged); }
-	if (!my_released) { ret.push_back(ak::core::eventType::eReleased); }
 	if (!my_selectionChanged) { ret.push_back(ak::core::eventType::eSelectionChanged); }
 	if (!my_stateChanged) { ret.push_back(ak::core::eventType::eStateChanged); }
 	//if (!my_textChanged) { ret.push_back(ak::core::eventType::eTextChanged); }

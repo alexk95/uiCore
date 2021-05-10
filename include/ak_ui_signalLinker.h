@@ -222,7 +222,6 @@ namespace ak {
 			void slotFocused();
 			void slotFocusLost();
 			void slotIndexChanged(int);
-			void slotReleased();
 			void slotKeyPressed(QKeyEvent *);
 			void slotKeyReleased(QKeyEvent *);
 			void slotSelectionChanged();
@@ -256,6 +255,7 @@ namespace ak {
 
 			void slotTreeItemActivated(QTreeWidgetItem * _item, int _column);
 			void slotTreeItemChanged(QTreeWidgetItem * _item, int _column);
+			void slotTreeItemTextChanged(QTreeWidgetItem * _item, int _column);
 			void slotTreeItemClicked(QTreeWidgetItem * _item, int _column);
 			void slotTreeItemCollapsed(QTreeWidgetItem * _item);
 			void slotTreeItemDoubleClicked(QTreeWidgetItem * _item, int _column);

@@ -34,11 +34,11 @@ ak::ui::qt::niceLineEdit::niceLineEdit(const QString & _initialText, const QStri
 	my_layout->addWidget(my_lineEdit);
 
 	// Connect signals
-	connect(my_lineEdit, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-	connect(my_lineEdit, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-	connect(my_lineEdit, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-	connect(my_lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(slotTextChanged(const QString &)));
-	connect(my_lineEdit, SIGNAL(returnPressed()), this, SLOT(slotReturnPressed()));
+	connect(my_lineEdit, &qt::lineEdit::keyPressed, this, &niceLineEdit::slotKeyPressed);
+	connect(my_lineEdit, &qt::lineEdit::keyReleased, this, &niceLineEdit::slotKeyReleased);
+	connect(my_lineEdit, &qt::lineEdit::finishedChanges, this, &niceLineEdit::slotEditingFinished);
+	connect(my_lineEdit, &QLineEdit::textChanged, this, &niceLineEdit::slotTextChanged);
+	connect(my_lineEdit, &QLineEdit::returnPressed, this, &niceLineEdit::slotReturnPressed);
 }
 
 ak::ui::qt::niceLineEdit::~niceLineEdit() {

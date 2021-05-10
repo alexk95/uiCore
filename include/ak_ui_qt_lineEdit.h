@@ -82,10 +82,15 @@ namespace ak {
 			signals:
 				void keyPressed(QKeyEvent *);
 				void keyReleased(QKeyEvent *);
+				void finishedChanges();
+
+			private slots:
+				void slotEditingFinished();
 
 			private:
 				bool					my_isError; 
 				bool					my_errorIsForeground;
+				QString					my_text;
 
 				lineEdit(const lineEdit &) = delete;
 				lineEdit & operator = (const lineEdit &) = delete;

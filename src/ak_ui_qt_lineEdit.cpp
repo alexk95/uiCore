@@ -16,9 +16,13 @@
 #define TYPE_COLORAREA ak::ui::core::colorAreaFlag
 
 ak::ui::qt::lineEdit::lineEdit(QWidget * _parent)
-	: QLineEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oLineEdit), my_isError(false), my_errorIsForeground(true) {}
+	: QLineEdit(_parent), ak::ui::core::aWidget(ak::ui::core::objectType::oLineEdit), my_isError(false), my_errorIsForeground(true) {
+	connect(this, &QLineEdit::editingFinished, this, &lineEdit::slotEditingFinished);
+}
 ak::ui::qt::lineEdit::lineEdit(const QString & _text, QWidget * _parent)
-	: QLineEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oLineEdit), my_isError(false), my_errorIsForeground(true) {}
+	: QLineEdit(_text, _parent), ak::ui::core::aWidget(ak::ui::core::objectType::oLineEdit), my_isError(false), my_errorIsForeground(true), my_text(_text) {
+	connect(this, &QLineEdit::editingFinished, this, &lineEdit::slotEditingFinished);
+}
 
 ak::ui::qt::lineEdit::~lineEdit() { A_OBJECT_DESTROYING }
 
@@ -86,4 +90,12 @@ void ak::ui::qt::lineEdit::setErrorStateIsForeground(bool _isForeground) {
 	if (_isForeground == my_errorIsForeground) { return; }	// Ignore if did not change
 	my_errorIsForeground = _isForeground;
 	setErrorState(my_isError);		// Repaint
+}
+
+// #######################################################################################################
+
+// Slots
+
+void ak::ui::qt::lineEdit::slotEditingFinished() {
+	if (text() != my_text) { my_text = text(); emit finishedChanges(); }
 }

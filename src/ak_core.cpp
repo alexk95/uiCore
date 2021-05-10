@@ -32,11 +32,11 @@ QString ak::core::toQString(
 	case ak::core::eFocusLeft: return QString("FocusLeft");
 	case ak::core::eIndexChanged: return QString("IndexChanged");
 	case ak::core::eInvalidEntry: return QString("InvalidEntry");
-	case ak::core::eItemTextChanged: return QString("ItemTextChanged");
+	case ak::core::eItemChanged: return QString("ItemChanged");
 	case ak::core::eKeyPressed: return QString("KeyPressed");
 	case ak::core::eKeyReleased: return QString("KeyReleased");
 	case ak::core::eLocationChanged: return QString("LocationChanged");
-	case ak::core::eReleased: return QString("Released");
+	case ak::core::eItemTextChanged: return QString("ItemTextChanged");
 	case ak::core::eSelectionChanged: return QString("SelectionChanged");
 	case ak::core::eStateChanged: return QString("StateChanged");
 	case ak::core::eTabToolbarChanged: return QString("TabToolbarChanged");
