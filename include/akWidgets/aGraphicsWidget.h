@@ -1,0 +1,34 @@
+#pragma once
+
+// AK header
+#include <akWidgets/aWidget.h>
+#include <akCore/globalDataTypes.h>
+
+// Qt header
+#include <qgraphicsview.h>
+
+class QResizeEvent;
+
+namespace ak {
+	class UICORE_API_EXPORT aGraphicsWidget : public QGraphicsView, aWidget {
+		Q_OBJECT
+	public:
+		aGraphicsWidget();
+		virtual ~aGraphicsWidget();
+
+		virtual QWidget * widget(void) override;
+
+		virtual void setColorStyle(
+			const aColorStyle *					_colorStyle
+		) override;
+
+		virtual void resizeEvent(QResizeEvent * _event) override;
+
+		void setHeightForWidthActive(
+			bool				_active
+		);
+
+	private:
+		bool				my_heightForWidth;
+	};
+}

@@ -9,13 +9,12 @@
 
 #pragma once
 
-#include <ak_globalDataTypes.h>		// UID type
-#include <ak_notifier.h>			// Base class
+#include <akCore/aNotifier.h>
 
 class Example;
 
 //! @brief This notifier is used to notify the core application about incoming events and errors from the uiAPI
-class ExampleNotifier : public ak::notifier {
+class ExampleNotifier : public ak::aNotifier {
 public:
 	
 	//! @brief Constructor
@@ -39,7 +38,7 @@ public:
 	//! @throw ak::Exception to forward exceptions coming from the application core class
 	virtual void notify(
 		ak::UID					_senderId,
-		ak::core::eventType		_event,
+		ak::eventType			_event,
 		int						_info1,
 		int						_info2
 	) override;

@@ -9,20 +9,16 @@
 
 #pragma once
 
-#include <ak_globalDataTypes.h>			// ID and UID types
-#include <ak_core.h>					// eventType type
-#include <ak_ui_color.h>
+#include <akCore/globalDataTypes.h>
+#include <akCore/akCore.h>
+#include <akGui/aColor.h>
 
 #include <string>
 
 // Forward declaration
 class ExampleNotifier;
 namespace ak {
-	namespace ui {
-		namespace qt {
-			class dockWatcherToolButton;
-		}
-	}
+	class aDockWatcherButtonWidget;
 }
 
 //! This class is managing the UI
@@ -43,7 +39,7 @@ public:
 	//! @param _info2 Additional information 2
 	void eventCallback(
 		ak::UID					_sender,
-		ak::core::eventType		_eventType,
+		ak::eventType			_eventType,
 		int						_info1,
 		int						_info2
 	);
@@ -83,11 +79,11 @@ private:
 	structUi					my_ui;			//! Contains all UIDs of the UI
 	ak::UID						my_uid;			//! The UID of this application
 	ExampleNotifier *			my_notifier;	//! The notifier that receives the callback messages
-	ak::ui::color				my_settingColor;
+	ak::aColor					my_settingColor;
 	std::string					my_JSONSettingsString;
 
 	std::vector <ak::UID>		my_testingData;
 
-	ak::ui::qt::dockWatcherToolButton *	my_testButton;
+	ak::aDockWatcherButtonWidget *	my_testButton;
 
 };

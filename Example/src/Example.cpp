@@ -7,16 +7,21 @@
  *  Copyright (c) 2020 Alexander Kuester
  */
 
+// Application header
 #include <Example.h>			// Corresponding header
 #include <ExampleNotifier.h>	// Notifier
-#include <ak_exception.h>		// Error handling
-#include <ak_uiAPI.h>			// uiAPI
-#include <ak_ui_core.h>			// dockLocation type
-#include <ak_ui_colorStyle.h>
 
+// AK header
+#include <akAPI/uiAPI.h>
+#include <akCore/aException.h>
+#include <akGui/aColorStyle.h>
+#include <akWidgets/aDockWidget.h>
+
+// Qt header
 #include <qstring.h>
 #include <qsettings.h>
 
+// C++ header
 #include <vector>
 #include <array>
 
@@ -31,20 +36,9 @@
 #include <rapidjson/writer.h>			// Writer
 #include <rapidjson/stringbuffer.h>		// String buffer
 
-
 // #################################################################################################
 
-#include <ak_ui_qt_label.h>
-#include <ak_ui_qt_lineEdit.h>
-#include <ak_ui_qt_pushButton.h>
-#include <ak_ui_qt_dock.h>
-#include <qlayout.h>
-
-// #################################################################################################
-
-#include <ak_ui_dialog_options.h>
-
-#include <ak_ui_qt_dockWatcherToolButton.h>
+#include <aDockWatcherButtonWidget.h>
 
 Example::Example()
 	: my_settingColor(255,255,0)
@@ -71,10 +65,10 @@ Example::Example()
 	ak::uiAPI::registerUidNotifier(my_ui.logInDialog, my_notifier);
 
 	// Show log in dialog
-	ak::ui::core::dialogResult result = ak::uiAPI::logInDialog::showDialog(my_ui.logInDialog);
+	ak::dialogResult result = ak::uiAPI::logInDialog::showDialog(my_ui.logInDialog);
 	ak::uiAPI::object::destroy(my_ui.logInDialog);
 
-	if (result == ak::ui::core::resultOk) {
+	if (result == ak::resultOk) {
 		// Fill UI
 		setupUi();
 		
@@ -83,7 +77,7 @@ Example::Example()
 		ak::uiAPI::restoreStateColorStyle(settings.value("UI.ColorStyle", "").toString().toStdString(), APP_SETTINGS_VERSION);
 
 		// Check the current color style (after it was restored)
-		const ak::ui::colorStyle * currentColorStyle = ak::uiAPI::getCurrentColorStyle();
+		const ak::aColorStyle * currentColorStyle = ak::uiAPI::getCurrentColorStyle();
 		if (currentColorStyle->getColorStyleName() == "Default" || currentColorStyle->getColorStyleName() == "") {
 			ak::uiAPI::toolButton::setText(my_ui.ttb_aColorStyle, TXT_Dark);
 			ak::uiAPI::toolButton::setIcon(my_ui.ttb_aColorStyle, ICO_Dark, "32");
@@ -106,7 +100,7 @@ Example::Example()
 		my_testButton->setEnabled(true);
 		my_testButton->refreshData();
 
-		ak::uiAPI::promptDialog::show("Test message tada aa ad ad awd kladg ad adjada dafsadf a dasfd kasdfkasdf adsk afsd afdkaf ksdf adg faksdka dkaf d", "Title", ak::ui::core::promptIconLeft, "Test", "32");
+		ak::uiAPI::promptDialog::show("Test message tada aa ad ad awd kladg ad adjada dafsadf a dasfd kasdfkasdf adsk afsd afdkaf ksdf adg faksdka dkaf d", "Title", ak::promptIconLeft, "Test", "32");
 
 		// Run the main application
 		ak::uiAPI::exec();
@@ -123,7 +117,7 @@ Example::~Example() {}
 
 void Example::eventCallback(
 	ak::UID					_sender,
-	ak::core::eventType		_eventType,
+	ak::eventType		_eventType,
 	int						_info1,
 	int						_info2
 ) {
@@ -137,12 +131,12 @@ void Example::eventCallback(
 				str.append("\"; Info1=\"");
 				str.append(QString::number(_info1));
 				str.append("\"; Info2=\"");
-				if (_eventType == ak::core::eKeyPressed) { str.append(ak::uiAPI::special::toString((ak::ui::core::keyType)_info2)); }
+				if (_eventType == ak::etKeyPressed) { str.append(ak::uiAPI::special::toString((ak::keyType)_info2)); }
 				else { str.append(QString::number(_info2)); }
 				str.append("\"; }\n");
 				ak::uiAPI::textEdit::appendText(my_ui.outputWidget, str);
 			}
-			if (_eventType == ak::core::eventType::eClicked) {
+			if (_eventType == ak::etClicked) {
 				if (_sender == my_ui.logInDialog) {
 					// Validate logic
 
@@ -153,7 +147,7 @@ void Example::eventCallback(
 					bool d = ak::uiAPI::logInDialog::getSavePassword(my_ui.logInDialog);
 
 					// Show main UI and close dialog
-					ak::uiAPI::logInDialog::close(my_ui.logInDialog, ak::ui::core::resultOk);
+					ak::uiAPI::logInDialog::close(my_ui.logInDialog, ak::resultOk);
 				}
 				else if (_sender == my_ui.ttb_aExit) {
 					// Close the main window
@@ -190,7 +184,7 @@ void Example::eventCallback(
 					ak::uiAPI::window::setWaitingAnimationVisible(my_ui.mainWindow, false);
 				}
 			}
-			else if (_sender == my_ui.propertiesWidget && _eventType == ak::core::eChanged) {
+			else if (_sender == my_ui.propertiesWidget && _eventType == ak::etChanged) {
 				QString msg("PropteryChange{ id=\"");
 				msg.append(QString::number(_info1));
 				msg.append("\"; Name=\"");
@@ -199,30 +193,30 @@ void Example::eventCallback(
 
 				switch (ak::uiAPI::propertyGrid::getItemValueType(my_ui.propertiesWidget, _info1))
 				{
-				case ak::core::valueType::vBool:
+				case ak::vtBool:
 					if (ak::uiAPI::propertyGrid::getItemValueBool(my_ui.propertiesWidget, _info1)) {
 						msg.append("Boolean\"; Value=\"True");
 					}
 					else { msg.append("Boolean\"; Value=\"False"); }
 					break;
-				case ak::core::valueType::vColor:
+				case ak::vtColor:
 					msg.append("Color\"; Value=\"");
 					my_settingColor = ak::uiAPI::propertyGrid::getItemValueColor(my_ui.propertiesWidget, _info1);
 					msg.append(my_settingColor.toRGBString(":"));
 					break;
-				case ak::core::valueType::vDouble:
+				case ak::vtDouble:
 					msg.append("Double\"; Value=\"");
 					msg.append(QString::number(ak::uiAPI::propertyGrid::getItemValueDouble(my_ui.propertiesWidget, _info1)));
 					break;
-				case ak::core::valueType::vInt:
+				case ak::vtInt:
 					msg.append("Integer\"; Value=\"");
 					msg.append(QString::number(ak::uiAPI::propertyGrid::getItemValueInteger(my_ui.propertiesWidget, _info1)));
 					break;
-				case ak::core::valueType::vSelection:
+				case ak::vtSelection:
 					msg.append("Selection\"; Value=\"");
 					msg.append(ak::uiAPI::propertyGrid::getItemValueSelection(my_ui.propertiesWidget, _info1));
 					break;
-				case ak::core::valueType::vString:
+				case ak::vtString:
 					msg.append("String\"; Value=\"");
 					msg.append(ak::uiAPI::propertyGrid::getItemValueString(my_ui.propertiesWidget, _info1));
 					break;
@@ -234,7 +228,7 @@ void Example::eventCallback(
 				ak::uiAPI::textEdit::appendText(my_ui.outputWidget, msg);
 				
 			}
-			else if (_sender == my_timerRestoreSettings && _eventType == ak::core::eventType::eTimeout) {
+			else if (_sender == my_timerRestoreSettings && _eventType == ak::eventType::etTimeout) {
 				// Load last settings
 				QSettings settings("AK", "uiCoreExample");
 				QString lastConfigString = settings.value("UI.Config", "").toString();
@@ -244,11 +238,11 @@ void Example::eventCallback(
 				}
 			}
 		}
-		catch (const ak::Exception & e) { throw ak::Exception(e, "Example::eventCallback()"); }
-		catch (const std::exception & e) { throw ak::Exception(e.what(), "Example::eventCallback()"); }
-		catch (...) { throw ak::Exception("Unknown error", "Example::eventCallback()"); }
+		catch (const ak::aException & e) { throw ak::aException(e, "Example::eventCallback()"); }
+		catch (const std::exception & e) { throw ak::aException(e.what(), "Example::eventCallback()"); }
+		catch (...) { throw ak::aException("Unknown error", "Example::eventCallback()"); }
 	}
-	catch (const ak::Exception & e) {
+	catch (const ak::aException & e) {
 		ak::uiAPI::promptDialog::show(e.what(), "Error");
 	}
 }
@@ -262,8 +256,8 @@ void Example::setupUi(void) {
 	try {
 		try {
 			// Setup UI
-			ak::uiAPI::window::setDockBottomLeftPriority(my_ui.mainWindow, ak::ui::core::dock_dockLeft);
-			ak::uiAPI::window::setDockBottomRightPriority(my_ui.mainWindow, ak::ui::core::dock_dockRight);
+			ak::uiAPI::window::setDockBottomLeftPriority(my_ui.mainWindow, ak::dockLeft);
+			ak::uiAPI::window::setDockBottomRightPriority(my_ui.mainWindow, ak::dockRight);
 
 			// Setup tab toolbar
 			ak::uiAPI::window::setTabToolBarVisible(my_ui.mainWindow);
@@ -304,17 +298,17 @@ void Example::setupUi(void) {
 			ak::uiAPI::dock::setCentralWidget(my_ui.dockTester, my_ui.tester);
 			ak::uiAPI::dock::setCentralWidget(my_ui.dockTree, my_ui.treeWidget);
 
-			my_testButton = new ak::ui::qt::dockWatcherToolButton{ ak::uiAPI::getIcon("Test", "32"), "Docks" };
+			my_testButton = new ak::aDockWatcherButtonWidget{ ak::uiAPI::getIcon("Test", "32"), "Docks" };
 			my_testButton->setEnabled(false);
-			my_testButton->addWatch(ak::uiAPI::object::get<ak::ui::qt::dock>(my_ui.dockOutput), "Output");
-			my_testButton->addWatch(ak::uiAPI::object::get<ak::ui::qt::dock>(my_ui.dockProperties), "Properties");
-			my_testButton->addWatch(ak::uiAPI::object::get<ak::ui::qt::dock>(my_ui.dockTester), "Tester");
-			my_testButton->addWatch(ak::uiAPI::object::get<ak::ui::qt::dock>(my_ui.dockTree), "Tree");
+			my_testButton->addWatch(ak::uiAPI::object::get<ak::aDockWidget>(my_ui.dockOutput), "Output");
+			my_testButton->addWatch(ak::uiAPI::object::get<ak::aDockWidget>(my_ui.dockProperties), "Properties");
+			my_testButton->addWatch(ak::uiAPI::object::get<ak::aDockWidget>(my_ui.dockTester), "Tester");
+			my_testButton->addWatch(ak::uiAPI::object::get<ak::aDockWidget>(my_ui.dockTree), "Tree");
 
 			// Display docks
-			ak::uiAPI::window::addDock(my_ui.mainWindow, my_ui.dockOutput, ak::ui::core::dock_dockBottom);
-			ak::uiAPI::window::addDock(my_ui.mainWindow, my_ui.dockTree, ak::ui::core::dock_dockLeft);
-			ak::uiAPI::window::addDock(my_ui.mainWindow, my_ui.dockProperties, ak::ui::core::dock_dockLeft);
+			ak::uiAPI::window::addDock(my_ui.mainWindow, my_ui.dockOutput, ak::dockBottom);
+			ak::uiAPI::window::addDock(my_ui.mainWindow, my_ui.dockTree, ak::dockLeft);
+			ak::uiAPI::window::addDock(my_ui.mainWindow, my_ui.dockProperties, ak::dockLeft);
 			ak::uiAPI::window::tabifyDock(my_ui.mainWindow, my_ui.dockOutput, my_ui.dockTester);
 
 			// Setup widgets
@@ -323,7 +317,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::tree::setFilterVisible(my_ui.treeWidget);
 		
 			ak::uiAPI::tabView::setSpecialTabBar(my_ui.tabViewWidget, my_ui.specialTabBar);
-			ak::uiAPI::specialTabBar::addColor(my_ui.specialTabBar, 1, ak::ui::color(255, 0, 0));
+			ak::uiAPI::specialTabBar::addColor(my_ui.specialTabBar, 1, ak::aColor(255, 0, 0));
 
 			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
 			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
@@ -332,7 +326,7 @@ void Example::setupUi(void) {
 
 			ak::uiAPI::contextMenu::clear(my_ui.outputWidget);
 			ak::uiAPI::contextMenu::addSeparator(my_ui.outputWidget);
-			ak::uiAPI::contextMenu::addItem(my_ui.outputWidget, "Clear", "Clear", "32", ak::ui::core::contextMenuRole::crClear);
+			ak::uiAPI::contextMenu::addItem(my_ui.outputWidget, "Clear", "Clear", "32", ak::cmrClear);
 			ak::uiAPI::contextMenu::addSeparator(my_ui.outputWidget);
 			
 			ak::uiAPI::propertyGrid::setGroupStateIcons(my_ui.propertiesWidget, "ArrowGreenDown", "32", "ArrowBlueRight", "32");
@@ -388,9 +382,9 @@ void Example::setupUi(void) {
 			ak::uiAPI::window::setWaitingAnimation(my_ui.mainWindow, "SpinnerSun");
 
 		}
-		catch (const ak::Exception & e) { throw ak::Exception(e, "Example::Example()"); }
-		catch (const std::exception & e) { throw ak::Exception(e.what(), "Example::Example()"); }
-		catch (...) { throw ak::Exception("Unknown error", "Example::Example()"); }
+		catch (const ak::aException & e) { throw ak::aException(e, "Example::Example()"); }
+		catch (const std::exception & e) { throw ak::aException(e.what(), "Example::Example()"); }
+		catch (...) { throw ak::aException("Unknown error", "Example::Example()"); }
 	}
 	catch (const std::exception & e) {
 		ak::uiAPI::promptDialog::show(e.what(), "Error");
