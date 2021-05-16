@@ -867,7 +867,7 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	else {
 		my_widgetBool->setChecked(_value);
 	}
-	QString sheet("QCheckBox{background-aColor:#");
+	QString sheet("QCheckBox{background-color:#");
 	sheet.append(my_colorBackground.toHexString(true));
 	sheet.append(";}\n");
 	my_widgetBool->setStyleSheet(sheet);
@@ -1432,7 +1432,7 @@ void ak::aPropertyGridItem::repaint(void) {
 		case vtBool:
 		{
 			assert(my_widgetBool != nullptr); // Something went wrong
-			QString sheet("QCheckBox{background-aColor:#");
+			QString sheet("QCheckBox{background-color:#");
 			sheet.append(my_colorBackground.toHexString(true));
 			sheet.append(";}\n");
 			my_widgetBool->setStyleSheet(sheet);
@@ -1441,9 +1441,9 @@ void ak::aPropertyGridItem::repaint(void) {
 		case vtColor:
 		{
 			assert(my_widgetColor != nullptr); // Something went wrong
-			QString sheet("QPushButton{background-aColor: #");
+			QString sheet("QPushButton{background-color: #");
 			sheet.append(my_colorBackground.toHexString(true));
-			sheet.append("; aColor: #");
+			sheet.append("; color: #");
 			sheet.append(my_colorNormalForeground.toHexString(true));
 			sheet.append("; }");
 
@@ -1460,17 +1460,17 @@ void ak::aPropertyGridItem::repaint(void) {
 		case vtSelection:
 		{
 			assert(my_widgetSelection != nullptr); // Something went wrong
-			QString sheet("QPushButton{aColor: #");
+			QString sheet("QPushButton{color: #");
 			aColor fore(my_colorNormalForeground);
 			aColor back(my_colorBackground);
 			sheet.append(fore.toHexString(true));
-			sheet.append("; background-aColor: #");
+			sheet.append("; background-color: #");
 			sheet.append(back.toHexString(true));
-			sheet.append(";} QPushButton QMenu{aColor: #");
+			sheet.append(";} QPushButton QMenu{color: #");
 			sheet.append(fore.toHexString(true));
-			sheet.append("; background-aColor: #");
+			sheet.append("; background-color: #");
 			sheet.append(back.toHexString(true));
-			sheet.append("; alternate-background-aColor: red; border 1px solid black; }");
+			sheet.append("; alternate-background-color: red; border 1px solid black; }");
 
 			if (my_globalColorStyle != nullptr) {
 				sheet.append(my_globalColorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus, "QPushButton:hover{", "}"));

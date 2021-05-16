@@ -117,7 +117,11 @@ void ak::aColorEditButtonWidget::overrideText(
 void ak::aColorEditButtonWidget::fillBackground(
 	const aColor &			_color
 ) {
-	QString sheet("#" MY_OBJECTNAME "{background-color:#");
+	/*QString sheet("#" MY_OBJECTNAME "{background-color:#");
+	sheet.append(_color.toHexString(true));
+	sheet.append(";}\n");
+	*/
+	QString sheet("background-color:#");
 	sheet.append(_color.toHexString(true));
 	sheet.append(";}\n");
 	my_widget->setAutoFillBackground(true);
