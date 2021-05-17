@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_comboBox.h
+ *	File:		aComboBoxWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: April 06, 2020
  *	Author: Alexander Kuester

@@ -1,5 +1,6 @@
 /*
- * ak_ui_colorStyleDefault.h
+ *	File:		aColorStyleDefault.h
+ *	Package:	akGui
  *
  *  Created on: April 26, 2020
  *	Author: Alexander Kuester

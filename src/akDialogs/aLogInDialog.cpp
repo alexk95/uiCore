@@ -1,5 +1,6 @@
 /*
- * ak_ui_dialog_aLogInDialog.cpp
+ *	File:		aLogInDialog.cpp
+ *	Package:	akDialogs
  *
  *  Created on: October 06, 2020
  *	Author: Alexander Kuester

@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_aListWidget.cpp
+ *	File:		aListWidget.cpp
+ *	Package:	akWidgets
  *
  *  Created on: October 12, 2020
  *	Author: Alexander Kuester

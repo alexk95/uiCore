@@ -1,5 +1,6 @@
 /*
- * ak_ui_color.h
+ *	File:		aColor.h
+ *	Package:	akGui
  *
  *  Created on: April 02, 2020
  *	Author: Alexander Kuester

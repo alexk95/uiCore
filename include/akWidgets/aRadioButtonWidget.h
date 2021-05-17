@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_radioButton.h
+ *	File:		aRadioButtonWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: April 22, 2020
  *	Author: Alexander Kuester

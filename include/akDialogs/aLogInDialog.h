@@ -1,5 +1,6 @@
 /*
- * ak_ui_dialog_logIn.h
+ *	File:		aLogInDialog.h
+ *	Package:	akDialogs
  *
  *  Created on: October 06, 2020
  *	Author: Alexander Kuester

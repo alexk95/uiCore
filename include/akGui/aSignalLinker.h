@@ -1,5 +1,6 @@
 /*
- * ak_ui_signalLinker.h
+ *	File:		aSignalLinker.h
+ *	Package:	akGui
  *
  *  Created on: February 21, 2020
  *	Author: Alexander Kuester

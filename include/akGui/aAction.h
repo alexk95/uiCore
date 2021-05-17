@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_action.h
+ *	File:		aAction.h
+ *	Package:	akGui
  *
  *  Created on: March 19, 2020
  *	Author: Alexander Kuester

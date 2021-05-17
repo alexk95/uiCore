@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_aToolButtonWidget.cpp
+ *	File:		aToolButtonWidget.cpp
+ *	Package:	akWidgets
  *
  *  Created on: November 07, 2020
  *	Author: Alexander Kuester

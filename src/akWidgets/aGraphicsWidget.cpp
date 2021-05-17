@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_graphicsView.cpp
+ *	File:		aGraphicsWidget.cpp
+ *	Package:	akWidgets
  *
  *  Created on: October 21, 2020
  *	Author: Alexander Kuester

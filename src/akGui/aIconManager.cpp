@@ -1,5 +1,6 @@
 /*
- * ak_ui_aIconManager.cpp
+ *	File:		aIconManager.cpp
+ *	Package:	akGui
  *
  *  Created on: March 20, 2020
  *	Author: Alexander Kuester

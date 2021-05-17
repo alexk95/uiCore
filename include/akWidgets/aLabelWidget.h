@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_label.h
+ *	File:		aLabelWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: October 27, 2020
  *	Author: Alexander Kuester

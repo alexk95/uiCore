@@ -1,5 +1,6 @@
 /*
- * ak_messenger.h
+ *	File:		aMessenger.h
+ *	Package:	akCore
  *
  *  Created on: February 06, 2020
  *	Author: Alexander Kuester

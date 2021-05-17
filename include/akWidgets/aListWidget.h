@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_list.h
+ *	File:		aListWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: October 13, 2020
  *	Author: Alexander Kuester

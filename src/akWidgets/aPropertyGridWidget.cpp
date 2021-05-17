@@ -1,5 +1,6 @@
 /*
- * ak_ui_widget_aPropertyGridWidget.cpp
+ *	File:		aPropertyGridWidget.cpp
+ *	Package:	akWidgets
  *
  *  Created on: October 21, 2020
  *	Author: Alexander Kuester

@@ -1,5 +1,6 @@
 /*
- * ak_ui_windowEventHandler.h
+ *	File:		aWindowEventHandler.h
+ *	Package:	akGui
  *
  *  Created on: November 09, 2020
  *	Author: Alexander Kuester

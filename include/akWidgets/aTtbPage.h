@@ -1,5 +1,6 @@
 /*
- * ak_ui_ttb_page.h
+ *	File:		aTtbPage.h
+ *	Package:	akWidgets
  *
  *  Created on: August 05, 2020
  *	Author: Alexander Kuester

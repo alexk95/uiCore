@@ -1,5 +1,6 @@
 /*
- * ak_globalDataTypes.h
+ *	File:		globalDataTypes.h
+ *	Package:	akCore
  *
  *  Created on: September 06, 2020
  *	Author: Alexander Kuester

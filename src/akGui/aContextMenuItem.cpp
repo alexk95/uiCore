@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_aContextMenuItem.cpp
+ *	File:		aContextMenuItem.cpp
+ *	Package:	akGui
  *
  *  Created on: November 19, 2020
  *	Author: Alexander Kuester

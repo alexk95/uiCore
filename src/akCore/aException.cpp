@@ -1,5 +1,6 @@
 /*
- * ak_exception.cpp
+ *	File:		aException.h
+ *	Package:	akCore
  *
  *  Created on: January 29, 2020
  *	Author: Alexander Kuester

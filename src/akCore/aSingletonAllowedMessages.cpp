@@ -1,5 +1,6 @@
 /*
- * ak_aSingletonAllowedMessages.cpp
+ *	File:		aSingletonAllowedMessages.cpp
+ *	Package:	akCore
  *
  *  Created on: September 16, 2020
  *	Author: Alexander Kuester

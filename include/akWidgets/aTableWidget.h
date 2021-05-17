@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_table.h
+ *	File:		aTableWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: March 19, 2020
  *	Author: Alexander Kuester

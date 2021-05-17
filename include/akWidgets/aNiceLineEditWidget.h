@@ -1,5 +1,6 @@
 /*
- * ak_ui_widget_niceLineEdit.h
+ *	File:		aNiceLineEditWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: April 02, 2021
  *	Author: Alexander Kuester

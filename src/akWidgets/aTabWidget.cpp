@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_aTabWidget.cpp
+ *	File:		aTabWidget.cpp
+ *	Package:	akWidgets
  *
  *  Created on: September 18, 2020
  *	Author: Alexander Kuester

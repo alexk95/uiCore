@@ -1,5 +1,6 @@
 /*
- * ak_ui_dialog_prompt.h
+ *	File:		aPromptDialog.h
+ *	Package:	akDialogs
  *
  *  Created on: October 07, 2020
  *	Author: Alexander Kuester

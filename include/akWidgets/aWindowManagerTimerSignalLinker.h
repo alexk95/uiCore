@@ -1,5 +1,6 @@
 /*
- * ak_ui_uiManagerTimerSignalLinker.h
+ *	File:		aWindowManagerTimerSignalLinker.h
+ *	Package:	akWidgets
  *
  *  Created on: February 30, 2020
  *	Author: Alexander Kuester

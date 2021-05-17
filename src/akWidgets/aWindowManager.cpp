@@ -1,5 +1,6 @@
 /*
- * ak_ui_aWindowManager.cpp
+ *	File:		aWindowManager.cpp
+ *	Package:	akWidgets
  *
  *  Created on: January 30, 2020
  *	Author: Alexander Kuester

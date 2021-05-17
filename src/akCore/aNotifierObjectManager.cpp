@@ -1,5 +1,6 @@
 /*
- * ak_notifierObjectManager.cpp
+ *	File:		aNotifierObjectManager.cpp
+ *	Package:	akCore
  *
  *  Created on: July 16, 2020
  *	Author: Alexander Kuester

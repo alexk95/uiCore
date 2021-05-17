@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_timer.cpp
+ *	File:		aTimer.cpp
+ *	Package:	akGui
  *
  *  Created on: September 19, 2020
  *	Author: Alexander Kuester

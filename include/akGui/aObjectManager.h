@@ -1,5 +1,6 @@
 /*
- * ak_ui_objectManager.h
+ *	File:		aObjectManager.h
+ *	Package:	akGui
  *
  *  Created on: July 14, 2020
  *	Author: Alexander Kuester

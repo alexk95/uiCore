@@ -1,5 +1,6 @@
 /*
- * ak_core.cpp
+ *	File:		akCore.cpp
+ *	Package:	akCore
  *
  *  Created on: February 06, 2020
  *	Author: Alexander Kuester

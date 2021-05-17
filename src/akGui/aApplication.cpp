@@ -1,5 +1,6 @@
 /*
- * ak_ui_application.cpp
+ *	File:		aApplication.cpp
+ *	Package:	akGui
  *
  *  Created on: October 23, 2020
  *	Author: Alexander Kuester

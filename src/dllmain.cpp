@@ -1,7 +1,8 @@
 /*
- * dllmain.cpp
+ *	File:		dllmain.cpp
+ *	Package:	-NONE-
  *
- *  Created on: September 20 06, 2020
+ *  Created on: January 06, 2020
  *	Author: Alexander Kuester
  *  Copyright (c) 2020 Alexander Kuester
  *	This file is part of the uiCore component.

@@ -1,5 +1,6 @@
 /*
- * ak_ui_aColorStyle.cpp
+ *	File:		aColorStyle.cpp
+ *	Package:	akGui
  *
  *  Created on: April 09, 2020
  *	Author: Alexander Kuester

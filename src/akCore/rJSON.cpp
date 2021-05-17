@@ -1,5 +1,6 @@
 /*
- *	rJSON.cpp
+ *	File:		rJSON.cpp
+ *	Package:	akCore
  *
  *  Created on: January 03, 2021
  *	Author: Alexander Kuester

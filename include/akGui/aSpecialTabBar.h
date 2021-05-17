@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_specialTabBar.h
+ *	File:		aSpecialTabBar.h
+ *	Package:	akGui
  *
  *  Created on: April 04, 2021
  *	Author: Alexander Kuester

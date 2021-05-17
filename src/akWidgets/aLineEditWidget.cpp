@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_aLineEditWidget.cpp
+ *	File:		aLineEditWidget.cpp
+ *	Package:	akWidgets
  *
  *  Created on: October 19, 2020
  *	Author: Alexander Kuester

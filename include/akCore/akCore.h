@@ -1,5 +1,6 @@
 /*
- * ak_core.h
+ *	File:		akCore.h
+ *	Package:	akCore
  *
  *  Created on: February 06, 2020
  *	Author: Alexander Kuester

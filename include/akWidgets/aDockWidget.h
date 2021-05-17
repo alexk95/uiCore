@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_dock.h
+ *	File:		aDockWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: August 10, 2020
  *	Author: Alexander Kuester

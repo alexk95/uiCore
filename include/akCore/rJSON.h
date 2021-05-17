@@ -1,5 +1,6 @@
 /*
- *	ak_rJSON.h
+ *	File:		rJSON.h
+ *	Package:	akCore
  *
  *  Created on: January 03, 2021
  *	Author: Alexander Kuester

@@ -1,5 +1,6 @@
 /*
- * ak_ui_application.h
+ *	File:		aApplication.h
+ *	Package:	akGui
  *
  *  Created on: October 23, 2020
  *	Author: Alexander Kuester

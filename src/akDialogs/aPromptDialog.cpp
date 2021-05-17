@@ -1,5 +1,6 @@
 /*
- * ak_ui_dialog_aPromptDialog.cpp
+ *	File:		aPromptDialog.cpp
+ *	Package:	akDialogs
  *
  *  Created on: October 07, 2020
  *	Author: Alexander Kuester

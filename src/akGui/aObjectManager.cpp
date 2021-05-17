@@ -1,5 +1,6 @@
 /*
- * ak_ui_aObjectManager.cpp
+ *	File:		aObjectManager.cpp
+ *	Package:	akGui
  *
  *  Created on: July 14, 2020
  *	Author: Alexander Kuester

@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_aComboButtonWidget.cpp
+ *	File:		aComboButtonWidget.cpp
+ *	Package:	akWidgets
  *
  *  Created on: March 19, 2020
  *	Author: Alexander Kuester

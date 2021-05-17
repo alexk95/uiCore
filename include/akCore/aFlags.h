@@ -1,5 +1,6 @@
 /*
- * ak_flags.h
+ *	File:		aFlags.h
+ *	Package:	akCore
  *
  *  Created on: February 06, 2021
  *	Author: Alexander Kuester

@@ -1,5 +1,6 @@
 /*
- * ak_ui_core_aWidget.h
+ *	File:		aWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: July 26, 2020
  *	Author: Alexander Kuester

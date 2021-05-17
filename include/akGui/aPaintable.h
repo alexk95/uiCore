@@ -1,5 +1,6 @@
 /*
- * ak_ui_core_aPaintable.h
+ *	File:		aPaintable.h
+ *	Package:	akGui
  *
  *  Created on: July 26, 2020
  *	Author: Alexander Kuester

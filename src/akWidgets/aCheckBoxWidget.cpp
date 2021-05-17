@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_aCheckBoxWidget.cpp
+ *	File:		aCheckBoxWidget.cpp
+ *	Package:	akWidgets
  *
  *  Created on: March 19, 2020
  *	Author: Alexander Kuester

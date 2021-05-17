@@ -1,5 +1,6 @@
 /*
- * ak_ui_colorStyleDefaultDark.h
+ *	File:		aColorStyleDefaultDark.h
+ *	Package:	akGui
  *
  *  Created on: April 08, 2020
  *	Author: Alexander Kuester

@@ -1,5 +1,6 @@
 /*
- * ak_ui_core_aRestorable.cpp
+ *	File:		aRestorable.cpp
+ *	Package:	akGui
  *
  *  Created on: October 01, 2020
  *	Author: Alexander Kuester

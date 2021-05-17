@@ -1,5 +1,6 @@
 /*
- * ak_uiAPI.cpp
+ *	File:		uiAPI.cpp
+ *	Package:	akAPI
  *
  *  Created on: February 06, 2020
  *	Author: Alexander Kuester

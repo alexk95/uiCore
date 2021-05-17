@@ -1,5 +1,6 @@
 /*
- * ak_ui_uiManager.h
+ *	File:		aWindowManager.h
+ *	Package:	akWidgets
  *
  *  Created on: January 30, 2020
  *	Author: Alexander Kuester

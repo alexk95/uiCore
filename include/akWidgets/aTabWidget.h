@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_tabView.h
+ *	File:		aTabWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: September 18, 2020
  *	Author: Alexander Kuester

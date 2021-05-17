@@ -1,5 +1,6 @@
 /*
- * ak_ui_core_aRestorable.h
+ *	File:		aRestorable.h
+ *	Package:	akGui
  *
  *  Created on: October 01, 2020
  *	Author: Alexander Kuester

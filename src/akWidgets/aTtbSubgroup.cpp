@@ -1,5 +1,6 @@
 /*
- * ak_ui_ttb_subgroup.cpp
+ *	File:		aTtbSubgroup.cpp
+ *	Package:	akWidgets
  *
  *  Created on: August 05, 2020
  *	Author: Alexander Kuester

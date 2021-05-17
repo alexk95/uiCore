@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_window.cpp
+ *	File:		aWindow.cpp
+ *	Package:	akWidgets
  *
  *  Created on: November 09, 2020
  *	Author: Alexander Kuester

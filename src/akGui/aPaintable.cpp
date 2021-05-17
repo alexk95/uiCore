@@ -1,5 +1,6 @@
 /*
- * ak_ui_core_aPaintable.cpp
+ *	File:		aPaintable.cpp
+ *	Package:	akGui
  *
  *  Created on: July 26, 2020
  *	Author: Alexander Kuester

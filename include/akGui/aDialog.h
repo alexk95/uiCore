@@ -1,5 +1,6 @@
 /*
- * ak_ui_core_aDialog.h
+ *	File:		aDialog.h
+ *	Package:	akGui
  *
  *  Created on: October 06, 2020
  *	Author: Alexander Kuester

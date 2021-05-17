@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_pushButton.h
+ *	File:		aPushButtonWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: March 19, 2020
  *	Author: Alexander Kuester

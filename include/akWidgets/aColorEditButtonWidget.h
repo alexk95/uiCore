@@ -1,5 +1,6 @@
 /*
- * ak_ui_widget_colorEditButton.h
+ *	File:		aColorEditButtonWidget.h
+ *	Package:	akWidgets
  *
  *  Created on: August 05, 2020
  *	Author: Alexander Kuester

@@ -1,5 +1,6 @@
 /*
- * ak_ui_qt_comboButtonItem.h
+ *	File:		aComboButtonWidgetItem.h
+ *	Package:	akWidgets
  *
  *  Created on: March 19, 2020
  *	Author: Alexander Kuester

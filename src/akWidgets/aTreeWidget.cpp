@@ -1,5 +1,6 @@
 /*
- * ak_ui_widget_tree.cpp
+ *	File:		aTreeWidget.cpp
+ *	Package:	akWidgets
  *
  *  Created on: March 10, 2020
  *	Author: Alexander Kuester

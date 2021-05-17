@@ -1,5 +1,6 @@
 /*
- * ak_ui_objectManager.h
+ *	File:		aOptionsDialog.h
+ *	Package:	akDialogs
  *
  *  Created on: November 03, 2020
  *	Author: Alexander Kuester

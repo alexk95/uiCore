@@ -1,5 +1,6 @@
 /*
- * ak_ui_core_aObject.cpp
+ *	File:		aObject.cpp
+ *	Package:	akCore
  *
  *  Created on: July 26, 2020
  *	Author: Alexander Kuester
