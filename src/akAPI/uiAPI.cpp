@@ -71,6 +71,7 @@
 #include <qmovie.h>
 #include <qdesktopwidget.h>
 #include <qfiledialog.h>
+#include <qdatetime.h>
 
 static ak::uiAPI::apiManager		my_apiManager;					//! The API manager
 static ak::aObjectManager *			my_objManager = nullptr;					//! The object manager used in this API
@@ -3039,7 +3040,7 @@ QString ak::uiAPI::special::toString(
 	return ak::toQString(_tabLocation);
 }
 
-QString ak::uiAPI::special::toQString(
+QString ak::uiAPI::special::toString(
 	dialogResult							_dialogResult
 ) {
 	return ak::toQString(_dialogResult);
@@ -3061,6 +3062,63 @@ QString ak::uiAPI::special::toString(
 	settingsRestoreErrorCode					_settingsRestoreErrorCode
 ) {
 	return ak::toQString(_settingsRestoreErrorCode);
+}
+
+QString ak::uiAPI::special::toString(
+	const QDate &							_date,
+	dateFormat								_format,
+	const QString &							_delimiter
+) {
+	QString ret;
+	QString d;
+	QString m;
+	QString y = QString::number(_date.year());
+	
+	if (_date.day() < 10) { d = "0" + QString::number(_date.day()); }
+	else { d = QString::number(_date.day()); }
+
+	if (_date.month() < 10) { m = "0" + QString::number(_date.month()); }
+	else { m = QString::number(_date.month()); }
+	
+	switch (_format)
+	{
+	case ak::dfDDMMYYYY: ret.append(d).append(_delimiter).append(m).append(_delimiter).append(y); break;
+	case ak::dfMMDDYYYY: ret.append(m).append(_delimiter).append(d).append(_delimiter).append(y); break;
+	case ak::dfYYYYMMDD: ret.append(y).append(_delimiter).append(m).append(_delimiter).append(d); break;
+	case ak::dfYYYYDDMM: ret.append(y).append(_delimiter).append(d).append(_delimiter).append(m); break;
+	default: assert(0); return "";
+	}
+}
+
+QString ak::uiAPI::special::toString(
+	const QTime &							_time,
+	timeFormat								_format,
+	const QString &							_delimiter,
+	const QString &							_millisecondDelimiter
+) {
+	QString ret;
+	QString h;
+	QString m;
+	QString s;
+	QString ms = QString::number(_time.msec());
+
+	if (_time.hour() < 10) { h = "0" + QString::number(_time.hour()); }
+	else { h = QString::number(_time.hour()); }
+
+	if (_time.minute() < 10) { m = "0" + QString::number(_time.minute()); }
+	else { m = QString::number(_time.minute()); }
+
+	if (_time.second() < 10) { s = "0" + QString::number(_time.second()); }
+	else { s = QString::number(_time.second()); }
+
+	switch (_format)
+	{
+	case ak::tfHHMM: ret.append(h).append(_delimiter).append(m); break;
+	case ak::tfHHMMSS: ret.append(h).append(_delimiter).append(m).append(_delimiter).append(s); break;
+	case ak::tfHHMMSSMMMM: ret.append(h).append(_delimiter).append(m).append(_delimiter).append(s).append(_millisecondDelimiter).append(ms); break;
+	default:
+		assert(0); return "";
+	}
 }
 
 QString ak::uiAPI::special::toEventText(

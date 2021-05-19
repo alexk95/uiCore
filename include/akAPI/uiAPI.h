@@ -2647,7 +2647,7 @@ namespace ak {
 
 			//! @brief Create a string representation of the provided dialog result
 			//! @param _dialogResult The dialog result to be converted
-			UICORE_API_EXPORT QString toQString(
+			UICORE_API_EXPORT QString toString(
 				dialogResult							_dialogResult
 			);
 
@@ -2667,6 +2667,19 @@ namespace ak {
 			//! @param _type The error code that should be represented
 			UICORE_API_EXPORT QString toString(
 				settingsRestoreErrorCode				_settingsRestoreErrorCode
+			);
+
+			UICORE_API_EXPORT QString toString(
+				const QDate &							_date,
+				dateFormat								_format,
+				const QString &							_delimiter
+			);
+
+			UICORE_API_EXPORT QString toString(
+				const QTime &							_time,
+				timeFormat								_format,
+				const QString &							_delimiter,
+				const QString &							_millisecondDelimiter = "."
 			);
 
 			//! @brief Will create a JSON type representation of the event
