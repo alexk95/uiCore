@@ -3086,8 +3086,9 @@ QString ak::uiAPI::special::toString(
 	case ak::dfMMDDYYYY: ret.append(m).append(_delimiter).append(d).append(_delimiter).append(y); break;
 	case ak::dfYYYYMMDD: ret.append(y).append(_delimiter).append(m).append(_delimiter).append(d); break;
 	case ak::dfYYYYDDMM: ret.append(y).append(_delimiter).append(d).append(_delimiter).append(m); break;
-	default: assert(0); return "";
+	default: assert(0);
 	}
+	return ret;
 }
 
 QString ak::uiAPI::special::toString(
@@ -3116,9 +3117,9 @@ QString ak::uiAPI::special::toString(
 	case ak::tfHHMM: ret.append(h).append(_delimiter).append(m); break;
 	case ak::tfHHMMSS: ret.append(h).append(_delimiter).append(m).append(_delimiter).append(s); break;
 	case ak::tfHHMMSSMMMM: ret.append(h).append(_delimiter).append(m).append(_delimiter).append(s).append(_millisecondDelimiter).append(ms); break;
-	default:
-		assert(0); return "";
+	default: assert(0);
 	}
+	return ret;
 }
 
 QString ak::uiAPI::special::toEventText(
