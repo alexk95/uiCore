@@ -1980,123 +1980,128 @@ void ak::uiAPI::specialTabBar::setRepaintBlocked(
 
 // TabView
 
-ak::ID ak::uiAPI::tabView::addTab(
-	UID				_tabViewUID,
+ak::ID ak::uiAPI::tabWidget::addTab(
+	UID				_tabWidgetUID,
 	UID				_widgetUID,
 	const QString &		_title
-) { return object::get<aTabWidget>(_tabViewUID)->addTab(object::get<aWidget>(_widgetUID)->widget(), _title); }
+) { return object::get<aTabWidget>(_tabWidgetUID)->addTab(object::get<aWidget>(_widgetUID)->widget(), _title); }
 
-ak::ID ak::uiAPI::tabView::addTab(
-	UID				_tabViewUID,
+ak::ID ak::uiAPI::tabWidget::addTab(
+	UID				_tabWidgetUID,
 	UID				_widgetUID,
 	const QString &		_title,
 	const QString &		_iconName,
 	const QString &		_iconFolder
 ) {
 	assert(my_iconManager != nullptr); // API not initialized
-	return object::get<aTabWidget>(_tabViewUID)->addTab(object::get<aWidget>(_widgetUID)->widget(), *my_iconManager->icon(_iconName, _iconFolder), _title);
+	return object::get<aTabWidget>(_tabWidgetUID)->addTab(object::get<aWidget>(_widgetUID)->widget(), *my_iconManager->icon(_iconName, _iconFolder), _title);
 }
 
-ak::ID ak::uiAPI::tabView::addTab(
-	UID				_tabViewUID,
+ak::ID ak::uiAPI::tabWidget::addTab(
+	UID				_tabWidgetUID,
 	UID				_widgetUID,
 	const QString &		_title,
 	const QIcon &		_icon
-) { return object::get<aTabWidget>(_tabViewUID)->addTab(object::get<aWidget>(_widgetUID)->widget(), _icon, _title); }
+) { return object::get<aTabWidget>(_tabWidgetUID)->addTab(object::get<aWidget>(_widgetUID)->widget(), _icon, _title); }
 
-ak::ID ak::uiAPI::tabView::addTab(
-	UID				_tabViewUID,
+ak::ID ak::uiAPI::tabWidget::addTab(
+	UID				_tabWidgetUID,
 	QWidget *			_widget,
 	const QString &		_title
 ) {
-	return object::get<aTabWidget>(_tabViewUID)->addTab(_widget, _title);
+	return object::get<aTabWidget>(_tabWidgetUID)->addTab(_widget, _title);
 }
 
-ak::ID ak::uiAPI::tabView::addTab(
-	UID				_tabViewUID,
+ak::ID ak::uiAPI::tabWidget::addTab(
+	UID				_tabWidgetUID,
 	QWidget *			_widget,
 	const QString &		_title,
 	const QString &		_iconName,
 	const QString &		_iconFolder
 ) {
 	assert(my_iconManager != nullptr); // API not initialized
-	return object::get<aTabWidget>(_tabViewUID)->addTab(_widget, *my_iconManager->icon(_iconName, _iconFolder), _title);
+	return object::get<aTabWidget>(_tabWidgetUID)->addTab(_widget, *my_iconManager->icon(_iconName, _iconFolder), _title);
 }
 
-ak::ID ak::uiAPI::tabView::addTab(
-	UID				_tabViewUID,
+ak::ID ak::uiAPI::tabWidget::addTab(
+	UID				_tabWidgetUID,
 	QWidget *			_widget,
 	const QString &		_title,
 	const QIcon &		_icon
-) { return object::get<aTabWidget>(_tabViewUID)->addTab(_widget, _icon, _title); }
+) { return object::get<aTabWidget>(_tabWidgetUID)->addTab(_widget, _icon, _title); }
 
-void ak::uiAPI::tabView::closeAllTabs(
-	UID				_tabViewUID
-) { object::get<aTabWidget>(_tabViewUID)->clear(); }
+void ak::uiAPI::tabWidget::closeAllTabs(
+	UID				_tabWidgetUID
+) { object::get<aTabWidget>(_tabWidgetUID)->clear(); }
 
-void ak::uiAPI::tabView::closeTab(
-	UID				_tabViewUID,
+void ak::uiAPI::tabWidget::closeTab(
+	UID				_tabWidgetUID,
 	ID				_tabID
-) { return object::get<aTabWidget>(_tabViewUID)->removeTab(_tabID); }
+) { return object::get<aTabWidget>(_tabWidgetUID)->removeTab(_tabID); }
 
-ak::ID ak::uiAPI::tabView::getFocusedTab(
-	UID				_tabViewUID
-) { return object::get<aTabWidget>(_tabViewUID)->currentIndex(); }
+ak::ID ak::uiAPI::tabWidget::getFocusedTab(
+	UID				_tabWidgetUID
+) { return object::get<aTabWidget>(_tabWidgetUID)->currentIndex(); }
 
-bool ak::uiAPI::tabView::getTabsClosable(
-	UID				_tabViewUID
-) { return object::get<aTabWidget>(_tabViewUID)->tabsClosable(); }
+bool ak::uiAPI::tabWidget::getTabsClosable(
+	UID				_tabWidgetUID
+) { return object::get<aTabWidget>(_tabWidgetUID)->tabsClosable(); }
 
-QString ak::uiAPI::tabView::getTabText(
-	UID				_tabViewUID,
+QString ak::uiAPI::tabWidget::getTabText(
+	UID				_tabWidgetUID,
 	ID				_tabID
-) { return object::get<aTabWidget>(_tabViewUID)->tabText(_tabID); }
+) { return object::get<aTabWidget>(_tabWidgetUID)->tabText(_tabID); }
 
-void ak::uiAPI::tabView::setEnabled(
-	UID				_tabViewUID,
+void ak::uiAPI::tabWidget::setEnabled(
+	UID				_tabWidgetUID,
 	bool				_enabled
-) { object::get<aTabWidget>(_tabViewUID)->setEnabled(_enabled); }
+) { object::get<aTabWidget>(_tabWidgetUID)->setEnabled(_enabled); }
 
-void ak::uiAPI::tabView::setTabbarLocation(
-	UID								_tabViewUID,
+void ak::uiAPI::tabWidget::setTabbarLocation(
+	UID								_tabWidgetUID,
 	tabLocation						_location
-) { object::get<aTabWidget>(_tabViewUID)->setTabLocation(_location); }
+) { object::get<aTabWidget>(_tabWidgetUID)->setTabLocation(_location); }
 
-void ak::uiAPI::tabView::setTabFocused(
-	UID				_tabViewUID,
+void ak::uiAPI::tabWidget::setTabFocused(
+	UID				_tabWidgetUID,
 	ID				_tabID
-) { object::get<aTabWidget>(_tabViewUID)->setCurrentIndex(_tabID); }
+) { object::get<aTabWidget>(_tabWidgetUID)->setCurrentIndex(_tabID); }
 
-void ak::uiAPI::tabView::setTabsClosable(
-	UID								_tabViewUID,
+void ak::uiAPI::tabWidget::setTabsClosable(
+	UID								_tabWidgetUID,
 	bool								_closeable
-) { object::get<aTabWidget>(_tabViewUID)->setTabsClosable(_closeable); }
+) { object::get<aTabWidget>(_tabWidgetUID)->setTabsClosable(_closeable); }
 
-void ak::uiAPI::tabView::setTabText(
-	UID								_tabViewUID,
+void ak::uiAPI::tabWidget::setTabText(
+	UID								_tabWidgetUID,
 	ID								_tab,
 	const QString &						_text
-) { object::get<aTabWidget>(_tabViewUID)->setTabText(_tab, _text); }
+) { object::get<aTabWidget>(_tabWidgetUID)->setTabText(_tab, _text); }
 
-void ak::uiAPI::tabView::setSpecialTabBar(
-	UID								_tabViewUID,
+void ak::uiAPI::tabWidget::setSpecialTabBar(
+	UID								_tabWidgetUID,
 	UID								_specialTabBarUID
-) { setSpecialTabBar(_tabViewUID, object::get<aSpecialTabBar>(_specialTabBarUID)); }
+) { setSpecialTabBar(_tabWidgetUID, object::get<aSpecialTabBar>(_specialTabBarUID)); }
 
-void ak::uiAPI::tabView::setSpecialTabBar(
-	UID								_tabViewUID,
+void ak::uiAPI::tabWidget::setSpecialTabBar(
+	UID								_tabWidgetUID,
 	QTabBar *							_specialTabBar
-) { object::get<aTabWidget>(_tabViewUID)->setCustomTabBar(_specialTabBar); }
+) { object::get<aTabWidget>(_tabWidgetUID)->setCustomTabBar(_specialTabBar); }
 
-void ak::uiAPI::tabView::setVisible(
-	UID				_tabViewUID,
+void ak::uiAPI::tabWidget::setVisible(
+	UID				_tabWidgetUID,
 	bool				_visible
-) { object::get<aTabWidget>(_tabViewUID)->setVisible(_visible); }
+) { object::get<aTabWidget>(_tabWidgetUID)->setVisible(_visible); }
 
-void ak::uiAPI::tabView::setObjectName(
-	UID							_tabViewUID,
+void ak::uiAPI::tabWidget::setObjectName(
+	UID							_tabWidgetUID,
 	const QString &					_name
-) {	object::get<aTabWidget>(_tabViewUID)->setObjectName(_name); }
+) {	object::get<aTabWidget>(_tabWidgetUID)->setObjectName(_name); }
+
+bool ak::uiAPI::tabWidget::hasTab(
+	UID							_tabWidgetUID,
+	const QString &				_tabText
+) { return object::get<aTabWidget>(_tabWidgetUID)->hasTab(_tabText); }
 
 // TabView
 

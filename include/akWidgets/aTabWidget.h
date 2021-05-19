@@ -78,5 +78,9 @@ namespace ak {
 
 		QStringList tabTitles(void) const;
 
+		//! @brief Will return true if a tab with the provided text exists
+		//! @param _tabText The text of the tab to look for
+		bool hasTab(const QString & _tabText);
+
 	};
 } // namespace ak

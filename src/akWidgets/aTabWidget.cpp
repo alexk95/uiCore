@@ -95,3 +95,10 @@ QStringList ak::aTabWidget::tabTitles(void) const {
 	for (int i = 0; i < count(); i++) { ret.push_back(tabText(i)); }
 	return ret;
 }
+
+bool ak::aTabWidget::hasTab(const QString & _tabText) {
+	for (int i = 0; i < count(); i++) {
+		if (tabText(i) == _tabText) { return true; }
+	}
+	return false;
+}

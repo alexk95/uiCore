@@ -1667,16 +1667,16 @@ namespace ak {
 
 		// TabView
 
-		namespace tabView {
+		namespace tabWidget {
 
 			UICORE_API_EXPORT ID addTab(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				UID				_widgetUID,
 				const QString &		_title
 			);
 
 			UICORE_API_EXPORT ID addTab(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				UID				_widgetUID,
 				const QString &		_title,
 				const QString &		_iconName,
@@ -1684,20 +1684,20 @@ namespace ak {
 			);
 
 			UICORE_API_EXPORT ID addTab(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				UID				_widgetUID,
 				const QString &		_title,
 				const QIcon &		_icon
 			);
 
 			UICORE_API_EXPORT ID addTab(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				QWidget *			_widget,
 				const QString &		_title
 			);
 
 			UICORE_API_EXPORT ID addTab(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				QWidget *			_widget,
 				const QString &		_title,
 				const QString &		_iconName,
@@ -1705,91 +1705,98 @@ namespace ak {
 			);
 
 			UICORE_API_EXPORT ID addTab(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				QWidget *			_widget,
 				const QString &		_title,
 				const QIcon &		_icon
 			);
 
-			//! @brief Will close all tabs of the specified tabView
+			//! @brief Will close all tabs of the specified tabWidget
 			UICORE_API_EXPORT void closeAllTabs(
-				UID				_tabViewUID
+				UID				_tabWidgetUID
 			);
 
 			UICORE_API_EXPORT void closeTab(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				ID				_tabID
 			);
 
 			UICORE_API_EXPORT ID getFocusedTab(
-				UID				_tabViewUID
+				UID				_tabWidgetUID
 			);
 
 			UICORE_API_EXPORT bool getTabsClosable(
-				UID				_tabViewUID
+				UID				_tabWidgetUID
 			);
 
 			UICORE_API_EXPORT QString getTabText(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				ID				_tabID
 			);
 
 			UICORE_API_EXPORT void setEnabled(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				bool				_enabled
 			);
 
 			UICORE_API_EXPORT void setTabbarLocation(
-				UID								_tabViewUID,
+				UID								_tabWidgetUID,
 				tabLocation						_location
 			);
 
 			UICORE_API_EXPORT void setTabFocused(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				ID				_tabID
 			);
 
-			//! @brief Will set the closeabled state for the tabs in this tabView
+			//! @brief Will set the closeabled state for the tabs in this tabWidget
 			//! @param _closeable If true the tabs can be closed by the user
 			UICORE_API_EXPORT void setTabsClosable(
-				UID								_tabViewUID,
+				UID								_tabWidgetUID,
 				bool								_closeable
 			);
 
 			//! @brief Will set the text of the specified tab
-			//! @param _tabViewUID The UID of the tab view
+			//! @param _tabWidgetUID The UID of the tab view
 			//! @param _tab The tab to set the text at
 			//! @param _text The text to set
 			UICORE_API_EXPORT void setTabText(
-				UID								_tabViewUID,
+				UID								_tabWidgetUID,
 				ID								_tab,
 				const QString &						_text
 			);
 
 			//! @brief Will set the provided tab bar to the tab view
-			//! @param _tabViewUID The UID of the tab view to set the tab bar at
+			//! @param _tabWidgetUID The UID of the tab view to set the tab bar at
 			//! @param _specialTabBarUID The UID of the special tab bar to set
 			UICORE_API_EXPORT void setSpecialTabBar(
-				UID								_tabViewUID,
+				UID								_tabWidgetUID,
 				UID								_specialTabBarUID
 			);
 
 			//! @brief Will set the provided tab bar to the tab view
-			//! @param _tabViewUID The UID of the tab view to set the tab bar at
+			//! @param _tabWidgetUID The UID of the tab view to set the tab bar at
 			//! @param _specialTabBar The special tab bar to set
 			UICORE_API_EXPORT void setSpecialTabBar(
-				UID								_tabViewUID,
+				UID								_tabWidgetUID,
 				QTabBar *							_specialTabBar
 			);
 
 			UICORE_API_EXPORT void setVisible(
-				UID				_tabViewUID,
+				UID				_tabWidgetUID,
 				bool				_visible
 			);
 
 			UICORE_API_EXPORT void setObjectName(
-				UID							_tabViewUID,
+				UID							_tabWidgetUID,
 				const QString &					_name
+			);
+
+			//! @brief Will return true if a tab with the provided text exists
+			//! @param _tabText The text of the tab to look for
+			UICORE_API_EXPORT bool hasTab(
+				UID							_tabWidgetUID,
+				const QString & _tabText
 			);
 
 		}
