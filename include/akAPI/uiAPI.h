@@ -80,7 +80,7 @@ namespace ak {
 			//! @brief Will call the execute function of the QApplication
 			int exec(void);
 
-			//! @breif Will return the default surface format
+			//! @brief Will return the default surface format
 			QSurfaceFormat * getDefaultSurfaceFormat(void);
 
 			//! @brief Will return the file with the provided UID
@@ -1799,6 +1799,12 @@ namespace ak {
 				const QString & _tabText
 			);
 
+			//! @brief Will return the ID of the first tab with the specified name
+			UICORE_API_EXPORT ID getTabIDByText(
+				UID							_tabWidgetUID,
+				const QString & _tabText
+			);
+
 		}
 
 		// ###############################################################################################################################################
@@ -2182,6 +2188,10 @@ namespace ak {
 			UICORE_API_EXPORT void setAutoSelectAndDeselectChildrenEnabled(
 				UID							_treeUID,
 				bool							_enabled = true
+			);
+
+			UICORE_API_EXPORT bool getAutoSelectAndDeselectChildrenEnabled(
+				UID							_treeUID
 			);
 
 			UICORE_API_EXPORT void setEnabled(

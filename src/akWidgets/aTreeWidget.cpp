@@ -214,6 +214,8 @@ void ak::aTreeWidget::setItemSelected(
 ) {
 	auto itm = my_items.find(_itemId);
 	assert(itm != my_items.end()); // Invalid item ID
+	if (itm == my_items.end()) return;
+
 	my_ignoreEvents = true;
 	itm->second->setSelected(_selected);
 	if (my_selectAndDeselectChildren) { itm->second->setChildsSelected(_selected); }

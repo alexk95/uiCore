@@ -320,6 +320,8 @@ namespace ak {
 
 		bool isReadOnly(void) const { return my_isReadOnly; }
 
+		bool getAutoSelectAndDeselectChildrenEnabled(void) { return my_selectAndDeselectChildren; }
+
 		// ###########################################################################################################################################
 
 		// Events

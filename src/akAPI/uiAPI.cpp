@@ -2104,6 +2104,17 @@ bool ak::uiAPI::tabWidget::hasTab(
 	const QString &				_tabText
 ) { return object::get<aTabWidget>(_tabWidgetUID)->hasTab(_tabText); }
 
+ak::ID ak::uiAPI::tabWidget::getTabIDByText(
+	UID							_tabWidgetUID,
+	const QString & _tabText
+) {
+	auto t = object::get<aTabWidget>(_tabWidgetUID)->tabTitles();
+	for (int i = 0; i < t.size(); i++) {
+		if (t.at(i) == _tabText) { return i; }
+	}
+	return invalidID;
+}
+
 // TabView
 
 // ###############################################################################################################################################
