@@ -231,6 +231,9 @@
     <ClCompile Include="src\akWidgets\aGraphicsWidget.cpp">
       <Filter>Source Files\ak\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="src\akCore\aDateHelper.cpp">
+      <Filter>Source Files\ak\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\akAPI\uiAPI.h">
@@ -322,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="include\akGui\aTimer.h">
       <Filter>Header Files\ak\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\akCore\aDateHelper.h">
+      <Filter>Header Files\ak\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -110,6 +110,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\akAPI\uiAPI.cpp" />
+    <ClCompile Include="src\akCore\aDateHelper.cpp" />
     <ClCompile Include="src\akCore\aException.cpp" />
     <ClCompile Include="src\akCore\aFile.cpp" />
     <ClCompile Include="src\akCore\akCore.cpp" />
@@ -169,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\akAPI\uiAPI.h" />
+    <ClInclude Include="include\akCore\aDateHelper.h" />
     <ClInclude Include="include\akCore\aException.h" />
     <ClInclude Include="include\akCore\aFile.h" />
     <ClInclude Include="include\akCore\aFlags.h" />
