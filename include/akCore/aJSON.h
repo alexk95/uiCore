@@ -267,6 +267,9 @@ namespace ak {
 		//! This function may be used only for array type item
 		aJSON getAt(size_t _index);
 
+		//! @brief Will return the ammount of members in the object or the array size
+		//! This function has only an effect on an objct type or array type item, otherwise will return 0
+		size_t size(void) const;
 	private:
 
 		std::string toMultilineString(const std::string & _prefix) const;

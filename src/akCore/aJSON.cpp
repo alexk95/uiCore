@@ -194,6 +194,12 @@ ak::aJSON ak::aJSON::getAt(size_t _index) {
 	return m_array[_index];
 }
 
+size_t ak::aJSON::size(void) const {
+	if (m_type == Array) { return m_array.size(); }
+	else if (m_type == Object) { return m_obj.size(); }
+	else { return 0; }
+}
+
 // ########################################################################################
 
 // Private functions
