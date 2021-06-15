@@ -113,6 +113,7 @@
     <ClCompile Include="src\akCore\aDateHelper.cpp" />
     <ClCompile Include="src\akCore\aException.cpp" />
     <ClCompile Include="src\akCore\aFile.cpp" />
+    <ClCompile Include="src\akCore\aJSON.cpp" />
     <ClCompile Include="src\akCore\akCore.cpp" />
     <ClCompile Include="src\akCore\aMessenger.cpp" />
     <ClCompile Include="src\akCore\aNotifier.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="include\akCore\aException.h" />
     <ClInclude Include="include\akCore\aFile.h" />
     <ClInclude Include="include\akCore\aFlags.h" />
+    <ClInclude Include="include\akCore\aJSON.h" />
     <ClInclude Include="include\akCore\akCore.h" />
     <ClInclude Include="include\akCore\aMessenger.h" />
     <ClInclude Include="include\akCore\aNotifier.h" />

@@ -234,6 +234,9 @@
     <ClCompile Include="src\akCore\aDateHelper.cpp">
       <Filter>Source Files\ak\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\akCore\aJSON.cpp">
+      <Filter>Source Files\ak\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\akAPI\uiAPI.h">
@@ -327,6 +330,9 @@
       <Filter>Header Files\ak\Gui</Filter>
     </ClInclude>
     <ClInclude Include="include\akCore\aDateHelper.h">
+      <Filter>Header Files\ak\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\akCore\aJSON.h">
       <Filter>Header Files\ak\Core</Filter>
     </ClInclude>
   </ItemGroup>
