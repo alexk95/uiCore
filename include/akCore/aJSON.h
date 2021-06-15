@@ -274,6 +274,8 @@ namespace ak {
 
 		std::string toMultilineString(const std::string & _prefix) const;
 
+		std::string toValidStringItem(const std::string & _orig) const;
+
 		jsonType				m_type;
 
 		std::vector<aJSON>		m_array;

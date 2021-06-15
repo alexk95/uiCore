@@ -11,6 +11,10 @@
  */
 
 #include <akCore/aJSON.h>
+
+#include <qstring.h>
+#include <qstringlist.h>
+
 #include <cassert>
 
 ak::aJSON::aJSON(jsonType _type)
@@ -250,8 +254,78 @@ std::string ak::aJSON::toMultilineString(const std::string & _prefix) const {
 		ret.append("\n").append(_prefix).append("}");
 		return ret;
 	}
-	case ak::aJSON::String: return "\"" + m_string + "\"";
+	case ak::aJSON::String: return "\"" + toValidStringItem(m_string) + "\"";
 	case ak::aJSON::Null:
 	default: return "null";
 	}
+}
+
+std::string ak::aJSON::toValidStringItem(const std::string & _orig) const{
+	QString str{ _orig.c_str() };
+	QString ret;
+	QStringList splitted = str.split('\\', QString::KeepEmptyParts);
+	bool first{ true };
+	for (auto s : splitted) {
+		if (first) {
+			first = false;
+		}
+		else {
+			ret.append("\\\\");
+		}
+		ret.append(s);
+	}
+	
+	str.clear();
+	splitted = ret.split('\t', QString::KeepEmptyParts);
+	first = true;
+	for (auto s : splitted) {
+		if (first) {
+			first = false;
+		}
+		else {
+			str.append("\\t");
+		}
+		str.append(s);
+	}
+
+	ret.clear();
+	splitted = str.split('\n', QString::KeepEmptyParts);
+	first = true;
+	for (auto s : splitted) {
+		if (first) {
+			first = false;
+		}
+		else {
+			ret.append("\\n");
+		}
+		ret.append(s);
+	}
+
+	str.clear();
+	splitted = ret.split('\r', QString::KeepEmptyParts);
+	first = true;
+	for (auto s : splitted) {
+		if (first) {
+			first = false;
+		}
+		else {
+			str.append("\\r");
+		}
+		str.append(s);
+	}
+
+	ret.clear();
+	splitted = str.split('\"', QString::KeepEmptyParts);
+	first = true;
+	for (auto s : splitted) {
+		if (first) {
+			first = false;
+		}
+		else {
+			ret.append("\\\"");
+		}
+		ret.append(s);
+	}
+
+	return ret.toStdString();
 }
