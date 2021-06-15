@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ak_globalDataTypes.h>
+#include <akCore/globalDataTypes.h>
 
 class AppBase {
 public:

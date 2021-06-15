@@ -1,7 +1,7 @@
 // Project header
 #include "AppBase.h"
 
-#include <ak_uiAPI.h>
+#include <akAPI/uiAPI.h>
 
 AppBase::AppBase(int _argc, char ** _argv) {
 
