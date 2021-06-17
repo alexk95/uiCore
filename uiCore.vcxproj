@@ -141,11 +141,13 @@
     <ClCompile Include="src\akGui\aSpecialTabBar.cpp" />
     <ClCompile Include="src\akGui\aTimer.cpp" />
     <ClCompile Include="src\akGui\aTtbContainer.cpp" />
+    <ClCompile Include="src\akWidgets\aCalendarWidget.cpp" />
     <ClCompile Include="src\akWidgets\aCheckBoxWidget.cpp" />
     <ClCompile Include="src\akWidgets\aColorEditButtonWidget.cpp" />
     <ClCompile Include="src\akWidgets\aComboBoxWidget.cpp" />
     <ClCompile Include="src\akWidgets\aComboButtonWidget.cpp" />
     <ClCompile Include="src\akWidgets\aComboButtonWidgetItem.cpp" />
+    <ClCompile Include="src\akWidgets\aDatePickWidget.cpp" />
     <ClCompile Include="src\akWidgets\aDockWidget.cpp" />
     <ClCompile Include="src\akWidgets\aGraphicsWidget.cpp" />
     <ClCompile Include="src\akWidgets\aLabelWidget.cpp" />
@@ -158,6 +160,7 @@
     <ClCompile Include="src\akWidgets\aTableWidget.cpp" />
     <ClCompile Include="src\akWidgets\aTabWidget.cpp" />
     <ClCompile Include="src\akWidgets\aTextEditWidget.cpp" />
+    <ClCompile Include="src\akWidgets\aTimePickWidget.cpp" />
     <ClCompile Include="src\akWidgets\aToolButtonWidget.cpp" />
     <ClCompile Include="src\akWidgets\aTreeWidget.cpp" />
     <ClCompile Include="src\akWidgets\aTtbGroup.cpp" />
@@ -201,6 +204,9 @@
     <ClInclude Include="include\akGui\aTtbContainer.h" />
     <ClInclude Include="include\akGui\aWindowEventHandler.h" />
     <QtMoc Include="include\akWidgets\aGraphicsWidget.h" />
+    <QtMoc Include="include\akWidgets\aDatePickWidget.h" />
+    <ClInclude Include="include\akWidgets\aCalendarWidget.h" />
+    <QtMoc Include="include\akWidgets\aTimePickWidget.h" />
     <ClInclude Include="include\akWidgets\aTtbGroup.h" />
     <ClInclude Include="include\akWidgets\aTtbPage.h" />
     <ClInclude Include="include\akWidgets\aTtbSubgroup.h" />

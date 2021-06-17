@@ -237,6 +237,15 @@
     <ClCompile Include="src\akCore\aJSON.cpp">
       <Filter>Source Files\ak\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\akWidgets\aDatePickWidget.cpp">
+      <Filter>Source Files\ak\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\akWidgets\aCalendarWidget.cpp">
+      <Filter>Source Files\ak\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\akWidgets\aTimePickWidget.cpp">
+      <Filter>Source Files\ak\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\akAPI\uiAPI.h">
@@ -335,6 +344,9 @@
     <ClInclude Include="include\akCore\aJSON.h">
       <Filter>Header Files\ak\Core</Filter>
     </ClInclude>
+    <ClInclude Include="include\akWidgets\aCalendarWidget.h">
+      <Filter>Header Files\ak\Widgets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\akDialogs\aLogInDialog.h">
@@ -423,6 +435,12 @@
     </QtMoc>
     <QtMoc Include="include\akGui\aContextMenuItem.h">
       <Filter>Header Files\ak\Gui</Filter>
+    </QtMoc>
+    <QtMoc Include="include\akWidgets\aDatePickWidget.h">
+      <Filter>Header Files\ak\Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="include\akWidgets\aTimePickWidget.h">
+      <Filter>Header Files\ak\Widgets</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>
