@@ -237,6 +237,8 @@ QString ak::toQString(
 	case otPropertyGrid: return QString("PropertyGrid");
 	case otPushButton: return QString("PushButton");
 	case otRadioButton: return QString("RadioButton");
+	case otSpecialTabBar: return QString("SpecialTabBar");
+	case otSpinBox: return QString("SpinBox");
 	case otTable: return QString("Table");
 	case otTabToolbar: return QString("TabToolBar");
 	case otTabToolbarGroup: return QString("TabToolBarGroup");

@@ -246,6 +246,12 @@
     <ClCompile Include="src\akWidgets\aTimePickWidget.cpp">
       <Filter>Source Files\ak\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="src\akWidgets\aSpinBoxWidget.cpp">
+      <Filter>Source Files\ak\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\akWidgets\aDoubleSpinBoxWidget.cpp">
+      <Filter>Source Files\ak\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\akAPI\uiAPI.h">
@@ -440,6 +446,12 @@
       <Filter>Header Files\ak\Widgets</Filter>
     </QtMoc>
     <QtMoc Include="include\akWidgets\aTimePickWidget.h">
+      <Filter>Header Files\ak\Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="include\akWidgets\aSpinBoxWidget.h">
+      <Filter>Header Files\ak\Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="include\akWidgets\aDoubleSpinBoxWidget.h">
       <Filter>Header Files\ak\Widgets</Filter>
     </QtMoc>
   </ItemGroup>

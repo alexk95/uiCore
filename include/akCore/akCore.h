@@ -207,6 +207,7 @@ namespace ak {
 		otPushButton,
 		otRadioButton,
 		otSpecialTabBar,
+		otSpinBox,
 		otTable,
 		otTabToolbar,
 		otTabToolbarGroup,

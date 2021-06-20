@@ -149,6 +149,7 @@
     <ClCompile Include="src\akWidgets\aComboButtonWidgetItem.cpp" />
     <ClCompile Include="src\akWidgets\aDatePickWidget.cpp" />
     <ClCompile Include="src\akWidgets\aDockWidget.cpp" />
+    <ClCompile Include="src\akWidgets\aDoubleSpinBoxWidget.cpp" />
     <ClCompile Include="src\akWidgets\aGraphicsWidget.cpp" />
     <ClCompile Include="src\akWidgets\aLabelWidget.cpp" />
     <ClCompile Include="src\akWidgets\aLineEditWidget.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="src\akWidgets\aPropertyGridWidget.cpp" />
     <ClCompile Include="src\akWidgets\aPushButtonWidget.cpp" />
     <ClCompile Include="src\akWidgets\aRadioButtonWidget.cpp" />
+    <ClCompile Include="src\akWidgets\aSpinBoxWidget.cpp" />
     <ClCompile Include="src\akWidgets\aTableWidget.cpp" />
     <ClCompile Include="src\akWidgets\aTabWidget.cpp" />
     <ClCompile Include="src\akWidgets\aTextEditWidget.cpp" />
@@ -207,6 +209,8 @@
     <QtMoc Include="include\akWidgets\aDatePickWidget.h" />
     <ClInclude Include="include\akWidgets\aCalendarWidget.h" />
     <QtMoc Include="include\akWidgets\aTimePickWidget.h" />
+    <QtMoc Include="include\akWidgets\aSpinBoxWidget.h" />
+    <QtMoc Include="include\akWidgets\aDoubleSpinBoxWidget.h" />
     <ClInclude Include="include\akWidgets\aTtbGroup.h" />
     <ClInclude Include="include\akWidgets\aTtbPage.h" />
     <ClInclude Include="include\akWidgets\aTtbSubgroup.h" />

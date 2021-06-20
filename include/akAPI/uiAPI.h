@@ -274,14 +274,14 @@ namespace ak {
 		//! @brief Will create a new Action and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @param _text The text of the action
-		//! @param _iconSize The size of the icon to display in the action (requires also the icon name to be provided)
+		//! @param _iconSubFolder The sub folder the icon is located at (Folder depends on the search directories)
 		//! @param _iconName The name of the icon to display in the action (requires also the icon size to be provided)
 		//! @throw ak::Exception if the API is not initialized
 		UICORE_API_EXPORT UID createAction(
 			UID									_creatorUid,
 			const QString &						_text,
 			const QString &						_iconName,
-			const QString &						_iconSize = QString("32")
+			const QString &						_iconSubFolder = QString("32")
 		);
 
 		//! @brief Will create a new Action and return its UID
@@ -679,12 +679,13 @@ namespace ak {
 			//! @param _textEditUID The UID of the text edit
 			//! @param _icon The icon of the new item
 			//! @param _text The text of the new item
+			//! @param _iconSubFolder The sub folder the icon is located at (Folder depends on the search directories)
 			//! @param _role The role of the item, if none a signal will be emitted, otherwise the corresponding action will be performed
 			UICORE_API_EXPORT ID addItem(
 				UID							_textEditUID,
 				const QString &					_text,
 				const QString &					_iconName,
-				const QString &					_iconSize,
+				const QString &					_iconSubFolder,
 				contextMenuRole					_role = cmrNone
 			);
 
