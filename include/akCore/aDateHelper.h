@@ -18,6 +18,10 @@ namespace ak {
 
 		static QTime subTime(const QTime & _orig, const QTime & _other, bool & _overflow);
 
+		static QTime timeDif(const QTime & _orig, const QTime & _other);
+
+		static QTime timeDif(const QTime & _orig, const QTime & _other, bool & _overflow);
+
 	};
 
 }
