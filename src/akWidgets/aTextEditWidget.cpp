@@ -18,12 +18,13 @@
 // Qt header
 #include <qscrollbar.h>
 #include <qmenu.h>
+#include <qevent.h>
 
 ak::aTextEditWidget::aTextEditWidget(QWidget * _parent)
-: QTextEdit(_parent), aWidget(otTextEdit), my_autoScrollToBottom(false), my_contextMenu(nullptr)
+: QTextEdit(_parent), aWidget(otTextEdit), my_autoScrollToBottom(false), my_contextMenu(nullptr), m_maxLength(0), m_controlIsPressed(false)
 { ini(); }
 ak::aTextEditWidget::aTextEditWidget(const QString & _text, QWidget * _parent)
-: QTextEdit(_text, _parent), aWidget(otTextEdit), my_autoScrollToBottom(false), my_contextMenu(nullptr)
+: QTextEdit(_text, _parent), aWidget(otTextEdit), my_autoScrollToBottom(false), my_contextMenu(nullptr), m_maxLength(0), m_controlIsPressed(false)
 { ini(); }
 
 ak::aTextEditWidget::~aTextEditWidget()
@@ -37,11 +38,19 @@ ak::aTextEditWidget::~aTextEditWidget()
 
 void ak::aTextEditWidget::keyPressEvent(QKeyEvent *_event)
 {
-	QTextEdit::keyPressEvent(_event); emit keyPressed(_event);
+	if (_event->key() == Qt::Key_Control) { m_controlIsPressed = true; }
+	if (m_maxLength <= 0) { QTextEdit::keyPressEvent(_event); emit keyPressed(_event); }
+	else if (toPlainText().length() < m_maxLength || _event->key() == Qt::Key_Backspace || m_controlIsPressed ||
+		_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down || _event->key() == Qt::Key_Left ||
+		_event->key() == Qt::Key_Right) { QTextEdit::keyPressEvent(_event); emit keyPressed(_event); }
 }
 
 void ak::aTextEditWidget::keyReleaseEvent(QKeyEvent *_event) {
-	QTextEdit::keyReleaseEvent(_event); emit keyReleased(_event);
+	if (_event->key() == Qt::Key_Control) { m_controlIsPressed = false; }
+	if (m_maxLength <= 0) { QTextEdit::keyReleaseEvent(_event); emit keyReleased(_event); }
+	else if (toPlainText().length() < m_maxLength || _event->key() == Qt::Key_Backspace || m_controlIsPressed ||
+		_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down || _event->key() == Qt::Key_Left ||
+		_event->key() == Qt::Key_Right) { QTextEdit::keyReleaseEvent(_event); emit keyReleased(_event); }
 }
 
 void ak::aTextEditWidget::slotChanged() {

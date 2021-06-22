@@ -101,6 +101,10 @@ namespace ak {
 		//! @brief Will perform the auto scroll to bottom
 		void performAutoScrollToBottom(void);
 
+		void setMaxTextLength(int _length) { m_maxLength = _length; }
+
+		int maxTextLength(void) const { return m_maxLength; }
+
 	signals:
 		void keyPressed(QKeyEvent *);
 		void keyReleased(QKeyEvent *);
@@ -115,6 +119,8 @@ namespace ak {
 		bool							my_autoScrollToBottom;		//! If true, the textbox will automatically scroll down on text change
 		QMenu *							my_contextMenu;
 		ID								my_currentContextMenuItemId;
+		int								m_maxLength;
+		bool							m_controlIsPressed;
 
 		std::vector<aContextMenuItem *>	my_contextMenuItems;
 
