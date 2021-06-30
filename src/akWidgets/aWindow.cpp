@@ -137,6 +137,7 @@ void ak::aWindowCentralWidget::setChild(
 	my_childWidget = _widget;
 	if (my_childWidget != nullptr) {
 		_widget->setParent(this);
+		_widget->resize(size());
 		_widget->show();
 	}
 	if (my_waitingAnimationVisible) { setWaitingAnimationVisible(true); }
