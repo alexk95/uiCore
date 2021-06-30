@@ -1112,7 +1112,12 @@ QString ak::uiAPI::object::getObjectUniqueName(
 
 ak::UID ak::uiAPI::object::getUidFromObjectUniqueName(
 	const QString &										_name
-) { return my_objManager->object(_name)->uid(); }
+) { 
+	ak::aObject *object = my_objManager->object(_name);
+	if (object == nullptr) return ak::invalidUID;
+
+	return object->uid(); 
+}
 
 void ak::uiAPI::object::setToolTip(
 	UID													_objectUID,
@@ -2625,6 +2630,12 @@ void ak::uiAPI::tree::setAutoSelectAndDeselectChildrenEnabled(
 ) {
 	auto actualTree = object::get<aTreeWidget>(_treeUID);
 	actualTree->setAutoSelectAndDeselectChildrenEnabled(_enabled);
+}
+
+bool ak::uiAPI::tree::getAutoSelectAndDeselectChildrenEnabled(
+	UID							_treeUID
+) {
+	return object::get<aTreeWidget>(_treeUID)->getAutoSelectAndDeselectChildrenEnabled();
 }
 
 void ak::uiAPI::tree::setEnabled(

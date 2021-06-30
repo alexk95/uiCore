@@ -577,8 +577,7 @@ ak::aObject * ak::aObjectManager::object(
 	const QString &										_objectUniqueName
 ) {
 	auto itm = my_mapUniqueNames.find(_objectUniqueName);
-	assert(itm != my_mapUniqueNames.end());	// Invalid object UID provided
-	if (itm == my_mapUniqueNames.end()) return ak::invalidUID;
+	if (itm == my_mapUniqueNames.end()) return nullptr; // Invalid object UID provided
 	return itm->second;
 }
 

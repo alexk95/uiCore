@@ -349,6 +349,8 @@ void ak::aPropertyGridWidget::setEnabled(
 void ak::aPropertyGridWidget::clear(
 	bool											_keepGroups
 ) {
+	slotFocusLost();
+
 	if (_keepGroups) {
 		for (auto itm : my_groups) { itm.second->clear(); }
 	}
