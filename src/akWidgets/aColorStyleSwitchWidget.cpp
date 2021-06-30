@@ -14,15 +14,19 @@
 #include <akGui/aColorStyle.h>
 #include <akAPI/uiAPI.h>
 
+#include <qaction.h>
+
 ak::aColorStyleSwitchWidget::aColorStyleSwitchWidget(
 	const QString &			_brightModeTitle,
 	const QString &			_darkModeTitle,
 	const QIcon &			_brightModeIcon,
 	const QIcon &			_darkModeIcon,
 	bool					_isBright
-)	: aWidget(otColorStyleSwitchButton), m_isBright(_isBright), m_brightModeIcon(_brightModeIcon), 
+)	: aToolButtonWidget(_brightModeIcon, _brightModeTitle), m_isBright(_isBright), m_brightModeIcon(_brightModeIcon), 
 	m_brightModeTitle(_brightModeTitle), m_darkModeIcon(_darkModeIcon), m_darkModeTitle(_darkModeTitle)
 {
+	m_action = new QAction(this);
+
 	if (m_isBright) {
 		setText(m_darkModeTitle);
 		setIcon(m_darkModeIcon);
@@ -32,7 +36,7 @@ ak::aColorStyleSwitchWidget::aColorStyleSwitchWidget(
 		setIcon(m_brightModeIcon);
 	}
 
-	connect(this, &QToolButton::toggled, this, &aColorStyleSwitchWidget::slotClicked);
+	connect(this, &aToolButtonWidget::clicked, this, &aColorStyleSwitchWidget::slotClicked);
 }
 
 ak::aColorStyleSwitchWidget::~aColorStyleSwitchWidget() {

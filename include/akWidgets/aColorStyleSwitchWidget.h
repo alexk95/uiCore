@@ -14,14 +14,16 @@
 
 #include <akCore/globalDataTypes.h>
 #include <akWidgets/aWidget.h>
+#include <akWidgets/aToolButtonWidget.h>
 
-#include <qtoolbutton.h>
 #include <qicon.h>
 #include <qstring.h>
 
+class QAction;
+
 namespace ak {
 
-	class aColorStyleSwitchWidget : public QToolButton, public aWidget {
+	class aColorStyleSwitchWidget : public aToolButtonWidget {
 		Q_OBJECT
 	public:
 		aColorStyleSwitchWidget(
@@ -64,6 +66,7 @@ namespace ak {
 
 	private:
 
+		QAction *	m_action;
 		QString		m_brightModeTitle;
 		QString		m_darkModeTitle;
 		QIcon		m_brightModeIcon;
