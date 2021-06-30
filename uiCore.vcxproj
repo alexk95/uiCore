@@ -148,6 +148,7 @@
     <ClCompile Include="src\akWidgets\aComboButtonWidget.cpp" />
     <ClCompile Include="src\akWidgets\aComboButtonWidgetItem.cpp" />
     <ClCompile Include="src\akWidgets\aDatePickWidget.cpp" />
+    <ClCompile Include="src\akWidgets\aDockWatcherWidget.cpp" />
     <ClCompile Include="src\akWidgets\aDockWidget.cpp" />
     <ClCompile Include="src\akWidgets\aDoubleSpinBoxWidget.cpp" />
     <ClCompile Include="src\akWidgets\aGraphicsWidget.cpp" />
@@ -211,6 +212,7 @@
     <QtMoc Include="include\akWidgets\aTimePickWidget.h" />
     <QtMoc Include="include\akWidgets\aSpinBoxWidget.h" />
     <QtMoc Include="include\akWidgets\aDoubleSpinBoxWidget.h" />
+    <QtMoc Include="include\akWidgets\aDockWatcherWidget.h" />
     <ClInclude Include="include\akWidgets\aTtbGroup.h" />
     <ClInclude Include="include\akWidgets\aTtbPage.h" />
     <ClInclude Include="include\akWidgets\aTtbSubgroup.h" />
