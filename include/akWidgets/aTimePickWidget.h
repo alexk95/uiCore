@@ -25,12 +25,12 @@
 class QHBoxLayout;
 class QVBoxLayout;
 class QWidget;
-class QSpinBox;
 
 namespace ak {
 
 	class aLabelWidget;
 	class aPushButtonWidget;
+	class aSpinBoxWidget;
 
 	class UICORE_API_EXPORT aTimePickWidget : public QPushButton, public aWidget {
 		Q_OBJECT
@@ -66,6 +66,9 @@ namespace ak {
 		//! @return The selected time format
 		timeFormat getTimeFormat(void) const { return my_timeFormat; }
 
+		//! @brief Will return the minute step
+		int minuteStep(void) const { return m_minuteStep; }
+
 		// #############################################################################################################################
 
 		// Setter
@@ -79,6 +82,9 @@ namespace ak {
 		//! @param _timeFormat The time format to set
 		//! @param _refresh If true, the object will be repainted according to the current changes
 		void setTimeFormat(timeFormat _timeFormat, bool _refresh = true);
+		
+		//! @brief Will set the provided step length as a minute step
+		void setMinuteStep(int _step);
 
 	signals:
 
@@ -101,6 +107,7 @@ namespace ak {
 
 		QTime					my_time;			//! The time
 		timeFormat				my_timeFormat;		//! The time format
+		int						m_minuteStep;		//! The step size for a single minute step
 	};
 
 	// #################################################################################################################################
@@ -113,8 +120,8 @@ namespace ak {
 		Q_OBJECT
 	public:
 
-		aTimePickDialog();
-		aTimePickDialog(const QTime & _time, timeFormat _timeFormat);
+		aTimePickDialog(aTimePickWidget * _owner, timeFormat _timeFormat = tfHHMM);
+		aTimePickDialog(const QTime & _time, aTimePickWidget * _owner, timeFormat _timeFormat = tfHHMM);
 		virtual ~aTimePickDialog();
 
 		// #############################################################################################################################
@@ -145,8 +152,12 @@ namespace ak {
 
 	private:
 
+		aTimePickWidget *			m_owner;			//! The owner of this time pick dialog
+
 		//! @brief Setups the widget
-		void setupWidget(void);
+		void setupWidget(timeFormat _timeFormat);
+
+		timeFormat					m_timeFormat;		//! The current time format of the time pick dialog
 
 		QVBoxLayout *				my_mainLayout;		//! The main layout of the widget
 
@@ -156,11 +167,10 @@ namespace ak {
 		QHBoxLayout *				my_buttonLayout;	//! The layout of the button
 		QWidget *					my_buttonWidget;	//! The widget of the button
 
-		aLabelWidget *				my_hourLabel;		//! The label of the hours
-		QSpinBox *					my_hourInput;		//! The button to select the hour
-
-		aLabelWidget *				my_minLabel;		//! The label of the minutes
-		QSpinBox *					my_minInput;		//! The button to select the minutes
+		aSpinBoxWidget *			my_hourInput;		//! The spinbox to select the hour
+		aSpinBoxWidget *			my_minInput;		//! The button to select the minutes
+		aSpinBoxWidget *			m_secInput;			//! The spinbox to select the seconds
+		aSpinBoxWidget *			m_msecInput;		//! The spinbox to select the milliseconds
 
 		aPushButtonWidget *			my_buttonOk;		//! The button to confirm the results
 		aPushButtonWidget *			my_buttonCancel;	//! The button to cancel the widget

@@ -41,7 +41,19 @@ namespace ak {
 			const aColorStyle *	_colorStyle
 		) override;
 
-	private:
+		//! @brief Will set the step length for the spinBox
+		void SetStepLength(int _stepLength);
 
+		int StepLength(void) const { return m_stepLength; }
+
+	private slots:
+		void slotValueChanged(const QString & _v);
+
+	signals:
+		void valueChangedA(void);
+
+	protected:
+		int		m_stepLength;
+		int		m_value;
 	};
 }

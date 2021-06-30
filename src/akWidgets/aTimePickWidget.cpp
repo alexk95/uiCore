@@ -16,11 +16,11 @@
 #include <akGui/aColorStyle.h>
 #include <akWidgets/aLabelWidget.h>
 #include <akWidgets/aPushButtonWidget.h>
+#include <akWidgets/aSpinBoxWidget.h>
 
 // QT header
 #include <qlayout.h>
 #include <qtextformat.h>
-#include <QSpinBox>
 
 ak::aTimePickWidget::aTimePickWidget()
 	: aWidget(otTimePicker), my_time{ QTime::currentTime() }, my_timeFormat{ tfHHMM }
@@ -75,12 +75,25 @@ void ak::aTimePickWidget::setTimeFormat(timeFormat _timeFormat, bool _refresh) {
 	if (_refresh) { refreshTime(); }
 }
 
+void ak::aTimePickWidget::setMinuteStep(int _step) {
+	m_minuteStep = _step;
+
+	if (m_minuteStep > 1) {
+		int min = my_time.minute();
+		if (min % m_minuteStep != 0) {
+			min = (min / m_minuteStep) * m_minuteStep;
+		}
+		my_time.setHMS(my_time.hour(), min, my_time.second(), my_time.msec());
+	}
+}
+
 // #############################################################################################################################
 
 // Slots
 
 void ak::aTimePickWidget::slotClicked(void) {
-	aTimePickDialog t{ my_time , my_timeFormat };
+	aTimePickDialog t{ my_time , this, my_timeFormat };
+
 	if (my_colorStyle != nullptr) { t.setColorStyle(my_colorStyle); }
 
 	if (t.showDialog() == ak::dialogResult::resultOk) {
@@ -112,7 +125,12 @@ void ak::aTimePickWidget::refreshTime(void) {
 	else {
 		s = "0" + QString::number(my_time.second());
 	}
+
 	if (my_time.msec() < 10) {
+		ms = "000" + QString::number(my_time.msec());
+	} else if (my_time.msec() < 100) {
+		ms = "00" + QString::number(my_time.msec());
+	} else if (my_time.msec() < 1000) {
 		ms = "0" + QString::number(my_time.msec());
 	}
 	else {
@@ -127,7 +145,7 @@ void ak::aTimePickWidget::refreshTime(void) {
 	case ak::tfHHMMSS:
 		msg.append(h).append(":").append(m).append(":").append(s); break;
 	case ak::tfHHMMSSMMMM:
-		msg.append(h).append(":").append(m).append(":").append(s).append(":").append(ms); break;
+		msg.append(h).append(":").append(m).append(":").append(s).append(".").append(ms); break;
 	}
 
 	setText(msg);
@@ -140,19 +158,34 @@ void ak::aTimePickWidget::refreshTime(void) {
 
 // #############################################################################################################################
 
-ak::aTimePickDialog::aTimePickDialog()
-	: ak::aPaintable(otTimePickerDialog)
+ak::aTimePickDialog::aTimePickDialog(aTimePickWidget * _owner, timeFormat _timeFormat)
+	: ak::aPaintable(otTimePickerDialog), m_timeFormat(_timeFormat), m_owner(_owner)
 {
-	setupWidget();
+	setupWidget(m_timeFormat);
 
 }
 
-ak::aTimePickDialog::aTimePickDialog(const QTime & _time, timeFormat _timeFormat)
-	: ak::aPaintable(otTimePickerDialog)
+ak::aTimePickDialog::aTimePickDialog(const QTime & _time, aTimePickWidget * _owner, timeFormat _timeFormat)
+	: ak::aPaintable(otTimePickerDialog), m_timeFormat(_timeFormat), m_owner(_owner)
 {
-	setupWidget();
-	my_hourInput->setValue(_time.hour());
-	my_minInput->setValue(_time.minute());
+	setupWidget(m_timeFormat);
+
+	switch (m_timeFormat)
+	{
+	case ak::tfHHMMSSMMMM:
+		m_msecInput->setValue(_time.msec());
+	case ak::tfHHMMSS:
+		m_secInput->setValue(_time.second());
+	case ak::tfHHMM:
+		my_minInput->setValue(_time.minute());
+		my_hourInput->setValue(_time.hour());
+		break;
+	default:
+		assert(0);	// Not implemented time format
+		break;
+	}
+
+	
 }
 
 ak::aTimePickDialog::~aTimePickDialog() {
@@ -165,10 +198,18 @@ void ak::aTimePickDialog::setColorStyle(
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
-	my_hourLabel->setColorStyle(my_colorStyle);
-	my_minLabel->setColorStyle(my_colorStyle);
 	my_buttonCancel->setColorStyle(my_colorStyle);
 	my_buttonOk->setColorStyle(my_colorStyle);
+
+	my_hourInput->setColorStyle(my_colorStyle);
+	my_minInput->setColorStyle(my_colorStyle);
+
+	if (m_secInput != nullptr) {
+		m_secInput->setColorStyle(my_colorStyle);
+	}
+	if (m_msecInput != nullptr) {
+		m_msecInput->setColorStyle(my_colorStyle);
+	}
 
 	QString sheet(my_colorStyle->toStyleSheet(cafBackgroundColorWindow | cafForegroundColorWindow |
 		cafDefaultBorderWindow | cafBorderColorWindow, "#time_picker_dialog_main {", "}"));
@@ -181,7 +222,15 @@ void ak::aTimePickDialog::setColorStyle(
 // Getter
 
 QTime ak::aTimePickDialog::selectedTime(void) const {
-	return QTime(my_hourInput->value(), my_minInput->value());
+	switch (m_timeFormat)
+	{
+	case ak::tfHHMM: return QTime(my_hourInput->value(), my_minInput->value());
+	case ak::tfHHMMSS: return QTime(my_hourInput->value(), my_minInput->value(), m_secInput->value());
+	case ak::tfHHMMSSMMMM: return QTime(my_hourInput->value(), my_minInput->value(), m_secInput->value(), m_msecInput->value());
+	default:
+		assert(0);
+		return QTime(my_hourInput->value(), my_minInput->value());
+	}
 }
 
 // #################################################################################################################################
@@ -198,7 +247,7 @@ void ak::aTimePickDialog::slotCancelClicked(void) {
 
 // Private functions
 
-void ak::aTimePickDialog::setupWidget(void) {
+void ak::aTimePickDialog::setupWidget(timeFormat _timeFormat) {
 
 	// Create Layouts
 	my_mainLayout = new QVBoxLayout{ this };
@@ -214,32 +263,46 @@ void ak::aTimePickDialog::setupWidget(void) {
 
 	// Create Controls
 
-	my_hourLabel = new aLabelWidget{ "h" };
-	my_hourInput = new QSpinBox;
+	my_hourInput = new aSpinBoxWidget{ 0 };
+	my_hourInput->setMaximum(23);
+	my_hourInput->setSuffix("h");
 
-	my_minLabel = new aLabelWidget{ "min" };
-	my_minInput = new QSpinBox;
+	my_minInput = new aSpinBoxWidget(0);
+	my_minInput->setMaximum(59);
+	if (m_owner != nullptr) {
+		my_minInput->SetStepLength(m_owner->minuteStep());
+	}
+	my_minInput->setSuffix("min");
+
+	my_inputLayout->addWidget(my_hourInput);
+	my_inputLayout->addWidget(my_minInput);
+
+	if (m_timeFormat == tfHHMMSS || m_timeFormat == tfHHMMSSMMMM) {
+		m_secInput = new aSpinBoxWidget(0);
+		m_secInput->setMaximum(59);
+		m_secInput->setSuffix("sec");
+		my_inputLayout->addWidget(m_secInput);
+	}
+	else {
+		m_secInput = nullptr;
+	}
+
+	if (m_timeFormat == tfHHMMSSMMMM) {
+		m_msecInput = new aSpinBoxWidget(0);
+		m_msecInput->setMaximum(999);
+		m_msecInput->setSuffix("msec");
+		my_inputLayout->addWidget(m_msecInput);
+	}
+	else {
+		m_msecInput = nullptr;
+	}
 
 	my_buttonOk = new aPushButtonWidget{ "Ok" };
 	my_buttonCancel = new aPushButtonWidget{ "Cancel" };
 
 	// Add Controls To Layouts
-	my_inputLayout->addWidget(my_hourInput);
-	my_inputLayout->addWidget(my_hourLabel);
-
-	my_inputLayout->addWidget(my_minInput);
-	my_inputLayout->addWidget(my_minLabel);
-
 	my_buttonLayout->addWidget(my_buttonOk);
 	my_buttonLayout->addWidget(my_buttonCancel);
-
-	// Setup Controls
-	my_hourLabel->setBuddy(my_hourInput);
-	my_hourInput->setMaximum(23);
-
-	my_minLabel->setBuddy(my_minInput);
-	my_minInput->setMaximum(45);
-	my_minInput->setSingleStep(15);
 
 	connect(my_buttonOk, SIGNAL(clicked()), this, SLOT(slotOkClicked()));
 	connect(my_buttonCancel, SIGNAL(clicked()), this, SLOT(slotCancelClicked()));
@@ -252,3 +315,4 @@ void ak::aTimePickDialog::setupWidget(void) {
 
 	setObjectName("time_picker_dialog_main");
 }
+

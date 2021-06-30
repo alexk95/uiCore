@@ -14,11 +14,11 @@
 #include <akGui/aColorStyle.h>
 
 ak::aSpinBoxWidget::aSpinBoxWidget(QWidget * _parent)
-	: QSpinBox(_parent), aWidget(otSpinBox)
-{}
+	: QSpinBox(_parent), aWidget(otSpinBox), m_stepLength(1), m_value(0)
+{ setValue(0); }
 
 ak::aSpinBoxWidget::aSpinBoxWidget(int _value, QWidget * _parent) 
-	: QSpinBox(_parent), aWidget(otSpinBox)
+	: QSpinBox(_parent), aWidget(otSpinBox), m_stepLength(1), m_value(_value)
 { setValue(_value); }
 
 ak::aSpinBoxWidget::~aSpinBoxWidget(void) {}
@@ -42,4 +42,22 @@ void ak::aSpinBoxWidget::setColorStyle(
 	
 	QString sheet;
 	sheet = my_colorStyle->toStyleSheet(cafBackgroundColorControls | cafForegroundColorControls);
+}
+
+void ak::aSpinBoxWidget::SetStepLength(int _stepLength) {
+	m_stepLength = _stepLength;
+	slotValueChanged("");
+}
+
+void ak::aSpinBoxWidget::slotValueChanged(const QString & _v) {
+	if (m_stepLength > 1) {
+		if (value() % m_stepLength != 0) {
+			setValue((value() / m_stepLength) * m_stepLength);
+			return;
+		}
+	}
+	if (value() != m_value) {
+		m_value = value();
+		emit valueChangedA();
+	}
 }
