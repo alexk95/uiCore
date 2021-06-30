@@ -45,6 +45,7 @@
 #include <akWidgets/aComboBoxWidget.h>
 #include <akWidgets/aComboButtonWidget.h>
 #include <akWidgets/aDockWidget.h>
+#include <akWidgets/aDockWatcherWidget.h>
 #include <akWidgets/aGraphicsWidget.h>
 #include <akWidgets/aLabelWidget.h>
 #include <akWidgets/aLineEditWidget.h>
@@ -441,6 +442,34 @@ ak::UID ak::uiAPI::createDock(
 	return my_objManager->createDock(_creatorUid, _text);
 }
 
+ak::UID ak::uiAPI::createDockWatcher(
+	UID									_creatorUid,
+	const QString &						_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createDockWatcher(_creatorUid, _text);
+}
+
+ak::UID ak::uiAPI::createDockWatcher(
+	UID									_creatorUid,
+	const QIcon &						_icon,
+	const QString &						_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createDockWatcher(_creatorUid, _icon, _text);
+}
+
+ak::UID ak::uiAPI::createDockWatcher(
+	UID									_creatorUid,
+	const QString &						_iconName,
+	const QString &						_iconFolder,
+	const QString &						_text
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	return my_objManager->createDockWatcher(_creatorUid, *my_iconManager->icon(_iconName, _iconFolder), _text);
+}
+
 ak::UID ak::uiAPI::createLineEdit(
 	UID													_creatorUid,
 	const QString &											_initialText
@@ -835,6 +864,54 @@ bool ak::uiAPI::dock::isVisible(
 ) { return object::get<aDockWidget>(_dockUID)->isVisible(); }
 
 // Dock
+
+// ###############################################################################################################################################
+
+// Dock watcher
+
+void ak::uiAPI::dockWatcher::addWatch(
+	ak::UID						_dockWatcherUid,
+	ak::UID						_dockUid
+) {
+	addWatch(_dockWatcherUid, object::get<aDockWidget>(_dockUid));
+}
+
+void ak::uiAPI::dockWatcher::addWatch(
+	ak::UID						_dockWatcherUid,
+	aDockWidget *				_dock
+) {
+	object::get<aDockWatcherWidget>(_dockWatcherUid)->addWatch(_dock);
+}
+
+void ak::uiAPI::dockWatcher::removeWatch(
+	ak::UID						_dockWatcherUid,
+	ak::UID						_dockUid
+) {
+	removeWatch(_dockWatcherUid, object::get<aDockWidget>(_dockUid));
+}
+
+void ak::uiAPI::dockWatcher::removeWatch(
+	ak::UID						_dockWatcherUid,
+	aDockWidget *				_dock
+) {
+	object::get<aDockWatcherWidget>(_dockWatcherUid)->removeWatch(_dock);
+}
+
+void ak::uiAPI::dockWatcher::setWatchEnabled(
+	ak::UID						_dockWatcherUid,
+	bool						_isEnbaled
+) {
+	object::get<aDockWatcherWidget>(_dockWatcherUid)->setWatcherEnabled(_isEnbaled);
+}
+
+bool ak::uiAPI::dockWatcher::isWatchEnabled(
+	ak::UID						_dockWatcherUid,
+	bool						_isEnbaled
+) {
+	return object::get<aDockWatcherWidget>(_dockWatcherUid)->isWatcherEnabled();
+}
+
+// Dock watcher
 
 // ###############################################################################################################################################
 

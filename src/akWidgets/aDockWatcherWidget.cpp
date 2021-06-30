@@ -18,7 +18,7 @@
 #include <qmenu.h>
 
 ak::aDockWatcherWidget::aDockWatcherWidget(const QString & _title)
-	: aWidget(otDockWatcherToolButton), my_isEnabled(true)
+	: aWidget(otDockWatcher), my_isEnabled(true)
 {
 	setText(_title);
 	my_menu = new QMenu;
@@ -26,7 +26,7 @@ ak::aDockWatcherWidget::aDockWatcherWidget(const QString & _title)
 }
 
 ak::aDockWatcherWidget::aDockWatcherWidget(const QIcon & _icon, const QString & _title)
-	: aWidget(otDockWatcherToolButton), my_isEnabled(true)
+	: aWidget(otDockWatcher), my_isEnabled(true)
 {
 	setIcon(_icon);
 	setText(_title);
@@ -80,8 +80,8 @@ void ak::aDockWatcherWidget::refreshData(void) {
 	}
 }
 
-void ak::aDockWatcherWidget::addWatch(QDockWidget * _dock, const QString & _text) {
-	auto action = new aContextMenuItem(_text, cmrNone);
+void ak::aDockWatcherWidget::addWatch(QDockWidget * _dock) {
+	auto action = new aContextMenuItem(_dock->windowTitle(), cmrNone);
 	my_menu->addAction(action);
 	action->setCheckable(true);
 	action->setChecked(_dock->isVisible());

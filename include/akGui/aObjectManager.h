@@ -119,6 +119,24 @@ namespace ak {
 			const QString &										_text = QString()
 		);
 
+		//! @brief Will create a new DockWatcher and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		//! @param _text The initial text of the DockWatcher
+		UID createDockWatcher(
+			UID									_creatorUid,
+			const QString &						_text = QString("Docks")
+		);
+
+		//! @brief Will create a new DockWatcher and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		//! @param _icon The initial icon of the DockWatcher
+		//! @param _text The initial text of the DockWatcher
+		UID createDockWatcher(
+			UID									_creatorUid,
+			const QIcon &						_icon,
+			const QString &						_text = QString("Docks")
+		);
+
 		//! @brief Will create a line edit and return its UID
 		//! param _creatorUid The UID of the creator
 		//! @param _initialText The initial text to display

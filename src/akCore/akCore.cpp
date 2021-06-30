@@ -225,7 +225,7 @@ QString ak::toQString(
 	case otDatePickerDialog: return QString("DatePickerDialog");
 	case otDefaultWelcomeScreen: return ("DefaultWelcomeScreen");
 	case otDock: return QString("Dock");
-	case otDockWatcherToolButton: return QString("DockWatcherToolButton");
+	case otDockWatcher: return QString("DockWatcher");
 	case otGraphicsView: return QString("GraphicsView");
 	case otLabel: return QString("Label");
 	case otLineEdit: return QString("LineEdit");

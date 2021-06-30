@@ -58,7 +58,7 @@ namespace ak {
 		//! @brief Will add the provided dock as to watch
 		//! @param _dock The dock to add to the watcher
 		//! @param _text The text to display in the context menu
-		void addWatch(QDockWidget * _dock, const QString & _text);
+		void addWatch(QDockWidget * _dock);
 
 		//! @brief Will remove the watch for the specified dock
 		void removeWatch(QDockWidget * _dock);
@@ -68,7 +68,7 @@ namespace ak {
 		void setWatcherEnabled(bool _isEnabled) { my_isEnabled = _isEnabled; }
 
 		//! @brief Will return the enabled state that is currently set
-		bool watcherEnabled(void) { return my_isEnabled; }
+		bool isWatcherEnabled(void) const { return my_isEnabled; }
 
 	private slots:
 		void slotVisibilityChanged(bool _visible);

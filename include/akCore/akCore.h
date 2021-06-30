@@ -191,7 +191,7 @@ namespace ak {
 		otDatePickerDialog,
 		otDefaultWelcomeScreen,
 		otDock,
-		otDockWatcherToolButton,
+		otDockWatcher,
 		otGraphicsView,
 		otLabel,
 		otLineEdit,

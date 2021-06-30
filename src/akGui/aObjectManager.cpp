@@ -44,6 +44,7 @@
 #include <akWidgets/aComboBoxWidget.h>
 #include <akWidgets/aComboButtonWidget.h>
 #include <akWidgets/aDockWidget.h>
+#include <akWidgets/aDockWatcherWidget.h>
 #include <akWidgets/aLabelWidget.h>
 #include <akWidgets/aLineEditWidget.h>
 #include <akWidgets/aListWidget.h>
@@ -208,6 +209,35 @@ ak::UID ak::aObjectManager::createDock(
 	aDockWidget * obj = new aDockWidget(_text);
 	// Set parameter
 	my_signalLinker->addLink(obj);
+	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
+}
+
+ak::UID ak::aObjectManager::createDockWatcher(
+	UID									_creatorUid,
+	const QString &						_text
+) {
+	// Create object
+	aDockWatcherWidget * obj = new aDockWatcherWidget(_text);
+	// Set parameter
+	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
+}
+
+ak::UID ak::aObjectManager::createDockWatcher(
+	UID									_creatorUid,
+	const QIcon &						_icon,
+	const QString &						_text
+) {
+	// Create object
+	aDockWatcherWidget * obj = new aDockWatcherWidget(_icon, _text);
+	// Set parameter
 	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 	// Store data
 	my_mapObjects.insert_or_assign(obj->uid(), obj);

@@ -42,6 +42,7 @@ namespace ak {
 
 	// Forward declaration
 	class aApplication;
+	class aDockWidget;
 	class aMessenger;
 	class aNotifier;
 	class aUidManager;
@@ -367,6 +368,36 @@ namespace ak {
 		UICORE_API_EXPORT UID createDock(
 			UID									_creatorUid,
 			const QString &						_text = QString("")
+		);
+
+		//! @brief Will create a new DockWatcher and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		//! @param _text The initial text of the DockWatcher
+		UICORE_API_EXPORT UID createDockWatcher(
+			UID									_creatorUid,
+			const QString &						_text = QString("Docks")
+		);
+
+		//! @brief Will create a new DockWatcher and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		//! @param _icon The initial icon of the DockWatcher
+		//! @param _text The initial text of the DockWatcher
+		UICORE_API_EXPORT UID createDockWatcher(
+			UID									_creatorUid,
+			const QIcon &						_icon,
+			const QString &						_text = QString("Docks")
+		);
+
+		//! @brief Will create a new DockWatcher and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		//! @param _iconName The icon name of the icon to set at the DockWatcher
+		//! @param _iconFOlder The icon folder of the icon to set at the DockWatcher
+		//! @param _text The initial text of the DockWatcher
+		UICORE_API_EXPORT UID createDockWatcher(
+			UID									_creatorUid,
+			const QString &						_iconName,
+			const QString &						_iconFolder,
+			const QString &						_text = QString("Docks")
 		);
 
 		//! @brief Will create a line edit and return its UID
@@ -747,6 +778,44 @@ namespace ak {
 			//! @brief Will return the currently set visible state of the 
 			UICORE_API_EXPORT bool isVisible(
 				UID												_dockUID
+			);
+
+		}
+
+		// ###############################################################################################################################################
+
+		// Dock watcher
+
+		namespace dockWatcher {
+
+			UICORE_API_EXPORT void addWatch(
+				ak::UID						_dockWatcherUid,
+				ak::UID						_dockUid
+			);
+
+			UICORE_API_EXPORT void addWatch(
+				ak::UID						_dockWatcherUid,
+				aDockWidget *				_dock
+			);
+
+			UICORE_API_EXPORT void removeWatch(
+				ak::UID						_dockWatcherUid,
+				ak::UID						_dockUid
+			);
+
+			UICORE_API_EXPORT void removeWatch(
+				ak::UID						_dockWatcherUid,
+				aDockWidget *				_dock
+			);
+
+			UICORE_API_EXPORT void setWatchEnabled(
+				ak::UID						_dockWatcherUid,
+				bool						_isEnbaled
+			);
+
+			UICORE_API_EXPORT bool isWatchEnabled(
+				ak::UID						_dockWatcherUid,
+				bool						_isEnbaled
 			);
 
 		}
