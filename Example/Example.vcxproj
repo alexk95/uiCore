@@ -11,12 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="include\aDockWatcherButtonWidget.h" />
+    <QtMoc Include="include\aDockWatcherWidget.h" />
     <ClInclude Include="include\Example.h" />
     <ClInclude Include="include\ExampleNotifier.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\aDockWatcherButtonWidget.cpp" />
+    <ClCompile Include="src\aDockWatcherWidget.cpp" />
     <ClCompile Include="src\Example.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>

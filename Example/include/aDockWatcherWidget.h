@@ -17,12 +17,12 @@ class QDockWidget;
 namespace ak {
 	class aContextMenuItem;
 
-	class aDockWatcherButtonWidget : public QToolButton, public aWidget {
+	class aDockWatcherWidget : public QToolButton, public aWidget {
 		Q_OBJECT
 	public:
-		aDockWatcherButtonWidget(const QString & _title = QString{ "Docks" });
-		aDockWatcherButtonWidget(const QIcon & _icon, const QString & _title = QString{ "Docks" });
-		virtual ~aDockWatcherButtonWidget();
+		aDockWatcherWidget(const QString & _title = QString{ "Docks" });
+		aDockWatcherWidget(const QIcon & _icon, const QString & _title = QString{ "Docks" });
+		virtual ~aDockWatcherWidget();
 
 		// #######################################################################################################
 		// Base class functions
@@ -69,8 +69,8 @@ namespace ak {
 		bool										my_isEnabled;
 		QMenu *										my_menu;
 
-		aDockWatcherButtonWidget(aDockWatcherButtonWidget &) = delete;
-		aDockWatcherButtonWidget & operator = (aDockWatcherButtonWidget &) = delete;
+		aDockWatcherWidget(aDockWatcherWidget &) = delete;
+		aDockWatcherWidget & operator = (aDockWatcherWidget &) = delete;
 
 	};
 }

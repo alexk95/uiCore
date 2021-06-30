@@ -38,7 +38,9 @@
 
 // #################################################################################################
 
-#include <aDockWatcherButtonWidget.h>
+#include <akWidgets/aTimePickWidget.h>
+
+#include <aDockWatcherWidget.h>
 
 Example::Example()
 	: my_settingColor(255,255,0)
@@ -101,6 +103,8 @@ Example::Example()
 		my_testButton->refreshData();
 
 		ak::uiAPI::promptDialog::show("Test message tada aa ad ad awd kladg ad adjada dafsadf a dasfd kasdfkasdf adsk afsd afdkaf ksdf adg faksdka dkaf d", "Title", ak::promptIconLeft, "Test", "32");
+
+
 
 		// Run the main application
 		ak::uiAPI::exec();
@@ -298,7 +302,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::dock::setCentralWidget(my_ui.dockTester, my_ui.tester);
 			ak::uiAPI::dock::setCentralWidget(my_ui.dockTree, my_ui.treeWidget);
 
-			my_testButton = new ak::aDockWatcherButtonWidget{ ak::uiAPI::getIcon("Test", "32"), "Docks" };
+			my_testButton = new ak::aDockWatcherWidget{ ak::uiAPI::getIcon("Test", "32"), "Docks" };
 			my_testButton->setEnabled(false);
 			my_testButton->addWatch(ak::uiAPI::object::get<ak::aDockWidget>(my_ui.dockOutput), "Output");
 			my_testButton->addWatch(ak::uiAPI::object::get<ak::aDockWidget>(my_ui.dockProperties), "Properties");
@@ -316,11 +320,15 @@ void Example::setupUi(void) {
 			ak::uiAPI::tree::setMultiSelectionEnabled(my_ui.treeWidget, true);
 			ak::uiAPI::tree::setFilterVisible(my_ui.treeWidget);
 		
-			ak::uiAPI::tabView::setSpecialTabBar(my_ui.tabViewWidget, my_ui.specialTabBar);
+			ak::uiAPI::tabWidget::setSpecialTabBar(my_ui.tabViewWidget, my_ui.specialTabBar);
 			ak::uiAPI::specialTabBar::addColor(my_ui.specialTabBar, 1, ak::aColor(255, 0, 0));
 
-			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
-			ak::uiAPI::tabView::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
+			ak::uiAPI::tabWidget::addTab(my_ui.tabViewWidget, my_ui.table1, "Test 1");
+			ak::uiAPI::tabWidget::addTab(my_ui.tabViewWidget, my_ui.table2, "Test 2");
+			ak::aTimePickWidget * w = new ak::aTimePickWidget;
+			w->setMinuteStep(15);
+			ak::uiAPI::tabWidget::addTab(my_ui.tabViewWidget, w, "Test widget");
+			ak::uiAPI::tabWidget::addTab(my_ui.tabViewWidget, my_testButton, "Test widget 2");
 
 			ak::uiAPI::textEdit::setReadOnly(my_ui.outputWidget);
 
@@ -332,8 +340,7 @@ void Example::setupUi(void) {
 			ak::uiAPI::propertyGrid::setGroupStateIcons(my_ui.propertiesWidget, "ArrowGreenDown", "32", "ArrowBlueRight", "32");
 
 			// Set central widget
-			//ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
-			ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, my_testButton);
+			ak::uiAPI::window::setCentralWidget(my_ui.mainWindow, my_ui.tabViewWidget);
 
 			// Register notifier
 			ak::uiAPI::registerUidNotifier(my_ui.propertiesWidget, my_notifier);

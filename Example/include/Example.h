@@ -18,7 +18,7 @@
 // Forward declaration
 class ExampleNotifier;
 namespace ak {
-	class aDockWatcherButtonWidget;
+	class aDockWatcherWidget;
 }
 
 //! This class is managing the UI
@@ -84,6 +84,6 @@ private:
 
 	std::vector <ak::UID>		my_testingData;
 
-	ak::aDockWatcherButtonWidget *	my_testButton;
+	ak::aDockWatcherWidget *	my_testButton;
 
 };

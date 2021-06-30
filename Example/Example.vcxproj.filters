@@ -33,7 +33,7 @@
     <ClCompile Include="src\Example.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\aDockWatcherButtonWidget.cpp">
+    <ClCompile Include="src\aDockWatcherWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -46,7 +46,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="include\aDockWatcherButtonWidget.h">
+    <QtMoc Include="include\aDockWatcherWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
