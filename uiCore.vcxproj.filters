@@ -255,6 +255,9 @@
     <ClCompile Include="src\akWidgets\aDockWatcherWidget.cpp">
       <Filter>Source Files\ak\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="src\akWidgets\aColorStyleSwitchWidget.cpp">
+      <Filter>Source Files\ak\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\akAPI\uiAPI.h">
@@ -458,6 +461,9 @@
       <Filter>Header Files\ak\Widgets</Filter>
     </QtMoc>
     <QtMoc Include="include\akWidgets\aDockWatcherWidget.h">
+      <Filter>Header Files\ak\Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="include\akWidgets\aColorStyleSwitchWidget.h">
       <Filter>Header Files\ak\Widgets</Filter>
     </QtMoc>
   </ItemGroup>

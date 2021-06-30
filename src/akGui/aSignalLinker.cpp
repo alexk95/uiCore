@@ -23,6 +23,7 @@
 // AK Widgets header
 #include <akWidgets/aCheckBoxWidget.h>
 #include <akWidgets/aColorEditButtonWidget.h>
+#include <akWidgets/aColorStyleSwitchWidget.h>
 #include <akWidgets/aComboBoxWidget.h>
 #include <akWidgets/aComboButtonWidget.h>
 #include <akWidgets/aDockWidget.h>
@@ -81,6 +82,9 @@ ak::aSignalLinker::~aSignalLinker()
 			itm->second.object->disconnect(itm->second.object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
 			break;
 		case otColorEditButton:
+			itm->second.object->disconnect(itm->second.object, SIGNAL(changed()), this, SLOT(slotChanged()));
+			break;
+		case otColorStyleSwitchButton:
 			itm->second.object->disconnect(itm->second.object, SIGNAL(changed()), this, SLOT(slotChanged()));
 			break;
 		case otComboBox:
@@ -226,6 +230,18 @@ ak::UID ak::aSignalLinker::addLink(
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otColorEditButton });
 	_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
+	return _objectUid;
+}
+
+ak::UID ak::aSignalLinker::addLink(
+	aColorStyleSwitchWidget *							_object,
+	UID													_objectUid
+) {
+	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
+	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	_object->setUid(_objectUid);
+	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otColorStyleSwitchButton });
+	_object->connect(_object, &aColorStyleSwitchWidget::changed, this, &aSignalLinker::slotChanged);
 	return _objectUid;
 }
 

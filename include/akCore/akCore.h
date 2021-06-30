@@ -183,6 +183,7 @@ namespace ak {
 		otNone,
 		otAction,
 		otColorEditButton,
+		otColorStyleSwitchButton,
 		otComboBox,
 		otComboButton,
 		otComboButtonItem,

@@ -144,6 +144,7 @@
     <ClCompile Include="src\akWidgets\aCalendarWidget.cpp" />
     <ClCompile Include="src\akWidgets\aCheckBoxWidget.cpp" />
     <ClCompile Include="src\akWidgets\aColorEditButtonWidget.cpp" />
+    <ClCompile Include="src\akWidgets\aColorStyleSwitchWidget.cpp" />
     <ClCompile Include="src\akWidgets\aComboBoxWidget.cpp" />
     <ClCompile Include="src\akWidgets\aComboButtonWidget.cpp" />
     <ClCompile Include="src\akWidgets\aComboButtonWidgetItem.cpp" />
@@ -213,6 +214,7 @@
     <QtMoc Include="include\akWidgets\aSpinBoxWidget.h" />
     <QtMoc Include="include\akWidgets\aDoubleSpinBoxWidget.h" />
     <QtMoc Include="include\akWidgets\aDockWatcherWidget.h" />
+    <QtMoc Include="include\akWidgets\aColorStyleSwitchWidget.h" />
     <ClInclude Include="include\akWidgets\aTtbGroup.h" />
     <ClInclude Include="include\akWidgets\aTtbPage.h" />
     <ClInclude Include="include\akWidgets\aTtbSubgroup.h" />

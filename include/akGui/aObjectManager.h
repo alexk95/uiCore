@@ -86,6 +86,15 @@ namespace ak {
 			const QString &										_textOverride = QString("")
 		);
 
+		UID createColorStyleSwitch(
+			UID						_creatorUid,
+			const QString &			_brightModeTitle,
+			const QString &			_darkModeTitle,
+			const QIcon &			_brightModeIcon,
+			const QIcon &			_darkModeIcon,
+			bool					_isBright
+		);
+
 		//! @brief Will create a combo box and return its UID
 		//! @param _creatorUid The UID of the creator
 		UID createComboBox(

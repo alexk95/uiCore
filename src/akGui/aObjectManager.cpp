@@ -41,6 +41,7 @@
 // AK Widgets header
 #include <akWidgets/aCheckBoxWidget.h>
 #include <akWidgets/aColorEditButtonWidget.h>
+#include <akWidgets/aColorStyleSwitchWidget.h>
 #include <akWidgets/aComboBoxWidget.h>
 #include <akWidgets/aComboButtonWidget.h>
 #include <akWidgets/aDockWidget.h>
@@ -146,6 +147,25 @@ ak::UID ak::aObjectManager::createColorEditButton(
 ) {
 	// Create object
 	aColorEditButtonWidget * obj = new aColorEditButtonWidget(_color, _textOverride);
+	// Set parameter
+	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
+	my_signalLinker->addLink(obj);
+	// Store data
+	my_mapObjects.insert_or_assign(obj->uid(), obj);
+	addCreatedUid(_creatorUid, obj->uid());
+	return obj->uid();
+}
+
+ak::UID ak::aObjectManager::createColorStyleSwitch(
+	UID						_creatorUid,
+	const QString &			_brightModeTitle,
+	const QString &			_darkModeTitle,
+	const QIcon &			_brightModeIcon,
+	const QIcon &			_darkModeIcon,
+	bool					_isBright
+) {
+	// Create object
+	aColorStyleSwitchWidget * obj = new aColorStyleSwitchWidget(_brightModeTitle, _darkModeTitle, _brightModeIcon, _darkModeIcon, _isBright);
 	// Set parameter
 	if (my_currentColorStyle != nullptr) { obj->setColorStyle(my_currentColorStyle); }
 	my_signalLinker->addLink(obj);

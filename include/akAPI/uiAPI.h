@@ -335,6 +335,42 @@ namespace ak {
 			const QString &						_textOverride = QString("")
 		);
 
+		//! @brief Will create a new ColorStyleSwitch and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		//! @param _brightModeTitle The title of the switch when the next color style is the bright mode
+		//! @param _darkModeTitle The title of the switch when the next color style is the bright mode
+		//! @param _brightModeIcon The icon of the switch when the next color style is the bright mode
+		//! @param _darkModeIcon The icon of the switch when the next color style is the bright mode
+		//! @param _isBright The current color style state
+		UICORE_API_EXPORT UID createColorStyleSwitch(
+			UID						_creatorUid,
+			const QString &			_brightModeTitle,
+			const QString &			_darkModeTitle,
+			const QIcon &			_brightModeIcon,
+			const QIcon &			_darkModeIcon,
+			bool					_isBright = true
+		);
+
+		//! @brief Will create a new ColorStyleSwitch and return its UID
+		//! @param _creatorUid The UID of the creator who creates this object
+		//! @param _brightModeTitle The title of the switch when the next color style is the bright mode
+		//! @param _darkModeTitle The title of the switch when the next color style is the bright mode
+		//! @param _brightModeIconName The icon name of the switch when the next color style is the bright mode
+		//! @param _brightModeIconFolder The icon folder of the switch when the next color style is the bright mode
+		//! @param _darkModeIconName The icon name of the switch when the next color style is the bright mode
+		//! @param _darkModeIconFolder The icon folder of the switch when the next color style is the bright mode
+		//! @param _isBright The current color style state
+		UICORE_API_EXPORT UID createColorStyleSwitch(
+			UID						_creatorUid,
+			const QString &			_brightModeTitle,
+			const QString &			_darkModeTitle,
+			const QString &			_brightModeIconName,
+			const QString &			_brightModeIconFolder,
+			const QString &			_darkModeIconName,
+			const QString &			_darkModeIconFolder,
+			bool					_isBright = true
+		);
+
 		//! @brief Will create a new ComboBox and return its UID
 		//! @param _creatorUid The UID of the creator who creates this object
 		//! @throw ak::Exception if the API is not initialized
@@ -645,6 +681,32 @@ namespace ak {
 
 			UICORE_API_EXPORT bool isEnabled(
 				UID								_checkBoxUID
+			);
+
+		}
+
+		// ###############################################################################################################################################
+
+		// Color switch
+	
+		namespace colorStyleSwitch {
+
+			UICORE_API_EXPORT void setAutoSetColorStyle(
+				UID				_switchUid,
+				bool			_enabled
+			);
+
+			UICORE_API_EXPORT bool isAutoSetColorStyle(
+				UID				_switchUid
+			);
+
+			UICORE_API_EXPORT void setCurrentIsBright(
+				UID				_switchUid,
+				bool			_isBright
+			);
+
+			UICORE_API_EXPORT bool isCurrentBright(
+				UID				_switchUid
 			);
 
 		}

@@ -42,6 +42,7 @@
 // AK widgets
 #include <akWidgets/aCheckBoxWidget.h>
 #include <akWidgets/aColorEditButtonWidget.h>
+#include <akWidgets/aColorStyleSwitchWidget.h>
 #include <akWidgets/aComboBoxWidget.h>
 #include <akWidgets/aComboButtonWidget.h>
 #include <akWidgets/aDockWidget.h>
@@ -418,6 +419,36 @@ ak::UID ak::uiAPI::createColorEditButton(
 	return my_objManager->createColorEditButton(_creatorUid, _color, _textOverride);
 }
 
+ak::UID ak::uiAPI::createColorStyleSwitch(
+	UID						_creatorUid,
+	const QString &			_brightModeTitle,
+	const QString &			_darkModeTitle,
+	const QIcon &			_brightModeIcon,
+	const QIcon &			_darkModeIcon,
+	bool					_isBright
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	return my_objManager->createColorStyleSwitch(_creatorUid, _brightModeTitle, _darkModeTitle, _brightModeIcon, _darkModeIcon, _isBright);
+}
+
+ak::UID ak::uiAPI::createColorStyleSwitch(
+	UID						_creatorUid,
+	const QString &			_brightModeTitle,
+	const QString &			_darkModeTitle,
+	const QString &			_brightModeIconName,
+	const QString &			_brightModeIconFolder,
+	const QString &			_darkModeIconName,
+	const QString &			_darkModeIconFolder,
+	bool					_isBright
+) {
+	assert(my_objManager != nullptr); // API not initialized
+	assert(my_iconManager != nullptr); // API not initialized
+	return createColorStyleSwitch(_creatorUid, _brightModeTitle, _darkModeTitle, 
+		*my_iconManager->icon(_brightModeIconName, _brightModeIconFolder),
+		*my_iconManager->icon(_darkModeIconName, _darkModeIconFolder),
+		_isBright);
+}
+
 ak::UID ak::uiAPI::createComboBox(
 	UID												_creatorUid
 ) {
@@ -693,6 +724,36 @@ bool ak::uiAPI::checkBox::isChecked(
 bool ak::uiAPI::checkBox::isEnabled(
 	UID												_checkBoxUID
 ) { return object::get<aCheckBoxWidget>(_checkBoxUID)->isEnabled(); }
+
+// ###############################################################################################################################################
+
+// colorSwitchWidget
+
+void ak::uiAPI::colorStyleSwitch::setAutoSetColorStyle(
+	UID				_switchUid,
+	bool			_enabled
+) {
+	object::get<aColorStyleSwitchWidget>(_switchUid)->setAutoSetColorStyle(_enabled);
+}
+
+bool ak::uiAPI::colorStyleSwitch::isAutoSetColorStyle(
+	UID				_switchUid
+) {
+	return object::get<aColorStyleSwitchWidget>(_switchUid)->isAutoSetColorStyle();
+}
+
+void ak::uiAPI::colorStyleSwitch::setCurrentIsBright(
+	UID				_switchUid,
+	bool			_isBright
+) {
+	object::get<aColorStyleSwitchWidget>(_switchUid)->setCurrentIsBright(_isBright);
+}
+
+bool ak::uiAPI::colorStyleSwitch::isCurrentBright(
+	UID				_switchUid
+) {
+	return object::get<aColorStyleSwitchWidget>(_switchUid)->isCurrentBright();
+}
 
 // ###############################################################################################################################################
 
