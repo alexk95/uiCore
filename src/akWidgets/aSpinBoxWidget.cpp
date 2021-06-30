@@ -15,7 +15,10 @@
 
 ak::aSpinBoxWidget::aSpinBoxWidget(QWidget * _parent)
 	: QSpinBox(_parent), aWidget(otSpinBox), m_stepLength(1), m_value(0)
-{ setValue(0); }
+{
+	setValue(0);
+	connect(this, SIGNAL(valueChanged(int)), this, SLOT(slotValueChanged(int)));
+}
 
 ak::aSpinBoxWidget::aSpinBoxWidget(int _value, QWidget * _parent) 
 	: QSpinBox(_parent), aWidget(otSpinBox), m_stepLength(1), m_value(_value)
@@ -46,10 +49,10 @@ void ak::aSpinBoxWidget::setColorStyle(
 
 void ak::aSpinBoxWidget::SetStepLength(int _stepLength) {
 	m_stepLength = _stepLength;
-	slotValueChanged("");
+	slotValueChanged(0);
 }
 
-void ak::aSpinBoxWidget::slotValueChanged(const QString & _v) {
+void ak::aSpinBoxWidget::slotValueChanged(int _v) {
 	if (m_stepLength > 1) {
 		if (value() % m_stepLength != 0) {
 			setValue((value() / m_stepLength) * m_stepLength);

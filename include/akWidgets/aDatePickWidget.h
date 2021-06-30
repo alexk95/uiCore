@@ -116,7 +116,7 @@ namespace ak {
 
 	// #################################################################################################################################
 
-	class aDatePickDialog : public aDialog, public aPaintable {
+	class UICORE_API_EXPORT aDatePickDialog : public aDialog, public aPaintable {
 		Q_OBJECT
 	public:
 		aDatePickDialog();

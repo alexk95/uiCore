@@ -84,6 +84,7 @@ void ak::aTimePickWidget::setMinuteStep(int _step) {
 			min = (min / m_minuteStep) * m_minuteStep;
 		}
 		my_time.setHMS(my_time.hour(), min, my_time.second(), my_time.msec());
+		refreshTime();
 	}
 }
 
@@ -271,6 +272,7 @@ void ak::aTimePickDialog::setupWidget(timeFormat _timeFormat) {
 	my_minInput->setMaximum(59);
 	if (m_owner != nullptr) {
 		my_minInput->SetStepLength(m_owner->minuteStep());
+		my_minInput->setSingleStep(m_owner->minuteStep());
 	}
 	my_minInput->setSuffix("min");
 
