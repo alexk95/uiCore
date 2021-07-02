@@ -22,10 +22,10 @@ ak::aTtbContainer::aTtbContainer(
 	aColorStyle *		_colorStyle,
 	UID						_uid
 ) : aPaintable(_type, _colorStyle, _uid),
-	my_messenger(nullptr)
+	m_messenger(nullptr)
 {
 	assert(_messenger != nullptr); // Is nullptr
-	my_messenger = _messenger;
+	m_messenger = _messenger;
 }
 
 ak::aTtbContainer::~aTtbContainer() {}
@@ -33,8 +33,8 @@ ak::aTtbContainer::~aTtbContainer() {}
 ak::aTtbContainer * ak::aTtbContainer::getSubContainer(
 	const QString &				_text
 ) {
-	for (auto itm : my_subContainer) { if (itm->text() == _text) { return itm; } }
+	for (auto itm : m_subContainer) { if (itm->text() == _text) { return itm; } }
 	return nullptr;
 }
 
-int ak::aTtbContainer::subContainerCount(void) const { return my_subContainer.size(); }
+int ak::aTtbContainer::subContainerCount(void) const { return m_subContainer.size(); }

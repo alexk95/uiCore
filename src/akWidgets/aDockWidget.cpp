@@ -47,36 +47,36 @@ void ak::aDockWidget::setColorStyle(
 	aColorStyle *					_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
+	m_colorStyle = _colorStyle;
 	QString sheet;
-	sheet = my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	sheet = m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow, "QDockWidget{", "titlebar-close-icon: none; titlebar-normal-icon: none;}\n");
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorHeader |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorHeader |
 		cafBackgroundColorHeader | cafBorderColorHeader, "QDockWidget::title{border-width: 1px;", "}\n"));
 	
 	if (!sheet.isEmpty()) {
 		sheet.append("QDockWidget::close-button{border: none; background: transparent; icon-size: 12px; image: url(");
-		sheet.append(my_colorStyle->getFilePath("Dock/Dock_Close.png"));
+		sheet.append(m_colorStyle->getFilePath("Dock/Dock_Close.png"));
 		sheet.append(");}");
 
 		sheet.append("QDockWidget::close-button:hover:!pressed{border: none; color: transparent; background: transparent; icon-size: 12px; image: url(");
-		sheet.append(my_colorStyle->getFilePath("Dock/Dock_Close_Focus.png"));
+		sheet.append(m_colorStyle->getFilePath("Dock/Dock_Close_Focus.png"));
 		sheet.append(");}");
 
 		sheet.append("QDockWidget::close-button:pressed{border: none; background: transparent; icon-size: 12px; image: url(");
-		sheet.append(my_colorStyle->getFilePath("Dock/Dock_Close_Pressed.png"));
+		sheet.append(m_colorStyle->getFilePath("Dock/Dock_Close_Pressed.png"));
 		sheet.append(");}");
 
 		sheet.append("QDockWidget::float-button{border: none; background: transparent; icon-size: 12px; image: url(");
-		sheet.append(my_colorStyle->getFilePath("Dock/Dock_Float.png"));
+		sheet.append(m_colorStyle->getFilePath("Dock/Dock_Float.png"));
 		sheet.append(");}");
 
 		sheet.append("QDockWidget::float-button:hover:!pressed{border: none; background: transparent; icon-size: 12px; image: url(");
-		sheet.append(my_colorStyle->getFilePath("Dock/Dock_Float_Focus.png"));
+		sheet.append(m_colorStyle->getFilePath("Dock/Dock_Float_Focus.png"));
 		sheet.append(");}");
 
 		sheet.append("QDockWidget::float-button:pressed{border: none; background: transparent; icon-size: 12px; image: url(");
-		sheet.append(my_colorStyle->getFilePath("Dock/Dock_Float_Pressed.png"));
+		sheet.append(m_colorStyle->getFilePath("Dock/Dock_Float_Pressed.png"));
 		sheet.append(");}");
 	}
 	this->setStyleSheet(sheet);
@@ -102,7 +102,7 @@ void ak::aDockWidget::closeEvent(
 
 void ak::aDockWidget::setAlias(
 	const QString &							_alias
-) { aObject::setAlias(_alias); setObjectName(my_alias); }
+) { aObject::setAlias(_alias); setObjectName(m_alias); }
 
 void ak::aDockWidget::addObjectSettingsToValue(
 	rapidjson::Value &						_array,
@@ -123,9 +123,9 @@ void ak::aDockWidget::slotDockLocationChanged(
 ) {
 	switch (_area)
 	{
-	case Qt::DockWidgetArea::BottomDockWidgetArea: my_location = dockBottom; break;
-	case Qt::DockWidgetArea::LeftDockWidgetArea: my_location = dockLeft; break;
-	case Qt::DockWidgetArea::RightDockWidgetArea: my_location = dockRight; break;
+	case Qt::DockWidgetArea::BottomDockWidgetArea: m_location = dockBottom; break;
+	case Qt::DockWidgetArea::LeftDockWidgetArea: m_location = dockLeft; break;
+	case Qt::DockWidgetArea::RightDockWidgetArea: m_location = dockRight; break;
 	default:
 		assert(0); // This should not happen
 		break;

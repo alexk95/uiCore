@@ -31,10 +31,10 @@ ak::aPromptDialog::aPromptDialog(
 	promptType					_type,
 	QWidget *					_parent
 ) : aPaintable(otPrompt), aDialog(_parent),
-	my_button1(nullptr), my_button2(nullptr), my_button3(nullptr), my_buttonsLayout(nullptr),
-	my_buttonsWidget(nullptr), my_infoLayout(nullptr), my_infoWidget(nullptr), my_layout(nullptr), my_iconLabel(nullptr)
+	m_button1(nullptr), m_button2(nullptr), m_button3(nullptr), m_buttonsLayout(nullptr),
+	m_buttonsWidget(nullptr), m_infoLayout(nullptr), m_infoWidget(nullptr), m_layout(nullptr), m_iconLabel(nullptr)
 {
-	setupDialog(_message, _title, _type, my_currentIcon);
+	setupDialog(_message, _title, _type, m_currentIcon);
 }
 
 ak::aPromptDialog::aPromptDialog(
@@ -44,43 +44,43 @@ ak::aPromptDialog::aPromptDialog(
 	const QIcon &				_icon,
 	QWidget *					_parent
 ) : aPaintable(otPrompt), aDialog(_parent),
-	my_button1(nullptr), my_button2(nullptr), my_button3(nullptr), my_buttonsLayout(nullptr),
-	my_buttonsWidget(nullptr), my_infoLayout(nullptr), my_infoWidget(nullptr), my_layout(nullptr), my_iconLabel(nullptr), my_currentIcon(_icon)
+	m_button1(nullptr), m_button2(nullptr), m_button3(nullptr), m_buttonsLayout(nullptr),
+	m_buttonsWidget(nullptr), m_infoLayout(nullptr), m_infoWidget(nullptr), m_layout(nullptr), m_iconLabel(nullptr), m_currentIcon(_icon)
 {
-	setupDialog(_message, _title, _type, my_currentIcon);
+	setupDialog(_message, _title, _type, m_currentIcon);
 }
 
 ak::aPromptDialog::~aPromptDialog() {
 	A_OBJECT_DESTROYING
 
-	if (my_label != nullptr) { delete my_label; }
+	if (m_label != nullptr) { delete m_label; }
 
-	if (my_infoLayout != nullptr) { delete my_layout; }
-	if (my_infoWidget != nullptr) { delete my_infoWidget; }
+	if (m_infoLayout != nullptr) { delete m_layout; }
+	if (m_infoWidget != nullptr) { delete m_infoWidget; }
 
-	if (my_button1 != nullptr) { delete my_button1; }
-	if (my_button2 != nullptr) { delete my_button2; }
-	if (my_button3 != nullptr) { delete my_button3; }
+	if (m_button1 != nullptr) { delete m_button1; }
+	if (m_button2 != nullptr) { delete m_button2; }
+	if (m_button3 != nullptr) { delete m_button3; }
 
-	if (my_buttonsLayout != nullptr) { delete my_buttonsLayout; }
-	if (my_buttonsWidget != nullptr) { delete my_buttonsWidget; }
+	if (m_buttonsLayout != nullptr) { delete m_buttonsLayout; }
+	if (m_buttonsWidget != nullptr) { delete m_buttonsWidget; }
 
-	//if (my_layout != nullptr) { delete my_layout; }
+	//if (m_layout != nullptr) { delete m_layout; }
 }
 
 void ak::aPromptDialog::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
-	QString sheet(my_colorStyle->toStyleSheet(cafBackgroundColorDialogWindow | cafForegroundColorDialogWindow, "QDialog {", "}"));
+	m_colorStyle = _colorStyle;
+	QString sheet(m_colorStyle->toStyleSheet(cafBackgroundColorDialogWindow | cafForegroundColorDialogWindow, "QDialog {", "}"));
 	setStyleSheet(sheet);
 
-	if (my_button1 != nullptr) { my_button1->setColorStyle(my_colorStyle); }
-	if (my_button2 != nullptr) { my_button2->setColorStyle(my_colorStyle); }
-	if (my_button3 != nullptr) { my_button3->setColorStyle(my_colorStyle); }
+	if (m_button1 != nullptr) { m_button1->setColorStyle(m_colorStyle); }
+	if (m_button2 != nullptr) { m_button2->setColorStyle(m_colorStyle); }
+	if (m_button3 != nullptr) { m_button3->setColorStyle(m_colorStyle); }
 
-	if (my_label != nullptr) { my_label->setColorStyle(my_colorStyle); }
+	if (m_label != nullptr) { m_label->setColorStyle(m_colorStyle); }
 
 }
 
@@ -96,17 +96,17 @@ void ak::aPromptDialog::resizeEvent(QResizeEvent * _event) {
 
 // Slots
 
-void ak::aPromptDialog::slotOk(void) { my_result = resultOk; close(); }
+void ak::aPromptDialog::slotOk(void) { m_result = resultOk; close(); }
 
-void ak::aPromptDialog::slotCancel(void) { my_result = resultCancel; close(); }
+void ak::aPromptDialog::slotCancel(void) { m_result = resultCancel; close(); }
 
-void ak::aPromptDialog::slotYes(void) { my_result = resultYes; close(); }
+void ak::aPromptDialog::slotYes(void) { m_result = resultYes; close(); }
 
-void ak::aPromptDialog::slotNo(void) { my_result = resultNo; close(); }
+void ak::aPromptDialog::slotNo(void) { m_result = resultNo; close(); }
 
-void ak::aPromptDialog::slotRetry(void) { my_result = resultRetry; close(); }
+void ak::aPromptDialog::slotRetry(void) { m_result = resultRetry; close(); }
 
-void ak::aPromptDialog::slotIgnore(void) { my_result = resultIgnore; close(); }
+void ak::aPromptDialog::slotIgnore(void) { m_result = resultIgnore; close(); }
 
 // ##############################################################################################################
 
@@ -118,92 +118,92 @@ void ak::aPromptDialog::setupDialog(
 	promptType					_type,
 	const QIcon &				_icon
 ) {
-	my_type = _type;
+	m_type = _type;
 
 	// Create Buttons
-	my_buttonsWidget = new QWidget;
-	my_buttonsLayout = new QHBoxLayout(my_buttonsWidget);
+	m_buttonsWidget = new QWidget;
+	m_buttonsLayout = new QHBoxLayout(m_buttonsWidget);
 
 	// Create label layout
-	my_infoWidget = new QWidget;
-	my_infoLayout = new QHBoxLayout(my_infoWidget);
+	m_infoWidget = new QWidget;
+	m_infoLayout = new QHBoxLayout(m_infoWidget);
 
 	// Create info label
-	my_label = new aLabelWidget(_message);
-	my_label->setWordWrap(true);
+	m_label = new aLabelWidget(_message);
+	m_label->setWordWrap(true);
 
-	switch (my_type)
+	switch (m_type)
 	{
 	case promptOk:
-		my_button1 = new aPushButtonWidget("Ok");
-		connect(my_button1, &QPushButton::clicked, this, &aPromptDialog::slotOk);
-		my_buttonsLayout->addWidget(my_button1);
+		m_button1 = new aPushButtonWidget("Ok");
+		connect(m_button1, &QPushButton::clicked, this, &aPromptDialog::slotOk);
+		m_buttonsLayout->addWidget(m_button1);
 		break;
 	case promptYesNo:
-		my_button1 = new aPushButtonWidget("Yes");
-		connect(my_button1, &QPushButton::clicked, this, &aPromptDialog::slotYes);
-		my_button2 = new aPushButtonWidget("No");
-		connect(my_button2, &QPushButton::clicked, this, &aPromptDialog::slotNo);
-		my_buttonsLayout->addWidget(my_button1);
-		my_buttonsLayout->addWidget(my_button2);
+		m_button1 = new aPushButtonWidget("Yes");
+		connect(m_button1, &QPushButton::clicked, this, &aPromptDialog::slotYes);
+		m_button2 = new aPushButtonWidget("No");
+		connect(m_button2, &QPushButton::clicked, this, &aPromptDialog::slotNo);
+		m_buttonsLayout->addWidget(m_button1);
+		m_buttonsLayout->addWidget(m_button2);
 		break;
 	case promptYesNoCancel:
-		my_button1 = new aPushButtonWidget("Yes");
-		connect(my_button1, &QPushButton::clicked, this, &aPromptDialog::slotYes);
-		my_button2 = new aPushButtonWidget("No");
-		connect(my_button2, &QPushButton::clicked, this, &aPromptDialog::slotNo);
-		my_button3 = new aPushButtonWidget("Cancel");
-		connect(my_button3, &QPushButton::clicked, this, &aPromptDialog::slotCancel);
-		my_buttonsLayout->addWidget(my_button1);
-		my_buttonsLayout->addWidget(my_button2);
-		my_buttonsLayout->addWidget(my_button3);
+		m_button1 = new aPushButtonWidget("Yes");
+		connect(m_button1, &QPushButton::clicked, this, &aPromptDialog::slotYes);
+		m_button2 = new aPushButtonWidget("No");
+		connect(m_button2, &QPushButton::clicked, this, &aPromptDialog::slotNo);
+		m_button3 = new aPushButtonWidget("Cancel");
+		connect(m_button3, &QPushButton::clicked, this, &aPromptDialog::slotCancel);
+		m_buttonsLayout->addWidget(m_button1);
+		m_buttonsLayout->addWidget(m_button2);
+		m_buttonsLayout->addWidget(m_button3);
 		break;
 	case promptOkCancel:
-		my_button1 = new aPushButtonWidget("Ok");
-		connect(my_button1, &QPushButton::clicked, this, &aPromptDialog::slotOk);
-		my_button2 = new aPushButtonWidget("Cancel");
-		connect(my_button2, &QPushButton::clicked, this, &aPromptDialog::slotCancel);
-		my_buttonsLayout->addWidget(my_button1);
-		my_buttonsLayout->addWidget(my_button2);
+		m_button1 = new aPushButtonWidget("Ok");
+		connect(m_button1, &QPushButton::clicked, this, &aPromptDialog::slotOk);
+		m_button2 = new aPushButtonWidget("Cancel");
+		connect(m_button2, &QPushButton::clicked, this, &aPromptDialog::slotCancel);
+		m_buttonsLayout->addWidget(m_button1);
+		m_buttonsLayout->addWidget(m_button2);
 		break;
 	case promptRetryCancel:
-		my_button1 = new aPushButtonWidget("Retry");
-		connect(my_button1, &QPushButton::clicked, this, &aPromptDialog::slotRetry);
-		my_button2 = new aPushButtonWidget("Cancel");
-		connect(my_button2, &QPushButton::clicked, this, &aPromptDialog::slotCancel);
-		my_buttonsLayout->addWidget(my_button1);
-		my_buttonsLayout->addWidget(my_button2);
+		m_button1 = new aPushButtonWidget("Retry");
+		connect(m_button1, &QPushButton::clicked, this, &aPromptDialog::slotRetry);
+		m_button2 = new aPushButtonWidget("Cancel");
+		connect(m_button2, &QPushButton::clicked, this, &aPromptDialog::slotCancel);
+		m_buttonsLayout->addWidget(m_button1);
+		m_buttonsLayout->addWidget(m_button2);
 		break;
 	case promptIgnoreRetryCancel:
-		my_button1 = new aPushButtonWidget("Ignore");
-		connect(my_button1, &QPushButton::clicked, this, &aPromptDialog::slotIgnore);
-		my_button2 = new aPushButtonWidget("Retry");
-		connect(my_button2, &QPushButton::clicked, this, &aPromptDialog::slotRetry);
-		my_button3 = new aPushButtonWidget("Cancel");
-		connect(my_button3, &QPushButton::clicked, this, &aPromptDialog::slotCancel);
-		my_buttonsLayout->addWidget(my_button1);
-		my_buttonsLayout->addWidget(my_button2);
-		my_buttonsLayout->addWidget(my_button3);
+		m_button1 = new aPushButtonWidget("Ignore");
+		connect(m_button1, &QPushButton::clicked, this, &aPromptDialog::slotIgnore);
+		m_button2 = new aPushButtonWidget("Retry");
+		connect(m_button2, &QPushButton::clicked, this, &aPromptDialog::slotRetry);
+		m_button3 = new aPushButtonWidget("Cancel");
+		connect(m_button3, &QPushButton::clicked, this, &aPromptDialog::slotCancel);
+		m_buttonsLayout->addWidget(m_button1);
+		m_buttonsLayout->addWidget(m_button2);
+		m_buttonsLayout->addWidget(m_button3);
 		break;
 	case promptIconLeft:
-		my_button1 = new aPushButtonWidget("Ok");
-		connect(my_button1, &QPushButton::clicked, this, &aPromptDialog::slotOk);
-		my_buttonsLayout->addWidget(my_button1);
-		my_iconLabel = new aLabelWidget;
-		my_iconLabel->setPixmap(_icon.pixmap(my_label->size().height(), my_label->size().height()));
-		my_infoLayout->addWidget(my_iconLabel);
+		m_button1 = new aPushButtonWidget("Ok");
+		connect(m_button1, &QPushButton::clicked, this, &aPromptDialog::slotOk);
+		m_buttonsLayout->addWidget(m_button1);
+		m_iconLabel = new aLabelWidget;
+		m_iconLabel->setPixmap(_icon.pixmap(m_label->size().height(), m_label->size().height()));
+		m_infoLayout->addWidget(m_iconLabel);
 		break;
 	default:
 		assert(0);	// Unknown type
 		break;
 	}
 
-	my_infoLayout->addWidget(my_label);
+	m_infoLayout->addWidget(m_label);
 
 	// Create main layout
-	my_layout = new QVBoxLayout(this);
-	my_layout->addWidget(my_infoWidget);
-	my_layout->addWidget(my_buttonsWidget);
+	m_layout = new QVBoxLayout(this);
+	m_layout->addWidget(m_infoWidget);
+	m_layout->addWidget(m_buttonsWidget);
 
 	setWindowTitle(_title);
 

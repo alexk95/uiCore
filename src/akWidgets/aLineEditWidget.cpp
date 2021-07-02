@@ -16,11 +16,11 @@
 #include <akWidgets/aLineEditWidget.h>
 
 ak::aLineEditWidget::aLineEditWidget(QWidget * _parent)
-	: QLineEdit(_parent), aWidget(otLineEdit), my_isError(false), my_errorIsForeground(true) {
+	: QLineEdit(_parent), aWidget(otLineEdit), m_isError(false), m_errorIsForeground(true) {
 	connect(this, &QLineEdit::editingFinished, this, &aLineEditWidget::slotEditingFinished);
 }
 ak::aLineEditWidget::aLineEditWidget(const QString & _text, QWidget * _parent)
-	: QLineEdit(_text, _parent), aWidget(otLineEdit), my_isError(false), my_errorIsForeground(true), my_text(_text) {
+	: QLineEdit(_text, _parent), aWidget(otLineEdit), m_isError(false), m_errorIsForeground(true), m_text(_text) {
 	connect(this, &QLineEdit::editingFinished, this, &aLineEditWidget::slotEditingFinished);
 }
 
@@ -46,28 +46,28 @@ void ak::aLineEditWidget::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
-	setErrorState(my_isError);
+	m_colorStyle = _colorStyle;
+	setErrorState(m_isError);
 }
 
 // #######################################################################################################
 
 void ak::aLineEditWidget::setErrorState(bool _error) {
-	my_isError = _error;
-	if (my_isError)
+	m_isError = _error;
+	if (m_isError)
 	{
-		if (my_colorStyle != nullptr) {
+		if (m_colorStyle != nullptr) {
 			QString sheet{ "color: #" };
-			if (my_errorIsForeground) { sheet.append(my_colorStyle->getControlsErrorFrontForegroundColor().toHexString()); }
-			else { sheet.append(my_colorStyle->getControlsErrorBackForegroundColor().toHexString()); }
+			if (m_errorIsForeground) { sheet.append(m_colorStyle->getControlsErrorFrontForegroundColor().toHexString()); }
+			else { sheet.append(m_colorStyle->getControlsErrorBackForegroundColor().toHexString()); }
 			sheet.append("; background-color: #");
-			if (my_errorIsForeground) { sheet.append(my_colorStyle->getControlsMainBackgroundColor().toHexString()); }
-			else { sheet.append(my_colorStyle->getControlsErrorBackBackgroundColor().toHexString()); }
-			sheet.append("; border: 1px solid #").append(my_colorStyle->getControlsBorderColor().toHexString(true));
+			if (m_errorIsForeground) { sheet.append(m_colorStyle->getControlsMainBackgroundColor().toHexString()); }
+			else { sheet.append(m_colorStyle->getControlsErrorBackBackgroundColor().toHexString()); }
+			sheet.append("; border: 1px solid #").append(m_colorStyle->getControlsBorderColor().toHexString(true));
 			sheet.append(";}");
 			setStyleSheet(sheet);
 		}
-		else if (my_errorIsForeground) {
+		else if (m_errorIsForeground) {
 			setStyleSheet("color: #ff0000;");
 		}
 		else {
@@ -75,10 +75,10 @@ void ak::aLineEditWidget::setErrorState(bool _error) {
 		}
 
 	}
-	else if (my_colorStyle != nullptr)
+	else if (m_colorStyle != nullptr)
 	{
-		QString Color = my_colorStyle->getControlsBorderColor().toHexString(true);
-		setStyleSheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+		QString Color = m_colorStyle->getControlsBorderColor().toHexString(true);
+		setStyleSheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 			cafBackgroundColorControls | cafBorderColorControls, "", "border: 1px solid #" + Color + ";"));
 	}
 	else {
@@ -87,9 +87,9 @@ void ak::aLineEditWidget::setErrorState(bool _error) {
 }
 
 void ak::aLineEditWidget::setErrorStateIsForeground(bool _isForeground) {
-	if (_isForeground == my_errorIsForeground) { return; }	// Ignore if did not change
-	my_errorIsForeground = _isForeground;
-	setErrorState(my_isError);		// Repaint
+	if (_isForeground == m_errorIsForeground) { return; }	// Ignore if did not change
+	m_errorIsForeground = _isForeground;
+	setErrorState(m_isError);		// Repaint
 }
 
 // #######################################################################################################
@@ -97,5 +97,5 @@ void ak::aLineEditWidget::setErrorStateIsForeground(bool _isForeground) {
 // Slots
 
 void ak::aLineEditWidget::slotEditingFinished() {
-	if (text() != my_text) { my_text = text(); emit finishedChanges(); }
+	if (text() != m_text) { m_text = text(); emit finishedChanges(); }
 }

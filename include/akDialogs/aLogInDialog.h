@@ -132,37 +132,37 @@ namespace ak {
 		) const;
 
 
-		std::map<ak::ID, aLogInDialogInputField *>	my_customInputFields;
+		std::map<ak::ID, aLogInDialogInputField *>	m_customInputFields;
 		
-		int										my_rowCounter;
-		ID										my_currentID;
-		bool									my_showSavePassword;
+		int										m_rowCounter;
+		ID										m_currentID;
+		bool									m_showSavePassword;
 
-		QString									my_hashedPw;
+		QString									m_hashedPw;
 
-		aMessenger *							my_messenger;
+		aMessenger *							m_messenger;
 		
-		QPixmap *								my_bgImage;
-		QPixmap									my_currentImage;
+		QPixmap *								m_bgImage;
+		QPixmap									m_currentImage;
 
-		QVBoxLayout *							my_mainLayout;
-		QSpacerItem *							my_spacer;
+		QVBoxLayout *							m_mainLayout;
+		QSpacerItem *							m_spacer;
 
 
-		QGridLayout *							my_gridLayout;
-		QWidget *								my_gridWidget;
+		QGridLayout *							m_gridLayout;
+		QWidget *								m_gridWidget;
 
-		QHBoxLayout *							my_layout;
-		QWidget *								my_layoutWidget;
+		QHBoxLayout *							m_layout;
+		QWidget *								m_layoutWidget;
 
-		aCheckBoxWidget *						my_savePassword;
-		aLogInDialogInputField *				my_inputUsername;
-		aLogInDialogInputField *				my_inputPassword;
-		aPushButtonWidget *						my_buttonLogIn;
-		QVBoxLayout *							my_controlLayout;
-		QWidget *								my_controlLayoutWidget;
+		aCheckBoxWidget *						m_savePassword;
+		aLogInDialogInputField *				m_inputUsername;
+		aLogInDialogInputField *				m_inputPassword;
+		aPushButtonWidget *						m_buttonLogIn;
+		QVBoxLayout *							m_controlLayout;
+		QWidget *								m_controlLayoutWidget;
 
-		HashAlgorithm							my_passwordHashAlgorithm;
+		HashAlgorithm							m_passwordHashAlgorithm;
 
 		aLogInDialog(const aLogInDialog &) = delete;
 		aLogInDialog & operator = (const aLogInDialog &) = delete;
@@ -177,9 +177,9 @@ namespace ak {
 			aLabelWidget *			_label
 		);
 
-		aLineEditWidget * getInput(void) const { return my_input; }
+		aLineEditWidget * getInput(void) const { return m_input; }
 
-		aLabelWidget * getLabel(void) const { return my_label; }
+		aLabelWidget * getLabel(void) const { return m_label; }
 
 		void clearInput(void);
 
@@ -191,8 +191,8 @@ namespace ak {
 		);
 
 	private:
-		aLineEditWidget *			my_input;
-		aLabelWidget *				my_label;
+		aLineEditWidget *			m_input;
+		aLabelWidget *				m_label;
 
 		aLogInDialogInputField() = delete;
 		aLogInDialogInputField(const aLogInDialogInputField &) = delete;

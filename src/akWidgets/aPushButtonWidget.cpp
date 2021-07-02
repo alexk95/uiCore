@@ -48,12 +48,12 @@ void ak::aPushButtonWidget::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
-	QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorButton |
+	m_colorStyle = _colorStyle;
+	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorButton |
 		cafBackgroundColorButton, "QPushButton{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorFocus |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorFocus |
 		cafBackgroundColorFocus, "QPushButton:hover:!pressed{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorSelected |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorSelected |
 		cafBackgroundColorSelected, "QPushButton:pressed{", "}\n"));
 
 	this->setStyleSheet(sheet);

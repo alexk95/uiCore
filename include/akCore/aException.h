@@ -122,14 +122,14 @@ namespace ak {
 		exceptionType getType(void) const;
 
 	protected:
-		std::string						my_what;								//! Contains the exception message
-		std::string						my_where;								//! Contains the location desription
-		exceptionType					my_type;								//! Contains the exception type which is initialized as undefined
+		std::string						m_what;								//! Contains the exception message
+		std::string						m_where;								//! Contains the location desription
+		exceptionType					m_type;								//! Contains the exception type which is initialized as undefined
 
 		void buildOut(void);													//! Used internally to build the output string
 
 	private:
-		std::string						my_out;									//! Contains the output message which will be returned in the what() function
+		std::string						m_out;									//! Contains the output message which will be returned in the what() function
 	};
 
 } // namespace ak

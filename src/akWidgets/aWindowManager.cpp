@@ -40,103 +40,103 @@
 #include <qbytearray.h>							// QByteArray
 #include <qmovie.h>
 
-// my_window->resizeDocks({ dock }, { 0 }, Qt::Horizontal); // This is the hack
+// m_window->resizeDocks({ dock }, { 0 }, Qt::Horizontal); // This is the hack
 
 ak::aWindowManager::aWindowManager(
 	aMessenger *									_messenger,
 	aUidManager *								_uidManager,
 	aColorStyle *							_colorStyle
 ) : aPaintable(otMainWindow),
-my_window(nullptr),
-my_messenger(nullptr),
-my_uidManager(nullptr),
-my_tabToolBar(nullptr),
-my_statusLabel(nullptr),
-my_progressBar(nullptr),
-my_timerLabelHide(nullptr),
-my_timerLabelShow(nullptr),
-my_timerProgressHide(nullptr),
-my_timerProgressShow(nullptr),
-my_timerSignalLinker(nullptr),
-my_timerShowMainWindow(nullptr)
+m_window(nullptr),
+m_messenger(nullptr),
+m_uidManager(nullptr),
+m_tabToolBar(nullptr),
+m_statusLabel(nullptr),
+m_progressBar(nullptr),
+m_timerLabelHide(nullptr),
+m_timerLabelShow(nullptr),
+m_timerProgressHide(nullptr),
+m_timerProgressShow(nullptr),
+m_timerSignalLinker(nullptr),
+m_timerShowMainWindow(nullptr)
 {
 	// Check parameter
 	assert(_messenger != nullptr); // Nullptr provided
 	assert(_uidManager != nullptr); // Nullptr provided
-	my_messenger = _messenger;
-	my_uidManager = _uidManager;
-	my_uid = my_uidManager->getId();
-	my_colorStyle = _colorStyle;
+	m_messenger = _messenger;
+	m_uidManager = _uidManager;
+	m_uid = m_uidManager->getId();
+	m_colorStyle = _colorStyle;
 
 	// Create main window
-	my_window = new aWindow();
-	my_window->setAutoFillBackground(true);
-	my_window->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
+	m_window = new aWindow();
+	m_window->setAutoFillBackground(true);
+	m_window->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
 
 	// Create tab Toolbar
-	my_tabToolBar = new tt::TabToolbar();
-	my_tabToolBar->setVisible(false);
-	my_tabToolBar->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
-	my_window->addToolBar(my_tabToolBar);
+	m_tabToolBar = new tt::TabToolbar();
+	m_tabToolBar->setVisible(false);
+	m_tabToolBar->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
+	m_window->addToolBar(m_tabToolBar);
 
 	// Connect tab Toolbar tab signals
-	connect(my_tabToolBar, SIGNAL(tabClicked(int)), this, SLOT(slotTabToolbarTabClicked(int)));
-	connect(my_tabToolBar, SIGNAL(currentTabChanged(int)), this, SLOT(slotTabToolbarTabCurrentTabChanged(int)));
+	connect(m_tabToolBar, SIGNAL(tabClicked(int)), this, SLOT(slotTabToolbarTabClicked(int)));
+	connect(m_tabToolBar, SIGNAL(currentTabChanged(int)), this, SLOT(slotTabToolbarTabCurrentTabChanged(int)));
 
 	// Create progressbar
-	my_progressBar = new QProgressBar;
-	my_progressBar->setMinimumWidth(180);
-	my_progressBar->setMaximumWidth(180);
-	my_progressBar->setMinimum(0);
-	my_progressBar->setValue(0);
-	my_progressBar->setMaximum(100);
-	my_progressBar->setVisible(false);
+	m_progressBar = new QProgressBar;
+	m_progressBar->setMinimumWidth(180);
+	m_progressBar->setMaximumWidth(180);
+	m_progressBar->setMinimum(0);
+	m_progressBar->setValue(0);
+	m_progressBar->setMaximum(100);
+	m_progressBar->setVisible(false);
 
 	// Create status label
-	my_statusLabel = new QLabel;
-	my_statusLabel->setMinimumWidth(250);
-	my_statusLabel->setMaximumWidth(250);
-	my_statusLabel->setText(QString());
+	m_statusLabel = new QLabel;
+	m_statusLabel->setMinimumWidth(250);
+	m_statusLabel->setMaximumWidth(250);
+	m_statusLabel->setText(QString());
 
-	my_window->statusBar()->addPermanentWidget(my_progressBar, 180);
-	my_window->statusBar()->addPermanentWidget(my_statusLabel, 250);
-	my_window->statusBar()->setVisible(true);
+	m_window->statusBar()->addPermanentWidget(m_progressBar, 180);
+	m_window->statusBar()->addPermanentWidget(m_statusLabel, 250);
+	m_window->statusBar()->setVisible(true);
 
 	// Setup timer
-	my_timerLabelHide = new QTimer;
-	my_timerLabelShow = new QTimer;
-	my_timerProgressHide = new QTimer;
-	my_timerProgressShow = new QTimer;
-	my_timerShowMainWindow = new QTimer;
-	my_timerLabelHide->setInterval(1500);
-	my_timerLabelShow->setInterval(3000);
-	my_timerProgressHide->setInterval(1500);
-	my_timerProgressShow->setInterval(3000);
-	my_timerShowMainWindow->setInterval(1);
-	my_timerShowMainWindow->setSingleShot(true);
+	m_timerLabelHide = new QTimer;
+	m_timerLabelShow = new QTimer;
+	m_timerProgressHide = new QTimer;
+	m_timerProgressShow = new QTimer;
+	m_timerShowMainWindow = new QTimer;
+	m_timerLabelHide->setInterval(1500);
+	m_timerLabelShow->setInterval(3000);
+	m_timerProgressHide->setInterval(1500);
+	m_timerProgressShow->setInterval(3000);
+	m_timerShowMainWindow->setInterval(1);
+	m_timerShowMainWindow->setSingleShot(true);
 
 	// Create timer signal linker
-	my_timerSignalLinker = new aWindowManagerTimerSignalLinker(this);
+	m_timerSignalLinker = new aWindowManagerTimerSignalLinker(this);
 	
 	// Link timer to the corresponding functions (realised via the timer type) 
-	my_timerSignalLinker->addLink(my_timerLabelHide, ak::aWindowManagerTimerSignalLinker::timerType::statusLabelHide);
-	my_timerSignalLinker->addLink(my_timerLabelShow, ak::aWindowManagerTimerSignalLinker::timerType::statusLabelShow);
-	my_timerSignalLinker->addLink(my_timerProgressHide, ak::aWindowManagerTimerSignalLinker::timerType::progressHide);
-	my_timerSignalLinker->addLink(my_timerProgressShow, ak::aWindowManagerTimerSignalLinker::timerType::progressShow);
-	my_timerSignalLinker->addLink(my_timerShowMainWindow, ak::aWindowManagerTimerSignalLinker::timerType::showWindow);
+	m_timerSignalLinker->addLink(m_timerLabelHide, ak::aWindowManagerTimerSignalLinker::timerType::statusLabelHide);
+	m_timerSignalLinker->addLink(m_timerLabelShow, ak::aWindowManagerTimerSignalLinker::timerType::statusLabelShow);
+	m_timerSignalLinker->addLink(m_timerProgressHide, ak::aWindowManagerTimerSignalLinker::timerType::progressHide);
+	m_timerSignalLinker->addLink(m_timerProgressShow, ak::aWindowManagerTimerSignalLinker::timerType::progressShow);
+	m_timerSignalLinker->addLink(m_timerShowMainWindow, ak::aWindowManagerTimerSignalLinker::timerType::showWindow);
 
-	if (my_colorStyle != nullptr) { setColorStyle(my_colorStyle); }
+	if (m_colorStyle != nullptr) { setColorStyle(m_colorStyle); }
 
 	// Show main window
-	//my_timerShowMainWindow->start();
-	my_window->resize(800, 600);
-	//	my_window->showMaximized();
+	//m_timerShowMainWindow->start();
+	m_window->resize(800, 600);
+	//	m_window->showMaximized();
 }
 
 ak::aWindowManager::~aWindowManager() {
 	A_OBJECT_DESTROYING
 	// Delete the timer signal linker first, so all objects will be disconnected propertly
-	if (my_timerSignalLinker != nullptr) { delete my_timerSignalLinker; my_timerSignalLinker = nullptr; }
+	if (m_timerSignalLinker != nullptr) { delete m_timerSignalLinker; m_timerSignalLinker = nullptr; }
 
 }
 
@@ -144,33 +144,33 @@ void ak::aWindowManager::setColorStyle(
 	aColorStyle *								_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
+	m_colorStyle = _colorStyle;
 
-	my_window->setColorStyle(_colorStyle);
+	m_window->setColorStyle(_colorStyle);
 
-	my_progressBar->setStyleSheet(my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	m_progressBar->setStyleSheet(m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow));
-	my_statusLabel->setStyleSheet(my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	m_statusLabel->setStyleSheet(m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorTransparent));
 
 	// TTB
-	QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow, "QToolBar{border: 0px;", "}"));
 	if (sheet.isEmpty()) {
 		sheet = "QToolBar{border: 0px;}";
 	}
-	my_tabToolBar->SetStylesheet(sheet);
+	m_tabToolBar->SetStylesheet(sheet);
 	
-	sheet = my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	sheet = m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow, "QTabWidget{", "}");
-	sheet.append(my_colorStyle->toStyleSheet(cafBorderColorHeader, "QTabWidget::pane{border: 0px solid; border-top-width: 1px; border-bottom-width: 1px;", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
+	sheet.append(m_colorStyle->toStyleSheet(cafBorderColorHeader, "QTabWidget::pane{border: 0px solid; border-top-width: 1px; border-bottom-width: 1px;", "}\n"));
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
 		"QTabWidget::tab-bar{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
 		"QTabBar::tab{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus,
 		"QTabBar::tab:hover{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected,
 		"QTabBar::tab:selected{", "}"));
 	
 	if (sheet.length() == 0) {
@@ -180,8 +180,8 @@ void ak::aWindowManager::setColorStyle(
 			;
 	}
 
-	my_tabToolBar->SetTabBarStylesheet(sheet);
-	my_tabToolBar->SetHideButtonStylesheet(my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	m_tabToolBar->SetTabBarStylesheet(sheet);
+	m_tabToolBar->SetHideButtonStylesheet(m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow));
 }
 
@@ -193,16 +193,16 @@ void ak::aWindowManager::removeChildObject(
 		aTtbPage * page = nullptr;
 		page = dynamic_cast<aTtbPage *>(_child);
 		assert(page != nullptr); // Cast failed
-		my_tabToolBar->DestroyPage(page->index());
-		for (int i = my_tabToolBarContainer.size() - 1; i >= 0; i--) {
-			if (my_tabToolBarContainer[i] == page) {
-				my_tabToolBarContainer.erase(my_tabToolBarContainer.begin() + i);
+		m_tabToolBar->DestroyPage(page->index());
+		for (int i = m_tabToolBarContainer.size() - 1; i >= 0; i--) {
+			if (m_tabToolBarContainer[i] == page) {
+				m_tabToolBarContainer.erase(m_tabToolBarContainer.begin() + i);
 			}
 		}
 	}
 	else {
-		my_window->takeCentralWidget();
-		my_window->SetCentralWidget(nullptr);
+		m_window->takeCentralWidget();
+		m_window->SetCentralWidget(nullptr);
 	}
 }
 
@@ -210,13 +210,13 @@ void ak::aWindowManager::setAlias(
 	const QString &							_alias
 ) {
 	aObject::setAlias(_alias);
-	my_window->setObjectName(my_alias);
-	my_window->statusBar()->setObjectName(my_alias + "__StatusBar");
-	my_progressBar->setObjectName(my_alias + "__ProgressBar");
-	my_statusLabel->setObjectName(my_alias + "__StatusLabel");
-	//my_tabToolBar->setObjectName(my_alias + "__TTB_ToolBar");
-	//my_tabToolBar->setObjectName(my_alias + "__TTB_TabBar");
-	//my_tabToolBar->setObjectName(my_alias + "__TTB_HideButton");
+	m_window->setObjectName(m_alias);
+	m_window->statusBar()->setObjectName(m_alias + "__StatusBar");
+	m_progressBar->setObjectName(m_alias + "__ProgressBar");
+	m_statusLabel->setObjectName(m_alias + "__StatusLabel");
+	//m_tabToolBar->setObjectName(m_alias + "__TTB_ToolBar");
+	//m_tabToolBar->setObjectName(m_alias + "__TTB_TabBar");
+	//m_tabToolBar->setObjectName(m_alias + "__TTB_HideButton");
 }
 
 void ak::aWindowManager::addObjectSettingsToValue(
@@ -230,12 +230,12 @@ void ak::aWindowManager::addObjectSettingsToValue(
 	root.SetObject();
 
 	// Add alias
-	std::string str(my_alias.toStdString());
+	std::string str(m_alias.toStdString());
 	rapidjson::Value nAlias(str.c_str(), _allocator);
 	root.AddMember(RESTORABLE_NAME_ALIAS, nAlias, _allocator);
 
 	// Add object type
-	str = ak::toQString(my_objectType).toStdString();
+	str = ak::toQString(m_objectType).toStdString();
 	rapidjson::Value nType(str.c_str(), _allocator);
 	root.AddMember(RESTORABLE_NAME_TYPE, nType, _allocator);
 
@@ -243,7 +243,7 @@ void ak::aWindowManager::addObjectSettingsToValue(
 	rapidjson::Value settings;
 	settings.SetObject();
 
-	QByteArray lastConfig(my_window->saveState());
+	QByteArray lastConfig(m_window->saveState());
 	rapidjson::Value state(rapidjson::kArrayType);
 	for (auto itm : lastConfig) {
 		rapidjson::Value nV(itm);
@@ -281,8 +281,8 @@ void ak::aWindowManager::setCentralWidget(
 	QWidget *														_centralWidget
 ) {
 	assert(_centralWidget != nullptr); // nullptr provided
-	my_window->takeCentralWidget();
-	my_window->SetCentralWidget(_centralWidget);
+	m_window->takeCentralWidget();
+	m_window->SetCentralWidget(_centralWidget);
 }
 
 // #############################################################################################################
@@ -298,20 +298,20 @@ void ak::aWindowManager::addDock(
 		switch (_dockLocation)
 		{
 		case dockLeft:
-			my_window->addDockWidget(Qt::LeftDockWidgetArea, _dock);
+			m_window->addDockWidget(Qt::LeftDockWidgetArea, _dock);
 			break;
 		case dockRight:
-			my_window->addDockWidget(Qt::RightDockWidgetArea, _dock);
+			m_window->addDockWidget(Qt::RightDockWidgetArea, _dock);
 			break;
 		case dockBottom:
-			my_window->addDockWidget(Qt::BottomDockWidgetArea, _dock);
+			m_window->addDockWidget(Qt::BottomDockWidgetArea, _dock);
 			break;
 		default:
 			assert(0); // Not implemented yet
 			break;
 		}
-		my_window->resizeDocks({ _dock }, { 0 }, Qt::Orientation::Vertical);
-		my_window->resizeDocks({ _dock }, { 0 }, Qt::Orientation::Horizontal);
+		m_window->resizeDocks({ _dock }, { 0 }, Qt::Orientation::Vertical);
+		m_window->resizeDocks({ _dock }, { 0 }, Qt::Orientation::Horizontal);
 		//_dock->resize(200, 200);
 	}
 	catch (const aException & e) { throw aException(e, "ak::aWindowManager::addDock()"); }
@@ -327,10 +327,10 @@ void ak::aWindowManager::tabifyDock(
 	assert(_subDock != nullptr); // Cast failed
 
 	// tabify dock
-	my_window->tabifyDockWidget(_mainDock, _subDock);
+	m_window->tabifyDockWidget(_mainDock, _subDock);
 	//_subDock->resize(200, 200);
-	my_window->resizeDocks({ _subDock }, { 0 }, Qt::Orientation::Vertical);
-	my_window->resizeDocks({ _subDock }, { 0 }, Qt::Orientation::Horizontal);
+	m_window->resizeDocks({ _subDock }, { 0 }, Qt::Orientation::Vertical);
+	m_window->resizeDocks({ _subDock }, { 0 }, Qt::Orientation::Horizontal);
 	//_subDock->resize(200, 200);
 	_mainDock->raise();
 }
@@ -342,9 +342,9 @@ void ak::aWindowManager::setDockPriorityBottomLeft(
 		switch (_dockLocation)
 		{
 		case dockLeft:
-			my_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::LeftDockWidgetArea); break;
+			m_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::LeftDockWidgetArea); break;
 		case dockBottom:
-			my_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::BottomDockWidgetArea); break;
+			m_window->setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::BottomDockWidgetArea); break;
 		default:
 			throw aException("Invalid dock location", "Check dock location");
 		}
@@ -361,9 +361,9 @@ void ak::aWindowManager::setDockPriorityBottomRight(
 		switch (_dockLocation)
 		{
 		case dockRight:
-			my_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::RightDockWidgetArea); break;
+			m_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::RightDockWidgetArea); break;
 		case dockBottom:
-			my_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::BottomDockWidgetArea); break;
+			m_window->setCorner(Qt::Corner::BottomRightCorner, Qt::DockWidgetArea::BottomDockWidgetArea); break;
 		default:
 			throw aException("Invalid dock location", "Check dock location");
 		}
@@ -382,7 +382,7 @@ void ak::aWindowManager::setStatusBarProgress(
 ) {
 	if (_progress < 0 || _progress > 100) { throw aException("Progress out of range", "ak::aWindowManager::setStatusProgress()"); }
 	setStatusBarContinuous(false);
-	my_progressBar->setValue(_progress);
+	m_progressBar->setValue(_progress);
 }
 
 void ak::aWindowManager::setStatusBarVisible(
@@ -390,163 +390,163 @@ void ak::aWindowManager::setStatusBarVisible(
 	bool										_showDelayed
 ) {
 	if (_visible) {
-		my_timerProgressShow->stop();
-		if (my_timerProgressHide->isActive()) {
-			my_timerProgressHide->stop();
-			my_progressBar->setVisible(false);
+		m_timerProgressShow->stop();
+		if (m_timerProgressHide->isActive()) {
+			m_timerProgressHide->stop();
+			m_progressBar->setVisible(false);
 		}
 		if (_showDelayed) {
-			my_timerProgressShow->start();
+			m_timerProgressShow->start();
 		}
-		else { my_progressBar->setVisible(true); }
+		else { m_progressBar->setVisible(true); }
 	}
 	else {
-		my_timerProgressHide->stop();
-		if (my_timerProgressShow->isActive()) {
-			my_timerProgressShow->stop();
-			my_progressBar->setVisible(true);
+		m_timerProgressHide->stop();
+		if (m_timerProgressShow->isActive()) {
+			m_timerProgressShow->stop();
+			m_progressBar->setVisible(true);
 		}
 		if (_showDelayed) {
-			my_timerProgressHide->start();
+			m_timerProgressHide->start();
 		}
-		else { my_progressBar->setVisible(false); }
+		else { m_progressBar->setVisible(false); }
 	}
 }
 
 void ak::aWindowManager::setStatusBarContinuous(
 	bool										_continuos
 ) {
-	my_progressBarContinuous = _continuos;
-	if (my_progressBarContinuous) {
-		my_progressBar->setValue(0);
-		my_progressBar->setRange(0, 0);
+	m_progressBarContinuous = _continuos;
+	if (m_progressBarContinuous) {
+		m_progressBar->setValue(0);
+		m_progressBar->setRange(0, 0);
 	}
 	else {
-		my_progressBar->setRange(0, 100);
+		m_progressBar->setRange(0, 100);
 	}
 }
 
-bool ak::aWindowManager::getStatusBarVisible(void) const { return my_progressBar->isVisible(); }
+bool ak::aWindowManager::getStatusBarVisible(void) const { return m_progressBar->isVisible(); }
 
-bool ak::aWindowManager::getStatusLabelVisible(void) const { return my_statusLabel->isVisible(); }
+bool ak::aWindowManager::getStatusLabelVisible(void) const { return m_statusLabel->isVisible(); }
 
-QString ak::aWindowManager::getStatusLabelText(void) const { return my_statusLabel->text(); }
+QString ak::aWindowManager::getStatusLabelText(void) const { return m_statusLabel->text(); }
 
-int ak::aWindowManager::getStatusBarProgress(void) const { return my_progressBar->value(); }
+int ak::aWindowManager::getStatusBarProgress(void) const { return m_progressBar->value(); }
 
-bool ak::aWindowManager::getStatusBarContinuous(void) const { return my_progressBarContinuous; }
+bool ak::aWindowManager::getStatusBarContinuous(void) const { return m_progressBarContinuous; }
 
 void ak::aWindowManager::setStatusLabelText(
 	const QString &														_status
-) { my_statusLabel->setText(_status); }
+) { m_statusLabel->setText(_status); }
 
 void ak::aWindowManager::setStatusLabelVisible(
 	bool																_visible,
 	bool																_showDelayed
 ) {
 	if (_visible) {
-		my_timerLabelShow->stop();
-		if (my_timerLabelHide->isActive()) {
-			my_timerLabelHide->stop();
-			my_statusLabel->setVisible(false);
+		m_timerLabelShow->stop();
+		if (m_timerLabelHide->isActive()) {
+			m_timerLabelHide->stop();
+			m_statusLabel->setVisible(false);
 		}
 		if (_showDelayed) {
-			my_timerLabelShow->start();
+			m_timerLabelShow->start();
 		}
-		else { my_statusLabel->setVisible(true); }
+		else { m_statusLabel->setVisible(true); }
 	}
 	else {
-		my_timerLabelHide->stop();
-		if (my_timerLabelShow->isActive()) {
-			my_timerLabelShow->stop();
-			my_statusLabel->setVisible(true);
+		m_timerLabelHide->stop();
+		if (m_timerLabelShow->isActive()) {
+			m_timerLabelShow->stop();
+			m_statusLabel->setVisible(true);
 		}
 		if (_showDelayed) {
-			my_timerLabelHide->start();
+			m_timerLabelHide->start();
 		}
-		else { my_statusLabel->setVisible(false); }
+		else { m_statusLabel->setVisible(false); }
 	}
 }
 
-void ak::aWindowManager::showMaximized(void) { my_window->showMaximized(); }
+void ak::aWindowManager::showMaximized(void) { m_window->showMaximized(); }
 
-void ak::aWindowManager::showMinimized(void) { my_window->showMinimized(); }
+void ak::aWindowManager::showMinimized(void) { m_window->showMinimized(); }
 
-void ak::aWindowManager::showNormal(void) { my_window->showNormal(); }
+void ak::aWindowManager::showNormal(void) { m_window->showNormal(); }
 
-void ak::aWindowManager::close(void) { my_window->close(); }
+void ak::aWindowManager::close(void) { m_window->close(); }
 
 void ak::aWindowManager::resize(
 	int		_width,
 	int		_height
-) { my_window->resize(_width, _height); }
+) { m_window->resize(_width, _height); }
 
 void ak::aWindowManager::setShowStatusObjectDelayTimerInterval(int _interval) {
 	bool labelShow = false;
 	bool progressShow = false;
 	// Check if timer is already running
-	if (my_timerLabelShow->isActive()) { my_timerLabelShow->stop(); labelShow = true; }
-	if (my_timerProgressShow->isActive()) { my_timerProgressShow->stop(); progressShow = true; }
+	if (m_timerLabelShow->isActive()) { m_timerLabelShow->stop(); labelShow = true; }
+	if (m_timerProgressShow->isActive()) { m_timerProgressShow->stop(); progressShow = true; }
 	// Set new interval
-	my_timerLabelShow->setInterval(_interval);
-	my_timerProgressShow->setInterval(_interval);
+	m_timerLabelShow->setInterval(_interval);
+	m_timerProgressShow->setInterval(_interval);
 	// Reastart timer if needed
-	if (labelShow) { my_timerLabelShow->start(); }
-	if (progressShow) { my_timerProgressShow->start(); }
+	if (labelShow) { m_timerLabelShow->start(); }
+	if (progressShow) { m_timerProgressShow->start(); }
 }
 
 void ak::aWindowManager::setHideStatusObjectDelayTimerInterval(int _interval) {
 	bool labelHide = false;
 	bool progressHide = false;
 	// Check if timer is already running
-	if (my_timerLabelHide->isActive()) { my_timerLabelHide->stop(); labelHide = true; }
-	if (my_timerProgressHide->isActive()) { my_timerProgressHide->stop(); progressHide = true; }
+	if (m_timerLabelHide->isActive()) { m_timerLabelHide->stop(); labelHide = true; }
+	if (m_timerProgressHide->isActive()) { m_timerProgressHide->stop(); progressHide = true; }
 	// Set new interval
-	my_timerLabelHide->setInterval(_interval);
-	my_timerProgressHide->setInterval(_interval);
+	m_timerLabelHide->setInterval(_interval);
+	m_timerProgressHide->setInterval(_interval);
 	// Reastart timer if needed
-	if (labelHide) { my_timerLabelHide->start(); }
-	if (progressHide) { my_timerProgressHide->start(); }
+	if (labelHide) { m_timerLabelHide->start(); }
+	if (progressHide) { m_timerProgressHide->start(); }
 }
 
 int ak::aWindowManager::getShowStatusObjectDelayTimerInterval(void) const {
-	return my_timerLabelShow->interval();
+	return m_timerLabelShow->interval();
 }
 
 int ak::aWindowManager::getHideStatusObjectDelayTimerInterval(void) const {
-	return my_timerLabelHide->interval();
+	return m_timerLabelHide->interval();
 }
 
 void ak::aWindowManager::setWaitingAnimationVisible(
 	bool									_visible
-) { my_window->setWaitingAnimationVisible(_visible); }
+) { m_window->setWaitingAnimationVisible(_visible); }
 
 void ak::aWindowManager::setWaitingAnimation(
 	QMovie *							_movie
-) { my_window->setWaitingAnimation(_movie); }
+) { m_window->setWaitingAnimation(_movie); }
 
 // #############################################################################################################
 
 void ak::aWindowManager::setTabToolBarVisible(
 	bool						_vis
 ) {
-	my_tabToolBar->setVisible(_vis);
+	m_tabToolBar->setVisible(_vis);
 }
 
 ak::aTtbPage * ak::aWindowManager::createTabToolbarSubContainer(
 	const QString &				_text
 ) {
-	tt::Page * page = my_tabToolBar->AddPage(_text);
-	ak::aTtbPage * p = new ak::aTtbPage(my_messenger, page, _text);
-	if (my_colorStyle != nullptr) { p->setColorStyle(my_colorStyle); setColorStyle(my_colorStyle); }
-	my_tabToolBarContainer.push_back(p);
+	tt::Page * page = m_tabToolBar->AddPage(_text);
+	ak::aTtbPage * p = new ak::aTtbPage(m_messenger, page, _text);
+	if (m_colorStyle != nullptr) { p->setColorStyle(m_colorStyle); setColorStyle(m_colorStyle); }
+	m_tabToolBarContainer.push_back(p);
 	return p;
 }
 
 ak::aTtbContainer * ak::aWindowManager::getTabToolBarSubContainer(
 	const QString &				_text
 ) {
-	for (auto itm : my_tabToolBarContainer) {
+	for (auto itm : m_tabToolBarContainer) {
 		if (itm->text() == _text) {
 			return itm;
 		}
@@ -561,24 +561,24 @@ void ak::aWindowManager::addTabToolbarWidget(
 	assert(0); // Not implemented yet
 }
 
-ak::ID ak::aWindowManager::currentTabToolbarTab(void) const { return my_tabToolBar->CurrentTab(); }
+ak::ID ak::aWindowManager::currentTabToolbarTab(void) const { return m_tabToolBar->CurrentTab(); }
 
-int ak::aWindowManager::tabToolbarTabCount(void) const { return my_tabToolBar->TabCount(); }
+int ak::aWindowManager::tabToolbarTabCount(void) const { return m_tabToolBar->TabCount(); }
 
 void ak::aWindowManager::setCurrentTabToolBarTab(
 	ak::ID						_tabID
 ) {
-	assert(_tabID >= 0 && _tabID < my_tabToolBar->TabCount());	// Index out of range
-	my_tabToolBar->SetCurrentTab(_tabID);
+	assert(_tabID >= 0 && _tabID < m_tabToolBar->TabCount());	// Index out of range
+	m_tabToolBar->SetCurrentTab(_tabID);
 }
 
 void ak::aWindowManager::setCurrentTabToolBarTab(
 	const std::string					&_tabName
 ) {
 	int index = 0;
-	for (auto itm : my_tabToolBarContainer) {
+	for (auto itm : m_tabToolBarContainer) {
 		if (itm->text() == _tabName.c_str()) {
-			my_tabToolBar->SetCurrentTab(index);
+			m_tabToolBar->SetCurrentTab(index);
 			break;
 		}
 		index++;
@@ -588,7 +588,7 @@ void ak::aWindowManager::setCurrentTabToolBarTab(
 void ak::aWindowManager::setCentralWidgetMinimumSize(
 	const QSize &				_size
 ) {
-	QWidget * w = my_window->centralWidget();
+	QWidget * w = m_window->centralWidget();
 	if (w != nullptr) {
 		w->setMinimumSize(_size);
 	}
@@ -596,21 +596,21 @@ void ak::aWindowManager::setCentralWidgetMinimumSize(
 
 // #############################################################################################################
 
-ak::aWindow * ak::aWindowManager::window(void) const { return my_window; }
+ak::aWindow * ak::aWindowManager::window(void) const { return m_window; }
 
 void ak::aWindowManager::setWindowTitle(
 	const QString &														_title
-) { my_window->setWindowTitle(_title); }
+) { m_window->setWindowTitle(_title); }
 
-QString ak::aWindowManager::windowTitle(void) const { return my_window->windowTitle(); }
+QString ak::aWindowManager::windowTitle(void) const { return m_window->windowTitle(); }
 
 void ak::aWindowManager::addEventHandler(
 	aWindowEventHandler *					_eventHandler
-) { my_window->addEventHandler(_eventHandler); }
+) { m_window->addEventHandler(_eventHandler); }
 
 void ak::aWindowManager::removeEventHandler(
 	aWindowEventHandler *					_eventHandler
-) { my_window->removeEventHandler(_eventHandler); }
+) { m_window->removeEventHandler(_eventHandler); }
 
 // #############################################################################################################
 
@@ -619,12 +619,12 @@ void ak::aWindowManager::removeEventHandler(
 void ak::aWindowManager::slotRestoreSetting(
 	const QByteArray &					_actualState
 ) {
-	my_window->restoreState(_actualState);
+	m_window->restoreState(_actualState);
 }
 
 void ak::aWindowManager::slotTabToolbarTabClicked(int _index) {
-	my_messenger->sendMessage(my_uid, etTabToolbarClicked, _index);
+	m_messenger->sendMessage(m_uid, etTabToolbarClicked, _index);
 }
 void ak::aWindowManager::slotTabToolbarTabCurrentTabChanged(int _index) {
-	my_messenger->sendMessage(my_uid, etTabToolbarChanged, _index);
+	m_messenger->sendMessage(m_uid, etTabToolbarChanged, _index);
 }

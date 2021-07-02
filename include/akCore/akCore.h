@@ -353,8 +353,8 @@ namespace ak {
 		// Block default constructor
 		aPoint2D() = delete;
 
-		T		my_x;			//! The current X value
-		U		my_y;			//! The current Y value
+		T		m_x;			//! The current X value
+		U		m_y;			//! The current Y value
 
 	};
 
@@ -425,9 +425,9 @@ namespace ak {
 		// Block default constructor
 		aPoint3D() = delete;
 
-		T		my_x;			//! The current X value
-		U		my_y;			//! The current Y value
-		V		my_z;			//! The current Z value
+		T		m_x;			//! The current X value
+		U		m_y;			//! The current Y value
+		V		m_z;			//! The current Z value
 
 	}; // class aPoint3D
 
@@ -593,17 +593,17 @@ namespace ak {
 
 // point 2d
 
-template <class T, class U> ak::aPoint2D<T, U>::aPoint2D(T _x, U _y) { my_x = _x; my_y = _y; }
+template <class T, class U> ak::aPoint2D<T, U>::aPoint2D(T _x, U _y) { m_x = _x; m_y = _y; }
 
-template <class T, class U> ak::aPoint2D<T, U>::aPoint2D(const aPoint2D & _other) { my_x = _other.x(); my_y = _other.y(); }
+template <class T, class U> ak::aPoint2D<T, U>::aPoint2D(const aPoint2D & _other) { m_x = _other.x(); m_y = _other.y(); }
 
 template <class T, class U> ak::aPoint2D<T, U> & ak::aPoint2D<T, U>::operator = (const aPoint2D<T, U> & _other) {
-	my_x = _other.x(); my_y = _other.y();
+	m_x = _other.x(); m_y = _other.y();
 	return *this;
 }
 
 template <class T, class U> ak::aPoint2D<T, U> ak::aPoint2D<T, U>::operator + (const aPoint2D<T, U> & _other) {
-	aPoint2D<T, U> ret(my_x, my_y);
+	aPoint2D<T, U> ret(m_x, m_y);
 	ret.addX(_other.x());
 	ret.addY(_other.y());
 	return ret;
@@ -611,51 +611,51 @@ template <class T, class U> ak::aPoint2D<T, U> ak::aPoint2D<T, U>::operator + (c
 }
 
 template <class T, class U> ak::aPoint2D<T, U> & ak::aPoint2D<T, U>::operator += (const aPoint2D<T, U> & _other) {
-	my_x = my_x + _other.x();
-	my_y = my_y + _other.y();
-	my_z = my_z + _other.z();
+	m_x = m_x + _other.x();
+	m_y = m_y + _other.y();
+	m_z = m_z + _other.z();
 	return *this;
 }
 
 template <class T, class U> bool ak::aPoint2D<T, U>::operator == (const aPoint2D & _other) {
-	if (my_x != _other.x()) { return false; }
-	if (my_y != _other.y()) { return false; }
+	if (m_x != _other.x()) { return false; }
+	if (m_y != _other.y()) { return false; }
 	return true;
 }
 
 template <class T, class U> bool ak::aPoint2D<T, U>::operator != (const aPoint2D & _other) { return !(*this == _other); }
 
-template <class T, class U> T ak::aPoint2D<T, U>::x(void) const { return my_x; }
+template <class T, class U> T ak::aPoint2D<T, U>::x(void) const { return m_x; }
 
-template <class T, class U> U ak::aPoint2D<T, U>::y(void) const { return my_y; }
+template <class T, class U> U ak::aPoint2D<T, U>::y(void) const { return m_y; }
 
-template <class T, class U> void ak::aPoint2D<T, U>::setX(T _x) { my_x = _x; }
+template <class T, class U> void ak::aPoint2D<T, U>::setX(T _x) { m_x = _x; }
 
-template <class T, class U> void ak::aPoint2D<T, U>::setY(U _y) { my_y = _y; }
+template <class T, class U> void ak::aPoint2D<T, U>::setY(U _y) { m_y = _y; }
 
-template <class T, class U> T ak::aPoint2D<T, U>::addX(T _v) { my_x = my_x + v; return my_x; }
+template <class T, class U> T ak::aPoint2D<T, U>::addX(T _v) { m_x = m_x + v; return m_x; }
 
-template <class T, class U> U ak::aPoint2D<T, U>::addY(U _v) { my_y = my_y + v; return my_y; }
+template <class T, class U> U ak::aPoint2D<T, U>::addY(U _v) { m_y = m_y + v; return m_y; }
 
-template <class T, class U> T ak::aPoint2D<T, U>::subX(T _v) { my_x = my_x - _v; return my_x; }
+template <class T, class U> T ak::aPoint2D<T, U>::subX(T _v) { m_x = m_x - _v; return m_x; }
 
-template <class T, class U> U ak::aPoint2D<T, U>::subY(U _v) { my_y = my_y - _v; return my_y; }
+template <class T, class U> U ak::aPoint2D<T, U>::subY(U _v) { m_y = m_y - _v; return m_y; }
 
 // ############################################################################################################################################
 
 // point 3d
 
-template <class T, class U, class V> ak::aPoint3D<T, U, V>::aPoint3D(T _x, U _y, V _z) { my_x = _x; my_y = _y; my_z = _z; }
+template <class T, class U, class V> ak::aPoint3D<T, U, V>::aPoint3D(T _x, U _y, V _z) { m_x = _x; m_y = _y; m_z = _z; }
 
-template <class T, class U, class V> ak::aPoint3D<T, U, V>::aPoint3D(const aPoint3D & _other) { my_x = _other.x(); my_y = _other.y(); my_z = _other.z(); }
+template <class T, class U, class V> ak::aPoint3D<T, U, V>::aPoint3D(const aPoint3D & _other) { m_x = _other.x(); m_y = _other.y(); m_z = _other.z(); }
 
 template <class T, class U, class V> ak::aPoint3D<T, U, V> & ak::aPoint3D<T, U, V>::operator = (const aPoint3D<T, U, V> & _other) {
-	my_x = _other.x(); my_y = _other.y(); my_z = _other.z();
+	m_x = _other.x(); m_y = _other.y(); m_z = _other.z();
 	return *this;
 }
 
 template <class T, class U, class V> ak::aPoint3D<T, U, V> ak::aPoint3D<T, U, V>::operator + (const aPoint3D<T, U, V> & _other) {
-	aPoint3D<T, U, V> ret(my_x, my_y, my_z);
+	aPoint3D<T, U, V> ret(m_x, m_y, m_z);
 	ret.addX(_other.x());
 	ret.addY(_other.y());
 	ret.addZ(_other.z());
@@ -664,41 +664,41 @@ template <class T, class U, class V> ak::aPoint3D<T, U, V> ak::aPoint3D<T, U, V>
 }
 
 template <class T, class U, class V>  ak::aPoint3D<T, U, V> & ak::aPoint3D<T, U, V>::operator += (const aPoint3D<T, U, V> & _other) {
-	my_x = my_x + _other.x();
-	my_y = my_y + _other.y();
-	my_z = my_z + _other.z();
+	m_x = m_x + _other.x();
+	m_y = m_y + _other.y();
+	m_z = m_z + _other.z();
 	return *this;
 }
 
 template <class T, class U, class V> bool ak::aPoint3D<T, U, V>::operator == (const aPoint3D & _other) {
-	if (my_x != _other.x()) { return false; }
-	if (my_y != _other.y()) { return false; }
-	if (my_z != _other.z()) { return false; }
+	if (m_x != _other.x()) { return false; }
+	if (m_y != _other.y()) { return false; }
+	if (m_z != _other.z()) { return false; }
 	return true;
 }
 
 template <class T, class U, class V> bool ak::aPoint3D<T, U, V>::operator != (const aPoint3D & _other) { return !(*this == _other); }
 
-template <class T, class U, class V> T ak::aPoint3D<T, U, V>::x(void) const { return my_x; }
+template <class T, class U, class V> T ak::aPoint3D<T, U, V>::x(void) const { return m_x; }
 
-template <class T, class U, class V> U ak::aPoint3D<T, U, V>::y(void) const { return my_y; }
+template <class T, class U, class V> U ak::aPoint3D<T, U, V>::y(void) const { return m_y; }
 
-template <class T, class U, class V> V ak::aPoint3D<T, U, V>::z(void) const { return my_z; }
+template <class T, class U, class V> V ak::aPoint3D<T, U, V>::z(void) const { return m_z; }
 
-template <class T, class U, class V> void ak::aPoint3D<T, U, V>::setX(T _x) { my_x = _x; }
+template <class T, class U, class V> void ak::aPoint3D<T, U, V>::setX(T _x) { m_x = _x; }
 
-template <class T, class U, class V> void ak::aPoint3D<T, U, V>::setY(U _y) { my_y = _y; }
+template <class T, class U, class V> void ak::aPoint3D<T, U, V>::setY(U _y) { m_y = _y; }
 
-template <class T, class U, class V> void ak::aPoint3D<T, U, V>::setZ(V _z) { my_z = _z; }
+template <class T, class U, class V> void ak::aPoint3D<T, U, V>::setZ(V _z) { m_z = _z; }
 
-template <class T, class U, class V> T ak::aPoint3D<T, U, V>::addX(T _v) { my_x = my_x + v; return my_x; }
+template <class T, class U, class V> T ak::aPoint3D<T, U, V>::addX(T _v) { m_x = m_x + v; return m_x; }
 
-template <class T, class U, class V> U ak::aPoint3D<T, U, V>::addY(U _v) { my_y = my_y + v; return my_y; }
+template <class T, class U, class V> U ak::aPoint3D<T, U, V>::addY(U _v) { m_y = m_y + v; return m_y; }
 
-template <class T, class U, class V> V ak::aPoint3D<T, U, V>::addZ(V _v) { my_z = my_z + v; return my_z; }
+template <class T, class U, class V> V ak::aPoint3D<T, U, V>::addZ(V _v) { m_z = m_z + v; return m_z; }
 
-template <class T, class U, class V> T ak::aPoint3D<T, U, V>::subX(T _v) { my_x = my_x - _v; return my_x; }
+template <class T, class U, class V> T ak::aPoint3D<T, U, V>::subX(T _v) { m_x = m_x - _v; return m_x; }
 
-template <class T, class U, class V> U ak::aPoint3D<T, U, V>::subY(U _v) { my_y = my_y - _v; return my_y; }
+template <class T, class U, class V> U ak::aPoint3D<T, U, V>::subY(U _v) { m_y = m_y - _v; return m_y; }
 
-template <class T, class U, class V> V ak::aPoint3D<T, U, V>::subZ(V _z) { my_z = my_z - _v; return my_z; }
+template <class T, class U, class V> V ak::aPoint3D<T, U, V>::subZ(V _z) { m_z = m_z - _v; return m_z; }

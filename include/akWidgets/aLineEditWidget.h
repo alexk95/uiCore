@@ -80,9 +80,9 @@ namespace ak {
 		void slotEditingFinished();
 
 	private:
-		bool					my_isError;
-		bool					my_errorIsForeground;
-		QString					my_text;
+		bool					m_isError;
+		bool					m_errorIsForeground;
+		QString					m_text;
 
 		aLineEditWidget(const aLineEditWidget &) = delete;
 		aLineEditWidget & operator = (const aLineEditWidget &) = delete;

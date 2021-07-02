@@ -64,10 +64,10 @@ namespace ak {
 
 		//! @brief Will set the enabled state of the watcher
 		//! @param _isEnabled The enabled state to set
-		void setWatcherEnabled(bool _isEnabled) { my_isEnabled = _isEnabled; }
+		void setWatcherEnabled(bool _isEnabled) { m_isEnabled = _isEnabled; }
 
 		//! @brief Will return the enabled state that is currently set
-		bool isWatcherEnabled(void) const { return my_isEnabled; }
+		bool isWatcherEnabled(void) const { return m_isEnabled; }
 
 	private slots:
 		void slotVisibilityChanged(bool _visible);
@@ -76,10 +76,10 @@ namespace ak {
 
 	private:
 
-		std::map<QDockWidget *, aContextMenuItem *>	my_dockMap;
-		std::map<aContextMenuItem *, QDockWidget *>	my_actionMap;
-		bool										my_isEnabled;
-		QMenu *										my_menu;
+		std::map<QDockWidget *, aContextMenuItem *>	m_dockMap;
+		std::map<aContextMenuItem *, QDockWidget *>	m_actionMap;
+		bool										m_isEnabled;
+		QMenu *										m_menu;
 
 		aDockWatcherWidget(aDockWatcherWidget &) = delete;
 		aDockWatcherWidget & operator = (aDockWatcherWidget &) = delete;

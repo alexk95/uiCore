@@ -16,14 +16,14 @@
 
 ak::aDialog::aDialog(
 	QWidget *			_parent
-)	: QDialog(_parent), my_result(resultNone) {}
+)	: QDialog(_parent), m_result(resultNone) {}
 
 ak::aDialog::~aDialog() {}
 
 void ak::aDialog::setResult(
 	dialogResult		_result
-) { my_result = _result; }
+) { m_result = _result; }
 
-ak::dialogResult ak::aDialog::result(void) const { return my_result; }
+ak::dialogResult ak::aDialog::result(void) const { return m_result; }
 
-ak::dialogResult ak::aDialog::showDialog(void) { exec(); return my_result; }
+ak::dialogResult ak::aDialog::showDialog(void) { exec(); return m_result; }

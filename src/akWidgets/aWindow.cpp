@@ -25,11 +25,11 @@
 #include <qscreen.h>
 
 ak::aWindow::aWindow()
-	: QMainWindow(), aPaintable(otMainWindow), my_waitingWidget(nullptr), my_centralWidget(nullptr)
+	: QMainWindow(), aPaintable(otMainWindow), m_waitingWidget(nullptr), m_centralWidget(nullptr)
 {
-	my_waitingWidget = new QLabel();
-	my_centralWidget = new aWindowCentralWidget();
-	setCentralWidget(my_centralWidget);
+	m_waitingWidget = new QLabel();
+	m_centralWidget = new aWindowCentralWidget();
+	setCentralWidget(m_centralWidget);
 }
 
 ak::aWindow::~aWindow() { A_OBJECT_DESTROYING }
@@ -42,35 +42,35 @@ void ak::aWindow::setColorStyle(
 	aColorStyle *					_colorStyle
 ) {
 	assert(_colorStyle != nullptr);		// Nullptr provided
-	my_colorStyle = _colorStyle;
+	m_colorStyle = _colorStyle;
 
-	QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow));
 
 	setStyleSheet(sheet);
 
 	// Double paint to not mess up the tab toolbar
-	sheet = my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	sheet = m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow, "QMainWindow{", "}\n");
 
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorWindow | cafBackgroundColorWindow,
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorWindow | cafBackgroundColorWindow,
 		"QTabBar{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
 		"QTabBar::tab{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus,
 		"QTabBar::tab:hover{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected,
 		"QTabBar::tab:selected{", "}"));
 
 	setStyleSheet(sheet);
 
-	statusBar()->setStyleSheet(my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	statusBar()->setStyleSheet(m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow));
 	
 }
 
 void ak::aWindow::closeEvent(QCloseEvent * _event) {
-	for (auto handler : my_eventHandler) {
+	for (auto handler : m_eventHandler) {
 		if (!handler.first->closeEvent()) {
 			_event->ignore();
 			return;
@@ -87,44 +87,44 @@ void ak::aWindow::closeEvent(QCloseEvent * _event) {
 void ak::aWindow::addEventHandler(
 	aWindowEventHandler *					_eventHandler
 ) {
-	assert(my_eventHandler.find(_eventHandler) == my_eventHandler.end());	// Event handler already set
-	my_eventHandler.insert_or_assign(_eventHandler, true);
+	assert(m_eventHandler.find(_eventHandler) == m_eventHandler.end());	// Event handler already set
+	m_eventHandler.insert_or_assign(_eventHandler, true);
 }
 
 void ak::aWindow::removeEventHandler(
 	aWindowEventHandler *					_eventHandler
-) { my_eventHandler.erase(_eventHandler); }
+) { m_eventHandler.erase(_eventHandler); }
 
 void ak::aWindow::SetCentralWidget(
 	QWidget *								_widget
 ) {
-	setCentralWidget(my_centralWidget);
-	my_centralWidget->setChild(_widget);
+	setCentralWidget(m_centralWidget);
+	m_centralWidget->setChild(_widget);
 }
 
 void ak::aWindow::setWaitingAnimationVisible(
 	bool									_visible
 ) {
-	my_centralWidget->setWaitingAnimationVisible(_visible);
+	m_centralWidget->setWaitingAnimationVisible(_visible);
 }
 
 void ak::aWindow::setWaitingAnimation(
 	QMovie *							_movie
 ) {
-	my_centralWidget->setWaitingAnimation(_movie);
+	m_centralWidget->setWaitingAnimation(_movie);
 }
 
 // ###########################################################################################################################################################
 
 ak::aWindowCentralWidget::aWindowCentralWidget()
-	: my_waitingLabelSize(20,20), my_waitingAnimation(nullptr), my_waitingAnimationVisible(false)
+	: m_waitingLabelSize(20,20), m_waitingAnimation(nullptr), m_waitingAnimationVisible(false)
 {
-	my_childWidget = nullptr;
-	my_waitingLabel = new QLabel("");
-	my_waitingLabel->setAttribute(Qt::WA_NoSystemBackground);
-	my_waitingLabel->setParent(this);
-	my_waitingLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
-	my_waitingLabel->hide();
+	m_childWidget = nullptr;
+	m_waitingLabel = new QLabel("");
+	m_waitingLabel->setAttribute(Qt::WA_NoSystemBackground);
+	m_waitingLabel->setParent(this);
+	m_waitingLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	m_waitingLabel->hide();
 }
 
 ak::aWindowCentralWidget::~aWindowCentralWidget() {
@@ -134,44 +134,47 @@ ak::aWindowCentralWidget::~aWindowCentralWidget() {
 void ak::aWindowCentralWidget::setChild(
 	QWidget *		_widget
 ) {
-	if (my_childWidget != nullptr) { my_childWidget->hide(); }
-	my_childWidget = _widget;
-	if (my_childWidget != nullptr) {
+	QSize s = size();
+	auto oldChild = m_childWidget;
+	m_childWidget = _widget;
+	if (m_childWidget != nullptr) {
 		_widget->setParent(this);
-		_widget->resize(size());
+		_widget->resize(s);
 		_widget->show();
 	}
-	if (my_waitingAnimationVisible) { setWaitingAnimationVisible(true); }
+	if (oldChild != nullptr) { oldChild->hide(); }
+	if (m_waitingAnimationVisible) { setWaitingAnimationVisible(true); }
+
 }
 
 void ak::aWindowCentralWidget::resizeEvent(QResizeEvent * _event) {
-	if (my_childWidget != nullptr) {
-		my_childWidget->resize(size());
+	if (m_childWidget != nullptr) {
+		m_childWidget->resize(size());
 	}
-	my_waitingLabel->resize(size());
+	m_waitingLabel->resize(size());
 }
 
 void ak::aWindowCentralWidget::setWaitingAnimationVisible(
 	bool			_visible
 ) {
-	assert(my_waitingAnimation != nullptr); // No waiting animation set yet
-	my_waitingAnimationVisible = _visible;
-	if (my_waitingAnimationVisible) {
-		if (my_childWidget == nullptr) {
-			my_waitingLabel->setParent(this);
+	assert(m_waitingAnimation != nullptr); // No waiting animation set yet
+	m_waitingAnimationVisible = _visible;
+	if (m_waitingAnimationVisible) {
+		if (m_childWidget == nullptr) {
+			m_waitingLabel->setParent(this);
 		}
 		else {
-			my_waitingLabel->setParent(my_childWidget);
+			m_waitingLabel->setParent(m_childWidget);
 		}
-		my_waitingLabel->setMovie(my_waitingAnimation);
-		my_waitingAnimation->start();
-		my_waitingLabel->setGeometry(rect());
-		my_waitingLabel->show();
+		m_waitingLabel->setMovie(m_waitingAnimation);
+		m_waitingAnimation->start();
+		m_waitingLabel->setGeometry(rect());
+		m_waitingLabel->show();
 	}
 	else {
-		my_waitingAnimation->stop();
-		my_waitingLabel->setParent(nullptr);
-		my_waitingLabel->hide();
+		m_waitingAnimation->stop();
+		m_waitingLabel->setParent(nullptr);
+		m_waitingLabel->hide();
 	}
 }
 
@@ -179,5 +182,5 @@ void ak::aWindowCentralWidget::setWaitingAnimation(
 	QMovie *							_movie
 ) {
 	assert(_movie != nullptr); // Nullptr provided
-	my_waitingAnimation = _movie;
+	m_waitingAnimation = _movie;
 }

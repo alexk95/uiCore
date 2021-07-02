@@ -100,7 +100,7 @@ namespace ak {
 
 	private:
 
-		dockLocation		my_location;
+		dockLocation		m_location;
 
 		// Block default constructor
 		aDockWidget() = delete;

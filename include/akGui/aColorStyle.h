@@ -56,59 +56,59 @@ namespace ak {
 		) = 0;
 
 		//! @brief Returns the currently set window main foreground color
-		aColor getWindowMainForegroundColor(void) const { return my_windowMainForecolor; }
+		aColor getWindowMainForegroundColor(void) const { return m_windowMainForecolor; }
 
 		//! @brief Returns the currently set window main background color
-		aColor getWindowMainBackgroundColor(void) const { return my_windowMainBackcolor; }
+		aColor getWindowMainBackgroundColor(void) const { return m_windowMainBackcolor; }
 
 		//! @brief Returns the currently set controls main foreground color
-		aColor getControlsMainForegroundColor(void) const { return my_controlsMainForecolor; }
+		aColor getControlsMainForegroundColor(void) const { return m_controlsMainForecolor; }
 
 		//! @brief Returns the currently set controls main background color
-		aColor getControlsMainBackgroundColor(void) const { return my_controlsMainBackcolor; }
+		aColor getControlsMainBackgroundColor(void) const { return m_controlsMainBackcolor; }
 
 		//! @brief Returns the currently set controls mian error foreground color
-		aColor getControlsErrorFrontForegroundColor(void) const { return my_controlsErrorFrontForecolor; }
+		aColor getControlsErrorFrontForegroundColor(void) const { return m_controlsErrorFrontForecolor; }
 
 		//! @brief Returns the currently set controls mian error foreground color
-		aColor getControlsErrorBackForegroundColor(void) const { return my_controlsErrorBackForecolor; }
+		aColor getControlsErrorBackForegroundColor(void) const { return m_controlsErrorBackForecolor; }
 
 		//! @brief Returns the currently set controls mian error foreground color
-		aColor getControlsErrorBackBackgroundColor(void) const { return my_controlsErrorBackBackcolor; }
+		aColor getControlsErrorBackBackgroundColor(void) const { return m_controlsErrorBackBackcolor; }
 
 		//! @brief Returns the currently set controls focus background color
-		aColor getControlsFocusedBackgroundColor(void) const { return my_controlsFocusBackColor; }
+		aColor getControlsFocusedBackgroundColor(void) const { return m_controlsFocusBackColor; }
 
 		//! @brief Returns the currently set controls focus color
-		aColor getControlsFocusedForegroundColor(void) const { return my_controlsFocusForeColor; }
+		aColor getControlsFocusedForegroundColor(void) const { return m_controlsFocusForeColor; }
 
 		//! @brief Returns the currently set controls pressed color
-		aColor getControlsPressedForegroundColor(void) const { return my_controlsPressedForeColor; }
+		aColor getControlsPressedForegroundColor(void) const { return m_controlsPressedForeColor; }
 
 		//! @brief Returns the currently set controls pressed color
-		aColor getControlsPressedBackgroundColor(void) const { return my_controlsPressedBackColor; }
+		aColor getControlsPressedBackgroundColor(void) const { return m_controlsPressedBackColor; }
 
 		//! @brief Returns the currently set alternate fore color
-		aColor getAlternateForegroundColor(void) const { return my_alternateForeColor; }
+		aColor getAlternateForegroundColor(void) const { return m_alternateForeColor; }
 
 		//! @brief Returns the currently set alternate back color
-		aColor getAlternateBackgroundColor(void) const { return my_alternateBackColor; }
+		aColor getAlternateBackgroundColor(void) const { return m_alternateBackColor; }
 
 		//! @brief Returns the currently set header foreground color
-		aColor getHeaderForegroundColor(void) const { return my_headerForeColor; }
+		aColor getHeaderForegroundColor(void) const { return m_headerForeColor; }
 
 		//! @brief Returns the currently set header background color
-		aColor getHeaderBackgroundColor(void) const { return my_headerBackColor; }
+		aColor getHeaderBackgroundColor(void) const { return m_headerBackColor; }
 
 		//! @brief Returns the currently set controls border color
-		aColor getControlsBorderColor(void) const { return my_controlsBorderColor; }
+		aColor getControlsBorderColor(void) const { return m_controlsBorderColor; }
 
 		//! @brief Will set the provided directories to the colorStyle
 		//! @param _directory The new search directory to add
 		void setDirectories(
 			const std::vector<QString> &	_directories
 		) {
-			my_directories = _directories;
+			m_directories = _directories;
 		}
 
 		//! @brief Returns the filename for the requested file by searching the set directories
@@ -120,28 +120,28 @@ namespace ak {
 
 	protected:
 
-		aColor					my_windowMainForecolor;			//! The currently set window main foreground color
-		aColor					my_windowMainBackcolor;			//! The currently set window main background color
+		aColor					m_windowMainForecolor;			//! The currently set window main foreground color
+		aColor					m_windowMainBackcolor;			//! The currently set window main background color
 
-		aColor					my_controlsMainForecolor;		//! The currently set controls main foreground color
-		aColor					my_controlsMainBackcolor;		//! The currently set controls main background color
+		aColor					m_controlsMainForecolor;		//! The currently set controls main foreground color
+		aColor					m_controlsMainBackcolor;		//! The currently set controls main background color
 
-		aColor					my_controlsErrorFrontForecolor;	//! The currently set controls error front foreground color
-		aColor					my_controlsErrorBackForecolor;	//! The currently set controls error back foreground color
-		aColor					my_controlsErrorBackBackcolor;	//! The currently set controls error back background color
-		aColor					my_controlsFocusBackColor;		//! The currently set controls focus back color
-		aColor					my_controlsFocusForeColor;		//! The currently set controls focus fore color
-		aColor					my_controlsPressedBackColor;	//! The currently set controls pressed color
-		aColor					my_controlsPressedForeColor;	//! The currently set controls pressed color
-		aColor					my_controlsBorderColor;
+		aColor					m_controlsErrorFrontForecolor;	//! The currently set controls error front foreground color
+		aColor					m_controlsErrorBackForecolor;	//! The currently set controls error back foreground color
+		aColor					m_controlsErrorBackBackcolor;	//! The currently set controls error back background color
+		aColor					m_controlsFocusBackColor;		//! The currently set controls focus back color
+		aColor					m_controlsFocusForeColor;		//! The currently set controls focus fore color
+		aColor					m_controlsPressedBackColor;	//! The currently set controls pressed color
+		aColor					m_controlsPressedForeColor;	//! The currently set controls pressed color
+		aColor					m_controlsBorderColor;
 
-		aColor					my_alternateBackColor;
-		aColor					my_alternateForeColor;
+		aColor					m_alternateBackColor;
+		aColor					m_alternateForeColor;
 
-		aColor					my_headerBackColor;
-		aColor					my_headerForeColor;
-		aColor					my_headerBorderColor;
+		aColor					m_headerBackColor;
+		aColor					m_headerForeColor;
+		aColor					m_headerBorderColor;
 
-		std::vector<QString>	my_directories;					//! Contains all directories to scan for incons
+		std::vector<QString>	m_directories;					//! Contains all directories to scan for incons
 	};
 } // namespace ak

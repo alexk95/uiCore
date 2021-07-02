@@ -15,22 +15,22 @@
 ak::aContextMenuItem::aContextMenuItem(
 	const QString &				_text,
 	contextMenuRole				_role
-) : QAction(_text), aObject(otAction), my_role(_role), my_id(invalidID)
+) : QAction(_text), aObject(otAction), m_role(_role), m_id(invalidID)
 {}
 
 ak::aContextMenuItem::aContextMenuItem(
 	const QIcon &				_icon,
 	const QString &				_text,
 	contextMenuRole				_role
-) : QAction(_icon, _text), aObject(otAction), my_role(_role), my_id(invalidID)
+) : QAction(_icon, _text), aObject(otAction), m_role(_role), m_id(invalidID)
 {}
 
 ak::aContextMenuItem::~aContextMenuItem() { A_OBJECT_DESTROYING }
 
-ak::contextMenuRole ak::aContextMenuItem::role(void) const { return my_role; }
+ak::contextMenuRole ak::aContextMenuItem::role(void) const { return m_role; }
 
 void ak::aContextMenuItem::setId(
 	ak::ID						_id
-) { my_id = _id; }
+) { m_id = _id; }
 
-ak::ID ak::aContextMenuItem::id(void) const { return my_id; }
+ak::ID ak::aContextMenuItem::id(void) const { return m_id; }

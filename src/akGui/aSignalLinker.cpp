@@ -47,16 +47,16 @@
 ak::aSignalLinker::aSignalLinker(
 	aMessenger *							_messanger,
 	aUidManager *							_uidManager
-)	: my_messanger(nullptr),
-	my_uidManager(nullptr),
-	my_uid(0)
+)	: m_messanger(nullptr),
+	m_uidManager(nullptr),
+	m_uid(0)
 {
 	try {
 		if (_uidManager == nullptr) { throw aException("Is nullptr", "Check UID manager"); }
 		if (_messanger == nullptr) { throw aException("Is nullptr", "Check messanger"); }
-		my_uidManager = _uidManager;
-		my_messanger = _messanger;
-		my_uid = my_uidManager->getId();
+		m_uidManager = _uidManager;
+		m_messanger = _messanger;
+		m_uid = m_uidManager->getId();
 	}
 	catch (const aException & e) { throw aException(e, "ak::aSignalLinker::aSignalLinker()"); }
 	catch (const std::exception & e) { throw aException(e.what(), "ak::aSignalLinker::aSignalLinker()"); }
@@ -65,7 +65,7 @@ ak::aSignalLinker::aSignalLinker(
 
 ak::aSignalLinker::~aSignalLinker()
 {
-	for (my_objectsIterator itm = my_objects.begin(); itm != my_objects.end(); itm++) {
+	for (m_objectsIterator itm = m_objects.begin(); itm != m_objects.end(); itm++) {
 		switch (itm->second.type)
 		{
 		case otAction:
@@ -194,10 +194,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aAction *								_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otAction });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otAction });
 
 	_object->connect(_object, &aAction::changed, this, &aSignalLinker::slotChanged);
 	_object->connect(_object, &aAction::triggered, this, &aSignalLinker::slotClicked);
@@ -211,10 +211,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aCheckBoxWidget *								_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otCheckBox });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otCheckBox });
 
 	_object->connect(_object, &aCheckBoxWidget::clicked, this, &aSignalLinker::slotClicked);
 	_object->connect(_object, &aCheckBoxWidget::toggled, this, &aSignalLinker::slotToggled);
@@ -229,10 +229,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aColorEditButtonWidget *						_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otColorEditButton });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otColorEditButton });
 
 	_object->connect(_object, &aColorEditButtonWidget::changed, this, &aSignalLinker::slotChanged);
 
@@ -243,10 +243,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aColorStyleSwitchWidget *							_object,
 	UID													_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otColorStyleSwitchButton });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otColorStyleSwitchButton });
 	_object->connect(_object, &aColorStyleSwitchWidget::changed, this, &aSignalLinker::slotChanged);
 	return _objectUid;
 }
@@ -255,10 +255,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aComboBoxWidget *								_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otComboBox });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otComboBox });
 
 	_object->connect(_object, qOverload<int>(&aComboBoxWidget::activated), this, &aSignalLinker::slotIndexActivated);
 	_object->connect(_object, qOverload<int>(&aComboBoxWidget::currentIndexChanged), this, &aSignalLinker::slotIndexChanged);
@@ -272,10 +272,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aComboButtonWidget *							_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otComboButton });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otComboButton });
 
 	_object->connect(_object, &aComboButtonWidget::clicked, this, &aSignalLinker::slotClicked);
 	_object->connect(_object, &aComboButtonWidget::toggled, this, &aSignalLinker::slotToggled);
@@ -290,10 +290,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aLineEditWidget *								_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otLineEdit });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otLineEdit });
 	_object->connect(_object, &QLineEdit::cursorPositionChanged, this, &aSignalLinker::slotCursorPositionChangedIndex);
 	_object->connect(_object, &QLineEdit::selectionChanged, this, &aSignalLinker::slotSelectionChanged);
 	_object->connect(_object, &QLineEdit::textChanged, this, &aSignalLinker::slotChanged);
@@ -307,10 +307,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aNiceLineEditWidget *							_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otNiceLineEdit });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otNiceLineEdit });
 	_object->connect(_object, &aNiceLineEditWidget::cursorPositionChanged, this, &aSignalLinker::slotCursorPositionChangedIndex);
 	_object->connect(_object, &aNiceLineEditWidget::selectionChanged, this, &aSignalLinker::slotSelectionChanged);
 	_object->connect(_object, &aNiceLineEditWidget::textChanged, this, &aSignalLinker::slotChanged);
@@ -325,10 +325,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aDockWidget *									_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otDock });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otDock });
 
 	_object->connect(_object, &aDockWidget::visibilityChanged, this, &aSignalLinker::slotVisibilityChanged);
 	_object->connect(_object, &aDockWidget::closing, this, &aSignalLinker::slotClosing);
@@ -340,10 +340,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aPropertyGridWidget *							_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otPropertyGrid });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otPropertyGrid });
 	_object->connect(_object, &aPropertyGridWidget::cleared, this, &aSignalLinker::slotCleared);
 	_object->connect(_object, &aPropertyGridWidget::itemChanged, this, &aSignalLinker::slotItemChanged);
 	return _objectUid;
@@ -353,10 +353,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aPushButtonWidget *							_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otPushButton });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otPushButton });
 
 	_object->connect(_object, &aPushButtonWidget::clicked, this, &aSignalLinker::slotClicked);
 	_object->connect(_object, &aPushButtonWidget::toggled, this, &aSignalLinker::slotToggled);
@@ -370,10 +370,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aTableWidget *									_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otTable });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otTable });
 	_object->connect(_object, &QTableWidget::cellActivated, this, &aSignalLinker::tableCellActivated);
 	_object->connect(_object, &QTableWidget::cellChanged, this, &aSignalLinker::tableCellChanged);
 	_object->connect(_object, &QTableWidget::cellClicked, this, &aSignalLinker::tableCellClicked);
@@ -388,10 +388,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aTabWidget *										_object,
 	UID													_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otTabView });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otTabView });
 	_object->connect(_object, &QTabWidget::currentChanged, this, &aSignalLinker::slotItemChanged);
 	_object->connect(_object, &QTabWidget::tabBarClicked, this, &aSignalLinker::slotItemClicked);
 	_object->connect(_object, &QTabWidget::tabCloseRequested, this, &aSignalLinker::slotItemClicked);
@@ -403,10 +403,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aTextEditWidget *								_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otTextEdit });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otTextEdit });
 	_object->connect(_object, &QTextEdit::cursorPositionChanged, this, &aSignalLinker::slotCursorPositionChanged);
 	_object->connect(_object, &QTextEdit::selectionChanged, this, &aSignalLinker::slotSelectionChanged);
 	_object->connect(_object, &QTextEdit::textChanged, this, &aSignalLinker::slotChanged);
@@ -420,10 +420,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aTimer *									_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otTimer });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otTimer });
 
 	_object->connect(_object, &aTimer::timeout, this, &aSignalLinker::slotTimeout);
 
@@ -434,10 +434,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aToolButtonWidget *							_object,
 	UID												_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otToolButton });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otToolButton });
 	_object->connect(_object, &aToolButtonWidget::btnClicked, this, &aSignalLinker::slotClicked);
 	_object->connect(_object, &aToolButtonWidget::keyPressed, this, &aSignalLinker::slotKeyPressed);
 	_object->connect(_object, &aToolButtonWidget::keyReleased, this, &aSignalLinker::slotKeyReleased);
@@ -450,10 +450,10 @@ ak::UID ak::aSignalLinker::addLink(
 	aTreeWidget *											_object,
 	UID													_objectUid
 ) {
-	if (_objectUid == ak::invalidUID) { _objectUid = my_uidManager->getId(); }
-	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
+	if (_objectUid == ak::invalidUID) { _objectUid = m_uidManager->getId(); }
+	assert(m_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
-	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otTree });
+	m_objects.insert_or_assign(_objectUid, struct_object{ _object, otTree });
 	_object->connect(_object, &aTreeWidget::keyPressed, this, &aSignalLinker::slotKeyPressed);
 	_object->connect(_object, &aTreeWidget::keyReleased, this, &aSignalLinker::slotKeyReleased);
 	_object->connect(_object, &aTreeWidget::cleared, this, &aSignalLinker::slotCleared);
@@ -693,8 +693,8 @@ void ak::aSignalLinker::raiseEvent(
 	int													_info2
 ) {
 	try { 
-		if (my_messanger == nullptr) { assert(0); throw aException("Is nullptr", "Check messanger"); }
-		my_messanger->sendMessage(_senderUid, _eventType, _info1, _info2);
+		if (m_messanger == nullptr) { assert(0); throw aException("Is nullptr", "Check messanger"); }
+		m_messanger->sendMessage(_senderUid, _eventType, _info1, _info2);
 	}
 	catch (const std::exception & e) {
 		assert(0);

@@ -23,7 +23,7 @@
 #include <akCore/akCore.h>
 #include <akGui/aPaintable.h>
 
-#define TTB_CONT_DEL_PARENTCHECK assert(my_parentObject != nullptr); my_parentObject->removeChildObject(this);
+#define TTB_CONT_DEL_PARENTCHECK assert(m_parentObject != nullptr); m_parentObject->removeChildObject(this);
 #define TTB_CONTAINER_DESTROYING TTB_CONT_DEL_PARENTCHECK
 
 namespace ak {
@@ -70,10 +70,10 @@ namespace ak {
 		//! @param _enbaled The enabled state to set
 		virtual void setEnabled(
 			bool					_enabled
-		) { my_isEnabled = _enabled; }
+		) { m_isEnabled = _enabled; }
 
 		//! @brief Will return the enabled state of this container
-		bool enabled(void) const { return my_isEnabled; }
+		bool enabled(void) const { return m_isEnabled; }
 
 		//! @brief Will return the sub container with the specified text
 		//! Returns nullptr if no sub container with the specified text exists
@@ -85,13 +85,13 @@ namespace ak {
 		virtual void destroyAllSubContainer(void) = 0;
 
 		//! @brief Will return the text of this ttb container
-		QString text(void) const { return my_text; }
+		QString text(void) const { return m_text; }
 
 	protected:
-		aMessenger *					my_messenger;
-		std::vector<aTtbContainer *>	my_subContainer;
-		QString							my_text;
-		bool							my_isEnabled;
+		aMessenger *					m_messenger;
+		std::vector<aTtbContainer *>	m_subContainer;
+		QString							m_text;
+		bool							m_isEnabled;
 
 	private:
 		// Block default constructor

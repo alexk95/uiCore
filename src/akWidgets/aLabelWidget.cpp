@@ -30,13 +30,13 @@ void ak::aLabelWidget::setColorStyle(
 	aColorStyle *	_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
-			cafBackgroundColorTransparent, "#" + my_alias + "{", "}"));
+	m_colorStyle = _colorStyle;
+	if (m_alias.length() > 0) {
+		this->setStyleSheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
+			cafBackgroundColorTransparent, "#" + m_alias + "{", "}"));
 	}
 	else {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+		this->setStyleSheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 			cafBackgroundColorTransparent));
 	}
 }

@@ -25,12 +25,12 @@ void ak::aGraphicsWidget::setColorStyle(
 	aColorStyle *					_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
+	m_colorStyle = _colorStyle;
 	assert(0); // Not implemented yet
 }
 
 void ak::aGraphicsWidget::resizeEvent(QResizeEvent *_event) {
-	if (my_heightForWidth) {
+	if (m_heightForWidth) {
 		if (height() != width()) { resize(height(), height()); }
 	}
 	QGraphicsView::resizeEvent(_event);
@@ -39,5 +39,5 @@ void ak::aGraphicsWidget::resizeEvent(QResizeEvent *_event) {
 void ak::aGraphicsWidget::setHeightForWidthActive(
 	bool				_active
 ) {
-	my_heightForWidth = _active;
+	m_heightForWidth = _active;
 }

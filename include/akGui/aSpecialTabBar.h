@@ -42,13 +42,13 @@ namespace ak {
 
 		void addColor(int _index, const aColor & _color, bool _repaint = true);
 
-		void setRepaintBlocked(bool _blocked = true) { my_repaintIsBlocked = _blocked; }
+		void setRepaintBlocked(bool _blocked = true) { m_repaintIsBlocked = _blocked; }
 
 	private:
 
-		std::map<int, aColor>		my_colors;
+		std::map<int, aColor>		m_colors;
 
-		bool						my_repaintIsBlocked;
+		bool						m_repaintIsBlocked;
 
 		aSpecialTabBar(const aSpecialTabBar&) = delete;
 		aSpecialTabBar & operator = (const aSpecialTabBar&) = delete;

@@ -105,10 +105,10 @@ namespace ak {
 		void slotItemTriggered();
 
 	private:
-		QMenu *													my_menu;				//! The QMenu of this combo button
-		aUidManager												my_itemsUIDmanager;		//! The UID manager used for the menu items of this combo button
-		std::vector<aComboButtonWidgetItem *>					my_items;				//! The items of this combo button
-		std::map<UID, size_t>								my_itemUids;			//! The map containing the index of a item UID
+		QMenu *													m_menu;				//! The QMenu of this combo button
+		aUidManager												m_itemsUIDmanager;		//! The UID manager used for the menu items of this combo button
+		std::vector<aComboButtonWidgetItem *>					m_items;				//! The items of this combo button
+		std::map<UID, size_t>								m_itemUids;			//! The map containing the index of a item UID
 
 		aComboButtonWidget(aComboButtonWidget &) = delete;
 		aComboButtonWidget & operator = (aComboButtonWidget &) = delete;

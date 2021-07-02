@@ -15,72 +15,72 @@
 
 ak::aException::aException()
 {
-	my_where = "exception_where";
-	my_what = "exception_what";
-	my_out = "ex : exception";
-	my_type = Undefined;
+	m_where = "exception_where";
+	m_what = "exception_what";
+	m_out = "ex : exception";
+	m_type = Undefined;
 }
 
 ak::aException::aException(
 	const char *	 				_exWhat,
 	const char *				 	_exWhere,
 	ak::aException::exceptionType				_exType
-) : my_what(_exWhat), my_where(_exWhere), my_type(_exType) { buildOut(); }
+) : m_what(_exWhat), m_where(_exWhere), m_type(_exType) { buildOut(); }
 
 
 ak::aException::aException(
 	const std::string &				_exWhat,
 	const char *					_exWhere,
 	exceptionType					_exType
-) : my_what(_exWhat), my_where(_exWhere), my_type(_exType) { buildOut(); }
+) : m_what(_exWhat), m_where(_exWhere), m_type(_exType) { buildOut(); }
 
 ak::aException::aException(
 	const std::string &				_exWhat,
 	const std::string &				_exWhere,
 	exceptionType					_exType
-) : my_what(_exWhat), my_where(_exWhere), my_type(_exType) { buildOut(); }
+) : m_what(_exWhat), m_where(_exWhere), m_type(_exType) { buildOut(); }
 
 ak::aException::aException(
 	const char *					_exWhat,
 	const std::string &				_exWhere,
 	exceptionType					_exType
-) : my_what(_exWhat), my_where(_exWhere), my_type(_exType) { buildOut(); }
+) : m_what(_exWhat), m_where(_exWhere), m_type(_exType) { buildOut(); }
 
 ak::aException::aException(
 	const ak::aException &			_other
-) : my_what(_other.getWhat()),
-	my_where(_other.getWhere()),
-	my_type(_other.getType())
+) : m_what(_other.getWhat()),
+	m_where(_other.getWhere()),
+	m_type(_other.getType())
 {
 	buildOut();
-	my_type = _other.getType();
+	m_type = _other.getType();
 }
 
 ak::aException::aException(
 	const ak::aException & 			_other,
 	const char * 					_exWhere
-) : my_what(_other.getWhat()),
-	my_where(_other.getWhere()),
-	my_type(_other.getType())
+) : m_what(_other.getWhat()),
+	m_where(_other.getWhere()),
+	m_type(_other.getType())
 {
-	my_where += AK_CSTR_NL "@ ";
-	my_where += _exWhere;
+	m_where += AK_CSTR_NL "@ ";
+	m_where += _exWhere;
 	buildOut();
-	my_type = _other.getType();
+	m_type = _other.getType();
 }
 
 ak::aException::~aException() throw() {}
 
-const char * ak::aException::what(void) const throw() { return my_out.c_str(); }
+const char * ak::aException::what(void) const throw() { return m_out.c_str(); }
 
-std::string ak::aException::getWhat(void) const { return my_what; }
+std::string ak::aException::getWhat(void) const { return m_what; }
 
-std::string ak::aException::getWhere(void) const {return my_where; }
+std::string ak::aException::getWhere(void) const {return m_where; }
 
-ak::aException::exceptionType ak::aException::getType(void) const { return my_type; }
+ak::aException::exceptionType ak::aException::getType(void) const { return m_type; }
 
 void ak::aException::buildOut(void) {
-	my_out = my_what;
-	my_out += AK_CSTR_NL "@ ";
-	my_out += my_where;
+	m_out = m_what;
+	m_out += AK_CSTR_NL "@ ";
+	m_out += m_where;
 }

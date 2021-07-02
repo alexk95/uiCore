@@ -15,25 +15,25 @@
 #include <akCore/aException.h>
 
 ak::aColorStyleDefaultDark::aColorStyleDefaultDark() {
-	my_controlsMainBackcolor.setRGBA(48, 48, 48);
-	my_controlsMainForecolor.setRGBA(255, 255, 255);
-	my_controlsErrorFrontForecolor.setRGBA(255,0,0);
-	my_controlsErrorBackBackcolor.setRGBA(255, 0, 0);
-	my_controlsErrorBackForecolor.setRGBA(0, 0, 0);
-	my_controlsPressedBackColor.setRGBA(60, 200, 60);
-	my_controlsPressedForeColor.setRGBA(0, 0, 0);
-	my_controlsFocusBackColor.setRGBA(64, 128, 200);
-	my_controlsFocusForeColor.setRGBA(255, 255, 255);
-	my_controlsBorderColor.setRGBA(130, 135, 144);
+	m_controlsMainBackcolor.setRGBA(48, 48, 48);
+	m_controlsMainForecolor.setRGBA(255, 255, 255);
+	m_controlsErrorFrontForecolor.setRGBA(255,0,0);
+	m_controlsErrorBackBackcolor.setRGBA(255, 0, 0);
+	m_controlsErrorBackForecolor.setRGBA(0, 0, 0);
+	m_controlsPressedBackColor.setRGBA(60, 200, 60);
+	m_controlsPressedForeColor.setRGBA(0, 0, 0);
+	m_controlsFocusBackColor.setRGBA(64, 128, 200);
+	m_controlsFocusForeColor.setRGBA(255, 255, 255);
+	m_controlsBorderColor.setRGBA(130, 135, 144);
 
-	my_windowMainBackcolor.setRGBA(48, 48, 48);
-	my_windowMainForecolor.setRGBA(255, 255, 255);
+	m_windowMainBackcolor.setRGBA(48, 48, 48);
+	m_windowMainForecolor.setRGBA(255, 255, 255);
 
-	my_alternateBackColor.setRGBA(69, 69, 69);
-	my_alternateForeColor.setRGBA(255, 255, 255);
+	m_alternateBackColor.setRGBA(69, 69, 69);
+	m_alternateForeColor.setRGBA(255, 255, 255);
 
-	my_headerBackColor.setRGBA(80, 80, 80);
-	my_headerForeColor.setRGBA(255, 255, 255);
+	m_headerBackColor.setRGBA(80, 80, 80);
+	m_headerForeColor.setRGBA(255, 255, 255);
 }
 
 ak::aColorStyleDefaultDark::~aColorStyleDefaultDark() {}

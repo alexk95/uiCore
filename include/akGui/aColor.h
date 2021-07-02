@@ -181,11 +181,11 @@ namespace ak {
 		bool wasChanged(void) const;
 
 	protected:
-		int		my_a;					//! The currently set alpha channel value
-		int		my_r;					//! The currently set red channel value
-		int		my_g;					//! The currently set green channel value
-		int		my_b;					//! The currently set blue channel value
-		bool	my_wasChanged;			//! If true, a value has been changed after creation
+		int		m_a;					//! The currently set alpha channel value
+		int		m_r;					//! The currently set red channel value
+		int		m_g;					//! The currently set green channel value
+		int		m_b;					//! The currently set blue channel value
+		bool	m_wasChanged;			//! If true, a value has been changed after creation
 	};
 
 	//! @brief Returns a Hex-String representation of the value provided like: (int) 24 = "18"

@@ -70,7 +70,7 @@ namespace ak {
 			QTimer *	timer;
 			timerType	type;
 		};
-		std::vector<timer>		my_links;			//! Contains all linked timers
-		aWindowManager *		my_uiManager;		//! The UI manager using this singal linker
+		std::vector<timer>		m_links;			//! Contains all linked timers
+		aWindowManager *		m_uiManager;		//! The UI manager using this singal linker
 	};
 } // namespace ak

@@ -112,13 +112,13 @@ namespace ak {
 
 	private:
 
-		aGraphicsWidget *		my_view;					//! Graphics view required to display the color
-		aPushButtonWidget *		my_button;					//! The button to change the color
-		QHBoxLayout *			my_layout;					//! The layout used to place the widgets
+		aGraphicsWidget *		m_view;					//! Graphics view required to display the color
+		aPushButtonWidget *		m_button;					//! The button to change the color
+		QHBoxLayout *			m_layout;					//! The layout used to place the widgets
 
-		aColor					my_color;					//! The currently set color
+		aColor					m_color;					//! The currently set color
 
-		QWidget *				my_widget;
+		QWidget *				m_widget;
 
 		//! Block default constructor
 		aColorEditButtonWidget() = delete;

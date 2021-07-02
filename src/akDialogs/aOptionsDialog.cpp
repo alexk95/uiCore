@@ -36,46 +36,46 @@ ak::aOptionsDialog::aOptionsDialog(
 	const QString &						_title
 ) :
 	aPaintable(otOptionsDialog),
-	my_mainLayout{ nullptr }, my_buttonsLayout{ nullptr },
-	my_buttonsWidget{ nullptr }, my_centralWidget{ nullptr }, my_tree{ nullptr }, my_dummy{ nullptr },
-	my_btnApply{ nullptr }, my_btnCancel{ nullptr }, my_btnOk{ nullptr }, my_groupIconsSet{ false },
-	my_settingsChanged{ false }
+	m_mainLayout{ nullptr }, m_buttonsLayout{ nullptr },
+	m_buttonsWidget{ nullptr }, m_centralWidget{ nullptr }, m_tree{ nullptr }, m_dummy{ nullptr },
+	m_btnApply{ nullptr }, m_btnCancel{ nullptr }, m_btnOk{ nullptr }, m_groupIconsSet{ false },
+	m_settingsChanged{ false }
 {
 	// Create layouts
-	my_mainLayout = new QVBoxLayout{ this };
-	my_buttonsWidget = new QWidget;
-	my_buttonsLayout = new QHBoxLayout{ my_buttonsWidget };
-	my_centralWidget = new QSplitter(Qt::Orientation::Horizontal);
-	my_mainLayout->addWidget(my_centralWidget, 2);
-	my_mainLayout->addWidget(my_buttonsWidget);
+	m_mainLayout = new QVBoxLayout{ this };
+	m_buttonsWidget = new QWidget;
+	m_buttonsLayout = new QHBoxLayout{ m_buttonsWidget };
+	m_centralWidget = new QSplitter(Qt::Orientation::Horizontal);
+	m_mainLayout->addWidget(m_centralWidget, 2);
+	m_mainLayout->addWidget(m_buttonsWidget);
 
 	// Create buttons
-	my_btnApply = new aPushButtonWidget{ "Apply" };
-	my_btnCancel = new aPushButtonWidget{ "Cancel" };
-	my_btnOk = new aPushButtonWidget{ "Ok" };
-	my_buttonsLayout->addStretch();
-	my_buttonsLayout->addWidget(my_btnOk, 0, Qt::AlignRight);
-	my_buttonsLayout->addWidget(my_btnApply, 0, Qt::AlignRight);
-	my_buttonsLayout->addWidget(my_btnCancel, 0, Qt::AlignRight);
-	my_btnApply->setEnabled(false);
+	m_btnApply = new aPushButtonWidget{ "Apply" };
+	m_btnCancel = new aPushButtonWidget{ "Cancel" };
+	m_btnOk = new aPushButtonWidget{ "Ok" };
+	m_buttonsLayout->addStretch();
+	m_buttonsLayout->addWidget(m_btnOk, 0, Qt::AlignRight);
+	m_buttonsLayout->addWidget(m_btnApply, 0, Qt::AlignRight);
+	m_buttonsLayout->addWidget(m_btnCancel, 0, Qt::AlignRight);
+	m_btnApply->setEnabled(false);
 
-	connect(my_btnApply, SIGNAL(clicked()), this, SLOT(slotApply()));
-	connect(my_btnCancel, SIGNAL(clicked()), this, SLOT(slotCancel()));
-	connect(my_btnOk, SIGNAL(clicked()), this, SLOT(slotOk()));
+	connect(m_btnApply, SIGNAL(clicked()), this, SLOT(slotApply()));
+	connect(m_btnCancel, SIGNAL(clicked()), this, SLOT(slotCancel()));
+	connect(m_btnOk, SIGNAL(clicked()), this, SLOT(slotOk()));
 	
 	// Create central components
-	my_tree = new aTreeWidget;
-	my_tree->setMultiSelectionEnabled(false);
-	my_tree->setSortingEnabled(true);
-	if (my_colorStyle != nullptr) { my_tree->setColorStyle(my_colorStyle); }
-	connect(my_tree, &aTreeWidget::selectionChanged, this, &aOptionsDialog::slotSelectionChanged);
+	m_tree = new aTreeWidget;
+	m_tree->setMultiSelectionEnabled(false);
+	m_tree->setSortingEnabled(true);
+	if (m_colorStyle != nullptr) { m_tree->setColorStyle(m_colorStyle); }
+	connect(m_tree, &aTreeWidget::selectionChanged, this, &aOptionsDialog::slotSelectionChanged);
 
-	my_dummy = new aPropertyGridWidget;
-	my_dummy->setUid(2);
-	if (my_colorStyle != nullptr) { my_dummy->setColorStyle(my_colorStyle); }
+	m_dummy = new aPropertyGridWidget;
+	m_dummy->setUid(2);
+	if (m_colorStyle != nullptr) { m_dummy->setColorStyle(m_colorStyle); }
 
-	my_centralWidget->addWidget(my_tree->widget());
-	my_centralWidget->addWidget(my_dummy->widget());
+	m_centralWidget->addWidget(m_tree->widget());
+	m_centralWidget->addWidget(m_dummy->widget());
 	
 	// Set properties
 	setMinimumSize(400, 300);
@@ -86,48 +86,48 @@ ak::aOptionsDialog::aOptionsDialog(
 ak::aOptionsDialog::~aOptionsDialog() {
 	A_OBJECT_DESTROYING
 
-	for (auto itm : my_categories) {
+	for (auto itm : m_categories) {
 		delete itm.second;
 	}
-	delete my_dummy;
-	delete my_btnApply;
-	delete my_btnCancel;
-	delete my_btnOk;
-	delete my_tree;
-	delete my_buttonsLayout;
-	delete my_buttonsWidget;
-	delete my_centralWidget;
-	delete my_mainLayout;
+	delete m_dummy;
+	delete m_btnApply;
+	delete m_btnCancel;
+	delete m_btnOk;
+	delete m_tree;
+	delete m_buttonsLayout;
+	delete m_buttonsWidget;
+	delete m_centralWidget;
+	delete m_mainLayout;
 }
 
 void ak::aOptionsDialog::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
-	my_colorStyle = _colorStyle;
-	my_tree->setColorStyle(_colorStyle);
-	my_btnApply->setColorStyle(_colorStyle);
-	my_btnCancel->setColorStyle(_colorStyle);
-	my_btnOk->setColorStyle(_colorStyle);
-	my_dummy->setColorStyle(_colorStyle);
-	for (auto itm : my_categories) {
+	m_colorStyle = _colorStyle;
+	m_tree->setColorStyle(_colorStyle);
+	m_btnApply->setColorStyle(_colorStyle);
+	m_btnCancel->setColorStyle(_colorStyle);
+	m_btnOk->setColorStyle(_colorStyle);
+	m_dummy->setColorStyle(_colorStyle);
+	for (auto itm : m_categories) {
 		itm.second->setColorStyle(_colorStyle);
 	}
-	if (my_colorStyle != nullptr) {
-		QString sheet(my_colorStyle->toStyleSheet(cafBackgroundColorDialogWindow | cafForegroundColorDialogWindow, "QDialog {", "}"));
+	if (m_colorStyle != nullptr) {
+		QString sheet(m_colorStyle->toStyleSheet(cafBackgroundColorDialogWindow | cafForegroundColorDialogWindow, "QDialog {", "}"));
 		setStyleSheet(sheet);
-		sheet = my_colorStyle->toStyleSheet(cafBackgroundColorButton |
+		sheet = m_colorStyle->toStyleSheet(cafBackgroundColorButton |
 			cafForegroundColorButton, "QSplitter[orientation=\"1\"]::handle {", "}");
-		my_centralWidget->setStyleSheet(sheet);
+		m_centralWidget->setStyleSheet(sheet);
 	}
 	else {
 		setStyleSheet("");
-		my_centralWidget->setStyleSheet("");
+		m_centralWidget->setStyleSheet("");
 	}
 }
 
 void ak::aOptionsDialog::closeEvent(QCloseEvent * _event) {
-	if (my_settingsChanged) {
-		for (auto handler : my_windowEventHandler) {
+	if (m_settingsChanged) {
+		for (auto handler : m_windowEventHandler) {
 			if (!handler->closeEvent()) {
 				_event->ignore();
 				return;
@@ -144,13 +144,13 @@ ak::ID ak::aOptionsDialog::createCategory(
 	ID									_parentID,
 	const QString &						_text
 ) {
-	ID id = my_tree->add(_parentID, _text);
+	ID id = m_tree->add(_parentID, _text);
 	aOptionsDialogCategory * newCategory = new aOptionsDialogCategory{ this, id };
-	my_categories.insert_or_assign(id, newCategory);
-	if (my_groupIconsSet) {
-		newCategory->getPropertyGrid()->setGroupStateIcons(my_iconGroupExpanded, my_iconGroupCollapsed);
+	m_categories.insert_or_assign(id, newCategory);
+	if (m_groupIconsSet) {
+		newCategory->getPropertyGrid()->setGroupStateIcons(m_iconGroupExpanded, m_iconGroupCollapsed);
 	}
-	if (my_colorStyle != nullptr) { newCategory->setColorStyle(my_colorStyle); }
+	if (m_colorStyle != nullptr) { newCategory->setColorStyle(m_colorStyle); }
 	return id;
 }
 
@@ -159,14 +159,14 @@ ak::ID ak::aOptionsDialog::createCategory(
 	const QString &						_text,
 	const QIcon &						_icon
 ) {
-	ID id = my_tree->add(_parentID, _text);
-	my_tree->setItemIcon(id, _icon);
+	ID id = m_tree->add(_parentID, _text);
+	m_tree->setItemIcon(id, _icon);
 	aOptionsDialogCategory * newCategory = new aOptionsDialogCategory{ this, id };
-	my_categories.insert_or_assign(id, newCategory);
-	if (my_groupIconsSet) {
-		newCategory->getPropertyGrid()->setGroupStateIcons(my_iconGroupExpanded, my_iconGroupCollapsed);
+	m_categories.insert_or_assign(id, newCategory);
+	if (m_groupIconsSet) {
+		newCategory->getPropertyGrid()->setGroupStateIcons(m_iconGroupExpanded, m_iconGroupCollapsed);
 	}
-	if (my_colorStyle != nullptr) { newCategory->setColorStyle(my_colorStyle); }
+	if (m_colorStyle != nullptr) { newCategory->setColorStyle(m_colorStyle); }
 	return id;
 }
 
@@ -175,8 +175,8 @@ void ak::aOptionsDialog::createGroup(
 	const QString &						_name,
 	const QColor &						_color
 ) {
-	assert(_categoryID >= 0 && _categoryID < my_categories.size());
-	auto actualCategory = my_categories.at(_categoryID);
+	assert(_categoryID >= 0 && _categoryID < m_categories.size());
+	auto actualCategory = m_categories.at(_categoryID);
 	actualCategory->getPropertyGrid()->addGroup(_color, _name);
 }
 
@@ -184,11 +184,11 @@ void ak::aOptionsDialog::setGroupStateIcons(
 	const QIcon &						_groupExpanded,
 	const QIcon &						_groupCollapsed
 ) {
-	my_iconGroupExpanded = _groupExpanded;
-	my_iconGroupCollapsed = _groupCollapsed;
-	my_groupIconsSet = true;
-	for (auto category : my_categories) {
-		category.second->getPropertyGrid()->setGroupStateIcons(my_iconGroupExpanded, my_iconGroupCollapsed);
+	m_iconGroupExpanded = _groupExpanded;
+	m_iconGroupCollapsed = _groupCollapsed;
+	m_groupIconsSet = true;
+	for (auto category : m_categories) {
+		category.second->getPropertyGrid()->setGroupStateIcons(m_iconGroupExpanded, m_iconGroupCollapsed);
 	}
 }
 
@@ -204,8 +204,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const QString &									_settingName,
 	bool											_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _settingName, _value);
 }
 
@@ -215,8 +215,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const QString &									_settingName,
 	const aColor &								_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _settingName, _value);
 }
 
@@ -226,8 +226,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const QString &									_settingName,
 	double											_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _settingName, _value);
 }
 
@@ -237,8 +237,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const QString &									_settingName,
 	int												_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _settingName, _value);
 }
 
@@ -249,8 +249,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const std::vector<QString> &					_possibleSelection,
 	const QString &									_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _settingName, _possibleSelection, _value);
 }
 
@@ -260,8 +260,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const QString &									_settingName,
 	const QString &									_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _settingName, _value);
 }
 
@@ -274,8 +274,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const QString &									_settingName,
 	bool											_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _groupName, _settingName, _value);
 }
 
@@ -286,8 +286,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const QString &									_settingName,
 	const aColor &									_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _groupName, _settingName, _value);
 }
 
@@ -298,8 +298,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const QString &									_settingName,
 	double											_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _groupName, _settingName, _value);
 }
 
@@ -310,8 +310,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const QString &									_settingName,
 	int												_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _groupName, _settingName, _value);
 }
 
@@ -323,8 +323,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const std::vector<QString> &					_possibleSelection,
 	const QString &									_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _groupName, _settingName, _possibleSelection, _value);
 }
 
@@ -335,8 +335,8 @@ ak::ID ak::aOptionsDialog::addItem(
 	const QString &									_settingName,
 	const QString &									_value
 ) {
-	auto itm{ my_categories.find(_categoryID) };
-	assert(itm != my_categories.end());	// Invalid category ID
+	auto itm{ m_categories.find(_categoryID) };
+	assert(itm != m_categories.end());	// Invalid category ID
 	return itm->second->getPropertyGrid()->addItem(_isMultipleValues, _groupName, _settingName, _value);
 }
 
@@ -345,12 +345,12 @@ ak::ID ak::aOptionsDialog::addItem(
 // Data manipulation
 
 void ak::aOptionsDialog::clear(void) {
-	my_tree->clear();
-	for (auto category : my_categories) {
+	m_tree->clear();
+	for (auto category : m_categories) {
 		delete category.second;
 	}
-	my_categories.clear();
-	my_settingsChanged = false;
+	m_categories.clear();
+	m_settingsChanged = false;
 }
 
 // ###################################################################################################################################################
@@ -358,14 +358,14 @@ void ak::aOptionsDialog::clear(void) {
 // Event handling
 
 void ak::aOptionsDialog::slotSelectionChanged() {
-	auto selection{ my_tree->selectedItems() };
+	auto selection{ m_tree->selectedItems() };
 	if (selection.size() == 0) {
-		my_centralWidget->replaceWidget(1, my_dummy->widget());
+		m_centralWidget->replaceWidget(1, m_dummy->widget());
 	}
 	else if (selection.size() == 1) {
-		auto category{ my_categories.find(selection.at(0)) };
-		assert(category != my_categories.end()); // That should not happen. Invalid category selected
-		my_centralWidget->replaceWidget(1, category->second->widget());
+		auto category{ m_categories.find(selection.at(0)) };
+		assert(category != m_categories.end()); // That should not happen. Invalid category selected
+		m_centralWidget->replaceWidget(1, category->second->widget());
 	}
 	else {
 		assert(0);	// To many items selected
@@ -374,11 +374,11 @@ void ak::aOptionsDialog::slotSelectionChanged() {
 
 void ak::aOptionsDialog::addWindowEventHandler(
 	aWindowEventHandler *					_handler
-) { my_windowEventHandler.push_back(_handler); }
+) { m_windowEventHandler.push_back(_handler); }
 
 void ak::aOptionsDialog::slotChanged(int _itemId) {
-	my_settingsChanged = true;
-	my_result = resultCancel;
+	m_settingsChanged = true;
+	m_result = resultCancel;
 }
 
 void ak::aOptionsDialog::slotOk() {
@@ -387,7 +387,7 @@ void ak::aOptionsDialog::slotOk() {
 }
 
 void ak::aOptionsDialog::slotApply() {
-	my_result = resultYes;
+	m_result = resultYes;
 	emit changed();
 }
 
@@ -404,22 +404,22 @@ void ak::aOptionsDialog::slotCancel() {
 ak::aOptionsDialogCategory::aOptionsDialogCategory(
 	aOptionsDialog *			_optionsDialog,
 	ID					_treeItemId
-) : aWidget{ otNone }, my_treeItemId{ _treeItemId }, my_propertyGrid{ nullptr }, my_optionsDialog{ _optionsDialog }
+) : aWidget{ otNone }, m_treeItemId{ _treeItemId }, m_propertyGrid{ nullptr }, m_optionsDialog{ _optionsDialog }
 {
-	my_propertyGrid = new aPropertyGridWidget;
-	my_propertyGrid->setUid(2);
+	m_propertyGrid = new aPropertyGridWidget;
+	m_propertyGrid->setUid(2);
 }
 
 ak::aOptionsDialogCategory::~aOptionsDialogCategory() {
-	delete my_propertyGrid;
+	delete m_propertyGrid;
 }
 
 // #######################################################################################################
 
 // Base class functions
 
-QWidget * ak::aOptionsDialogCategory::widget(void) { return my_propertyGrid->widget(); }
+QWidget * ak::aOptionsDialogCategory::widget(void) { return m_propertyGrid->widget(); }
 
 void ak::aOptionsDialogCategory::setColorStyle(
 	ak::aColorStyle *					_colorStyle
-) { my_propertyGrid->setColorStyle(_colorStyle); }
+) { m_propertyGrid->setColorStyle(_colorStyle); }

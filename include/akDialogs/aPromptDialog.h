@@ -81,21 +81,21 @@ namespace ak {
 			const QIcon &			_icon
 		);
 
-		QIcon				my_currentIcon;
-		promptType			my_type;
-		QVBoxLayout *		my_layout;
+		QIcon				m_currentIcon;
+		promptType			m_type;
+		QVBoxLayout *		m_layout;
 
-		QHBoxLayout *		my_buttonsLayout;
-		QWidget *			my_buttonsWidget;
+		QHBoxLayout *		m_buttonsLayout;
+		QWidget *			m_buttonsWidget;
 
-		QHBoxLayout *		my_infoLayout;
-		QWidget *			my_infoWidget;
+		QHBoxLayout *		m_infoLayout;
+		QWidget *			m_infoWidget;
 
-		aLabelWidget *		my_iconLabel;
-		aLabelWidget *		my_label;
-		aPushButtonWidget *	my_button1;
-		aPushButtonWidget *	my_button2;
-		aPushButtonWidget *	my_button3;
+		aLabelWidget *		m_iconLabel;
+		aLabelWidget *		m_label;
+		aPushButtonWidget *	m_button1;
+		aPushButtonWidget *	m_button2;
+		aPushButtonWidget *	m_button3;
 
 	};
 } // namespace ak

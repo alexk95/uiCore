@@ -47,77 +47,77 @@ namespace ak {
 
 		std::vector<ak::eventType> disabledMessages(void) const;
 
-		bool unknownEvent(void) const { return my_unknownEvent; }
+		bool unknownEvent(void) const { return m_unknownEvent; }
 
-		bool activatedEvent(void) const { return my_activated; }
+		bool activatedEvent(void) const { return m_activated; }
 
-		bool changedEvent(void) const { return my_changed; }
+		bool changedEvent(void) const { return m_changed; }
 
-		bool clearedEvent(void) const { return my_cleared; }
+		bool clearedEvent(void) const { return m_cleared; }
 
-		bool clickedEvent(void) const { return my_clicked; }
+		bool clickedEvent(void) const { return m_clicked; }
 
-		bool closeRequestedEvent(void) const { return my_closeRequested; }
+		bool closeRequestedEvent(void) const { return m_closeRequested; }
 
-		bool collapsedEvent(void) const { return my_collpased; }
+		bool collapsedEvent(void) const { return m_collpased; }
 
-		bool cursorPositionChangedEvent(void) const { return my_cursorPosotionChanged; }
+		bool cursorPositionChangedEvent(void) const { return m_cursorPosotionChanged; }
 
-		bool destroyedEvent(void) const { return my_destroyed; }
+		bool destroyedEvent(void) const { return m_destroyed; }
 
-		bool doubleClickedEvent(void) const { return my_doubleClicked; }
+		bool doubleClickedEvent(void) const { return m_doubleClicked; }
 
-		bool expandedEvent(void) const { return my_expanded; }
+		bool expandedEvent(void) const { return m_expanded; }
 
-		bool focusedEvent(void) const { return my_focused; }
+		bool focusedEvent(void) const { return m_focused; }
 
-		bool invalidEntryEvent(void) const { return my_invalidEntry; }
+		bool invalidEntryEvent(void) const { return m_invalidEntry; }
 
-		bool indexChangedEvent(void) const { return my_indexChanged; }
+		bool indexChangedEvent(void) const { return m_indexChanged; }
 
-		bool keyPressedEvent(void) const { return my_keyPressed; }
+		bool keyPressedEvent(void) const { return m_keyPressed; }
 
-		bool locationChangedEvent(void) const { return my_locationChanged; }
+		bool locationChangedEvent(void) const { return m_locationChanged; }
 
-		bool releasedEvent(void) const { return my_released; }
+		bool releasedEvent(void) const { return m_released; }
 
-		bool selectionChangedEvent(void) const { return my_selectionChanged; }
+		bool selectionChangedEvent(void) const { return m_selectionChanged; }
 
-		bool stateChangedEvent(void) const { return my_stateChanged; }
+		bool stateChangedEvent(void) const { return m_stateChanged; }
 
-		bool textChangedEvent(void) const { return my_textChanged; }
+		bool textChangedEvent(void) const { return m_textChanged; }
 
-		bool toggledCheckedEvent(void) const { return my_toggeledChecked; }
+		bool toggledCheckedEvent(void) const { return m_toggeledChecked; }
 
-		bool toggledUncheckedEvent(void) const { return my_toggeledUnchecked; }
+		bool toggledUncheckedEvent(void) const { return m_toggeledUnchecked; }
 
 	protected:
 		aSingletonAllowedMessages();
 
-		static aSingletonAllowedMessages *	my_singleton;
+		static aSingletonAllowedMessages *	m_singleton;
 
-		bool						my_unknownEvent;
-		bool						my_activated;
-		bool						my_changed;
-		bool						my_cleared;
-		bool						my_clicked;
-		bool						my_closeRequested;
-		bool						my_collpased;
-		bool						my_cursorPosotionChanged;
-		bool						my_destroyed;
-		bool						my_doubleClicked;
-		bool						my_expanded;
-		bool						my_focused;
-		bool						my_invalidEntry;
-		bool						my_indexChanged;
-		bool						my_locationChanged;
-		bool						my_released;
-		bool						my_keyPressed;
-		bool						my_selectionChanged;
-		bool						my_stateChanged;
-		bool						my_textChanged;
-		bool						my_toggeledChecked;
-		bool						my_toggeledUnchecked;
+		bool						m_unknownEvent;
+		bool						m_activated;
+		bool						m_changed;
+		bool						m_cleared;
+		bool						m_clicked;
+		bool						m_closeRequested;
+		bool						m_collpased;
+		bool						m_cursorPosotionChanged;
+		bool						m_destroyed;
+		bool						m_doubleClicked;
+		bool						m_expanded;
+		bool						m_focused;
+		bool						m_invalidEntry;
+		bool						m_indexChanged;
+		bool						m_locationChanged;
+		bool						m_released;
+		bool						m_keyPressed;
+		bool						m_selectionChanged;
+		bool						m_stateChanged;
+		bool						m_textChanged;
+		bool						m_toggeledChecked;
+		bool						m_toggeledUnchecked;
 			
 	};
 

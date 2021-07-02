@@ -23,10 +23,10 @@ QString ak::aColorStyle::getFilePath(
 ) const {
 	try {
 		// Search in all directories for the file
-		for (int i = 0; i < my_directories.size(); i++) {
+		for (int i = 0; i < m_directories.size(); i++) {
 			try {
 				// Check if the file exist at the current directory
-				QString f(my_directories.at(i));
+				QString f(m_directories.at(i));
 				f.append("ColorStyles/");
 				f.append(getColorStyleName());
 				f.append("/");
@@ -45,7 +45,7 @@ QString ak::aColorStyle::getFilePath(
 			}
 			catch (...) {
 				throw aException(QString(QString("Failed to check file\nFile: ") + QString(_fileName) + QString("\nPath: ") +
-					QString(my_directories.at(i))).toStdString().c_str(), "Check file");
+					QString(m_directories.at(i))).toStdString().c_str(), "Check file");
 			}
 		}
 		throw aException(QString(QString("The requested file: \"") + QString(_fileName) + QString("\" does not exist in the icon search directories")).toStdString(),

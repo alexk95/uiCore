@@ -37,46 +37,46 @@
 const int AK_INTERN_ALTERNATE_ROW_COLOR_VALUE = 40;
 
 ak::aPropertyGridWidget::aPropertyGridWidget()
-	: aWidget(otPropertyGrid), my_currentID(invalidID),
-	my_groupHeaderBackColor(80,80,80), my_groupHeaderForeColor(0,0,0), my_itemDefaultBackgroundColor(230,230,230),
-	my_itemTextColorError(255,0,0), my_itemTextColorNormal(0,0,0),
-	my_layout(nullptr), my_infoTextEdit(nullptr), my_isEnabled(true)
+	: aWidget(otPropertyGrid), m_currentID(invalidID),
+	m_groupHeaderBackColor(80,80,80), m_groupHeaderForeColor(0,0,0), m_itemDefaultBackgroundColor(230,230,230),
+	m_itemTextColorError(255,0,0), m_itemTextColorNormal(0,0,0),
+	m_layout(nullptr), m_infoTextEdit(nullptr), m_isEnabled(true)
 {
 	// Create central widget
 	setContentsMargins(0, 0, 0, 0);
-	my_layout = new QVBoxLayout(this);
-	my_layout->setContentsMargins(0, 0, 0, 0);
+	m_layout = new QVBoxLayout(this);
+	m_layout->setContentsMargins(0, 0, 0, 0);
 
 	// Create info field
-	my_infoTextEdit = new aTextEditWidget("No items");
-	my_infoTextEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
-	my_infoTextEdit->setReadOnly(true);
-	my_infoTextEdit->setTextInteractionFlags(Qt::TextInteractionFlag::NoTextInteraction);
-	my_layout->addWidget(my_infoTextEdit);
+	m_infoTextEdit = new aTextEditWidget("No items");
+	m_infoTextEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	m_infoTextEdit->setReadOnly(true);
+	m_infoTextEdit->setTextInteractionFlags(Qt::TextInteractionFlag::NoTextInteraction);
+	m_layout->addWidget(m_infoTextEdit);
 
 	// Create table
-	my_table = new aTableWidget(0, 2);
-	my_table->verticalHeader()->setVisible(false);
-	my_table->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+	m_table = new aTableWidget(0, 2);
+	m_table->verticalHeader()->setVisible(false);
+	m_table->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
 
 	QStringList lst;
 	lst.push_back("Name");
 	lst.push_back("Value");
-	my_table->setHorizontalHeaderLabels(lst);
+	m_table->setHorizontalHeaderLabels(lst);
 
-	my_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeMode::Stretch);
-	my_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::Stretch);
-	my_table->horizontalHeader()->setEnabled(false);
+	m_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeMode::Stretch);
+	m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::Stretch);
+	m_table->horizontalHeader()->setEnabled(false);
 
 	// Create default group
-	my_defaultGroup = new aPropertyGridGroup(my_table, "");
-	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor, false);
-	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError, false);
-	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
-	my_defaultGroup->setGroupHeaderVisible(false);
-	my_defaultGroup->activate();
+	m_defaultGroup = new aPropertyGridGroup(m_table, "");
+	m_defaultGroup->setItemsBackColor(m_itemDefaultBackgroundColor, false);
+	m_defaultGroup->setItemsTextColors(m_itemTextColorNormal, m_itemTextColorError, false);
+	m_defaultGroup->setHeaderColors(m_groupHeaderForeColor, m_groupHeaderBackColor);
+	m_defaultGroup->setGroupHeaderVisible(false);
+	m_defaultGroup->activate();
 
-	connect(my_table, &aTableWidget::focusLost, this, &aPropertyGridWidget::slotFocusLost);
+	connect(m_table, &aTableWidget::focusLost, this, &aPropertyGridWidget::slotFocusLost);
 }
 
 ak::aPropertyGridWidget::~aPropertyGridWidget() {
@@ -95,34 +95,34 @@ void ak::aPropertyGridWidget::setColorStyle(
 	aColorStyle *						_aColorStyle
 ) {
 	assert(_aColorStyle != nullptr); // nullptr provided
-	my_colorStyle = _aColorStyle;
-	//my_table->setStyleSheet(my_colorStyle->getStylesheet(ak::aColorStyle::styleableObject::sTable));
-	my_groupHeaderBackColor = my_colorStyle->getHeaderBackgroundColor().toQColor();
-	my_groupHeaderForeColor = my_colorStyle->getHeaderForegroundColor().toQColor();
-	my_itemDefaultBackgroundColor = my_colorStyle->getControlsMainBackgroundColor().toQColor();
-	my_itemTextColorNormal = my_colorStyle->getControlsMainForegroundColor().toQColor();
-	my_itemTextColorError = my_colorStyle->getControlsErrorFrontForegroundColor().toQColor();
+	m_colorStyle = _aColorStyle;
+	//m_table->setStyleSheet(m_colorStyle->getStylesheet(ak::aColorStyle::styleableObject::sTable));
+	m_groupHeaderBackColor = m_colorStyle->getHeaderBackgroundColor().toQColor();
+	m_groupHeaderForeColor = m_colorStyle->getHeaderForegroundColor().toQColor();
+	m_itemDefaultBackgroundColor = m_colorStyle->getControlsMainBackgroundColor().toQColor();
+	m_itemTextColorNormal = m_colorStyle->getControlsMainForegroundColor().toQColor();
+	m_itemTextColorError = m_colorStyle->getControlsErrorFrontForegroundColor().toQColor();
 
-	for (auto itm : my_groups) { 
-		itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
-		itm.second->setColorStyle(my_colorStyle, true);
+	for (auto itm : m_groups) { 
+		itm.second->setHeaderColors(m_groupHeaderForeColor, m_groupHeaderBackColor);
+		itm.second->setColorStyle(m_colorStyle, true);
 	}
 
-	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
-	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError, false);
-	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor, true);
+	m_defaultGroup->setHeaderColors(m_groupHeaderForeColor, m_groupHeaderBackColor);
+	m_defaultGroup->setItemsTextColors(m_itemTextColorNormal, m_itemTextColorError, false);
+	m_defaultGroup->setItemsBackColor(m_itemDefaultBackgroundColor, true);
 
 	QString sheet("QHeaderView{border: none;}\n");
 
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorHeader |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorHeader |
 		cafBackgroundColorHeader, "QHeaderView::section{","border: 0px}"
 		"QHeaderView::section:first{border-right: 1px solid black;}"));
 
-	my_table->horizontalHeader()->setStyleSheet(sheet);
-	my_table->setColorStyle(my_colorStyle);
-	my_infoTextEdit->setColorStyle(my_colorStyle);
+	m_table->horizontalHeader()->setStyleSheet(sheet);
+	m_table->setColorStyle(m_colorStyle);
+	m_infoTextEdit->setColorStyle(m_colorStyle);
 
-	for (auto itm : my_items) { itm.second->setColorStyle(my_colorStyle); }
+	for (auto itm : m_items) { itm.second->setColorStyle(m_colorStyle); }
 
 }
 
@@ -130,8 +130,8 @@ void ak::aPropertyGridWidget::setAlias(
 	const QString &							_alias
 ) {
 	aObject::setAlias(_alias);
-	my_table->setObjectName(my_alias + "__Table");
-	my_infoTextEdit->setObjectName(my_alias + "__TextEdit");
+	m_table->setObjectName(m_alias + "__Table");
+	m_infoTextEdit->setObjectName(m_alias + "__TextEdit");
 }
 
 // ##############################################################################################################
@@ -142,17 +142,17 @@ void ak::aPropertyGridWidget::addGroup(
 	const QString &									_group
 ) {
 	assert(_group.length() > 0); // Empty group name provided
-	auto itm = my_groups.find(_group);
-	assert(itm == my_groups.end());	// Group already exists
-	aPropertyGridGroup * newGroup = new aPropertyGridGroup(my_table, _group);
-	newGroup->setItemsBackColor(my_itemDefaultBackgroundColor, false);
-	newGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
-	newGroup->setStateIcons(&my_groupIconExpanded, &my_groupIconCollapsed);
-	if (my_colorStyle != nullptr) {
-		newGroup->setColorStyle(my_colorStyle, true);
+	auto itm = m_groups.find(_group);
+	assert(itm == m_groups.end());	// Group already exists
+	aPropertyGridGroup * newGroup = new aPropertyGridGroup(m_table, _group);
+	newGroup->setItemsBackColor(m_itemDefaultBackgroundColor, false);
+	newGroup->setHeaderColors(m_groupHeaderForeColor, m_groupHeaderBackColor);
+	newGroup->setStateIcons(&m_groupIconExpanded, &m_groupIconCollapsed);
+	if (m_colorStyle != nullptr) {
+		newGroup->setColorStyle(m_colorStyle, true);
 	}
 	newGroup->activate();
-	my_groups.insert_or_assign(_group, newGroup);
+	m_groups.insert_or_assign(_group, newGroup);
 }
 
 void ak::aPropertyGridWidget::addGroup(
@@ -160,67 +160,67 @@ void ak::aPropertyGridWidget::addGroup(
 	const QString &									_group
 ) {
 	assert(_group.length() > 0); // Empty group name provided
-	auto itm = my_groups.find(_group);
-	assert(itm == my_groups.end());	// Group already exists
-	aPropertyGridGroup * newGroup = new aPropertyGridGroup(my_table, _group);
+	auto itm = m_groups.find(_group);
+	assert(itm == m_groups.end());	// Group already exists
+	aPropertyGridGroup * newGroup = new aPropertyGridGroup(m_table, _group);
 	newGroup->setItemsBackColor(_aColor, false);
-	newGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
-	newGroup->setStateIcons(&my_groupIconExpanded, &my_groupIconCollapsed);
-	if (my_colorStyle != nullptr) {
-		newGroup->setColorStyle(my_colorStyle, true);
+	newGroup->setHeaderColors(m_groupHeaderForeColor, m_groupHeaderBackColor);
+	newGroup->setStateIcons(&m_groupIconExpanded, &m_groupIconCollapsed);
+	if (m_colorStyle != nullptr) {
+		newGroup->setColorStyle(m_colorStyle, true);
 	}
 	newGroup->activate();
-	my_groups.insert_or_assign(_group, newGroup);
+	m_groups.insert_or_assign(_group, newGroup);
 }
 
 ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	bool											_value
-) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
+) { return newItemCreated(m_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	const aColor &								_value
-) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
+) { return newItemCreated(m_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	double											_value
-) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
+) { return newItemCreated(m_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	int												_value
-) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
+) { return newItemCreated(m_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	const std::vector<QString> &					_possibleSelection,
 	const QString &									_value
-) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
+) { return newItemCreated(m_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	const QString &									_value
-) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
+) { return newItemCreated(m_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	const QDate &									_value
-) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
+) { return newItemCreated(m_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	const QTime &									_value
-) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
+) { return newItemCreated(m_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 // ++++++++++++++++++++++++++++++++++++++++++
 
@@ -230,8 +230,8 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	const QString &									_settingName,
 	bool											_value
 ) {
-	auto group = my_groups.find(_groupName);
-	assert(group != my_groups.end());	// Invalid group name
+	auto group = m_groups.find(_groupName);
+	assert(group != m_groups.end());	// Invalid group name
 	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
@@ -241,8 +241,8 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	const QString &									_settingName,
 	const aColor &									_value
 ) {
-	auto group = my_groups.find(_groupName);
-	assert(group != my_groups.end());	// Invalid group name
+	auto group = m_groups.find(_groupName);
+	assert(group != m_groups.end());	// Invalid group name
 	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
@@ -252,8 +252,8 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	const QString &									_settingName,
 	double											_value
 ) {
-	auto group = my_groups.find(_groupName);
-	assert(group != my_groups.end());	// Invalid group name
+	auto group = m_groups.find(_groupName);
+	assert(group != m_groups.end());	// Invalid group name
 	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
@@ -263,8 +263,8 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	const QString &									_settingName,
 	int												_value
 ) {
-	auto group = my_groups.find(_groupName);
-	assert(group != my_groups.end());	// Invalid group name
+	auto group = m_groups.find(_groupName);
+	assert(group != m_groups.end());	// Invalid group name
 	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
@@ -275,8 +275,8 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	const std::vector<QString> &					_possibleSelection,
 	const QString &									_value
 ) {
-	auto group = my_groups.find(_groupName);
-	assert(group != my_groups.end());	// Invalid group name
+	auto group = m_groups.find(_groupName);
+	assert(group != m_groups.end());	// Invalid group name
 	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _possibleSelection, _value));
 }
 
@@ -286,8 +286,8 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	const QString &									_settingName,
 	const QString &									_value
 ) {
-	auto group = my_groups.find(_groupName);
-	assert(group != my_groups.end());	// Invalid group name
+	auto group = m_groups.find(_groupName);
+	assert(group != m_groups.end());	// Invalid group name
 	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
@@ -297,8 +297,8 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	const QString &									_settingName,
 	const QDate &									_value
 ) {
-	auto group = my_groups.find(_groupName);
-	assert(group != my_groups.end());	// Invalid group name
+	auto group = m_groups.find(_groupName);
+	assert(group != m_groups.end());	// Invalid group name
 	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
@@ -308,8 +308,8 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	const QString &									_settingName,
 	const QTime &									_value
 ) {
-	auto group = my_groups.find(_groupName);
-	assert(group != my_groups.end());	// Invalid group name
+	auto group = m_groups.find(_groupName);
+	assert(group != m_groups.end());	// Invalid group name
 	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
 }
 
@@ -317,16 +317,16 @@ void ak::aPropertyGridWidget::setItemReadOnly(
 	ak::ID											_itemID,
 	bool											_readOnly
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	itm->second->setReadOnly(_readOnly);
 }
 
 bool ak::aPropertyGridWidget::itemIsReadOnly(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->isReadOnly();
 }
 
@@ -334,11 +334,11 @@ void ak::aPropertyGridWidget::setGroupStateIcons(
 	const QIcon &									_groupExpanded,
 	const QIcon &									_groupCollapsed
 ) {
-	my_groupIconCollapsed = _groupCollapsed;
-	my_groupIconExpanded = _groupExpanded;
+	m_groupIconCollapsed = _groupCollapsed;
+	m_groupIconExpanded = _groupExpanded;
 
-	for (auto itm : my_groups) {
-		itm.second->setStateIcons(&my_groupIconExpanded, &my_groupIconCollapsed);
+	for (auto itm : m_groups) {
+		itm.second->setStateIcons(&m_groupIconExpanded, &m_groupIconCollapsed);
 	}
 }
 
@@ -346,8 +346,8 @@ void ak::aPropertyGridWidget::resetItemAsError(
 	ak::ID											_itemID,
 	const QString &									_valueToReset
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	itm->second->resetAsError(_valueToReset);
 }
 
@@ -355,8 +355,8 @@ void ak::aPropertyGridWidget::resetItemAsError(
 	ak::ID											_itemID,
 	int												_valueToReset
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	itm->second->resetAsError(_valueToReset);
 }
 
@@ -364,28 +364,28 @@ void ak::aPropertyGridWidget::resetItemAsError(
 	ak::ID											_itemID,
 	double											_valueToReset
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	itm->second->resetAsError(_valueToReset);
 }
 
 void ak::aPropertyGridWidget::showItemAsError(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	itm->second->showAsError();
 }
 
 void ak::aPropertyGridWidget::setEnabled(
 	bool											_enabled
 ) {
-	my_isEnabled = _enabled;
-	if (my_isEnabled) {
-		for (auto itm : my_itemStateMap) { itm.first->setEnabled(itm.second); }
+	m_isEnabled = _enabled;
+	if (m_isEnabled) {
+		for (auto itm : m_itemStateMap) { itm.first->setEnabled(itm.second); }
 	}
 	else {
-		for (auto itm : my_itemStateMap) { itm.first->setEnabled(false); }
+		for (auto itm : m_itemStateMap) { itm.first->setEnabled(false); }
 	}
 }
 
@@ -399,16 +399,16 @@ void ak::aPropertyGridWidget::clear(
 	slotFocusLost();
 
 	if (_keepGroups) {
-		for (auto itm : my_groups) { itm.second->clear(); }
+		for (auto itm : m_groups) { itm.second->clear(); }
 	}
 	else {
-		for (auto itm : my_groups) { delete itm.second; }
-		my_groups.clear();
+		for (auto itm : m_groups) { delete itm.second; }
+		m_groups.clear();
 	}
-	my_defaultGroup->clear();
-	my_items.clear();
-	my_itemStateMap.clear();
-	my_currentID = ak::invalidID;
+	m_defaultGroup->clear();
+	m_items.clear();
+	m_itemStateMap.clear();
+	m_currentID = ak::invalidID;
 	itemCountChanged();
 	emit cleared();
 }
@@ -420,104 +420,104 @@ void ak::aPropertyGridWidget::clear(
 QString ak::aPropertyGridWidget::getItemGroup(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getGroup();
 }
 
 bool ak::aPropertyGridWidget::getItemIsMultipleValues(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getIsMultipleValues();
 }
 
 QString ak::aPropertyGridWidget::getItemName(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getName();
 }
 
 std::vector<QString> ak::aPropertyGridWidget::getItemPossibleSelection(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getPossibleSelection();
 }
 
 bool ak::aPropertyGridWidget::getItemValueBool(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getValueBool();
 }
 
 ak::aColor ak::aPropertyGridWidget::getItemValueColor(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getValueColor();
 }
 
 double ak::aPropertyGridWidget::getItemValueDouble(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getValueDouble();
 }
 
 int ak::aPropertyGridWidget::getItemValueInteger(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getValueInteger();
 }
 
 QString ak::aPropertyGridWidget::getItemValueSelection(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getValueSelection();
 }
 
 QString ak::aPropertyGridWidget::getItemValueString(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getValueString();
 }
 
 QDate ak::aPropertyGridWidget::getItemValueDate(
 	ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getValueDate();
 }
 
 QTime ak::aPropertyGridWidget::getItemValueTime(
 	ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getValueTime();
 }
 
 ak::valueType ak::aPropertyGridWidget::getItemValueType(
 	ak::ID											_itemID
 ) {
-	auto itm = my_items.find(_itemID);
-	assert(itm != my_items.end()); // Invalid item ID
+	auto itm = m_items.find(_itemID);
+	assert(itm != m_items.end()); // Invalid item ID
 	return itm->second->getValueType();
 }
 
@@ -533,24 +533,24 @@ void ak::aPropertyGridWidget::slotItemChanged(void) {
 }
 
 void ak::aPropertyGridWidget::slotCheckItemVisibility(void) {
-	if (my_checkItemVisibilityRequired) {
-		my_checkItemVisibilityRequired = false;
-		if (my_items.size() == 0) {
-			if (my_table->isVisible()) {
-				my_layout->removeWidget(my_table);
-				my_layout->addWidget(my_infoTextEdit);
-				my_infoTextEdit->setVisible(true);
-				my_table->setVisible(false);
-				//my_layout->setContentsMargins(2, 2, 2, 2);
+	if (m_checkItemVisibilityRequired) {
+		m_checkItemVisibilityRequired = false;
+		if (m_items.size() == 0) {
+			if (m_table->isVisible()) {
+				m_layout->removeWidget(m_table);
+				m_layout->addWidget(m_infoTextEdit);
+				m_infoTextEdit->setVisible(true);
+				m_table->setVisible(false);
+				//m_layout->setContentsMargins(2, 2, 2, 2);
 			}
 		}
 		else {
-			if (!my_table->isVisible()) {
-				my_layout->removeWidget(my_infoTextEdit);
-				my_layout->addWidget(my_table);
-				my_infoTextEdit->setVisible(false);
-				my_table->setVisible(true);
-				//my_layout->setContentsMargins(0, 0, 0, 0);
+			if (!m_table->isVisible()) {
+				m_layout->removeWidget(m_infoTextEdit);
+				m_layout->addWidget(m_table);
+				m_infoTextEdit->setVisible(false);
+				m_table->setVisible(true);
+				//m_layout->setContentsMargins(0, 0, 0, 0);
 			}
 
 		}
@@ -558,7 +558,7 @@ void ak::aPropertyGridWidget::slotCheckItemVisibility(void) {
 }
 
 void ak::aPropertyGridWidget::slotFocusLost(void) {
-	for (auto group : my_groups) { group.second->deselect(); }
+	for (auto group : m_groups) { group.second->deselect(); }
 }
 
 // ##############################################################################################################
@@ -566,22 +566,22 @@ void ak::aPropertyGridWidget::slotFocusLost(void) {
 // Private members
 
 void ak::aPropertyGridWidget::itemCountChanged(void) {
-	my_checkItemVisibilityRequired = true;
+	m_checkItemVisibilityRequired = true;
 	// Queue the request to avoid flickering when clearing property grid and refilling it with new items
 	QMetaObject::invokeMethod(this, "slotCheckItemVisibility", Qt::QueuedConnection);
 }
 
 ak::ID ak::aPropertyGridWidget::newItemCreated(aPropertyGridItem * _item) {
-	_item->setId(++my_currentID);
-	//if (my_colorStyle != nullptr) { _item->setColorStyle(my_colorStyle); }
-	my_items.insert_or_assign(my_currentID, _item);
-	my_itemStateMap.insert_or_assign(_item, true);
-	_item->setEnabled(my_isEnabled);
+	_item->setId(++m_currentID);
+	//if (m_colorStyle != nullptr) { _item->setColorStyle(m_colorStyle); }
+	m_items.insert_or_assign(m_currentID, _item);
+	m_itemStateMap.insert_or_assign(_item, true);
+	_item->setEnabled(m_isEnabled);
 
 	itemCountChanged();
 
 	connect(_item, &aPropertyGridItem::changed, this, &aPropertyGridWidget::slotItemChanged);
-	return my_currentID;
+	return m_currentID;
 }
 
 // ##############################################################################################################********************************************************
@@ -593,51 +593,51 @@ ak::ID ak::aPropertyGridWidget::newItemCreated(aPropertyGridItem * _item) {
 ak::aPropertyGridGroup::aPropertyGridGroup(
 	aTableWidget *						_propertyGridTable,
 	const QString &						_groupName
-) : my_propertyGridTable(_propertyGridTable), my_isActivated(false), my_isVisible(true), my_isAlternateBackground(false), my_headerIsVisible(true),
-	my_colorTextNormal(0, 0, 0), my_colorTextError(255, 0, 0), my_colorStyle(nullptr), my_colorStyleAlt(nullptr), my_externColorStyle(nullptr)
+) : m_propertyGridTable(_propertyGridTable), m_isActivated(false), m_isVisible(true), m_isAlternateBackground(false), m_headerIsVisible(true),
+	m_colorTextNormal(0, 0, 0), m_colorTextError(255, 0, 0), m_colorStyle(nullptr), m_colorStyleAlt(nullptr), m_externColorStyle(nullptr)
 {
-	assert(my_propertyGridTable != nullptr);
-	my_item = new QTableWidgetItem;
-	my_name = _groupName;
-	my_item->setText(_groupName);
-	Qt::ItemFlags flags = my_item->flags();
+	assert(m_propertyGridTable != nullptr);
+	m_item = new QTableWidgetItem;
+	m_name = _groupName;
+	m_item->setText(_groupName);
+	Qt::ItemFlags flags = m_item->flags();
 	flags.setFlag(Qt::ItemFlag::ItemIsEditable, false);
 	flags.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
-	my_item->setFlags(flags);
+	m_item->setFlags(flags);
 
-	int r = my_propertyGridTable->rowCount();
-	my_propertyGridTable->insertRow(r);
-	my_propertyGridTable->setSpan(r, 0, 1, 2);
-	my_propertyGridTable->setItem(r, 0, my_item);
-	QFont font = my_item->font();
+	int r = m_propertyGridTable->rowCount();
+	m_propertyGridTable->insertRow(r);
+	m_propertyGridTable->setSpan(r, 0, 1, 2);
+	m_propertyGridTable->setItem(r, 0, m_item);
+	QFont font = m_item->font();
 	font.setBold(true);
-	my_item->setFont(font);
+	m_item->setFont(font);
 
 	// Initialize icons
-	my_iconCollapsed = nullptr;
-	my_iconExpanded = nullptr;
+	m_iconCollapsed = nullptr;
+	m_iconExpanded = nullptr;
 
-	setItemsBackColor(my_colorItemBackground, false);
-	connect(my_propertyGridTable, &QTableWidget::itemDoubleClicked, this, &aPropertyGridGroup::slotDoubleClicked);
+	setItemsBackColor(m_colorItemBackground, false);
+	connect(m_propertyGridTable, &QTableWidget::itemDoubleClicked, this, &aPropertyGridGroup::slotDoubleClicked);
 }
 
 ak::aPropertyGridGroup::~aPropertyGridGroup() {
-	int r = my_item->row();
+	int r = m_item->row();
 	clear();
-	delete my_item;
-	my_propertyGridTable->removeRow(r);
+	delete m_item;
+	m_propertyGridTable->removeRow(r);
 }
 
-QString ak::aPropertyGridGroup::name(void) const { return my_name; }
+QString ak::aPropertyGridGroup::name(void) const { return m_name; }
 
 void ak::aPropertyGridGroup::setName(
 	const QString &						_groupName
 ) {
-	my_name = _groupName;
+	m_name = _groupName;
 }
 
 void ak::aPropertyGridGroup::activate(void) {
-	my_isActivated = true;
+	m_isActivated = true;
 	checkVisibility();
 }
 
@@ -645,34 +645,34 @@ void ak::aPropertyGridGroup::setHeaderColors(
 	const QColor &				_foreColor,
 	const QColor &				_backColor
 ) {
-	my_backColor = _backColor;
-	my_foreColor = _foreColor;
+	m_backColor = _backColor;
+	m_foreColor = _foreColor;
 
-	my_item->setBackgroundColor(my_backColor);
-	my_item->setTextColor(my_foreColor);
+	m_item->setBackgroundColor(m_backColor);
+	m_item->setTextColor(m_foreColor);
 }
 
 void ak::aPropertyGridGroup::setItemsBackColor(
 	const QColor &									_backgroudColor,
 	bool											_repaint
 ) {
-	my_colorItemBackground = _backgroudColor;
-	int r = my_colorItemBackground.red() + AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
-	int g = my_colorItemBackground.green() + AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
-	int b = my_colorItemBackground.blue() + AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
-	int a = my_colorItemBackground.alpha() - AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
+	m_colorItemBackground = _backgroudColor;
+	int r = m_colorItemBackground.red() + AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
+	int g = m_colorItemBackground.green() + AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
+	int b = m_colorItemBackground.blue() + AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
+	int a = m_colorItemBackground.alpha() - AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
 
 	if (r > 255 || g > 255 || b > 255) {
-		r = my_colorItemBackground.red() - AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
-		g = my_colorItemBackground.green() - AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
-		b = my_colorItemBackground.blue() - AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
+		r = m_colorItemBackground.red() - AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
+		g = m_colorItemBackground.green() - AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
+		b = m_colorItemBackground.blue() - AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
 	}
 	if (r < 0) { r = 0; }
 	if (g < 0) { g = 0; }
 	if (b < 0) { b = 0; }
 	if (a < 0) { a = 0; }
 	if (a > 255) { a = 255; }
-	my_colorItemBackgroundAlternate.setRgb(r, g, b, a);
+	m_colorItemBackgroundAlternate.setRgb(r, g, b, a);
 
 	if (_repaint) {
 		rebuildStyleSheets();
@@ -685,8 +685,8 @@ void ak::aPropertyGridGroup::setItemsTextColors(
 	const QColor &									_textColorError,
 	bool											_repaint
 ) {
-	my_colorTextNormal = _textColorNormal;
-	my_colorTextError = _textColorError;
+	m_colorTextNormal = _textColorNormal;
+	m_colorTextError = _textColorError;
 
 	if (_repaint) {
 		rebuildStyleSheets();
@@ -700,12 +700,12 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	const QString &									_settingName,
 	bool											_value
 ) {
-	int r = my_item->row();
-	if (my_items.size() > 0) {
-		r = my_items.back()->row();
+	int r = m_item->row();
+	if (m_items.size() > 0) {
+		r = m_items.back()->row();
 	}
-	my_propertyGridTable->insertRow(r + 1);
-	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
+	m_propertyGridTable->insertRow(r + 1);
+	aPropertyGridItem * newItem = new aPropertyGridItem(m_propertyGridTable, m_name, r + 1, _isMultipleValues, _settingName, _value);
 	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
@@ -717,12 +717,12 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	const QString &									_settingName,
 	const aColor &								_value
 ) {
-	int r = my_item->row();
-	if (my_items.size() > 0) {
-		r = my_items.back()->row();
+	int r = m_item->row();
+	if (m_items.size() > 0) {
+		r = m_items.back()->row();
 	}
-	my_propertyGridTable->insertRow(r + 1);
-	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
+	m_propertyGridTable->insertRow(r + 1);
+	aPropertyGridItem * newItem = new aPropertyGridItem(m_propertyGridTable, m_name, r + 1, _isMultipleValues, _settingName, _value);
 	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
@@ -734,12 +734,12 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	const QString &									_settingName,
 	double											_value
 ) {
-	int r = my_item->row();
-	if (my_items.size() > 0) {
-		r = my_items.back()->row();
+	int r = m_item->row();
+	if (m_items.size() > 0) {
+		r = m_items.back()->row();
 	}
-	my_propertyGridTable->insertRow(r + 1);
-	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
+	m_propertyGridTable->insertRow(r + 1);
+	aPropertyGridItem * newItem = new aPropertyGridItem(m_propertyGridTable, m_name, r + 1, _isMultipleValues, _settingName, _value);
 	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
@@ -751,12 +751,12 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	const QString &									_settingName,
 	int												_value
 ) {
-	int r = my_item->row();
-	if (my_items.size() > 0) {
-		r = my_items.back()->row();
+	int r = m_item->row();
+	if (m_items.size() > 0) {
+		r = m_items.back()->row();
 	}
-	my_propertyGridTable->insertRow(r + 1);
-	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
+	m_propertyGridTable->insertRow(r + 1);
+	aPropertyGridItem * newItem = new aPropertyGridItem(m_propertyGridTable, m_name, r + 1, _isMultipleValues, _settingName, _value);
 	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
@@ -769,12 +769,12 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	const std::vector<QString> &					_possibleSelection,
 	const QString &									_value
 ) {
-	int r = my_item->row();
-	if (my_items.size() > 0) {
-		r = my_items.back()->row();
+	int r = m_item->row();
+	if (m_items.size() > 0) {
+		r = m_items.back()->row();
 	}
-	my_propertyGridTable->insertRow(r + 1);
-	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _possibleSelection, _value);
+	m_propertyGridTable->insertRow(r + 1);
+	aPropertyGridItem * newItem = new aPropertyGridItem(m_propertyGridTable, m_name, r + 1, _isMultipleValues, _settingName, _possibleSelection, _value);
 	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
@@ -786,12 +786,12 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	const QString &									_settingName,
 	const QString &									_value
 ) {
-	int r = my_item->row();
-	if (my_items.size() > 0) {
-		r = my_items.back()->row();
+	int r = m_item->row();
+	if (m_items.size() > 0) {
+		r = m_items.back()->row();
 	}
-	my_propertyGridTable->insertRow(r + 1);
-	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
+	m_propertyGridTable->insertRow(r + 1);
+	aPropertyGridItem * newItem = new aPropertyGridItem(m_propertyGridTable, m_name, r + 1, _isMultipleValues, _settingName, _value);
 	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
@@ -803,12 +803,12 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	const QString &									_settingName,
 	const QDate &									_value
 ) {
-	int r = my_item->row();
-	if (my_items.size() > 0) {
-		r = my_items.back()->row();
+	int r = m_item->row();
+	if (m_items.size() > 0) {
+		r = m_items.back()->row();
 	}
-	my_propertyGridTable->insertRow(r + 1);
-	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
+	m_propertyGridTable->insertRow(r + 1);
+	aPropertyGridItem * newItem = new aPropertyGridItem(m_propertyGridTable, m_name, r + 1, _isMultipleValues, _settingName, _value);
 	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
@@ -820,12 +820,12 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	const QString &									_settingName,
 	const QTime &									_value
 ) {
-	int r = my_item->row();
-	if (my_items.size() > 0) {
-		r = my_items.back()->row();
+	int r = m_item->row();
+	if (m_items.size() > 0) {
+		r = m_items.back()->row();
 	}
-	my_propertyGridTable->insertRow(r + 1);
-	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
+	m_propertyGridTable->insertRow(r + 1);
+	aPropertyGridItem * newItem = new aPropertyGridItem(m_propertyGridTable, m_name, r + 1, _isMultipleValues, _settingName, _value);
 	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
@@ -834,16 +834,16 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 void ak::aPropertyGridGroup::setGroupHeaderVisible(
 	bool											_isVisible
 ) {
-	assert(my_item != nullptr);	// This should never happen
-	my_headerIsVisible = _isVisible;
-	my_propertyGridTable->setRowHidden(my_item->row(), !my_headerIsVisible);
+	assert(m_item != nullptr);	// This should never happen
+	m_headerIsVisible = _isVisible;
+	m_propertyGridTable->setRowHidden(m_item->row(), !m_headerIsVisible);
 }
 
 void ak::aPropertyGridGroup::setColorStyle(
 	aColorStyle *									_colorStyle,
 	bool											_repaint
 ) {
-	my_externColorStyle = _colorStyle;
+	m_externColorStyle = _colorStyle;
 
 	if (_repaint) {
 		rebuildStyleSheets();
@@ -852,17 +852,17 @@ void ak::aPropertyGridGroup::setColorStyle(
 }
 
 void ak::aPropertyGridGroup::clear(void) {
-	for (auto itm : my_items) {
+	for (auto itm : m_items) {
 		aPropertyGridItem * actualItem = itm;
 		delete actualItem;
 	}
-	my_items.clear();
-	my_isAlternateBackground = false;
+	m_items.clear();
+	m_isAlternateBackground = false;
 }
 
 void ak::aPropertyGridGroup::deselect(void) {
-	for (auto itm : my_items) { itm->deselect(); }
-	my_item->setSelected(false);
+	for (auto itm : m_items) { itm->deselect(); }
+	m_item->setSelected(false);
 }
 
 void ak::aPropertyGridGroup::setStateIcons(
@@ -871,8 +871,8 @@ void ak::aPropertyGridGroup::setStateIcons(
 ) {
 	assert(_expanded != nullptr); // Nullptr provided
 	assert(_collapsed != nullptr); // Nullptr provided
-	my_iconCollapsed = _collapsed;
-	my_iconExpanded = _expanded;
+	m_iconCollapsed = _collapsed;
+	m_iconExpanded = _expanded;
 	refreshIcon();
 }
 
@@ -881,11 +881,11 @@ void ak::aPropertyGridGroup::setStateIcons(
 // slots
 
 void ak::aPropertyGridGroup::slotDoubleClicked(QTableWidgetItem * _item) {
-	if (_item == my_item) {
-		for (auto itm : my_items) {
-			my_propertyGridTable->setRowHidden(itm->row(), my_isVisible);
+	if (_item == m_item) {
+		for (auto itm : m_items) {
+			m_propertyGridTable->setRowHidden(itm->row(), m_isVisible);
 		}
-		my_isVisible = !my_isVisible;
+		m_isVisible = !m_isVisible;
 		refreshIcon();
 	}
 }
@@ -895,136 +895,136 @@ void ak::aPropertyGridGroup::slotDoubleClicked(QTableWidgetItem * _item) {
 // private members
 
 void ak::aPropertyGridGroup::itemCreated(aPropertyGridItem * _item) {
-	my_items.push_back(_item);
-	if (my_isAlternateBackground) {
-		_item->setColorStyle(my_colorStyleAlt);
-		_item->setBackgroundColor(my_colorItemBackgroundAlternate);
+	m_items.push_back(_item);
+	if (m_isAlternateBackground) {
+		_item->setColorStyle(m_colorStyleAlt);
+		_item->setBackgroundColor(m_colorItemBackgroundAlternate);
 	}
 	else {
-		_item->setColorStyle(my_colorStyle);
-		_item->setBackgroundColor(my_colorItemBackground);
+		_item->setColorStyle(m_colorStyle);
+		_item->setBackgroundColor(m_colorItemBackground);
 	}
-	_item->setTextColors(my_colorTextNormal, my_colorTextError);
-	my_isAlternateBackground = !my_isAlternateBackground;
+	_item->setTextColors(m_colorTextNormal, m_colorTextError);
+	m_isAlternateBackground = !m_isAlternateBackground;
 	checkVisibility();
 }
 
 void ak::aPropertyGridGroup::checkVisibility(void) {
-	if (!my_isActivated) { return; }
-	if (my_items.size() > 0) {
+	if (!m_isActivated) { return; }
+	if (m_items.size() > 0) {
 		// Show group header (if is setVisible) and items
-		my_propertyGridTable->setRowHidden(my_item->row(), !my_headerIsVisible);
-		for (auto itm : my_items) {
-			my_propertyGridTable->setRowHidden(itm->row(), !my_isVisible);
+		m_propertyGridTable->setRowHidden(m_item->row(), !m_headerIsVisible);
+		for (auto itm : m_items) {
+			m_propertyGridTable->setRowHidden(itm->row(), !m_isVisible);
 		}
 	}
 	else {
 		// Hide group header
-		my_propertyGridTable->setRowHidden(my_item->row(), true);
-		my_isVisible = true;
+		m_propertyGridTable->setRowHidden(m_item->row(), true);
+		m_isVisible = true;
 	}
 }
 
 void ak::aPropertyGridGroup::rebuildStyleSheets() {
-	if (my_colorStyle == nullptr) {
-		my_colorStyle = new aCustomizableColorStyle;
+	if (m_colorStyle == nullptr) {
+		m_colorStyle = new aCustomizableColorStyle;
 	}
-	if (my_colorStyleAlt == nullptr) {
-		my_colorStyleAlt = new aCustomizableColorStyle;
+	if (m_colorStyleAlt == nullptr) {
+		m_colorStyleAlt = new aCustomizableColorStyle;
 	}
 
 	// Set default colors
-	my_colorStyle->setControlsMainForegroundColor(my_colorTextNormal);
-	my_colorStyle->setControlsMainBackgroundColor(my_colorItemBackground);
-	my_colorStyle->setAlternateForegroundColor(my_colorTextNormal);
-	my_colorStyle->setAlternateBackgroundColor(my_colorItemBackgroundAlternate);
-	my_colorStyle->setHeaderBackgroundColor(my_colorItemBackground);
-	my_colorStyle->setHeaderForegroundColor(my_colorTextNormal);
+	m_colorStyle->setControlsMainForegroundColor(m_colorTextNormal);
+	m_colorStyle->setControlsMainBackgroundColor(m_colorItemBackground);
+	m_colorStyle->setAlternateForegroundColor(m_colorTextNormal);
+	m_colorStyle->setAlternateBackgroundColor(m_colorItemBackgroundAlternate);
+	m_colorStyle->setHeaderBackgroundColor(m_colorItemBackground);
+	m_colorStyle->setHeaderForegroundColor(m_colorTextNormal);
 
-	my_colorStyleAlt->setControlsMainForegroundColor(my_colorTextNormal);
-	my_colorStyleAlt->setControlsMainBackgroundColor(my_colorItemBackground);
-	my_colorStyleAlt->setAlternateForegroundColor(my_colorTextNormal);
-	my_colorStyleAlt->setAlternateBackgroundColor(my_colorItemBackgroundAlternate);
-	my_colorStyleAlt->setHeaderBackgroundColor(my_colorItemBackground);
-	my_colorStyleAlt->setHeaderForegroundColor(my_colorTextNormal);
+	m_colorStyleAlt->setControlsMainForegroundColor(m_colorTextNormal);
+	m_colorStyleAlt->setControlsMainBackgroundColor(m_colorItemBackground);
+	m_colorStyleAlt->setAlternateForegroundColor(m_colorTextNormal);
+	m_colorStyleAlt->setAlternateBackgroundColor(m_colorItemBackgroundAlternate);
+	m_colorStyleAlt->setHeaderBackgroundColor(m_colorItemBackground);
+	m_colorStyleAlt->setHeaderForegroundColor(m_colorTextNormal);
 
 	// Set sheets
-	my_colorStyle->setSheet(cafBackgroundColorControls, aColor::toHexString(my_colorItemBackground, true, "background-color: #"));
-	my_colorStyle->setSheet(cafBackgroundColorWindow, aColor::toHexString(my_colorItemBackground, true, "background-color: #"));
-	my_colorStyle->setSheet(cafBackgroundColorButton, aColor::toHexString(my_colorItemBackground, true, "background-color: #"));
-	my_colorStyle->setSheet(cafForegroundColorControls, aColor::toHexString(my_colorTextNormal, true, "color: #"));
-	my_colorStyle->setSheet(cafForegroundColorButton, aColor::toHexString(my_colorTextNormal, true, "color: #"));
-	my_colorStyle->setSheet(cafForegroundColorWindow, aColor::toHexString(my_colorTextNormal, true, "color: #"));
+	m_colorStyle->setSheet(cafBackgroundColorControls, aColor::toHexString(m_colorItemBackground, true, "background-color: #"));
+	m_colorStyle->setSheet(cafBackgroundColorWindow, aColor::toHexString(m_colorItemBackground, true, "background-color: #"));
+	m_colorStyle->setSheet(cafBackgroundColorButton, aColor::toHexString(m_colorItemBackground, true, "background-color: #"));
+	m_colorStyle->setSheet(cafForegroundColorControls, aColor::toHexString(m_colorTextNormal, true, "color: #"));
+	m_colorStyle->setSheet(cafForegroundColorButton, aColor::toHexString(m_colorTextNormal, true, "color: #"));
+	m_colorStyle->setSheet(cafForegroundColorWindow, aColor::toHexString(m_colorTextNormal, true, "color: #"));
 
-	my_colorStyleAlt->setSheet(cafBackgroundColorControls, aColor::toHexString(my_colorItemBackgroundAlternate, true, "background-color: #"));
-	my_colorStyleAlt->setSheet(cafBackgroundColorWindow, aColor::toHexString(my_colorItemBackgroundAlternate, true, "background-color: #"));
-	my_colorStyleAlt->setSheet(cafBackgroundColorButton, aColor::toHexString(my_colorItemBackgroundAlternate, true, "background-color: #"));
-	my_colorStyleAlt->setSheet(cafForegroundColorControls, aColor::toHexString(my_colorTextNormal, true, "color: #"));
-	my_colorStyleAlt->setSheet(cafForegroundColorButton, aColor::toHexString(my_colorTextNormal, true, "color: #"));
-	my_colorStyleAlt->setSheet(cafForegroundColorWindow, aColor::toHexString(my_colorTextNormal, true, "color: #"));
+	m_colorStyleAlt->setSheet(cafBackgroundColorControls, aColor::toHexString(m_colorItemBackgroundAlternate, true, "background-color: #"));
+	m_colorStyleAlt->setSheet(cafBackgroundColorWindow, aColor::toHexString(m_colorItemBackgroundAlternate, true, "background-color: #"));
+	m_colorStyleAlt->setSheet(cafBackgroundColorButton, aColor::toHexString(m_colorItemBackgroundAlternate, true, "background-color: #"));
+	m_colorStyleAlt->setSheet(cafForegroundColorControls, aColor::toHexString(m_colorTextNormal, true, "color: #"));
+	m_colorStyleAlt->setSheet(cafForegroundColorButton, aColor::toHexString(m_colorTextNormal, true, "color: #"));
+	m_colorStyleAlt->setSheet(cafForegroundColorWindow, aColor::toHexString(m_colorTextNormal, true, "color: #"));
 
-	if (my_externColorStyle == nullptr) {
-		my_colorStyle->setSheet(cafBackgroundColorFocus, "");
-		my_colorStyleAlt->setSheet(cafBackgroundColorFocus, "");
+	if (m_externColorStyle == nullptr) {
+		m_colorStyle->setSheet(cafBackgroundColorFocus, "");
+		m_colorStyleAlt->setSheet(cafBackgroundColorFocus, "");
 
-		my_colorStyle->setSheet(cafForegroundColorFocus, "");
-		my_colorStyleAlt->setSheet(cafForegroundColorFocus, "");
+		m_colorStyle->setSheet(cafForegroundColorFocus, "");
+		m_colorStyleAlt->setSheet(cafForegroundColorFocus, "");
 
-		my_colorStyle->setSheet(cafBackgroundColorSelected, "");
-		my_colorStyleAlt->setSheet(cafBackgroundColorSelected, "");
+		m_colorStyle->setSheet(cafBackgroundColorSelected, "");
+		m_colorStyleAlt->setSheet(cafBackgroundColorSelected, "");
 
-		my_colorStyle->setSheet(cafForegroundColorSelected, "");
-		my_colorStyleAlt->setSheet(cafForegroundColorSelected, "");
+		m_colorStyle->setSheet(cafForegroundColorSelected, "");
+		m_colorStyleAlt->setSheet(cafForegroundColorSelected, "");
 
-		my_colorStyle->setSheet(cafBorderColorWindow, "");
-		my_colorStyleAlt->setSheet(cafBorderColorWindow, "");
+		m_colorStyle->setSheet(cafBorderColorWindow, "");
+		m_colorStyleAlt->setSheet(cafBorderColorWindow, "");
 
-		my_colorStyle->setSheet(cafDefaultBorderWindow, "");
-		my_colorStyleAlt->setSheet(cafDefaultBorderWindow, "");
+		m_colorStyle->setSheet(cafDefaultBorderWindow, "");
+		m_colorStyleAlt->setSheet(cafDefaultBorderWindow, "");
 	}
 	else {
-		my_colorStyle->setSheet(cafBackgroundColorFocus, my_externColorStyle->toStyleSheet(cafBackgroundColorFocus));
-		my_colorStyleAlt->setSheet(cafBackgroundColorFocus, my_externColorStyle->toStyleSheet(cafBackgroundColorFocus));
+		m_colorStyle->setSheet(cafBackgroundColorFocus, m_externColorStyle->toStyleSheet(cafBackgroundColorFocus));
+		m_colorStyleAlt->setSheet(cafBackgroundColorFocus, m_externColorStyle->toStyleSheet(cafBackgroundColorFocus));
 
-		my_colorStyle->setSheet(cafForegroundColorFocus, my_externColorStyle->toStyleSheet(cafForegroundColorFocus));
-		my_colorStyleAlt->setSheet(cafForegroundColorFocus, my_externColorStyle->toStyleSheet(cafForegroundColorFocus));
+		m_colorStyle->setSheet(cafForegroundColorFocus, m_externColorStyle->toStyleSheet(cafForegroundColorFocus));
+		m_colorStyleAlt->setSheet(cafForegroundColorFocus, m_externColorStyle->toStyleSheet(cafForegroundColorFocus));
 
-		my_colorStyle->setSheet(cafBackgroundColorSelected, my_externColorStyle->toStyleSheet(cafBackgroundColorSelected));
-		my_colorStyleAlt->setSheet(cafBackgroundColorSelected, my_externColorStyle->toStyleSheet(cafBackgroundColorSelected));
+		m_colorStyle->setSheet(cafBackgroundColorSelected, m_externColorStyle->toStyleSheet(cafBackgroundColorSelected));
+		m_colorStyleAlt->setSheet(cafBackgroundColorSelected, m_externColorStyle->toStyleSheet(cafBackgroundColorSelected));
 
-		my_colorStyle->setSheet(cafForegroundColorSelected, my_externColorStyle->toStyleSheet(cafForegroundColorSelected));
-		my_colorStyleAlt->setSheet(cafForegroundColorSelected, my_externColorStyle->toStyleSheet(cafForegroundColorSelected));
+		m_colorStyle->setSheet(cafForegroundColorSelected, m_externColorStyle->toStyleSheet(cafForegroundColorSelected));
+		m_colorStyleAlt->setSheet(cafForegroundColorSelected, m_externColorStyle->toStyleSheet(cafForegroundColorSelected));
 
-		my_colorStyle->setSheet(cafBorderColorWindow, my_externColorStyle->toStyleSheet(cafBorderColorWindow));
-		my_colorStyleAlt->setSheet(cafBorderColorWindow, my_externColorStyle->toStyleSheet(cafBorderColorWindow));
+		m_colorStyle->setSheet(cafBorderColorWindow, m_externColorStyle->toStyleSheet(cafBorderColorWindow));
+		m_colorStyleAlt->setSheet(cafBorderColorWindow, m_externColorStyle->toStyleSheet(cafBorderColorWindow));
 
-		my_colorStyle->setSheet(cafDefaultBorderWindow, my_externColorStyle->toStyleSheet(cafDefaultBorderWindow));
-		my_colorStyleAlt->setSheet(cafDefaultBorderWindow, my_externColorStyle->toStyleSheet(cafDefaultBorderWindow));
+		m_colorStyle->setSheet(cafDefaultBorderWindow, m_externColorStyle->toStyleSheet(cafDefaultBorderWindow));
+		m_colorStyleAlt->setSheet(cafDefaultBorderWindow, m_externColorStyle->toStyleSheet(cafDefaultBorderWindow));
 	}
 
 }
 
 void ak::aPropertyGridGroup::repaint(void) {
-	my_isAlternateBackground = false;
-	for (auto itm : my_items) {
-		if (my_isAlternateBackground) {
-			itm->setBackgroundColor(my_colorItemBackgroundAlternate);
-			itm->setColorStyle(my_colorStyleAlt);
+	m_isAlternateBackground = false;
+	for (auto itm : m_items) {
+		if (m_isAlternateBackground) {
+			itm->setBackgroundColor(m_colorItemBackgroundAlternate);
+			itm->setColorStyle(m_colorStyleAlt);
 		}
 		else { 
-			itm->setBackgroundColor(my_colorItemBackground);
-			itm->setColorStyle(my_colorStyle);
+			itm->setBackgroundColor(m_colorItemBackground);
+			itm->setColorStyle(m_colorStyle);
 		}
-		itm->setTextColors(my_colorTextNormal, my_colorTextError);
-		my_isAlternateBackground = !my_isAlternateBackground;
+		itm->setTextColors(m_colorTextNormal, m_colorTextError);
+		m_isAlternateBackground = !m_isAlternateBackground;
 	}
 }
 
 void ak::aPropertyGridGroup::refreshIcon(void) {
-	if (my_iconCollapsed != nullptr) {
-		assert(my_iconExpanded != nullptr); // This should never happen
-		if (my_isVisible) { my_item->setIcon(*my_iconExpanded); }
-		else { my_item->setIcon(*my_iconCollapsed); }
+	if (m_iconCollapsed != nullptr) {
+		assert(m_iconExpanded != nullptr); // This should never happen
+		if (m_isVisible) { m_item->setIcon(*m_iconExpanded); }
+		else { m_item->setIcon(*m_iconCollapsed); }
 	}
 }
 
@@ -1041,39 +1041,39 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	bool								_isMultipleValues,
 	const QString &						_settingName,
 	bool								_value
-) : my_propertyGridTable(_aPropertyGridWidgetTable), my_group(_group), my_valueType(vtBool),
-	my_name(_settingName), my_valueBool(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
+) : m_propertyGridTable(_aPropertyGridWidgetTable), m_group(_group), m_valueType(vtBool),
+	m_name(_settingName), m_valueBool(_value), m_isMultipleValues(_isMultipleValues), m_globalColorStyle(nullptr)
 {
-	assert(my_propertyGridTable != nullptr);
+	assert(m_propertyGridTable != nullptr);
 
 	ini();
 
 	// Create new cell items
-	my_cellSettingName = new QTableWidgetItem(_settingName);
-	my_widgetBool = new aCheckBoxWidget();
-	if (my_isMultipleValues) {
-		my_widgetBool->setTristate(true);
-		my_widgetBool->setCheckState(Qt::PartiallyChecked);
+	m_cellSettingName = new QTableWidgetItem(_settingName);
+	m_widgetBool = new aCheckBoxWidget();
+	if (m_isMultipleValues) {
+		m_widgetBool->setTristate(true);
+		m_widgetBool->setCheckState(Qt::PartiallyChecked);
 	}
 	else {
-		my_widgetBool->setChecked(_value);
+		m_widgetBool->setChecked(_value);
 	}
 	QString sheet("QCheckBox{background-color:#");
-	sheet.append(my_colorBackground.toHexString(true));
+	sheet.append(m_colorBackground.toHexString(true));
 	sheet.append(";}\n");
-	my_widgetBool->setStyleSheet(sheet);
+	m_widgetBool->setStyleSheet(sheet);
 
 	// Make the first cell read only
-	Qt::ItemFlags f = my_cellSettingName->flags();
+	Qt::ItemFlags f = m_cellSettingName->flags();
 	f.setFlag(Qt::ItemFlag::ItemIsEditable, false);
 	f.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
-	my_cellSettingName->setFlags(f);
+	m_cellSettingName->setFlags(f);
 
 	// Add cell items to the main aPropertyGridWidget table
-	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
-	my_propertyGridTable->setCellWidget(_row, 1, my_widgetBool);
+	m_propertyGridTable->setItem(_row, 0, m_cellSettingName);
+	m_propertyGridTable->setCellWidget(_row, 1, m_widgetBool);
 
-	connect(my_widgetBool, &QCheckBox::stateChanged, this, &aPropertyGridItem::slotValueWidgetEvent);
+	connect(m_widgetBool, &QCheckBox::stateChanged, this, &aPropertyGridItem::slotValueWidgetEvent);
 }
 
 ak::aPropertyGridItem::aPropertyGridItem(
@@ -1083,30 +1083,30 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	bool								_isMultipleValues,
 	const QString &						_settingName,
 	const aColor &					_value
-) : my_propertyGridTable(_aPropertyGridWidgetTable), my_group(_group), my_valueType(vtColor),
-	my_name(_settingName), my_valueColor(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
+) : m_propertyGridTable(_aPropertyGridWidgetTable), m_group(_group), m_valueType(vtColor),
+	m_name(_settingName), m_valueColor(_value), m_isMultipleValues(_isMultipleValues), m_globalColorStyle(nullptr)
 {
-	assert(my_propertyGridTable != nullptr);
+	assert(m_propertyGridTable != nullptr);
 
 	ini();
 
 	// Create new cell items
-	my_cellSettingName = new QTableWidgetItem(_settingName);
-	my_widgetColor = new aColorEditButtonWidget(_value);
-	if (my_isMultipleValues) {
-		my_widgetColor->overrideText("...");
+	m_cellSettingName = new QTableWidgetItem(_settingName);
+	m_widgetColor = new aColorEditButtonWidget(_value);
+	if (m_isMultipleValues) {
+		m_widgetColor->overrideText("...");
 	}
 	// Make the first cell read only
-	Qt::ItemFlags f = my_cellSettingName->flags();
+	Qt::ItemFlags f = m_cellSettingName->flags();
 	f.setFlag(Qt::ItemFlag::ItemIsEditable, false);
 	f.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
-	my_cellSettingName->setFlags(f);
+	m_cellSettingName->setFlags(f);
 
 	// Add cell items to the main aPropertyGridWidget table
-	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
-	my_propertyGridTable->setCellWidget(_row, 1, my_widgetColor->widget());
+	m_propertyGridTable->setItem(_row, 0, m_cellSettingName);
+	m_propertyGridTable->setCellWidget(_row, 1, m_widgetColor->widget());
 
-	connect(my_widgetColor, &aColorEditButtonWidget::changed, this, &aPropertyGridItem::slotValueWidgetEvent);
+	connect(m_widgetColor, &aColorEditButtonWidget::changed, this, &aPropertyGridItem::slotValueWidgetEvent);
 }
 
 ak::aPropertyGridItem::aPropertyGridItem(
@@ -1116,30 +1116,30 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	bool								_isMultipleValues,
 	const QString &						_settingName,
 	double								_value
-) : my_propertyGridTable(_aPropertyGridWidgetTable), my_group(_group), my_valueType(vtDouble),
-	my_name(_settingName), my_valueDouble(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
+) : m_propertyGridTable(_aPropertyGridWidgetTable), m_group(_group), m_valueType(vtDouble),
+	m_name(_settingName), m_valueDouble(_value), m_isMultipleValues(_isMultipleValues), m_globalColorStyle(nullptr)
 {
-	assert(my_propertyGridTable != nullptr);
+	assert(m_propertyGridTable != nullptr);
 
 	ini();
 
 	// Create new cell items
-	my_cellSettingName = new QTableWidgetItem(_settingName);
-	my_cellValue = new QTableWidgetItem(QString::number(_value));
-	if (my_isMultipleValues) {
-		my_cellValue->setText("...");
+	m_cellSettingName = new QTableWidgetItem(_settingName);
+	m_cellValue = new QTableWidgetItem(QString::number(_value));
+	if (m_isMultipleValues) {
+		m_cellValue->setText("...");
 	}
 
 	// Make the first cell read only
-	Qt::ItemFlags f = my_cellSettingName->flags();
+	Qt::ItemFlags f = m_cellSettingName->flags();
 	f.setFlag(Qt::ItemFlag::ItemIsEditable, false);
 	f.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
-	my_cellSettingName->setFlags(f);
+	m_cellSettingName->setFlags(f);
 
 	// Add cell items to the main aPropertyGridWidget table
-	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
-	my_propertyGridTable->setItem(_row, 1, my_cellValue);
-	connect(my_propertyGridTable, &QTableWidget::itemChanged, this, &aPropertyGridItem::slotTableCellChanged);
+	m_propertyGridTable->setItem(_row, 0, m_cellSettingName);
+	m_propertyGridTable->setItem(_row, 1, m_cellValue);
+	connect(m_propertyGridTable, &QTableWidget::itemChanged, this, &aPropertyGridItem::slotTableCellChanged);
 }
 
 ak::aPropertyGridItem::aPropertyGridItem(
@@ -1149,30 +1149,30 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	bool								_isMultipleValues,
 	const QString &						_settingName,
 	int									_value
-) : my_propertyGridTable(_aPropertyGridWidgetTable), my_group(_group), my_valueType(vtInt),
-	my_name(_settingName), my_valueInteger(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
+) : m_propertyGridTable(_aPropertyGridWidgetTable), m_group(_group), m_valueType(vtInt),
+	m_name(_settingName), m_valueInteger(_value), m_isMultipleValues(_isMultipleValues), m_globalColorStyle(nullptr)
 {
-	assert(my_propertyGridTable != nullptr);
+	assert(m_propertyGridTable != nullptr);
 
 	ini();
 
 	// Create new cell items
-	my_cellSettingName = new QTableWidgetItem(_settingName);
-	my_cellValue = new QTableWidgetItem(QString::number(_value));
-	if (my_isMultipleValues) {
-		my_cellValue->setText("...");
+	m_cellSettingName = new QTableWidgetItem(_settingName);
+	m_cellValue = new QTableWidgetItem(QString::number(_value));
+	if (m_isMultipleValues) {
+		m_cellValue->setText("...");
 	}
 
 	// Make the first cell read only
-	Qt::ItemFlags f = my_cellSettingName->flags();
+	Qt::ItemFlags f = m_cellSettingName->flags();
 	f.setFlag(Qt::ItemFlag::ItemIsEditable, false);
 	f.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
-	my_cellSettingName->setFlags(f);
+	m_cellSettingName->setFlags(f);
 
 	// Add cell items to the main aPropertyGridWidget table
-	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
-	my_propertyGridTable->setItem(_row, 1, my_cellValue);
-	connect(my_propertyGridTable, &QTableWidget::itemChanged, this, &aPropertyGridItem::slotTableCellChanged);
+	m_propertyGridTable->setItem(_row, 0, m_cellSettingName);
+	m_propertyGridTable->setItem(_row, 1, m_cellValue);
+	connect(m_propertyGridTable, &QTableWidget::itemChanged, this, &aPropertyGridItem::slotTableCellChanged);
 }
 
 ak::aPropertyGridItem::aPropertyGridItem(
@@ -1183,36 +1183,36 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	const QString &						_settingName,
 	const std::vector<QString> &		_possibleSlection,
 	const QString &						_value
-) : my_propertyGridTable(_aPropertyGridWidgetTable), my_group(_group), my_valueType(vtSelection),
-	my_name(_settingName), my_valueSelection(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
+) : m_propertyGridTable(_aPropertyGridWidgetTable), m_group(_group), m_valueType(vtSelection),
+	m_name(_settingName), m_valueSelection(_value), m_isMultipleValues(_isMultipleValues), m_globalColorStyle(nullptr)
 {
-	assert(my_propertyGridTable != nullptr);
+	assert(m_propertyGridTable != nullptr);
 
 	ini();
 
 	// Create new cell items
-	my_cellSettingName = new QTableWidgetItem(_settingName);
-	if (my_isMultipleValues) {
-		my_widgetSelection = new aComboButtonWidget("...");
+	m_cellSettingName = new QTableWidgetItem(_settingName);
+	if (m_isMultipleValues) {
+		m_widgetSelection = new aComboButtonWidget("...");
 	}
 	else {
-		my_widgetSelection = new aComboButtonWidget(_value);
+		m_widgetSelection = new aComboButtonWidget(_value);
 	}
-	my_valuePossibleSelection = _possibleSlection;
-	my_widgetSelection->setItems(my_valuePossibleSelection);
-	my_widgetSelection->setAutoFillBackground(true);
+	m_valuePossibleSelection = _possibleSlection;
+	m_widgetSelection->setItems(m_valuePossibleSelection);
+	m_widgetSelection->setAutoFillBackground(true);
 
 	// Make the first cell read only
-	Qt::ItemFlags f = my_cellSettingName->flags();
+	Qt::ItemFlags f = m_cellSettingName->flags();
 	f.setFlag(Qt::ItemFlag::ItemIsEditable, false);
 	f.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
-	my_cellSettingName->setFlags(f);
+	m_cellSettingName->setFlags(f);
 
 	// Add cell items to the main aPropertyGridWidget table
-	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
-	my_propertyGridTable->setCellWidget(_row, 1, my_widgetSelection);
+	m_propertyGridTable->setItem(_row, 0, m_cellSettingName);
+	m_propertyGridTable->setCellWidget(_row, 1, m_widgetSelection);
 
-	connect(my_widgetSelection, &aComboButtonWidget::changed, this, &aPropertyGridItem::slotValueWidgetEvent);
+	connect(m_widgetSelection, &aComboButtonWidget::changed, this, &aPropertyGridItem::slotValueWidgetEvent);
 }
 
 ak::aPropertyGridItem::aPropertyGridItem(
@@ -1222,30 +1222,30 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	bool								_isMultipleValues,
 	const QString &						_settingName,
 	const QString &						_value
-) : my_propertyGridTable(_aPropertyGridWidgetTable), my_group(_group), my_valueType(vtString),
-	my_name(_settingName), my_valueString(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
+) : m_propertyGridTable(_aPropertyGridWidgetTable), m_group(_group), m_valueType(vtString),
+	m_name(_settingName), m_valueString(_value), m_isMultipleValues(_isMultipleValues), m_globalColorStyle(nullptr)
 {
-	assert(my_propertyGridTable != nullptr);
+	assert(m_propertyGridTable != nullptr);
 
 	ini();
 
 	// Create new cell items
-	my_cellSettingName = new QTableWidgetItem(_settingName);
-	my_cellValue = new QTableWidgetItem(_value);
-	if (my_isMultipleValues) {
-		my_cellValue->setText("...");
+	m_cellSettingName = new QTableWidgetItem(_settingName);
+	m_cellValue = new QTableWidgetItem(_value);
+	if (m_isMultipleValues) {
+		m_cellValue->setText("...");
 	}
 
 	// Make the first cell read only
-	Qt::ItemFlags f = my_cellSettingName->flags();
+	Qt::ItemFlags f = m_cellSettingName->flags();
 	f.setFlag(Qt::ItemFlag::ItemIsEditable, false);
 	f.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
-	my_cellSettingName->setFlags(f);
+	m_cellSettingName->setFlags(f);
 
 	// Add cell items to the main aPropertyGridWidget table
-	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
-	my_propertyGridTable->setItem(_row, 1, my_cellValue);
-	connect(my_propertyGridTable, &QTableWidget::itemChanged, this, &aPropertyGridItem::slotTableCellChanged);
+	m_propertyGridTable->setItem(_row, 0, m_cellSettingName);
+	m_propertyGridTable->setItem(_row, 1, m_cellValue);
+	connect(m_propertyGridTable, &QTableWidget::itemChanged, this, &aPropertyGridItem::slotTableCellChanged);
 }
 
 ak::aPropertyGridItem::aPropertyGridItem(
@@ -1255,33 +1255,33 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	bool								_isMultipleValues,
 	const QString &						_settingName,
 	const QDate &						_value
-) : my_propertyGridTable(_propertyGridTable), my_group(_group), my_valueType(vtDate),
-	my_name(_settingName), my_valueDate(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr),
-	my_cellSettingName(nullptr), my_cellValue(nullptr)
+) : m_propertyGridTable(_propertyGridTable), m_group(_group), m_valueType(vtDate),
+	m_name(_settingName), m_valueDate(_value), m_isMultipleValues(_isMultipleValues), m_globalColorStyle(nullptr),
+	m_cellSettingName(nullptr), m_cellValue(nullptr)
 {
-	assert(my_propertyGridTable != nullptr);
+	assert(m_propertyGridTable != nullptr);
 
 	ini();
 
 	// Create new cell items
-	my_cellSettingName = new QTableWidgetItem(_settingName);
-	my_widgetDate = new aDatePickWidget(_value, dfDDMMYYYY);
+	m_cellSettingName = new QTableWidgetItem(_settingName);
+	m_widgetDate = new aDatePickWidget(_value, dfDDMMYYYY);
 
-	if (my_isMultipleValues) {
-		my_widgetDate->setText("...");
+	if (m_isMultipleValues) {
+		m_widgetDate->setText("...");
 	}
 
 	// Make the first cell read only
-	Qt::ItemFlags f = my_cellSettingName->flags();
+	Qt::ItemFlags f = m_cellSettingName->flags();
 	f.setFlag(Qt::ItemFlag::ItemIsEditable, false);
 	f.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
-	my_cellSettingName->setFlags(f);
+	m_cellSettingName->setFlags(f);
 
 	// Add cell items to the main aPropertyGridWidget table
-	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
-	my_propertyGridTable->setCellWidget(_row, 1, my_widgetDate);
+	m_propertyGridTable->setItem(_row, 0, m_cellSettingName);
+	m_propertyGridTable->setCellWidget(_row, 1, m_widgetDate);
 
-	connect(my_widgetDate, &aDatePickWidget::changed, this, &aPropertyGridItem::slotValueWidgetEvent);
+	connect(m_widgetDate, &aDatePickWidget::changed, this, &aPropertyGridItem::slotValueWidgetEvent);
 }
 
 ak::aPropertyGridItem::aPropertyGridItem(
@@ -1291,61 +1291,61 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	bool								_isMultipleValues,
 	const QString &						_settingName,
 	const QTime &						_value
-) : my_propertyGridTable(_propertyGridTable), my_group(_group), my_valueType(vtTime),
-	my_name(_settingName), my_valueTime(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
+) : m_propertyGridTable(_propertyGridTable), m_group(_group), m_valueType(vtTime),
+	m_name(_settingName), m_valueTime(_value), m_isMultipleValues(_isMultipleValues), m_globalColorStyle(nullptr)
 {
-	assert(my_propertyGridTable != nullptr);
+	assert(m_propertyGridTable != nullptr);
 
 	ini();
 
 	// Create new cell items
-	my_cellSettingName = new QTableWidgetItem(_settingName);
-	my_widgetTime = new aTimePickWidget(_value, tfHHMM);
+	m_cellSettingName = new QTableWidgetItem(_settingName);
+	m_widgetTime = new aTimePickWidget(_value, tfHHMM);
 
-	if (my_isMultipleValues) {
-		my_widgetTime->setText("...");
+	if (m_isMultipleValues) {
+		m_widgetTime->setText("...");
 	}
 
 	// Make the first cell read only
-	Qt::ItemFlags f = my_cellSettingName->flags();
+	Qt::ItemFlags f = m_cellSettingName->flags();
 	f.setFlag(Qt::ItemFlag::ItemIsEditable, false);
 	f.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
-	my_cellSettingName->setFlags(f);
+	m_cellSettingName->setFlags(f);
 
 	// Add cell items to the main aPropertyGridWidget table
-	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
-	my_propertyGridTable->setCellWidget(_row, 1, my_widgetTime);
+	m_propertyGridTable->setItem(_row, 0, m_cellSettingName);
+	m_propertyGridTable->setCellWidget(_row, 1, m_widgetTime);
 
-	connect(my_widgetTime, &aTimePickWidget::changed, this, &aPropertyGridItem::slotValueWidgetEvent);
+	connect(m_widgetTime, &aTimePickWidget::changed, this, &aPropertyGridItem::slotValueWidgetEvent);
 }
 
 ak::aPropertyGridItem::~aPropertyGridItem() {
-	assert(my_cellSettingName != nullptr); // This should never happen
-	if (my_cellValue != nullptr) { delete my_cellValue; }
-	if (my_widgetBool != nullptr) { delete my_widgetBool; }
-	if (my_widgetColor != nullptr) { delete my_widgetColor; }
-	if (my_widgetSelection != nullptr) { delete my_widgetSelection; }
-	int r = my_cellSettingName->row();
-	delete my_cellSettingName;
-	my_propertyGridTable->removeRow(r);
+	assert(m_cellSettingName != nullptr); // This should never happen
+	if (m_cellValue != nullptr) { delete m_cellValue; }
+	if (m_widgetBool != nullptr) { delete m_widgetBool; }
+	if (m_widgetColor != nullptr) { delete m_widgetColor; }
+	if (m_widgetSelection != nullptr) { delete m_widgetSelection; }
+	int r = m_cellSettingName->row();
+	delete m_cellSettingName;
+	m_propertyGridTable->removeRow(r);
 }
 
 int ak::aPropertyGridItem::row() const {
-	return my_cellSettingName->row();
+	return m_cellSettingName->row();
 }
 
 void ak::aPropertyGridItem::setId(
 	ak::ID								_ID
-) { my_id = _ID; }
+) { m_id = _ID; }
 
-ak::ID ak::aPropertyGridItem::getId(void) const { return my_id; }
+ak::ID ak::aPropertyGridItem::getId(void) const { return m_id; }
 
-bool ak::aPropertyGridItem::getIsCurrentlyError() const { return my_isCurrentlyError; }
+bool ak::aPropertyGridItem::getIsCurrentlyError() const { return m_isCurrentlyError; }
 
 void ak::aPropertyGridItem::setBackgroundColor(
 	const QColor &					_backgroundColor
 ) {
-	my_colorBackground = _backgroundColor; 
+	m_colorBackground = _backgroundColor; 
 	repaint();
 }
 
@@ -1353,216 +1353,216 @@ void ak::aPropertyGridItem::setTextColors(
 	const QColor &					_foregroundNormal,
 	const QColor &					_foregroundError
 ) {
-	my_colorErrorForeground = _foregroundError;
-	my_colorNormalForeground = _foregroundNormal;
+	m_colorErrorForeground = _foregroundError;
+	m_colorNormalForeground = _foregroundNormal;
 	repaint();
 }
 
 void ak::aPropertyGridItem::deselect(void) {
-	my_cellSettingName->setSelected(false);
-	if (my_cellValue != nullptr) { my_cellValue->setSelected(false); }
+	m_cellSettingName->setSelected(false);
+	if (m_cellValue != nullptr) { m_cellValue->setSelected(false); }
 }
 
 // #################################################################################
 
 // Information gathering
 
-QString ak::aPropertyGridItem::getGroup(void) const { return my_group; }
+QString ak::aPropertyGridItem::getGroup(void) const { return m_group; }
 
-bool ak::aPropertyGridItem::getIsMultipleValues(void) const { return my_isMultipleValues; }
+bool ak::aPropertyGridItem::getIsMultipleValues(void) const { return m_isMultipleValues; }
 
-QString ak::aPropertyGridItem::getName(void) const { return my_name; }
+QString ak::aPropertyGridItem::getName(void) const { return m_name; }
 
-ak::valueType ak::aPropertyGridItem::getValueType(void) const { return my_valueType; }
+ak::valueType ak::aPropertyGridItem::getValueType(void) const { return m_valueType; }
 
 std::vector<QString> ak::aPropertyGridItem::getPossibleSelection(void) const {
-	assert(my_valueType == vtSelection);	// Wrong value type for this item
-	return my_valuePossibleSelection;
+	assert(m_valueType == vtSelection);	// Wrong value type for this item
+	return m_valuePossibleSelection;
 }
 
 bool ak::aPropertyGridItem::getValueBool(void) const {
-	assert(my_valueType == vtBool);	// Wrong value type for this item
-	return my_valueBool;
+	assert(m_valueType == vtBool);	// Wrong value type for this item
+	return m_valueBool;
 }
 
 ak::aColor ak::aPropertyGridItem::getValueColor(void) const {
-	assert(my_valueType == vtColor);	// Wrong value type for this item
-	return my_valueColor;
+	assert(m_valueType == vtColor);	// Wrong value type for this item
+	return m_valueColor;
 }
 
 double ak::aPropertyGridItem::getValueDouble(void) const {
-	assert(my_valueType == vtDouble);	// Wrong value type for this item
-	return my_valueDouble;
+	assert(m_valueType == vtDouble);	// Wrong value type for this item
+	return m_valueDouble;
 }
 
 int ak::aPropertyGridItem::getValueInteger(void) const {
-	assert(my_valueType == vtInt);	// Wrong value type for this item
-	return my_valueInteger;
+	assert(m_valueType == vtInt);	// Wrong value type for this item
+	return m_valueInteger;
 }
 
 QString ak::aPropertyGridItem::getValueSelection(void) const {
-	assert(my_valueType == vtSelection);	// Wrong value type for this item
-	return my_valueSelection;
+	assert(m_valueType == vtSelection);	// Wrong value type for this item
+	return m_valueSelection;
 }
 
 QString ak::aPropertyGridItem::getValueString(void) const {
-	assert(my_valueType == vtString);	// Wrong value type for this item
-	return my_valueString;
+	assert(m_valueType == vtString);	// Wrong value type for this item
+	return m_valueString;
 }
 
 QDate ak::aPropertyGridItem::getValueDate(void) const {
-	assert(my_valueType == vtDate);
-	return my_valueDate;
+	assert(m_valueType == vtDate);
+	return m_valueDate;
 }
 
 QTime ak::aPropertyGridItem::getValueTime(void) const {
-	assert(my_valueType == vtTime);
-	return my_valueTime;
+	assert(m_valueType == vtTime);
+	return m_valueTime;
 }
 
-bool ak::aPropertyGridItem::isMultipleValues(void) const { return my_isMultipleValues; }
+bool ak::aPropertyGridItem::isMultipleValues(void) const { return m_isMultipleValues; }
 
 void ak::aPropertyGridItem::setReadOnly(
 	bool					_readOnly
 ) {
-	my_ignoreCellEvent = true;
-	my_isReadOnly = _readOnly;
-	switch (my_valueType)
+	m_ignoreCellEvent = true;
+	m_isReadOnly = _readOnly;
+	switch (m_valueType)
 	{
 	case vtBool:
-		assert(my_widgetBool != nullptr); // This should not happen
-		my_widgetBool->setEnabled(!my_isReadOnly && my_isEnabled);
+		assert(m_widgetBool != nullptr); // This should not happen
+		m_widgetBool->setEnabled(!m_isReadOnly && m_isEnabled);
 		break;
 	case vtColor:
-		assert(my_widgetColor != nullptr); // This should not happen
-		my_widgetColor->SetEnabled(!my_isReadOnly && my_isEnabled);
+		assert(m_widgetColor != nullptr); // This should not happen
+		m_widgetColor->SetEnabled(!m_isReadOnly && m_isEnabled);
 		break;
 	case vtSelection:
-		assert(my_widgetSelection != nullptr); // This should not happen
-		my_widgetSelection->setEnabled(!my_isReadOnly && my_isEnabled);
+		assert(m_widgetSelection != nullptr); // This should not happen
+		m_widgetSelection->setEnabled(!m_isReadOnly && m_isEnabled);
 		break;
 	case vtDate:
-		assert(my_widgetDate != nullptr); // This should not happen
-		my_widgetDate->setEnabled(!my_isReadOnly && my_isEnabled);
+		assert(m_widgetDate != nullptr); // This should not happen
+		m_widgetDate->setEnabled(!m_isReadOnly && m_isEnabled);
 		break;
 	case vtTime:
-		assert(my_widgetTime != nullptr); // This should not happen
-		my_widgetTime->setEnabled(!my_isReadOnly && my_isEnabled);
+		assert(m_widgetTime != nullptr); // This should not happen
+		m_widgetTime->setEnabled(!m_isReadOnly && m_isEnabled);
 		break;
 	case vtDouble:
 	case vtInt:
 	case vtString:
 	{
-		Qt::ItemFlags f = my_cellValue->flags();
-		f.setFlag(Qt::ItemFlag::ItemIsEditable, !my_isReadOnly && my_isEnabled);
-		my_cellValue->setFlags(f);
+		Qt::ItemFlags f = m_cellValue->flags();
+		f.setFlag(Qt::ItemFlag::ItemIsEditable, !m_isReadOnly && m_isEnabled);
+		m_cellValue->setFlags(f);
 	}
 	break;
 	default:
 		assert(0); // Invalid value type
 		break;
 	}
-	my_ignoreCellEvent = false;
+	m_ignoreCellEvent = false;
 }
 
-bool ak::aPropertyGridItem::isReadOnly() { return my_isReadOnly; }
+bool ak::aPropertyGridItem::isReadOnly() { return m_isReadOnly; }
 
 void ak::aPropertyGridItem::setEnabled(
 	bool					_enabled
 ) {
-	my_ignoreCellEvent = true;
-	my_isEnabled = _enabled;
-	switch (my_valueType)
+	m_ignoreCellEvent = true;
+	m_isEnabled = _enabled;
+	switch (m_valueType)
 	{
 	case vtBool:
-		assert(my_widgetBool != nullptr); // This should not happen
-		my_widgetBool->setEnabled(!my_isReadOnly && my_isEnabled);
+		assert(m_widgetBool != nullptr); // This should not happen
+		m_widgetBool->setEnabled(!m_isReadOnly && m_isEnabled);
 		break;
 	case vtColor:
-		assert(my_widgetColor != nullptr); // This should not happen
-		my_widgetColor->SetEnabled(!my_isReadOnly && my_isEnabled);
+		assert(m_widgetColor != nullptr); // This should not happen
+		m_widgetColor->SetEnabled(!m_isReadOnly && m_isEnabled);
 		break;
 	case vtSelection:
-		assert(my_widgetSelection != nullptr); // This should not happen
-		my_widgetSelection->setEnabled(!my_isReadOnly && my_isEnabled);
+		assert(m_widgetSelection != nullptr); // This should not happen
+		m_widgetSelection->setEnabled(!m_isReadOnly && m_isEnabled);
 		break;
 	case vtDate:
-		assert(my_widgetDate != nullptr); // This should not happen
-		my_widgetDate->setEnabled(!my_isReadOnly && my_isEnabled);
+		assert(m_widgetDate != nullptr); // This should not happen
+		m_widgetDate->setEnabled(!m_isReadOnly && m_isEnabled);
 		break;
 	case vtTime:
-		assert(my_widgetTime != nullptr); // This should not happen
-		my_widgetTime->setEnabled(!my_isReadOnly && my_isEnabled);
+		assert(m_widgetTime != nullptr); // This should not happen
+		m_widgetTime->setEnabled(!m_isReadOnly && m_isEnabled);
 		break;
 	case vtDouble:
 	case vtInt:
 	case vtString:
 	{
-		Qt::ItemFlags f = my_cellValue->flags();
-		f.setFlag(Qt::ItemFlag::ItemIsEditable, !my_isReadOnly && my_isEnabled);
-		my_cellValue->setFlags(f);
+		Qt::ItemFlags f = m_cellValue->flags();
+		f.setFlag(Qt::ItemFlag::ItemIsEditable, !m_isReadOnly && m_isEnabled);
+		m_cellValue->setFlags(f);
 	}
 	break;
 	default:
 		assert(0); // Invalid value type
 		break;
 	}
-	my_ignoreCellEvent = false;
+	m_ignoreCellEvent = false;
 }
 
 void ak::aPropertyGridItem::setColorStyle(
 	aColorStyle *	_style
 ) {
 	assert(_style != nullptr); // Nullptr provided
-	my_globalColorStyle = _style;
+	m_globalColorStyle = _style;
 	repaint();
 }
 
 void ak::aPropertyGridItem::resetAsError(
 	const QString &									_valueToReset
 ) {
-	assert(my_valueType == vtString);
-	my_ignoreCellEvent = true;
-	my_valueString = _valueToReset;
-	my_isCurrentlyError = true;
-	my_cellValue->setText(my_valueString);
+	assert(m_valueType == vtString);
+	m_ignoreCellEvent = true;
+	m_valueString = _valueToReset;
+	m_isCurrentlyError = true;
+	m_cellValue->setText(m_valueString);
 	repaint();
-	my_cellValue->setSelected(false);
-	my_ignoreCellEvent = false;
+	m_cellValue->setSelected(false);
+	m_ignoreCellEvent = false;
 }
 
 void ak::aPropertyGridItem::resetAsError(
 	int												_valueToReset
 ) {
-	assert(my_valueType == vtInt);
-	my_ignoreCellEvent = true;
-	my_valueInteger = _valueToReset;
-	my_isCurrentlyError = true;
-	my_cellValue->setText(QString::number(my_valueInteger));
+	assert(m_valueType == vtInt);
+	m_ignoreCellEvent = true;
+	m_valueInteger = _valueToReset;
+	m_isCurrentlyError = true;
+	m_cellValue->setText(QString::number(m_valueInteger));
 	repaint();
-	my_cellValue->setSelected(false);
-	my_ignoreCellEvent = false;
+	m_cellValue->setSelected(false);
+	m_ignoreCellEvent = false;
 }
 
 void ak::aPropertyGridItem::resetAsError(
 	double											_valueToReset
 ) {
-	assert(my_valueType == vtDouble);
-	my_ignoreCellEvent = true;
-	my_valueDouble = _valueToReset;
-	my_isCurrentlyError = true;
-	my_cellValue->setText(QString::number(my_valueDouble));
+	assert(m_valueType == vtDouble);
+	m_ignoreCellEvent = true;
+	m_valueDouble = _valueToReset;
+	m_isCurrentlyError = true;
+	m_cellValue->setText(QString::number(m_valueDouble));
 	repaint();
-	my_cellValue->setSelected(false);
-	my_ignoreCellEvent = false;
+	m_cellValue->setSelected(false);
+	m_ignoreCellEvent = false;
 }
 
 void ak::aPropertyGridItem::showAsError(void) {
-	my_ignoreCellEvent = true;
-	my_isCurrentlyError = true;
-	my_cellValue->setSelected(false);
+	m_ignoreCellEvent = true;
+	m_isCurrentlyError = true;
+	m_cellValue->setSelected(false);
 	repaint();
-	my_ignoreCellEvent = false;
+	m_ignoreCellEvent = false;
 }
 
 // #################################################################################
@@ -1570,39 +1570,39 @@ void ak::aPropertyGridItem::showAsError(void) {
 // Slots
 
 void ak::aPropertyGridItem::slotValueWidgetEvent() {
-	switch (my_valueType)
+	switch (m_valueType)
 	{
 	case vtBool:
-		if (my_isMultipleValues) {
-			my_isMultipleValues = false;
-			my_valueBool = true;
-			my_widgetBool->setTristate(false);
-			my_widgetBool->setChecked(my_valueBool);
+		if (m_isMultipleValues) {
+			m_isMultipleValues = false;
+			m_valueBool = true;
+			m_widgetBool->setTristate(false);
+			m_widgetBool->setChecked(m_valueBool);
 			emit changed();
 		}
 		else {
-			my_valueBool = my_widgetBool->isChecked();
+			m_valueBool = m_widgetBool->isChecked();
 			emit changed();
 		}
 		break;
 	case vtColor:
-		my_valueColor = my_widgetColor->color();
-		my_isMultipleValues = false;
+		m_valueColor = m_widgetColor->color();
+		m_isMultipleValues = false;
 		emit changed();
 		break;
 	case vtDate:
-		my_valueDate = my_widgetDate->currentDate();
-		my_isMultipleValues = false;
+		m_valueDate = m_widgetDate->currentDate();
+		m_isMultipleValues = false;
 		emit changed();
 		break;
 	case vtSelection:
-		my_valueSelection = my_widgetSelection->text();
-		my_isMultipleValues = false;
+		m_valueSelection = m_widgetSelection->text();
+		m_isMultipleValues = false;
 		emit changed();
 		break;
 	case vtTime:
-		my_valueTime = my_widgetTime->currentTime();
-		my_isMultipleValues = false;
+		m_valueTime = m_widgetTime->currentTime();
+		m_isMultipleValues = false;
 		emit changed();
 		break;
 	default:
@@ -1614,81 +1614,81 @@ void ak::aPropertyGridItem::slotValueWidgetEvent() {
 void ak::aPropertyGridItem::slotTableCellChanged(
 	QTableWidgetItem *									_item
 ) {
-	if (my_ignoreCellEvent) { return; }
-	if (_item == my_cellValue) {
+	if (m_ignoreCellEvent) { return; }
+	if (_item == m_cellValue) {
 
-		if (my_isCurrentlyError) {
-			my_isCurrentlyError = false;
+		if (m_isCurrentlyError) {
+			m_isCurrentlyError = false;
 			repaint();
 		}
 
 		QString theText(_item->text());
-		switch (my_valueType)
+		switch (m_valueType)
 		{
 		case vtDouble:
 		{
-			my_ignoreCellEvent = true;
+			m_ignoreCellEvent = true;
 			bool failed = false;
 			double v;
 			v = toNumber<double>(theText.toStdString(), failed);
 			if (failed) {
 				QString msg("Invalid value format provided for setting ");
-				msg.append(my_name);
+				msg.append(m_name);
 				msg.append(". Expected numeric.");
 				aPromptDialog dia(msg, "Error", promptType::promptOk);
 				dia.showDialog();
-				my_cellValue->setSelected(false);
-				if (my_isMultipleValues) {
-					my_cellValue->setText("...");
+				m_cellValue->setSelected(false);
+				if (m_isMultipleValues) {
+					m_cellValue->setText("...");
 				}
 				else {
-					my_cellValue->setText(QString::number(my_valueDouble));
+					m_cellValue->setText(QString::number(m_valueDouble));
 				}
-				my_cellValue->setTextColor(my_colorErrorForeground.toQColor());
-				my_ignoreCellEvent = false;
+				m_cellValue->setTextColor(m_colorErrorForeground.toQColor());
+				m_ignoreCellEvent = false;
 			}
 			else {
-				my_valueDouble = v;
-				my_isMultipleValues = false;
-				my_cellValue->setTextColor(my_colorNormalForeground.toQColor());
-				my_ignoreCellEvent = false;
+				m_valueDouble = v;
+				m_isMultipleValues = false;
+				m_cellValue->setTextColor(m_colorNormalForeground.toQColor());
+				m_ignoreCellEvent = false;
 				emit changed();
 			}
 		}
 			break;
 		case vtInt:
 		{
-			my_ignoreCellEvent = true;
+			m_ignoreCellEvent = true;
 			bool failed = false;
 			int v;
 			v = toNumber<int>(theText.toStdString(), failed);
 			if (failed) {
 				QString msg("Invalid value format provided for setting ");
-				msg.append(my_name);
+				msg.append(m_name);
 				msg.append(". Expected natural number.");
 				aPromptDialog dia(msg, "Error", promptType::promptOk);
 				dia.showDialog();
-				my_cellValue->setSelected(false);
-				if (my_isMultipleValues) {
-					my_cellValue->setText("...");
+				m_cellValue->setSelected(false);
+				if (m_isMultipleValues) {
+					m_cellValue->setText("...");
 				}
 				else {
-					my_cellValue->setText(QString::number(my_valueInteger));
+					m_cellValue->setText(QString::number(m_valueInteger));
 				}
-				my_cellValue->setTextColor(my_colorErrorForeground.toQColor());
-				my_ignoreCellEvent = false;
+				m_cellValue->setTextColor(m_colorErrorForeground.toQColor());
+				m_ignoreCellEvent = false;
 			}
 			else {
-				my_valueInteger = v;
-				my_isMultipleValues = false;
-				my_cellValue->setTextColor(my_colorNormalForeground.toQColor());
-				my_ignoreCellEvent = false;
+				m_valueInteger = v;
+				m_isMultipleValues = false;
+				m_cellValue->setTextColor(m_colorNormalForeground.toQColor());
+				m_ignoreCellEvent = false;
 				emit changed();
 			}
 		}
 			break;
 		case vtString:
-			my_valueString = theText;
+			m_valueString = theText;
 			emit changed();
 			break;
 		default:
@@ -1699,83 +1699,83 @@ void ak::aPropertyGridItem::slotTableCellChanged(
 }
 
 void ak::aPropertyGridItem::ini(void) {
-	my_cellSettingName = nullptr;
-	my_cellValue = nullptr;
-	my_widgetBool = nullptr;
-	my_widgetColor = nullptr;
-	my_widgetSelection = nullptr;
-	my_ignoreCellEvent = false;
-	my_isCurrentlyError = false;
-	my_isEnabled = true;
-	my_isReadOnly = false;
-	my_colorErrorForeground = QColor(255, 0, 0);
-	my_colorNormalForeground = QColor(0, 0, 0);
+	m_cellSettingName = nullptr;
+	m_cellValue = nullptr;
+	m_widgetBool = nullptr;
+	m_widgetColor = nullptr;
+	m_widgetSelection = nullptr;
+	m_ignoreCellEvent = false;
+	m_isCurrentlyError = false;
+	m_isEnabled = true;
+	m_isReadOnly = false;
+	m_colorErrorForeground = QColor(255, 0, 0);
+	m_colorNormalForeground = QColor(0, 0, 0);
 }
 
 void ak::aPropertyGridItem::repaint(void) {
-	if (my_cellSettingName != nullptr) {
-		my_cellSettingName->setBackgroundColor(my_colorBackground.toQColor());
-		my_cellSettingName->setTextColor(my_colorNormalForeground.toQColor());
+	if (m_cellSettingName != nullptr) {
+		m_cellSettingName->setBackgroundColor(m_colorBackground.toQColor());
+		m_cellSettingName->setTextColor(m_colorNormalForeground.toQColor());
 	}
-	if (my_cellValue != nullptr) {
-		my_ignoreCellEvent = true;
-		my_cellValue->setBackgroundColor(my_colorBackground.toQColor());
-		if (my_isCurrentlyError) {
-			my_cellValue->setTextColor(my_colorErrorForeground.toQColor());
+	if (m_cellValue != nullptr) {
+		m_ignoreCellEvent = true;
+		m_cellValue->setBackgroundColor(m_colorBackground.toQColor());
+		if (m_isCurrentlyError) {
+			m_cellValue->setTextColor(m_colorErrorForeground.toQColor());
 		}
 		else {
-			my_cellValue->setTextColor(my_colorNormalForeground.toQColor());
+			m_cellValue->setTextColor(m_colorNormalForeground.toQColor());
 		}
-		my_ignoreCellEvent = false;
+		m_ignoreCellEvent = false;
 	}
 	else {
-		switch (my_valueType)
+		switch (m_valueType)
 		{
 		case vtBool:
 		{
-			assert(my_widgetBool != nullptr); // Something went wrong
-			QString sheet = my_globalColorStyle->toStyleSheet(cafBackgroundColorControls | cafForegroundColorControls, "QCheckBox{", "}");
-			my_widgetBool->setStyleSheet(sheet);
+			assert(m_widgetBool != nullptr); // Something went wrong
+			QString sheet = m_globalColorStyle->toStyleSheet(cafBackgroundColorControls | cafForegroundColorControls, "QCheckBox{", "}");
+			m_widgetBool->setStyleSheet(sheet);
 			/*QString sheet("QCheckBox{background-color:#");
-			sheet.append(my_colorBackground.toHexString(true));
+			sheet.append(m_colorBackground.toHexString(true));
 			sheet.append(";}\n");
-			my_widgetBool->setStyleSheet(sheet);*/
+			m_widgetBool->setStyleSheet(sheet);*/
 		}
 			break;
 		case vtColor:
 		{
-			assert(my_widgetColor != nullptr); // Something went wrong
-			my_widgetColor->setColorStyle(my_globalColorStyle);
-			my_widgetColor->fillBackground(my_colorBackground);
+			assert(m_widgetColor != nullptr); // Something went wrong
+			m_widgetColor->setColorStyle(m_globalColorStyle);
+			m_widgetColor->fillBackground(m_colorBackground);
 			/*QString sheet("QPushButton{background-color: #");
-			sheet.append(my_colorBackground.toHexString(true));
+			sheet.append(m_colorBackground.toHexString(true));
 			sheet.append("; color: #");
-			sheet.append(my_colorNormalForeground.toHexString(true));
+			sheet.append(m_colorNormalForeground.toHexString(true));
 			sheet.append("; }");
 
-			if (my_globalColorStyle != nullptr) {
-				sheet.append(my_globalColorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus, "QPushButton:hover{", "}"));
-				sheet.append(my_globalColorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected, "QPushButton:pressed{", "}"));
+			if (m_globalColorStyle != nullptr) {
+				sheet.append(m_globalColorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus, "QPushButton:hover{", "}"));
+				sheet.append(m_globalColorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected, "QPushButton:pressed{", "}"));
 			}
 
-			my_widgetColor->setPushButtonStyleSheet(sheet);*/
+			m_widgetColor->setPushButtonStyleSheet(sheet);*/
 		}
 			break;
 		case vtDate:
-			assert(my_widgetDate != nullptr);	// Something went wrong
-			my_widgetDate->setColorStyle(my_globalColorStyle);
+			assert(m_widgetDate != nullptr);	// Something went wrong
+			m_widgetDate->setColorStyle(m_globalColorStyle);
 			break;
 		case vtTime:
-			assert(my_widgetTime != nullptr);	// Something went wrong
-			my_widgetTime->setColorStyle(my_globalColorStyle);
+			assert(m_widgetTime != nullptr);	// Something went wrong
+			m_widgetTime->setColorStyle(m_globalColorStyle);
 			break;
 		case vtSelection:
 		{
-			assert(my_widgetSelection != nullptr); // Something went wrong
-			my_widgetSelection->setColorStyle(my_globalColorStyle);
+			assert(m_widgetSelection != nullptr); // Something went wrong
+			m_widgetSelection->setColorStyle(m_globalColorStyle);
 			/*QString sheet("QPushButton{color: #");
-			aColor fore(my_colorNormalForeground);
-			aColor back(my_colorBackground);
+			aColor fore(m_colorNormalForeground);
+			aColor back(m_colorBackground);
 			sheet.append(fore.toHexString(true));
 			sheet.append("; background-color: #");
 			sheet.append(back.toHexString(true));
@@ -1785,12 +1785,12 @@ void ak::aPropertyGridItem::repaint(void) {
 			sheet.append(back.toHexString(true));
 			sheet.append("; alternate-background-color: red; border 1px solid black; }");
 
-			if (my_globalColorStyle != nullptr) {
-				sheet.append(my_globalColorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus, "QPushButton:hover{", "}"));
-				sheet.append(my_globalColorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected, "QPushButton:pressed{", "}"));
+			if (m_globalColorStyle != nullptr) {
+				sheet.append(m_globalColorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus, "QPushButton:hover{", "}"));
+				sheet.append(m_globalColorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected, "QPushButton:pressed{", "}"));
 			}
 			
-			my_widgetSelection->setStyleSheet(sheet);
+			m_widgetSelection->setStyleSheet(sheet);
 			*/
 		}
 			break;

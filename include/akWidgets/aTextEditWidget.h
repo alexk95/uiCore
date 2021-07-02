@@ -116,13 +116,13 @@ namespace ak {
 		void slotContextMenuItemClicked();
 
 	private:
-		bool							my_autoScrollToBottom;		//! If true, the textbox will automatically scroll down on text change
-		QMenu *							my_contextMenu;
-		ID								my_currentContextMenuItemId;
+		bool							m_autoScrollToBottom;		//! If true, the textbox will automatically scroll down on text change
+		QMenu *							m_contextMenu;
+		ID								m_currentContextMenuItemId;
 		int								m_maxLength;
 		bool							m_controlIsPressed;
 
-		std::vector<aContextMenuItem *>	my_contextMenuItems;
+		std::vector<aContextMenuItem *>	m_contextMenuItems;
 
 		// Initialize the textEdit
 		void ini(void);

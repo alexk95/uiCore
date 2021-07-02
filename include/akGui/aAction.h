@@ -73,9 +73,9 @@ namespace ak {
 		// #######################################################################################################
 
 		//! @brief Retuns the popup mode this Action is using
-		QToolButton::ToolButtonPopupMode popupMode(void) { return my_popupMode; }
+		QToolButton::ToolButtonPopupMode popupMode(void) { return m_popupMode; }
 
 	private:
-		QToolButton::ToolButtonPopupMode			my_popupMode;		//! The popup Mode of this Action
+		QToolButton::ToolButtonPopupMode			m_popupMode;		//! The popup Mode of this Action
 	};
 } // namespace ak

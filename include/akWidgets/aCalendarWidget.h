@@ -47,12 +47,12 @@ namespace ak {
 		void setOnlyCurrentMonthVisible(
 			bool						_onlyCurrentMonth = true
 		) {
-			my_onlyCurrentMonthVisible = _onlyCurrentMonth;
+			m_onlyCurrentMonthVisible = _onlyCurrentMonth;
 		}
 
 		//! @brief Checks if the current month is visible
 		//! @return Boolean value 
-		bool isOnlyCurrentMonthVisible(void) const { return my_onlyCurrentMonthVisible; }
+		bool isOnlyCurrentMonthVisible(void) const { return m_onlyCurrentMonthVisible; }
 
 	protected:
 
@@ -68,7 +68,7 @@ namespace ak {
 
 	private:
 
-		bool		my_onlyCurrentMonthVisible;				//! If the current month is shown
+		bool		m_onlyCurrentMonthVisible;				//! If the current month is shown
 
 	};
 }

@@ -119,10 +119,10 @@ namespace ak {
 		//! Will clear the memory allocated by this object
 		void memFree(void);
 
-		bool							my_verticalScrollbarAlwaysVisible;
+		bool							m_verticalScrollbarAlwaysVisible;
 
-		ID								my_currentId;
-		std::map<ID, aListWidgetItem *>	my_items;
+		ID								m_currentId;
+		std::map<ID, aListWidgetItem *>	m_items;
 
 	}; // class list
 
@@ -167,7 +167,7 @@ namespace ak {
 		ID id(void) const;
 
 	private:
-		ID					my_id;
+		ID					m_id;
 
 		aListWidgetItem(const aListWidgetItem &) = delete;
 		aListWidgetItem & operator = (const aListWidgetItem &) = delete;

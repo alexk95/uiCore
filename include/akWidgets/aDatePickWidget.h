@@ -58,15 +58,15 @@ namespace ak {
 
 		//! @brief Will return the currently selected date
 		//! @return Current date
-		QDate currentDate(void) const { return my_date; }
+		QDate currentDate(void) const { return m_date; }
 
 		//! @brief Will return the currently selected delimiter
 		//! @return Selected delimeter
-		QString delimiter(void) const { return my_delimiter; }
+		QString delimiter(void) const { return m_delimiter; }
 
 		//! @brief Will return the currently selected date format
 		//! @return Selected date format
-		dateFormat getDateFormat(void) const { return my_dateFormat; }
+		dateFormat getDateFormat(void) const { return m_dateFormat; }
 
 		// #############################################################################################################################
 
@@ -105,9 +105,9 @@ namespace ak {
 		//! @throw std::exception If the user lives in different countrys with other date delimiter, the delimiter can be changed
 		void refreshDate(void);
 
-		QDate				my_date;			//! The date
-		dateFormat			my_dateFormat;		//! The date format
-		QString				my_delimiter;		//! The date delimiter
+		QDate				m_date;			//! The date
+		dateFormat			m_dateFormat;		//! The date format
+		QString				m_delimiter;		//! The date delimiter
 	};
 
 	// #################################################################################################################################
@@ -154,12 +154,12 @@ namespace ak {
 		//! @brief Setups the widget
 		void setupWidget(void);
 
-		QVBoxLayout *		my_mainLayout;		//! The main layout of the widget
-		QHBoxLayout *		my_inputLayout;		//! The layout of the input
-		QWidget *			my_inputWidget;		//! The widget of the input
+		QVBoxLayout *		m_mainLayout;		//! The main layout of the widget
+		QHBoxLayout *		m_inputLayout;		//! The layout of the input
+		QWidget *			m_inputWidget;		//! The widget of the input
 
-		aCalendarWidget *	my_calendar;		//! The widget of the calendar
-		aPushButtonWidget *	my_buttonOk;		//! The button to confirm the results
-		aPushButtonWidget *	my_buttonCancel;	//! The button to cancel the widget
+		aCalendarWidget *	m_calendar;		//! The widget of the calendar
+		aPushButtonWidget *	m_buttonOk;		//! The button to confirm the results
+		aPushButtonWidget *	m_buttonCancel;	//! The button to cancel the widget
 	};
 }

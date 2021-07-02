@@ -338,24 +338,24 @@ namespace ak {
 	private:
 		// Variables
 
-		aWindow *							my_window;						//! The QMainWindow the UI manager is applying its changes to
+		aWindow *							m_window;						//! The QMainWindow the UI manager is applying its changes to
 
-		QLabel *							my_statusLabel;					//! The label used to display status messages
-		QProgressBar *						my_progressBar;					//! The progress bar used to display the progress of
+		QLabel *							m_statusLabel;					//! The label used to display status messages
+		QProgressBar *						m_progressBar;					//! The progress bar used to display the progress of
 
-		aMessenger *						my_messenger;					//! The messenger used in this object
-		aUidManager *						my_uidManager;					//! The UID manager used in this object
-		tt::TabToolbar *					my_tabToolBar;					//! The TabToolBar of this window
-		aWindowManagerTimerSignalLinker *	my_timerSignalLinker;			//! The signal linker used to link the timer singnals
+		aMessenger *						m_messenger;					//! The messenger used in this object
+		aUidManager *						m_uidManager;					//! The UID manager used in this object
+		tt::TabToolbar *					m_tabToolBar;					//! The TabToolBar of this window
+		aWindowManagerTimerSignalLinker *	m_timerSignalLinker;			//! The signal linker used to link the timer singnals
 
-		bool								my_progressBarContinuous;		//! If true, the status bar ist currently continuous
+		bool								m_progressBarContinuous;		//! If true, the status bar ist currently continuous
 
-		QTimer *							my_timerProgressShow;			//! The timer used to show the progress bar delayed
-		QTimer *							my_timerProgressHide;			//! The timer used to hide the progress bar delayed
-		QTimer *							my_timerLabelShow;				//! The timer used to show the status label delayed
-		QTimer *							my_timerLabelHide;				//! The timer used to hide the status label delayed
-		QTimer *							my_timerShowMainWindow;			//! The timer used to show the main window upon creation
+		QTimer *							m_timerProgressShow;			//! The timer used to show the progress bar delayed
+		QTimer *							m_timerProgressHide;			//! The timer used to hide the progress bar delayed
+		QTimer *							m_timerLabelShow;				//! The timer used to show the status label delayed
+		QTimer *							m_timerLabelHide;				//! The timer used to hide the status label delayed
+		QTimer *							m_timerShowMainWindow;			//! The timer used to show the main window upon creation
 
-		std::vector<aTtbContainer *>		my_tabToolBarContainer;
+		std::vector<aTtbContainer *>		m_tabToolBarContainer;
 	};
 } // namespace ak

@@ -24,17 +24,17 @@ ak::aComboButtonWidget::aComboButtonWidget(
 	QWidget *					_parent
 ) : QPushButton(_initialText, _parent),
 	ak::aWidget(otComboButton, _colorStyle),
-	my_menu(nullptr)
+	m_menu(nullptr)
 {
 	try {
 		// Create new QMenu to be a dropdown menu of the pushbutton
-		my_menu = new QMenu;
-		if (my_menu == nullptr) { throw aException("Failed to create", "Create menu"); }
+		m_menu = new QMenu;
+		if (m_menu == nullptr) { throw aException("Failed to create", "Create menu"); }
 
 		// Apply color style and menu
-		if (my_colorStyle != nullptr) { setColorStyle(_colorStyle); }
-		setMenu(my_menu);
-		my_itemsUIDmanager.setLatestUid(1);
+		if (m_colorStyle != nullptr) { setColorStyle(_colorStyle); }
+		setMenu(m_menu);
+		m_itemsUIDmanager.setLatestUid(1);
 	}
 	catch (const aException & e) { throw aException(e, "ak::aComboButtonWidget::aComboButtonWidget()"); }
 	catch (const std::exception & e) { throw aException(e.what(), "ak::aComboButtonWidget::aComboButtonWidget()"); }
@@ -61,17 +61,17 @@ void ak::aComboButtonWidget::keyReleaseEvent(QKeyEvent * _event) {
 // #######################################################################################################
 
 void ak::aComboButtonWidget::clearItems(void) {
-	for (int i = 0; i < my_items.size(); i++){
+	for (int i = 0; i < m_items.size(); i++){
 		// Remove the action from the menu of this combo button
-		my_menu->removeAction(my_items.at(i));
+		m_menu->removeAction(m_items.at(i));
 		// Disconnect the signal
-		disconnect(my_items.at(i), SIGNAL(triggered()), this, SLOT(slotItemTriggered()));
+		disconnect(m_items.at(i), SIGNAL(triggered()), this, SLOT(slotItemTriggered()));
 		// Remove entry from the vector
-		delete my_items.at(i);
+		delete m_items.at(i);
 	}
-	my_items.clear();
-	my_itemUids.clear();
-	my_itemsUIDmanager.setLatestUid(1);
+	m_items.clear();
+	m_itemUids.clear();
+	m_itemsUIDmanager.setLatestUid(1);
 }
 
 void ak::aComboButtonWidget::setItems(
@@ -84,12 +84,12 @@ void ak::aComboButtonWidget::setItems(
 			ak::aComboButtonWidgetItem * n_itm = nullptr;
 			n_itm = new ak::aComboButtonWidgetItem(_menu.at(i));
 			// Set the items UID
-			n_itm->setUid(my_itemsUIDmanager.getId());
+			n_itm->setUid(m_itemsUIDmanager.getId());
 			// Add the new item to the menu
-			my_menu->addAction(n_itm);
+			m_menu->addAction(n_itm);
 			// Store data
-			my_items.push_back(n_itm);
-			my_itemUids.insert_or_assign(n_itm->uid(), my_items.size() - 1);
+			m_items.push_back(n_itm);
+			m_itemUids.insert_or_assign(n_itm->uid(), m_items.size() - 1);
 			// Connect the triggered signal of the new item
 			connect(n_itm, SIGNAL(triggered()), this, SLOT(slotItemTriggered()));
 		}
@@ -108,32 +108,32 @@ int ak::aComboButtonWidget::addItem(
 		n_itm = new ak::aComboButtonWidgetItem(_other);
 		if (n_itm == nullptr) { throw aException("Failed to create", "Create aComboButtonWidgetItem"); }
 		// Set the items UID
-		n_itm->setUid(my_itemsUIDmanager.getId());
+		n_itm->setUid(m_itemsUIDmanager.getId());
 		// Add the new item to the menu
-		my_menu->addAction(n_itm);
+		m_menu->addAction(n_itm);
 		// Store data
-		my_items.push_back(n_itm);
-		my_itemUids.insert_or_assign(n_itm->uid(), my_items.size() - 1);
+		m_items.push_back(n_itm);
+		m_itemUids.insert_or_assign(n_itm->uid(), m_items.size() - 1);
 		// Connect the triggered signal of the new item
 		connect(n_itm, SIGNAL(triggered()), this, SLOT(slotItemTriggered()));
 		// Return the new items index in the menu
-		return (my_items.size() - 1);
+		return (m_items.size() - 1);
 	}
 	catch (const aException & e) { throw aException(e, "ak::aComboButtonWidget::addItem()"); }
 	catch (const std::exception & e) { throw aException(e.what(), "ak::aComboButtonWidget::addItem()"); }
 	catch (...) { throw aException("Unknown error", "ak::aComboButtonWidget::addItem()"); }
 }
 
-int ak::aComboButtonWidget::getItemCount(void) const { return my_items.size(); }
+int ak::aComboButtonWidget::getItemCount(void) const { return m_items.size(); }
 
 void ak::aComboButtonWidget::setColorStyle(
 	aColorStyle *								_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
-	QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+	m_colorStyle = _colorStyle;
+	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 		cafBackgroundColorControls));
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 		cafBackgroundColorControls | cafBackgroundColorAlternate, "QPushButton QMenu{", "}"));
 	this->setStyleSheet(sheet);
 }
@@ -142,9 +142,9 @@ void ak::aComboButtonWidget::slotItemTriggered() {
 	// Cast the QObject to the aComboButtonWidgetItem
 	ak::aComboButtonWidgetItem * itm = dynamic_cast<ak::aComboButtonWidgetItem *>(sender());
 	assert(itm != nullptr); // failed to cast. but item was expected
-	auto obj = my_itemUids.find(itm->uid());
-	assert(obj != my_itemUids.end()); // Invalid data stored
-	setText(my_items.at(obj->second)->text());
+	auto obj = m_itemUids.find(itm->uid());
+	assert(obj != m_itemUids.end()); // Invalid data stored
+	setText(m_items.at(obj->second)->text());
 	emit changed();
 }
 

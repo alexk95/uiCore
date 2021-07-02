@@ -41,6 +41,6 @@ namespace ak {
 		);
 
 	private:
-		bool				my_heightForWidth;
+		bool				m_heightForWidth;
 	};
 }

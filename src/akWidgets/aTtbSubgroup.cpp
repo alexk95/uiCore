@@ -32,17 +32,17 @@ ak::aTtbSubGroup::aTtbSubGroup(
 	aMessenger *				_messenger,
 	tt::SubGroup *				_group,
 	const QString &				_text
-) : ak::aTtbContainer(_messenger, otTabToolbarSubgroup), my_subGroup(_group)
+) : ak::aTtbContainer(_messenger, otTabToolbarSubgroup), m_subGroup(_group)
 {
-	assert(my_subGroup != nullptr); // Nullptr provided
+	assert(m_subGroup != nullptr); // Nullptr provided
 	assert(_messenger != nullptr); // Nullptr provided
-	my_text = _text;
+	m_text = _text;
 }
 
 ak::aTtbSubGroup::~aTtbSubGroup() {
 	TTB_CONTAINER_DESTROYING
 		
-	delete my_subGroup;
+	delete m_subGroup;
 }
 
 void ak::aTtbSubGroup::addChild(
@@ -55,7 +55,7 @@ void ak::aTtbSubGroup::addChild(
 		ac = dynamic_cast<aAction *>(_child);
 		assert(ac != nullptr); // Cast failed
 		//Place action
-		my_subGroup->AddAction(ac->popupMode(), ac);
+		m_subGroup->AddAction(ac->popupMode(), ac);
 	}
 	else {
 		// Check child
@@ -65,12 +65,12 @@ void ak::aTtbSubGroup::addChild(
 		w = dynamic_cast<aWidget *>(_child);
 		assert(w != nullptr); // Cast failed
 		// Place widget
-		my_subGroup->AddWidget(w->widget());
+		m_subGroup->AddWidget(w->widget());
 	}
 	_child->setParentObject(this);
 	addChildObject(_child);
 	// Store object
-	my_childObjects.insert_or_assign(_child->uid(), _child);
+	m_childObjects.insert_or_assign(_child->uid(), _child);
 }
 
 ak::aTtbContainer * ak::aTtbSubGroup::createSubContainer(
@@ -86,7 +86,7 @@ void ak::aTtbSubGroup::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 		assert(_colorStyle != nullptr); // nullptr provided
-		my_colorStyle = _colorStyle;
+		m_colorStyle = _colorStyle;
 }
 
 void ak::aTtbSubGroup::removeChildObject(
@@ -99,7 +99,7 @@ void ak::aTtbSubGroup::removeChildObject(
 		aAction * action = nullptr;
 		action = dynamic_cast<aAction *>(_child);
 		assert(action != nullptr);	// Cast failed
-		my_subGroup->removeAction(action);
+		m_subGroup->removeAction(action);
 	}
 }
 
@@ -107,5 +107,5 @@ void ak::aTtbSubGroup::setEnabled(
 	bool						_enabled
 ) {
 	aTtbContainer::setEnabled(_enabled);
-	my_subGroup->setEnabled(my_isEnabled);
+	m_subGroup->setEnabled(m_isEnabled);
 }

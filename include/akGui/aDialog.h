@@ -45,7 +45,7 @@ namespace ak {
 		dialogResult showDialog(void);
 
 	protected:
-		dialogResult			my_result;		//! The current result of this dialog
+		dialogResult			m_result;		//! The current result of this dialog
 
 		aDialog(aDialog &) = delete;
 		aDialog & operator = (aDialog &) = delete;

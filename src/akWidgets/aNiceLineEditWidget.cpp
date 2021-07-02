@@ -20,34 +20,34 @@
 #include <qlayout.h>
 
 ak::aNiceLineEditWidget::aNiceLineEditWidget(const QString & _initialText, const QString & _infoLabelText)
-	: aWidget{ otNiceLineEdit }, my_label{ nullptr }, my_lineEdit{ nullptr }, my_layout{ nullptr }
+	: aWidget{ otNiceLineEdit }, m_label{ nullptr }, m_lineEdit{ nullptr }, m_layout{ nullptr }
 {
 	// Create layout 
-	my_layout = new QHBoxLayout(this);
-	my_layout->setMargin(0);
+	m_layout = new QHBoxLayout(this);
+	m_layout->setMargin(0);
 	this->setContentsMargins(0, 0, 0, 0);
 
 	// Create controls
-	my_lineEdit = new aLineEditWidget{ _initialText };
-	my_label = new aLabelWidget{ _infoLabelText };
-	my_label->setBuddy(my_lineEdit);
-	my_layout->addWidget(my_label);
-	my_layout->addWidget(my_lineEdit);
+	m_lineEdit = new aLineEditWidget{ _initialText };
+	m_label = new aLabelWidget{ _infoLabelText };
+	m_label->setBuddy(m_lineEdit);
+	m_layout->addWidget(m_label);
+	m_layout->addWidget(m_lineEdit);
 
 	// Connect signals
-	connect(my_lineEdit, &aLineEditWidget::keyPressed, this, &aNiceLineEditWidget::slotKeyPressed);
-	connect(my_lineEdit, &aLineEditWidget::keyReleased, this, &aNiceLineEditWidget::slotKeyReleased);
-	connect(my_lineEdit, &aLineEditWidget::finishedChanges, this, &aNiceLineEditWidget::slotEditingFinished);
-	connect(my_lineEdit, &QLineEdit::textChanged, this, &aNiceLineEditWidget::slotTextChanged);
-	connect(my_lineEdit, &QLineEdit::returnPressed, this, &aNiceLineEditWidget::slotReturnPressed);
+	connect(m_lineEdit, &aLineEditWidget::keyPressed, this, &aNiceLineEditWidget::slotKeyPressed);
+	connect(m_lineEdit, &aLineEditWidget::keyReleased, this, &aNiceLineEditWidget::slotKeyReleased);
+	connect(m_lineEdit, &aLineEditWidget::finishedChanges, this, &aNiceLineEditWidget::slotEditingFinished);
+	connect(m_lineEdit, &QLineEdit::textChanged, this, &aNiceLineEditWidget::slotTextChanged);
+	connect(m_lineEdit, &QLineEdit::returnPressed, this, &aNiceLineEditWidget::slotReturnPressed);
 }
 
 ak::aNiceLineEditWidget::~aNiceLineEditWidget() {
 	A_OBJECT_DESTROYING
 
-	delete my_label;
-	delete my_lineEdit;
-	delete my_layout;
+	delete m_label;
+	delete m_lineEdit;
+	delete m_layout;
 }
 
 QWidget * ak::aNiceLineEditWidget::widget(void) { return this; }
@@ -55,25 +55,25 @@ QWidget * ak::aNiceLineEditWidget::widget(void) { return this; }
 void ak::aNiceLineEditWidget::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
-	my_colorStyle = _colorStyle;
-	my_label->setColorStyle(my_colorStyle);
-	my_lineEdit->setColorStyle(my_colorStyle);
+	m_colorStyle = _colorStyle;
+	m_label->setColorStyle(m_colorStyle);
+	m_lineEdit->setColorStyle(m_colorStyle);
 }
 
-void ak::aNiceLineEditWidget::setText(const QString & _text) { my_lineEdit->setText(_text); }
+void ak::aNiceLineEditWidget::setText(const QString & _text) { m_lineEdit->setText(_text); }
 
 void ak::aNiceLineEditWidget::setErrorState(bool _error)
-{ my_lineEdit->setErrorState(_error); }
+{ m_lineEdit->setErrorState(_error); }
 
-void ak::aNiceLineEditWidget::setInfoLabelText(const QString & _text) { my_label->setText(_text); }
+void ak::aNiceLineEditWidget::setInfoLabelText(const QString & _text) { m_label->setText(_text); }
 
 void ak::aNiceLineEditWidget::setErrorStateIsForeground(bool _isForeground) {
-	my_lineEdit->setErrorStateIsForeground(_isForeground);
+	m_lineEdit->setErrorStateIsForeground(_isForeground);
 }
 
-QString ak::aNiceLineEditWidget::text(void) const { return my_lineEdit->text(); }
+QString ak::aNiceLineEditWidget::text(void) const { return m_lineEdit->text(); }
 
-QString ak::aNiceLineEditWidget::infoLabelText(void) const { return my_label->text(); }
+QString ak::aNiceLineEditWidget::infoLabelText(void) const { return m_label->text(); }
 
 // ################################################################################################
 

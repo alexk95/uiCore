@@ -15,7 +15,7 @@
 #include <qstylepainter.h>
 #include <QStyleOptionTab>
 
-ak::aSpecialTabBar::aSpecialTabBar() : aObject{ otSpecialTabBar }, my_repaintIsBlocked{ false } {}
+ak::aSpecialTabBar::aSpecialTabBar() : aObject{ otSpecialTabBar }, m_repaintIsBlocked{ false } {}
 
 ak::aSpecialTabBar::~aSpecialTabBar() { A_OBJECT_DESTROYING }
 
@@ -27,8 +27,8 @@ void ak::aSpecialTabBar::paintEvent(QPaintEvent * _event) {
 	for (int i = 0; i < count(); i++)
 	{
 		initStyleOption(&opt, i);
-		auto itm = my_colors.find(i);
-		if (itm != my_colors.end()) {
+		auto itm = m_colors.find(i);
+		if (itm != m_colors.end()) {
 			opt.palette.setColor(QPalette::Button, itm->second.toQColor());
 		}
 		painter.drawControl(QStyle::CE_TabBarTabShape, opt);
@@ -38,16 +38,16 @@ void ak::aSpecialTabBar::paintEvent(QPaintEvent * _event) {
 }
 
 void ak::aSpecialTabBar::clearColors(bool _repaint) {
-	my_colors.clear();
-	if (_repaint && !my_repaintIsBlocked) { repaint(); }
+	m_colors.clear();
+	if (_repaint && !m_repaintIsBlocked) { repaint(); }
 }
 
 void ak::aSpecialTabBar::clearColor(int _index, bool _repaint) {
-	my_colors.erase(_index);
-	if (_repaint && !my_repaintIsBlocked) { repaint(); }
+	m_colors.erase(_index);
+	if (_repaint && !m_repaintIsBlocked) { repaint(); }
 }
 
 void ak::aSpecialTabBar::addColor(int _index, const aColor & _color, bool _repaint) {
-	my_colors.insert_or_assign(_index, _color);
-	if (_repaint && !my_repaintIsBlocked) { repaint(); }
+	m_colors.insert_or_assign(_index, _color);
+	if (_repaint && !m_repaintIsBlocked) { repaint(); }
 }

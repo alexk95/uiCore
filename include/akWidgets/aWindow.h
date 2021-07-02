@@ -84,10 +84,10 @@ namespace ak {
 
 	private:
 
-		aWindowCentralWidget *						my_centralWidget;
-		QLabel *									my_waitingWidget;
+		aWindowCentralWidget *						m_centralWidget;
+		QLabel *									m_waitingWidget;
 
-		std::map<aWindowEventHandler *, bool>		my_eventHandler;
+		std::map<aWindowEventHandler *, bool>		m_eventHandler;
 
 	};
 
@@ -114,10 +114,10 @@ namespace ak {
 
 		virtual void resizeEvent(QResizeEvent *event) override;
 
-		QMovie *			my_waitingAnimation;
-		QLabel *			my_waitingLabel;
-		QWidget *			my_childWidget;
-		QSize				my_waitingLabelSize;
-		bool				my_waitingAnimationVisible;
+		QMovie *			m_waitingAnimation;
+		QLabel *			m_waitingLabel;
+		QWidget *			m_childWidget;
+		QSize				m_waitingLabelSize;
+		bool				m_waitingAnimationVisible;
 	};
 }

@@ -71,7 +71,7 @@ namespace ak {
 		// #######################################################################################################
 
 		//! @brief Will return the action of this tool button
-		aAction * getAction() const { return my_action; }
+		aAction * getAction() const { return m_action; }
 
 		//! @brief Will set the toolTip and WhatsThis of this toolButton and its action
 		//! @param _text The text to set
@@ -132,9 +132,9 @@ namespace ak {
 		//! @brief Initializes the components of this toolButton
 		void ini(void);
 
-		QMenu *							my_menu;
-		std::vector<aContextMenuItem *>	my_menuItems;
-		aAction *						my_action;
+		QMenu *							m_menu;
+		std::vector<aContextMenuItem *>	m_menuItems;
+		aAction *						m_action;
 
 	};
 }

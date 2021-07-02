@@ -14,32 +14,32 @@
 #include <akCore/aUidMangager.h>
 #include <akCore/aException.h>
 
-ak::aUidManager::aUidManager() : my_currentId(1) {}
+ak::aUidManager::aUidManager() : m_currentId(1) {}
 
 ak::aUidManager::~aUidManager() {}
 
 // ###########################################################
 
 ak::UID ak::aUidManager::getId(void) {
-	my_mutex.lock();
-	ak::UID id = my_currentId++;
+	m_mutex.lock();
+	ak::UID id = m_currentId++;
 	if (id == 0xffffffffffffffff) {
 		assert(0);
-		my_mutex.unlock();
+		m_mutex.unlock();
 		throw aException("Max UID reached!", "aUidManager::getId()", aException::ArrayOutOfBounds);
 	}
-	my_mutex.unlock();
+	m_mutex.unlock();
 	return id;
 }
 
 void ak::aUidManager::reset(void) {
-	my_mutex.lock();
-	my_currentId = 1;
-	my_mutex.unlock();
+	m_mutex.lock();
+	m_currentId = 1;
+	m_mutex.unlock();
 }
 
 void ak::aUidManager::setLatestUid(ak::UID _uid) {
-	my_mutex.lock();
-	my_currentId = _uid;
-	my_mutex.unlock();
+	m_mutex.lock();
+	m_currentId = _uid;
+	m_mutex.unlock();
 }

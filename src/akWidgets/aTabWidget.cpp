@@ -35,28 +35,28 @@ void ak::aTabWidget::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
+	m_colorStyle = _colorStyle;
 	
-	/*QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+	/*QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 		cafBackgroundColorControls, "QWidget{", "}\n"));*/
 	QString sheet;
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorControls | cafBackgroundColorControls //|
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorControls | cafBackgroundColorControls //|
 		//cafBorderColorControls
 		, "QTabWidget{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
 		"QTabWidget::pane{", "border: 1px solid #"));
 	if (!sheet.isEmpty()) {
-		QString Color(my_colorStyle->getHeaderBackgroundColor().toHexString(true));
+		QString Color(m_colorStyle->getHeaderBackgroundColor().toHexString(true));
 		sheet.append(Color);
 		sheet.append(";}\n");
 	}
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
 		"QTabWidget::tab-bar{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorHeader | cafForegroundColorHeader,
 		"QTabBar::tab{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus,
 		"QTabBar::tab:hover{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected,
+	sheet.append(m_colorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected,
 		"QTabBar::tab:selected{", "}"));
 	
 	this->setStyleSheet(sheet);

@@ -49,7 +49,7 @@ namespace ak {
 		virtual bool isPaintableType(void) const override;
 
 	protected:
-		aColorStyle *			my_colorStyle;			//! The current objects color style
+		aColorStyle *			m_colorStyle;			//! The current objects color style
 
 	private:
 		// Block default constructor

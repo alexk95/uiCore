@@ -18,7 +18,7 @@ ak::aPaintable::aPaintable(
 	objectType		_type,
 	aColorStyle *		_colorStyle,
 	ak::UID							_uid
-) : aObject(_type, _uid), my_colorStyle(_colorStyle) {}
+) : aObject(_type, _uid), m_colorStyle(_colorStyle) {}
 
 ak::aPaintable::~aPaintable() {}
 

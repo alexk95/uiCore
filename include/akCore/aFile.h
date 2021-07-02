@@ -125,13 +125,13 @@ namespace ak {
 			bool					_append
 		) const;
 
-		bool					my_changed;		//! If true the file has changed after it was loaded or saved the last time
-		QString					my_name;		//! My file name
-		QString					my_path;		//! My file path
-		QString					my_extension;	//! My file extension
-		QStringList				my_lines;		//! The lines in this file
+		bool					m_changed;		//! If true the file has changed after it was loaded or saved the last time
+		QString					m_name;		//! My file name
+		QString					m_path;		//! My file path
+		QString					m_extension;	//! My file extension
+		QStringList				m_lines;		//! The lines in this file
 
-		ak::UID					my_uid;			//! My UID
+		ak::UID					m_uid;			//! My UID
 
 		aFile(aFile &) = delete;
 

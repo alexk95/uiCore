@@ -41,10 +41,10 @@ void ak::aSpinBoxWidget::setColorStyle(
 		assert(0);
 		return;
 	}
-	my_colorStyle = _colorStyle;
+	m_colorStyle = _colorStyle;
 	
 	QString sheet;
-	sheet = my_colorStyle->toStyleSheet(cafBackgroundColorControls | cafForegroundColorControls);
+	sheet = m_colorStyle->toStyleSheet(cafBackgroundColorControls | cafForegroundColorControls);
 }
 
 void ak::aSpinBoxWidget::SetStepLength(int _stepLength) {

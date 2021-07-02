@@ -60,11 +60,11 @@ namespace ak {
 
 		//! @brief Will return the currently selected time
 		//! @return QTime of the selected time
-		QTime currentTime(void) const { return my_time; }
+		QTime currentTime(void) const { return m_time; }
 
 		//! @brief Will return the currently selected time format
 		//! @return The selected time format
-		timeFormat getTimeFormat(void) const { return my_timeFormat; }
+		timeFormat getTimeFormat(void) const { return m_timeFormat; }
 
 		//! @brief Will return the minute step
 		int minuteStep(void) const { return m_minuteStep; }
@@ -105,8 +105,8 @@ namespace ak {
 		//! @throw std::exception If the user lives in different countrys with other time format, the format can be changed
 		void refreshTime(void);
 
-		QTime					my_time;			//! The time
-		timeFormat				my_timeFormat;		//! The time format
+		QTime					m_time;			//! The time
+		timeFormat				m_timeFormat;		//! The time format
 		int						m_minuteStep;		//! The step size for a single minute step
 	};
 
@@ -159,21 +159,21 @@ namespace ak {
 
 		timeFormat					m_timeFormat;		//! The current time format of the time pick dialog
 
-		QVBoxLayout *				my_mainLayout;		//! The main layout of the widget
+		QVBoxLayout *				m_mainLayout;		//! The main layout of the widget
 
-		QHBoxLayout *				my_inputLayout;		//! The layout of the input
-		QWidget *					my_inputWidget;		//! The widget of the input
+		QHBoxLayout *				m_inputLayout;		//! The layout of the input
+		QWidget *					m_inputWidget;		//! The widget of the input
 
-		QHBoxLayout *				my_buttonLayout;	//! The layout of the button
-		QWidget *					my_buttonWidget;	//! The widget of the button
+		QHBoxLayout *				m_buttonLayout;	//! The layout of the button
+		QWidget *					m_buttonWidget;	//! The widget of the button
 
-		aSpinBoxWidget *			my_hourInput;		//! The spinbox to select the hour
-		aSpinBoxWidget *			my_minInput;		//! The button to select the minutes
+		aSpinBoxWidget *			m_hourInput;		//! The spinbox to select the hour
+		aSpinBoxWidget *			m_minInput;		//! The button to select the minutes
 		aSpinBoxWidget *			m_secInput;			//! The spinbox to select the seconds
 		aSpinBoxWidget *			m_msecInput;		//! The spinbox to select the milliseconds
 
-		aPushButtonWidget *			my_buttonOk;		//! The button to confirm the results
-		aPushButtonWidget *			my_buttonCancel;	//! The button to cancel the widget
+		aPushButtonWidget *			m_buttonOk;		//! The button to confirm the results
+		aPushButtonWidget *			m_buttonCancel;	//! The button to cancel the widget
 
 	};
 }

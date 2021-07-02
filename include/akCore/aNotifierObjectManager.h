@@ -51,7 +51,7 @@ namespace ak {
 		) override;
 
 	private:
-		aObjectManager *		my_manager;			//! The manager used in this class
+		aObjectManager *		m_manager;			//! The manager used in this class
 	};
 
 } // namespace ak

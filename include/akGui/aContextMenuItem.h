@@ -49,8 +49,8 @@ namespace ak {
 
 	private:
 
-		contextMenuRole		my_role;
-		ID					my_id;
+		contextMenuRole		m_role;
+		ID					m_id;
 
 		aContextMenuItem() = delete;
 		aContextMenuItem(const aContextMenuItem &) = delete;

@@ -44,8 +44,8 @@ namespace ak {
 		void setLatestUid(UID _uid);
 
 	private:
-		UID				my_currentId;						//! Contains the current id
-		std::mutex		my_mutex;							//! Used for thread protection
+		UID				m_currentId;						//! Contains the current id
+		std::mutex		m_mutex;							//! Used for thread protection
 
 		// Block copy constructor
 		aUidManager(const aUidManager & other) = delete;

@@ -273,17 +273,17 @@ namespace ak {
 
 	private:
 
-		UID												my_uid;						//! The UID of the signal linker
-		aUidManager *									my_uidManager;				//! The UID manager used in this object
-		aMessenger *									my_messanger;				//! The messanger used in this object
+		UID												m_uid;						//! The UID of the signal linker
+		aUidManager *									m_uidManager;				//! The UID manager used in this object
+		aMessenger *									m_messanger;				//! The messanger used in this object
 
 		struct struct_object {														//! Contains information about an object
 			QObject *		object;													//! A pointer to an object
 			objectType		type;													//! The type of the object
 		};
 
-		std::map<UID, struct_object>					my_objects;					//! All objects registered in the signal linker
-		typedef std::map<UID, struct_object>::iterator	my_objectsIterator;			//! Iterator used to iterate through the objects
+		std::map<UID, struct_object>					m_objects;					//! All objects registered in the signal linker
+		typedef std::map<UID, struct_object>::iterator	m_objectsIterator;			//! Iterator used to iterate through the objects
 
 		//! @brief Will create and send a event message with the provided attributes
 		//! @param _senderUid The sender UID

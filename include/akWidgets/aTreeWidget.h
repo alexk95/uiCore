@@ -318,9 +318,9 @@ namespace ak {
 		//! @brief Will return the sorting enabled state
 		bool isSortingEnabled(void) const;
 
-		bool isReadOnly(void) const { return my_isReadOnly; }
+		bool isReadOnly(void) const { return m_isReadOnly; }
 
-		bool getAutoSelectAndDeselectChildrenEnabled(void) { return my_selectAndDeselectChildren; }
+		bool getAutoSelectAndDeselectChildrenEnabled(void) { return m_selectAndDeselectChildren; }
 
 		// ###########################################################################################################################################
 
@@ -403,25 +403,25 @@ namespace ak {
 			aTreeWidgetItem *				_itm
 		);
 
-		aTreeWidgetBase *							my_tree;					//! The tree widget this class is managing
-		aLineEditWidget *							my_filter;					//! The filter used in this tree
-		QWidget *									my_widget;
-		QVBoxLayout *								my_layout;					//! The layout of the tree
-		bool										my_filterCaseSensitive;		//! If true, the filter is case sensitive
-		bool										my_filterRefreshOnChange;	//! If true, the filter will always be applied when the text changes
-		bool										my_ignoreEvents;
-		bool										my_isReadOnly;
+		aTreeWidgetBase *							m_tree;					//! The tree widget this class is managing
+		aLineEditWidget *							m_filter;					//! The filter used in this tree
+		QWidget *									m_widget;
+		QVBoxLayout *								m_layout;					//! The layout of the tree
+		bool										m_filterCaseSensitive;		//! If true, the filter is case sensitive
+		bool										m_filterRefreshOnChange;	//! If true, the filter will always be applied when the text changes
+		bool										m_ignoreEvents;
+		bool										m_isReadOnly;
 
-		ID											my_focusedItem;
+		ID											m_focusedItem;
 
-		QString										my_headerText;				//! The header text of the tree
+		QString										m_headerText;				//! The header text of the tree
 
-		ID											my_currentId;				//! The current id of the items
+		ID											m_currentId;				//! The current id of the items
 
-		std::map<ID, aTreeWidgetItem *>				my_items;
+		std::map<ID, aTreeWidgetItem *>				m_items;
 
-		bool										my_selectAndDeselectChildren;
-		bool										my_itemsAreEditable;		//! If true then the items in this tree are editable
+		bool										m_selectAndDeselectChildren;
+		bool										m_itemsAreEditable;		//! If true then the items in this tree are editable
 	};
 
 	// #########################################################################################################################################
@@ -513,7 +513,7 @@ namespace ak {
 		void leave(QEvent *);
 
 	private:
-		std::map<ID, aTreeWidgetItem *>			my_topLevelItems;
+		std::map<ID, aTreeWidgetItem *>			m_topLevelItems;
 
 		aTreeWidgetBase(aTreeWidgetBase &) = delete;
 		aTreeWidgetBase& operator = (aTreeWidgetBase &) = delete;
@@ -652,10 +652,10 @@ namespace ak {
 		ID parentId(void) const;
 
 		//! @brief Will set the stored text, this value is only used to evaluate the changed event
-		void setStoredText(const QString & _text) { my_text = _text; }
+		void setStoredText(const QString & _text) { m_text = _text; }
 
 		//! @brief Will return the stored text
-		QString storedText(void) const { return my_text; }
+		QString storedText(void) const { return m_text; }
 
 		//! @brief Will unhide this item if hidden
 		//! @param _expandParents If true all parent objects will be expanded
@@ -677,14 +677,14 @@ namespace ak {
 
 		void refreshEditableState(void);
 
-		aTreeWidgetItem *				my_parent;
-		std::list<aTreeWidgetItem *>	my_childs;			//! Contains all childs of this item
-		std::list<aTreeWidgetItem *>	my_allChilds;
-		std::list<ID>					my_allChildsIDs;
-		ID								my_id;
-		QString							my_text;
-		bool							my_isEditable;
-		bool							my_isLockedForEdit;
+		aTreeWidgetItem *				m_parent;
+		std::list<aTreeWidgetItem *>	m_childs;			//! Contains all childs of this item
+		std::list<aTreeWidgetItem *>	m_allChilds;
+		std::list<ID>					m_allChildsIDs;
+		ID								m_id;
+		QString							m_text;
+		bool							m_isEditable;
+		bool							m_isLockedForEdit;
 
 		aTreeWidgetItem() = delete;
 		aTreeWidgetItem(aTreeWidgetItem &) = delete;

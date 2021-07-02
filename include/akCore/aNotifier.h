@@ -48,6 +48,6 @@ namespace ak {
 		bool isEnabled(void) const;
 
 	protected:
-		bool		my_isEnabled;		//! If false, messages will be ignored
+		bool		m_isEnabled;		//! If false, messages will be ignored
 	};
 }

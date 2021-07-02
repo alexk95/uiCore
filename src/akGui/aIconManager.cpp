@@ -29,10 +29,10 @@
 
 ak::aIconManager::aIconManager(
 	const QString &					_mainDirectory
-) : my_fileExtension(".png"),
-	my_mutex(nullptr)
+) : m_fileExtension(".png"),
+	m_mutex(nullptr)
 {
-	my_mutex = new std::mutex();
+	m_mutex = new std::mutex();
 	// Check if a main directory was provided
 	if (_mainDirectory.length() > 0) {
 		QDir dir(_mainDirectory);
@@ -43,16 +43,16 @@ ak::aIconManager::aIconManager(
 		QString directory = _mainDirectory;
 		if (!directory.endsWith('/') && !directory.endsWith('\\')) { directory.append('/'); }
 		// Add directory
-		my_directories.push_back(directory);
+		m_directories.push_back(directory);
 	}
 }
 
 ak::aIconManager::~aIconManager() {
-	if (my_mutex != nullptr) { 
-		my_mutex->lock(); my_mutex->unlock();  delete my_mutex;  my_mutex = nullptr;
+	if (m_mutex != nullptr) { 
+		m_mutex->lock(); m_mutex->unlock();  delete m_mutex;  m_mutex = nullptr;
 	}
 	// Delete all imported icons
-	for (auto icon = my_icons.begin(); icon != my_icons.end(); icon++) {
+	for (auto icon = m_icons.begin(); icon != m_icons.end(); icon++) {
 		if (icon->second != nullptr) {
 			for (auto size = icon->second->begin(); size != icon->second->end(); size++) {
 				if (size->second != nullptr) { delete size->second; size->second = nullptr; }
@@ -61,7 +61,7 @@ ak::aIconManager::~aIconManager() {
 		}
 	}
 
-	for (auto pix = my_pixmaps.begin(); pix != my_pixmaps.end(); pix++) {
+	for (auto pix = m_pixmaps.begin(); pix != m_pixmaps.end(); pix++) {
 		delete pix->second;
 	}
 }
@@ -70,12 +70,12 @@ void ak::aIconManager::addDirectory(
 	const QString &					_directory
 ) {
 	// Lock the mutex
-	my_mutex->lock();
+	m_mutex->lock();
 
 	// Check if the specified directory does exist
 	QDir dir(_directory);
 	if (!dir.exists()) {
-		my_mutex->unlock();
+		m_mutex->unlock();
 		throw aException("Provided directory does not exist!", "ak::aIconManager::addDirectory()");
 	}
 	// Check for the directory ending
@@ -84,32 +84,32 @@ void ak::aIconManager::addDirectory(
 	if (!directory.endsWith('/') && !directory.endsWith('\\')) { directory.append('/'); }
 
 	// Check if directory already exists
-	for (int i = 0; i < my_directories.size(); i++) {
-		if (my_directories.at(i).toLower() == directory.toLower()) { my_mutex->unlock(); return; }
+	for (int i = 0; i < m_directories.size(); i++) {
+		if (m_directories.at(i).toLower() == directory.toLower()) { m_mutex->unlock(); return; }
 	}
-	my_directories.push_back(directory);
-	my_mutex->unlock();
+	m_directories.push_back(directory);
+	m_mutex->unlock();
 }
 
 bool ak::aIconManager::removeDirectory(
 	const QString &					_directory
 ) {
 	// Lock the mutex
-	my_mutex->lock();
+	m_mutex->lock();
 
 	// Check for the directory ending to be able to check the
 	QString directory = _directory;
 	directory.replace('\\', '/');
 	if (!directory.endsWith('/') && !directory.endsWith('\\')) { directory.append('/'); }
-	for (int i = 0; i < my_directories.size(); i++) {
+	for (int i = 0; i < m_directories.size(); i++) {
 		// Check if the names are equal
-		if (my_directories.at(i).toLower() == directory.toLower()) {
-			my_directories.erase(my_directories.begin() + i);
-			my_mutex->unlock();
+		if (m_directories.at(i).toLower() == directory.toLower()) {
+			m_directories.erase(m_directories.begin() + i);
+			m_mutex->unlock();
 			return true;
 		}
 	}
-	my_mutex->unlock();
+	m_mutex->unlock();
 	assert(0); // The provided directory does not exist
 	return false;
 }
@@ -119,16 +119,16 @@ const QIcon * ak::aIconManager::icon(
 	const QString &					_iconSize
 ) {
 	try {
-		my_mutex->lock();
-		auto ico = my_icons.find(_iconName);
-		if (ico == my_icons.end()) {
+		m_mutex->lock();
+		auto ico = m_icons.find(_iconName);
+		if (ico == m_icons.end()) {
 			// icon does not exist at all
 			QIcon * newIcon = createIcon(_iconName, _iconSize);
 			std::map<QString, QIcon *> * newMap = nullptr;
 			newMap = new std::map<QString, QIcon *>;
 			newMap->insert_or_assign(_iconSize, newIcon);
-			my_icons.insert_or_assign(_iconName, newMap);
-			my_mutex->unlock();
+			m_icons.insert_or_assign(_iconName, newMap);
+			m_mutex->unlock();
 			return newIcon;
 		}
 		else {
@@ -137,67 +137,67 @@ const QIcon * ak::aIconManager::icon(
 				// icon in this size does not exist
 				QIcon * newIcon = createIcon(_iconName, _iconSize);
 				ico->second->insert_or_assign(_iconSize, newIcon);
-				my_mutex->unlock();
+				m_mutex->unlock();
 				return newIcon;
 			}
 			else {
 				// icon does exist
-				my_mutex->unlock();
+				m_mutex->unlock();
 				return size->second;
 			}
 		}
 	}
-	catch (const aException & e) { my_mutex->unlock(); throw aException(e, "ak::aIconManager::icon()"); }
-	catch (const std::exception & e) { my_mutex->unlock(); throw aException(e.what(), "ak::aIconManager::icon()"); }
-	catch (...) { my_mutex->unlock(); throw aException("Unknown error", "ak::aIconManager::icon()"); }
+	catch (const aException & e) { m_mutex->unlock(); throw aException(e, "ak::aIconManager::icon()"); }
+	catch (const std::exception & e) { m_mutex->unlock(); throw aException(e.what(), "ak::aIconManager::icon()"); }
+	catch (...) { m_mutex->unlock(); throw aException("Unknown error", "ak::aIconManager::icon()"); }
 }
 
 const QPixmap * ak::aIconManager::pixmap(
 	const QString &									_imageName
 ) {
 	try {
-		my_mutex->lock();
-		auto itm = my_pixmaps.find(_imageName);
-		if (itm != my_pixmaps.end()) { return itm->second; }
+		m_mutex->lock();
+		auto itm = m_pixmaps.find(_imageName);
+		if (itm != m_pixmaps.end()) { return itm->second; }
 		QPixmap * pix = createPixmap(_imageName);
-		my_pixmaps.insert_or_assign(_imageName, pix);
-		my_mutex->unlock();
+		m_pixmaps.insert_or_assign(_imageName, pix);
+		m_mutex->unlock();
 		return pix;
 	}
-	catch (const aException & e) { my_mutex->unlock(); throw aException(e, "ak::aIconManager::pixmap()"); }
-	catch (const std::exception & e) { my_mutex->unlock(); throw aException(e.what(), "ak::aIconManager::pixmap()"); }
-	catch (...) { my_mutex->unlock(); throw aException("Unknown error", "ak::aIconManager::pixmap()"); }
+	catch (const aException & e) { m_mutex->unlock(); throw aException(e, "ak::aIconManager::pixmap()"); }
+	catch (const std::exception & e) { m_mutex->unlock(); throw aException(e.what(), "ak::aIconManager::pixmap()"); }
+	catch (...) { m_mutex->unlock(); throw aException("Unknown error", "ak::aIconManager::pixmap()"); }
 }
 
 QMovie * ak::aIconManager::movie(
 	const QString &									_imageName
 ) {
 	try {
-		my_mutex->lock();
-		auto itm = my_movies.find(_imageName);
-		if (itm != my_movies.end()) { return itm->second; }
+		m_mutex->lock();
+		auto itm = m_movies.find(_imageName);
+		if (itm != m_movies.end()) { return itm->second; }
 		QMovie * mv = createMovie(_imageName);
-		my_movies.insert_or_assign(_imageName, mv);
-		my_mutex->unlock();
+		m_movies.insert_or_assign(_imageName, mv);
+		m_mutex->unlock();
 		return mv;
 	}
-	catch (const aException & e) { my_mutex->unlock(); throw aException(e, "ak::aIconManager::movie()"); }
-	catch (const std::exception & e) { my_mutex->unlock(); throw aException(e.what(), "ak::aIconManager::movie()"); }
-	catch (...) { my_mutex->unlock(); throw aException("Unknown error", "ak::aIconManager::movie()"); }
+	catch (const aException & e) { m_mutex->unlock(); throw aException(e, "ak::aIconManager::movie()"); }
+	catch (const std::exception & e) { m_mutex->unlock(); throw aException(e.what(), "ak::aIconManager::movie()"); }
+	catch (...) { m_mutex->unlock(); throw aException("Unknown error", "ak::aIconManager::movie()"); }
 }
 
 void ak::aIconManager::setFileExtension(
 	const QString &									_extension
 ) { 
-	my_mutex->lock();
-	my_fileExtension = _extension;
-	my_mutex->unlock();
+	m_mutex->lock();
+	m_fileExtension = _extension;
+	m_mutex->unlock();
 }
 
 QString ak::aIconManager::getFileExtension() { 
-	my_mutex->lock();
-	QString ret = my_fileExtension;
-	my_mutex->unlock();
+	m_mutex->lock();
+	QString ret = m_fileExtension;
+	m_mutex->unlock();
 	return ret;
 }
 
@@ -208,8 +208,8 @@ QIcon * ak::aIconManager::createIcon(
 ) {
 	// Mutex not required, caller must take care of the mutex
 	try {
-		for (int i = 0; i < my_directories.size(); i++) {
-			QFile file(my_directories.at(i) + _iconSize + '/' + _iconName + my_fileExtension);
+		for (int i = 0; i < m_directories.size(); i++) {
+			QFile file(m_directories.at(i) + _iconSize + '/' + _iconName + m_fileExtension);
 			// Check if the file exist
 			if (file.exists()) {
 				QIcon * ico = nullptr;
@@ -229,8 +229,8 @@ QPixmap * ak::aIconManager::createPixmap(
 ) {
 	// Mutex not required, caller must take care of the mutex
 	try {
-		for (int i = 0; i < my_directories.size(); i++) {
-			QFile file(my_directories.at(i) + PATH_PIXMAPS + _imageName + my_fileExtension);
+		for (int i = 0; i < m_directories.size(); i++) {
+			QFile file(m_directories.at(i) + PATH_PIXMAPS + _imageName + m_fileExtension);
 			// Check if the file exist
 			if (file.exists()) {
 				QPixmap * ico = nullptr;
@@ -251,8 +251,8 @@ QMovie * ak::aIconManager::createMovie(
 ) {
 	// Mutex not required, caller must take care of the mutex
 	try {
-		for (int i = 0; i < my_directories.size(); i++) {
-			QFile file(my_directories.at(i) + PATH_MOVIES + _imageName + ".gif");
+		for (int i = 0; i < m_directories.size(); i++) {
+			QFile file(m_directories.at(i) + PATH_MOVIES + _imageName + ".gif");
 			// Check if the file exist
 			if (file.exists()) {
 				QMovie * mv = nullptr;
@@ -268,4 +268,4 @@ QMovie * ak::aIconManager::createMovie(
 	catch (...) { throw aException("Unknown error", "ak::aIconManager::createMovie()"); }
 }
 
-std::vector<QString> ak::aIconManager::searchDirectories(void) const { return my_directories; }
+std::vector<QString> ak::aIconManager::searchDirectories(void) const { return m_directories; }

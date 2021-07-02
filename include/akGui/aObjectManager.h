@@ -441,24 +441,24 @@ namespace ak {
 		
 		// Object storing
 
-		std::map<UID, aObject *>			my_mapObjects;
-		std::map<QString, aObject *>		my_mapUniqueNames;			//! Contains the UIDs for a specified unique name
+		std::map<UID, aObject *>			m_mapObjects;
+		std::map<QString, aObject *>		m_mapUniqueNames;			//! Contains the UIDs for a specified unique name
 
-		std::map<UID, std::vector<UID> *>	my_mapCreators;				//! Contains all creators
-		std::map<QString, UID>					my_mapAliases;				//! Contains the UIDs for a specified alias
-		std::map<UID, UID>					my_mapOwners;				//! Contains the UIDs of the owener of the objects
+		std::map<UID, std::vector<UID> *>	m_mapCreators;				//! Contains all creators
+		std::map<QString, UID>					m_mapAliases;				//! Contains the UIDs for a specified alias
+		std::map<UID, UID>					m_mapOwners;				//! Contains the UIDs of the owener of the objects
 
-		std::vector<aColorStyle *>			my_colorStyles;
+		std::vector<aColorStyle *>			m_colorStyles;
 
-		std::vector<QString>				my_iconSearchPaths;
+		std::vector<QString>				m_iconSearchPaths;
 
 		// ###############################################################################################################################################
 
-		aUidManager *						my_uidManager;									//! The globally used uidManager
-		aMessenger *						my_messenger;									//! The globally used messaging system
-		aSignalLinker *						my_signalLinker;								//! The internal signal linker
-		aColorStyle *						my_currentColorStyle;							//! The globally used color style
-		aNotifierObjectManager *			my_notifier;									//! The notifier used to catch the destroyed messages
+		aUidManager *						m_uidManager;									//! The globally used uidManager
+		aMessenger *						m_messenger;									//! The globally used messaging system
+		aSignalLinker *						m_signalLinker;								//! The internal signal linker
+		aColorStyle *						m_currentColorStyle;							//! The globally used color style
+		aNotifierObjectManager *			m_notifier;									//! The notifier used to catch the destroyed messages
 
 		aObjectManager() = delete;
 		aObjectManager(const aObjectManager &) = delete;

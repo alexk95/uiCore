@@ -110,19 +110,19 @@ namespace ak {
 			QDesktopWidget * desktop();
 
 		protected:
-			aApplication *				my_app;							//! The core application
-			bool						my_appIsRunning;				//! True if the core application is already running
-			QSurfaceFormat *			my_defaultSurfaceFormat;
-			QDesktopWidget *			my_desktop;
+			aApplication *				m_app;							//! The core application
+			bool						m_appIsRunning;				//! True if the core application is already running
+			QSurfaceFormat *			m_defaultSurfaceFormat;
+			QDesktopWidget *			m_desktop;
 
-			bool						my_objManagerIsExtern;			//! If true, then the object manager was created externally
-			bool						my_messengerIsExtern;			//! If true, then the messenger was created externally
-			bool						my_uidManagerIsExtern;			//! If true, then the UID manager was created externally
-			bool						my_iconManagerIsExtern;			//! If true, then the icon manager was created externally
-			bool						my_isInitialized;				//! If true, then the API was initialized
+			bool						m_objManagerIsExtern;			//! If true, then the object manager was created externally
+			bool						m_messengerIsExtern;			//! If true, then the messenger was created externally
+			bool						m_uidManagerIsExtern;			//! If true, then the UID manager was created externally
+			bool						m_iconManagerIsExtern;			//! If true, then the icon manager was created externally
+			bool						m_isInitialized;				//! If true, then the API was initialized
 
-			aUidManager *				my_fileUidManager;				//! The UID manager used for files in this API
-			std::map<UID, ak::aFile *>	my_mapFiles;					//! Map containing all files created in this API
+			aUidManager *				m_fileUidManager;				//! The UID manager used for files in this API
+			std::map<UID, ak::aFile *>	m_mapFiles;					//! Map containing all files created in this API
 
 		private:
 			apiManager(const apiManager &) = delete;

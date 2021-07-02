@@ -19,7 +19,7 @@
 #include <qscrollbar.h>
 
 ak::aListWidget::aListWidget()
-	: aWidget(otList), my_currentId(invalidID), my_verticalScrollbarAlwaysVisible(true)
+	: aWidget(otList), m_currentId(invalidID), m_verticalScrollbarAlwaysVisible(true)
 {}
 
 ak::aListWidget::~aListWidget() {
@@ -33,14 +33,14 @@ void ak::aListWidget::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
-	if (my_alias.length() > 0) {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+	m_colorStyle = _colorStyle;
+	if (m_alias.length() > 0) {
+		this->setStyleSheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 			cafBackgroundColorControls | cafBackgroundColorAlternate,
-			"#" + my_alias + "{", "}"));
+			"#" + m_alias + "{", "}"));
 	}
 	else {
-		this->setStyleSheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+		this->setStyleSheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 			cafBackgroundColorControls | cafBackgroundColorAlternate));
 	}
 }
@@ -57,7 +57,7 @@ void ak::aListWidget::mouseMoveEvent(QMouseEvent * _event)
 void ak::aListWidget::enterEvent(QEvent *_event)
 {
 	QListWidget::leaveEvent(_event);
-	if (!my_verticalScrollbarAlwaysVisible) {
+	if (!m_verticalScrollbarAlwaysVisible) {
 		verticalScrollBar()->setVisible(true);
 	}
 	emit leave(_event);
@@ -66,7 +66,7 @@ void ak::aListWidget::enterEvent(QEvent *_event)
 void ak::aListWidget::leaveEvent(QEvent *_event)
 {
 	QListWidget::leaveEvent(_event);
-	if (!my_verticalScrollbarAlwaysVisible) {
+	if (!m_verticalScrollbarAlwaysVisible) {
 		verticalScrollBar()->setVisible(false);
 	}
 	emit leave(_event);
@@ -79,10 +79,10 @@ void ak::aListWidget::leaveEvent(QEvent *_event)
 ak::ID ak::aListWidget::AddItem(
 	const QString &					_text
 ) {
-	aListWidgetItem * nItm = new aListWidgetItem(_text, ++my_currentId, this);
-	my_items.insert_or_assign(nItm->id(), nItm);
+	aListWidgetItem * nItm = new aListWidgetItem(_text, ++m_currentId, this);
+	m_items.insert_or_assign(nItm->id(), nItm);
 	//addItem(nItm);
-	return my_currentId;
+	return m_currentId;
 }
 
 //! @brief Will add a new item to this aListWidget
@@ -92,16 +92,16 @@ ak::ID ak::aListWidget::AddItem(
 	const QIcon &					_icon,
 	const QString &					_text
 ) {
-	aListWidgetItem * nItm = new aListWidgetItem(_icon, _text, ++my_currentId, this);
-	my_items.insert_or_assign(nItm->id(), nItm);
+	aListWidgetItem * nItm = new aListWidgetItem(_icon, _text, ++m_currentId, this);
+	m_items.insert_or_assign(nItm->id(), nItm);
 	//addItem(nItm);
-	return my_currentId;
+	return m_currentId;
 }
 
 ak::aListWidgetItem * ak::aListWidget::Item(
 	const QString &					_text
 ) {
-	for (auto itm : my_items) {
+	for (auto itm : m_items) {
 		if (itm.second->text() == _text) {
 			return itm.second;
 		}
@@ -113,8 +113,8 @@ ak::aListWidgetItem * ak::aListWidget::Item(
 ak::aListWidgetItem * ak::aListWidget::Item(
 	ak::ID							_id
 ) {
-	auto itm = my_items.find(_id);
-	assert(itm != my_items.end()); // Invalid item id provided
+	auto itm = m_items.find(_id);
+	assert(itm != m_items.end()); // Invalid item id provided
 	assert(itm->second != nullptr);	// nullptr stored
 	return itm->second;
 }
@@ -148,25 +148,25 @@ void ak::aListWidget::removeItem(
 	aListWidgetItem * itm = Item(_id);
 	removeItemWidget(itm);
 	delete itm;
-	my_items.erase(_id);
+	m_items.erase(_id);
 }
 
-void ak::aListWidget::Clear() { clear(); my_currentId = ak::invalidID; memFree(); }
+void ak::aListWidget::Clear() { clear(); m_currentId = ak::invalidID; memFree(); }
 
 void ak::aListWidget::setVerticalScrollbarAlwaysVisible(
 	bool							_vis
 ) {
-	my_verticalScrollbarAlwaysVisible = _vis;
+	m_verticalScrollbarAlwaysVisible = _vis;
 	verticalScrollBar()->setVisible(false);
 }
 
 void ak::aListWidget::memFree(void) {
-	for (auto itm = my_items.begin(); itm != my_items.end(); itm++) {
+	for (auto itm = m_items.begin(); itm != m_items.end(); itm++) {
 		aListWidgetItem * actualItem = itm->second;
 		assert(actualItem != nullptr);	// Nullptr stored
 		delete actualItem;
 	}
-	my_items.clear();
+	m_items.clear();
 }
 
 // ###########################################################################################################################################
@@ -179,7 +179,7 @@ ak::aListWidgetItem::aListWidgetItem(
 	ak::ID				_id,
 	aListWidget *				_view,
 	int					_type
-) : QListWidgetItem(_view, _type), my_id(_id)
+) : QListWidgetItem(_view, _type), m_id(_id)
 {}
 
 ak::aListWidgetItem::aListWidgetItem(
@@ -187,7 +187,7 @@ ak::aListWidgetItem::aListWidgetItem(
 	ak::ID				_id,
 	aListWidget *				_view,
 	int					_type
-) : QListWidgetItem(_text, _view, _type), my_id(_id)
+) : QListWidgetItem(_text, _view, _type), m_id(_id)
 {}
 
 ak::aListWidgetItem::aListWidgetItem(
@@ -196,13 +196,13 @@ ak::aListWidgetItem::aListWidgetItem(
 	ak::ID				_id,
 	aListWidget *				_view,
 	int					_type
-) : QListWidgetItem(_icon, _text, _view, _type), my_id(_id)
+) : QListWidgetItem(_icon, _text, _view, _type), m_id(_id)
 {}
 
 ak::aListWidgetItem::~aListWidgetItem() {}
 
 void ak::aListWidgetItem::setId(
 	ak::ID				_id
-) { my_id = _id; }
+) { m_id = _id; }
 
-ak::ID ak::aListWidgetItem::id(void) const { return my_id; }
+ak::ID ak::aListWidgetItem::id(void) const { return m_id; }

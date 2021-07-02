@@ -49,18 +49,18 @@ void ak::aColorStyleSwitchWidget::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
+	m_colorStyle = _colorStyle;
 
-	QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 		cafBackgroundColorControls, "QToolButton{", "}"));
 
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorFocus |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorFocus |
 		cafBackgroundColorFocus, "QToolButton:hover:!pressed{", "}"));
 
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorSelected |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorSelected |
 		cafBackgroundColorSelected, "QToolButton:pressed{", "}"));
 
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorHeader |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorHeader |
 		cafBackgroundColorHeader | cafBorderColorHeader,
 		"QToolTip{", "border: 1px;}"));
 	setStyleSheet(sheet);

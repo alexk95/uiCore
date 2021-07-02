@@ -21,10 +21,10 @@
 #include <qevent.h>
 
 ak::aTextEditWidget::aTextEditWidget(QWidget * _parent)
-: QTextEdit(_parent), aWidget(otTextEdit), my_autoScrollToBottom(false), my_contextMenu(nullptr), m_maxLength(0), m_controlIsPressed(false)
+: QTextEdit(_parent), aWidget(otTextEdit), m_autoScrollToBottom(false), m_contextMenu(nullptr), m_maxLength(0), m_controlIsPressed(false)
 { ini(); }
 ak::aTextEditWidget::aTextEditWidget(const QString & _text, QWidget * _parent)
-: QTextEdit(_text, _parent), aWidget(otTextEdit), my_autoScrollToBottom(false), my_contextMenu(nullptr), m_maxLength(0), m_controlIsPressed(false)
+: QTextEdit(_text, _parent), aWidget(otTextEdit), m_autoScrollToBottom(false), m_contextMenu(nullptr), m_maxLength(0), m_controlIsPressed(false)
 { ini(); }
 
 ak::aTextEditWidget::~aTextEditWidget()
@@ -58,7 +58,7 @@ void ak::aTextEditWidget::slotChanged() {
 }
 
 void ak::aTextEditWidget::slotCustomMenuRequested(const QPoint & _pos) {
-	if (my_contextMenuItems.size() != 0) { my_contextMenu->exec(viewport()->mapToGlobal(_pos)); }
+	if (m_contextMenuItems.size() != 0) { m_contextMenu->exec(viewport()->mapToGlobal(_pos)); }
 }
 
 void ak::aTextEditWidget::slotContextMenuItemClicked() {
@@ -84,16 +84,16 @@ void ak::aTextEditWidget::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
+	m_colorStyle = _colorStyle;
 
-	QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 		cafBackgroundColorControls, "QTextEdit{", "}"));
 	this->setStyleSheet(sheet);
-	sheet = my_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu{", "}");
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu::item{", "}"));
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorFocus | cafBackgroundColorFocus, "QMenu::item:selected{", "}"));
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorSelected | cafBackgroundColorSelected, "QMenu::item:pressed{", "}"));
-	my_contextMenu->setStyleSheet(sheet);
+	sheet = m_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu{", "}");
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu::item{", "}"));
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorFocus | cafBackgroundColorFocus, "QMenu::item:selected{", "}"));
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorSelected | cafBackgroundColorSelected, "QMenu::item:pressed{", "}"));
+	m_contextMenu->setStyleSheet(sheet);
 }
 
 // #######################################################################################################
@@ -104,44 +104,44 @@ ak::ID ak::aTextEditWidget::addContextMenuItem(
 	aContextMenuItem *			_item
 ) {
 	assert(_item != nullptr); // Nullptr provided
-	_item->setId(++my_currentContextMenuItemId);
-	my_contextMenuItems.push_back(_item);
+	_item->setId(++m_currentContextMenuItemId);
+	m_contextMenuItems.push_back(_item);
 	connect(_item, SIGNAL(triggered(bool)), this, SLOT(slotContextMenuItemClicked()));
-	my_contextMenu->addAction(_item);
-	if (my_colorStyle != nullptr) {
-		QString sheet{ my_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu{", "}") };
-		sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu::item{", "}"));
-		sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorFocus | cafBackgroundColorFocus, "QMenu::item:selected{", "}"));
-		sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorSelected | cafBackgroundColorSelected, "QMenu::item:pressed{", "}"));
-		my_contextMenu->setStyleSheet(sheet);
+	m_contextMenu->addAction(_item);
+	if (m_colorStyle != nullptr) {
+		QString sheet{ m_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu{", "}") };
+		sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu::item{", "}"));
+		sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorFocus | cafBackgroundColorFocus, "QMenu::item:selected{", "}"));
+		sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorSelected | cafBackgroundColorSelected, "QMenu::item:pressed{", "}"));
+		m_contextMenu->setStyleSheet(sheet);
 	}
 	return _item->id();
 }
 
 void ak::aTextEditWidget::addContextMenuSeparator(void) {
-	my_contextMenu->addSeparator();
+	m_contextMenu->addSeparator();
 }
 
 void ak::aTextEditWidget::clearContextMenu(void) {
-	for (auto itm : my_contextMenuItems) {
+	for (auto itm : m_contextMenuItems) {
 		aContextMenuItem * item = itm;
 		delete item;
 	}
-	my_contextMenuItems.clear();
-	my_contextMenu->clear();
-	my_currentContextMenuItemId = ak::invalidID;
+	m_contextMenuItems.clear();
+	m_contextMenu->clear();
+	m_currentContextMenuItemId = ak::invalidID;
 }
 
 // #######################################################################################################
 
 void ak::aTextEditWidget::setAutoScrollToBottom(
 	bool							_autoScroll
-) { my_autoScrollToBottom = _autoScroll; }
+) { m_autoScrollToBottom = _autoScroll; }
 
-bool ak::aTextEditWidget::autoScrollToBottom(void) const { return my_autoScrollToBottom; }
+bool ak::aTextEditWidget::autoScrollToBottom(void) const { return m_autoScrollToBottom; }
 
 void ak::aTextEditWidget::performAutoScrollToBottom(void) {
-	if (my_autoScrollToBottom) {
+	if (m_autoScrollToBottom) {
 		//ensureCursorVisible();
 		QScrollBar * bar = verticalScrollBar();
 		if (bar->isVisible()) { bar->setValue(bar->maximum());}
@@ -151,11 +151,11 @@ void ak::aTextEditWidget::performAutoScrollToBottom(void) {
 // #######################################################################################################
 
 void ak::aTextEditWidget::ini(void) {
-	my_currentContextMenuItemId = ak::invalidID;
+	m_currentContextMenuItemId = ak::invalidID;
 	connect(this, SIGNAL(textChanged()), this, SLOT(slotChanged()));
 	setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(slotCustomMenuRequested(const QPoint &)));
-	my_contextMenu = new QMenu(this);
+	m_contextMenu = new QMenu(this);
 	aContextMenuItem * newItem = new aContextMenuItem("Clear", cmrClear);
 	addContextMenuItem(newItem);
 }

@@ -105,30 +105,30 @@ namespace ak {
 		void clearAll(void);
 
 		//! @brief Will enable the messenger
-		void enable(void) { my_isEnabled = true; }
+		void enable(void) { m_isEnabled = true; }
 
 		//! @brief Will disable the messenger
-		void disable(void) { my_isEnabled = false; }
+		void disable(void) { m_isEnabled = false; }
 
 		//! @brief Will set the messengers enabled state
 		//! @param _enabled The enabled state to set
 		void setEnabled(
 			bool						_enabled
-		) { my_isEnabled = _enabled; }
+		) { m_isEnabled = _enabled; }
 
 		//! @brief Will return the current enabled state of the messenger
-		bool isEnabled(void) const { return my_isEnabled; }
+		bool isEnabled(void) const { return m_isEnabled; }
 
 	private:
 
-		aUidManager *									my_uidManager;						//! The uid manager this messenger is using
+		aUidManager *									m_uidManager;						//! The uid manager this messenger is using
 
-		bool											my_isEnabled;						//! If true, messages will be send to the notifiers
+		bool											m_isEnabled;						//! If true, messages will be send to the notifiers
 
-		std::map<UID, std::vector<aNotifier *> * >		my_uidReceivers;					//! Map contains all registered receivers		
-		std::map<eventType, std::vector<aNotifier *> *>	my_eventReceivers;					//! Map contains all registered event type receivers
+		std::map<UID, std::vector<aNotifier *> * >		m_uidReceivers;					//! Map contains all registered receivers		
+		std::map<eventType, std::vector<aNotifier *> *>	m_eventReceivers;					//! Map contains all registered event type receivers
 
-		std::vector<aNotifier *>						my_allMessageReceivers;
+		std::vector<aNotifier *>						m_allMessageReceivers;
 
 		// Block copy constructor
 		aMessenger(aMessenger & other) = delete;

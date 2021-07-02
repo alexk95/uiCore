@@ -32,18 +32,18 @@ ak::aTtbPage::aTtbPage(
 	tt::Page *					_page,
 	const QString &				_text
 ) : ak::aTtbContainer(_messenger, otTabToolbarPage),
-my_page(_page)
+m_page(_page)
 {
-	assert(my_page != nullptr); // Nullptr provided
+	assert(m_page != nullptr); // Nullptr provided
 	assert(_messenger != nullptr); // Nullptr { throw ak::Exception("Is nullptr", "Check messenger"); }
-	my_text = _text;
+	m_text = _text;
 }
 
 ak::aTtbPage::~aTtbPage() {
 	TTB_CONTAINER_DESTROYING
 
 	destroyAllSubContainer();
-	delete my_page;
+	delete m_page;
 
 }
 
@@ -56,15 +56,15 @@ void ak::aTtbPage::addChild(
 ak::aTtbContainer * ak::aTtbPage::createSubContainer(
 	const QString &				_text
 ) {
-	aTtbGroup * obj = new aTtbGroup(my_messenger, my_page->AddGroup(_text), _text);
-	if (my_colorStyle != nullptr) { obj->setColorStyle(my_colorStyle); }
-	my_subContainer.push_back(obj);
+	aTtbGroup * obj = new aTtbGroup(m_messenger, m_page->AddGroup(_text), _text);
+	if (m_colorStyle != nullptr) { obj->setColorStyle(m_colorStyle); }
+	m_subContainer.push_back(obj);
 	return obj;
 }
 
 void ak::aTtbPage::destroyAllSubContainer(void) {
-	for (int i = 0; i < my_subContainer.size(); i++) {
-		aTtbContainer * obj = my_subContainer.at(i);
+	for (int i = 0; i < m_subContainer.size(); i++) {
+		aTtbContainer * obj = m_subContainer.at(i);
 		delete obj;
 	}
 }
@@ -73,10 +73,10 @@ void ak::aTtbPage::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
-	QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	m_colorStyle = _colorStyle;
+	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow));;
-	my_page->setStyleSheet(sheet);
+	m_page->setStyleSheet(sheet);
 }
 
 void ak::aTtbPage::removeChildObject(
@@ -88,9 +88,9 @@ void ak::aTtbPage::removeChildObject(
 		aTtbGroup * Group = nullptr;
 		Group = dynamic_cast<aTtbGroup *>(_child);
 		assert(Group != nullptr);
-		for (int i = 0; i < my_subContainer.size(); i++) {
-			if (my_subContainer.at(i) == Group) {
-				my_subContainer.erase(my_subContainer.begin() + i);
+		for (int i = 0; i < m_subContainer.size(); i++) {
+			if (m_subContainer.at(i) == Group) {
+				m_subContainer.erase(m_subContainer.begin() + i);
 				return;
 			}
 		}
@@ -102,11 +102,11 @@ void ak::aTtbPage::removeChildObject(
 	}
 }
 
-int ak::aTtbPage::index(void) const { return my_page->getIndex(); }
+int ak::aTtbPage::index(void) const { return m_page->getIndex(); }
 
 void ak::aTtbPage::setEnabled(
 	bool						_enabled
 ) {
 	aTtbContainer::setEnabled(_enabled);
-	my_page->setEnabled(my_isEnabled);
+	m_page->setEnabled(m_isEnabled);
 }

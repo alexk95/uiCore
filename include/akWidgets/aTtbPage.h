@@ -82,7 +82,7 @@ namespace ak {
 		) override;
 
 	private:
-		tt::Page *						my_page;
+		tt::Page *						m_page;
 
 		// Block default constructor
 		aTtbPage() = delete;

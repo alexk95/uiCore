@@ -22,7 +22,7 @@
 #include <qtextformat.h>
 
 ak::aDatePickWidget::aDatePickWidget()
-	: aWidget(otDatePicker), my_date{ QDate::currentDate() }, my_dateFormat{ dfDDMMYYYY }, my_delimiter{ "." }
+	: aWidget(otDatePicker), m_date{ QDate::currentDate() }, m_dateFormat{ dfDDMMYYYY }, m_delimiter{ "." }
 {
 	refreshDate();
 
@@ -30,7 +30,7 @@ ak::aDatePickWidget::aDatePickWidget()
 }
 
 ak::aDatePickWidget::aDatePickWidget(const QDate & _date, dateFormat _dateFormat)
-	: aWidget(otDatePicker), my_date{ _date }, my_dateFormat{ _dateFormat }, my_delimiter{ "." }
+	: aWidget(otDatePicker), m_date{ _date }, m_dateFormat{ _dateFormat }, m_delimiter{ "." }
 {
 	refreshDate();
 
@@ -49,12 +49,12 @@ void ak::aDatePickWidget::setColorStyle(
 	aColorStyle *	_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
-	QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorButton |
+	m_colorStyle = _colorStyle;
+	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorButton |
 		cafBackgroundColorButton, "QPushButton{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorFocus |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorFocus |
 		cafBackgroundColorFocus, "QPushButton:hover:!pressed{", "}\n"));
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorSelected |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorSelected |
 		cafBackgroundColorSelected, "QPushButton:pressed{", "}\n"));
 
 	this->setStyleSheet(sheet);
@@ -65,17 +65,17 @@ void ak::aDatePickWidget::setColorStyle(
 // Setter
 
 void ak::aDatePickWidget::setCurrentDate(const QDate & _date, bool _refresh) {
-	my_date = _date;
+	m_date = _date;
 	if (_refresh) { refreshDate(); }
 }
 
 void ak::aDatePickWidget::setDelimiter(const QString & _delimiter, bool _refresh) {
-	my_delimiter = _delimiter;
+	m_delimiter = _delimiter;
 	if (_refresh) { refreshDate(); }
 }
 
 void ak::aDatePickWidget::setDateFormat(dateFormat _dateFormat, bool _refresh) {
-	my_dateFormat = _dateFormat;
+	m_dateFormat = _dateFormat;
 	if (_refresh) { refreshDate(); }
 }
 
@@ -84,11 +84,11 @@ void ak::aDatePickWidget::setDateFormat(dateFormat _dateFormat, bool _refresh) {
 // Slots
 
 void ak::aDatePickWidget::slotClicked(void) {
-	aDatePickDialog d{ my_date, this };
-	if (my_colorStyle != nullptr) { d.setColorStyle(my_colorStyle); }
+	aDatePickDialog d{ m_date, this };
+	if (m_colorStyle != nullptr) { d.setColorStyle(m_colorStyle); }
 
 	if (d.showDialog() == ak::dialogResult::resultOk) {
-		my_date = d.selectedDate();
+		m_date = d.selectedDate();
 		refreshDate();
 		emit changed();
 	}
@@ -97,27 +97,27 @@ void ak::aDatePickWidget::slotClicked(void) {
 // #################################################################################################################################
 
 void ak::aDatePickWidget::refreshDate(void) {
-	QString y{ QString::number(my_date.year()) };
+	QString y{ QString::number(m_date.year()) };
 	QString d;
 	QString m;
-	if (my_date.day() < 10) { d = "0" + QString::number(my_date.day()); }
-	else { d = QString::number(my_date.day()); }
+	if (m_date.day() < 10) { d = "0" + QString::number(m_date.day()); }
+	else { d = QString::number(m_date.day()); }
 
-	if (my_date.month() < 10) { m = "0" + QString::number(my_date.month()); }
-	else { m = QString::number(my_date.month()); }
+	if (m_date.month() < 10) { m = "0" + QString::number(m_date.month()); }
+	else { m = QString::number(m_date.month()); }
 
 	QString msg;
 
-	switch (my_dateFormat)
+	switch (m_dateFormat)
 	{
 	case ak::dfDDMMYYYY:
-		msg.append(d).append(my_delimiter).append(m).append(my_delimiter).append(y); break;
+		msg.append(d).append(m_delimiter).append(m).append(m_delimiter).append(y); break;
 	case ak::dfMMDDYYYY:
-		msg.append(m).append(my_delimiter).append(d).append(my_delimiter).append(y); break;
+		msg.append(m).append(m_delimiter).append(d).append(m_delimiter).append(y); break;
 	case ak::dfYYYYMMDD:
-		msg.append(y).append(my_delimiter).append(m).append(my_delimiter).append(d); break;
+		msg.append(y).append(m_delimiter).append(m).append(m_delimiter).append(d); break;
 	case ak::dfYYYYDDMM:
-		msg.append(y).append(my_delimiter).append(d).append(my_delimiter).append(m); break;
+		msg.append(y).append(m_delimiter).append(d).append(m_delimiter).append(m); break;
 	default:
 		assert(0);	// Unknown format
 		break;
@@ -143,7 +143,7 @@ ak::aDatePickDialog::aDatePickDialog(const QDate & _date, aDatePickWidget * _par
 	: ak::aPaintable(otDatePickerDialog), aDialog(_parent)
 {
 	setupWidget();
-	my_calendar->setSelectedDate(_date);
+	m_calendar->setSelectedDate(_date);
 }
 
 ak::aDatePickDialog::~aDatePickDialog() {
@@ -156,15 +156,15 @@ void ak::aDatePickDialog::setColorStyle(
 	aColorStyle *	_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
-	my_buttonCancel->setColorStyle(my_colorStyle);
-	my_buttonOk->setColorStyle(my_colorStyle);
+	m_colorStyle = _colorStyle;
+	m_buttonCancel->setColorStyle(m_colorStyle);
+	m_buttonOk->setColorStyle(m_colorStyle);
 
-	QString sheet(my_colorStyle->toStyleSheet(cafBackgroundColorWindow | cafForegroundColorWindow |
+	QString sheet(m_colorStyle->toStyleSheet(cafBackgroundColorWindow | cafForegroundColorWindow |
 		cafDefaultBorderWindow | cafBorderColorWindow, "#date_picker_dialog_main {", "}"));
 
 	setStyleSheet(sheet);
-	my_calendar->setColorStyle(my_colorStyle);
+	m_calendar->setColorStyle(m_colorStyle);
 }
 
 // #############################################################################################################################
@@ -172,7 +172,7 @@ void ak::aDatePickDialog::setColorStyle(
 // Getter
 
 QDate ak::aDatePickDialog::selectedDate(void) const {
-	return my_calendar->selectedDate();
+	return m_calendar->selectedDate();
 }
 
 // #############################################################################################################################
@@ -180,12 +180,12 @@ QDate ak::aDatePickDialog::selectedDate(void) const {
 // Slots
 
 void ak::aDatePickDialog::slotOkClicked(void) {
-	my_result = resultOk;
+	m_result = resultOk;
 	close();
 }
 
 void ak::aDatePickDialog::slotCancelClicked(void) {
-	my_result = resultCancel;
+	m_result = resultCancel;
 	close();
 }
 
@@ -195,24 +195,24 @@ void ak::aDatePickDialog::slotCancelClicked(void) {
 
 void ak::aDatePickDialog::setupWidget(void) {
 	// Create layouts
-	my_mainLayout = new QVBoxLayout{ this };
+	m_mainLayout = new QVBoxLayout{ this };
 
-	my_inputWidget = new QWidget;
-	my_inputLayout = new QHBoxLayout{ my_inputWidget };
-	my_inputWidget->setContentsMargins(0, 0, 0, 0);
+	m_inputWidget = new QWidget;
+	m_inputLayout = new QHBoxLayout{ m_inputWidget };
+	m_inputWidget->setContentsMargins(0, 0, 0, 0);
 
 	// Create controls
-	my_calendar = new aCalendarWidget;
-	my_buttonOk = new aPushButtonWidget{ "Ok" };
-	my_buttonCancel = new aPushButtonWidget{ "Cancel" };
-	my_calendar->setOnlyCurrentMonthVisible(true);
+	m_calendar = new aCalendarWidget;
+	m_buttonOk = new aPushButtonWidget{ "Ok" };
+	m_buttonCancel = new aPushButtonWidget{ "Cancel" };
+	m_calendar->setOnlyCurrentMonthVisible(true);
 
 	// Add controls to layout
-	my_inputLayout->addWidget(my_buttonOk);
-	my_inputLayout->addWidget(my_buttonCancel);
+	m_inputLayout->addWidget(m_buttonOk);
+	m_inputLayout->addWidget(m_buttonCancel);
 
-	my_mainLayout->addWidget(my_calendar);
-	my_mainLayout->addWidget(my_inputWidget);
+	m_mainLayout->addWidget(m_calendar);
+	m_mainLayout->addWidget(m_inputWidget);
 
 	// Setup dialog
 	Qt::WindowFlags f;
@@ -221,11 +221,11 @@ void ak::aDatePickDialog::setupWidget(void) {
 	setWindowFlags(f);
 
 	setObjectName("date_picker_dialog_main");
-	my_calendar->setObjectName("date_picker_dialog_calendar");
-	my_buttonOk->setObjectName("date_picker_dialog_ok");
-	my_buttonCancel->setObjectName("date_picker_dialog_cancel");
+	m_calendar->setObjectName("date_picker_dialog_calendar");
+	m_buttonOk->setObjectName("date_picker_dialog_ok");
+	m_buttonCancel->setObjectName("date_picker_dialog_cancel");
 
 	// Connect signals
-	connect(my_buttonOk, SIGNAL(clicked()), this, SLOT(slotOkClicked()));
-	connect(my_buttonCancel, SIGNAL(clicked()), this, SLOT(slotCancelClicked()));
+	connect(m_buttonOk, SIGNAL(clicked()), this, SLOT(slotOkClicked()));
+	connect(m_buttonCancel, SIGNAL(clicked()), this, SLOT(slotCancelClicked()));
 }

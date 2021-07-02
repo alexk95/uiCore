@@ -18,7 +18,7 @@
 #include <qtextformat.h>
 
 ak::aCalendarWidget::aCalendarWidget()
-	: aWidget(otNone), my_onlyCurrentMonthVisible(false)
+	: aWidget(otNone), m_onlyCurrentMonthVisible(false)
 {
 
 }
@@ -46,10 +46,10 @@ void ak::aCalendarWidget::setColorStyle(
 	QStringList l;
 	foo(l, children());
 
-	my_colorStyle = _colorStyle;
-	assert(my_colorStyle != nullptr);	// Nullptr provided
+	m_colorStyle = _colorStyle;
+	assert(m_colorStyle != nullptr);	// Nullptr provided
 
-	QString sheet(my_colorStyle->toStyleSheet(cafBackgroundColorWindow | cafForegroundColorWindow,
+	QString sheet(m_colorStyle->toStyleSheet(cafBackgroundColorWindow | cafForegroundColorWindow,
 		"#qt_aCalendarWidget_aCalendarWidgetview {", "}\n"));
 
 	setStyleSheet(sheet);
@@ -75,7 +75,7 @@ void ak::aCalendarWidget::paintCell(
 	const QRect &		_rect,
 	const QDate &		_date
 ) const {
-	if (my_onlyCurrentMonthVisible) {
+	if (m_onlyCurrentMonthVisible) {
 		if (_date.month() == monthShown()) {
 			QCalendarWidget::paintCell(_painter, _rect, _date);
 		}

@@ -95,12 +95,12 @@ namespace ak {
 		std::vector<QString> searchDirectories(void) const;
 
 	protected:
-		std::map<QString, std::map<QString, QIcon * > * >	my_icons;					//! The map containing all imported icons
-		std::map<QString, QPixmap *>						my_pixmaps;
-		std::map<QString, QMovie *>							my_movies;
-		std::vector<QString>								my_directories;				//! Contains all set directories
-		QString												my_fileExtension;			//! The currently set file extension
-		std::mutex *										my_mutex;					//! The mutex used for thread protection
+		std::map<QString, std::map<QString, QIcon * > * >	m_icons;					//! The map containing all imported icons
+		std::map<QString, QPixmap *>						m_pixmaps;
+		std::map<QString, QMovie *>							m_movies;
+		std::vector<QString>								m_directories;				//! Contains all set directories
+		QString												m_fileExtension;			//! The currently set file extension
+		std::mutex *										m_mutex;					//! The mutex used for thread protection
 
 		//! @brief Imports an icon according to its name and size
 		//! Mutex will not be locked. Caller must take care of it

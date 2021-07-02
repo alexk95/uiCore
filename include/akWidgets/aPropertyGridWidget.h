@@ -316,7 +316,7 @@ namespace ak {
 			ID											_itemID
 		);
 
-		bool isEnabled(void) const { return my_isEnabled; }
+		bool isEnabled(void) const { return m_isEnabled; }
 
 	signals:
 		void cleared(void);
@@ -332,28 +332,28 @@ namespace ak {
 		void itemCountChanged(void);
 		ID newItemCreated(aPropertyGridItem * _item);
 
-		QVBoxLayout *							my_layout;
-		aTextEditWidget *						my_infoTextEdit;
-		aTableWidget *							my_table;
-		bool									my_checkItemVisibilityRequired;
+		QVBoxLayout *							m_layout;
+		aTextEditWidget *						m_infoTextEdit;
+		aTableWidget *							m_table;
+		bool									m_checkItemVisibilityRequired;
 
-		std::map<QString, aPropertyGridGroup *>	my_groups;
-		std::map<ID, aPropertyGridItem *>		my_items;
-		std::map<aPropertyGridItem *, bool>		my_itemStateMap;
+		std::map<QString, aPropertyGridGroup *>	m_groups;
+		std::map<ID, aPropertyGridItem *>		m_items;
+		std::map<aPropertyGridItem *, bool>		m_itemStateMap;
 
-		aPropertyGridGroup *					my_defaultGroup;
+		aPropertyGridGroup *					m_defaultGroup;
 
-		ID										my_currentID;
-		bool									my_isEnabled;
+		ID										m_currentID;
+		bool									m_isEnabled;
 
-		QColor									my_groupHeaderForeColor;
-		QColor									my_groupHeaderBackColor;
-		QColor									my_itemDefaultBackgroundColor;
-		QColor									my_itemTextColorError;
-		QColor									my_itemTextColorNormal;
+		QColor									m_groupHeaderForeColor;
+		QColor									m_groupHeaderBackColor;
+		QColor									m_itemDefaultBackgroundColor;
+		QColor									m_itemTextColorError;
+		QColor									m_itemTextColorNormal;
 
-		QIcon									my_groupIconExpanded;
-		QIcon									my_groupIconCollapsed;
+		QIcon									m_groupIconExpanded;
+		QIcon									m_groupIconCollapsed;
 
 		aPropertyGridWidget(aPropertyGridWidget &) = delete;
 		aPropertyGridWidget& operator = (aPropertyGridWidget &) = delete;
@@ -489,29 +489,29 @@ namespace ak {
 
 		void refreshIcon(void);
 
-		std::list<aPropertyGridItem *>			my_items;
-		aTableWidget *							my_propertyGridTable;
-		QTableWidgetItem *						my_item;
-		bool									my_headerIsVisible;
+		std::list<aPropertyGridItem *>			m_items;
+		aTableWidget *							m_propertyGridTable;
+		QTableWidgetItem *						m_item;
+		bool									m_headerIsVisible;
 
-		QString									my_name;
-		bool									my_isActivated;
-		bool									my_isVisible;
-		bool									my_isAlternateBackground;
+		QString									m_name;
+		bool									m_isActivated;
+		bool									m_isVisible;
+		bool									m_isAlternateBackground;
 
-		QColor									my_foreColor;
-		QColor									my_backColor;
-		QColor									my_colorTextError;
-		QColor									my_colorTextNormal;
-		QColor									my_colorItemBackground;
-		QColor									my_colorItemBackgroundAlternate;
+		QColor									m_foreColor;
+		QColor									m_backColor;
+		QColor									m_colorTextError;
+		QColor									m_colorTextNormal;
+		QColor									m_colorItemBackground;
+		QColor									m_colorItemBackgroundAlternate;
 
-		QIcon *									my_iconExpanded;
-		QIcon *									my_iconCollapsed;
+		QIcon *									m_iconExpanded;
+		QIcon *									m_iconCollapsed;
 
-		aColorStyle *							my_externColorStyle;
-		aCustomizableColorStyle *				my_colorStyle;
-		aCustomizableColorStyle *				my_colorStyleAlt;
+		aColorStyle *							m_externColorStyle;
+		aCustomizableColorStyle *				m_colorStyle;
+		aCustomizableColorStyle *				m_colorStyleAlt;
 
 		aPropertyGridGroup() = delete;
 		aPropertyGridGroup(const aPropertyGridGroup &) = delete;
@@ -664,7 +664,7 @@ namespace ak {
 			bool					_enabled = true
 		);
 
-		bool isEnabled(void) const { return my_isEnabled; }
+		bool isEnabled(void) const { return m_isEnabled; }
 
 		void setColorStyle(
 			aColorStyle *	_style
@@ -704,43 +704,43 @@ namespace ak {
 
 		void repaint(void);
 
-		ID								my_id;
-		bool							my_isMultipleValues;
-		bool							my_ignoreCellEvent;
-		bool							my_isCurrentlyError;
-		bool							my_isReadOnly;
-		bool							my_isEnabled;
+		ID								m_id;
+		bool							m_isMultipleValues;
+		bool							m_ignoreCellEvent;
+		bool							m_isCurrentlyError;
+		bool							m_isReadOnly;
+		bool							m_isEnabled;
 
-		aTableWidget *					my_propertyGridTable;
-		QString							my_group;
-		QString							my_name;
+		aTableWidget *					m_propertyGridTable;
+		QString							m_group;
+		QString							m_name;
 
-		aColor							my_colorErrorForeground;
-		aColor							my_colorNormalForeground;
-		aColor							my_colorBackground;
+		aColor							m_colorErrorForeground;
+		aColor							m_colorNormalForeground;
+		aColor							m_colorBackground;
 
-		aColorStyle *					my_globalColorStyle;
+		aColorStyle *					m_globalColorStyle;
 
-		QTableWidgetItem *				my_cellSettingName;
-		QTableWidgetItem *				my_cellValue;
+		QTableWidgetItem *				m_cellSettingName;
+		QTableWidgetItem *				m_cellValue;
 
-		valueType						my_valueType;
-		bool							my_valueBool;
-		aColor							my_valueColor;
-		double							my_valueDouble;
-		int								my_valueInteger;
-		QString							my_valueSelection;
-		QString							my_valueString;
-		QDate							my_valueDate;
-		QTime							my_valueTime;
+		valueType						m_valueType;
+		bool							m_valueBool;
+		aColor							m_valueColor;
+		double							m_valueDouble;
+		int								m_valueInteger;
+		QString							m_valueSelection;
+		QString							m_valueString;
+		QDate							m_valueDate;
+		QTime							m_valueTime;
 
-		std::vector<QString>			my_valuePossibleSelection;
+		std::vector<QString>			m_valuePossibleSelection;
 
-		aCheckBoxWidget *				my_widgetBool;
-		aColorEditButtonWidget *		my_widgetColor;
-		aComboButtonWidget *			my_widgetSelection;
-		aDatePickWidget *				my_widgetDate;
-		aTimePickWidget *				my_widgetTime;
+		aCheckBoxWidget *				m_widgetBool;
+		aColorEditButtonWidget *		m_widgetColor;
+		aComboButtonWidget *			m_widgetSelection;
+		aDatePickWidget *				m_widgetDate;
+		aTimePickWidget *				m_widgetTime;
 
 		aPropertyGridItem() = delete;
 		aPropertyGridItem(const aPropertyGridItem&) = delete;

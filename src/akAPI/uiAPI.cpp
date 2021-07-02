@@ -75,11 +75,11 @@
 #include <qfiledialog.h>
 #include <qdatetime.h>
 
-static ak::uiAPI::apiManager		my_apiManager;					//! The API manager
-static ak::aObjectManager *			my_objManager = nullptr;					//! The object manager used in this API
-static ak::aMessenger *				my_messenger = nullptr;					//! The messenger used in this API
-static ak::aUidManager *			my_uidManager = nullptr;					//! The UID manager used in this API
-static ak::aIconManager *			my_iconManager = nullptr;					//! The icon manager used in this API
+static ak::uiAPI::apiManager		m_apiManager;					//! The API manager
+static ak::aObjectManager *			m_objManager = nullptr;					//! The object manager used in this API
+static ak::aMessenger *				m_messenger = nullptr;					//! The messenger used in this API
+static ak::aUidManager *			m_uidManager = nullptr;					//! The UID manager used in this API
+static ak::aIconManager *			m_iconManager = nullptr;					//! The icon manager used in this API
 
 template <class T> T * akCastObject(ak::aObject * _obj) {
 	T * ret = nullptr;
@@ -89,49 +89,49 @@ template <class T> T * akCastObject(ak::aObject * _obj) {
 }
 
 ak::uiAPI::apiManager::apiManager()
-	: my_iconManagerIsExtern(false),
-	my_messengerIsExtern(false),
-	my_objManagerIsExtern(false),
-	my_uidManagerIsExtern(false),
-	my_isInitialized(false),
-	my_appIsRunning(false),
-	my_defaultSurfaceFormat(nullptr),
-	my_fileUidManager(nullptr),
-	my_app(nullptr)
+	: m_iconManagerIsExtern(false),
+	m_messengerIsExtern(false),
+	m_objManagerIsExtern(false),
+	m_uidManagerIsExtern(false),
+	m_isInitialized(false),
+	m_appIsRunning(false),
+	m_defaultSurfaceFormat(nullptr),
+	m_fileUidManager(nullptr),
+	m_app(nullptr)
 {
 	aSingletonAllowedMessages::instance();
-	my_fileUidManager = new aUidManager();
+	m_fileUidManager = new aUidManager();
 }
 
 ak::uiAPI::apiManager::~apiManager() {
 	// iconManager
-	if (!my_iconManagerIsExtern) {
-		if (my_iconManager != nullptr) {
-			delete my_iconManager; my_iconManager = nullptr;
+	if (!m_iconManagerIsExtern) {
+		if (m_iconManager != nullptr) {
+			delete m_iconManager; m_iconManager = nullptr;
 		}
 	}
 
 	// messenger
-	if (!my_messengerIsExtern) {
-		if (my_messenger != nullptr) {
-			delete my_messenger; my_messenger = nullptr;
+	if (!m_messengerIsExtern) {
+		if (m_messenger != nullptr) {
+			delete m_messenger; m_messenger = nullptr;
 		}
 	}
 	// object manager
-	if (!my_objManagerIsExtern) {
-		if (my_objManager != nullptr) {
-			delete my_objManager; my_objManager = nullptr;
+	if (!m_objManagerIsExtern) {
+		if (m_objManager != nullptr) {
+			delete m_objManager; m_objManager = nullptr;
 		}
 	}
 	// uid manager
-	if (!my_uidManagerIsExtern) {
-		if (my_uidManager != nullptr) {
-			delete my_uidManager; my_uidManager = nullptr;
+	if (!m_uidManagerIsExtern) {
+		if (m_uidManager != nullptr) {
+			delete m_uidManager; m_uidManager = nullptr;
 		}
 	}
 
 	// Qt Application
-	//delete my_app;
+	//delete m_app;
 }
 
 void ak::uiAPI::apiManager::ini(
@@ -140,55 +140,55 @@ void ak::uiAPI::apiManager::ini(
 	aIconManager *										_iconManager,
 	aObjectManager *									_objectManager
 ) {
-	assert(!my_isInitialized); // Is already initialized
-	my_app = new aApplication();
-	my_desktop = my_app->desktop();
+	assert(!m_isInitialized); // Is already initialized
+	m_app = new aApplication();
+	m_desktop = m_app->desktop();
 	
 	// messenger
 	if (_messenger == nullptr) {
-		my_messenger = new aMessenger();
-		assert(my_messenger != nullptr); // Failed to create
+		m_messenger = new aMessenger();
+		assert(m_messenger != nullptr); // Failed to create
 	}
-	else { my_messenger = _messenger; my_messengerIsExtern = true; }
+	else { m_messenger = _messenger; m_messengerIsExtern = true; }
 
 	// uid manager
 	if (_uidManager == nullptr) {
-		my_uidManager = new aUidManager();
-		assert(my_uidManager != nullptr); // Failed to create
+		m_uidManager = new aUidManager();
+		assert(m_uidManager != nullptr); // Failed to create
 	}
-	else { my_uidManager = _uidManager; my_uidManagerIsExtern = true; }
+	else { m_uidManager = _uidManager; m_uidManagerIsExtern = true; }
 
 	// icon manager
 	if (_iconManager == nullptr) {
-		my_iconManager = new aIconManager(QString(""));
-		assert(my_iconManager != nullptr); // Failed to create
+		m_iconManager = new aIconManager(QString(""));
+		assert(m_iconManager != nullptr); // Failed to create
 	}
-	else { my_iconManager = _iconManager; my_iconManagerIsExtern = true; }
+	else { m_iconManager = _iconManager; m_iconManagerIsExtern = true; }
 
 	// object manager
 	if (_objectManager == nullptr) {
-		my_objManager = new aObjectManager(my_messenger, my_uidManager);
-		assert(my_objManager != nullptr); // Failed to create
+		m_objManager = new aObjectManager(m_messenger, m_uidManager);
+		assert(m_objManager != nullptr); // Failed to create
 	}
 	else {
-		assert(my_messengerIsExtern);	// Internal messenger cannot be used with external objectManager
-		assert(my_uidManagerIsExtern);	// Internal uidManager cannot be used with external objectManager
-		my_objManager = _objectManager;
+		assert(m_messengerIsExtern);	// Internal messenger cannot be used with external objectManager
+		assert(m_uidManagerIsExtern);	// Internal uidManager cannot be used with external objectManager
+		m_objManager = _objectManager;
 	}
 
-	my_isInitialized = true;
+	m_isInitialized = true;
 }
 
-bool ak::uiAPI::apiManager::isInitialized(void) const { return my_isInitialized; }
+bool ak::uiAPI::apiManager::isInitialized(void) const { return m_isInitialized; }
 
 int ak::uiAPI::apiManager::exec(void) {
-	assert(my_isInitialized);	// API not initialized
-	return my_app->exec();
+	assert(m_isInitialized);	// API not initialized
+	return m_app->exec();
 }
 
 QSurfaceFormat * ak::uiAPI::apiManager::getDefaultSurfaceFormat(void) {
-	if (my_defaultSurfaceFormat == nullptr) { my_defaultSurfaceFormat = new QSurfaceFormat(); }
-	return my_defaultSurfaceFormat;
+	if (m_defaultSurfaceFormat == nullptr) { m_defaultSurfaceFormat = new QSurfaceFormat(); }
+	return m_defaultSurfaceFormat;
 }
 
 ak::aFile * ak::uiAPI::apiManager::getFile(
@@ -196,13 +196,13 @@ ak::aFile * ak::uiAPI::apiManager::getFile(
 ) {
 	if (_fileUid == ak::invalidUID) {
 		aFile * f = new aFile();
-		f->setUid(my_fileUidManager->getId());
-		my_mapFiles.insert_or_assign(f->uid(), f);
+		f->setUid(m_fileUidManager->getId());
+		m_mapFiles.insert_or_assign(f->uid(), f);
 		return f;
 	}
 	else {
-		auto itm = my_mapFiles.find(_fileUid);
-		assert(itm != my_mapFiles.end());	// Invalid file UID
+		auto itm = m_mapFiles.find(_fileUid);
+		assert(itm != m_mapFiles.end());	// Invalid file UID
 		aFile * f = itm->second;
 		return f;
 	}
@@ -211,8 +211,8 @@ ak::aFile * ak::uiAPI::apiManager::getFile(
 ak::aFile * ak::uiAPI::apiManager::getExistingFile(
 	UID												_fileUid
 ) {
-	auto itm = my_mapFiles.find(_fileUid);
-	assert(itm != my_mapFiles.end());	// Invalid file UID
+	auto itm = m_mapFiles.find(_fileUid);
+	assert(itm != m_mapFiles.end());	// Invalid file UID
 	aFile * f = itm->second;
 	return f;
 }
@@ -220,23 +220,23 @@ ak::aFile * ak::uiAPI::apiManager::getExistingFile(
 void ak::uiAPI::apiManager::deleteFile(
 	UID												_fileUid
 ) {
-	auto itm = my_mapFiles.find(_fileUid);
-	assert(itm != my_mapFiles.end());	// Invalid file UID
+	auto itm = m_mapFiles.find(_fileUid);
+	assert(itm != m_mapFiles.end());	// Invalid file UID
 	aFile * f = itm->second;
 	delete f;
-	my_mapFiles.erase(_fileUid);
+	m_mapFiles.erase(_fileUid);
 }
 
 void ak::uiAPI::apiManager::deleteAllFiles() {
-	for (auto itm = my_mapFiles.begin(); itm != my_mapFiles.end(); itm++) {
+	for (auto itm = m_mapFiles.begin(); itm != m_mapFiles.end(); itm++) {
 		aFile * f = itm->second; delete f;
 	}
-	my_mapFiles.clear();
+	m_mapFiles.clear();
 }
 
-ak::aApplication * ak::uiAPI::apiManager::app() { return my_app; }
+ak::aApplication * ak::uiAPI::apiManager::app() { return m_app; }
 
-QDesktopWidget * ak::uiAPI::apiManager::desktop() { return my_desktop; }
+QDesktopWidget * ak::uiAPI::apiManager::desktop() { return m_desktop; }
 
 // ###############################################################################################################################################
 
@@ -245,9 +245,9 @@ void ak::uiAPI::ini(
 	aUidManager *										_uidManager,
 	aIconManager *										_iconManager,
 	aObjectManager *									_objectManager
-) { my_apiManager.ini(_messenger, _uidManager, _iconManager, _objectManager); }
+) { m_apiManager.ini(_messenger, _uidManager, _iconManager, _objectManager); }
 
-void ak::uiAPI::destroy(void) {	if (my_objManager != nullptr) { my_objManager->destroyAll(); } }
+void ak::uiAPI::destroy(void) {	if (m_objManager != nullptr) { m_objManager->destroyAll(); } }
 
 void ak::uiAPI::enableEventTypes(
 	eventType											_types
@@ -260,14 +260,14 @@ void ak::uiAPI::disableEventTypes(
 void ak::uiAPI::setMessengerEnabled(
 	bool													_enabled
 ) {
-	assert(my_messenger != nullptr);	// Not initialized yet
-	if (_enabled) { my_messenger->enable(); }
-	else { my_messenger->disable(); }
+	assert(m_messenger != nullptr);	// Not initialized yet
+	if (_enabled) { m_messenger->enable(); }
+	else { m_messenger->disable(); }
 }
 
 bool ak::uiAPI::messengerIsEnabled(void) {
-	assert(my_messenger != nullptr);	// Not initialized yet
-	return my_messenger->isEnabled();
+	assert(m_messenger != nullptr);	// Not initialized yet
+	return m_messenger->isEnabled();
 }
 
 std::vector<ak::eventType> ak::uiAPI::enabledEventTypes(void) { return aSingletonAllowedMessages::instance()->enabledMessages(); }
@@ -277,33 +277,33 @@ std::vector<ak::eventType> ak::uiAPI::disabledEventTypes(void) { return aSinglet
 std::string ak::uiAPI::saveStateWindow(
 	const std::string &									_applicationVersion
 ) {
-	assert(my_objManager != nullptr);	// API not initialized
-	return my_objManager->saveStateWindow(_applicationVersion);
+	assert(m_objManager != nullptr);	// API not initialized
+	return m_objManager->saveStateWindow(_applicationVersion);
 }
 
 std::string ak::uiAPI::saveStateColorStyle(
 	const std::string &									_applicationVersion
 ) {
-	assert(my_objManager != nullptr);	// API not initialized
-	return my_objManager->saveStateColorStyle(_applicationVersion);
+	assert(m_objManager != nullptr);	// API not initialized
+	return m_objManager->saveStateColorStyle(_applicationVersion);
 }
 
 ak::settingsRestoreErrorCode ak::uiAPI::restoreStateWindow(
 	const std::string &									_json,
 	const std::string &									_applicationVersion
 ) {
-	assert(my_objManager != nullptr); // Not initialized
+	assert(m_objManager != nullptr); // Not initialized
 	if (_json.length() == 0) { return ak::settingsRestoreErrorCode::srecEmptySettingsString; }
-	return my_objManager->restoreStateWindow(_json.c_str(), _applicationVersion);
+	return m_objManager->restoreStateWindow(_json.c_str(), _applicationVersion);
 }
 
 ak::settingsRestoreErrorCode ak::uiAPI::restoreStateColorStyle(
 	const std::string &									_json,
 	const std::string &									_applicationVersion
 ) {
-	assert(my_objManager != nullptr); // Not initialized
+	assert(m_objManager != nullptr); // Not initialized
 	if (_json.length() == 0) { return ak::settingsRestoreErrorCode::srecEmptySettingsString; }
-	return my_objManager->restoreStateColorStyle(_json.c_str(), _applicationVersion);
+	return m_objManager->restoreStateColorStyle(_json.c_str(), _applicationVersion);
 }
 
 QWidget * ak::uiAPI::getWidget(
@@ -313,13 +313,13 @@ QWidget * ak::uiAPI::getWidget(
 ak::UID ak::uiAPI::getObjectCreator(
 	UID												_objectUID
 ) {
-	assert(my_objManager != nullptr);	// API not initialized
-	return my_objManager->objectCreator(_objectUID);
+	assert(m_objManager != nullptr);	// API not initialized
+	return m_objManager->objectCreator(_objectUID);
 }
 
 ak::aObjectManager * ak::uiAPI::getObjectManager(void) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager;
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager;
 }
 
 // ###############################################################################################################################################
@@ -328,23 +328,23 @@ ak::UID ak::uiAPI::registerUidNotifier(
 	UID												_senderUid,
 	aNotifier *										_notifier
 ) {
-	assert(my_messenger != nullptr); // API not initialized
-	return my_messenger->registerUidReceiver(_senderUid, _notifier);
+	assert(m_messenger != nullptr); // API not initialized
+	return m_messenger->registerUidReceiver(_senderUid, _notifier);
 }
 
 ak::UID ak::uiAPI::registerEventTypeNotifier(
 	eventType										_event,
 	aNotifier *										_notifier
 ) {
-	assert(my_messenger != nullptr); // API not initialized
-	return my_messenger->registerEventTypeReceiver(_event, _notifier);
+	assert(m_messenger != nullptr); // API not initialized
+	return m_messenger->registerEventTypeReceiver(_event, _notifier);
 }
 
 ak::UID ak::uiAPI::registerAllMessagesNotifier(
 	aNotifier *										_notifier
 ) {
-	assert(my_messenger != nullptr); // API not initialized
-	return my_messenger->registerNotifierForAllMessages(_notifier);
+	assert(m_messenger != nullptr); // API not initialized
+	return m_messenger->registerNotifierForAllMessages(_notifier);
 }
 
 void ak::uiAPI::sendMessage(
@@ -353,14 +353,14 @@ void ak::uiAPI::sendMessage(
 	int												_info1,
 	int												_info2
 ) {
-	assert(my_messenger != nullptr); // API not initialized
-	return my_messenger->sendMessage(_senderUid, _event, _info1, _info2);
+	assert(m_messenger != nullptr); // API not initialized
+	return m_messenger->sendMessage(_senderUid, _event, _info1, _info2);
 }
 
 void ak::uiAPI::setSurfaceFormatDefaultSamplesCount(
 	int												_count
 ) {
-	QSurfaceFormat * format = my_apiManager.getDefaultSurfaceFormat();
+	QSurfaceFormat * format = m_apiManager.getDefaultSurfaceFormat();
 	format->setSamples(_count);
 	QSurfaceFormat::setDefaultFormat(*format);
 }
@@ -375,9 +375,9 @@ ak::UID ak::uiAPI::createAction(
 	const QString &										_iconName,
 	const QString &										_iconSize
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
-	return my_objManager->createToolButton(_creatorUid, _text, *my_iconManager->icon(_iconName, _iconSize));
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
+	return m_objManager->createToolButton(_creatorUid, _text, *m_iconManager->icon(_iconName, _iconSize));
 }
 
 ak::UID ak::uiAPI::createAction(
@@ -385,8 +385,8 @@ ak::UID ak::uiAPI::createAction(
 	const QString &										_text,
 	const QIcon &										_icon
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createToolButton(_creatorUid, _text, _icon);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createToolButton(_creatorUid, _text, _icon);
 }
 
 ak::UID ak::uiAPI::createCheckbox(
@@ -394,8 +394,8 @@ ak::UID ak::uiAPI::createCheckbox(
 	const QString &										_text,
 	bool												_checked
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createCheckBox(_creatorUid, _text, _checked);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createCheckBox(_creatorUid, _text, _checked);
 }
 
 ak::UID ak::uiAPI::createColorEditButton(
@@ -406,8 +406,8 @@ ak::UID ak::uiAPI::createColorEditButton(
 	int													_a,
 	const QString &										_textOverride
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createColorEditButton(_creatorUid, aColor(_r, _g, _b, _a), _textOverride);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createColorEditButton(_creatorUid, aColor(_r, _g, _b, _a), _textOverride);
 }
 
 ak::UID ak::uiAPI::createColorEditButton(
@@ -415,8 +415,8 @@ ak::UID ak::uiAPI::createColorEditButton(
 	const aColor &									_color,
 	const QString &									_textOverride
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createColorEditButton(_creatorUid, _color, _textOverride);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createColorEditButton(_creatorUid, _color, _textOverride);
 }
 
 ak::UID ak::uiAPI::createColorStyleSwitch(
@@ -427,8 +427,8 @@ ak::UID ak::uiAPI::createColorStyleSwitch(
 	const QIcon &			_darkModeIcon,
 	bool					_isBright
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createColorStyleSwitch(_creatorUid, _brightModeTitle, _darkModeTitle, _brightModeIcon, _darkModeIcon, _isBright);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createColorStyleSwitch(_creatorUid, _brightModeTitle, _darkModeTitle, _brightModeIcon, _darkModeIcon, _isBright);
 }
 
 ak::UID ak::uiAPI::createColorStyleSwitch(
@@ -441,19 +441,19 @@ ak::UID ak::uiAPI::createColorStyleSwitch(
 	const QString &			_darkModeIconFolder,
 	bool					_isBright
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	return createColorStyleSwitch(_creatorUid, _brightModeTitle, _darkModeTitle, 
-		*my_iconManager->icon(_brightModeIconName, _brightModeIconFolder),
-		*my_iconManager->icon(_darkModeIconName, _darkModeIconFolder),
+		*m_iconManager->icon(_brightModeIconName, _brightModeIconFolder),
+		*m_iconManager->icon(_darkModeIconName, _darkModeIconFolder),
 		_isBright);
 }
 
 ak::UID ak::uiAPI::createComboBox(
 	UID												_creatorUid
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createComboBox(_creatorUid);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createComboBox(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createComboButton(
@@ -461,24 +461,24 @@ ak::UID ak::uiAPI::createComboButton(
 	const QString &										_text,
 	const std::vector<QString> &						_possibleSelection
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createComboButton(_creatorUid, _text, _possibleSelection);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createComboButton(_creatorUid, _text, _possibleSelection);
 }
 
 ak::UID ak::uiAPI::createDock(
 	UID												_creatorUid,
 	const QString &										_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createDock(_creatorUid, _text);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createDock(_creatorUid, _text);
 }
 
 ak::UID ak::uiAPI::createDockWatcher(
 	UID									_creatorUid,
 	const QString &						_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createDockWatcher(_creatorUid, _text);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createDockWatcher(_creatorUid, _text);
 }
 
 ak::UID ak::uiAPI::createDockWatcher(
@@ -486,8 +486,8 @@ ak::UID ak::uiAPI::createDockWatcher(
 	const QIcon &						_icon,
 	const QString &						_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createDockWatcher(_creatorUid, _icon, _text);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createDockWatcher(_creatorUid, _icon, _text);
 }
 
 ak::UID ak::uiAPI::createDockWatcher(
@@ -496,17 +496,17 @@ ak::UID ak::uiAPI::createDockWatcher(
 	const QString &						_iconFolder,
 	const QString &						_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
-	return my_objManager->createDockWatcher(_creatorUid, *my_iconManager->icon(_iconName, _iconFolder), _text);
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
+	return m_objManager->createDockWatcher(_creatorUid, *m_iconManager->icon(_iconName, _iconFolder), _text);
 }
 
 ak::UID ak::uiAPI::createLineEdit(
 	UID													_creatorUid,
 	const QString &											_initialText
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createLineEdit(_creatorUid, _initialText);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createLineEdit(_creatorUid, _initialText);
 }
 
 ak::UID ak::uiAPI::createLogInDialog(
@@ -516,9 +516,9 @@ ak::UID ak::uiAPI::createLogInDialog(
 	const QString &										_username,
 	const QString &										_password
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
-	return my_objManager->createLogInDialog(_creatorUid, _showSavePassword, *my_iconManager->pixmap(_imageName), _username, _password);
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
+	return m_objManager->createLogInDialog(_creatorUid, _showSavePassword, *m_iconManager->pixmap(_imageName), _username, _password);
 }
 
 ak::UID ak::uiAPI::createNiceLineEdit(
@@ -526,31 +526,31 @@ ak::UID ak::uiAPI::createNiceLineEdit(
 	const QString &										_initialText,
 	const QString &										_infoLabelText
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createNiceLineEdit(_creatorUid, _initialText, _infoLabelText);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createNiceLineEdit(_creatorUid, _initialText, _infoLabelText);
 }
 
 ak::UID ak::uiAPI::createPropertyGrid(
 	UID												_creatorUid
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createPropertyGrid(_creatorUid);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createPropertyGrid(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createPushButton(
 	UID												_creatorUid,
 	const QString &										_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createPushButton(_creatorUid, _text);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createPushButton(_creatorUid, _text);
 }
 
 ak::UID ak::uiAPI::createOptionsDialog(
 	UID												_creatorUid,
 	const QString &										_title
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createOptionsDialog(_creatorUid, _title);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createOptionsDialog(_creatorUid, _title);
 }
 
 ak::UID ak::uiAPI::createPushButton(
@@ -558,15 +558,15 @@ ak::UID ak::uiAPI::createPushButton(
 	const QIcon &										_icon,
 	const QString &										_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createPushButton(_creatorUid, _icon, _text);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createPushButton(_creatorUid, _icon, _text);
 }
 
 ak::UID ak::uiAPI::createSpecialTabBar(
 	UID												_creatorUid
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createSpecialTabBar(_creatorUid);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createSpecialTabBar(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createTable(
@@ -574,8 +574,8 @@ ak::UID ak::uiAPI::createTable(
 	int													_rows,
 	int													_columns
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createTable(_creatorUid, _rows, _columns);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createTable(_creatorUid, _rows, _columns);
 }
 
 ak::UID ak::uiAPI::createTabToolBarSubContainer(
@@ -583,38 +583,38 @@ ak::UID ak::uiAPI::createTabToolBarSubContainer(
 	UID												_parentUid,
 	const QString &										_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createTabToolBarSubContainer(_creatorUid, _parentUid, _text);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createTabToolBarSubContainer(_creatorUid, _parentUid, _text);
 }
 
 ak::UID ak::uiAPI::createTextEdit(
 	UID												_creatorUid,
 	const QString &										_initialText
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createTextEdit(_creatorUid, _initialText);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createTextEdit(_creatorUid, _initialText);
 }
 
 ak::UID ak::uiAPI::createTimer(
 	UID												_creatorUid
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createTimer(_creatorUid);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createTimer(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createToolButton(
 	UID												_creatorUid
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createToolButton(_creatorUid);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createToolButton(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createToolButton(
 	UID												_creatorUid,
 	const QString &										_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createToolButton(_creatorUid, _text);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createToolButton(_creatorUid, _text);
 }
 
 ak::UID ak::uiAPI::createToolButton(
@@ -622,8 +622,8 @@ ak::UID ak::uiAPI::createToolButton(
 	const QString &										_text,
 	const QIcon &										_icon
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createToolButton(_creatorUid, _text, _icon);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createToolButton(_creatorUid, _text, _icon);
 }
 
 ak::UID ak::uiAPI::createToolButton(
@@ -632,30 +632,30 @@ ak::UID ak::uiAPI::createToolButton(
 	const QString &										_iconName,
 	const QString &										_iconFolder
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
-	return my_objManager->createToolButton(_creatorUid, _text, *my_iconManager->icon(_iconName, _iconFolder));
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
+	return m_objManager->createToolButton(_creatorUid, _text, *m_iconManager->icon(_iconName, _iconFolder));
 }
 
 ak::UID ak::uiAPI::createTree(
 	UID												_creatorUid
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createTree(_creatorUid);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createTree(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createTabView(
 	UID												_creatorUid
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createTabView(_creatorUid);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createTabView(_creatorUid);
 }
 
 ak::UID ak::uiAPI::createWindow(
 	UID												_creatorUid
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->createWindow(_creatorUid);
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->createWindow(_creatorUid);
 }
 
 // Object creation
@@ -684,8 +684,8 @@ void ak::uiAPI::action::setIcon(
 	const QString &										_iconName,
 	const QString &										_iconFolder
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
-	object::get<aAction>(_actionUID)->setIcon(*my_iconManager->icon(_iconName, _iconFolder));
+	assert(m_iconManager != nullptr); // API not initialized
+	object::get<aAction>(_actionUID)->setIcon(*m_iconManager->icon(_iconName, _iconFolder));
 }
 
 QString ak::uiAPI::action::getText(
@@ -762,7 +762,7 @@ bool ak::uiAPI::colorStyleSwitch::isCurrentBright(
 void ak::uiAPI::container::addObject(
 	UID												_containerUID,
 	UID												_objectUID
-) { object::get<aTtbContainer>(_containerUID)->addChild(my_objManager->object(_objectUID)); }
+) { object::get<aTtbContainer>(_containerUID)->addChild(m_objManager->object(_objectUID)); }
 
 void ak::uiAPI::container::setEnabled(
 	UID												_containerUID,
@@ -784,8 +784,8 @@ ak::ID ak::uiAPI::contextMenu::addItem(
 	const QString &					_text,
 	contextMenuRole		_role
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	aObject * obj = my_objManager->object(_widgetUID);
+	assert(m_objManager != nullptr); // API not initialized
+	aObject * obj = m_objManager->object(_widgetUID);
 	aContextMenuItem * newItem = new aContextMenuItem(_text, _role);
 
 	switch (obj->type())
@@ -804,8 +804,8 @@ ak::ID ak::uiAPI::contextMenu::addItem(
 	const QString &					_text,
 	contextMenuRole		_role
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	aObject * obj = my_objManager->object(_widgetUID);
+	assert(m_objManager != nullptr); // API not initialized
+	aObject * obj = m_objManager->object(_widgetUID);
 	assert(obj != nullptr); // Invalid UID
 	aContextMenuItem * newItem = new aContextMenuItem(_icon, _text, _role);
 
@@ -826,11 +826,11 @@ ak::ID ak::uiAPI::contextMenu::addItem(
 	const QString &					_iconSize,
 	contextMenuRole		_role
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
-	aObject * obj = my_objManager->object(_widgetUID);
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
+	aObject * obj = m_objManager->object(_widgetUID);
 	assert(obj != nullptr); // Invalid UID
-	aContextMenuItem * newItem = new aContextMenuItem(*my_iconManager->icon(_iconName, _iconSize), _text, _role);
+	aContextMenuItem * newItem = new aContextMenuItem(*m_iconManager->icon(_iconName, _iconSize), _text, _role);
 
 	switch (obj->type())
 	{
@@ -845,8 +845,8 @@ ak::ID ak::uiAPI::contextMenu::addItem(
 void ak::uiAPI::contextMenu::addSeparator(
 	UID							_widgetUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	aObject * obj = my_objManager->object(_widgetUID);
+	assert(m_objManager != nullptr); // API not initialized
+	aObject * obj = m_objManager->object(_widgetUID);
 	assert(obj != nullptr); // Invalid UID
 	switch (obj->type())
 	{
@@ -860,8 +860,8 @@ void ak::uiAPI::contextMenu::addSeparator(
 void ak::uiAPI::contextMenu::clear(
 	UID							_widgetUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	aObject * obj = my_objManager->object(_widgetUID);
+	assert(m_objManager != nullptr); // API not initialized
+	aObject * obj = m_objManager->object(_widgetUID);
 	assert(obj != nullptr); // Invalid UID
 
 	switch (obj->type())
@@ -981,7 +981,7 @@ bool ak::uiAPI::dockWatcher::isWatchEnabled(
 ak::UID ak::uiAPI::file::load(
 	const QString &										_filePath
 ) {
-	aFile * f = my_apiManager.getFile(ak::invalidUID);
+	aFile * f = m_apiManager.getFile(ak::invalidUID);
 	f->load(_filePath);
 	return f->uid();
 }
@@ -990,7 +990,7 @@ void ak::uiAPI::file::load(
 	UID												_fileUid,
 	const QString &										_filePath
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	f->load(_filePath);
 }
 
@@ -998,7 +998,7 @@ void ak::uiAPI::file::save(
 	UID												_fileUid,
 	bool												_append
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	f->save(_append);
 }
 
@@ -1007,7 +1007,7 @@ void ak::uiAPI::file::save(
 	const QString &										_filePath,
 	bool												_append
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	f->save(_filePath, _append);
 }
 
@@ -1015,7 +1015,7 @@ void ak::uiAPI::file::setPath(
 	UID												_fileUid,
 	const QString &										_path
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	f->setPath(_path);
 }
 
@@ -1023,7 +1023,7 @@ void ak::uiAPI::file::setLines(
 	UID												_fileUid,
 	const QStringList &									_lines
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	f->setLines(_lines);
 }
 
@@ -1031,7 +1031,7 @@ void ak::uiAPI::file::addLine(
 	UID												_fileUid,
 	const QString &										_line
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	QStringList lst = _line.split("\n");
 	for (QString str : lst) { str.append('\n'); f->addLine(str); }
 }
@@ -1040,49 +1040,49 @@ void ak::uiAPI::file::addLine(
 	UID												_fileUid,
 	const QStringList &									_lines
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	f->addLine(_lines);
 }
 
 QString ak::uiAPI::file::name(
 	UID												_fileUid
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	return f->name();
 }
 
 QString ak::uiAPI::file::path(
 	UID												_fileUid
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	return f->path();
 }
 
 QString ak::uiAPI::file::extension(
 	UID												_fileUid
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	return f->extension();
 }
 
 QStringList ak::uiAPI::file::lines(
 	UID												_fileUid
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	return f->lines();
 }
 
 int ak::uiAPI::file::linesCount(
 	UID												_fileUid
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	return f->linesCount();
 }
 
 bool ak::uiAPI::file::hasChanged(
 	UID												_fileUid
 ) {
-	aFile * f = my_apiManager.getExistingFile(_fileUid);
+	aFile * f = m_apiManager.getExistingFile(_fileUid);
 	return f->hasChanged();
 }
 
@@ -1223,35 +1223,35 @@ void ak::uiAPI::object::destroy(
 	UID												_objectUID,
 	bool												_ignoreIfObjectHasChildObjects
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	my_objManager->destroy(_objectUID, _ignoreIfObjectHasChildObjects);
+	assert(m_objManager != nullptr); // API not initialized
+	m_objManager->destroy(_objectUID, _ignoreIfObjectHasChildObjects);
 }
 
 void ak::uiAPI::object::setAlias(
 	UID												_objectUID,
 	const QString &										_alias
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	aObject * actualObject = my_objManager->object(_objectUID);
+	assert(m_objManager != nullptr); // API not initialized
+	aObject * actualObject = m_objManager->object(_objectUID);
 	assert(actualObject != nullptr); // That should not happen
-	my_objManager->removeAlias(actualObject->alias());	// Delete last alias
+	m_objManager->removeAlias(actualObject->alias());	// Delete last alias
 	actualObject->setAlias(_alias);
-	if (_alias.length() != 0) { my_objManager->addAlias(_alias, _objectUID); }
+	if (_alias.length() != 0) { m_objManager->addAlias(_alias, _objectUID); }
 }
 
 void ak::uiAPI::object::setObjectUniqueName(
 	UID												_objectUID,
 	const QString &										_name
-) { my_objManager->setObjectUniqueName(_objectUID, _name); }
+) { m_objManager->setObjectUniqueName(_objectUID, _name); }
 
 QString ak::uiAPI::object::getObjectUniqueName(
 	UID												_objectUID
-) { return my_objManager->object(_objectUID)->uniqueName(); }
+) { return m_objManager->object(_objectUID)->uniqueName(); }
 
 ak::UID ak::uiAPI::object::getUidFromObjectUniqueName(
 	const QString &										_name
 ) { 
-	ak::aObject *object = my_objManager->object(_name);
+	ak::aObject *object = m_objManager->object(_name);
 	if (object == nullptr) return ak::invalidUID;
 
 	return object->uid(); 
@@ -1261,8 +1261,8 @@ void ak::uiAPI::object::setToolTip(
 	UID													_objectUID,
 	const QString &										_toolTip
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	auto obj{ my_objManager->object(_objectUID) };
+	assert(m_objManager != nullptr); // API not initialized
+	auto obj{ m_objManager->object(_objectUID) };
 	switch (obj->type())
 	{
 	case otToolButton: akCastObject<aToolButtonWidget>(obj)->SetToolTip(_toolTip); return;
@@ -1276,8 +1276,8 @@ void ak::uiAPI::object::setEnabled(
 	UID													_objectUID,
 	bool												_enabled
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	auto obj{ my_objManager->object(_objectUID) };
+	assert(m_objManager != nullptr); // API not initialized
+	auto obj{ m_objManager->object(_objectUID) };
 	switch (obj->type())
 	{
 	case otAction: akCastObject<aAction>(obj)->setEnabled(_enabled); return;
@@ -1314,8 +1314,8 @@ void ak::uiAPI::object::setEnabled(
 bool ak::uiAPI::object::getIsEnabled(
 	UID													_objectUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	auto obj{ my_objManager->object(_objectUID) };
+	assert(m_objManager != nullptr); // API not initialized
+	auto obj{ m_objManager->object(_objectUID) };
 	switch (obj->type())
 	{
 	case otAction: return akCastObject<aAction>(obj)->isEnabled();
@@ -1352,15 +1352,15 @@ bool ak::uiAPI::object::getIsEnabled(
 bool ak::uiAPI::object::exists(
 	UID													_objectUID
 ) {
-	assert(my_objManager != nullptr); // API is not initialized
-	return my_objManager->objectExists(_objectUID);
+	assert(m_objManager != nullptr); // API is not initialized
+	return m_objManager->objectExists(_objectUID);
 }
 
 ak::objectType ak::uiAPI::object::type(
 	UID													_objectUID
 ) {
-	assert(my_objManager != nullptr); // API is not initialized
-	return my_objManager->object(_objectUID)->type();
+	assert(m_objManager != nullptr); // API is not initialized
+	return m_objManager->object(_objectUID)->type();
 }
 
 // Object
@@ -1406,10 +1406,10 @@ void ak::uiAPI::optionsDialog::setGroupStateIcons(
 	const QString &									_groupCollapsedIconName,
 	const QString &									_groupCollapsedIconPath
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	object::get<aOptionsDialog>(_dialogUID)->setGroupStateIcons(
-		*my_iconManager->icon(_groupExpandedIconName, _groupExpandedIconPath),
-		*my_iconManager->icon(_groupCollapsedIconName, _groupExpandedIconPath));
+		*m_iconManager->icon(_groupExpandedIconName, _groupExpandedIconPath),
+		*m_iconManager->icon(_groupCollapsedIconName, _groupExpandedIconPath));
 }
 
 // Add item to default group
@@ -1546,8 +1546,8 @@ ak::dialogResult ak::uiAPI::promptDialog::show(
 	const QString &				_iconName,
 	const QString &				_iconPath
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
-	return show(_message, _title, _type, *my_iconManager->icon(_iconName, _iconPath));
+	assert(m_iconManager != nullptr); // API not initialized
+	return show(_message, _title, _type, *m_iconManager->icon(_iconName, _iconPath));
 }
 
 ak::dialogResult ak::uiAPI::promptDialog::show(
@@ -1556,9 +1556,9 @@ ak::dialogResult ak::uiAPI::promptDialog::show(
 	promptType					_type,
 	const QIcon &				_icon
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPromptDialog dialog(_message, _title, _type, _icon);
-	auto cs{ my_objManager->getCurrentColorStyle() };
+	auto cs{ m_objManager->getCurrentColorStyle() };
 	if (cs != nullptr) { dialog.setColorStyle(cs); }
 	return dialog.showDialog();
 }
@@ -1568,9 +1568,9 @@ ak::dialogResult ak::uiAPI::promptDialog::show(
 	const QString &				_title,
 	promptType					_type
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPromptDialog dialog(_message, _title, _type);
-	auto cs{ my_objManager->getCurrentColorStyle() };
+	auto cs{ m_objManager->getCurrentColorStyle() };
 	if (cs != nullptr) { dialog.setColorStyle(cs); }
 	return dialog.showDialog();
 }
@@ -1590,9 +1590,9 @@ void ak::uiAPI::propertyGrid::addGroup(
 	UID											_propertyGridUID,
 	const QString &									_groupName
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->addGroup(_groupName);
 }
@@ -1602,9 +1602,9 @@ void ak::uiAPI::propertyGrid::addGroup(
 	const QColor &									_color,
 	const QString &									_groupName
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->addGroup(_color, _groupName);
 }
@@ -1615,9 +1615,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	bool											_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
 }
@@ -1628,9 +1628,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	const aColor &								_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
 }
@@ -1641,9 +1641,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	double											_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
 }
@@ -1654,9 +1654,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	int												_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
 }
@@ -1668,9 +1668,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const std::vector<QString> &					_possibleSelection,
 	const QString &									_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _possibleSelection, _value);
 }
@@ -1681,9 +1681,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	const char *									_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, QString(_value));
 }
@@ -1694,9 +1694,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	const QString &									_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _itemName, _value);
 }
@@ -1708,9 +1708,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	bool											_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
@@ -1722,9 +1722,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	const aColor &								_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
@@ -1736,9 +1736,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	double											_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
@@ -1750,9 +1750,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	int												_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
@@ -1765,9 +1765,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const std::vector<QString> &					_possibleSelection,
 	const QString &									_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _possibleSelection, _value);
 }
@@ -1779,9 +1779,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	const char *									_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, QString(_value));
 }
@@ -1793,9 +1793,9 @@ ak::ID ak::uiAPI::propertyGrid::addItem(
 	const QString &									_itemName,
 	const QString &									_value
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->addItem(_isMultipleValues, _groupName, _itemName, _value);
 }
@@ -1804,9 +1804,9 @@ void ak::uiAPI::propertyGrid::clear(
 	UID											_propertyGridUID,
 	bool											_keepGroups
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->clear(_keepGroups);
 }
@@ -1815,9 +1815,9 @@ bool ak::uiAPI::propertyGrid::getItemIsReadOnly(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->itemIsReadOnly(_itemID);
 }
@@ -1826,9 +1826,9 @@ QString ak::uiAPI::propertyGrid::getItemGroup(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemGroup(_itemID);
 }
@@ -1837,9 +1837,9 @@ bool ak::uiAPI::propertyGrid::getItemIsMultipleValues(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemIsMultipleValues(_itemID);
 }
@@ -1848,9 +1848,9 @@ QString ak::uiAPI::propertyGrid::getItemName(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemName(_itemID);
 }
@@ -1859,9 +1859,9 @@ std::vector<QString> ak::uiAPI::propertyGrid::getItemPossibleSelection(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemPossibleSelection(_itemID);
 }
@@ -1870,9 +1870,9 @@ bool ak::uiAPI::propertyGrid::getItemValueBool(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueBool(_itemID);
 }
@@ -1881,9 +1881,9 @@ ak::aColor ak::uiAPI::propertyGrid::getItemValueColor(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueColor(_itemID);
 }
@@ -1892,9 +1892,9 @@ double ak::uiAPI::propertyGrid::getItemValueDouble(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueDouble(_itemID);
 }
@@ -1903,9 +1903,9 @@ int ak::uiAPI::propertyGrid::getItemValueInteger(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueInteger(_itemID);
 }
@@ -1914,9 +1914,9 @@ QString ak::uiAPI::propertyGrid::getItemValueSelection(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueSelection(_itemID);
 }
@@ -1925,9 +1925,9 @@ QString ak::uiAPI::propertyGrid::getItemValueString(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueString(_itemID);
 }
@@ -1936,9 +1936,9 @@ ak::valueType ak::uiAPI::propertyGrid::getItemValueType(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->getItemValueType(_itemID);
 }
@@ -1948,9 +1948,9 @@ void ak::uiAPI::propertyGrid::setItemIsReadOnly(
 	ID											_itemID,
 	bool											_readOnly
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->setItemReadOnly(_itemID, _readOnly);
 }
@@ -1960,9 +1960,9 @@ void ak::uiAPI::propertyGrid::setGroupStateIcons(
 	const QIcon &									_groupExpanded,
 	const QIcon &									_groupCollapsed
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->setGroupStateIcons(_groupExpanded, _groupCollapsed);
 }
@@ -1974,13 +1974,13 @@ void ak::uiAPI::propertyGrid::setGroupStateIcons(
 	const QString &									_groupCollapsedIconName,
 	const QString &									_groupCollapsedIconSize
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
-	actualPropertyGrid->setGroupStateIcons(*my_iconManager->icon(_groupExpandedIconName, _groupExpandedIconSize),
-		*my_iconManager->icon(_groupCollapsedIconName, _groupCollapsedIconSize));
+	actualPropertyGrid->setGroupStateIcons(*m_iconManager->icon(_groupExpandedIconName, _groupExpandedIconSize),
+		*m_iconManager->icon(_groupCollapsedIconName, _groupCollapsedIconSize));
 }
 
 void ak::uiAPI::propertyGrid::resetItemAsError(
@@ -1988,10 +1988,10 @@ void ak::uiAPI::propertyGrid::resetItemAsError(
 	ID											_itemID,
 	const QString &									_valueToReset
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->resetItemAsError(_itemID, _valueToReset);
 }
@@ -2001,10 +2001,10 @@ void ak::uiAPI::propertyGrid::resetItemAsError(
 	ID											_itemID,
 	int												_valueToReset
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->resetItemAsError(_itemID, _valueToReset);
 }
@@ -2014,10 +2014,10 @@ void ak::uiAPI::propertyGrid::resetItemAsError(
 	ID											_itemID,
 	double											_valueToReset
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->resetItemAsError(_itemID, _valueToReset);
 }
@@ -2026,10 +2026,10 @@ void ak::uiAPI::propertyGrid::showItemAsError(
 	UID											_propertyGridUID,
 	ID											_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->showItemAsError(_itemID);
 }
@@ -2038,10 +2038,10 @@ void ak::uiAPI::propertyGrid::setEnabled(
 	UID											_propertyGridUID,
 	bool											_enabled
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	actualPropertyGrid->setEnabled(_enabled);
 }
@@ -2049,10 +2049,10 @@ void ak::uiAPI::propertyGrid::setEnabled(
 bool ak::uiAPI::propertyGrid::isEnabled(
 	UID											_propertyGridUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aPropertyGridWidget * actualPropertyGrid = nullptr;
-	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(my_objManager->object(_propertyGridUID));
+	actualPropertyGrid = dynamic_cast<aPropertyGridWidget *>(m_objManager->object(_propertyGridUID));
 	assert(actualPropertyGrid != nullptr); // Invalid object type
 	return actualPropertyGrid->isEnabled();
 }
@@ -2067,10 +2067,10 @@ void ak::uiAPI::specialTabBar::clearColors(
 	UID			_specialTabBarUID,
 	bool			_repaint
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 
 	aSpecialTabBar * actualTabBar = nullptr;
-	actualTabBar = dynamic_cast<aSpecialTabBar *>(my_objManager->object(_specialTabBarUID));
+	actualTabBar = dynamic_cast<aSpecialTabBar *>(m_objManager->object(_specialTabBarUID));
 	assert(actualTabBar != nullptr); // Invalid object type
 
 	actualTabBar->clearColors(_repaint);
@@ -2081,10 +2081,10 @@ void ak::uiAPI::specialTabBar::clearColor(
 	int				_index,
 	bool			_repaint
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 
 	aSpecialTabBar * actualTabBar = nullptr;
-	actualTabBar = dynamic_cast<aSpecialTabBar *>(my_objManager->object(_specialTabBarUID));
+	actualTabBar = dynamic_cast<aSpecialTabBar *>(m_objManager->object(_specialTabBarUID));
 	assert(actualTabBar != nullptr); // Invalid object type
 
 	actualTabBar->clearColor(_index, _repaint);
@@ -2096,10 +2096,10 @@ void ak::uiAPI::specialTabBar::addColor(
 	aColor		_color,
 	bool			_repaint
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 
 	aSpecialTabBar * actualTabBar = nullptr;
-	actualTabBar = dynamic_cast<aSpecialTabBar *>(my_objManager->object(_specialTabBarUID));
+	actualTabBar = dynamic_cast<aSpecialTabBar *>(m_objManager->object(_specialTabBarUID));
 	assert(actualTabBar != nullptr); // Invalid object type
 
 	actualTabBar->addColor(_index, _color, _repaint);
@@ -2109,10 +2109,10 @@ void ak::uiAPI::specialTabBar::setRepaintBlocked(
 	UID			_specialTabBarUID,
 	bool			_blocked
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 
 	aSpecialTabBar * actualTabBar = nullptr;
-	actualTabBar = dynamic_cast<aSpecialTabBar *>(my_objManager->object(_specialTabBarUID));
+	actualTabBar = dynamic_cast<aSpecialTabBar *>(m_objManager->object(_specialTabBarUID));
 	assert(actualTabBar != nullptr); // Invalid object type
 
 	actualTabBar->setRepaintBlocked(_blocked);
@@ -2137,8 +2137,8 @@ ak::ID ak::uiAPI::tabWidget::addTab(
 	const QString &		_iconName,
 	const QString &		_iconFolder
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
-	return object::get<aTabWidget>(_tabWidgetUID)->addTab(object::get<aWidget>(_widgetUID)->widget(), *my_iconManager->icon(_iconName, _iconFolder), _title);
+	assert(m_iconManager != nullptr); // API not initialized
+	return object::get<aTabWidget>(_tabWidgetUID)->addTab(object::get<aWidget>(_widgetUID)->widget(), *m_iconManager->icon(_iconName, _iconFolder), _title);
 }
 
 ak::ID ak::uiAPI::tabWidget::addTab(
@@ -2163,8 +2163,8 @@ ak::ID ak::uiAPI::tabWidget::addTab(
 	const QString &		_iconName,
 	const QString &		_iconFolder
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
-	return object::get<aTabWidget>(_tabWidgetUID)->addTab(_widget, *my_iconManager->icon(_iconName, _iconFolder), _title);
+	assert(m_iconManager != nullptr); // API not initialized
+	return object::get<aTabWidget>(_tabWidgetUID)->addTab(_widget, *m_iconManager->icon(_iconName, _iconFolder), _title);
 }
 
 ak::ID ak::uiAPI::tabWidget::addTab(
@@ -2268,9 +2268,9 @@ void ak::uiAPI::textEdit::appendText(
 	UID				_textEditUID,
 	const QString &		_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTextEditWidget * actualTextEdit = nullptr;
-	actualTextEdit = dynamic_cast<aTextEditWidget *>(my_objManager->object(_textEditUID));
+	actualTextEdit = dynamic_cast<aTextEditWidget *>(m_objManager->object(_textEditUID));
 	assert(actualTextEdit != nullptr); // Invalid object type
 	actualTextEdit->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 	return actualTextEdit->insertPlainText(_text);
@@ -2279,9 +2279,9 @@ void ak::uiAPI::textEdit::appendText(
 void ak::uiAPI::textEdit::clear(
 	UID				_textEditUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTextEditWidget * actualTextEdit = nullptr;
-	actualTextEdit = dynamic_cast<aTextEditWidget *>(my_objManager->object(_textEditUID));
+	actualTextEdit = dynamic_cast<aTextEditWidget *>(m_objManager->object(_textEditUID));
 	assert(actualTextEdit != nullptr); // Invalid object type
 	return actualTextEdit->clear();
 }
@@ -2290,9 +2290,9 @@ void ak::uiAPI::textEdit::setAutoScrollToBottomEnabled(
 	UID				_textEditUID,
 	bool				_enabled
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTextEditWidget * actualTextEdit = nullptr;
-	actualTextEdit = dynamic_cast<aTextEditWidget *>(my_objManager->object(_textEditUID));
+	actualTextEdit = dynamic_cast<aTextEditWidget *>(m_objManager->object(_textEditUID));
 	assert(actualTextEdit != nullptr); // Invalid object type
 	return actualTextEdit->setAutoScrollToBottom(_enabled);
 }
@@ -2301,9 +2301,9 @@ void ak::uiAPI::textEdit::setReadOnly(
 	UID				_textEditUID,
 	bool				_readOnly
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTextEditWidget * actualTextEdit = nullptr;
-	actualTextEdit = dynamic_cast<aTextEditWidget *>(my_objManager->object(_textEditUID));
+	actualTextEdit = dynamic_cast<aTextEditWidget *>(m_objManager->object(_textEditUID));
 	assert(actualTextEdit != nullptr); // Invalid object type
 	actualTextEdit->setReadOnly(_readOnly);
 }
@@ -2312,9 +2312,9 @@ void ak::uiAPI::textEdit::setText(
 	UID				_textEditUID,
 	const QString &		_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTextEditWidget * actualTextEdit = nullptr;
-	actualTextEdit = dynamic_cast<aTextEditWidget *>(my_objManager->object(_textEditUID));
+	actualTextEdit = dynamic_cast<aTextEditWidget *>(m_objManager->object(_textEditUID));
 	assert(actualTextEdit != nullptr); // Invalid object type
 	return actualTextEdit->setPlainText(_text);
 }
@@ -2328,9 +2328,9 @@ void ak::uiAPI::textEdit::setText(
 int ak::uiAPI::timer::getInterval(
 	UID							_timerUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTimer * actualTimer = nullptr;
-	actualTimer = dynamic_cast<aTimer *>(my_objManager->object(_timerUID));
+	actualTimer = dynamic_cast<aTimer *>(m_objManager->object(_timerUID));
 	assert(actualTimer != nullptr); // Invalid object type
 	return actualTimer->interval();
 }
@@ -2339,9 +2339,9 @@ void ak::uiAPI::timer::setInterval(
 	UID							_timerUID,
 	int								_interval
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTimer * actualTimer = nullptr;
-	actualTimer = dynamic_cast<aTimer *>(my_objManager->object(_timerUID));
+	actualTimer = dynamic_cast<aTimer *>(m_objManager->object(_timerUID));
 	assert(actualTimer != nullptr); // Invalid object type
 	actualTimer->setInterval(_interval);
 }
@@ -2349,9 +2349,9 @@ void ak::uiAPI::timer::setInterval(
 void ak::uiAPI::timer::shoot(
 	UID							_timerUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTimer * actualTimer = nullptr;
-	actualTimer = dynamic_cast<aTimer *>(my_objManager->object(_timerUID));
+	actualTimer = dynamic_cast<aTimer *>(m_objManager->object(_timerUID));
 	assert(actualTimer != nullptr); // Invalid object type
 	actualTimer->setSingleShot(true);
 	actualTimer->start();
@@ -2361,9 +2361,9 @@ void ak::uiAPI::timer::shoot(
 	UID							_timerUID,
 	int								_interval
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTimer * actualTimer = nullptr;
-	actualTimer = dynamic_cast<aTimer *>(my_objManager->object(_timerUID));
+	actualTimer = dynamic_cast<aTimer *>(m_objManager->object(_timerUID));
 	assert(actualTimer != nullptr); // Invalid object type
 	actualTimer->setInterval(_interval);
 	actualTimer->setSingleShot(true);
@@ -2373,9 +2373,9 @@ void ak::uiAPI::timer::shoot(
 void ak::uiAPI::timer::start(
 	UID							_timerUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTimer * actualTimer = nullptr;
-	actualTimer = dynamic_cast<aTimer *>(my_objManager->object(_timerUID));
+	actualTimer = dynamic_cast<aTimer *>(m_objManager->object(_timerUID));
 	assert(actualTimer != nullptr); // Invalid object type
 	actualTimer->setSingleShot(false);
 	actualTimer->start();
@@ -2385,9 +2385,9 @@ void ak::uiAPI::timer::start(
 	UID							_timerUID,
 	int								_interval
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTimer * actualTimer = nullptr;
-	actualTimer = dynamic_cast<aTimer *>(my_objManager->object(_timerUID));
+	actualTimer = dynamic_cast<aTimer *>(m_objManager->object(_timerUID));
 	assert(actualTimer != nullptr); // Invalid object type
 	actualTimer->setInterval(_interval);
 	actualTimer->setSingleShot(false);
@@ -2397,9 +2397,9 @@ void ak::uiAPI::timer::start(
 void ak::uiAPI::timer::stop(
 	UID							_timerUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aTimer * actualTimer = nullptr;
-	actualTimer = dynamic_cast<aTimer *>(my_objManager->object(_timerUID));
+	actualTimer = dynamic_cast<aTimer *>(m_objManager->object(_timerUID));
 	assert(actualTimer != nullptr); // Invalid object type
 	actualTimer->stop();
 }
@@ -2413,9 +2413,9 @@ void ak::uiAPI::timer::stop(
 bool ak::uiAPI::toolButton::getIsEnabled(
 	UID							_toolButtonUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	return actualToolButton->getAction()->isEnabled();
 }
@@ -2423,9 +2423,9 @@ bool ak::uiAPI::toolButton::getIsEnabled(
 QString ak::uiAPI::toolButton::getText(
 	UID							_toolButtonUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	return actualToolButton->getAction()->text();
 }
@@ -2433,9 +2433,9 @@ QString ak::uiAPI::toolButton::getText(
 QString ak::uiAPI::toolButton::getToolTip(
 	UID							_toolButtonUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	return actualToolButton->ToolTip();
 }
@@ -2444,9 +2444,9 @@ void ak::uiAPI::toolButton::setEnabled(
 	UID							_toolButtonUID,
 	bool							_enabled
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	actualToolButton->getAction()->setEnabled(_enabled);
 }
@@ -2455,9 +2455,9 @@ void ak::uiAPI::toolButton::setText(
 	UID							_toolButtonUID,
 	const QString &					_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	actualToolButton->getAction()->setText(_text);
 }
@@ -2466,9 +2466,9 @@ void ak::uiAPI::toolButton::setToolTip(
 	UID							_toolButtonUID,
 	const QString &					_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	actualToolButton->SetToolTip(_text);
 }
@@ -2477,9 +2477,9 @@ void ak::uiAPI::toolButton::setIcon(
 	UID							_toolButtonUID,
 	const QIcon &					_icon
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	actualToolButton->getAction()->setIcon(_icon);
 }
@@ -2489,21 +2489,21 @@ void ak::uiAPI::toolButton::setIcon(
 	const QString &					_iconName,
 	const QString &					_iconFolder
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
-	actualToolButton->getAction()->setIcon(*my_iconManager->icon(_iconName, _iconFolder));
+	actualToolButton->getAction()->setIcon(*m_iconManager->icon(_iconName, _iconFolder));
 }
 
 ak::ID ak::uiAPI::toolButton::addMenuItem(
 	UID							_toolButtonUID,
 	const QString &					_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	aContextMenuItem * itm = new aContextMenuItem(_text, cmrNone);
 	return actualToolButton->addMenuItem(itm);
@@ -2514,9 +2514,9 @@ ak::ID ak::uiAPI::toolButton::addMenuItem(
 	const QIcon &					_icon,
 	const QString &					_text
 ) {
-	assert(my_objManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	aContextMenuItem * itm = new aContextMenuItem(_icon ,_text, cmrNone);
 	return actualToolButton->addMenuItem(itm);
@@ -2528,22 +2528,22 @@ ak::ID ak::uiAPI::toolButton::addMenuItem(
 	const QString &					_iconName,
 	const QString &					_iconFolder
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
-	aContextMenuItem * itm = new aContextMenuItem(*my_iconManager->icon(_iconName, _iconFolder), _text, cmrNone);
+	aContextMenuItem * itm = new aContextMenuItem(*m_iconManager->icon(_iconName, _iconFolder), _text, cmrNone);
 	return actualToolButton->addMenuItem(itm);
 }
 
 void ak::uiAPI::toolButton::addMenuSeperator(
 	UID							_toolButtonUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	actualToolButton->addMenuSeperator();
 }
@@ -2551,10 +2551,10 @@ void ak::uiAPI::toolButton::addMenuSeperator(
 void ak::uiAPI::toolButton::clearMenu(
 	UID							_toolButtonUID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	actualToolButton->clearMenu();
 }
@@ -2564,10 +2564,10 @@ void ak::uiAPI::toolButton::setMenuItemChecked(
 	ID							_itemID,
 	bool							_checked
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	actualToolButton->setMenuItemChecked(_itemID, _checked);
 }
@@ -2576,10 +2576,10 @@ void ak::uiAPI::toolButton::setMenuItemNotCheckable(
 	UID							_toolButtonUID,
 	ID							_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	actualToolButton->setMenuItemNotCheckable(_itemID);
 }
@@ -2588,10 +2588,10 @@ QString ak::uiAPI::toolButton::getMenuItemText(
 	UID							_toolButtonUID,
 	ID							_itemID
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	aToolButtonWidget * actualToolButton = nullptr;
-	actualToolButton = dynamic_cast<aToolButtonWidget *>(my_objManager->object(_toolButtonUID));
+	actualToolButton = dynamic_cast<aToolButtonWidget *>(m_objManager->object(_toolButtonUID));
 	assert(actualToolButton != nullptr); // Invalid object type
 	return actualToolButton->getMenuItemText(_itemID);
 }
@@ -2619,7 +2619,7 @@ ak::ID ak::uiAPI::tree::addItem(
 	textAlignment				_textAlignment
 ) {
 	auto actualTree = object::get<aTreeWidget>(_treeUID);
-	return actualTree->add(_parentId, _text, _textAlignment, *my_iconManager->icon(_iconName, _iconSize));
+	return actualTree->add(_parentId, _text, _textAlignment, *m_iconManager->icon(_iconName, _iconSize));
 }
 
 ak::ID ak::uiAPI::tree::addItem(
@@ -2640,9 +2640,9 @@ ak::ID ak::uiAPI::tree::addItem(
 	const QString &				_iconSize,
 	textAlignment				_textAlignment
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	auto actualTree = object::get<aTreeWidget>(_treeUID);
-	return actualTree->add(_cmd, _delimiter, _textAlignment, *my_iconManager->icon(_iconName, _iconSize));
+	return actualTree->add(_cmd, _delimiter, _textAlignment, *m_iconManager->icon(_iconName, _iconSize));
 }
 
 void ak::uiAPI::tree::clear(
@@ -2823,9 +2823,9 @@ void ak::uiAPI::tree::setItemIcon(
 	const QString &					_iconName,
 	const QString &					_iconFolder
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
+	assert(m_iconManager != nullptr); // API not initialized
 	auto actualTree = object::get<aTreeWidget>(_treeUID);
-	actualTree->setItemIcon(_itemID, *my_iconManager->icon(_iconName, _iconFolder));
+	actualTree->setItemIcon(_itemID, *m_iconManager->icon(_iconName, _iconFolder));
 }
 
 void ak::uiAPI::tree::setItemEnabled(
@@ -3068,8 +3068,8 @@ void ak::uiAPI::window::setWaitingAnimation(
 	UID												_windowUID,
 	const QString &										_animationName
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
-	object::get<aWindowManager>(_windowUID)->setWaitingAnimation(my_iconManager->movie(_animationName));
+	assert(m_iconManager != nullptr); // API not initialized
+	object::get<aWindowManager>(_windowUID)->setWaitingAnimation(m_iconManager->movie(_animationName));
  }
 
 void ak::uiAPI::window::setCentralWidgetMinimumSize(
@@ -3078,7 +3078,7 @@ void ak::uiAPI::window::setCentralWidgetMinimumSize(
 	int													_height
 ) { object::get<aWindowManager>(_windowUID)->setCentralWidgetMinimumSize(QSize(_width, _height)); }
 
-int ak::uiAPI::window::devicePixelRatio(void) { return my_apiManager.desktop()->devicePixelRatio(); }
+int ak::uiAPI::window::devicePixelRatio(void) { return m_apiManager.desktop()->devicePixelRatio(); }
 
 void ak::uiAPI::window::resize(
 	UID												_windowUID,
@@ -3100,43 +3100,43 @@ QString ak::uiAPI::crypto::hash(
 void ak::uiAPI::creatorDestroyed(
 	UID												_creatorUid
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	my_objManager->creatorDestroyed(_creatorUid);
+	assert(m_objManager != nullptr); // API not initialized
+	m_objManager->creatorDestroyed(_creatorUid);
 }
 
 void ak::uiAPI::addColorStyle(
 	aColorStyle *								_colorStyle,
 	bool												_activate
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	my_objManager->addColorStyle(_colorStyle, _activate);
+	assert(m_objManager != nullptr); // API not initialized
+	m_objManager->addColorStyle(_colorStyle, _activate);
 }
 
 void ak::uiAPI::setColorStyle(
 	const QString &				_colorStyleName
 ) {
-	assert(my_objManager != nullptr); // API not initialized
-	my_objManager->setColorStyle(_colorStyleName);
+	assert(m_objManager != nullptr); // API not initialized
+	m_objManager->setColorStyle(_colorStyleName);
 }
 
 ak::aColorStyle *  ak::uiAPI::getCurrentColorStyle(void) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->getCurrentColorStyle();
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->getCurrentColorStyle();
 }
 
 QString ak::uiAPI::getCurrentColorStyleName(void) {
-	assert(my_objManager != nullptr); // API not initialized
-	return my_objManager->getCurrentColorStyleName();
+	assert(m_objManager != nullptr); // API not initialized
+	return m_objManager->getCurrentColorStyleName();
 }
 
 void ak::uiAPI::setDefaultDarkColorStyle() {
-	assert(my_objManager != nullptr); // API not initialized
-	my_objManager->setDefaultDarkColorStyle();
+	assert(m_objManager != nullptr); // API not initialized
+	m_objManager->setDefaultDarkColorStyle();
 }
 
 void ak::uiAPI::setDefaultColorStyle() {
-	assert(my_objManager != nullptr); // API not initialized
-	my_objManager->setDefaultColorStyle();
+	assert(m_objManager != nullptr); // API not initialized
+	m_objManager->setDefaultColorStyle();
 }
 
 // ###############################################################################################################################################
@@ -3144,41 +3144,41 @@ void ak::uiAPI::setDefaultColorStyle() {
 void ak::uiAPI::addIconSearchPath(
 	const QString &										_path
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
-	assert(my_objManager != nullptr); // API not initialized
-	my_iconManager->addDirectory(_path);
-	my_objManager->setIconSearchDirectories(my_iconManager->searchDirectories());
+	assert(m_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	m_iconManager->addDirectory(_path);
+	m_objManager->setIconSearchDirectories(m_iconManager->searchDirectories());
 }
 
 void ak::uiAPI::removeIconSearchPath(
 	const QString &										_path
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
-	assert(my_objManager != nullptr); // API not initialized
-	my_iconManager->removeDirectory(_path);
-	my_objManager->setIconSearchDirectories(my_iconManager->searchDirectories());
+	assert(m_iconManager != nullptr); // API not initialized
+	assert(m_objManager != nullptr); // API not initialized
+	m_iconManager->removeDirectory(_path);
+	m_objManager->setIconSearchDirectories(m_iconManager->searchDirectories());
 }
 
 ak::UID ak::uiAPI::createUid(void) {
-	assert(my_uidManager != nullptr); // API not initialized
-	return my_uidManager->getId();
+	assert(m_uidManager != nullptr); // API not initialized
+	return m_uidManager->getId();
 } 
 
-ak::aMessenger *ak::uiAPI::getMessenger(void) { return my_messenger; }
+ak::aMessenger *ak::uiAPI::getMessenger(void) { return m_messenger; }
 
 const QIcon & ak::uiAPI::getIcon(
 	const QString &											_name,
 	const QString &											_size
 ) {
-	assert(my_iconManager != nullptr); // API not initialized
-	return *my_iconManager->icon(_name, _size);
+	assert(m_iconManager != nullptr); // API not initialized
+	return *m_iconManager->icon(_name, _size);
 }
 
 // ###############################################################################################################################################
 
 // special
 
-int ak::uiAPI::exec(void) { return my_apiManager.exec(); }
+int ak::uiAPI::exec(void) { return m_apiManager.exec(); }
 
 QString ak::uiAPI::special::toString(
 	eventType									_type

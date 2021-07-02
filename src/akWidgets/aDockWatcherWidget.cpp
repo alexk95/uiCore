@@ -18,20 +18,20 @@
 #include <qmenu.h>
 
 ak::aDockWatcherWidget::aDockWatcherWidget(const QString & _title)
-	: my_isEnabled(true)
+	: m_isEnabled(true)
 {
 	setText(_title);
-	my_menu = new QMenu;
-	setMenu(my_menu);
+	m_menu = new QMenu;
+	setMenu(m_menu);
 }
 
 ak::aDockWatcherWidget::aDockWatcherWidget(const QIcon & _icon, const QString & _title)
-	: my_isEnabled(true)
+	: m_isEnabled(true)
 {
 	setIcon(_icon);
 	setText(_title);
-	my_menu = new QMenu;
-	setMenu(my_menu);
+	m_menu = new QMenu;
+	setMenu(m_menu);
 	connect(this, &QToolButton::clicked, this, &aDockWatcherWidget::slotClicked);
 }
 
@@ -47,74 +47,74 @@ void ak::aDockWatcherWidget::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
+	m_colorStyle = _colorStyle;
 
-	QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 		cafBackgroundColorControls, "QToolButton{", "}"));
 
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorFocus |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorFocus |
 		cafBackgroundColorFocus, "QToolButton:hover:!pressed{", "}"));
 
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorSelected |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorSelected |
 		cafBackgroundColorSelected, "QToolButton:pressed{", "}"));
 
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorHeader |
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorHeader |
 		cafBackgroundColorHeader | cafBorderColorHeader,
 		"QToolTip{", "border: 1px;}"));
 	setStyleSheet(sheet);
 
-	if (my_menu != nullptr) {
-		sheet = my_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu{", "}");
-		sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu::item{", "}"));
-		sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorFocus | cafBackgroundColorFocus, "QMenu::item:selected{", "}"));
-		sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorSelected | cafBackgroundColorSelected, "QMenu::item:pressed{", "}"));
-		my_menu->setStyleSheet(sheet);
+	if (m_menu != nullptr) {
+		sheet = m_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu{", "}");
+		sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu::item{", "}"));
+		sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorFocus | cafBackgroundColorFocus, "QMenu::item:selected{", "}"));
+		sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorSelected | cafBackgroundColorSelected, "QMenu::item:pressed{", "}"));
+		m_menu->setStyleSheet(sheet);
 	}
 }
 
 // #######################################################################################################
 
 void ak::aDockWatcherWidget::refreshData(void) {
-	for (auto itm : my_dockMap) {
+	for (auto itm : m_dockMap) {
 		itm.second->setChecked(itm.first->isVisible());
 	}
 }
 
 void ak::aDockWatcherWidget::addWatch(QDockWidget * _dock) {
 	auto action = new aContextMenuItem(_dock->windowTitle(), cmrNone);
-	my_menu->addAction(action);
+	m_menu->addAction(action);
 	action->setCheckable(true);
 	action->setChecked(_dock->isVisible());
-	my_dockMap.insert_or_assign(_dock, action);
-	my_actionMap.insert_or_assign(action, _dock);
+	m_dockMap.insert_or_assign(_dock, action);
+	m_actionMap.insert_or_assign(action, _dock);
 
 	connect(_dock, &QDockWidget::visibilityChanged, this, &aDockWatcherWidget::slotVisibilityChanged);
 	connect(action, &QAction::toggled, this, &aDockWatcherWidget::slotMenuItemChanged);
 }
 
 void ak::aDockWatcherWidget::removeWatch(QDockWidget * _dock) {
-	auto itm = my_dockMap.find(_dock);
-	assert(itm != my_dockMap.end());
-	my_actionMap.erase(itm->second);
+	auto itm = m_dockMap.find(_dock);
+	assert(itm != m_dockMap.end());
+	m_actionMap.erase(itm->second);
 	disconnect(_dock, &QDockWidget::visibilityChanged, this, &aDockWatcherWidget::slotVisibilityChanged);
 	disconnect(itm->second, &QAction::toggled, this, &aDockWatcherWidget::slotMenuItemChanged);
-	my_menu->removeAction(itm->second);
+	m_menu->removeAction(itm->second);
 	delete itm->second;
-	my_dockMap.erase(_dock);
+	m_dockMap.erase(_dock);
 }
 
 void ak::aDockWatcherWidget::slotVisibilityChanged(bool _visible) {
-	if (!my_isEnabled) { return; }
+	if (!m_isEnabled) { return; }
 	QDockWidget * actualDock = nullptr;
 	actualDock = dynamic_cast<QDockWidget *>(sender());
 	assert(actualDock != nullptr);	// Sender is not a dock
-	auto itm = my_dockMap.find(actualDock);
-	assert(itm != my_dockMap.end());
+	auto itm = m_dockMap.find(actualDock);
+	assert(itm != m_dockMap.end());
 	itm->second->setChecked(actualDock->isVisible());
 }
 
 void ak::aDockWatcherWidget::slotClicked() {
-	if (my_dockMap.size() > 0) {
+	if (m_dockMap.size() > 0) {
 		showMenu();
 	}
 }
@@ -123,7 +123,7 @@ void ak::aDockWatcherWidget::slotMenuItemChanged() {
 	aContextMenuItem * itm = nullptr;
 	itm = dynamic_cast<aContextMenuItem *>(sender());
 	assert(itm != nullptr);
-	auto d = my_actionMap.find(itm);
-	assert(d != my_actionMap.end());
+	auto d = m_actionMap.find(itm);
+	assert(d != m_actionMap.end());
 	d->second->setVisible(itm->isChecked());
 }

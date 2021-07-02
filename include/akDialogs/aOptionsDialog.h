@@ -217,10 +217,10 @@ namespace ak {
 		// Getter
 
 		//! @brief Will return the tree used in this options dialog
-		aTreeWidget * getTree(void) const { return my_tree; }
+		aTreeWidget * getTree(void) const { return m_tree; }
 
 		//! @brief Will return true if a least one setting has changed
-		bool settingsChanged(void) const { return my_settingsChanged; }
+		bool settingsChanged(void) const { return m_settingsChanged; }
 
 		// ###################################################################################################################################################
 
@@ -243,26 +243,26 @@ namespace ak {
 
 	private:
 
-		QVBoxLayout *							my_mainLayout;
-		QWidget *								my_buttonsWidget;
-		QHBoxLayout *							my_buttonsLayout;
-		QSplitter *								my_centralWidget;
+		QVBoxLayout *							m_mainLayout;
+		QWidget *								m_buttonsWidget;
+		QHBoxLayout *							m_buttonsLayout;
+		QSplitter *								m_centralWidget;
 
-		aPushButtonWidget *						my_btnOk;
-		aPushButtonWidget *						my_btnApply;
-		aPushButtonWidget *						my_btnCancel;
+		aPushButtonWidget *						m_btnOk;
+		aPushButtonWidget *						m_btnApply;
+		aPushButtonWidget *						m_btnCancel;
 
-		aTreeWidget *							my_tree;
-		aPropertyGridWidget *					my_dummy;
-		std::map<ID, aOptionsDialogCategory *>	my_categories;
-		bool									my_settingsChanged;
-		ID										my_currentCategory;
+		aTreeWidget *							m_tree;
+		aPropertyGridWidget *					m_dummy;
+		std::map<ID, aOptionsDialogCategory *>	m_categories;
+		bool									m_settingsChanged;
+		ID										m_currentCategory;
 
-		QIcon									my_iconGroupExpanded;
-		QIcon									my_iconGroupCollapsed;
-		bool									my_groupIconsSet;
+		QIcon									m_iconGroupExpanded;
+		QIcon									m_iconGroupCollapsed;
+		bool									m_groupIconsSet;
 
-		std::vector<aWindowEventHandler *>		my_windowEventHandler;
+		std::vector<aWindowEventHandler *>		m_windowEventHandler;
 
 		aOptionsDialog() = delete;
 		aOptionsDialog(const aOptionsDialog&) = delete;
@@ -303,12 +303,12 @@ namespace ak {
 		// Getter
 
 		//! @brief Will return the property grid of this category
-		aPropertyGridWidget * getPropertyGrid(void) const { return my_propertyGrid; }
+		aPropertyGridWidget * getPropertyGrid(void) const { return m_propertyGrid; }
 
 	private:
-		ID						my_treeItemId;
-		aPropertyGridWidget *	my_propertyGrid;
-		aOptionsDialog *		my_optionsDialog;
+		ID						m_treeItemId;
+		aPropertyGridWidget *	m_propertyGrid;
+		aOptionsDialog *		m_optionsDialog;
 
 		aOptionsDialogCategory() = delete;
 		aOptionsDialogCategory(const aOptionsDialogCategory &) = delete;

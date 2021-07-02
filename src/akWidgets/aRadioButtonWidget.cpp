@@ -30,9 +30,9 @@ void ak::aRadioButtonWidget::setColorStyle(
 	aColorStyle *	_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
+	m_colorStyle = _colorStyle;
 
-	this->setStyleSheet(my_colorStyle->toStyleSheet(cafForegroundColorControls |
+	this->setStyleSheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 		cafBackgroundColorTransparent));
 	
 }

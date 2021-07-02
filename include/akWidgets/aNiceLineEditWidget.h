@@ -78,8 +78,8 @@ namespace ak {
 		void returnPressed();
 
 	private:
-		QHBoxLayout *			my_layout;
-		aLineEditWidget *		my_lineEdit;
-		aLabelWidget *			my_label;
+		QHBoxLayout *			m_layout;
+		aLineEditWidget *		m_lineEdit;
+		aLabelWidget *			m_label;
 	};
 }

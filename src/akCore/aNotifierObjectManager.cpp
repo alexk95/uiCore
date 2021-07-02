@@ -20,7 +20,7 @@ ak::aNotifierObjectManager::aNotifierObjectManager(
 ) {
 	try {
 		if (_manager == nullptr) { throw aException("Is nullptr", "Check manager", aException::exceptionType::Nullptr); }
-		my_manager = _manager;
+		m_manager = _manager;
 	}
 	catch (const aException & e) { throw aException(e, "aNotifierObjectManager::aNotifierObjectManager()"); }
 	catch (const std::exception & e) { throw aException(e.what(), "aNotifierObjectManager::aNotifierObjectManager()"); }
@@ -42,7 +42,7 @@ void ak::aNotifierObjectManager::notify(
 	try {
 		if (_event == etDestroyed) {
 			assert(isEnabled()); // Message received even if notifier was disabled
-			my_manager->creatorDestroyed(_senderId);
+			m_manager->creatorDestroyed(_senderId);
 		}
 	}
 	catch (const aException & e) { throw aException(e, "ak::notifierObjectManager::notify()"); }

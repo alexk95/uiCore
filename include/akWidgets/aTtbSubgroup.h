@@ -79,7 +79,7 @@ namespace ak {
 		) override;
 
 	private:
-		tt::SubGroup *			my_subGroup;
+		tt::SubGroup *			m_subGroup;
 
 		// Block default constructor
 		aTtbSubGroup() = delete;

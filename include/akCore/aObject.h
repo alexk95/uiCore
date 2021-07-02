@@ -23,8 +23,8 @@
 #include <map>
 
 //! Use to notify the parent object that this object is currently destroying
-#define A_OBJECT_DESTROYING_WITHOWNER if (my_owner != nullptr) { ak::aObject * obj = my_owner->parentObject(); if (obj != nullptr) { obj->removeChildObject(my_owner); } }
-#define A_OBJECT_DESTROYING_WITHPARENT if (my_parentObject != nullptr) { my_parentObject->removeChildObject(this); my_parentObject = nullptr; }
+#define A_OBJECT_DESTROYING_WITHOWNER if (m_owner != nullptr) { ak::aObject * obj = m_owner->parentObject(); if (obj != nullptr) { obj->removeChildObject(m_owner); } }
+#define A_OBJECT_DESTROYING_WITHPARENT if (m_parentObject != nullptr) { m_parentObject->removeChildObject(this); m_parentObject = nullptr; }
 #define A_OBJECT_DESTROYING A_OBJECT_DESTROYING_WITHOWNER else A_OBJECT_DESTROYING_WITHPARENT
 
 namespace ak {
@@ -84,7 +84,7 @@ namespace ak {
 		void setUniqueName(
 			const QString &							_name
 		) {
-			my_uniqueName = _name;
+			m_uniqueName = _name;
 		}
 
 		//! @brief Will set the parent object of this object
@@ -98,7 +98,7 @@ namespace ak {
 		QString alias(void) const;
 
 		//! @brief Will return the unique name of this object
-		QString uniqueName(void) const { return my_uniqueName; }
+		QString uniqueName(void) const { return m_uniqueName; }
 
 		//! @brief Will return a pointer to the parent object
 		aObject * parentObject(void) const;
@@ -141,14 +141,14 @@ namespace ak {
 		virtual bool isWidgetType(void) const;
 
 	protected:
-		UID							my_uid;				//! The objects UID
-		int							my_references;		//! The objects references
-		objectType					my_objectType;		//! The object type of this object
-		QString						my_alias;			//! The alias of this object
-		QString						my_uniqueName;
-		aObject *					my_parentObject;
-		aObject *					my_owner;
-		std::map<UID, aObject *>	my_childObjects;
+		UID							m_uid;				//! The objects UID
+		int							m_references;		//! The objects references
+		objectType					m_objectType;		//! The object type of this object
+		QString						m_alias;			//! The alias of this object
+		QString						m_uniqueName;
+		aObject *					m_parentObject;
+		aObject *					m_owner;
+		std::map<UID, aObject *>	m_childObjects;
 
 	private:
 		// Block default constructor

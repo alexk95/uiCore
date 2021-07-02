@@ -35,17 +35,17 @@ ak::aTtbGroup::aTtbGroup(
 	tt::Group *					_group,
 	const QString &				_text
 ) : aTtbContainer(_messenger, otTabToolbarGroup),
-	my_group(_group)
+	m_group(_group)
 {
-	assert(my_group != nullptr); // Nullptr provided
+	assert(m_group != nullptr); // Nullptr provided
 	assert(_messenger != nullptr); // Nullptr provided
-	my_text = _text;
+	m_text = _text;
 }
 
 ak::aTtbGroup::~aTtbGroup() {
 	TTB_CONTAINER_DESTROYING
 	destroyAllSubContainer();
-	delete my_group;
+	delete m_group;
 }
 
 void ak::aTtbGroup::addChild(
@@ -58,7 +58,7 @@ void ak::aTtbGroup::addChild(
 		ac = dynamic_cast<aAction *>(_child);
 		assert(ac != nullptr); // Wrong object type
 		//Place action
-		my_group->AddAction(ac->popupMode(), ac);
+		m_group->AddAction(ac->popupMode(), ac);
 	}
 	else if (_child->type() == ak::objectType::otToolButton) {
 		// Cast widget
@@ -72,7 +72,7 @@ void ak::aTtbGroup::addChild(
 		w->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
 		w->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 		// Place widget
-		my_group->AddWidget(w->widget());
+		m_group->AddWidget(w->widget());
 	} else {
 		// Check child
 		assert(_child->isWidgetType()); // Provided object es no action and no widget
@@ -81,25 +81,25 @@ void ak::aTtbGroup::addChild(
 		w = dynamic_cast<ak::aWidget *>(_child);
 		assert(w != nullptr); // Cast failed
 		// Place widget
-		my_group->AddWidget(w->widget());
+		m_group->AddWidget(w->widget());
 	}
 	_child->setParentObject(this);
 	addChildObject(_child);
 	// Store object
-	my_childObjects.insert_or_assign(_child->uid(), _child);
+	m_childObjects.insert_or_assign(_child->uid(), _child);
 }
 
 ak::aTtbContainer * ak::aTtbGroup::createSubContainer(
 	const QString &				_text
 ) {
-	aTtbSubGroup * obj = new aTtbSubGroup(my_messenger, my_group->AddSubGroup(tt::SubGroup::Align::Yes), _text);
-	my_subContainer.push_back(obj);
+	aTtbSubGroup * obj = new aTtbSubGroup(m_messenger, m_group->AddSubGroup(tt::SubGroup::Align::Yes), _text);
+	m_subContainer.push_back(obj);
 	return obj;
 }
 
 void ak::aTtbGroup::destroyAllSubContainer(void) {
-	for (int i = 0; i < my_subContainer.size(); i++) {
-		aTtbContainer * obj = my_subContainer.at(i);
+	for (int i = 0; i < m_subContainer.size(); i++) {
+		aTtbContainer * obj = m_subContainer.at(i);
 		delete obj;
 	}
 }
@@ -108,15 +108,15 @@ void ak::aTtbGroup::setColorStyle(
 	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
-	my_colorStyle = _colorStyle;
-	my_group->setStyleSheet(my_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	m_colorStyle = _colorStyle;
+	m_group->setStyleSheet(m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow));
-	QString sheet(my_colorStyle->toStyleSheet(cafForegroundColorFocus | cafBackgroundColorFocus, "QToolButton:hover:!pressed{", "}"));
-	sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorSelected | cafBackgroundColorSelected, "QToolButton:pressed{", "}"));
-	//sheet.append(my_colorStyle->toStyleSheet(cafForegroundColorControls | cafBackgroundColorControls, "QToolButton QToolTip{", "}"));
-	my_group->SetToolButtonStylesheet(sheet);
-	sheet = my_colorStyle->toStyleSheet(cafTabToolBarGroupSeperatorLine);
-	my_group->SetSeparatorStyleSheet(sheet);
+	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorFocus | cafBackgroundColorFocus, "QToolButton:hover:!pressed{", "}"));
+	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorSelected | cafBackgroundColorSelected, "QToolButton:pressed{", "}"));
+	//sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorControls | cafBackgroundColorControls, "QToolButton QToolTip{", "}"));
+	m_group->SetToolButtonStylesheet(sheet);
+	sheet = m_colorStyle->toStyleSheet(cafTabToolBarGroupSeperatorLine);
+	m_group->SetSeparatorStyleSheet(sheet);
 }
 
 void ak::aTtbGroup::removeChildObject(
@@ -128,9 +128,9 @@ void ak::aTtbGroup::removeChildObject(
 		aTtbSubGroup * Group = nullptr;
 		Group = dynamic_cast<aTtbSubGroup *>(_child);
 		assert(Group != nullptr);
-		for (int i = 0; i < my_subContainer.size(); i++) {
-			if (my_subContainer.at(i) == Group) {
-				my_subContainer.erase(my_subContainer.begin() + i);
+		for (int i = 0; i < m_subContainer.size(); i++) {
+			if (m_subContainer.at(i) == Group) {
+				m_subContainer.erase(m_subContainer.begin() + i);
 				return;
 			}
 		}
@@ -141,7 +141,7 @@ void ak::aTtbGroup::removeChildObject(
 		aAction * action = nullptr;
 		action = dynamic_cast<aAction *>(_child);
 		assert(action != nullptr);	// Cast failed
-		my_group->RemoveAction(action);
+		m_group->RemoveAction(action);
 	}
 }
 
@@ -149,5 +149,5 @@ void ak::aTtbGroup::setEnabled(
 	bool						_enabled
 ) {
 	aTtbContainer::setEnabled(_enabled);
-	my_group->setEnabled(my_isEnabled);
+	m_group->setEnabled(m_isEnabled);
 }

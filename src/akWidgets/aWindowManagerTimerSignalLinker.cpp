@@ -22,27 +22,27 @@ ak::aWindowManagerTimerSignalLinker::aWindowManagerTimerSignalLinker(
 	aWindowManager *				_uiManager
 ) {
 	if (_uiManager == nullptr) { throw aException("Is nullptr", "Check ui manager"); }
-	my_uiManager = _uiManager;
+	m_uiManager = _uiManager;
 }
 
 ak::aWindowManagerTimerSignalLinker::~aWindowManagerTimerSignalLinker() {
-	for (int i = 0; i < my_links.size(); i++) {
-		switch (my_links.at(i).type)
+	for (int i = 0; i < m_links.size(); i++) {
+		switch (m_links.at(i).type)
 		{
 		case progressShow:
-			disconnect(my_links.at(i).timer, &QTimer::timeout, this, &aWindowManagerTimerSignalLinker::timerTimeoutProgressShow);
+			disconnect(m_links.at(i).timer, &QTimer::timeout, this, &aWindowManagerTimerSignalLinker::timerTimeoutProgressShow);
 			break;
 		case progressHide:
-			disconnect(my_links.at(i).timer, &QTimer::timeout, this, &aWindowManagerTimerSignalLinker::timerTimeoutProgressHide);
+			disconnect(m_links.at(i).timer, &QTimer::timeout, this, &aWindowManagerTimerSignalLinker::timerTimeoutProgressHide);
 			break;
 		case statusLabelShow:
-			disconnect(my_links.at(i).timer, &QTimer::timeout, this, &aWindowManagerTimerSignalLinker::timerTimeoutLabelShow);
+			disconnect(m_links.at(i).timer, &QTimer::timeout, this, &aWindowManagerTimerSignalLinker::timerTimeoutLabelShow);
 			break;
 		case statusLabelHide:
-			disconnect(my_links.at(i).timer, &QTimer::timeout, this, &aWindowManagerTimerSignalLinker::timerTimeoutLabelHide);
+			disconnect(m_links.at(i).timer, &QTimer::timeout, this, &aWindowManagerTimerSignalLinker::timerTimeoutLabelHide);
 			break;
 		case timerType::showWindow:
-			disconnect(my_links.at(i).timer, &QTimer::timeout, this, &aWindowManagerTimerSignalLinker::timerTimeoutShowWindow);
+			disconnect(m_links.at(i).timer, &QTimer::timeout, this, &aWindowManagerTimerSignalLinker::timerTimeoutShowWindow);
 			break;
 		default:
 			assert(0); // not implemented timer type
@@ -71,15 +71,15 @@ void ak::aWindowManagerTimerSignalLinker::addLink(
 		assert(0); // not implemented timer type
 		break;
 	}
-	my_links.push_back(timer{ _timer, _timerType });
+	m_links.push_back(timer{ _timer, _timerType });
 }
 
-void ak::aWindowManagerTimerSignalLinker::timerTimeoutLabelHide() { my_uiManager->setStatusLabelVisible(false, false); }
+void ak::aWindowManagerTimerSignalLinker::timerTimeoutLabelHide() { m_uiManager->setStatusLabelVisible(false, false); }
 
-void ak::aWindowManagerTimerSignalLinker::timerTimeoutLabelShow() { my_uiManager->setStatusLabelVisible(true, false); }
+void ak::aWindowManagerTimerSignalLinker::timerTimeoutLabelShow() { m_uiManager->setStatusLabelVisible(true, false); }
 
-void ak::aWindowManagerTimerSignalLinker::timerTimeoutProgressHide() { my_uiManager->setStatusBarVisible(false, false); }
+void ak::aWindowManagerTimerSignalLinker::timerTimeoutProgressHide() { m_uiManager->setStatusBarVisible(false, false); }
 
-void ak::aWindowManagerTimerSignalLinker::timerTimeoutProgressShow() { my_uiManager->setStatusBarVisible(true, false); }
+void ak::aWindowManagerTimerSignalLinker::timerTimeoutProgressShow() { m_uiManager->setStatusBarVisible(true, false); }
 
-void ak::aWindowManagerTimerSignalLinker::timerTimeoutShowWindow() { my_uiManager->showMaximized(); }
+void ak::aWindowManagerTimerSignalLinker::timerTimeoutShowWindow() { m_uiManager->showMaximized(); }

@@ -27,79 +27,79 @@ namespace ak {
 	public:
 
 		//! @brief Constructor
-		aFlags() : my_field{ static_cast<T>(0) } {}
+		aFlags() : m_field{ static_cast<T>(0) } {}
 
 		//! @brief Copy constructor
 		//! @param _other The other "bitfield"
-		aFlags(const aFlags<T> & _other) : my_field{ _other.field() } {}
+		aFlags(const aFlags<T> & _other) : m_field{ _other.field() } {}
 
 		//! @brief Constructor
 		//! @param _initialState The initial state of the bitfield
-		aFlags(T _initialState) : my_field{ _initialState } {}
+		aFlags(T _initialState) : m_field{ _initialState } {}
 
 		//! @brief Constructor
 		//! @param _initialStateValue A value that can be casted to the bitfield
-		aFlags(long long _initialStateValue) : my_field{ static_cast<T>(_initialStateValue) } {}
+		aFlags(long long _initialStateValue) : m_field{ static_cast<T>(_initialStateValue) } {}
 
 		//! @brief Deconstructor
 		virtual ~aFlags() {}
 
 		//! @brief Will return a copy of the bitfield
-		T field(void) const { return my_field; }
+		T field(void) const { return m_field; }
 
 		//! @brief Will return a value representing the current bitfield
-		long long castField(void) const { return static_cast<long long>(my_field); }
+		long long castField(void) const { return static_cast<long long>(m_field); }
 
 		//! @brief Will set the provided flag
-		void setFlag(T _flag) { my_field = static_cast<T>(static_cast<long long>(my_field) | static_cast<long long>(_flag)); }
+		void setFlag(T _flag) { m_field = static_cast<T>(static_cast<long long>(m_field) | static_cast<long long>(_flag)); }
 
 		//! @brief Will set the provided flag
 		void setFlag(T _flag, bool _flagIsSet) {
-			if (_flagIsSet) { my_field = static_cast<T>(static_cast<long long>(my_field) | static_cast<long long>(_flag)); }
-			else { my_field = static_cast<T>(static_cast<long long>(my_field) & (!static_cast<long long>(_flag))); }
+			if (_flagIsSet) { m_field = static_cast<T>(static_cast<long long>(m_field) | static_cast<long long>(_flag)); }
+			else { m_field = static_cast<T>(static_cast<long long>(m_field) & (!static_cast<long long>(_flag))); }
 		}
 
 		//! @brief Will remove the provided flag
-		void removeFlag(T _flag) { my_field = static_cast<T>(static_cast<long long>(my_field) & (!static_cast<long long>(_flag))); }
+		void removeFlag(T _flag) { m_field = static_cast<T>(static_cast<long long>(m_field) & (!static_cast<long long>(_flag))); }
 
 		//! @brief Will check if the provided flag is set
-		bool flagIsSet(T _flag) const { return (static_cast<long long>(my_field) & static_cast<long long>(_flag)) == static_cast<long long>(_flag); }
+		bool flagIsSet(T _flag) const { return (static_cast<long long>(m_field) & static_cast<long long>(_flag)) == static_cast<long long>(_flag); }
 
 		//! @brief Will copy the other bitfield
-		aFlags<T> & operator = (const aFlags<T> & _other) { my_field = _other.field(); return this; }
+		aFlags<T> & operator = (const aFlags<T> & _other) { m_field = _other.field(); return this; }
 
 		//! @brief Will take the other bitfield and perform a bitwise OR, will return the result
 		aFlags<T> operator + (const aFlags<T> & _other) {
-			flags<T> newField{ static_cast<T>(static_cast<long long>(_other.field()) | static_cast<long long>(my_field)) };
+			flags<T> newField{ static_cast<T>(static_cast<long long>(_other.field()) | static_cast<long long>(m_field)) };
 			return newField;
 		}
 
 		//! @brief Will remove all set bits set at the other bitfield from this bitfield
 		aFlags<T> operator - (const aFlags<T> & _other) {
-			flags<T> newField{ static_cast<T>(static_cast<long long>(_other.field()) & !static_cast<long long>(my_field)) };
+			flags<T> newField{ static_cast<T>(static_cast<long long>(_other.field()) & !static_cast<long long>(m_field)) };
 			return newField;
 		}
 
 		//! @brief Will take the other bitfield and perform a bitwise OR, will return the result
 		aFlags<T> operator += (const aFlags<T> & _other) {
-			my_field = static_cast<T>(static_cast<long long>(_other.field()) | static_cast<long long>(my_field));
+			m_field = static_cast<T>(static_cast<long long>(_other.field()) | static_cast<long long>(m_field));
 			return this;
 		}
 
 		//! @brief Will remove all set bits set at the other bitfield from this bitfield
 		aFlags<T> & operator -= (const aFlags<T> & _other) {
-			my_field = static_cast<T>(static_cast<long long>(_other.field()) & !static_cast<long long>(my_field));
+			m_field = static_cast<T>(static_cast<long long>(_other.field()) & !static_cast<long long>(m_field));
 			return this;
 		}
 
 		//! @brief Will return true if both fields are equal
-		bool operator == (const aFlags<T> & _other) const { return static_cast<long long>(my_field) == static_cast<long long>(_other.field()); }
+		bool operator == (const aFlags<T> & _other) const { return static_cast<long long>(m_field) == static_cast<long long>(_other.field()); }
 
 		//! @brief Will return true if both fields are not equal
-		bool operator != (const aFlags<T> & _other) const { return static_cast<long long>(my_field) != static_cast<long long>(_other.field()); }
+		bool operator != (const aFlags<T> & _other) const { return static_cast<long long>(m_field) != static_cast<long long>(_other.field()); }
 
 	private:
-		T		my_field;
+		T		m_field;
 	};
 
 }
