@@ -68,7 +68,7 @@ namespace ak {
 
 		//! @brief Will set the current color style for this dialog
 		virtual void setColorStyle(
-			const aColorStyle *			_colorStyle
+			aColorStyle *			_colorStyle
 		) override;
 
 		virtual void paintEvent(QPaintEvent * _event) override;
@@ -187,7 +187,7 @@ namespace ak {
 
 		//! @brief Will set the current color style for this combination
 		void setColorStyle(
-			const aColorStyle *		_colorStyle
+			aColorStyle *		_colorStyle
 		);
 
 	private:

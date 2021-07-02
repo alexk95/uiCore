@@ -32,7 +32,7 @@ QWidget * ak::aDoubleSpinBoxWidget::widget(void) {
 }
 
 void ak::aDoubleSpinBoxWidget::setColorStyle(
-	const aColorStyle *	_colorStyle
+	aColorStyle *	_colorStyle
 ) {
 	if (_colorStyle == nullptr) {
 		assert(0);

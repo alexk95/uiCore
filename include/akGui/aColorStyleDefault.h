@@ -52,7 +52,7 @@ namespace ak {
 			colorAreaFlag		_colorAreas,
 			const QString &		_prefix = QString(),
 			const QString &		_suffix = QString()
-		) const override;
+		) override;
 
 		//! @brief Returns the filename for the requested file by searching the set directories
 		//! @param _fileName The filename only of the requsted file (subdirectories have to be provided)

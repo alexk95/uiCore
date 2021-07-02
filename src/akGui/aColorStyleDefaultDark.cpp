@@ -85,7 +85,7 @@ QString ak::aColorStyleDefaultDark::toStyleSheet(
 	colorAreaFlag			_colorAreas,
 	const QString &					_prefix,
 	const QString &					_suffix
-) const {
+) {
 	QString ret(_prefix);
 	
 	AK_INTERN_ADD_STYLE_IF_FLAG(cafBackgroundColorAlternate, STYLE_COLOR_BACK_ALTERNATE);

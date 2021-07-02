@@ -49,7 +49,7 @@ namespace ak {
 		//! @brief Will set the objects color style
 		//! @param _colorStyle The color style to set
 		virtual void setColorStyle(
-			const aColorStyle *					_colorStyle
+			aColorStyle *					_colorStyle
 		) override;
 
 		virtual void closeEvent(QCloseEvent * _event) override;

@@ -30,7 +30,7 @@ ak::aListWidget::~aListWidget() {
 QWidget * ak::aListWidget::widget(void) { return this; }
 
 void ak::aListWidget::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

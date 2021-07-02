@@ -269,6 +269,7 @@ namespace ak {
 		vtArray,
 		vtBool,
 		vtColor,
+		vtDate,
 		vtDouble,
 		vtFloat,
 		vtInt,
@@ -280,6 +281,7 @@ namespace ak {
 		vtObject,
 		vtSelection,
 		vtString,
+		vtTime,
 		vtUint,
 		vtUint64
 	};

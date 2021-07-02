@@ -146,7 +146,7 @@ ak::aLogInDialog::~aLogInDialog() {
 }
 
 void ak::aLogInDialog::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
@@ -324,7 +324,7 @@ QString ak::aLogInDialogInputField::text(void) const {
 }
 
 void ak::aLogInDialogInputField::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	my_input->setColorStyle(_colorStyle);
 	my_label->setColorStyle(_colorStyle);

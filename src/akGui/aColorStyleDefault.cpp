@@ -44,7 +44,7 @@ QString ak::aColorStyleDefault::toStyleSheet(
 	colorAreaFlag					_colorAreas,
 	const QString &					_prefix,
 	const QString &					_suffix
-) const { return ""; }
+) { return ""; }
 
 QString ak::aColorStyleDefault::getFilePath(
 	const QString &			_fileName

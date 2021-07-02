@@ -58,7 +58,7 @@ namespace ak {
 
 		//! @brief Will set the current color style for this dialog
 		virtual void setColorStyle(
-			const aColorStyle *		_colorStyle
+			aColorStyle *		_colorStyle
 		) override;
 
 	protected:

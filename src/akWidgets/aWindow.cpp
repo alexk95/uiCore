@@ -38,7 +38,7 @@ ak::aWindow::~aWindow() { A_OBJECT_DESTROYING }
 // Base class functions
 
 void ak::aWindow::setColorStyle(
-	const aColorStyle *					_colorStyle
+	aColorStyle *					_colorStyle
 ) {
 	assert(_colorStyle != nullptr);		// Nullptr provided
 	my_colorStyle = _colorStyle;

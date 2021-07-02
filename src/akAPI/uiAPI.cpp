@@ -3109,7 +3109,7 @@ void ak::uiAPI::setColorStyle(
 	my_objManager->setColorStyle(_colorStyleName);
 }
 
-const ak::aColorStyle *  ak::uiAPI::getCurrentColorStyle(void) {
+ak::aColorStyle *  ak::uiAPI::getCurrentColorStyle(void) {
 	assert(my_objManager != nullptr); // API not initialized
 	return my_objManager->getCurrentColorStyle();
 }

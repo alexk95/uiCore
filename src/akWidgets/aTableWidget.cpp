@@ -47,7 +47,7 @@ void ak::aTableWidget::focusOutEvent(QFocusEvent * _event) {
 QWidget * ak::aTableWidget::widget(void) { return this; }
 
 void ak::aTableWidget::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

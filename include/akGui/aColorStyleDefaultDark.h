@@ -53,7 +53,7 @@ namespace ak {
 			colorAreaFlag			_colorAreas,
 			const QString &			_prefix = QString(),
 			const QString &			_suffix = QString()
-		) const override;
+		) override;
 
 	};
 } // namespace ak

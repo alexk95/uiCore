@@ -19,7 +19,7 @@
 ak::aTtbContainer::aTtbContainer(
 	aMessenger *			_messenger,
 	objectType				_type,
-	const aColorStyle *		_colorStyle,
+	aColorStyle *		_colorStyle,
 	UID						_uid
 ) : aPaintable(_type, _colorStyle, _uid),
 	my_messenger(nullptr)

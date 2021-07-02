@@ -81,6 +81,7 @@ QString ak::toQString(
 	case vtArray: return QString("Array"); break;
 	case vtBool: return QString("Bool"); break;
 	case vtColor: return QString("Color"); break;
+	case vtDate: return QString("Date"); break;
 	case vtDouble: return QString("Double"); break;
 	case vtFloat: return QString("Float"); break;
 	case vtInt: return QString("Integer"); break;
@@ -92,6 +93,7 @@ QString ak::toQString(
 	case vtObject: return QString("Object"); break;
 	case vtSelection: return QString("Selection"); break;
 	case vtString: return QString("String"); break;
+	case vtTime: return QString("Time"); break;
 	case vtUint: return QString("UnsignedInteger"); break;
 	case vtUint64: return QString("Unsigned64bitInteger"); break;
 	default: assert(0); // not implemented yet

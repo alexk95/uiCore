@@ -44,7 +44,7 @@ namespace ak {
 		aTtbContainer(
 			aMessenger *			_messenger,
 			objectType				_type,
-			const aColorStyle *		_colorStyle = nullptr,
+			aColorStyle *		_colorStyle = nullptr,
 			UID						_UID = ak::invalidUID
 		);
 

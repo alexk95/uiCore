@@ -43,7 +43,7 @@ void ak::aLineEditWidget::keyReleaseEvent(QKeyEvent *_event) {
 QWidget * ak::aLineEditWidget::widget(void) { return this; }
 
 void ak::aLineEditWidget::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

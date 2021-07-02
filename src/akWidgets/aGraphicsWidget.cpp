@@ -22,7 +22,7 @@ ak::aGraphicsWidget::~aGraphicsWidget() { A_OBJECT_DESTROYING }
 QWidget * ak::aGraphicsWidget::widget(void) { return this; }
 
 void ak::aGraphicsWidget::setColorStyle(
-	const aColorStyle *					_colorStyle
+	aColorStyle *					_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

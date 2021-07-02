@@ -81,7 +81,7 @@ void ak::aTextEditWidget::slotContextMenuItemClicked() {
 QWidget * ak::aTextEditWidget::widget(void) { return this; }
 
 void ak::aTextEditWidget::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

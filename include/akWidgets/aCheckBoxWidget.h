@@ -72,7 +72,7 @@ namespace ak {
 		//! @param _colorStyle The color style to set
 		//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 		virtual void setColorStyle(
-			const aColorStyle *					_colorStyle
+			aColorStyle *					_colorStyle
 		) override;
 
 	signals:

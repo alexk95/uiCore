@@ -35,7 +35,7 @@ namespace ak {
 		//! @param _colorStyle The initial color style used in this paintable
 		aWidget(
 			objectType			_type,
-			const aColorStyle *	_colorStyle = nullptr,
+			aColorStyle *	_colorStyle = nullptr,
 			UID					_UID = invalidUID
 		);
 

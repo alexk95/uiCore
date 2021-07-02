@@ -101,7 +101,7 @@ ak::aOptionsDialog::~aOptionsDialog() {
 }
 
 void ak::aOptionsDialog::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	my_colorStyle = _colorStyle;
 	my_tree->setColorStyle(_colorStyle);
@@ -421,5 +421,5 @@ ak::aOptionsDialogCategory::~aOptionsDialogCategory() {
 QWidget * ak::aOptionsDialogCategory::widget(void) { return my_propertyGrid->widget(); }
 
 void ak::aOptionsDialogCategory::setColorStyle(
-	const ak::aColorStyle *					_colorStyle
+	ak::aColorStyle *					_colorStyle
 ) { my_propertyGrid->setColorStyle(_colorStyle); }

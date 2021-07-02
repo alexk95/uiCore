@@ -53,7 +53,7 @@ namespace ak {
 			colorAreaFlag				_colorAreas,
 			const QString &				_prefix = QString(),
 			const QString &				_suffix = QString()
-		) const = 0;
+		) = 0;
 
 		//! @brief Returns the currently set window main foreground color
 		aColor getWindowMainForegroundColor(void) const { return my_windowMainForecolor; }

@@ -20,7 +20,7 @@
 
 ak::aComboButtonWidget::aComboButtonWidget(
 	const QString &				_initialText,
-	const ak::aColorStyle *		_colorStyle,
+	ak::aColorStyle *			_colorStyle,
 	QWidget *					_parent
 ) : QPushButton(_initialText, _parent),
 	ak::aWidget(otComboButton, _colorStyle),
@@ -127,7 +127,7 @@ int ak::aComboButtonWidget::addItem(
 int ak::aComboButtonWidget::getItemCount(void) const { return my_items.size(); }
 
 void ak::aComboButtonWidget::setColorStyle(
-	const aColorStyle *								_colorStyle
+	aColorStyle *								_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

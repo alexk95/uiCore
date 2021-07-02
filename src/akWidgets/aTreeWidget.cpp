@@ -26,7 +26,7 @@
 #include <qheaderview.h>
 
 ak::aTreeWidget::aTreeWidget(
-	const aColorStyle *	_colorStyle
+	aColorStyle *	_colorStyle
 ) : ak::aWidget(otTree, _colorStyle),
 	my_tree(nullptr), my_filter(nullptr), my_layout(nullptr),
 	my_filterCaseSensitive(false), my_filterRefreshOnChange(true), my_currentId(0), my_itemsAreEditable(false),
@@ -82,7 +82,7 @@ ak::aTreeWidget::~aTreeWidget() {
 QWidget * ak::aTreeWidget::widget(void) { return my_widget; }
 
 void ak::aTreeWidget::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
@@ -688,7 +688,7 @@ void ak::aTreeWidget::clearItem(
 
 
 ak::aTreeWidgetBase::aTreeWidgetBase(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) : QTreeWidget(),
 ak::aWidget(otTree, _colorStyle) {
 	setStyleSheet("");
@@ -725,7 +725,7 @@ void ak::aTreeWidgetBase::leaveEvent(QEvent *_event)
 QWidget * ak::aTreeWidgetBase::widget(void) { return this; }
 
 void ak::aTreeWidgetBase::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

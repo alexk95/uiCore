@@ -32,7 +32,7 @@ ak::aTabWidget::~aTabWidget() { A_OBJECT_DESTROYING }
 QWidget * ak::aTabWidget::widget(void) { return this; }
 
 void ak::aTabWidget::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

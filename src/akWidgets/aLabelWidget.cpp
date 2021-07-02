@@ -27,7 +27,7 @@ ak::aLabelWidget::~aLabelWidget() { A_OBJECT_DESTROYING }
 QWidget * ak::aLabelWidget::widget(void) { return this; }
 
 void ak::aLabelWidget::setColorStyle(
-	const aColorStyle *	_colorStyle
+	aColorStyle *	_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

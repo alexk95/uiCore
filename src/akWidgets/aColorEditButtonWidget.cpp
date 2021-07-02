@@ -80,7 +80,7 @@ ak::aColorEditButtonWidget::~aColorEditButtonWidget() {
 QWidget * ak::aColorEditButtonWidget::widget(void) { return my_widget; }
 
 void ak::aColorEditButtonWidget::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

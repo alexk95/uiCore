@@ -53,7 +53,7 @@ ak::aNiceLineEditWidget::~aNiceLineEditWidget() {
 QWidget * ak::aNiceLineEditWidget::widget(void) { return this; }
 
 void ak::aNiceLineEditWidget::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	my_colorStyle = _colorStyle;
 	my_label->setColorStyle(my_colorStyle);

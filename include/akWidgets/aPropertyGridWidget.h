@@ -23,6 +23,7 @@
 #include <qcolor.h>						// QColor
 #include <qtablewidget.h>				// QTableWidgetItem
 #include <qicon.h>
+#include <qdatetime.h>
 
 // AK header
 #include <akCore/globalDataTypes.h>
@@ -45,6 +46,8 @@ namespace ak {
 	class aColorEditButtonWidget;
 	class aComboButtonWidget;
 	class aTextEditWidget;
+	class aDatePickWidget;
+	class aTimePickWidget;
 
 	class UICORE_API_EXPORT aPropertyGridWidget : public QWidget, public aWidget {
 		Q_OBJECT
@@ -64,7 +67,7 @@ namespace ak {
 		//! @param _colorStyle The color style to set
 		//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 		virtual void setColorStyle(
-			const aColorStyle *						_colorStyle
+			aColorStyle *						_colorStyle
 		) override;
 
 		//! @brief Will set the alias for this object
@@ -125,6 +128,18 @@ namespace ak {
 			const QString &									_value
 		);
 
+		ID addItem(
+			bool											_isMultipleValues,
+			const QString &									_settingName,
+			const QDate &									_value
+		);
+
+		ID addItem(
+			bool											_isMultipleValues,
+			const QString &									_settingName,
+			const QTime &									_value
+		);
+
 		// Add item to specified group
 
 		ID addItem(
@@ -168,6 +183,20 @@ namespace ak {
 			const QString &									_groupName,
 			const QString &									_settingName,
 			const QString &									_value
+		);
+
+		ID addItem(
+			bool											_isMultipleValues,
+			const QString &									_groupName,
+			const QString &									_settingName,
+			const QDate &									_value
+		);
+
+		ID addItem(
+			bool											_isMultipleValues,
+			const QString &									_groupName,
+			const QString &									_settingName,
+			const QTime &									_value
 		);
 
 		void setItemReadOnly(
@@ -274,6 +303,14 @@ namespace ak {
 			ID											_itemID
 		);
 
+		QDate getItemValueDate(
+			ID											_itemID
+		);
+
+		QTime getItemValueTime(
+			ID											_itemID
+		);
+
 		valueType getItemValueType(
 			ID											_itemID
 		);
@@ -360,35 +397,35 @@ namespace ak {
 		);
 
 		aPropertyGridItem * addItem(
-			ID											_itemId,
+			ID												_itemId,
 			bool											_isMultipleValues,
 			const QString &									_settingName,
 			bool											_value
 		);
 
 		aPropertyGridItem * addItem(
-			ID											_itemId,
+			ID												_itemId,
 			bool											_isMultipleValues,
 			const QString &									_settingName,
-			const aColor &								_value
+			const aColor &									_value
 		);
 
 		aPropertyGridItem * addItem(
-			ID											_itemId,
+			ID												_itemId,
 			bool											_isMultipleValues,
 			const QString &									_settingName,
 			double											_value
 		);
 
 		aPropertyGridItem * addItem(
-			ID											_itemId,
+			ID												_itemId,
 			bool											_isMultipleValues,
 			const QString &									_settingName,
 			int												_value
 		);
 
 		aPropertyGridItem * addItem(
-			ID											_itemId,
+			ID												_itemId,
 			bool											_isMultipleValues,
 			const QString &									_settingName,
 			const std::vector<QString> &					_possibleSelection,
@@ -396,10 +433,24 @@ namespace ak {
 		);
 
 		aPropertyGridItem * addItem(
-			ID											_itemId,
+			ID												_itemId,
 			bool											_isMultipleValues,
 			const QString &									_settingName,
 			const QString &									_value
+		);
+
+		aPropertyGridItem * addItem(
+			ID												_itemId,
+			bool											_isMultipleValues,
+			const QString &									_settingName,
+			const QDate &									_value
+		);
+
+		aPropertyGridItem * addItem(
+			ID												_itemId,
+			bool											_isMultipleValues,
+			const QString &									_settingName,
+			const QTime &									_value
 		);
 
 		void setGroupHeaderVisible(
@@ -514,6 +565,24 @@ namespace ak {
 			const QString &						_value
 		);
 
+		aPropertyGridItem(
+			aTableWidget *						_propertyGridTable,
+			const QString &						_group,
+			int									_row,
+			bool								_isMultipleValues,
+			const QString &						_settingName,
+			const QDate &						_value
+		);
+
+		aPropertyGridItem(
+			aTableWidget *						_propertyGridTable,
+			const QString &						_group,
+			int									_row,
+			bool								_isMultipleValues,
+			const QString &						_settingName,
+			const QTime &						_value
+		);
+
 		virtual ~aPropertyGridItem();
 
 		int row() const;
@@ -541,27 +610,31 @@ namespace ak {
 
 		// Information gathering
 
-		QString getGroup() const;
+		QString getGroup(void) const;
 
-		bool getIsMultipleValues() const;
+		bool getIsMultipleValues(void) const;
 
-		QString getName() const;
+		QString getName(void) const;
 
-		valueType getValueType() const;
+		valueType getValueType(void) const;
 
-		std::vector<QString> getPossibleSelection() const;
+		std::vector<QString> getPossibleSelection(void) const;
 
-		bool getValueBool() const;
+		bool getValueBool(void) const;
 
-		aColor getValueColor() const;
+		aColor getValueColor(void) const;
 
-		double getValueDouble() const;
+		double getValueDouble(void) const;
 
-		int getValueInteger() const;
+		int getValueInteger(void) const;
 
-		QString getValueSelection() const;
+		QString getValueSelection(void) const;
 
-		QString getValueString() const;
+		QString getValueString(void) const;
+
+		QDate getValueDate(void) const;
+
+		QTime getValueTime(void) const;
 
 		bool isMultipleValues(void) const;
 
@@ -578,7 +651,7 @@ namespace ak {
 		bool isEnabled(void) const { return my_isEnabled; }
 
 		void setColorStyle(
-			const aColorStyle *	_style
+			aColorStyle *	_style
 		);
 
 		//! @brief Will set the provided value to this item
@@ -630,7 +703,7 @@ namespace ak {
 		aColor							my_colorNormalForeground;
 		aColor							my_colorBackground;
 
-		const aColorStyle *				my_globalColorStyle;
+		aColorStyle *					my_globalColorStyle;
 
 		QTableWidgetItem *				my_cellSettingName;
 		QTableWidgetItem *				my_cellValue;
@@ -642,13 +715,16 @@ namespace ak {
 		int								my_valueInteger;
 		QString							my_valueSelection;
 		QString							my_valueString;
+		QDate							my_valueDate;
+		QTime							my_valueTime;
 
 		std::vector<QString>			my_valuePossibleSelection;
 
 		aCheckBoxWidget *				my_widgetBool;
 		aColorEditButtonWidget *		my_widgetColor;
 		aComboButtonWidget *			my_widgetSelection;
-
+		aDatePickWidget *				my_widgetDate;
+		aTimePickWidget *				my_widgetTime;
 
 		aPropertyGridItem() = delete;
 		aPropertyGridItem(const aPropertyGridItem&) = delete;

@@ -41,7 +41,7 @@ void foo(QStringList & _lst, const QObjectList & _obj) {
 }
 
 void ak::aCalendarWidget::setColorStyle(
-	const aColorStyle *	_colorStyle
+	aColorStyle *	_colorStyle
 ) {
 	QStringList l;
 	foo(l, children());

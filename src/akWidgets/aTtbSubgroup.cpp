@@ -83,7 +83,7 @@ ak::aTtbContainer * ak::aTtbSubGroup::createSubContainer(
 void ak::aTtbSubGroup::destroyAllSubContainer(void) {}
 
 void ak::aTtbSubGroup::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 		assert(_colorStyle != nullptr); // nullptr provided
 		my_colorStyle = _colorStyle;

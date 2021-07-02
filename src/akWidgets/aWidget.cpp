@@ -16,7 +16,7 @@
 
 ak::aWidget::aWidget(
 	objectType				_type,
-	const aColorStyle *	_colorStyle,
+	aColorStyle *	_colorStyle,
 	ak::UID						_UID
 ) : aPaintable(_type, _colorStyle, _UID) {}
 

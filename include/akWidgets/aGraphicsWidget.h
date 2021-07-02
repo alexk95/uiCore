@@ -31,7 +31,7 @@ namespace ak {
 		virtual QWidget * widget(void) override;
 
 		virtual void setColorStyle(
-			const aColorStyle *					_colorStyle
+			aColorStyle *					_colorStyle
 		) override;
 
 		virtual void resizeEvent(QResizeEvent * _event) override;

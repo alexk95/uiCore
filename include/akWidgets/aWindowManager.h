@@ -77,7 +77,7 @@ namespace ak {
 		//! @brief Will set the provided color style as the current color style and apply the changes to all childs
 		//! @param _colorStyle The color style to set
 		virtual void setColorStyle(
-			const aColorStyle *								_colorStyle
+			aColorStyle *								_colorStyle
 		) override;
 
 		//! @brief Will remove the child from this object (not destroy it)

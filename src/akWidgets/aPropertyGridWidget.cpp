@@ -21,6 +21,8 @@
 #include <akWidgets/aPropertyGridWidget.h>
 #include <akWidgets/aTableWidget.h>
 #include <akWidgets/aTextEditWidget.h>
+#include <akWidgets/aDatePickWidget.h>
+#include <akWidgets/aTimePickWidget.h>
 
 // Qt header
 #include <qwidget.h>
@@ -88,7 +90,7 @@ ak::aPropertyGridWidget::~aPropertyGridWidget() {
 QWidget * ak::aPropertyGridWidget::widget(void) { return this; }
 
 void ak::aPropertyGridWidget::setColorStyle(
-	const aColorStyle *						_aColorStyle
+	aColorStyle *						_aColorStyle
 ) {
 	assert(_aColorStyle != nullptr); // nullptr provided
 	my_colorStyle = _aColorStyle;
@@ -197,6 +199,18 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	const QString &									_value
 ) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
+ak::ID ak::aPropertyGridWidget::addItem(
+	bool											_isMultipleValues,
+	const QString &									_settingName,
+	const QDate &									_value
+) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
+
+ak::ID ak::aPropertyGridWidget::addItem(
+	bool											_isMultipleValues,
+	const QString &									_settingName,
+	const QTime &									_value
+) { return newItemCreated(my_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
+
 // ++++++++++++++++++++++++++++++++++++++++++
 
 ak::ID ak::aPropertyGridWidget::addItem(
@@ -260,6 +274,28 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	const QString &									_groupName,
 	const QString &									_settingName,
 	const QString &									_value
+) {
+	auto group = my_groups.find(_groupName);
+	assert(group != my_groups.end());	// Invalid group name
+	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
+}
+
+ak::ID ak::aPropertyGridWidget::addItem(
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_settingName,
+	const QDate &									_value
+) {
+	auto group = my_groups.find(_groupName);
+	assert(group != my_groups.end());	// Invalid group name
+	return newItemCreated(group->second->addItem(-1, _isMultipleValues, _settingName, _value));
+}
+
+ak::ID ak::aPropertyGridWidget::addItem(
+	bool											_isMultipleValues,
+	const QString &									_groupName,
+	const QString &									_settingName,
+	const QTime &									_value
 ) {
 	auto group = my_groups.find(_groupName);
 	assert(group != my_groups.end());	// Invalid group name
@@ -448,6 +484,22 @@ QString ak::aPropertyGridWidget::getItemValueString(
 	auto itm = my_items.find(_itemID);
 	assert(itm != my_items.end()); // Invalid item ID
 	return itm->second->getValueString();
+}
+
+QDate ak::aPropertyGridWidget::getItemValueDate(
+	ID											_itemID
+) {
+	auto itm = my_items.find(_itemID);
+	assert(itm != my_items.end()); // Invalid item ID
+	return itm->second->getValueDate();
+}
+
+QTime ak::aPropertyGridWidget::getItemValueTime(
+	ID											_itemID
+) {
+	auto itm = my_items.find(_itemID);
+	assert(itm != my_items.end()); // Invalid item ID
+	return itm->second->getValueTime();
 }
 
 ak::valueType ak::aPropertyGridWidget::getItemValueType(
@@ -738,6 +790,50 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
 	const QString &									_value
+) {
+	int r = my_item->row();
+	if (my_items.size() > 0) {
+		r = my_items.back()->row();
+	}
+	my_propertyGridTable->insertRow(r + 1);
+	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
+	my_items.push_back(newItem);
+	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
+	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
+	else { newItem->setBackgroundColor(my_colorItemBackground); }
+	my_isAlternateBackground = !my_isAlternateBackground;
+	checkVisibility();
+	newItem->setId(_itemId);
+	return newItem;
+}
+
+ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
+	ID												_itemId,
+	bool											_isMultipleValues,
+	const QString &									_settingName,
+	const QDate &									_value
+) {
+	int r = my_item->row();
+	if (my_items.size() > 0) {
+		r = my_items.back()->row();
+	}
+	my_propertyGridTable->insertRow(r + 1);
+	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
+	my_items.push_back(newItem);
+	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
+	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
+	else { newItem->setBackgroundColor(my_colorItemBackground); }
+	my_isAlternateBackground = !my_isAlternateBackground;
+	checkVisibility();
+	newItem->setId(_itemId);
+	return newItem;
+}
+
+ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
+	ID												_itemId,
+	bool											_isMultipleValues,
+	const QString &									_settingName,
+	const QTime &									_value
 ) {
 	int r = my_item->row();
 	if (my_items.size() > 0) {
@@ -1060,6 +1156,77 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	connect(my_propertyGridTable, &QTableWidget::itemChanged, this, &aPropertyGridItem::slotTableCellChanged);
 }
 
+ak::aPropertyGridItem::aPropertyGridItem(
+	aTableWidget *						_propertyGridTable,
+	const QString &						_group,
+	int									_row,
+	bool								_isMultipleValues,
+	const QString &						_settingName,
+	const QDate &						_value
+) : my_propertyGridTable(_propertyGridTable), my_group(_group), my_valueType(vtDate),
+	my_name(_settingName), my_valueDate(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr),
+	my_cellSettingName(nullptr), my_cellValue(nullptr)
+{
+	assert(my_propertyGridTable != nullptr);
+
+	ini();
+
+	// Create new cell items
+	my_cellSettingName = new QTableWidgetItem(_settingName);
+	my_widgetDate = new aDatePickWidget(_value, dfDDMMYYYY);
+
+	if (my_isMultipleValues) {
+		my_widgetDate->setText("...");
+	}
+
+	// Make the first cell read only
+	Qt::ItemFlags f = my_cellSettingName->flags();
+	f.setFlag(Qt::ItemFlag::ItemIsEditable, false);
+	f.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
+	my_cellSettingName->setFlags(f);
+
+	// Add cell items to the main aPropertyGridWidget table
+	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
+	my_propertyGridTable->setCellWidget(_row, 1, my_widgetDate);
+
+	connect(my_widgetDate, &aDatePickWidget::changed, this, &aPropertyGridItem::slotValueWidgetEvent);
+}
+
+ak::aPropertyGridItem::aPropertyGridItem(
+	aTableWidget *						_propertyGridTable,
+	const QString &						_group,
+	int									_row,
+	bool								_isMultipleValues,
+	const QString &						_settingName,
+	const QTime &						_value
+) : my_propertyGridTable(_propertyGridTable), my_group(_group), my_valueType(vtTime),
+	my_name(_settingName), my_valueTime(_value), my_isMultipleValues(_isMultipleValues), my_globalColorStyle(nullptr)
+{
+	assert(my_propertyGridTable != nullptr);
+
+	ini();
+
+	// Create new cell items
+	my_cellSettingName = new QTableWidgetItem(_settingName);
+	my_widgetTime = new aTimePickWidget(_value, tfHHMM);
+
+	if (my_isMultipleValues) {
+		my_widgetTime->setText("...");
+	}
+
+	// Make the first cell read only
+	Qt::ItemFlags f = my_cellSettingName->flags();
+	f.setFlag(Qt::ItemFlag::ItemIsEditable, false);
+	f.setFlag(Qt::ItemFlag::ItemIsSelectable, false);
+	my_cellSettingName->setFlags(f);
+
+	// Add cell items to the main aPropertyGridWidget table
+	my_propertyGridTable->setItem(_row, 0, my_cellSettingName);
+	my_propertyGridTable->setCellWidget(_row, 1, my_widgetTime);
+
+	connect(my_widgetTime, &aTimePickWidget::changed, this, &aPropertyGridItem::slotValueWidgetEvent);
+}
+
 ak::aPropertyGridItem::~aPropertyGridItem() {
 	assert(my_cellSettingName != nullptr); // This should never happen
 	if (my_cellValue != nullptr) { delete my_cellValue; }
@@ -1105,47 +1272,57 @@ void ak::aPropertyGridItem::deselect(void) {
 
 // Information gathering
 
-QString ak::aPropertyGridItem::getGroup() const { return my_group; }
+QString ak::aPropertyGridItem::getGroup(void) const { return my_group; }
 
-bool ak::aPropertyGridItem::getIsMultipleValues() const { return my_isMultipleValues; }
+bool ak::aPropertyGridItem::getIsMultipleValues(void) const { return my_isMultipleValues; }
 
-QString ak::aPropertyGridItem::getName() const { return my_name; }
+QString ak::aPropertyGridItem::getName(void) const { return my_name; }
 
-ak::valueType ak::aPropertyGridItem::getValueType() const { return my_valueType; }
+ak::valueType ak::aPropertyGridItem::getValueType(void) const { return my_valueType; }
 
-std::vector<QString> ak::aPropertyGridItem::getPossibleSelection() const {
+std::vector<QString> ak::aPropertyGridItem::getPossibleSelection(void) const {
 	assert(my_valueType == vtSelection);	// Wrong value type for this item
 	return my_valuePossibleSelection;
 }
 
-bool ak::aPropertyGridItem::getValueBool() const {
+bool ak::aPropertyGridItem::getValueBool(void) const {
 	assert(my_valueType == vtBool);	// Wrong value type for this item
 	return my_valueBool;
 }
 
-ak::aColor ak::aPropertyGridItem::getValueColor() const {
+ak::aColor ak::aPropertyGridItem::getValueColor(void) const {
 	assert(my_valueType == vtColor);	// Wrong value type for this item
 	return my_valueColor;
 }
 
-double ak::aPropertyGridItem::getValueDouble() const {
+double ak::aPropertyGridItem::getValueDouble(void) const {
 	assert(my_valueType == vtDouble);	// Wrong value type for this item
 	return my_valueDouble;
 }
 
-int ak::aPropertyGridItem::getValueInteger() const {
+int ak::aPropertyGridItem::getValueInteger(void) const {
 	assert(my_valueType == vtInt);	// Wrong value type for this item
 	return my_valueInteger;
 }
 
-QString ak::aPropertyGridItem::getValueSelection() const {
+QString ak::aPropertyGridItem::getValueSelection(void) const {
 	assert(my_valueType == vtSelection);	// Wrong value type for this item
 	return my_valueSelection;
 }
 
-QString ak::aPropertyGridItem::getValueString() const {
+QString ak::aPropertyGridItem::getValueString(void) const {
 	assert(my_valueType == vtString);	// Wrong value type for this item
 	return my_valueString;
+}
+
+QDate ak::aPropertyGridItem::getValueDate(void) const {
+	assert(my_valueType == vtDate);
+	return my_valueDate;
+}
+
+QTime ak::aPropertyGridItem::getValueTime(void) const {
+	assert(my_valueType == vtTime);
+	return my_valueTime;
 }
 
 bool ak::aPropertyGridItem::isMultipleValues(void) const { return my_isMultipleValues; }
@@ -1168,6 +1345,14 @@ void ak::aPropertyGridItem::setReadOnly(
 	case vtSelection:
 		assert(my_widgetSelection != nullptr); // This should not happen
 		my_widgetSelection->setEnabled(!my_isReadOnly && my_isEnabled);
+		break;
+	case vtDate:
+		assert(my_widgetDate != nullptr); // This should not happen
+		my_widgetDate->setEnabled(!my_isReadOnly && my_isEnabled);
+		break;
+	case vtTime:
+		assert(my_widgetTime != nullptr); // This should not happen
+		my_widgetTime->setEnabled(!my_isReadOnly && my_isEnabled);
 		break;
 	case vtDouble:
 	case vtInt:
@@ -1206,6 +1391,14 @@ void ak::aPropertyGridItem::setEnabled(
 		assert(my_widgetSelection != nullptr); // This should not happen
 		my_widgetSelection->setEnabled(!my_isReadOnly && my_isEnabled);
 		break;
+	case vtDate:
+		assert(my_widgetDate != nullptr); // This should not happen
+		my_widgetDate->setEnabled(!my_isReadOnly && my_isEnabled);
+		break;
+	case vtTime:
+		assert(my_widgetTime != nullptr); // This should not happen
+		my_widgetTime->setEnabled(!my_isReadOnly && my_isEnabled);
+		break;
 	case vtDouble:
 	case vtInt:
 	case vtString:
@@ -1223,7 +1416,7 @@ void ak::aPropertyGridItem::setEnabled(
 }
 
 void ak::aPropertyGridItem::setColorStyle(
-	const aColorStyle *	_style
+	aColorStyle *	_style
 ) {
 	assert(_style != nullptr); // Nullptr provided
 	my_globalColorStyle = _style;
@@ -1242,6 +1435,7 @@ void ak::aPropertyGridItem::resetAsError(
 	my_cellValue->setSelected(false);
 	my_ignoreCellEvent = false;
 }
+
 void ak::aPropertyGridItem::resetAsError(
 	int												_valueToReset
 ) {
@@ -1301,8 +1495,18 @@ void ak::aPropertyGridItem::slotValueWidgetEvent() {
 		my_isMultipleValues = false;
 		emit changed();
 		break;
+	case vtDate:
+		my_valueDate = my_widgetDate->currentDate();
+		my_isMultipleValues = false;
+		emit changed();
+		break;
 	case vtSelection:
 		my_valueSelection = my_widgetSelection->text();
+		my_isMultipleValues = false;
+		emit changed();
+		break;
+	case vtTime:
+		my_valueTime = my_widgetTime->currentTime();
 		my_isMultipleValues = false;
 		emit changed();
 		break;
@@ -1454,7 +1658,6 @@ void ak::aPropertyGridItem::repaint(void) {
 				sheet.append(my_globalColorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus, "QPushButton:hover{", "}"));
 				sheet.append(my_globalColorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected, "QPushButton:pressed{", "}"));
 			}
-
 
 			my_widgetColor->fillBackground(my_colorBackground);
 			my_widgetColor->setPushButtonStyleSheet(sheet);

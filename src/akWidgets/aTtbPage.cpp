@@ -70,7 +70,7 @@ void ak::aTtbPage::destroyAllSubContainer(void) {
 }
 
 void ak::aTtbPage::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

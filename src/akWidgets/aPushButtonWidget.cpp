@@ -45,7 +45,7 @@ void ak::aPushButtonWidget::keyReleaseEvent(QKeyEvent * _event) {
 QWidget * ak::aPushButtonWidget::widget(void) { return this; }
 
 void ak::aPushButtonWidget::setColorStyle(
-	const aColorStyle *			_colorStyle
+	aColorStyle *			_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

@@ -26,7 +26,7 @@ ak::aAction::aAction(const QIcon & _icon, const QString & _text, QToolButton::To
 ak::aAction::~aAction() { A_OBJECT_DESTROYING }
 
 void ak::aAction::setColorStyle(
-	const aColorStyle *					_colorStyle
+	aColorStyle *					_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

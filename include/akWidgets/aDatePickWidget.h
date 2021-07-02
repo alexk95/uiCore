@@ -49,7 +49,7 @@ namespace ak {
 		//! @param _colorStyle The color style to set
 		//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 		virtual void setColorStyle(
-			const aColorStyle *	_colorStyle
+			aColorStyle *	_colorStyle
 		) override;
 
 		// #############################################################################################################################
@@ -119,8 +119,8 @@ namespace ak {
 	class UICORE_API_EXPORT aDatePickDialog : public aDialog, public aPaintable {
 		Q_OBJECT
 	public:
-		aDatePickDialog();
-		aDatePickDialog(const QDate & _date);
+		aDatePickDialog(aDatePickWidget * _parent = nullptr);
+		aDatePickDialog(const QDate & _date, aDatePickWidget * _parent = nullptr);
 		virtual ~aDatePickDialog();
 
 		// #############################################################################################################################
@@ -131,7 +131,7 @@ namespace ak {
 		//! @param _colorStyle The color style to set
 		//! @throw ak::Exception if the provided color style is a nullptr or failed to repaint the object
 		virtual void setColorStyle(
-			const aColorStyle *	_colorStyle
+			aColorStyle *	_colorStyle
 		) override;
 
 		// #############################################################################################################################

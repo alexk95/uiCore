@@ -46,7 +46,7 @@ ak::aDatePickWidget::~aDatePickWidget() {
 QWidget * ak::aDatePickWidget::widget(void) { return this; }
 
 void ak::aDatePickWidget::setColorStyle(
-	const aColorStyle *	_colorStyle
+	aColorStyle *	_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
@@ -84,7 +84,7 @@ void ak::aDatePickWidget::setDateFormat(dateFormat _dateFormat, bool _refresh) {
 // Slots
 
 void ak::aDatePickWidget::slotClicked(void) {
-	aDatePickDialog d{ my_date };
+	aDatePickDialog d{ my_date, this };
 	if (my_colorStyle != nullptr) { d.setColorStyle(my_colorStyle); }
 
 	if (d.showDialog() == ak::dialogResult::resultOk) {
@@ -132,15 +132,15 @@ void ak::aDatePickWidget::refreshDate(void) {
 
 // #################################################################################################################################
 
-ak::aDatePickDialog::aDatePickDialog()
-	: ak::aPaintable(otDatePickerDialog)
+ak::aDatePickDialog::aDatePickDialog(aDatePickWidget * _parent)
+	: ak::aPaintable(otDatePickerDialog), aDialog(_parent)
 {
 	setupWidget();
 
 }
 
-ak::aDatePickDialog::aDatePickDialog(const QDate & _date)
-	: ak::aPaintable(otDatePickerDialog)
+ak::aDatePickDialog::aDatePickDialog(const QDate & _date, aDatePickWidget * _parent)
+	: ak::aPaintable(otDatePickerDialog), aDialog(_parent)
 {
 	setupWidget();
 	my_calendar->setSelectedDate(_date);
@@ -153,7 +153,7 @@ ak::aDatePickDialog::~aDatePickDialog() {
 // #############################################################################################################################
 
 void ak::aDatePickDialog::setColorStyle(
-	const aColorStyle *	_colorStyle
+	aColorStyle *	_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

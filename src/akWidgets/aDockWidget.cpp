@@ -44,7 +44,7 @@ ak::aDockWidget::~aDockWidget() {
 QWidget * ak::aDockWidget::widget(void) { return this; }
 
 void ak::aDockWidget::setColorStyle(
-	const aColorStyle *					_colorStyle
+	aColorStyle *					_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

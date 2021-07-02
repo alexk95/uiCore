@@ -47,7 +47,7 @@ ak::aTimePickWidget::~aTimePickWidget() {
 QWidget * ak::aTimePickWidget::widget(void) { return this; }
 
 void ak::aTimePickWidget::setColorStyle(
-	const aColorStyle *	_colorStyle
+	aColorStyle *	_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
@@ -195,7 +195,7 @@ ak::aTimePickDialog::~aTimePickDialog() {
 // #############################################################################################################################
 
 void ak::aTimePickDialog::setColorStyle(
-	const aColorStyle *	_colorStyle
+	aColorStyle *	_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;

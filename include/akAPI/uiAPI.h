@@ -2704,7 +2704,7 @@ namespace ak {
 		);
 
 		//! @brief Will return the current color style
-		UICORE_API_EXPORT const ak::aColorStyle * getCurrentColorStyle(void);
+		UICORE_API_EXPORT ak::aColorStyle * getCurrentColorStyle(void);
 
 		UICORE_API_EXPORT QString getCurrentColorStyleName(void);
 

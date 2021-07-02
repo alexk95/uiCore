@@ -35,7 +35,7 @@ QWidget * ak::aSpinBoxWidget::widget(void) {
 }
 
 void ak::aSpinBoxWidget::setColorStyle(
-	const aColorStyle *	_colorStyle
+	aColorStyle *	_colorStyle
 ) {
 	if (_colorStyle == nullptr) {
 		assert(0);

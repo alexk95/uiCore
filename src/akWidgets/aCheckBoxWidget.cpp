@@ -55,7 +55,7 @@ void ak::aCheckBoxWidget::keyReleaseEvent(
 QWidget * ak::aCheckBoxWidget::widget(void) { return this; }
 
 void ak::aCheckBoxWidget::setColorStyle(
-	const aColorStyle *					_colorStyle
+	aColorStyle *					_colorStyle
 ) {
 	assert(_colorStyle != nullptr); // nullptr provided
 	my_colorStyle = _colorStyle;
