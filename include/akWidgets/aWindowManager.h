@@ -319,9 +319,17 @@ namespace ak {
 		//! @brief Will set the window state to minimized
 		void showMinimized(void);
 
+		//! @brief Will set the window state to normal
+		void showNormal(void);
+
 		//! @brief Will close the window
 		void close(void);
 
+		void resize(
+			int		_width,
+			int		_height
+		);
+		
 	private slots:
 		void slotRestoreSetting(const QByteArray & _actualState);
 		void slotTabToolbarTabClicked(int _index);

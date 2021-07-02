@@ -22,6 +22,7 @@
 #include <qstatusbar.h>
 #include <qlabel.h>
 #include <qmovie.h>
+#include <qscreen.h>
 
 ak::aWindow::aWindow()
 	: QMainWindow(), aPaintable(otMainWindow), my_waitingWidget(nullptr), my_centralWidget(nullptr)

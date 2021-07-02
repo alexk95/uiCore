@@ -2617,6 +2617,12 @@ namespace ak {
 				UID												_windowUID
 			);
 
+			//! @brief Will show the window
+			//! @param _windowUID The UID of the window
+			UICORE_API_EXPORT void showNormal(
+				UID												_windowUID
+			);
+
 			//! @brief Will show the window as minimized
 			//! @param _windowUID The UID of the window
 			UICORE_API_EXPORT void showMinimized(
@@ -2665,6 +2671,13 @@ namespace ak {
 
 			//! @brief Will return the device pixel ratio of the currently used device
 			UICORE_API_EXPORT int devicePixelRatio(void);
+
+			//! @brief Will resize the window
+			UICORE_API_EXPORT void resize(
+				UID												_windowUID,
+				int													_width,
+				int													_height
+			);
 
 		} // namespace window
 

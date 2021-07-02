@@ -28,6 +28,6 @@ namespace ak {
 
 		//! @brief This function will be called by the window when the closeEvent occurs
 		//! If the return value is true the closeEvent will be acceptet otherwise ignored 
-		virtual bool closeEvent() { return true; }
+		virtual bool closeEvent() const { return true; }
 	};
 }

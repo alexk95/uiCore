@@ -3042,6 +3042,10 @@ void ak::uiAPI::window::showMaximized(
 	UID												_windowUID
 ) { object::get<aWindowManager>(_windowUID)->showMaximized(); }
 
+void ak::uiAPI::window::showNormal(
+	UID												_windowUID
+) { object::get<aWindowManager>(_windowUID)->showNormal(); }
+
 void ak::uiAPI::window::showMinimized(
 	UID												_windowUID
 ) { object::get<aWindowManager>(_windowUID)->showMaximized(); }
@@ -3075,6 +3079,12 @@ void ak::uiAPI::window::setCentralWidgetMinimumSize(
 ) { object::get<aWindowManager>(_windowUID)->setCentralWidgetMinimumSize(QSize(_width, _height)); }
 
 int ak::uiAPI::window::devicePixelRatio(void) { return my_apiManager.desktop()->devicePixelRatio(); }
+
+void ak::uiAPI::window::resize(
+	UID												_windowUID,
+	int													_width,
+	int													_height
+) { object::get<aWindowManager>(_windowUID)->resize(_width, _height); }
 
 // ###############################################################################################################################################
 

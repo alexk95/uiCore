@@ -38,7 +38,7 @@
 #include <qtimer.h>								// QTimer
 #include <qmessagebox.h>						// QMessageBox
 #include <qbytearray.h>							// QByteArray
-#include <qmovie.h>	
+#include <qmovie.h>
 
 // my_window->resizeDocks({ dock }, { 0 }, Qt::Horizontal); // This is the hack
 
@@ -472,7 +472,14 @@ void ak::aWindowManager::showMaximized(void) { my_window->showMaximized(); }
 
 void ak::aWindowManager::showMinimized(void) { my_window->showMinimized(); }
 
+void ak::aWindowManager::showNormal(void) { my_window->showNormal(); }
+
 void ak::aWindowManager::close(void) { my_window->close(); }
+
+void ak::aWindowManager::resize(
+	int		_width,
+	int		_height
+) { my_window->resize(_width, _height); }
 
 void ak::aWindowManager::setShowStatusObjectDelayTimerInterval(int _interval) {
 	bool labelShow = false;

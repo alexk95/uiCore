@@ -235,6 +235,9 @@ namespace ak {
 		//! @brief Will return a multiline JSON string representing this item
 		std::string toMultilineString(void) const;
 
+		//! @brief Will return a single line JSON string representing this item
+		std::string toString(void) const;
+
 		//! @brief Will return the bool value
 		//! This function may be used only for bool type item
 		inline bool getBool(void) const { return m_bool; }

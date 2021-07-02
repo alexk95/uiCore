@@ -178,6 +178,57 @@ std::string ak::aJSON::toMultilineString(void) const {
 	return toMultilineString("");
 }
 
+std::string ak::aJSON::toString(void) const {
+	switch (m_type)
+	{
+	case ak::aJSON::Array:
+	{
+		std::string ret{ "[" };
+		bool first{ true };
+		for (auto itm : m_array) {
+			if (first) {
+				first = false;
+			}
+			else {
+				ret.append(", ");
+			}
+			ret.append(itm.toString());
+		}
+		ret.append("]");
+		return ret;
+	}
+		break;
+	case ak::aJSON::Boolean:
+		if (m_bool) { return "true"; }
+		else { return "false"; }
+	case ak::aJSON::Double: return std::to_string(m_double);
+	case ak::aJSON::Integer: return std::to_string(m_int);
+	case ak::aJSON::Null: return "null";
+	case ak::aJSON::Object:
+	{
+		std::string ret{ "{" };
+		bool first{ true };
+		for (auto itm : m_obj) {
+			if (first) {
+				ret.append("\"");
+				first = false;
+			}
+			else {
+				ret.append(", \"");
+			}
+			ret.append(itm.first).append("\": ").append(itm.second.toString());
+		}
+		ret.append("}");
+		return ret;
+	}
+		break;
+	case ak::aJSON::String: return "\"" + toValidStringItem(m_string) + "\"";
+	default:
+		assert(0);
+	}
+	return "";
+}
+
 bool ak::aJSON::hasMember(const std::string & _key) const {
 	if (m_type != Object) { return false; }
 	auto it = m_obj.find(_key);
