@@ -27,7 +27,7 @@ namespace ak {
 		virtual ~aCustomizableColorStyle() {}
 
 		//! @brief Will return the name of this styleSheet
-		virtual QString getColorStyleName(void) const { return QString("CustomizableColorStyle"); }
+		virtual QString getColorStyleName(void) const override { return QString("CustomizableColorStyle"); }
 
 		//! @brief Will return a stylesheet that can be applied
 		//! If the aColor areas foreground and background are provided the stylesheet will look something like this:
@@ -53,6 +53,38 @@ namespace ak {
 		QString getSheet(colorAreaFlag _area);
 
 		void removeSheet(colorAreaFlag _area);
+
+		void setWindowMainForegroundColor(const aColor & _color) { my_windowMainForecolor = _color; }
+
+		void setWindowMainBackgroundColor(const aColor & _color) { my_windowMainBackcolor = _color; }
+
+		void setControlsMainForegroundColor(const aColor & _color) { my_controlsMainForecolor = _color; }
+
+		void setControlsMainBackgroundColor(const aColor & _color) { my_controlsMainBackcolor = _color; }
+
+		void setControlsErrorFrontForegroundColor(const aColor & _color) { my_controlsErrorFrontForecolor = _color; }
+
+		void setControlsErrorBackForegroundColor(const aColor & _color) { my_controlsErrorBackForecolor = _color; }
+
+		void setControlsErrorBackBackgroundColor(const aColor & _color) { my_controlsErrorBackBackcolor = _color; }
+
+		void setControlsFocusedBackgroundColor(const aColor & _color) { my_controlsFocusBackColor = _color; }
+
+		void setControlsFocusedForegroundColor(const aColor & _color) { my_controlsFocusForeColor = _color; }
+
+		void setControlsPressedForegroundColor(const aColor & _color) { my_controlsPressedForeColor = _color; }
+
+		void setControlsPressedBackgroundColor(const aColor & _color) { my_controlsPressedBackColor = _color; }
+
+		void setAlternateForegroundColor(const aColor & _color) { my_alternateForeColor = _color; }
+
+		void setAlternateBackgroundColor(const aColor & _color) { my_alternateBackColor = _color; }
+
+		void setHeaderForegroundColor(const aColor & _color) { my_headerForeColor = _color; }
+
+		void setHeaderBackgroundColor(const aColor & _color) { my_headerBackColor = _color; }
+
+		void setControlsBorderColor(const aColor & _color) { my_controlsBorderColor = _color; }
 
 	private:
 

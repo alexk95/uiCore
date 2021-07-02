@@ -22,82 +22,82 @@ QString ak::aCustomizableColorStyle::toStyleSheet(
 	QString ret{ _prefix };
 
 	if (f.flagIsSet(cafBackgroundColorWindow)) {
-		ret.append(getSheet(cafBackgroundColorWindow));
+		ret.append(getSheet(cafBackgroundColorWindow)).append("; ");
 	}
 	if (f.flagIsSet(cafForegroundColorWindow)) {
-		ret.append(getSheet(cafForegroundColorWindow));
+		ret.append(getSheet(cafForegroundColorWindow)).append("; ");
 	}
 	if (f.flagIsSet(cafBorderColorWindow)) {
-		ret.append(getSheet(cafBorderColorWindow));
+		ret.append(getSheet(cafBorderColorWindow)).append("; ");
 	}
 	if (f.flagIsSet(cafBackgroundColorHeader)) {
-		ret.append(getSheet(cafBackgroundColorHeader));
+		ret.append(getSheet(cafBackgroundColorHeader)).append("; ");
 	}
 	if (f.flagIsSet(cafForegroundColorHeader)) {
-		ret.append(getSheet(cafForegroundColorHeader));
+		ret.append(getSheet(cafForegroundColorHeader)).append("; ");
 	}
 	if (f.flagIsSet(cafBorderColorHeader)) {
-		ret.append(getSheet(cafBorderColorHeader));
+		ret.append(getSheet(cafBorderColorHeader)).append("; ");
 	}
 	if (f.flagIsSet(cafBackgroundColorControls)) {
-		ret.append(getSheet(cafBackgroundColorControls));
+		ret.append(getSheet(cafBackgroundColorControls)).append("; ");
 	}
 	if (f.flagIsSet(cafForegroundColorControls)) {
-		ret.append(getSheet(cafForegroundColorControls));
+		ret.append(getSheet(cafForegroundColorControls)).append("; ");
 	}
 	if (f.flagIsSet(cafBorderColorControls)) {
-		ret.append(getSheet(cafBorderColorControls));
+		ret.append(getSheet(cafBorderColorControls)).append("; ");
 	}
 	if (f.flagIsSet(cafDefaultBorderControls)) {
-		ret.append(getSheet(cafDefaultBorderControls));
+		ret.append(getSheet(cafDefaultBorderControls)).append("; ");
 	}
 	if (f.flagIsSet(cafDefaultBorderWindow)) {
-		ret.append(getSheet(cafDefaultBorderWindow));
+		ret.append(getSheet(cafDefaultBorderWindow)).append("; ");
 	}
 	if (f.flagIsSet(cafBackgroundColorAlternate)) {
-		ret.append(getSheet(cafBackgroundColorAlternate));
+		ret.append(getSheet(cafBackgroundColorAlternate)).append("; ");
 	}
 	if (f.flagIsSet(cafForegroundColorError)) {
-		ret.append(getSheet(cafForegroundColorError));
+		ret.append(getSheet(cafForegroundColorError)).append("; ");
 	}
 	if (f.flagIsSet(cafBackgroundColorFocus)) {
-		ret.append(getSheet(cafBackgroundColorFocus));
+		ret.append(getSheet(cafBackgroundColorFocus)).append("; ");
 	}
 	if (f.flagIsSet(cafBackgroundColorSelected)) {
-		ret.append(getSheet(cafBackgroundColorSelected));
+		ret.append(getSheet(cafBackgroundColorSelected)).append("; ");
 	}
 	if (f.flagIsSet(cafForegroundColorFocus)) {
-		ret.append(getSheet(cafForegroundColorFocus));
+		ret.append(getSheet(cafForegroundColorFocus)).append("; ");
 	}
 	if (f.flagIsSet(cafForegroundColorSelected)) {
-		ret.append(getSheet(cafForegroundColorSelected));
+		ret.append(getSheet(cafForegroundColorSelected)).append("; ");
 	}
 	if (f.flagIsSet(cafBackgroundColorTransparent)) {
-		ret.append(getSheet(cafBackgroundColorTransparent));
+		ret.append(getSheet(cafBackgroundColorTransparent)).append("; ");
 	}
 	if (f.flagIsSet(cafImagesTree)) {
-		ret.append(getSheet(cafImagesTree));
+		ret.append(getSheet(cafImagesTree)).append("; ");
 	}
 	if (f.flagIsSet(cafImagesDock)) {
-		ret.append(getSheet(cafImagesDock));
+		ret.append(getSheet(cafImagesDock)).append("; ");
 	}
 	if (f.flagIsSet(cafDefaultBorderHeader)) {
-		ret.append(getSheet(cafDefaultBorderHeader));
+		ret.append(getSheet(cafDefaultBorderHeader)).append("; ");
 	}
 	if (f.flagIsSet(cafBackgroundColorDialogWindow)) {
-		ret.append(getSheet(cafBackgroundColorDialogWindow));
+		ret.append(getSheet(cafBackgroundColorDialogWindow)).append("; ");
 	}
 	if (f.flagIsSet(cafForegroundColorDialogWindow)) {
-		ret.append(getSheet(cafForegroundColorDialogWindow));
+		ret.append(getSheet(cafForegroundColorDialogWindow)).append("; ");
 	}
 	if (f.flagIsSet(cafBackgroundColorButton)) {
-		ret.append(getSheet(cafBackgroundColorButton));
+		ret.append(getSheet(cafBackgroundColorButton)).append("; ");
 	}
 	if (f.flagIsSet(cafForegroundColorButton)) {
-		ret.append(getSheet(cafForegroundColorButton));
+		ret.append(getSheet(cafForegroundColorButton)).append("; ");
 	}
 	if (f.flagIsSet(cafTabToolBarGroupSeperatorLine)) {
-		ret.append(getSheet(cafTabToolBarGroupSeperatorLine));
+		ret.append(getSheet(cafTabToolBarGroupSeperatorLine)).append("; ");
 	}
 	ret.append(_suffix);
 	return ret;
