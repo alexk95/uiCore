@@ -208,17 +208,45 @@ QString ak::aColor::toHexString(
 	bool				_includeA,
 	const QString &		_prefix
 ) const {
+	return toHexString(*this, _includeA, _prefix);
+}
+
+QString ak::aColor::toHexString(
+	const aColor &		_color,
+	bool				_includeA,
+	const QString &		_prefix
+) {
 	QString out = _prefix;
 	QString v = "";
 	if (_includeA) {
-		v = ak::toHexString(my_a, 2);
+		v = ak::toHexString(_color.my_a, 2);
 		out.append(v);
 	}
-	v = ak::toHexString(my_r, 2);
+	v = ak::toHexString(_color.my_r, 2);
 	out.append(v);
-	v = ak::toHexString(my_g, 2);
+	v = ak::toHexString(_color.my_g, 2);
 	out.append(v);
-	v = ak::toHexString(my_b, 2);
+	v = ak::toHexString(_color.my_b, 2);
+	out.append(v);
+	return out;
+}
+
+QString ak::aColor::toHexString(
+	const QColor &		_color,
+	bool				_includeA,
+	const QString &		_prefix
+) {
+	QString out = _prefix;
+	QString v = "";
+	if (_includeA) {
+		v = ak::toHexString(_color.alpha(), 2);
+		out.append(v);
+	}
+	v = ak::toHexString(_color.red(), 2);
+	out.append(v);
+	v = ak::toHexString(_color.green(), 2);
+	out.append(v);
+	v = ak::toHexString(_color.blue(), 2);
 	out.append(v);
 	return out;
 }

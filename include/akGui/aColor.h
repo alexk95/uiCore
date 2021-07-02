@@ -146,6 +146,22 @@ namespace ak {
 			const QString &		_prefix = QString()
 		) const;
 
+		//! @brief Returns a Hex-String representation of the color like: #aaddeebb (aaRRggBB)
+		//! @param _includeA If false, the alpha channel value will be excluded from the hex-string
+		static QString toHexString(
+			const aColor &		_color,
+			bool				_includeA = false,
+			const QString &		_prefix = QString()
+		);
+
+		//! @brief Returns a Hex-String representation of the color like: #aaddeebb (aaRRggBB)
+		//! @param _includeA If false, the alpha channel value will be excluded from the hex-string
+		static QString toHexString(
+			const QColor &		_color,
+			bool				_includeA = false,
+			const QString &		_prefix = QString()
+		);
+
 		//! @brief Returns a RGB-String reprensentation of the color like: "255, 255, 255" (R,G,B, delimiter = "," + " ")
 		//! @param _delimiter The delimiter between the entries (Spacebar will NOT be added automatically)
 		QString toRGBString(
