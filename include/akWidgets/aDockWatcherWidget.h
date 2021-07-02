@@ -13,11 +13,10 @@
 #pragma once
 
 // AK header
-#include <akWidgets/aWidget.h>
+#include <akWidgets/aToolButtonWidget.h>
 #include <akCore/globalDataTypes.h>
 
 // Qt header
-#include <qtoolbutton.h>				// Base class
 #include <qstring.h>					// QString
 #include <qicon.h>						// QIcon
 
@@ -30,7 +29,7 @@ class QDockWidget;
 namespace ak {
 	class aContextMenuItem;
 
-	class UICORE_API_EXPORT aDockWatcherWidget : public QToolButton, public aWidget {
+	class UICORE_API_EXPORT aDockWatcherWidget : public aToolButtonWidget {
 		Q_OBJECT
 	public:
 		aDockWatcherWidget(const QString & _title = QString{ "Docks" });

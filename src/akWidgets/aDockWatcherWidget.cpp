@@ -18,7 +18,7 @@
 #include <qmenu.h>
 
 ak::aDockWatcherWidget::aDockWatcherWidget(const QString & _title)
-	: aWidget(otDockWatcher), my_isEnabled(true)
+	: my_isEnabled(true)
 {
 	setText(_title);
 	my_menu = new QMenu;
@@ -26,7 +26,7 @@ ak::aDockWatcherWidget::aDockWatcherWidget(const QString & _title)
 }
 
 ak::aDockWatcherWidget::aDockWatcherWidget(const QIcon & _icon, const QString & _title)
-	: aWidget(otDockWatcher), my_isEnabled(true)
+	: my_isEnabled(true)
 {
 	setIcon(_icon);
 	setText(_title);
