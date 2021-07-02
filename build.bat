@@ -48,6 +48,25 @@ IF "%2"=="BUILD" (
 	SET TYPE_NAME=BUILD
 )
 
+REM Clean up the build logs
+if "%1"=="" (
+	DEL buildLog_Debug.txt
+	DEL buildLog_Release.txt
+)
+	
+if "%1"=="BOTH" (
+	DEL buildLog_Debug.txt
+	DEL buildLog_Release.txt
+)
+	
+if "%1"=="RELEASE" (
+	DEL buildLog_Release.txt
+)
+	
+if "%1"=="DEBUG" (
+	DEL buildLog_Debug.txt
+)
+
 IF %DEBUG%==1 (
 	ECHO %TYPE_NAME% DEBUG
 	"%DEVENV_ROOT%\devenv.exe" "%UI_CORE_ROOT%\uiCore.vcxproj" %TYPE% "Debug|x64" /Out buildLog_Debug.txt
