@@ -198,10 +198,12 @@ ak::UID ak::aSignalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otAction });
-	_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
-	_object->connect(_object, SIGNAL(triggered()), this, SLOT(slotClicked()));
-	_object->connect(_object, SIGNAL(hovered()), this, SLOT(slotFocused()));
-	_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+
+	_object->connect(_object, &aAction::changed, this, &aSignalLinker::slotChanged);
+	_object->connect(_object, &aAction::triggered, this, &aSignalLinker::slotClicked);
+	_object->connect(_object, &aAction::hovered, this, &aSignalLinker::slotFocused);
+	_object->connect(_object, &aAction::toggled, this, &aSignalLinker::slotToggled);
+
 	return _objectUid;
 }
 
@@ -213,11 +215,13 @@ ak::UID ak::aSignalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otCheckBox });
-	_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-	_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-	_object->connect(_object, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
-	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+
+	_object->connect(_object, &aCheckBoxWidget::clicked, this, &aSignalLinker::slotClicked);
+	_object->connect(_object, &aCheckBoxWidget::toggled, this, &aSignalLinker::slotToggled);
+	_object->connect(_object, &aCheckBoxWidget::stateChanged, this, &aSignalLinker::slotStateChanged);
+	_object->connect(_object, &aCheckBoxWidget::keyPressed, this, &aSignalLinker::slotKeyPressed);
+	_object->connect(_object, &aCheckBoxWidget::keyReleased, this, &aSignalLinker::slotKeyReleased);
+
 	return _objectUid;
 }
 
@@ -229,7 +233,9 @@ ak::UID ak::aSignalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otColorEditButton });
-	_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
+
+	_object->connect(_object, &aColorEditButtonWidget::changed, this, &aSignalLinker::slotChanged);
+
 	return _objectUid;
 }
 
@@ -253,10 +259,12 @@ ak::UID ak::aSignalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otComboBox });
-	_object->connect(_object, SIGNAL(activated(int)), this, SLOT(slotIndexActivated(int)));
-	_object->connect(_object, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged(int)));
-	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+
+	_object->connect(_object, qOverload<int>(&aComboBoxWidget::activated), this, &aSignalLinker::slotIndexActivated);
+	_object->connect(_object, qOverload<int>(&aComboBoxWidget::currentIndexChanged), this, &aSignalLinker::slotIndexChanged);
+	_object->connect(_object, &aComboBoxWidget::keyPressed, this, &aSignalLinker::slotKeyPressed);
+	_object->connect(_object, &aComboBoxWidget::keyReleased, this, &aSignalLinker::slotKeyReleased);
+
 	return _objectUid;
 }
 
@@ -268,11 +276,13 @@ ak::UID ak::aSignalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otComboButton });
-	_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-	_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-	_object->connect(_object, SIGNAL(changed()), this, SLOT(slotChanged()));
-	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+
+	_object->connect(_object, &aComboButtonWidget::clicked, this, &aSignalLinker::slotClicked);
+	_object->connect(_object, &aComboButtonWidget::toggled, this, &aSignalLinker::slotToggled);
+	_object->connect(_object, &aComboButtonWidget::changed, this, &aSignalLinker::slotChanged);
+	_object->connect(_object, &aComboButtonWidget::keyPressed, this, &aSignalLinker::slotKeyPressed);
+	_object->connect(_object, &aComboButtonWidget::keyReleased, this, &aSignalLinker::slotKeyReleased);
+
 	return _objectUid;
 }
 
@@ -319,8 +329,10 @@ ak::UID ak::aSignalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otDock });
-	_object->connect(_object, SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
-	_object->connect(_object, SIGNAL(closing()), this, SLOT(slotClosing()));
+
+	_object->connect(_object, &aDockWidget::visibilityChanged, this, &aSignalLinker::slotVisibilityChanged);
+	_object->connect(_object, &aDockWidget::closing, this, &aSignalLinker::slotClosing);
+
 	return _objectUid;
 }
 
@@ -345,10 +357,12 @@ ak::UID ak::aSignalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otPushButton });
-	_object->connect(_object, SIGNAL(clicked()), this, SLOT(slotClicked()));
-	_object->connect(_object, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
+
+	_object->connect(_object, &aPushButtonWidget::clicked, this, &aSignalLinker::slotClicked);
+	_object->connect(_object, &aPushButtonWidget::toggled, this, &aSignalLinker::slotToggled);
+	_object->connect(_object, &aPushButtonWidget::keyPressed, this, &aSignalLinker::slotKeyPressed);
+	_object->connect(_object, &aPushButtonWidget::keyReleased, this, &aSignalLinker::slotKeyReleased);
+
 	return _objectUid;
 }
 
@@ -410,7 +424,9 @@ ak::UID ak::aSignalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otTimer });
-	_object->connect(_object, SIGNAL(timeout()), this, SLOT(slotTimeout()));
+
+	_object->connect(_object, &aTimer::timeout, this, &aSignalLinker::slotTimeout);
+
 	return _objectUid;
 }
 
@@ -422,11 +438,11 @@ ak::UID ak::aSignalLinker::addLink(
 	assert(my_objects.count(_objectUid) == 0); // Object with the provided UID already exists
 	_object->setUid(_objectUid);
 	my_objects.insert_or_assign(_objectUid, struct_object{ _object, otToolButton });
-	_object->connect(_object, SIGNAL(btnClicked()), this, SLOT(slotClicked()));
-	_object->connect(_object, SIGNAL(keyPressed(QKeyEvent *)), this, SLOT(slotKeyPressed(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(keyReleased(QKeyEvent *)), this, SLOT(slotKeyReleased(QKeyEvent *)));
-	_object->connect(_object, SIGNAL(menuItemClicked(ak::ID)), this, SLOT(slotContextMenuItemClicked(ak::ID)));
-	_object->connect(_object, SIGNAL(menuItemCheckedChanged(ak::ID, bool)), this, SLOT(slotContextMenuItemCheckedChanged(ak::ID, bool)));
+	_object->connect(_object, &aToolButtonWidget::btnClicked, this, &aSignalLinker::slotClicked);
+	_object->connect(_object, &aToolButtonWidget::keyPressed, this, &aSignalLinker::slotKeyPressed);
+	_object->connect(_object, &aToolButtonWidget::keyReleased, this, &aSignalLinker::slotKeyReleased);
+	_object->connect(_object, &aToolButtonWidget::menuItemClicked, this, &aSignalLinker::slotContextMenuItemClicked);
+	_object->connect(_object, &aToolButtonWidget::menuItemCheckedChanged, this, &aSignalLinker::slotContextMenuItemCheckedChanged);
 	return _objectUid;
 }
 
