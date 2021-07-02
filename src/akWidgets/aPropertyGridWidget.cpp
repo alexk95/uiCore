@@ -11,7 +11,9 @@
  */
 
  // AK header
+#include <akGui/aColor.h>
 #include <akGui/aColorStyle.h>
+#include <akGui/aCustomizableColorStyle.h>
 
 #include <akDialogs/aPromptDialog.h>
 
@@ -32,7 +34,7 @@
 #include <qfont.h>
 #include <qstringlist.h>
 
-#define AK_INTERN_ALTERNATE_ROW_COLOR_VALUE 40
+const int AK_INTERN_ALTERNATE_ROW_COLOR_VALUE = 40;
 
 ak::aPropertyGridWidget::aPropertyGridWidget()
 	: aWidget(otPropertyGrid), my_currentID(invalidID),
@@ -68,8 +70,8 @@ ak::aPropertyGridWidget::aPropertyGridWidget()
 
 	// Create default group
 	my_defaultGroup = new aPropertyGridGroup(my_table, "");
-	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
-	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
+	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor, false);
+	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError, false);
 	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	my_defaultGroup->setGroupHeaderVisible(false);
 	my_defaultGroup->activate();
@@ -101,11 +103,14 @@ void ak::aPropertyGridWidget::setColorStyle(
 	my_itemTextColorNormal = my_colorStyle->getControlsMainForegroundColor().toQColor();
 	my_itemTextColorError = my_colorStyle->getControlsErrorFrontForegroundColor().toQColor();
 
-	for (auto itm : my_groups) { itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor); }
+	for (auto itm : my_groups) { 
+		itm.second->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
+		itm.second->setColorStyle(my_colorStyle, true);
+	}
 
 	my_defaultGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
-	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError);
-	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
+	my_defaultGroup->setItemsTextColors(my_itemTextColorNormal, my_itemTextColorError, false);
+	my_defaultGroup->setItemsBackColor(my_itemDefaultBackgroundColor, true);
 
 	QString sheet("QHeaderView{border: none;}\n");
 
@@ -140,9 +145,12 @@ void ak::aPropertyGridWidget::addGroup(
 	auto itm = my_groups.find(_group);
 	assert(itm == my_groups.end());	// Group already exists
 	aPropertyGridGroup * newGroup = new aPropertyGridGroup(my_table, _group);
-	newGroup->setItemsBackColor(my_itemDefaultBackgroundColor);
+	newGroup->setItemsBackColor(my_itemDefaultBackgroundColor, false);
 	newGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	newGroup->setStateIcons(&my_groupIconExpanded, &my_groupIconCollapsed);
+	if (my_colorStyle != nullptr) {
+		newGroup->setColorStyle(my_colorStyle, true);
+	}
 	newGroup->activate();
 	my_groups.insert_or_assign(_group, newGroup);
 }
@@ -155,9 +163,12 @@ void ak::aPropertyGridWidget::addGroup(
 	auto itm = my_groups.find(_group);
 	assert(itm == my_groups.end());	// Group already exists
 	aPropertyGridGroup * newGroup = new aPropertyGridGroup(my_table, _group);
-	newGroup->setItemsBackColor(_aColor);
+	newGroup->setItemsBackColor(_aColor, false);
 	newGroup->setHeaderColors(my_groupHeaderForeColor, my_groupHeaderBackColor);
 	newGroup->setStateIcons(&my_groupIconExpanded, &my_groupIconCollapsed);
+	if (my_colorStyle != nullptr) {
+		newGroup->setColorStyle(my_colorStyle, true);
+	}
 	newGroup->activate();
 	my_groups.insert_or_assign(_group, newGroup);
 }
@@ -562,7 +573,7 @@ void ak::aPropertyGridWidget::itemCountChanged(void) {
 
 ak::ID ak::aPropertyGridWidget::newItemCreated(aPropertyGridItem * _item) {
 	_item->setId(++my_currentID);
-	if (my_colorStyle != nullptr) { _item->setColorStyle(my_colorStyle); }
+	//if (my_colorStyle != nullptr) { _item->setColorStyle(my_colorStyle); }
 	my_items.insert_or_assign(my_currentID, _item);
 	my_itemStateMap.insert_or_assign(_item, true);
 	_item->setEnabled(my_isEnabled);
@@ -583,7 +594,7 @@ ak::aPropertyGridGroup::aPropertyGridGroup(
 	aTableWidget *						_propertyGridTable,
 	const QString &						_groupName
 ) : my_propertyGridTable(_propertyGridTable), my_isActivated(false), my_isVisible(true), my_isAlternateBackground(false), my_headerIsVisible(true),
-	my_colorTextNormal(0, 0, 0), my_colorTextError(255, 0, 0)
+	my_colorTextNormal(0, 0, 0), my_colorTextError(255, 0, 0), my_colorStyle(nullptr), my_colorStyleAlt(nullptr), my_externColorStyle(nullptr)
 {
 	assert(my_propertyGridTable != nullptr);
 	my_item = new QTableWidgetItem;
@@ -606,9 +617,8 @@ ak::aPropertyGridGroup::aPropertyGridGroup(
 	my_iconCollapsed = nullptr;
 	my_iconExpanded = nullptr;
 
-	setItemsBackColor(my_colorItemBackground);
+	setItemsBackColor(my_colorItemBackground, false);
 	connect(my_propertyGridTable, &QTableWidget::itemDoubleClicked, this, &aPropertyGridGroup::slotDoubleClicked);
-
 }
 
 ak::aPropertyGridGroup::~aPropertyGridGroup() {
@@ -643,7 +653,8 @@ void ak::aPropertyGridGroup::setHeaderColors(
 }
 
 void ak::aPropertyGridGroup::setItemsBackColor(
-	const QColor &									_backgroudColor
+	const QColor &									_backgroudColor,
+	bool											_repaint
 ) {
 	my_colorItemBackground = _backgroudColor;
 	int r = my_colorItemBackground.red() + AK_INTERN_ALTERNATE_ROW_COLOR_VALUE;
@@ -662,16 +673,25 @@ void ak::aPropertyGridGroup::setItemsBackColor(
 	if (a < 0) { a = 0; }
 	if (a > 255) { a = 255; }
 	my_colorItemBackgroundAlternate.setRgb(r, g, b, a);
-	repaint();
+
+	if (_repaint) {
+		rebuildStyleSheets();
+		repaint();
+	}
 }
 
 void ak::aPropertyGridGroup::setItemsTextColors(
 	const QColor &									_textColorNormal,
-	const QColor &									_textColorError
+	const QColor &									_textColorError,
+	bool											_repaint
 ) {
 	my_colorTextNormal = _textColorNormal;
 	my_colorTextError = _textColorError;
-	repaint();
+
+	if (_repaint) {
+		rebuildStyleSheets();
+		repaint();
+	}
 }
 
 ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
@@ -686,12 +706,7 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	}
 	my_propertyGridTable->insertRow(r + 1);
 	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
-	my_items.push_back(newItem);
-	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
-	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
-	else { newItem->setBackgroundColor(my_colorItemBackground); }
-	my_isAlternateBackground = !my_isAlternateBackground;
-	checkVisibility();
+	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
 }
@@ -708,12 +723,7 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	}
 	my_propertyGridTable->insertRow(r + 1);
 	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
-	my_items.push_back(newItem);
-	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
-	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
-	else { newItem->setBackgroundColor(my_colorItemBackground); }
-	my_isAlternateBackground = !my_isAlternateBackground;
-	checkVisibility();
+	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
 }
@@ -730,12 +740,7 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	}
 	my_propertyGridTable->insertRow(r + 1);
 	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
-	my_items.push_back(newItem);
-	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
-	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
-	else { newItem->setBackgroundColor(my_colorItemBackground); }
-	my_isAlternateBackground = !my_isAlternateBackground;
-	checkVisibility();
+	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
 }
@@ -752,12 +757,7 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	}
 	my_propertyGridTable->insertRow(r + 1);
 	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
-	my_items.push_back(newItem);
-	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
-	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
-	else { newItem->setBackgroundColor(my_colorItemBackground); }
-	my_isAlternateBackground = !my_isAlternateBackground;
-	checkVisibility();
+	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
 }
@@ -775,12 +775,7 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	}
 	my_propertyGridTable->insertRow(r + 1);
 	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _possibleSelection, _value);
-	my_items.push_back(newItem);
-	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
-	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
-	else { newItem->setBackgroundColor(my_colorItemBackground); }
-	my_isAlternateBackground = !my_isAlternateBackground;
-	checkVisibility();
+	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
 }
@@ -797,12 +792,7 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	}
 	my_propertyGridTable->insertRow(r + 1);
 	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
-	my_items.push_back(newItem);
-	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
-	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
-	else { newItem->setBackgroundColor(my_colorItemBackground); }
-	my_isAlternateBackground = !my_isAlternateBackground;
-	checkVisibility();
+	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
 }
@@ -819,12 +809,7 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	}
 	my_propertyGridTable->insertRow(r + 1);
 	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
-	my_items.push_back(newItem);
-	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
-	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
-	else { newItem->setBackgroundColor(my_colorItemBackground); }
-	my_isAlternateBackground = !my_isAlternateBackground;
-	checkVisibility();
+	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
 }
@@ -841,12 +826,7 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	}
 	my_propertyGridTable->insertRow(r + 1);
 	aPropertyGridItem * newItem = new aPropertyGridItem(my_propertyGridTable, my_name, r + 1, _isMultipleValues, _settingName, _value);
-	my_items.push_back(newItem);
-	newItem->setTextColors(my_colorTextNormal, my_colorTextError);
-	if (my_isAlternateBackground) { newItem->setBackgroundColor(my_colorItemBackgroundAlternate); }
-	else { newItem->setBackgroundColor(my_colorItemBackground); }
-	my_isAlternateBackground = !my_isAlternateBackground;
-	checkVisibility();
+	itemCreated(newItem);
 	newItem->setId(_itemId);
 	return newItem;
 }
@@ -857,6 +837,18 @@ void ak::aPropertyGridGroup::setGroupHeaderVisible(
 	assert(my_item != nullptr);	// This should never happen
 	my_headerIsVisible = _isVisible;
 	my_propertyGridTable->setRowHidden(my_item->row(), !my_headerIsVisible);
+}
+
+void ak::aPropertyGridGroup::setColorStyle(
+	aColorStyle *									_colorStyle,
+	bool											_repaint
+) {
+	my_externColorStyle = _colorStyle;
+
+	if (_repaint) {
+		rebuildStyleSheets();
+		repaint();
+	}
 }
 
 void ak::aPropertyGridGroup::clear(void) {
@@ -902,6 +894,21 @@ void ak::aPropertyGridGroup::slotDoubleClicked(QTableWidgetItem * _item) {
 
 // private members
 
+void ak::aPropertyGridGroup::itemCreated(aPropertyGridItem * _item) {
+	my_items.push_back(_item);
+	if (my_isAlternateBackground) {
+		_item->setColorStyle(my_colorStyleAlt);
+		_item->setBackgroundColor(my_colorItemBackgroundAlternate);
+	}
+	else {
+		_item->setColorStyle(my_colorStyle);
+		_item->setBackgroundColor(my_colorItemBackground);
+	}
+	_item->setTextColors(my_colorTextNormal, my_colorTextError);
+	my_isAlternateBackground = !my_isAlternateBackground;
+	checkVisibility();
+}
+
 void ak::aPropertyGridGroup::checkVisibility(void) {
 	if (!my_isActivated) { return; }
 	if (my_items.size() > 0) {
@@ -918,11 +925,96 @@ void ak::aPropertyGridGroup::checkVisibility(void) {
 	}
 }
 
+void ak::aPropertyGridGroup::rebuildStyleSheets() {
+	if (my_colorStyle == nullptr) {
+		my_colorStyle = new aCustomizableColorStyle;
+	}
+	if (my_colorStyleAlt == nullptr) {
+		my_colorStyleAlt = new aCustomizableColorStyle;
+	}
+
+	// Set default colors
+	my_colorStyle->setControlsMainForegroundColor(my_colorTextNormal);
+	my_colorStyle->setControlsMainBackgroundColor(my_colorItemBackground);
+	my_colorStyle->setAlternateForegroundColor(my_colorTextNormal);
+	my_colorStyle->setAlternateBackgroundColor(my_colorItemBackgroundAlternate);
+	my_colorStyle->setHeaderBackgroundColor(my_colorItemBackground);
+	my_colorStyle->setHeaderForegroundColor(my_colorTextNormal);
+
+	my_colorStyleAlt->setControlsMainForegroundColor(my_colorTextNormal);
+	my_colorStyleAlt->setControlsMainBackgroundColor(my_colorItemBackground);
+	my_colorStyleAlt->setAlternateForegroundColor(my_colorTextNormal);
+	my_colorStyleAlt->setAlternateBackgroundColor(my_colorItemBackgroundAlternate);
+	my_colorStyleAlt->setHeaderBackgroundColor(my_colorItemBackground);
+	my_colorStyleAlt->setHeaderForegroundColor(my_colorTextNormal);
+
+	// Set sheets
+	my_colorStyle->setSheet(cafBackgroundColorControls, aColor::toHexString(my_colorItemBackground, true, "background-color: #"));
+	my_colorStyle->setSheet(cafBackgroundColorWindow, aColor::toHexString(my_colorItemBackground, true, "background-color: #"));
+	my_colorStyle->setSheet(cafBackgroundColorButton, aColor::toHexString(my_colorItemBackground, true, "background-color: #"));
+	my_colorStyle->setSheet(cafForegroundColorControls, aColor::toHexString(my_colorTextNormal, true, "color: #"));
+	my_colorStyle->setSheet(cafForegroundColorButton, aColor::toHexString(my_colorTextNormal, true, "color: #"));
+	my_colorStyle->setSheet(cafForegroundColorWindow, aColor::toHexString(my_colorTextNormal, true, "color: #"));
+
+	my_colorStyleAlt->setSheet(cafBackgroundColorControls, aColor::toHexString(my_colorItemBackgroundAlternate, true, "background-color: #"));
+	my_colorStyleAlt->setSheet(cafBackgroundColorWindow, aColor::toHexString(my_colorItemBackgroundAlternate, true, "background-color: #"));
+	my_colorStyleAlt->setSheet(cafBackgroundColorButton, aColor::toHexString(my_colorItemBackgroundAlternate, true, "background-color: #"));
+	my_colorStyleAlt->setSheet(cafForegroundColorControls, aColor::toHexString(my_colorTextNormal, true, "color: #"));
+	my_colorStyleAlt->setSheet(cafForegroundColorButton, aColor::toHexString(my_colorTextNormal, true, "color: #"));
+	my_colorStyleAlt->setSheet(cafForegroundColorWindow, aColor::toHexString(my_colorTextNormal, true, "color: #"));
+
+	if (my_externColorStyle == nullptr) {
+		my_colorStyle->setSheet(cafBackgroundColorFocus, "");
+		my_colorStyleAlt->setSheet(cafBackgroundColorFocus, "");
+
+		my_colorStyle->setSheet(cafForegroundColorFocus, "");
+		my_colorStyleAlt->setSheet(cafForegroundColorFocus, "");
+
+		my_colorStyle->setSheet(cafBackgroundColorSelected, "");
+		my_colorStyleAlt->setSheet(cafBackgroundColorSelected, "");
+
+		my_colorStyle->setSheet(cafForegroundColorSelected, "");
+		my_colorStyleAlt->setSheet(cafForegroundColorSelected, "");
+
+		my_colorStyle->setSheet(cafBorderColorWindow, "");
+		my_colorStyleAlt->setSheet(cafBorderColorWindow, "");
+
+		my_colorStyle->setSheet(cafDefaultBorderWindow, "");
+		my_colorStyleAlt->setSheet(cafDefaultBorderWindow, "");
+	}
+	else {
+		my_colorStyle->setSheet(cafBackgroundColorFocus, my_externColorStyle->toStyleSheet(cafBackgroundColorFocus));
+		my_colorStyleAlt->setSheet(cafBackgroundColorFocus, my_externColorStyle->toStyleSheet(cafBackgroundColorFocus));
+
+		my_colorStyle->setSheet(cafForegroundColorFocus, my_externColorStyle->toStyleSheet(cafForegroundColorFocus));
+		my_colorStyleAlt->setSheet(cafForegroundColorFocus, my_externColorStyle->toStyleSheet(cafForegroundColorFocus));
+
+		my_colorStyle->setSheet(cafBackgroundColorSelected, my_externColorStyle->toStyleSheet(cafBackgroundColorSelected));
+		my_colorStyleAlt->setSheet(cafBackgroundColorSelected, my_externColorStyle->toStyleSheet(cafBackgroundColorSelected));
+
+		my_colorStyle->setSheet(cafForegroundColorSelected, my_externColorStyle->toStyleSheet(cafForegroundColorSelected));
+		my_colorStyleAlt->setSheet(cafForegroundColorSelected, my_externColorStyle->toStyleSheet(cafForegroundColorSelected));
+
+		my_colorStyle->setSheet(cafBorderColorWindow, my_externColorStyle->toStyleSheet(cafBorderColorWindow));
+		my_colorStyleAlt->setSheet(cafBorderColorWindow, my_externColorStyle->toStyleSheet(cafBorderColorWindow));
+
+		my_colorStyle->setSheet(cafDefaultBorderWindow, my_externColorStyle->toStyleSheet(cafDefaultBorderWindow));
+		my_colorStyleAlt->setSheet(cafDefaultBorderWindow, my_externColorStyle->toStyleSheet(cafDefaultBorderWindow));
+	}
+
+}
+
 void ak::aPropertyGridGroup::repaint(void) {
 	my_isAlternateBackground = false;
 	for (auto itm : my_items) {
-		if (my_isAlternateBackground) { itm->setBackgroundColor(my_colorItemBackgroundAlternate); }
-		else { itm->setBackgroundColor(my_colorItemBackground); }
+		if (my_isAlternateBackground) {
+			itm->setBackgroundColor(my_colorItemBackgroundAlternate);
+			itm->setColorStyle(my_colorStyleAlt);
+		}
+		else { 
+			itm->setBackgroundColor(my_colorItemBackground);
+			itm->setColorStyle(my_colorStyle);
+		}
 		itm->setTextColors(my_colorTextNormal, my_colorTextError);
 		my_isAlternateBackground = !my_isAlternateBackground;
 	}
@@ -1252,7 +1344,10 @@ bool ak::aPropertyGridItem::getIsCurrentlyError() const { return my_isCurrentlyE
 
 void ak::aPropertyGridItem::setBackgroundColor(
 	const QColor &					_backgroundColor
-) { my_colorBackground = _backgroundColor; repaint(); }
+) {
+	my_colorBackground = _backgroundColor; 
+	repaint();
+}
 
 void ak::aPropertyGridItem::setTextColors(
 	const QColor &					_foregroundNormal,
@@ -1639,16 +1734,20 @@ void ak::aPropertyGridItem::repaint(void) {
 		case vtBool:
 		{
 			assert(my_widgetBool != nullptr); // Something went wrong
-			QString sheet("QCheckBox{background-color:#");
+			QString sheet = my_globalColorStyle->toStyleSheet(cafBackgroundColorControls | cafForegroundColorControls, "QCheckBox{", "}");
+			my_widgetBool->setStyleSheet(sheet);
+			/*QString sheet("QCheckBox{background-color:#");
 			sheet.append(my_colorBackground.toHexString(true));
 			sheet.append(";}\n");
-			my_widgetBool->setStyleSheet(sheet);
+			my_widgetBool->setStyleSheet(sheet);*/
 		}
 			break;
 		case vtColor:
 		{
 			assert(my_widgetColor != nullptr); // Something went wrong
-			QString sheet("QPushButton{background-color: #");
+			my_widgetColor->setColorStyle(my_globalColorStyle);
+			my_widgetColor->fillBackground(my_colorBackground);
+			/*QString sheet("QPushButton{background-color: #");
 			sheet.append(my_colorBackground.toHexString(true));
 			sheet.append("; color: #");
 			sheet.append(my_colorNormalForeground.toHexString(true));
@@ -1659,14 +1758,22 @@ void ak::aPropertyGridItem::repaint(void) {
 				sheet.append(my_globalColorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected, "QPushButton:pressed{", "}"));
 			}
 
-			my_widgetColor->fillBackground(my_colorBackground);
-			my_widgetColor->setPushButtonStyleSheet(sheet);
+			my_widgetColor->setPushButtonStyleSheet(sheet);*/
 		}
+			break;
+		case vtDate:
+			assert(my_widgetDate != nullptr);	// Something went wrong
+			my_widgetDate->setColorStyle(my_globalColorStyle);
+			break;
+		case vtTime:
+			assert(my_widgetTime != nullptr);	// Something went wrong
+			my_widgetTime->setColorStyle(my_globalColorStyle);
 			break;
 		case vtSelection:
 		{
 			assert(my_widgetSelection != nullptr); // Something went wrong
-			QString sheet("QPushButton{color: #");
+			my_widgetSelection->setColorStyle(my_globalColorStyle);
+			/*QString sheet("QPushButton{color: #");
 			aColor fore(my_colorNormalForeground);
 			aColor back(my_colorBackground);
 			sheet.append(fore.toHexString(true));
@@ -1682,8 +1789,9 @@ void ak::aPropertyGridItem::repaint(void) {
 				sheet.append(my_globalColorStyle->toStyleSheet(cafBackgroundColorFocus | cafForegroundColorFocus, "QPushButton:hover{", "}"));
 				sheet.append(my_globalColorStyle->toStyleSheet(cafBackgroundColorSelected | cafForegroundColorSelected, "QPushButton:pressed{", "}"));
 			}
-
+			
 			my_widgetSelection->setStyleSheet(sheet);
+			*/
 		}
 			break;
 		default:

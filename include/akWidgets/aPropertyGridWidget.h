@@ -43,6 +43,7 @@ namespace ak {
 	class aPropertyGridItem;
 	class aTableWidget;
 	class aCheckBoxWidget;
+	class aCustomizableColorStyle;
 	class aColorEditButtonWidget;
 	class aComboButtonWidget;
 	class aTextEditWidget;
@@ -388,12 +389,14 @@ namespace ak {
 		);
 
 		void setItemsBackColor(
-			const QColor &						_backgroundColor
+			const QColor &						_backgroundColor,
+			bool								_repaint
 		);
 
 		void setItemsTextColors(
 			const QColor &						_textColorNormal,
-			const QColor &						_textColorError
+			const QColor &						_textColorError,
+			bool								_repaint
 		);
 
 		aPropertyGridItem * addItem(
@@ -457,6 +460,11 @@ namespace ak {
 			bool											_isVisible
 		);
 
+		void setColorStyle(
+			aColorStyle *									_colorStyle,
+			bool											_repaint
+		);
+
 		void clear(void);
 
 		void deselect(void);
@@ -471,9 +479,13 @@ namespace ak {
 
 	private:
 
+		void itemCreated(aPropertyGridItem * _item);
+
 		void checkVisibility(void);
 
 		void repaint(void);
+
+		void rebuildStyleSheets(void);
 
 		void refreshIcon(void);
 
@@ -496,6 +508,10 @@ namespace ak {
 
 		QIcon *									my_iconExpanded;
 		QIcon *									my_iconCollapsed;
+
+		aColorStyle *							my_externColorStyle;
+		aCustomizableColorStyle *				my_colorStyle;
+		aCustomizableColorStyle *				my_colorStyleAlt;
 
 		aPropertyGridGroup() = delete;
 		aPropertyGridGroup(const aPropertyGridGroup &) = delete;
