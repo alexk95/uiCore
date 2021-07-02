@@ -641,25 +641,23 @@ void ak::aObjectManager::creatorDestroyed(
 		// Get all UIDs created by this creator
 		auto itm = my_mapCreators.find(_creatorUid);
 		if (itm != my_mapCreators.end()) {
-			// Get and destroy every single object created by this creator
-			for (int i = 0; i < itm->second->size(); i++) {
-				auto obj = my_mapObjects.find(itm->second->at(i));
-				if (obj != my_mapObjects.end()) {
-					ak::aObject * actualObject = obj->second;
-					// Check if object is a restorable type and remove it from the map
-					my_mapAliases.erase(actualObject->alias());
 
-					// Remove the unique name access to this object
-					if (!actualObject->uniqueName().isEmpty()) {
-						my_mapUniqueNames.erase(actualObject->uniqueName());
+			bool erased{ true };
+			while (erased) {
+				erased = false;
+
+				// Get and destroy every single object created by this creator
+				for (int i = 0; i < itm->second->size() && !erased; i++) {
+					destroy(itm->second->at(i), true);
+					if (!objectExists(itm->second->at(i))) {
+						itm->second->erase(itm->second->begin() + i);
+						erased = true;
+						break;
 					}
-
-					// Delete object
-					delete actualObject;
-					obj->second = nullptr;
-					my_mapObjects.erase(itm->second->at(i));
 				}
+
 			}
+
 			// Delete vector
 			std::vector<UID> *	r = itm->second;
 			delete r;
