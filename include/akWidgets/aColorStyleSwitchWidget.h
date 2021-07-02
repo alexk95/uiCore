@@ -23,7 +23,7 @@ class QAction;
 
 namespace ak {
 
-	class aColorStyleSwitchWidget : public aToolButtonWidget {
+	class UICORE_API_EXPORT aColorStyleSwitchWidget : public aToolButtonWidget {
 		Q_OBJECT
 	public:
 		aColorStyleSwitchWidget(
