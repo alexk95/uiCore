@@ -258,6 +258,9 @@
     <ClCompile Include="src\akWidgets\aColorStyleSwitchWidget.cpp">
       <Filter>Source Files\ak\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="src\akGui\aCustomizableColorStyle.cpp">
+      <Filter>Source Files\ak\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\akAPI\uiAPI.h">
@@ -358,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="include\akWidgets\aCalendarWidget.h">
       <Filter>Header Files\ak\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\akGui\aCustomizableColorStyle.h">
+      <Filter>Header Files\ak\Gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

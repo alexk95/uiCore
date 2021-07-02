@@ -132,6 +132,7 @@
     <ClCompile Include="src\akGui\aColorStyleDefault.cpp" />
     <ClCompile Include="src\akGui\aColorStyleDefaultDark.cpp" />
     <ClCompile Include="src\akGui\aContextMenuItem.cpp" />
+    <ClCompile Include="src\akGui\aCustomizableColorStyle.cpp" />
     <ClCompile Include="src\akGui\aDialog.cpp" />
     <ClCompile Include="src\akGui\aIconManager.cpp" />
     <ClCompile Include="src\akGui\aObjectManager.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="include\akGui\aColorStyleDefault.h" />
     <ClInclude Include="include\akGui\aColorStyleDefaultDark.h" />
     <QtMoc Include="include\akGui\aContextMenuItem.h" />
+    <ClInclude Include="include\akGui\aCustomizableColorStyle.h" />
     <ClInclude Include="include\akGui\aDialog.h" />
     <ClInclude Include="include\akGui\aIconManager.h" />
     <ClInclude Include="include\akGui\aObjectManager.h" />
