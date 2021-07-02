@@ -86,88 +86,88 @@ void ak::aJSON::reserve(size_t _size) {
 }
 
 void ak::aJSON::pushBack(bool _v) {
-	if (m_type == Array) { m_array.push_back(_v); }
+	if (m_type == Array) { m_array.push_back(aJSON(_v)); }
 }
 
 void ak::aJSON::pushBack(int _v) {
-	if (m_type == Array) { m_array.push_back(_v); }
+	if (m_type == Array) { m_array.push_back(aJSON(_v)); }
 }
 
 void ak::aJSON::pushBack(double _v) {
-	if (m_type == Array) { m_array.push_back(_v); }
+	if (m_type == Array) { m_array.push_back(aJSON(_v)); }
 }
 
 void ak::aJSON::pushBack(char _v) {
-	if (m_type == Array) { m_array.push_back(_v); }
+	if (m_type == Array) { m_array.push_back(aJSON(_v)); }
 }
 
 void ak::aJSON::pushBack(const char * _v) {
-	if (m_type == Array) { m_array.push_back(_v); }
+	if (m_type == Array) { m_array.push_back(aJSON(_v)); }
 }
 
 void ak::aJSON::pushBack(const std::string & _v) {
-	if (m_type == Array) { m_array.push_back(_v); }
+	if (m_type == Array) { m_array.push_back(aJSON(_v)); }
 }
 
 void ak::aJSON::pushBack(const aJSON & _v) {
-	if (m_type == Array) { m_array.push_back(_v); }
+	if (m_type == Array) { m_array.push_back(aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const char * _member, bool _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(std::string(_member), aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const char * _member, int _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(std::string(_member), aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const char * _member, double _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(std::string(_member), aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const char * _member, char _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(std::string(_member), aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const char * _member, const char * _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(std::string(_member), aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const char * _member, const std::string & _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(std::string(_member), aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const char * _member, const aJSON & _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(std::string(_member), aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const std::string & _member, bool _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(_member, aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const std::string & _member, int _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(_member, aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const std::string & _member, double _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(_member, aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const std::string & _member, char _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(_member, aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const std::string & _member, const char * _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(_member, aJSON(_v)); }
 }
 
 void ak::aJSON::addMember(const std::string & _member, const std::string & _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(_member, aJSON(_v)); }
 }
 
 
 void ak::aJSON::addMember(const std::string & _member, const aJSON & _v) {
-	if (m_type == Object) { m_obj.insert_or_assign(_member, _v); }
+	if (m_type == Object) { m_obj.insert_or_assign(_member, aJSON(_v)); }
 }
 
 // ########################################################################################
@@ -233,7 +233,7 @@ std::string ak::aJSON::toMultilineString(const std::string & _prefix) const {
 	case ak::aJSON::Boolean:
 		if (m_bool) { return "true"; }
 		else { return "false"; }
-	case ak::aJSON::Double: return std::to_string(m_int);
+	case ak::aJSON::Double: return std::to_string(m_double);
 	case ak::aJSON::Integer: return std::to_string(m_int);
 	case ak::aJSON::Object:
 	{
