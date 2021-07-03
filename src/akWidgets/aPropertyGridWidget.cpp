@@ -952,16 +952,22 @@ void ak::aPropertyGridGroup::rebuildStyleSheets() {
 	m_colorStyle->setSheet(cafBackgroundColorControls, aColor::toHexString(m_colorItemBackground, true, "background-color: #"));
 	m_colorStyle->setSheet(cafBackgroundColorWindow, aColor::toHexString(m_colorItemBackground, true, "background-color: #"));
 	m_colorStyle->setSheet(cafBackgroundColorButton, aColor::toHexString(m_colorItemBackground, true, "background-color: #"));
+	m_colorStyle->setSheet(cafBackgroundColorAlternate, aColor::toHexString(m_colorItemBackgroundAlternate, true, "alternate-background-color: #"));
+	m_colorStyle->setSheet(cafBackgroundColorDialogWindow, aColor::toHexString(m_colorItemBackgroundAlternate, true, "background-color: #"));
 	m_colorStyle->setSheet(cafForegroundColorControls, aColor::toHexString(m_colorTextNormal, true, "color: #"));
 	m_colorStyle->setSheet(cafForegroundColorButton, aColor::toHexString(m_colorTextNormal, true, "color: #"));
 	m_colorStyle->setSheet(cafForegroundColorWindow, aColor::toHexString(m_colorTextNormal, true, "color: #"));
+	m_colorStyle->setSheet(cafForegroundColorDialogWindow, aColor::toHexString(m_colorTextNormal, true, "color: #"));
 
 	m_colorStyleAlt->setSheet(cafBackgroundColorControls, aColor::toHexString(m_colorItemBackgroundAlternate, true, "background-color: #"));
 	m_colorStyleAlt->setSheet(cafBackgroundColorWindow, aColor::toHexString(m_colorItemBackgroundAlternate, true, "background-color: #"));
 	m_colorStyleAlt->setSheet(cafBackgroundColorButton, aColor::toHexString(m_colorItemBackgroundAlternate, true, "background-color: #"));
+	m_colorStyleAlt->setSheet(cafBackgroundColorAlternate, aColor::toHexString(m_colorItemBackgroundAlternate, true, "alternate-background-color: #"));
+	m_colorStyleAlt->setSheet(cafBackgroundColorDialogWindow, aColor::toHexString(m_colorItemBackgroundAlternate, true, "background-color: #"));
 	m_colorStyleAlt->setSheet(cafForegroundColorControls, aColor::toHexString(m_colorTextNormal, true, "color: #"));
 	m_colorStyleAlt->setSheet(cafForegroundColorButton, aColor::toHexString(m_colorTextNormal, true, "color: #"));
 	m_colorStyleAlt->setSheet(cafForegroundColorWindow, aColor::toHexString(m_colorTextNormal, true, "color: #"));
+	m_colorStyleAlt->setSheet(cafForegroundColorDialogWindow, aColor::toHexString(m_colorTextNormal, true, "color: #"));
 
 	if (m_externColorStyle == nullptr) {
 		m_colorStyle->setSheet(cafBackgroundColorFocus, "");

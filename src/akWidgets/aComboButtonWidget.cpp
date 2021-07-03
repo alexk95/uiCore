@@ -133,9 +133,15 @@ void ak::aComboButtonWidget::setColorStyle(
 	m_colorStyle = _colorStyle;
 	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorControls |
 		cafBackgroundColorControls));
-	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorControls |
-		cafBackgroundColorControls | cafBackgroundColorAlternate, "QPushButton QMenu{", "}"));
 	this->setStyleSheet(sheet);
+
+	if (m_menu != nullptr) {
+		sheet = m_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu{", "}");
+		sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorDialogWindow | cafBackgroundColorDialogWindow, "QMenu::item{", "}"));
+		sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorFocus | cafBackgroundColorFocus, "QMenu::item:selected{", "}"));
+		sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorSelected | cafBackgroundColorSelected, "QMenu::item:pressed{", "}"));
+		m_menu->setStyleSheet(sheet);
+	}
 }
 
 void ak::aComboButtonWidget::slotItemTriggered() {
