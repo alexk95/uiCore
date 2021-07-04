@@ -37,6 +37,7 @@ class QSurfaceFormat;
 class QWidget;
 class QMovie;
 class QTabBar;
+class QSettings;
 
 namespace ak {
 
@@ -47,6 +48,7 @@ namespace ak {
 	class aNotifier;
 	class aUidManager;
 	class aFile;
+	class aPaintable;
 	class aObjectManager;
 	class aColorStyle;
 	class aIconManager;
@@ -69,10 +71,8 @@ namespace ak {
 			//! @param _iconManager The external icon manager. If nullptr a new one will be created
 			//! @param _objectManager The external object manager. If nullptr a new one will be created
 			void ini(
-				aMessenger *			_messenger = nullptr,
-				aUidManager *			_uidManager = nullptr,
-				aIconManager *			_iconManager = nullptr,
-				aObjectManager *		_objectManager = nullptr
+				const QString &			_organizationName,
+				const QString &			_applicationName
 			);
 
 			//! @brief Returns true if the API was initialized
@@ -105,9 +105,11 @@ namespace ak {
 			//! @brief Will delete all files created
 			void deleteAllFiles();
 
-			aApplication * app();
+			aApplication * app() { return m_app; }
 
-			QDesktopWidget * desktop();
+			QDesktopWidget * desktop() { return m_desktop; }
+
+			QSettings * settings(void) const { return m_settings; }
 
 		protected:
 			aApplication *				m_app;							//! The core application
@@ -115,10 +117,10 @@ namespace ak {
 			QSurfaceFormat *			m_defaultSurfaceFormat;
 			QDesktopWidget *			m_desktop;
 
-			bool						m_objManagerIsExtern;			//! If true, then the object manager was created externally
-			bool						m_messengerIsExtern;			//! If true, then the messenger was created externally
-			bool						m_uidManagerIsExtern;			//! If true, then the UID manager was created externally
-			bool						m_iconManagerIsExtern;			//! If true, then the icon manager was created externally
+			QString						m_companyName;
+			QString						m_applicationName;
+			QSettings *					m_settings;
+
 			bool						m_isInitialized;				//! If true, then the API was initialized
 
 			aUidManager *				m_fileUidManager;				//! The UID manager used for files in this API
@@ -132,15 +134,13 @@ namespace ak {
 		// ###############################################################################################################################################
 
 		//! @brief Will initialize the application
-		//! @param _messenger The messenger that will be used in the aplication, if nullptr a new one will be created
-		//! @param _uidManager The UID manager that will be used in the aplication, if nullptr a new one will be created
-		//! @param _iconManager The icon manager that will be used in the aplication, if nullptr a new one will be created
-		//! @param _objectManager The object manager that will be used in the aplication, if nullptr a new one will be created
+		//! @param _argc The program start argument count
+		//! @param _argv The program start arguments
+		//! @param _organizationName The name of the organization (required for settings set/get)
+		//! @param _applicationName The name of the application (required for settings set/get)
 		UICORE_API_EXPORT void ini(
-			aMessenger *						_messenger = nullptr,
-			aUidManager *						_uidManager = nullptr,
-			ak::aIconManager *					_iconManager = nullptr,
-			ak::aObjectManager *				_objectManager = nullptr
+			const QString &		_organizationName,
+			const QString &		_applicationName
 		);
 
 		//! @brief Will destroy all objects created by this API
@@ -212,6 +212,14 @@ namespace ak {
 		//! @brief Will return the object manager used in this API
 		UICORE_API_EXPORT aObjectManager * getObjectManager(void);
 
+		//! @brief Will add the provided object to the paintable list
+		//! @param _object The object to add
+		UICORE_API_EXPORT void addPaintable(aPaintable * _object);
+
+		//! @brief Will remove the object from the paintable list
+		//! @param _object The object to remove
+		UICORE_API_EXPORT void removePaintable(aPaintable * _object);
+
 		// ###############################################################################################################################################
 		
 		// message functions
@@ -222,7 +230,7 @@ namespace ak {
 		//! @param _senderUid The sender UID for which to register the provided notifier
 		//! @param _notifier The notifier which to register
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API_EXPORT UID registerUidNotifier(
+		UICORE_API_EXPORT void registerUidNotifier(
 			UID									_senderUid,
 			ak::aNotifier *						_notifier
 		);
@@ -233,7 +241,7 @@ namespace ak {
 		//! @param _event The event type for which to register the provided notifier
 		//! @param _notifier The notifier which to register
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API_EXPORT UID registerEventTypeNotifier(
+		UICORE_API_EXPORT void registerEventTypeNotifier(
 			eventType							_event,
 			ak::aNotifier *						_notifier
 		);
@@ -243,7 +251,7 @@ namespace ak {
 		//! Returns the UID of the notifier
 		//! @param _notifier The notifier which to register
 		//! @throw ak::Exception if the API is not initialized
-		UICORE_API_EXPORT UID registerAllMessagesNotifier(
+		UICORE_API_EXPORT void registerAllMessagesNotifier(
 			ak::aNotifier *						_notifier
 		);
 
@@ -2759,6 +2767,64 @@ namespace ak {
 			const QString &											_name,
 			const QString &											_size
 		);
+
+		// ###############################################################################################################################################
+
+		// Settings
+
+		namespace settings {
+
+			UICORE_API_EXPORT QString getString(
+				const QString &			_settingsName,
+				const QString &			_defaultValue = QString("")
+			);
+
+			UICORE_API_EXPORT int getInt(
+				const QString &			_settingsName,
+				int						_defaultValue = 0
+			);
+
+			UICORE_API_EXPORT double getDouble(
+				const QString &			_settingsName,
+				double					_defaultValue = 0.0
+			);
+
+			UICORE_API_EXPORT float getFloat(
+				const QString &			_settingsName,
+				float					_defaultValue = 0.0
+			);
+
+			UICORE_API_EXPORT bool getBool(
+				const QString &			_settingsName,
+				bool					_defaultValue = 0.0
+			);
+
+			UICORE_API_EXPORT void setString(
+				const QString &			_settingsName,
+				const QString &			_value
+			);
+
+			UICORE_API_EXPORT void setInt(
+				const QString &			_settingsName,
+				int						_value
+			);
+
+			UICORE_API_EXPORT void setDouble(
+				const QString &			_settingsName,
+				double					_value
+			);
+
+			UICORE_API_EXPORT void setFloat(
+				const QString &			_settingsName,
+				float					_value
+			);
+
+			UICORE_API_EXPORT void setBool(
+				const QString &			_settingsName,
+				bool					_value
+			);
+
+		}
 
 		// ###############################################################################################################################################
 
