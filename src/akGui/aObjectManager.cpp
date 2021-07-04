@@ -33,6 +33,7 @@
 #include <akGui/aContextMenuItem.h>
 #include <akGui/aDialog.h>
 #include <akGui/aObjectManager.h>
+#include <akGui/aPaintable.h>
 #include <akGui/aRestorable.h>
 #include <akGui/aSignalLinker.h>
 #include <akGui/aSpecialTabBar.h>
@@ -994,6 +995,14 @@ bool ak::aObjectManager::objectExists(
 	return !(itm == m_mapObjects.end());
 }
 
+void ak::aObjectManager::addPaintable(aPaintable * _object) {
+	m_externalPaintableObjects.insert_or_assign(_object, false);
+}
+
+void ak::aObjectManager::removePaintable(aPaintable * _object) {
+	m_externalPaintableObjects.erase(_object);
+}
+
 // ###############################################################################################################################################
 
 void ak::aObjectManager::setColorStyle(
@@ -1002,15 +1011,19 @@ void ak::aObjectManager::setColorStyle(
 	assert(_colorStyle != nullptr); // Nullptr provided
 	m_currentColorStyle = _colorStyle;
 
-	for (auto obj = m_mapObjects.begin(); obj != m_mapObjects.end(); obj++) {
-		assert(obj->second != nullptr); // nullptr stored
-		if (obj->second->isPaintableType()) {
+	for (auto obj : m_mapObjects) {
+		assert(obj.second != nullptr); // nullptr stored
+		if (obj.second->isPaintableType()) {
 			// Cast paintable
 			ak::aPaintable * itm = nullptr;
-			itm = dynamic_cast<ak::aPaintable *>(obj->second);
+			itm = dynamic_cast<ak::aPaintable *>(obj.second);
 			assert(itm != nullptr); // Cast failed
 			itm->setColorStyle(m_currentColorStyle);
 		}
+	}
+
+	for (auto obj : m_externalPaintableObjects) {
+		obj.first->setColorStyle(_colorStyle);
 	}
 }
 

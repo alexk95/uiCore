@@ -34,6 +34,7 @@
 #include <akGui/aColorStyle.h>
 #include <akGui/aContextMenuItem.h>
 #include <akGui/aIconManager.h>
+#include <akGui/aPaintable.h>
 #include <akGui/aRestorable.h>
 #include <akGui/aSpecialTabBar.h>
 #include <akGui/aTtbContainer.h>
@@ -74,6 +75,7 @@
 #include <qdesktopwidget.h>
 #include <qfiledialog.h>
 #include <qdatetime.h>
+#include <qsettings.h>
 
 static ak::uiAPI::apiManager		m_apiManager;					//! The API manager
 static ak::aObjectManager *			m_objManager = nullptr;					//! The object manager used in this API
@@ -89,15 +91,12 @@ template <class T> T * akCastObject(ak::aObject * _obj) {
 }
 
 ak::uiAPI::apiManager::apiManager()
-	: m_iconManagerIsExtern(false),
-	m_messengerIsExtern(false),
-	m_objManagerIsExtern(false),
-	m_uidManagerIsExtern(false),
-	m_isInitialized(false),
+	: m_isInitialized(false),
 	m_appIsRunning(false),
 	m_defaultSurfaceFormat(nullptr),
 	m_fileUidManager(nullptr),
-	m_app(nullptr)
+	m_app(nullptr),
+	m_settings(nullptr)
 {
 	aSingletonAllowedMessages::instance();
 	m_fileUidManager = new aUidManager();
@@ -105,77 +104,55 @@ ak::uiAPI::apiManager::apiManager()
 
 ak::uiAPI::apiManager::~apiManager() {
 	// iconManager
-	if (!m_iconManagerIsExtern) {
-		if (m_iconManager != nullptr) {
-			delete m_iconManager; m_iconManager = nullptr;
-		}
+	if (m_iconManager != nullptr) {
+		delete m_iconManager; m_iconManager = nullptr;
 	}
+
 
 	// messenger
-	if (!m_messengerIsExtern) {
-		if (m_messenger != nullptr) {
-			delete m_messenger; m_messenger = nullptr;
-		}
-	}
-	// object manager
-	if (!m_objManagerIsExtern) {
-		if (m_objManager != nullptr) {
-			delete m_objManager; m_objManager = nullptr;
-		}
-	}
-	// uid manager
-	if (!m_uidManagerIsExtern) {
-		if (m_uidManager != nullptr) {
-			delete m_uidManager; m_uidManager = nullptr;
-		}
+	if (m_messenger != nullptr) {
+		delete m_messenger; m_messenger = nullptr;
 	}
 
-	// Qt Application
-	//delete m_app;
+	// object manager
+	if (m_objManager != nullptr) {
+		delete m_objManager; m_objManager = nullptr;
+	}
+
+	// uid manager
+	if (m_uidManager != nullptr) {
+		delete m_uidManager; m_uidManager = nullptr;
+	}
+
+	if (m_settings != nullptr) {
+		delete m_settings; m_settings = nullptr;
+	}
 }
 
 void ak::uiAPI::apiManager::ini(
-	aMessenger *										_messenger,
-	aUidManager *										_uidManager,
-	aIconManager *										_iconManager,
-	aObjectManager *									_objectManager
+	const QString &			_organizationName,
+	const QString &			_applicationName
 ) {
 	assert(!m_isInitialized); // Is already initialized
-	m_app = new aApplication();
+	m_app = new aApplication;
 	m_desktop = m_app->desktop();
 	
+	m_companyName = _organizationName;
+	m_applicationName = _applicationName;
+	m_settings = new QSettings(_organizationName, _applicationName);
+
 	// messenger
-	if (_messenger == nullptr) {
-		m_messenger = new aMessenger();
-		assert(m_messenger != nullptr); // Failed to create
-	}
-	else { m_messenger = _messenger; m_messengerIsExtern = true; }
-
+	m_messenger = new aMessenger;
+	
 	// uid manager
-	if (_uidManager == nullptr) {
-		m_uidManager = new aUidManager();
-		assert(m_uidManager != nullptr); // Failed to create
-	}
-	else { m_uidManager = _uidManager; m_uidManagerIsExtern = true; }
-
+	m_uidManager = new aUidManager();
+	
 	// icon manager
-	if (_iconManager == nullptr) {
-		m_iconManager = new aIconManager(QString(""));
-		assert(m_iconManager != nullptr); // Failed to create
-	}
-	else { m_iconManager = _iconManager; m_iconManagerIsExtern = true; }
-
+	m_iconManager = new aIconManager(QString(""));
+	
 	// object manager
-	if (_objectManager == nullptr) {
-		m_objManager = new aObjectManager(m_messenger, m_uidManager);
-		assert(m_objManager != nullptr); // Failed to create
-	}
-	else {
-		assert(m_messengerIsExtern);	// Internal messenger cannot be used with external objectManager
-		assert(m_uidManagerIsExtern);	// Internal uidManager cannot be used with external objectManager
-		m_objManager = _objectManager;
-	}
-
+	m_objManager = new aObjectManager(m_messenger, m_uidManager);
+	
 	m_isInitialized = true;
 }
 
@@ -234,18 +211,12 @@ void ak::uiAPI::apiManager::deleteAllFiles() {
 	m_mapFiles.clear();
 }
 
-ak::aApplication * ak::uiAPI::apiManager::app() { return m_app; }
-
-QDesktopWidget * ak::uiAPI::apiManager::desktop() { return m_desktop; }
-
 // ###############################################################################################################################################
 
 void ak::uiAPI::ini(
-	aMessenger *										_messenger,
-	aUidManager *										_uidManager,
-	aIconManager *										_iconManager,
-	aObjectManager *									_objectManager
-) { m_apiManager.ini(_messenger, _uidManager, _iconManager, _objectManager); }
+	const QString &			_company,
+	const QString &			_applicationName
+) { m_apiManager.ini(_company, _applicationName); }
 
 void ak::uiAPI::destroy(void) {	if (m_objManager != nullptr) { m_objManager->destroyAll(); } }
 
@@ -322,29 +293,39 @@ ak::aObjectManager * ak::uiAPI::getObjectManager(void) {
 	return m_objManager;
 }
 
+void ak::uiAPI::addPaintable(aPaintable * _object) {
+	assert(m_objManager != nullptr);	// API not initialized
+	m_objManager->addPaintable(_object);
+}
+
+void ak::uiAPI::removePaintable(aPaintable * _object) {
+	assert(m_objManager != nullptr);	// API not initialized
+	m_objManager->removePaintable(_object);
+}
+
 // ###############################################################################################################################################
 
-ak::UID ak::uiAPI::registerUidNotifier(
+void ak::uiAPI::registerUidNotifier(
 	UID												_senderUid,
 	aNotifier *										_notifier
 ) {
 	assert(m_messenger != nullptr); // API not initialized
-	return m_messenger->registerUidReceiver(_senderUid, _notifier);
+	m_messenger->registerUidReceiver(_senderUid, _notifier);
 }
 
-ak::UID ak::uiAPI::registerEventTypeNotifier(
+void ak::uiAPI::registerEventTypeNotifier(
 	eventType										_event,
 	aNotifier *										_notifier
 ) {
 	assert(m_messenger != nullptr); // API not initialized
-	return m_messenger->registerEventTypeReceiver(_event, _notifier);
+	m_messenger->registerEventTypeReceiver(_event, _notifier);
 }
 
-ak::UID ak::uiAPI::registerAllMessagesNotifier(
+void ak::uiAPI::registerAllMessagesNotifier(
 	aNotifier *										_notifier
 ) {
 	assert(m_messenger != nullptr); // API not initialized
-	return m_messenger->registerNotifierForAllMessages(_notifier);
+	m_messenger->registerNotifierForAllMessages(_notifier);
 }
 
 void ak::uiAPI::sendMessage(
@@ -3176,7 +3157,81 @@ const QIcon & ak::uiAPI::getIcon(
 
 // ###############################################################################################################################################
 
-// special
+// settings
+
+QString ak::uiAPI::settings::getString(
+	const QString &			_settingsName,
+	const QString &			_defaultValue
+) {
+	return m_apiManager.settings()->value(_settingsName, _defaultValue).toString();
+}
+
+int ak::uiAPI::settings::getInt(
+	const QString &			_settingsName,
+	int						_defaultValue
+) {
+	return m_apiManager.settings()->value(_settingsName, _defaultValue).toInt();
+}
+
+double ak::uiAPI::settings::getDouble(
+	const QString &			_settingsName,
+	double					_defaultValue
+) {
+	return m_apiManager.settings()->value(_settingsName, _defaultValue).toDouble();
+}
+
+float ak::uiAPI::settings::getFloat(
+	const QString &			_settingsName,
+	float					_defaultValue
+) {
+	return m_apiManager.settings()->value(_settingsName, _defaultValue).toFloat();
+}
+
+bool ak::uiAPI::settings::getBool(
+	const QString &			_settingsName,
+	bool					_defaultValue
+) {
+	return m_apiManager.settings()->value(_settingsName, _defaultValue).toBool();
+}
+
+void ak::uiAPI::settings::setString(
+	const QString &			_settingsName,
+	const QString &			_value
+) {
+	m_apiManager.settings()->setValue(_settingsName, _value);
+}
+
+void ak::uiAPI::settings::setInt(
+	const QString &			_settingsName,
+	int						_value
+) {
+	m_apiManager.settings()->setValue(_settingsName, _value);
+}
+
+void ak::uiAPI::settings::setDouble(
+	const QString &			_settingsName,
+	double					_value
+) {
+	m_apiManager.settings()->setValue(_settingsName, _value);
+}
+
+void ak::uiAPI::settings::setFloat(
+	const QString &			_settingsName,
+	float					_value
+) {
+	m_apiManager.settings()->setValue(_settingsName, _value);
+}
+
+void ak::uiAPI::settings::setBool(
+	const QString &			_settingsName,
+	bool					_value
+) {
+	m_apiManager.settings()->setValue(_settingsName, _value);
+}
+
+// ###############################################################################################################################################
+
+// Special
 
 int ak::uiAPI::exec(void) { return m_apiManager.exec(); }
 

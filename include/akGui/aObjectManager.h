@@ -31,6 +31,7 @@ namespace ak {
 	class aObject;
 	class aNotifierObjectManager;
 	class aMessenger;
+	class aPaintable;
 	class aUidManager;
 	class aSignalLinker;
 	class aColorStyle;
@@ -418,6 +419,14 @@ namespace ak {
 			UID												_objectUID
 		);
 
+		//! @brief Will add the provided object to the paintable list
+		//! @param _object The object to add
+		void addPaintable(aPaintable * _object);
+
+		//! @brief Will remove the object from the paintable list
+		//! @param _object The object to remove
+		void removePaintable(aPaintable * _object);
+
 	private:
 
 		void setColorStyle(
@@ -435,7 +444,7 @@ namespace ak {
 		//! @brief Will cast and return the object to a QWidget
 		QWidget * castToWidget(
 			UID												_objectUid
-		);
+		);		
 
 		// ###############################################################################################################################################
 		
@@ -449,6 +458,8 @@ namespace ak {
 		std::map<UID, UID>					m_mapOwners;				//! Contains the UIDs of the owener of the objects
 
 		std::vector<aColorStyle *>			m_colorStyles;
+		
+		std::map<aPaintable *, bool>		m_externalPaintableObjects;
 
 		std::vector<QString>				m_iconSearchPaths;
 

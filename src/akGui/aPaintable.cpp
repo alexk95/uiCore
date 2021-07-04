@@ -11,6 +11,7 @@
  */
 
 // AK header
+#include <akAPI/uiAPI.h>
 #include <akGui/aPaintable.h>
 #include <akGui/aColorStyle.h>
 

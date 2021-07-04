@@ -12,6 +12,8 @@
 
 #include <akWidgets/aColorStyleSwitchWidget.h>
 #include <akGui/aColorStyle.h>
+#include <akGui/aColorStyleDefault.h>
+#include <akGui/aColorStyleDefaultDark.h>
 #include <akAPI/uiAPI.h>
 
 #include <qaction.h>
@@ -65,9 +67,22 @@ void ak::aColorStyleSwitchWidget::setColorStyle(
 		"QToolTip{", "border: 1px;}"));
 	setStyleSheet(sheet);
 
+	if (m_isAutoSetColorStyle) {
+		if (m_colorStyle->getColorStyleName() == aColorStyleDefault::colorStyleName()) {
+			setCurrentIsBright(true);
+		}
+		else if (m_colorStyle->getColorStyleName() == aColorStyleDefaultDark::colorStyleName()) {
+			setCurrentIsBright(false);
+		}
+		else {
+			assert(0);	// The colorStyleSwitchWidget should only be used with the two default color styles provided with the uiCore
+		}
+	}
+
 }
 
 void ak::aColorStyleSwitchWidget::setCurrentIsBright(bool _isBright) {
+	if (m_isBright == _isBright) { return; }
 	m_isBright = _isBright;
 	if (m_isBright) {
 		setText(m_darkModeTitle);

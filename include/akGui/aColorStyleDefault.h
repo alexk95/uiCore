@@ -35,6 +35,8 @@ namespace ak {
 		//! @brief Will return the name of this styleSheet
 		virtual QString getColorStyleName(void) const override;
 
+		static QString colorStyleName(void);
+
 		//! @brief Will return a stylesheet that can be applied
 		//! If the color areas foreground and background are provided the stylesheet will look something like this:
 		//!			color:#00ffd0; background-color:#ffffff;

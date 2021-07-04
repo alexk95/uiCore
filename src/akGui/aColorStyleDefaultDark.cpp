@@ -38,7 +38,11 @@ ak::aColorStyleDefaultDark::aColorStyleDefaultDark() {
 
 ak::aColorStyleDefaultDark::~aColorStyleDefaultDark() {}
 
-QString ak::aColorStyleDefaultDark::getColorStyleName(void) const { return QString("Default_Dark"); }
+QString ak::aColorStyleDefaultDark::getColorStyleName(void) const { return aColorStyleDefaultDark::colorStyleName(); }
+
+QString ak::aColorStyleDefaultDark::colorStyleName(void) {
+	return QString("Default_Dark");
+}
 
 /*
 #define _borderDefaultControl "border-style: outset;border-width: 1px; border-radius: 0px;border-color: #707070;"

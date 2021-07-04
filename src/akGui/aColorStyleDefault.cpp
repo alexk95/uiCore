@@ -38,7 +38,11 @@ ak::aColorStyleDefault::aColorStyleDefault() {
 
 ak::aColorStyleDefault::~aColorStyleDefault() {}
 
-QString ak::aColorStyleDefault::getColorStyleName(void) const { return QString("Default"); }
+QString ak::aColorStyleDefault::getColorStyleName(void) const { return aColorStyleDefault::colorStyleName(); }
+
+QString ak::aColorStyleDefault::colorStyleName(void) {
+	return QString("Default");
+}
 
 QString ak::aColorStyleDefault::toStyleSheet(
 	colorAreaFlag					_colorAreas,
