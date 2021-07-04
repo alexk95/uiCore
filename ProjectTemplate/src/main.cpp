@@ -4,13 +4,27 @@
 // Project header
 #include "AppBase.h"
 
+using namespace ak;
+
 int main(int _argc, char ** _argv) {
-	// Initialize the uiCore. This step is mandatory before any UI element is created!
-	ak::uiAPI::ini(nullptr, nullptr, nullptr, nullptr);
+	// Initialize the API. This function call is mandatory,
+	// otherwise the API will not be able to create objects.
+	// The initialization will create all core objects required for the API to work
+	uiAPI::ini("<Your organization name>", "<Your application name>");
 
-	// Create a new Application base object that should manage the application and setup the UI in the constructor
-	AppBase app{ _argc, _argv };
+	try {
+		// Create the main class that is managing the functions of the UI
+		AppBase e(_argc, _argv);
 
-	// Start the QT event loop from now on only messages (and/or signals) will be received in case of the registered events
-	return ak::uiAPI::exec();
+		// Start the Qt event queue
+		return uiAPI::exec();
+	}
+	catch (const std::exception & e) {
+		uiAPI::promptDialog::show(e.what(), "Fatal error");
+		return -1;
+	}
+	catch (...) {
+		uiAPI::promptDialog::show("Unknown error", "Fatal error");
+		return -2;
+	}
 }

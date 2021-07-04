@@ -13,9 +13,13 @@
   <ItemGroup>
     <ClCompile Include="src\AppBase.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\TabToolbar.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\AppBase.h" />
+    <QtMoc Include="include\AppBase.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\TabToolbar.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{63A6BF5F-A201-4F33-A81F-6CE3448FE9AF}</ProjectGuid>
