@@ -11,16 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Example.h" />
+    <QtMoc Include="include\AppBase.h" />
+    <QtMoc Include="include\myCustomCentralWidget.h" />
+    <ClInclude Include="include\TabToolbar.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Example.cpp">
+    <ClCompile Include="src\AppBase.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\myCustomCentralWidget.cpp" />
+    <ClCompile Include="src\TabToolbar.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{63A6BF5F-A201-4F33-A81F-6CE3448FE9AF}</ProjectGuid>

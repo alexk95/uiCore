@@ -8,19 +8,32 @@
  */
 
 #include <akAPI/uiAPI.h>
-#include <Example.h>			// The example class managing the UI
+#include "AppBase.h"			// The example class managing the UI
 
 using namespace ak;
 
-int main(int argc, char *argv[])
+int main(int _argc, char * _argv[])
 {
 	// Initialize the API. This function call is mandatory,
 	// otherwise the API will not be able to create objects.
 	// The initialization will create all core objects required for the API to work
-	uiAPI::ini();
+	uiAPI::ini("<Your organization name>", "<Your application name>");
 
-	// Create the main class that is managing the functions of the UI
-	Example e;
+	try {
+		// Create the main class that is managing the functions of the UI
+		AppBase e(_argc, _argv);
 
-	return 0;
+		// Start the Qt event queue
+		return uiAPI::exec();
+	}
+	catch (const std::exception & e) {
+		uiAPI::promptDialog::show(e.what(), "Fatal error");
+		return -1;
+	}
+	catch (...) {
+		uiAPI::promptDialog::show("Unknown error", "Fatal error");
+		return -2;
+	}
+
+	
 }
