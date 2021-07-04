@@ -13,7 +13,7 @@
 // AK header
 #include <akCore/aNotifier.h>
 
-ak::aNotifier::aNotifier() : aObject(otNone), m_isEnabled(true) {}
+ak::aNotifier::aNotifier() : m_isEnabled(true) {}
 
 void ak::aNotifier::enable(void) { m_isEnabled = true; }
 

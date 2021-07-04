@@ -68,7 +68,7 @@ namespace ak {
 		//! @param _senderId The id of the sender the notifier wants to receive the message from
 		//! @param _messageType The type of the message which the notifier wants to receive
 		//! @param _notifier The notifier which is receiving the message
-		UID registerUidReceiver(
+		void registerUidReceiver(
 			UID							_senderId,
 			aNotifier *					_notifier
 		);
@@ -76,14 +76,14 @@ namespace ak {
 		//! @brief Will register a receiver for a specified sender
 		//! @param _eventType The event type for what to register this receiver
 		//! @param _notifier The notifier to register
-		UID registerEventTypeReceiver(
+		void registerEventTypeReceiver(
 			eventType					_eventType,
 			aNotifier *					_notifier
 		);
 
 		//! @brief Will register a receiver for every single message send
 		//! @param _notifier The notifier to register
-		UID registerNotifierForAllMessages(
+		void registerNotifierForAllMessages(
 			aNotifier *					_notifier
 		);
 

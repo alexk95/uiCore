@@ -64,16 +64,13 @@ void ak::aMessenger::sendMessage(
 // #############################################################################
 // id management
 
-ak::UID ak::aMessenger::registerUidReceiver(
+void ak::aMessenger::registerUidReceiver(
 	UID					_senderId,
 	aNotifier *			_notifier
 ) {
 	try {
 
 		if (_notifier == nullptr) { throw aException("Is nullptr", "Check notifier"); }
-		if (_notifier->uid() == ak::invalidUID) {
-			_notifier->setUid(m_uidManager->getId());
-		}
 
 		auto itm = m_uidReceivers.find(_senderId);
 
@@ -87,23 +84,19 @@ ak::UID ak::aMessenger::registerUidReceiver(
 		} else {
 			itm->second->push_back(_notifier);
 		}
-		return _notifier->uid();
 	}
 	catch (const aException & e) { throw aException(e, "ak::aMessenger::registerUidReceiver()"); }
 	catch (const std::exception & e) { throw aException(e.what(), "ak::aMessenger::registerUidReceiver()"); }
 	catch (...) { throw aException("Unknown error", "ak::aMessenger::registerUidReceiver()"); }
 }
 
-ak::UID ak::aMessenger::registerEventTypeReceiver(
+void ak::aMessenger::registerEventTypeReceiver(
 	eventType				_eventType,
 	aNotifier *					_notifier
 ) {
 	try {
 
 		if (_notifier == nullptr) { throw aException("Is nullptr", "Check notifier"); }
-		if (_notifier->uid() == ak::invalidUID) {
-			_notifier->setUid(m_uidManager->getId());
-		}
 
 		auto itm = m_eventReceivers.find(_eventType);
 
@@ -116,21 +109,18 @@ ak::UID ak::aMessenger::registerEventTypeReceiver(
 			m_eventReceivers.insert_or_assign(_eventType, collection);
 		}
 		else { itm->second->push_back(_notifier); }
-		return _notifier->uid();
 	}
 	catch (const aException & e) { throw aException(e, "ak::aMessenger::registerEventTypeReceiver()"); }
 	catch (const std::exception & e) { throw aException(e.what(), "ak::aMessenger::registerEventTypeReceiver()"); }
 	catch (...) { throw aException("Unknown error", "ak::aMessenger::registerEventTypeReceiver()"); }
 }
 
-ak::UID ak::aMessenger::registerNotifierForAllMessages(
+void ak::aMessenger::registerNotifierForAllMessages(
 	aNotifier *					_notifier
 ) {
 	try {
 		if (_notifier == nullptr) { throw aException("Is nullptr", "Check notifier"); }
-		if (_notifier->uid() == ak::invalidUID) { _notifier->setUid(m_uidManager->getId()); }
 		m_allMessageReceivers.push_back(_notifier);
-		return _notifier->uid();
 	}
 	catch (const aException & e) { throw aException(e, "ak::aMessenger::registerNotifierForAllMessages()"); }
 	catch (const std::exception & e) { throw aException(e.what(), "ak::aMessenger::registerNotifierForAllMessages()"); }

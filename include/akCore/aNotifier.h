@@ -15,15 +15,17 @@
 // AK header
 #include <akCore/akCore.h>
 #include <akCore/globalDataTypes.h>
-#include <akCore/aObject.h>
 
 namespace ak {
 	
 	//! This abstract class is used to provide the receiver functionallity used in the messaging class.
-	class UICORE_API_EXPORT aNotifier : public aObject {
+	class UICORE_API_EXPORT aNotifier {
 	public:
 		//! @brief Will initialize the notifier
 		aNotifier();
+
+		//! @brief Destructor
+		virtual ~aNotifier() {}
 
 		//! @brief Will notify this receiver that a message was received by a sender.
 		//! @param _senderId The id of the sender the message was sent from
