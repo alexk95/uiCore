@@ -110,6 +110,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\akAPI\uiAPI.cpp" />
+    <ClCompile Include="src\akCore\aDate.cpp" />
     <ClCompile Include="src\akCore\aDateHelper.cpp" />
     <ClCompile Include="src\akCore\aException.cpp" />
     <ClCompile Include="src\akCore\aFile.cpp" />
@@ -123,6 +124,7 @@
     <ClCompile Include="src\akCore\aUidManager.cpp" />
     <ClCompile Include="src\akCore\rJSON.cpp" />
     <ClCompile Include="src\akDB\aMSSQLWrapper.cpp" />
+    <ClCompile Include="src\akDB\aSQLEntities.cpp" />
     <ClCompile Include="src\akDialogs\aLogInDialog.cpp" />
     <ClCompile Include="src\akDialogs\aOptionsDialog.cpp" />
     <ClCompile Include="src\akDialogs\aPromptDialog.cpp" />
@@ -180,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\akAPI\uiAPI.h" />
+    <ClInclude Include="include\akCore\aDate.h" />
     <ClInclude Include="include\akCore\aDateHelper.h" />
     <ClInclude Include="include\akCore\aException.h" />
     <ClInclude Include="include\akCore\aFile.h" />
@@ -195,6 +198,7 @@
     <ClInclude Include="include\akCore\globalDataTypes.h" />
     <ClInclude Include="include\akCore\rJSON.h" />
     <ClInclude Include="include\akDB\aMSSQLWrapper.h" />
+    <ClInclude Include="include\akDB\aSQLEntities.h" />
     <ClInclude Include="include\akGui\aApplication.h" />
     <ClInclude Include="include\akGui\aColor.h" />
     <ClInclude Include="include\akGui\aColorStyle.h" />

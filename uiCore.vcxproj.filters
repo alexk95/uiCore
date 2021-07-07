@@ -270,6 +270,12 @@
     <ClCompile Include="src\akDB\aMSSQLWrapper.cpp">
       <Filter>Source Files\ak\DB</Filter>
     </ClCompile>
+    <ClCompile Include="src\akDB\aSQLEntities.cpp">
+      <Filter>Source Files\ak\DB</Filter>
+    </ClCompile>
+    <ClCompile Include="src\akCore\aDate.cpp">
+      <Filter>Source Files\ak\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\akAPI\uiAPI.h">
@@ -376,6 +382,12 @@
     </ClInclude>
     <ClInclude Include="include\akDB\aMSSQLWrapper.h">
       <Filter>Header Files\ak\DB</Filter>
+    </ClInclude>
+    <ClInclude Include="include\akDB\aSQLEntities.h">
+      <Filter>Header Files\ak\DB</Filter>
+    </ClInclude>
+    <ClInclude Include="include\akCore\aDate.h">
+      <Filter>Header Files\ak\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
