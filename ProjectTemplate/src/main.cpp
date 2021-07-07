@@ -6,11 +6,14 @@
 
 using namespace ak;
 
+const QString c_orgName = "Your organization name";
+const QString c_appName = "Your application name";
+
 int main(int _argc, char ** _argv) {
 	// Initialize the API. This function call is mandatory,
 	// otherwise the API will not be able to create objects.
 	// The initialization will create all core objects required for the API to work
-	uiAPI::ini("<Your organization name>", "<Your application name>");
+	uiAPI::ini(c_orgName, c_appName);
 
 	try {
 		// Create the main class that is managing the functions of the UI

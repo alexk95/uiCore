@@ -16,7 +16,7 @@
     <ClCompile Include="src\TabToolbar.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="include\AppBase.h" />
+    <ClInclude Include="include\AppBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\TabToolbar.h" />

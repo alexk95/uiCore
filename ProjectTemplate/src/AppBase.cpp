@@ -1,5 +1,6 @@
 // Application header
 #include "AppBase.h"			// Corresponding header
+#include "TabToolbar.h"			// TabToolbar
 
 // AK header
 #include <akAPI/uiAPI.h>		// The uiAPI
@@ -16,6 +17,7 @@ const QString c_settingsWindowState = "WindowState";
 const QString c_settingsColorStyle = "ColorStyle";
 
 AppBase::AppBase(int _argc, char ** _argv)
+	: m_ttb(nullptr)
 {
 	// Create own UID
 	m_uid = ak::uiAPI::createUid();
@@ -40,6 +42,9 @@ AppBase::AppBase(int _argc, char ** _argv)
 	// Create the main window
 	m_mainWindow = uiAPI::createWindow(m_uid);
 
+	// Create the tabToolbar
+	m_ttb = new TabToolbar(this);
+
 	// Create your elements
 
 	// ...
@@ -55,21 +60,6 @@ AppBase::AppBase(int _argc, char ** _argv)
 
 AppBase::~AppBase() {
 	if (m_ttb != nullptr) { delete m_ttb; }
-}
-
-void AppBase::notify(
-	ak::UID					_sender,
-	ak::eventType			_eventType,
-	int						_info1,
-	int						_info2
-) {
-	try {
-
-	}
-	catch (const std::exception & e) {
-		// Show an error dialog
-		ak::uiAPI::promptDialog::show(e.what(), "Error", promptIconLeft, c_dialogErrorIcon, c_dialogIconPath);
-	}
 }
 
 bool AppBase::closeEvent(void) {
