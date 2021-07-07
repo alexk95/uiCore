@@ -44,13 +44,13 @@ void ak::aWindow::setColorStyle(
 	assert(_colorStyle != nullptr);		// Nullptr provided
 	m_colorStyle = _colorStyle;
 
-	QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	/*QString sheet(m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow));
 
-	setStyleSheet(sheet);
+	setStyleSheet(sheet);*/
 
 	// Double paint to not mess up the tab toolbar
-	sheet = m_colorStyle->toStyleSheet(cafForegroundColorWindow |
+	QString sheet = m_colorStyle->toStyleSheet(cafForegroundColorWindow |
 		cafBackgroundColorWindow, "QMainWindow{", "}\n");
 
 	sheet.append(m_colorStyle->toStyleSheet(cafForegroundColorWindow | cafBackgroundColorWindow,

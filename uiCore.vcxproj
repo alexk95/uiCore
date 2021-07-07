@@ -122,6 +122,7 @@
     <ClCompile Include="src\akCore\aSingletonAllowedMessages.cpp" />
     <ClCompile Include="src\akCore\aUidManager.cpp" />
     <ClCompile Include="src\akCore\rJSON.cpp" />
+    <ClCompile Include="src\akDB\aMSSQLWrapper.cpp" />
     <ClCompile Include="src\akDialogs\aLogInDialog.cpp" />
     <ClCompile Include="src\akDialogs\aOptionsDialog.cpp" />
     <ClCompile Include="src\akDialogs\aPromptDialog.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="include\akCore\aUidMangager.h" />
     <ClInclude Include="include\akCore\globalDataTypes.h" />
     <ClInclude Include="include\akCore\rJSON.h" />
+    <ClInclude Include="include\akDB\aMSSQLWrapper.h" />
     <ClInclude Include="include\akGui\aApplication.h" />
     <ClInclude Include="include\akGui\aColor.h" />
     <ClInclude Include="include\akGui\aColorStyle.h" />
