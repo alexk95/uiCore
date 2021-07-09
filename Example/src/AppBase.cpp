@@ -32,23 +32,6 @@ AppBase::AppBase(int _argc, char ** _argv)
 	// Create own UID
 	m_uid = ak::uiAPI::createUid();
 	
-	// Setup icon manager
-	// We need to place the addIconSearchPath in a try block since a exception will be thrown if there is no valid search path
-
-	int pathFoundCounter{ 0 };
-
-	// Installation directory
-	try { ak::uiAPI::addIconSearchPath(".\\Icons\\"); ++pathFoundCounter; }
-	catch (...) {}
-	// Repository icon folder
-	try { ak::uiAPI::addIconSearchPath(QString(qgetenv("UI_CORE_ROOT") + "\\Icons\\")); ++pathFoundCounter; }
-	catch (...) {}
-
-	// If no repository was found throw an exception
-	if (pathFoundCounter == 0) {
-		throw std::exception("No icon path found. Please reinstall the application.");
-	}
-
 	// Create the main window
 	m_mainWindow = uiAPI::createWindow(m_uid);
 
