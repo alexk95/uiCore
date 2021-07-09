@@ -39,6 +39,10 @@ ak::aMSSQLWrapper::~aMSSQLWrapper() {
 	disconnect();
 }
 
+// ################################################################################################################
+
+// Connection
+
 bool ak::aMSSQLWrapper::connect(
 	const std::string &		_ipAddress,
 	const std::string &		_port,
@@ -105,7 +109,7 @@ bool ak::aMSSQLWrapper::connect(
 	case SQL_INVALID_HANDLE:
 		throw std::exception("Invalid handle");
 	case SQL_ERROR:
-		throw std::exception("SQL error");
+		throw aMSSQLConnectionException();
 	default:
 		assert(0); // That should not happen
 		throw std::exception("Unknown error");
@@ -136,6 +140,22 @@ SQLHANDLE ak::aMSSQLWrapper::executeQuery(const std::wstring & _query) {
 	else {
 		return m_lastQueryHandle;
 	}
+}
+
+// ###################################################################################################################################
+
+// Getter
+
+bool ak::aMSSQLWrapper::tableExists(const std::wstring & _table) {
+	std::wstring query{ L"SELECT name FROM SYSOBJECTS WHERE xtype = 'U' AND name = '" };
+	query.append(_table).append(L"'");
+
+	auto handle = executeQuery(query);
+
+	if (handle != NULL) {
+		return SQLFetch(handle) == SQL_SUCCESS;
+	}
+	return false;
 }
 
 // ####################################################################################################################################
@@ -196,3 +216,7 @@ void ak::aMSSQLWrapper::deallocateHandles(void) {
 	}
 	m_isConnected = false;
 }
+
+ak::aMSSQLConnectionException::aMSSQLConnectionException()
+	: std::exception("MSSQL connection exception")
+{}

@@ -12,8 +12,12 @@
 
 #pragma once
 
-#include <string>
+// uiCore header
+#include <akCore/globalDataTypes.h>
 
+// C++ header
+#include <exception>
+#include <string>
 #include <Windows.h>
 #include <sqlext.h>
 #include <sqltypes.h>
@@ -21,7 +25,7 @@
 
 namespace ak {
 
-	class aMSSQLWrapper {
+	class UICORE_API_EXPORT aMSSQLWrapper {
 	public:
 
 		//! @brief Default constructor
@@ -41,6 +45,10 @@ namespace ak {
 		//! @brief Deconstructor
 		virtual ~aMSSQLWrapper();
 
+		// ################################################################################################################
+
+		// Connection
+
 		//! @brief Will establish the connection to the SQL server
 		//! Will return false if the connection failed.
 		//! @param _ipAddress The IP adress of the SQL server
@@ -53,10 +61,6 @@ namespace ak {
 			const std::string &		_userName,
 			const std::string &		_password
 		);
-
-		// ###################################################################################################################################
-
-		// Connection
 
 		//! @brief Will establish the connection to the SQL server
 		//! Will return false if the connection failed.
@@ -100,6 +104,9 @@ namespace ak {
 		//! @brief Will return true if the connection is established
 		bool isConnected(void) const { return m_isConnected; }
 
+		//! @brief Will return true if a table with the specified name does exist
+		bool tableExists(const std::wstring & _table);
+
 		// ###################################################################################################################################
 
 		// Helper functions
@@ -135,6 +142,11 @@ namespace ak {
 
 		aMSSQLWrapper(aMSSQLWrapper&) = delete;
 		aMSSQLWrapper& operator = (aMSSQLWrapper&) = delete;
+	};
+
+	class UICORE_API_EXPORT aMSSQLConnectionException : public std::exception {
+	public:
+		aMSSQLConnectionException();
 	};
 
 }
