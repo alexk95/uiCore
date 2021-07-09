@@ -213,6 +213,9 @@ namespace ak {
 		//! @brief Will return the object manager used in this API
 		UICORE_API_EXPORT aObjectManager * getObjectManager(void);
 
+		//! @brief Will return the application that was created by this API
+		UICORE_API_EXPORT aApplication * getApplication(void);
+
 		//! @brief Will add the provided object to the paintable list
 		//! @param _object The object to add
 		UICORE_API_EXPORT void addPaintable(aPaintable * _object);

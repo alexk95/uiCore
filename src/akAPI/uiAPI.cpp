@@ -293,6 +293,10 @@ ak::aObjectManager * ak::uiAPI::getObjectManager(void) {
 	return m_objManager;
 }
 
+ak::aApplication * ak::uiAPI::getApplication(void) {
+	return m_apiManager.app();
+}
+
 void ak::uiAPI::addPaintable(aPaintable * _object) {
 	assert(m_objManager != nullptr);	// API not initialized
 	m_objManager->addPaintable(_object);
