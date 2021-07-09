@@ -3148,11 +3148,18 @@ ak::UID ak::uiAPI::createUid(void) {
 ak::aMessenger *ak::uiAPI::getMessenger(void) { return m_messenger; }
 
 const QIcon & ak::uiAPI::getIcon(
-	const QString &											_name,
-	const QString &											_size
+	const QString &											_iconName,
+	const QString &											_iconSubPath
 ) {
 	assert(m_iconManager != nullptr); // API not initialized
-	return *m_iconManager->icon(_name, _size);
+	return *m_iconManager->icon(_iconName, _iconSubPath);
+}
+
+const QPixmap & ak::uiAPI::getPixmap(
+	const QString &											_name
+) {
+	assert(m_iconManager != nullptr); // API not initialized
+	return *m_iconManager->pixmap(_name);
 }
 
 // ###############################################################################################################################################

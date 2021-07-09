@@ -21,6 +21,7 @@
 #include <qicon.h>						// QIcon
 #include <qstringlist.h>				// QStringList
 #include <qsize.h>
+#include <qpixmap.h>
 
 // AK header
 #include <akCore/akCore.h>
@@ -2764,8 +2765,14 @@ namespace ak {
 		//! @brief WIll return the icon with the specified name and path
 		//! @throw ak::Exception if the API is not initialized
 		UICORE_API_EXPORT const QIcon & getIcon(
-			const QString &											_name,
-			const QString &											_size
+			const QString &											_iconName,
+			const QString &											_iconSubPath
+		);
+
+		//! @brief WIll return the icon with the specified name and path
+		//! @throw ak::Exception if the API is not initialized
+		UICORE_API_EXPORT const QPixmap & getPixmap(
+			const QString &											_name
 		);
 
 		// ###############################################################################################################################################
