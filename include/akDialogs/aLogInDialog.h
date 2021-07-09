@@ -55,7 +55,6 @@ namespace ak {
 		//! @param _password The initial password
 		//! @param _parent The parent widget
 		aLogInDialog(
-			aMessenger *				_messenger,
 			bool						_showSavePassword,
 			const QPixmap &				_backgroundImage,
 			const QString &				_username = QString(),
@@ -124,6 +123,9 @@ namespace ak {
 		void slotUsernameChanged(const QString & _text);
 		void slotPasswordChanged(const QString & _text);
 
+	signals:
+		void logInRequested(void);
+
 	private:
 
 		void createToolTip(
@@ -140,8 +142,6 @@ namespace ak {
 
 		QString									m_hashedPw;
 
-		aMessenger *							m_messenger;
-		
 		QPixmap *								m_bgImage;
 		QPixmap									m_currentImage;
 

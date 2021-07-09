@@ -289,17 +289,15 @@ ak::UID ak::aObjectManager::createLogInDialog(
 	const QString &										_password
 ) {
 	// Create object
-	aLogInDialog * obj = new aLogInDialog(m_messenger, _showSavePassword, _backgroundImage, _username, _password);
-	assert(obj != nullptr);
-
+	aLogInDialog * obj = new aLogInDialog(_showSavePassword, _backgroundImage, _username, _password);
+	// Connect to signal linker
+	m_signalLinker->addLink(obj);
 	if (m_currentColorStyle != nullptr) { obj->setColorStyle(m_currentColorStyle); }
-	obj->setUid(m_uidManager->getId());
 
 	// Store data
 	m_mapObjects.insert_or_assign(obj->uid(), obj);
 	addCreatedUid(_creatorUid, obj->uid());
 	return obj->uid();
-	QWidget *d;
 }
 
 ak::UID ak::aObjectManager::createNiceLineEdit(

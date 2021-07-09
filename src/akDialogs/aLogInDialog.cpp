@@ -34,7 +34,6 @@
 #include <qpainter.h>
 
 ak::aLogInDialog::aLogInDialog(
-	aMessenger *								_messenger,
 	bool										_showSavePassword,
 	const QPixmap &								_backgroundImage,
 	const QString &								_username,
@@ -42,11 +41,9 @@ ak::aLogInDialog::aLogInDialog(
 	QWidget *									_parent
 ) : aDialog(_parent), aPaintable(otLogInDialog), m_hashedPw(_hashedPassword),
 	m_buttonLogIn(nullptr), m_layout(nullptr), m_spacer(nullptr), m_layoutWidget(nullptr), m_gridLayout(nullptr), m_savePassword(nullptr),
-	m_messenger(_messenger), m_mainLayout(nullptr), m_controlLayout(nullptr), m_controlLayoutWidget(nullptr), m_inputPassword(nullptr), m_inputUsername(nullptr),
+	m_mainLayout(nullptr), m_controlLayout(nullptr), m_controlLayoutWidget(nullptr), m_inputPassword(nullptr), m_inputUsername(nullptr),
 	m_currentID(ak::invalidID), m_rowCounter(0), m_showSavePassword(_showSavePassword), m_passwordHashAlgorithm(hashSha_256)
 {
-	assert(m_messenger != nullptr);
-
 	// Initialize entries
 	m_gridWidget = new QWidget();
 	m_gridLayout = new QGridLayout(m_gridWidget);
@@ -270,8 +267,7 @@ void ak::aLogInDialog::slotClicked(void) {
 		return;
 	}
 
-	m_messenger->sendMessage(m_uid, etClicked);
-
+	emit logInRequested();
 }
 
 void ak::aLogInDialog::slotUsernameChanged(const QString & _text) {
