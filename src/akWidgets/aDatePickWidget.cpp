@@ -22,17 +22,17 @@
 #include <qtextformat.h>
 
 ak::aDatePickWidget::aDatePickWidget()
-	: aWidget(otDatePicker), m_date{ QDate::currentDate() }, m_dateFormat{ dfDDMMYYYY }, m_delimiter{ "." }
+	: aWidget(otDatePicker), m_date{ QDate::currentDate() }, m_dateFormat{ dfDDMMYYYY }, m_delimiter{ "-" }
 {
-	refreshDate();
+	setText(m_date.toQString(m_delimiter, m_dateFormat));
 
 	connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
 }
 
-ak::aDatePickWidget::aDatePickWidget(const QDate & _date, dateFormat _dateFormat)
-	: aWidget(otDatePicker), m_date{ _date }, m_dateFormat{ _dateFormat }, m_delimiter{ "." }
+ak::aDatePickWidget::aDatePickWidget(const aDate & _date, dateFormat _dateFormat)
+	: aWidget(otDatePicker), m_date{ _date }, m_dateFormat{ _dateFormat }, m_delimiter{ "-" }
 {
-	refreshDate();
+	setText(m_date.toQString(m_delimiter, m_dateFormat));
 
 	connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
 }
@@ -64,19 +64,19 @@ void ak::aDatePickWidget::setColorStyle(
 
 // Setter
 
-void ak::aDatePickWidget::setCurrentDate(const QDate & _date, bool _refresh) {
+void ak::aDatePickWidget::setCurrentDate(const aDate & _date, bool _refresh) {
 	m_date = _date;
-	if (_refresh) { refreshDate(); }
+	if (_refresh) { setText(m_date.toQString(m_delimiter, m_dateFormat)); }
 }
 
 void ak::aDatePickWidget::setDelimiter(const QString & _delimiter, bool _refresh) {
 	m_delimiter = _delimiter;
-	if (_refresh) { refreshDate(); }
+	if (_refresh) { setText(m_date.toQString(m_delimiter, m_dateFormat)); }
 }
 
 void ak::aDatePickWidget::setDateFormat(dateFormat _dateFormat, bool _refresh) {
 	m_dateFormat = _dateFormat;
-	if (_refresh) { refreshDate(); }
+	if (_refresh) { setText(m_date.toQString(m_delimiter, m_dateFormat)); }
 }
 
 // #############################################################################################################################
@@ -89,41 +89,9 @@ void ak::aDatePickWidget::slotClicked(void) {
 
 	if (d.showDialog() == ak::dialogResult::resultOk) {
 		m_date = d.selectedDate();
-		refreshDate();
+		setText(m_date.toQString(m_delimiter, m_dateFormat));
 		emit changed();
 	}
-}
-
-// #################################################################################################################################
-
-void ak::aDatePickWidget::refreshDate(void) {
-	QString y{ QString::number(m_date.year()) };
-	QString d;
-	QString m;
-	if (m_date.day() < 10) { d = "0" + QString::number(m_date.day()); }
-	else { d = QString::number(m_date.day()); }
-
-	if (m_date.month() < 10) { m = "0" + QString::number(m_date.month()); }
-	else { m = QString::number(m_date.month()); }
-
-	QString msg;
-
-	switch (m_dateFormat)
-	{
-	case ak::dfDDMMYYYY:
-		msg.append(d).append(m_delimiter).append(m).append(m_delimiter).append(y); break;
-	case ak::dfMMDDYYYY:
-		msg.append(m).append(m_delimiter).append(d).append(m_delimiter).append(y); break;
-	case ak::dfYYYYMMDD:
-		msg.append(y).append(m_delimiter).append(m).append(m_delimiter).append(d); break;
-	case ak::dfYYYYDDMM:
-		msg.append(y).append(m_delimiter).append(d).append(m_delimiter).append(m); break;
-	default:
-		assert(0);	// Unknown format
-		break;
-	}
-
-	setText(msg);
 }
 
 // #################################################################################################################################
@@ -139,11 +107,11 @@ ak::aDatePickDialog::aDatePickDialog(aDatePickWidget * _parent)
 
 }
 
-ak::aDatePickDialog::aDatePickDialog(const QDate & _date, aDatePickWidget * _parent)
+ak::aDatePickDialog::aDatePickDialog(const aDate & _date, aDatePickWidget * _parent)
 	: ak::aPaintable(otDatePickerDialog), aDialog(_parent)
 {
 	setupWidget();
-	m_calendar->setSelectedDate(_date);
+	m_calendar->setSelectedDate(_date.toQDate());
 }
 
 ak::aDatePickDialog::~aDatePickDialog() {
@@ -171,8 +139,8 @@ void ak::aDatePickDialog::setColorStyle(
 
 // Getter
 
-QDate ak::aDatePickDialog::selectedDate(void) const {
-	return m_calendar->selectedDate();
+ak::aDate ak::aDatePickDialog::selectedDate(void) const {
+	return aDate(m_calendar->selectedDate());
 }
 
 // #############################################################################################################################

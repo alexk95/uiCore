@@ -23,17 +23,17 @@
 #include <qtextformat.h>
 
 ak::aTimePickWidget::aTimePickWidget()
-	: aWidget(otTimePicker), m_time{ QTime::currentTime() }, m_timeFormat{ tfHHMM }
+	: aWidget(otTimePicker), m_time{ QTime::currentTime() }, m_timeFormat{ tfHHMM }, m_delimiter(":")
 {
-	refreshTime();
+	setText(m_time.toQString(m_delimiter, m_timeFormat));
 
 	connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
 }
 
-ak::aTimePickWidget::aTimePickWidget(const QTime & _time, timeFormat _timeFormat)
-	: aWidget(otTimePicker), m_time{ _time }, m_timeFormat{ _timeFormat }
+ak::aTimePickWidget::aTimePickWidget(const aTime & _time, timeFormat _timeFormat)
+	: aWidget(otTimePicker), m_time{ _time }, m_timeFormat{ _timeFormat }, m_delimiter(":")
 {
-	refreshTime();
+	setText(m_time.toQString(m_delimiter, m_timeFormat));
 
 	connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
 }
@@ -67,12 +67,17 @@ void ak::aTimePickWidget::setColorStyle(
 
 void ak::aTimePickWidget::setCurrentTime(const QTime & _time, bool _refresh) {
 	m_time = _time;
-	if (_refresh) { refreshTime(); }
+	if (_refresh) { setText(m_time.toQString(m_delimiter, m_timeFormat)); }
+}
+
+void ak::aTimePickWidget::setDelimiter(const QString& _delimiter, bool _refresh) {
+	m_delimiter = _delimiter;
+	if (_refresh) { setText(m_time.toQString(m_delimiter, m_timeFormat)); }
 }
 
 void ak::aTimePickWidget::setTimeFormat(timeFormat _timeFormat, bool _refresh) {
 	m_timeFormat = _timeFormat;
-	if (_refresh) { refreshTime(); }
+	if (_refresh) { setText(m_time.toQString(m_delimiter, m_timeFormat)); }
 }
 
 void ak::aTimePickWidget::setMinuteStep(int _step) {
@@ -83,8 +88,8 @@ void ak::aTimePickWidget::setMinuteStep(int _step) {
 		if (min % m_minuteStep != 0) {
 			min = (min / m_minuteStep) * m_minuteStep;
 		}
-		m_time.setHMS(m_time.hour(), min, m_time.second(), m_time.msec());
-		refreshTime();
+		m_time.setMinute(min);
+		setText(m_time.toQString(m_delimiter, m_timeFormat));
 	}
 }
 
@@ -99,58 +104,9 @@ void ak::aTimePickWidget::slotClicked(void) {
 
 	if (t.showDialog() == ak::dialogResult::resultOk) {
 		m_time = t.selectedTime();
-		refreshTime();
+		setText(m_time.toQString(m_delimiter, m_timeFormat));
 		emit changed();
 	}
-}
-
-
-// #############################################################################################################################
-
-void ak::aTimePickWidget::refreshTime(void) {
-	QString h;
-	QString m;
-	QString s;
-	QString ms;
-
-	h = QString::number(m_time.hour());
-	if (m_time.minute() < 10) {
-		m = "0" + QString::number(m_time.minute());
-	}
-	else {
-		m = QString::number(m_time.minute());
-	}
-	if (m_time.second() < 10) {
-		s = "0" + QString::number(m_time.second());
-	}
-	else {
-		s = "0" + QString::number(m_time.second());
-	}
-
-	if (m_time.msec() < 10) {
-		ms = "000" + QString::number(m_time.msec());
-	} else if (m_time.msec() < 100) {
-		ms = "00" + QString::number(m_time.msec());
-	} else if (m_time.msec() < 1000) {
-		ms = "0" + QString::number(m_time.msec());
-	}
-	else {
-		ms = QString::number(m_time.msec());
-	}
-
-	QString msg;
-
-	switch (m_timeFormat) {
-	case ak::tfHHMM:
-		msg.append(h).append(":").append(m); break;
-	case ak::tfHHMMSS:
-		msg.append(h).append(":").append(m).append(":").append(s); break;
-	case ak::tfHHMMSSMMMM:
-		msg.append(h).append(":").append(m).append(":").append(s).append(".").append(ms); break;
-	}
-
-	setText(msg);
-
 }
 
 // #################################################################################################################################
@@ -166,7 +122,7 @@ ak::aTimePickDialog::aTimePickDialog(aTimePickWidget * _owner, timeFormat _timeF
 
 }
 
-ak::aTimePickDialog::aTimePickDialog(const QTime & _time, aTimePickWidget * _owner, timeFormat _timeFormat)
+ak::aTimePickDialog::aTimePickDialog(const aTime & _time, aTimePickWidget * _owner, timeFormat _timeFormat)
 	: ak::aPaintable(otTimePickerDialog), m_timeFormat(_timeFormat), m_owner(_owner)
 {
 	setupWidget(m_timeFormat);
@@ -222,15 +178,15 @@ void ak::aTimePickDialog::setColorStyle(
 
 // Getter
 
-QTime ak::aTimePickDialog::selectedTime(void) const {
+ak::aTime ak::aTimePickDialog::selectedTime(void) const {
 	switch (m_timeFormat)
 	{
-	case ak::tfHHMM: return QTime(m_hourInput->value(), m_minInput->value());
-	case ak::tfHHMMSS: return QTime(m_hourInput->value(), m_minInput->value(), m_secInput->value());
-	case ak::tfHHMMSSMMMM: return QTime(m_hourInput->value(), m_minInput->value(), m_secInput->value(), m_msecInput->value());
+	case ak::tfHHMM: return aTime(m_hourInput->value(), m_minInput->value());
+	case ak::tfHHMMSS: return aTime(m_hourInput->value(), m_minInput->value(), m_secInput->value());
+	case ak::tfHHMMSSMMMM: return aTime(m_hourInput->value(), m_minInput->value(), m_secInput->value(), m_msecInput->value());
 	default:
 		assert(0);
-		return QTime(m_hourInput->value(), m_minInput->value());
+		return aTime(m_hourInput->value(), m_minInput->value());
 	}
 }
 

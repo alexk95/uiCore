@@ -13,13 +13,13 @@
 #pragma once
 
  // AK header
+#include <akCore/aTime.h>
 #include <akGui/aDialog.h>
 #include <akWidgets/aWidget.h>
 #include <akCore/globalDataTypes.h>
 
 // QT header
 #include <qpushbutton.h>
-#include <qdatetime.h>
 
 // Forward declaration
 class QHBoxLayout;
@@ -37,7 +37,7 @@ namespace ak {
 	public:
 
 		aTimePickWidget();
-		aTimePickWidget(const QTime & _time, timeFormat _timeFormat);
+		aTimePickWidget(const aTime & _time, timeFormat _timeFormat);
 		virtual ~aTimePickWidget();
 
 		// #############################################################################################################################
@@ -60,7 +60,7 @@ namespace ak {
 
 		//! @brief Will return the currently selected time
 		//! @return QTime of the selected time
-		QTime currentTime(void) const { return m_time; }
+		aTime currentTime(void) const { return m_time; }
 
 		//! @brief Will return the currently selected time format
 		//! @return The selected time format
@@ -77,6 +77,11 @@ namespace ak {
 		//! @param _time The date to set
 		//! @param _refresh If true, the object will be repainted according to the current changes
 		void setCurrentTime(const QTime & _time, bool _refresh = true);
+
+		//! @brief Will set the delimiter
+		//! @param _delimiter The delimiter to set
+		//! @param _refresh If true, the object will be repainted according to the current changes
+		void setDelimiter(const QString& _delimiter, bool _refresh = true);
 
 		//! @brief Will set the time format
 		//! @param _timeFormat The time format to set
@@ -98,14 +103,8 @@ namespace ak {
 
 	private:
 
-		//! @brief The time to set
-		//! @throw std::exception If the number of the minute is a single digit, a 0 will be preprended to the number
-		//! @throw std::exception If the number of the second is a single digit, a 0 will be preprended to the number
-		//! @throw std::exception If the number of the milli second is a single digit, a 0 will be preprended to the number
-		//! @throw std::exception If the user lives in different countrys with other time format, the format can be changed
-		void refreshTime(void);
-
-		QTime					m_time;			//! The time
+		aTime					m_time;			//! The time
+		QString					m_delimiter;
 		timeFormat				m_timeFormat;		//! The time format
 		int						m_minuteStep;		//! The step size for a single minute step
 	};
@@ -121,7 +120,7 @@ namespace ak {
 	public:
 
 		aTimePickDialog(aTimePickWidget * _owner, timeFormat _timeFormat = tfHHMM);
-		aTimePickDialog(const QTime & _time, aTimePickWidget * _owner, timeFormat _timeFormat = tfHHMM);
+		aTimePickDialog(const aTime & _time, aTimePickWidget * _owner, timeFormat _timeFormat = tfHHMM);
 		virtual ~aTimePickDialog();
 
 		// #############################################################################################################################
@@ -140,7 +139,7 @@ namespace ak {
 		// Getter
 
 		//! @brief Will return the currently sected date
-		QTime selectedTime(void) const;
+		aTime selectedTime(void) const;
 
 	private slots:
 

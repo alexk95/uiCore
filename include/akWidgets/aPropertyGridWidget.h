@@ -23,11 +23,12 @@
 #include <qcolor.h>						// QColor
 #include <qtablewidget.h>				// QTableWidgetItem
 #include <qicon.h>
-#include <qdatetime.h>
 
 // AK header
 #include <akCore/globalDataTypes.h>
 #include <akCore/akCore.h>
+#include <akCore/aDate.h>
+#include <akCore/aTime.h>
 #include <akWidgets/aWidget.h>
 #include <akGui/aColor.h>
 
@@ -132,13 +133,13 @@ namespace ak {
 		ID addItem(
 			bool											_isMultipleValues,
 			const QString &									_settingName,
-			const QDate &									_value
+			const aDate &									_value
 		);
 
 		ID addItem(
 			bool											_isMultipleValues,
 			const QString &									_settingName,
-			const QTime &									_value
+			const aTime &									_value
 		);
 
 		// Add item to specified group
@@ -190,14 +191,14 @@ namespace ak {
 			bool											_isMultipleValues,
 			const QString &									_groupName,
 			const QString &									_settingName,
-			const QDate &									_value
+			const aDate &									_value
 		);
 
 		ID addItem(
 			bool											_isMultipleValues,
 			const QString &									_groupName,
 			const QString &									_settingName,
-			const QTime &									_value
+			const aTime &									_value
 		);
 
 		void setItemReadOnly(
@@ -304,11 +305,11 @@ namespace ak {
 			ID											_itemID
 		);
 
-		QDate getItemValueDate(
+		aDate getItemValueDate(
 			ID											_itemID
 		);
 
-		QTime getItemValueTime(
+		aTime getItemValueTime(
 			ID											_itemID
 		);
 
@@ -446,14 +447,14 @@ namespace ak {
 			ID												_itemId,
 			bool											_isMultipleValues,
 			const QString &									_settingName,
-			const QDate &									_value
+			const aDate &									_value
 		);
 
 		aPropertyGridItem * addItem(
 			ID												_itemId,
 			bool											_isMultipleValues,
 			const QString &									_settingName,
-			const QTime &									_value
+			const aTime &									_value
 		);
 
 		void setGroupHeaderVisible(
@@ -587,7 +588,7 @@ namespace ak {
 			int									_row,
 			bool								_isMultipleValues,
 			const QString &						_settingName,
-			const QDate &						_value
+			const aDate &						_value
 		);
 
 		aPropertyGridItem(
@@ -596,7 +597,7 @@ namespace ak {
 			int									_row,
 			bool								_isMultipleValues,
 			const QString &						_settingName,
-			const QTime &						_value
+			const aTime &						_value
 		);
 
 		virtual ~aPropertyGridItem();
@@ -648,9 +649,9 @@ namespace ak {
 
 		QString getValueString(void) const;
 
-		QDate getValueDate(void) const;
+		aDate getValueDate(void) const;
 
-		QTime getValueTime(void) const;
+		aTime getValueTime(void) const;
 
 		bool isMultipleValues(void) const;
 
@@ -731,8 +732,8 @@ namespace ak {
 		int								m_valueInteger;
 		QString							m_valueSelection;
 		QString							m_valueString;
-		QDate							m_valueDate;
-		QTime							m_valueTime;
+		aDate							m_valueDate;
+		aTime							m_valueTime;
 
 		std::vector<QString>			m_valuePossibleSelection;
 

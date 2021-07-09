@@ -13,13 +13,13 @@
 #pragma once
 
  // AK header
+#include <akCore/aDate.h>
 #include <akGui/aDialog.h>
 #include <akWidgets/aWidget.h>
 #include <akCore/globalDataTypes.h>
 
 // QT header
 #include <qpushbutton.h>
-#include <qdatetime.h>
 
 // Forward declaration
 class QHBoxLayout;
@@ -35,7 +35,7 @@ namespace ak {
 	public:
 
 		aDatePickWidget();
-		aDatePickWidget(const QDate & _date, dateFormat _dateFormat = dfDDMMYYYY);
+		aDatePickWidget(const aDate & _date, dateFormat _dateFormat = dfDDMMYYYY);
 		virtual ~aDatePickWidget();
 
 		// #############################################################################################################################
@@ -58,7 +58,7 @@ namespace ak {
 
 		//! @brief Will return the currently selected date
 		//! @return Current date
-		QDate currentDate(void) const { return m_date; }
+		aDate currentDate(void) const { return m_date; }
 
 		//! @brief Will return the currently selected delimiter
 		//! @return Selected delimeter
@@ -75,7 +75,7 @@ namespace ak {
 		//! @brief Will set the currently selected date
 		//! @param _date The date to set
 		//! @param _refresh If true, the object will be repainted according to the current changes
-		void setCurrentDate(const QDate & _date, bool _refresh = true);
+		void setCurrentDate(const aDate & _date, bool _refresh = true);
 
 		//! @brief Will set the delimiter
 		//! @param _delimiter The delimiter to set
@@ -97,15 +97,7 @@ namespace ak {
 		void slotClicked(void);
 
 	private:
-
-		//! @brief The date to set
-		//! @throw std::exception If the number of the day is a single digit, a 0 will be preprended to the number
-		//! @throw std::exception If the number of the month is a single digit, a 0 will be preprended to the number
-		//! @throw std::exception If the user lives in different countrys with other date format, the format can be changed
-		//! @throw std::exception If the user lives in different countrys with other date delimiter, the delimiter can be changed
-		void refreshDate(void);
-
-		QDate				m_date;			//! The date
+		aDate				m_date;				//! The date
 		dateFormat			m_dateFormat;		//! The date format
 		QString				m_delimiter;		//! The date delimiter
 	};
@@ -120,7 +112,7 @@ namespace ak {
 		Q_OBJECT
 	public:
 		aDatePickDialog(aDatePickWidget * _parent = nullptr);
-		aDatePickDialog(const QDate & _date, aDatePickWidget * _parent = nullptr);
+		aDatePickDialog(const aDate & _date, aDatePickWidget * _parent = nullptr);
 		virtual ~aDatePickDialog();
 
 		// #############################################################################################################################
@@ -139,7 +131,7 @@ namespace ak {
 		// Getter
 
 		//! @brief Will return the currently sected date
-		QDate selectedDate(void) const;
+		aDate selectedDate(void) const;
 
 	private slots:
 

@@ -213,13 +213,13 @@ ak::ID ak::aPropertyGridWidget::addItem(
 ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
-	const QDate &									_value
+	const aDate &									_value
 ) { return newItemCreated(m_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_settingName,
-	const QTime &									_value
+	const aTime &									_value
 ) { return newItemCreated(m_defaultGroup->addItem(-1, _isMultipleValues, _settingName, _value)); }
 
 // ++++++++++++++++++++++++++++++++++++++++++
@@ -295,7 +295,7 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_groupName,
 	const QString &									_settingName,
-	const QDate &									_value
+	const aDate &									_value
 ) {
 	auto group = m_groups.find(_groupName);
 	assert(group != m_groups.end());	// Invalid group name
@@ -306,7 +306,7 @@ ak::ID ak::aPropertyGridWidget::addItem(
 	bool											_isMultipleValues,
 	const QString &									_groupName,
 	const QString &									_settingName,
-	const QTime &									_value
+	const aTime &									_value
 ) {
 	auto group = m_groups.find(_groupName);
 	assert(group != m_groups.end());	// Invalid group name
@@ -497,7 +497,7 @@ QString ak::aPropertyGridWidget::getItemValueString(
 	return itm->second->getValueString();
 }
 
-QDate ak::aPropertyGridWidget::getItemValueDate(
+ak::aDate ak::aPropertyGridWidget::getItemValueDate(
 	ID											_itemID
 ) {
 	auto itm = m_items.find(_itemID);
@@ -505,7 +505,7 @@ QDate ak::aPropertyGridWidget::getItemValueDate(
 	return itm->second->getValueDate();
 }
 
-QTime ak::aPropertyGridWidget::getItemValueTime(
+ak::aTime ak::aPropertyGridWidget::getItemValueTime(
 	ID											_itemID
 ) {
 	auto itm = m_items.find(_itemID);
@@ -801,7 +801,7 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	ID												_itemId,
 	bool											_isMultipleValues,
 	const QString &									_settingName,
-	const QDate &									_value
+	const aDate &									_value
 ) {
 	int r = m_item->row();
 	if (m_items.size() > 0) {
@@ -818,7 +818,7 @@ ak::aPropertyGridItem * ak::aPropertyGridGroup::addItem(
 	ID												_itemId,
 	bool											_isMultipleValues,
 	const QString &									_settingName,
-	const QTime &									_value
+	const aTime &									_value
 ) {
 	int r = m_item->row();
 	if (m_items.size() > 0) {
@@ -1260,7 +1260,7 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	int									_row,
 	bool								_isMultipleValues,
 	const QString &						_settingName,
-	const QDate &						_value
+	const aDate &						_value
 ) : m_propertyGridTable(_propertyGridTable), m_group(_group), m_valueType(vtDate),
 	m_name(_settingName), m_valueDate(_value), m_isMultipleValues(_isMultipleValues), m_globalColorStyle(nullptr),
 	m_cellSettingName(nullptr), m_cellValue(nullptr)
@@ -1296,7 +1296,7 @@ ak::aPropertyGridItem::aPropertyGridItem(
 	int									_row,
 	bool								_isMultipleValues,
 	const QString &						_settingName,
-	const QTime &						_value
+	const aTime &						_value
 ) : m_propertyGridTable(_propertyGridTable), m_group(_group), m_valueType(vtTime),
 	m_name(_settingName), m_valueTime(_value), m_isMultipleValues(_isMultipleValues), m_globalColorStyle(nullptr)
 {
@@ -1416,12 +1416,12 @@ QString ak::aPropertyGridItem::getValueString(void) const {
 	return m_valueString;
 }
 
-QDate ak::aPropertyGridItem::getValueDate(void) const {
+ak::aDate ak::aPropertyGridItem::getValueDate(void) const {
 	assert(m_valueType == vtDate);
 	return m_valueDate;
 }
 
-QTime ak::aPropertyGridItem::getValueTime(void) const {
+ak::aTime ak::aPropertyGridItem::getValueTime(void) const {
 	assert(m_valueType == vtTime);
 	return m_valueTime;
 }
