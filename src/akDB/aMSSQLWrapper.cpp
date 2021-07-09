@@ -127,15 +127,13 @@ SQLHANDLE ak::aMSSQLWrapper::executeQuery(const std::wstring & _query) {
 
 	// Allocates the statement
 	if (SQL_SUCCESS != SQLAllocHandle(SQL_HANDLE_STMT, m_connectionHandle, &m_lastQueryHandle)) {
-		throw std::exception("An error occured while allocating the statement handle");
+		throw aMSSQLConnectionException("An error occured while allocating the statement handle");
 	}
 
 	// Executes a preparable statement
 	auto result = SQLExecDirectW(m_lastQueryHandle, (SQLWCHAR*)_query.c_str(), SQL_NTS);
 	if (SQL_SUCCESS != result) {
-		//Clear memory
-		SQLFreeHandle(SQL_HANDLE_STMT, m_lastQueryHandle);
-		throw std::exception("Failed to execute query");
+		throw aMSSQLQueryException("Failed to execute query");
 	}
 	else {
 		return m_lastQueryHandle;
@@ -162,22 +160,31 @@ bool ak::aMSSQLWrapper::tableExists(const std::wstring & _table) {
 
 // Helper functions
 
-std::wstring ak::aMSSQLWrapper::getSQLConnectionError(void) {
-	return getSQLError(SQL_HANDLE_DBC, m_connectionHandle);
+std::wstring ak::aMSSQLWrapper::getSQLConnectionError(bool _includeState) {
+	return getSQLError(SQL_HANDLE_DBC, m_connectionHandle, _includeState);
 }
 
-std::wstring ak::aMSSQLWrapper::getSQLEnvironmentError(void) {
-	return getSQLError(SQL_HANDLE_ENV, m_environmentHandle);
+std::wstring ak::aMSSQLWrapper::getSQLEnvironmentError(bool _includeState) {
+	return getSQLError(SQL_HANDLE_ENV, m_environmentHandle, _includeState);
 }
 
-std::wstring ak::aMSSQLWrapper::getSQLError(unsigned int _handleType, const SQLHANDLE & _handle)
+std::wstring ak::aMSSQLWrapper::getSQLQueryError(bool _includeState) {
+	return getSQLError(SQL_HANDLE_STMT, m_lastQueryHandle, _includeState);
+}
+
+std::wstring ak::aMSSQLWrapper::getSQLError(unsigned int _handleType, const SQLHANDLE & _handle, bool _includeState)
 {
 	SQLWCHAR SQLState[1024];
 	SQLWCHAR message[1024];
 	if (SQL_SUCCESS == SQLGetDiagRec(_handleType, _handle, 1, SQLState, NULL, message, 1024, NULL)) {
 		// Returns the current values of multiple fields of a diagnostic record that contains error, warning, and status information
 		std::wstringstream ss;
-		ss << L"SQL state: " << SQLState << L", SQL driver message: " << message << L"\n";
+		if (_includeState) {
+			ss << L"SQL state: " << SQLState << L", SQL driver message: " << message << L"\n";
+		}
+		else {
+			ss << message;
+		}
 		return ss.str();
 	}
 	else {
@@ -217,6 +224,18 @@ void ak::aMSSQLWrapper::deallocateHandles(void) {
 	m_isConnected = false;
 }
 
-ak::aMSSQLConnectionException::aMSSQLConnectionException()
-	: std::exception("MSSQL connection exception")
-{}
+// ####################################################################################################################################
+
+// ####################################################################################################################################
+
+// ####################################################################################################################################
+
+// Exceptions
+
+ak::aMSSQLConnectionException::aMSSQLConnectionException() : std::exception("MSSQL connection exception") {}
+
+ak::aMSSQLConnectionException::aMSSQLConnectionException(const char * _errorText) : std::exception(_errorText) {}
+
+ak::aMSSQLQueryException::aMSSQLQueryException() : std::exception("MSSQL query exception") {}
+
+ak::aMSSQLQueryException::aMSSQLQueryException(const char * _errorText) : std::exception(_errorText) {}

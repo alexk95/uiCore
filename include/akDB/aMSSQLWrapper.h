@@ -112,13 +112,15 @@ namespace ak {
 		// Helper functions
 
 		//! @brief Will return the last connection error message
-		std::wstring getSQLConnectionError(void);
+		std::wstring getSQLConnectionError(bool _includeState = true);
 
 		//! @brief Will return the last environment error message
-		std::wstring getSQLEnvironmentError(void);
+		std::wstring getSQLEnvironmentError(bool _includeState = true);
+
+		std::wstring getSQLQueryError(bool _includeState = true);
 
 		//! @brief Will return the last error message for the provided SQLHandle
-		std::wstring getSQLError(unsigned int _handleType, const SQLHANDLE & _handle);
+		std::wstring getSQLError(unsigned int _handleType, const SQLHANDLE & _handle, bool _includeState = true);
 
 		//! @brief Will convert the provided std::string to a std::wstring
 		std::wstring convertString(const std::string & _str);
@@ -147,6 +149,13 @@ namespace ak {
 	class UICORE_API_EXPORT aMSSQLConnectionException : public std::exception {
 	public:
 		aMSSQLConnectionException();
+		aMSSQLConnectionException(const char * _errorText);
+	};
+
+	class UICORE_API_EXPORT aMSSQLQueryException : public std::exception {
+	public:
+		aMSSQLQueryException();
+		aMSSQLQueryException(const char * _errorText);
 	};
 
 }
