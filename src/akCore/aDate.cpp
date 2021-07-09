@@ -22,6 +22,10 @@ ak::aDate::aDate(int _d, int _m, int _y)
 	: m_d(_d), m_m(_m), m_y(_y)
 {}
 
+ak::aDate::aDate(const QDate & _other)
+	: m_d(_other.day()), m_m(_other.month()), m_y(_other.year())
+{}
+
 ak::aDate::aDate(const aDate & _other) 
 	: m_d(_other.m_d), m_m(_other.m_m), m_y(_other.m_y)
 {}
@@ -117,6 +121,12 @@ void ak::aDate::set(int _d, int _m, int _y) {
 	m_d = _d;
 }
 
+void ak::aDate::set(const QDate & _date) {
+	m_y = _date.year();
+	m_m = _date.month();
+	m_d = _date.day();
+}
+
 // ############################################################################################################
 
 // Static parser
@@ -139,7 +149,10 @@ ak::aDate ak::aDate::parseString(const std::wstring & _string, const std::wstrin
 
 ak::aDate ak::aDate::parseString(const QString & _string, const QString & _delimiter, dateFormat _dateFormat) {
 	QStringList lst{ _string.split(_delimiter, QString::SkipEmptyParts) };
-	if (lst.length() != 3) { return aDate(); }
+	if (lst.length() != 3) {
+		assert(0);
+		return aDate();
+	}
 
 	switch (_dateFormat)
 	{
@@ -164,53 +177,152 @@ ak::aDate & ak::aDate::operator = (const aDate & _other) {
 	return *this;
 }
 
-bool ak::aDate::operator == (const aDate & _other) {
-	return m_d == _other.m_d && m_m == _other.m_m && m_y == _other.m_y;
+ak::aDate & ak::aDate::operator = (const QDate & _other) {
+	m_y = _other.year();
+	m_m = _other.month();
+	m_d = _other.day();
+	return *this;
 }
 
-bool ak::aDate::operator != (const aDate & _other) {
-	return m_d != _other.m_d || m_m != _other.m_m || m_y != _other.m_y;
+bool ak::operator == (const aDate & _lhv, const aDate & _rhv) {
+	return _lhv.year() == _rhv.year() && _lhv.month() == _rhv.month() && _lhv.day() == _rhv.day();
+}
+bool ak::operator == (const aDate & _lhv, const QDate & _rhv) {
+	return _lhv.year() == _rhv.year() && _lhv.month() == _rhv.month() && _lhv.day() == _rhv.day();
+}
+bool ak::operator == (const QDate & _lhv, const aDate & _rhv) {
+	return _lhv.year() == _rhv.year() && _lhv.month() == _rhv.month() && _lhv.day() == _rhv.day();
 }
 
-bool ak::aDate::operator < (const aDate & _other) {
-	if (m_y < _other.m_y) { return true; }
-	else if (m_y == _other.m_y) {
-		if (m_m < _other.m_m) { return true; }
-		else if (m_m == _other.m_m) {
-			if (m_d < _other.m_d) { return true; }
+bool ak::operator != (const aDate & _lhv, const aDate & _rhv) {
+	return _lhv.year() != _rhv.year() || _lhv.month() != _rhv.month() || _lhv.day() != _rhv.day();
+}
+bool ak::operator != (const aDate & _lhv, const QDate & _rhv) {
+	return _lhv.year() != _rhv.year() || _lhv.month() != _rhv.month() || _lhv.day() != _rhv.day();
+}
+bool ak::operator != (const QDate & _lhv, const aDate & _rhv) {
+	return _lhv.year() != _rhv.year() || _lhv.month() != _rhv.month() || _lhv.day() != _rhv.day();
+}
+
+bool ak::operator < (const aDate & _lhv, const aDate & _rhv) {
+	if (_lhv.year() < _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() < _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() < _rhv.day()) { return true; }
+		}
+	}
+	return false;
+}
+bool ak::operator < (const aDate & _lhv, const QDate & _rhv) {
+	if (_lhv.year() < _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() < _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() < _rhv.day()) { return true; }
+		}
+	}
+	return false;
+}
+bool ak::operator < (const QDate & _lhv, const aDate & _rhv) {
+	if (_lhv.year() < _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() < _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() < _rhv.day()) { return true; }
 		}
 	}
 	return false;
 }
 
-bool ak::aDate::operator > (const aDate & _other) {
-	if (m_y > _other.m_y) { return true; }
-	else if (m_y == _other.m_y) {
-		if (m_m > _other.m_m) { return true; }
-		else if (m_m == _other.m_m) {
-			if (m_d > _other.m_d) { return true; }
+bool ak::operator > (const aDate & _lhv, const aDate & _rhv) {
+	if (_lhv.year() > _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() > _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() > _rhv.day()) { return true; }
+		}
+	}
+	return false;
+}
+bool ak::operator > (const aDate & _lhv, const QDate & _rhv) {
+	if (_lhv.year() > _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() > _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() > _rhv.day()) { return true; }
+		}
+	}
+	return false;
+}
+bool ak::operator > (const QDate & _lhv, const aDate & _rhv) {
+	if (_lhv.year() > _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() > _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() > _rhv.day()) { return true; }
 		}
 	}
 	return false;
 }
 
-bool ak::aDate::operator <= (const aDate & _other) {
-	if (m_y < _other.m_y) { return true; }
-	else if (m_y == _other.m_y) {
-		if (m_m < _other.m_m) { return true; }
-		else if (m_m == _other.m_m) {
-			if (m_d <= _other.m_d) { return true; }
+bool ak::operator <= (const aDate & _lhv, const aDate & _rhv) {
+	if (_lhv.year() < _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() < _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() <= _rhv.day()) { return true; }
+		}
+	}
+	return false;
+}
+bool ak::operator <= (const aDate & _lhv, const QDate & _rhv) {
+	if (_lhv.year() < _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() < _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() <= _rhv.day()) { return true; }
+		}
+	}
+	return false;
+}
+bool ak::operator <= (const QDate & _lhv, const aDate & _rhv) {
+	if (_lhv.year() < _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() < _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() <= _rhv.day()) { return true; }
 		}
 	}
 	return false;
 }
 
-bool ak::aDate::operator >= (const aDate & _other) {
-	if (m_y > _other.m_y) { return true; }
-	else if (m_y == _other.m_y) {
-		if (m_m > _other.m_m) { return true; }
-		else if (m_m == _other.m_m) {
-			if (m_d >= _other.m_d) { return true; }
+bool ak::operator >= (const aDate & _lhv, const aDate & _rhv) {
+	if (_lhv.year() > _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() > _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() >= _rhv.day()) { return true; }
+		}
+	}
+	return false;
+}
+bool ak::operator >= (const aDate & _lhv, const QDate & _rhv) {
+	if (_lhv.year() > _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() > _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() >= _rhv.day()) { return true; }
+		}
+	}
+	return false;
+}
+bool ak::operator >= (const QDate & _lhv, const aDate & _rhv) {
+	if (_lhv.year() > _rhv.year()) { return true; }
+	else if (_lhv.year() == _rhv.year()) {
+		if (_lhv.month() > _rhv.month()) { return true; }
+		else if (_lhv.month() == _rhv.month()) {
+			if (_lhv.day() >= _rhv.day()) { return true; }
 		}
 	}
 	return false;

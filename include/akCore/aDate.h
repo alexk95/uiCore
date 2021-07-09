@@ -12,18 +12,24 @@
 
 #pragma once
 
+// uiCore header
 #include <akCore/akCore.h>
+#include <akCore/globalDataTypes.h>
 
-#include <string>
+// QT header
 #include <qstring.h>
 #include <qdatetime.h>
 
+// C++ header
+#include <string>
+
 namespace ak {
 
-	class aDate {
+	class UICORE_API_EXPORT aDate {
 	public:
 		aDate();
 		aDate(int _d, int _m, int _y);
+		aDate(const QDate & _date);
 		aDate(const aDate & _other);
 		virtual ~aDate();
 
@@ -42,14 +48,17 @@ namespace ak {
 
 		//! @brief Will return a String representation of this date
 		//! @param _delimiter The delimiter that is used to seperate the day, month and year
+		//! @param _dateFormat The dateFormat of the created string
 		std::string toString(const std::string _delimiter = "-", dateFormat _dateFormat = dfDDMMYYYY) const;
 
 		//! @brief Will return a String representation of this date
 		//! @param _delimiter The delimiter that is used to seperate the day, month and year
+		//! @param _dateFormat The dateFormat of the created string
 		std::wstring toWString(const std::wstring _delimiter = L"-", dateFormat _dateFormat = dfDDMMYYYY) const;
 
 		//! @brief Will return a String representation of this date
 		//! @param _delimiter The delimiter that is used to seperate the day, month and year
+		//! @param _dateFormat The dateFormat of the created string
 		QString toQString(const QString _delimiter = "-", dateFormat _dateFormat = dfDDMMYYYY) const;
 
 		//! @brief Will return a QDate object representing this object
@@ -76,6 +85,10 @@ namespace ak {
 		//! @param _m The month to set
 		//! @param _d The day to set
 		void set(int _d, int _m, int _y);
+
+		//! @brief Will set the current date
+		//! @param _date The date to set
+		void set(const QDate & _date);
 
 		// ############################################################################################################
 
@@ -111,17 +124,36 @@ namespace ak {
 		// Operators
 
 		aDate & operator = (const aDate & _other);
-		bool operator == (const aDate & _other);
-		bool operator != (const aDate & _other);
-		bool operator < (const aDate & _other);
-		bool operator > (const aDate & _other);
-		bool operator <= (const aDate & _other);
-		bool operator >= (const aDate & _other);
+		aDate & operator = (const QDate & _other);
 
 	private:
-		int		m_y;
-		int		m_m;
-		int		m_d;
+		int		m_y;		//! The year value
+		int		m_m;		//! The month value
+		int		m_d;		//! The day value
 	};
+
+	UICORE_API_EXPORT bool operator == (const aDate & _lhv, const aDate & _rhv);
+	UICORE_API_EXPORT bool operator == (const aDate & _lhv, const QDate & _rhv);
+	UICORE_API_EXPORT bool operator == (const QDate & _lhv, const aDate & _rhv);
+
+	UICORE_API_EXPORT bool operator != (const aDate & _lhv, const aDate & _rhv);
+	UICORE_API_EXPORT bool operator != (const aDate & _lhv, const QDate & _rhv);
+	UICORE_API_EXPORT bool operator != (const QDate & _lhv, const aDate & _rhv);
+	
+	UICORE_API_EXPORT bool operator < (const aDate & _lhv, const aDate & _rhv);
+	UICORE_API_EXPORT bool operator < (const aDate & _lhv, const QDate & _rhv);
+	UICORE_API_EXPORT bool operator < (const QDate & _lhv, const aDate & _rhv);
+	
+	UICORE_API_EXPORT bool operator > (const aDate & _lhv, const aDate & _rhv);
+	UICORE_API_EXPORT bool operator > (const aDate & _lhv, const QDate & _rhv);
+	UICORE_API_EXPORT bool operator > (const QDate & _lhv, const aDate & _rhv);
+	
+	UICORE_API_EXPORT bool operator <= (const aDate & _lhv, const aDate & _rhv);
+	UICORE_API_EXPORT bool operator <= (const aDate & _lhv, const QDate & _rhv);
+	UICORE_API_EXPORT bool operator <= (const QDate & _lhv, const aDate & _rhv);
+	
+	UICORE_API_EXPORT bool operator >= (const aDate & _lhv, const aDate & _rhv);
+	UICORE_API_EXPORT bool operator >= (const aDate & _lhv, const QDate & _rhv);
+	UICORE_API_EXPORT bool operator >= (const QDate & _lhv, const aDate & _rhv);
 
 }
