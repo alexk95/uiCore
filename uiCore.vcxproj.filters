@@ -270,11 +270,14 @@
     <ClCompile Include="src\akDB\aMSSQLWrapper.cpp">
       <Filter>Source Files\ak\DB</Filter>
     </ClCompile>
-    <ClCompile Include="src\akDB\aSQLEntities.cpp">
-      <Filter>Source Files\ak\DB</Filter>
-    </ClCompile>
     <ClCompile Include="src\akCore\aDate.cpp">
       <Filter>Source Files\ak\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\akCore\aTime.cpp">
+      <Filter>Source Files\ak\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\akDialogs\aCustomizableInputDialog.cpp">
+      <Filter>Source Files\ak\Dialogs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -383,10 +386,10 @@
     <ClInclude Include="include\akDB\aMSSQLWrapper.h">
       <Filter>Header Files\ak\DB</Filter>
     </ClInclude>
-    <ClInclude Include="include\akDB\aSQLEntities.h">
-      <Filter>Header Files\ak\DB</Filter>
-    </ClInclude>
     <ClInclude Include="include\akCore\aDate.h">
+      <Filter>Header Files\ak\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\akCore\aTime.h">
       <Filter>Header Files\ak\Core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -495,6 +498,9 @@
     </QtMoc>
     <QtMoc Include="include\akWidgets\aColorStyleSwitchWidget.h">
       <Filter>Header Files\ak\Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="include\akDialogs\aCustomizableInputDialog.h">
+      <Filter>Header Files\ak\Dialogs</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

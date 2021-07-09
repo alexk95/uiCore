@@ -121,10 +121,11 @@
     <ClCompile Include="src\akCore\aNotifierObjectManager.cpp" />
     <ClCompile Include="src\akCore\aObject.cpp" />
     <ClCompile Include="src\akCore\aSingletonAllowedMessages.cpp" />
+    <ClCompile Include="src\akCore\aTime.cpp" />
     <ClCompile Include="src\akCore\aUidManager.cpp" />
     <ClCompile Include="src\akCore\rJSON.cpp" />
     <ClCompile Include="src\akDB\aMSSQLWrapper.cpp" />
-    <ClCompile Include="src\akDB\aSQLEntities.cpp" />
+    <ClCompile Include="src\akDialogs\aCustomizableInputDialog.cpp" />
     <ClCompile Include="src\akDialogs\aLogInDialog.cpp" />
     <ClCompile Include="src\akDialogs\aOptionsDialog.cpp" />
     <ClCompile Include="src\akDialogs\aPromptDialog.cpp" />
@@ -194,11 +195,12 @@
     <ClInclude Include="include\akCore\aNotifierObjectManager.h" />
     <ClInclude Include="include\akCore\aObject.h" />
     <ClInclude Include="include\akCore\aSingletonAllowedMessages.h" />
+    <ClInclude Include="include\akCore\aTime.h" />
     <ClInclude Include="include\akCore\aUidMangager.h" />
     <ClInclude Include="include\akCore\globalDataTypes.h" />
     <ClInclude Include="include\akCore\rJSON.h" />
     <ClInclude Include="include\akDB\aMSSQLWrapper.h" />
-    <ClInclude Include="include\akDB\aSQLEntities.h" />
+    <QtMoc Include="include\akDialogs\aCustomizableInputDialog.h" />
     <ClInclude Include="include\akGui\aApplication.h" />
     <ClInclude Include="include\akGui\aColor.h" />
     <ClInclude Include="include\akGui\aColorStyle.h" />
