@@ -72,10 +72,6 @@ namespace ak {
 
 		virtual void paintEvent(QPaintEvent * _event) override;
 
-		void close(
-			dialogResult				_result
-		);
-
 		ak::ID addCustomInput(
 			const QString &				_labelText,
 			const QString &				_initialInputText = QString("")

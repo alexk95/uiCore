@@ -96,17 +96,17 @@ void ak::aPromptDialog::resizeEvent(QResizeEvent * _event) {
 
 // Slots
 
-void ak::aPromptDialog::slotOk(void) { m_result = resultOk; close(); }
+void ak::aPromptDialog::slotOk(void) { Close(resultOk); }
 
-void ak::aPromptDialog::slotCancel(void) { m_result = resultCancel; close(); }
+void ak::aPromptDialog::slotCancel(void) { Close(resultCancel); }
 
-void ak::aPromptDialog::slotYes(void) { m_result = resultYes; close(); }
+void ak::aPromptDialog::slotYes(void) { Close(resultYes); }
 
-void ak::aPromptDialog::slotNo(void) { m_result = resultNo; close(); }
+void ak::aPromptDialog::slotNo(void) { Close(resultNo); }
 
-void ak::aPromptDialog::slotRetry(void) { m_result = resultRetry; close(); }
+void ak::aPromptDialog::slotRetry(void) { Close(resultRetry); }
 
-void ak::aPromptDialog::slotIgnore(void) { m_result = resultIgnore; close(); }
+void ak::aPromptDialog::slotIgnore(void) { Close(resultIgnore); }
 
 // ##############################################################################################################
 
@@ -206,7 +206,5 @@ void ak::aPromptDialog::setupDialog(
 	m_layout->addWidget(m_buttonsWidget);
 
 	setWindowTitle(_title);
-
-	// Hide info button
-	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	hideInfoButton();
 }

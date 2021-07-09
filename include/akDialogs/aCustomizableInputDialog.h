@@ -14,11 +14,14 @@
 
 // uiCore header
 #include <akCore/globalDataTypes.h>
+#include <akCore/aDate.h>
+#include <akCore/aTime.h>
 #include <akGui/aDialog.h>
 #include <akGui/aPaintable.h>
 
 // C++ header
 #include <vector>
+#include <map>
 
 class QWidget;
 class QHBoxLayout;
@@ -42,7 +45,7 @@ namespace ak {
 		//! @param _style The color style to set
 		virtual void setColorStyle(aColorStyle * _style) override;
 
-		// #################################################################################
+		// ################################################################################################################
 
 		// Item adder
 
@@ -67,6 +70,24 @@ namespace ak {
 		//! @param _toolTip The tooltip text
 		UID addPasswordInput(const QString& _label, const QString& _initialText, const QString& _placeholder = QString(), const QString& _toolTip = QString());
 
+		//! @brief Will add a new date input
+		//! Will return the inputs local UID
+		//! @param _label The label text
+		//! @param _initialDate The initial date to set
+		UID addDateInput(const QString& _label, const aDate& _initialDate, dateFormat _dateFormat);
+
+		//! @brief Will add a new time input
+		//! Will return the inputs local UID
+		//! @param _label The label text
+		//! @param _initialTime The initial time to set
+		UID addTimeInput(const QString& _label, const aTime& _initialTime, timeFormat _timeFormat);
+
+		//! @brief Will add a new checkbox input
+		//! Will return the inputs local UID
+		//! @param _label The label text
+		//! @param _initiallyChecked The initial checked state
+		UID addCheckInput(const QString& _label, bool _initiallyChecked);
+
 		//! @brief Will add the custom widget
 		//! Will return the inputs local UID.
 		//! The dialog will take over the widget.
@@ -74,18 +95,43 @@ namespace ak {
 		//! @param _widget The widget to add
 		UID addCustomInput(const QString& _label, aWidget * _widget);
 
+		// ################################################################################################################
+
+		// Getter
+
+		//! @brief Will return the current text in a text based input
+		//! @param _inputUID The input UID
+		QString getText(UID _inputUID);
+
+		//! @brief Will return the current text in a text based input
+		//! The text will be hashed and the hashed string will be returned
+		//! @param _inputUID The input UID
+		QString getPassword(UID _inputUID, HashAlgorithm _hashAlgorithm);
+
+		//! @brief Will return the current date
+		//! @param _inputUID The input UID
+		aDate getDate(UID _inputUID);
+
+		//! @brief Will return the current time
+		//! @param _inputUID The input UID
+		aTime getTime(UID _inputUID);
+
+		//! @brief Will return the current checked state
+		//! @param _inputUID The input UID
+		bool getChecked(UID _inputUID);
+
 	signals:
 		void buttonClicked(UID _buttonUID);
 		void editFinished(UID _editUID);
 
-	private slots:
+	protected slots:
 		void slotButtonClicked(void);
 		void slotInputChanged(void);
 
-	private:
+	protected:
 
 		std::vector<aPushButtonWidget *>		m_buttons;			//! All buttons that are placed in this dialog
-		std::vector<std::pair<aLabelWidget *, 
+		std::map<UID, std::pair<aLabelWidget *, 
 			aWidget *>>							m_inputs;			//! All inputs that are placed in this dialog
 
 		UID										m_currentUid;		//! The current item UID
@@ -98,7 +144,9 @@ namespace ak {
 
 		QWidget *								m_buttonLayoutW;	//! The layout widget for the buttons
 		QHBoxLayout *							m_buttonLayout;		//! The buttons layout
-			
+
+	private:
+
 		aCustomizableInputDialog(aCustomizableInputDialog&) = delete;
 		aCustomizableInputDialog& operator = (aCustomizableInputDialog&) = delete;
 

@@ -27,3 +27,14 @@ void ak::aDialog::setResult(
 ak::dialogResult ak::aDialog::result(void) const { return m_result; }
 
 ak::dialogResult ak::aDialog::showDialog(void) { exec(); return m_result; }
+
+void ak::aDialog::hideInfoButton(void) {
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+}
+
+void ak::aDialog::Close(
+	dialogResult				_result
+) {
+	m_result = _result; 
+	QDialog::close();
+}

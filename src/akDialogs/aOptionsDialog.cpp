@@ -79,8 +79,8 @@ ak::aOptionsDialog::aOptionsDialog(
 	
 	// Set properties
 	setMinimumSize(400, 300);
-	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 	setWindowTitle(_title);
+	hideInfoButton();
 }
 
 ak::aOptionsDialog::~aOptionsDialog() {

@@ -1112,7 +1112,7 @@ ak::dialogResult ak::uiAPI::logInDialog::showDialog(
 void ak::uiAPI::logInDialog::close(
 	UID												_dialogUID,
 	dialogResult									_result
-) { object::get<aLogInDialog>(_dialogUID)->close(_result); }
+) { object::get<aLogInDialog>(_dialogUID)->Close(_result); }
 
 QString ak::uiAPI::logInDialog::getUsername(
 	UID												_dialogUID

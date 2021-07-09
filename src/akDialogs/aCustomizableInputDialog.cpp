@@ -12,10 +12,14 @@
 
 // uiCore header
 #include <akGui/aColorStyle.h>
+#include <akCore/akCore.h>
 #include <akDialogs/aCustomizableInputDialog.h>
 #include <akWidgets/aPushButtonWidget.h>
 #include <akWidgets/aLabelWidget.h>
 #include <akWidgets/aLineEditWidget.h>
+#include <akWidgets/aDatePickWidget.h>
+#include <akWidgets/aTimePickWidget.h>
+#include <akWidgets/aCheckBoxWidget.h>
 
 // Qt header
 #include <qwidget.h>
@@ -43,8 +47,8 @@ ak::aCustomizableInputDialog::~aCustomizableInputDialog() {
 	}
 
 	for (auto input : m_inputs) {
-		delete input.first;
-		delete input.second;
+		delete input.second.first;
+		delete input.second.second;
 	}
 
 	delete m_buttonLayout;
@@ -64,8 +68,8 @@ void ak::aCustomizableInputDialog::setColorStyle(aColorStyle * _style) {
 	}
 
 	for (auto input : m_inputs) {
-		input.first->setColorStyle(_style);
-		input.second->setColorStyle(_style);
+		input.second.first->setColorStyle(_style);
+		input.second.second->setColorStyle(_style);
 	}
 }
 
@@ -79,6 +83,7 @@ ak::UID ak::aCustomizableInputDialog::addButton(const QString& _buttonText) {
 	nBtn->setUid(++m_currentUid);
 	connect(nBtn, &aPushButtonWidget::clicked, this, &aCustomizableInputDialog::slotButtonClicked);
 	m_buttons.push_back(nBtn);
+	m_buttonLayout->addWidget(nBtn);
 	return nBtn->uid();
 }
 
@@ -105,6 +110,28 @@ ak::UID ak::aCustomizableInputDialog::addPasswordInput(const QString& _label, co
 	return nInput->uid();
 }
 
+ak::UID ak::aCustomizableInputDialog::addDateInput(const QString& _label, const aDate& _initialDate, dateFormat _dateFormat) {
+	aDatePickWidget * nInput = new aDatePickWidget(_initialDate, _dateFormat);
+	addCustomInput(_label, nInput);
+	connect(nInput, &aDatePickWidget::changed, this, &aCustomizableInputDialog::slotInputChanged);
+	return nInput->uid();
+}
+
+ak::UID ak::aCustomizableInputDialog::addTimeInput(const QString& _label, const aTime& _initialTime, timeFormat _timeFormat) {
+	aTimePickWidget * nInput = new aTimePickWidget(_initialTime, _timeFormat);
+	addCustomInput(_label, nInput);
+	connect(nInput, &aTimePickWidget::changed, this, &aCustomizableInputDialog::slotInputChanged);
+	return nInput->uid();
+}
+
+ak::UID ak::aCustomizableInputDialog::addCheckInput(const QString& _label, bool _initiallyChecked) {
+	aCheckBoxWidget * nInput = new aCheckBoxWidget;
+	nInput->setChecked(_initiallyChecked);
+	addCustomInput(_label, nInput);
+	connect(nInput, &aCheckBoxWidget::stateChanged, this, &aCustomizableInputDialog::slotInputChanged);
+	return nInput->uid();
+}
+
 ak::UID ak::aCustomizableInputDialog::addCustomInput(const QString& _label, aWidget * _widget) {
 	// Create label and setup controls
 	aLabelWidget * nLabel = new aLabelWidget(_label);
@@ -116,13 +143,97 @@ ak::UID ak::aCustomizableInputDialog::addCustomInput(const QString& _label, aWid
 
 	// Store data
 	_widget->setUid(++m_currentUid);
-	m_inputs.push_back(std::pair<aLabelWidget *, aWidget *>(nLabel, _widget));
+	m_inputs.insert_or_assign(_widget->uid(), std::pair<aLabelWidget *, aWidget *>(nLabel, _widget));
 
 	// Add to layout
 	m_inputsLayout->addWidget(nLabel, m_currentInputRow, 0);
 	m_inputsLayout->addWidget(_widget->widget(), m_currentInputRow++, 1);
 
 	return _widget->uid();
+}
+
+// ################################################################################################################
+
+// Getter
+
+QString ak::aCustomizableInputDialog::getText(UID _inputUID) {
+	auto control = m_inputs.find(_inputUID);
+	if (control == m_inputs.end()) {
+		assert(0);
+		return "";
+	}
+	aLineEditWidget * input = dynamic_cast<aLineEditWidget *>(control->second.second);
+	if (input) {
+		return input->text();
+	}
+	else {
+		assert(0);
+		return "";
+	}
+}
+
+QString ak::aCustomizableInputDialog::getPassword(UID _inputUID, HashAlgorithm _hashAlgorithm) {
+	auto control = m_inputs.find(_inputUID);
+	if (control == m_inputs.end()) {
+		assert(0);
+		return "";
+	}
+	aLineEditWidget * input = dynamic_cast<aLineEditWidget *>(control->second.second);
+	if (input) {
+		return hashString(input->text(), _hashAlgorithm);
+	}
+	else {
+		assert(0);
+		return "";
+	}
+}
+
+ak::aDate ak::aCustomizableInputDialog::getDate(UID _inputUID) {
+	auto control = m_inputs.find(_inputUID);
+	if (control == m_inputs.end()) {
+		assert(0);
+		return aDate();
+	}
+	aDatePickWidget * input = dynamic_cast<aDatePickWidget *>(control->second.second);
+	if (input) {
+		return input->currentDate();
+	}
+	else {
+		assert(0);
+		return aDate();
+	}
+}
+
+ak::aTime ak::aCustomizableInputDialog::getTime(UID _inputUID) {
+	auto control = m_inputs.find(_inputUID);
+	if (control == m_inputs.end()) {
+		assert(0);
+		return aTime();
+	}
+	aTimePickWidget * input = dynamic_cast<aTimePickWidget *>(control->second.second);
+	if (input) {
+		return input->currentTime();
+	}
+	else {
+		assert(0);
+		return aTime();
+	}
+}
+
+bool ak::aCustomizableInputDialog::getChecked(UID _inputUID) {
+	auto control = m_inputs.find(_inputUID);
+	if (control == m_inputs.end()) {
+		assert(0);
+		return false;
+	}
+	aCheckBoxWidget * input = dynamic_cast<aCheckBoxWidget *>(control->second.second);
+	if (input) {
+		return input->isChecked();
+	}
+	else {
+		assert(0);
+		return false;
+	}
 }
 
 // #####################################################################################################################################

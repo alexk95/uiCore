@@ -111,8 +111,7 @@ ak::aLogInDialog::aLogInDialog(
 	setLayout(m_mainLayout);
 	
 	setWindowTitle("Welcome");
-	// Hide info button
-	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	hideInfoButton();
 
 	resize(m_bgImage->size());
 }
@@ -173,10 +172,6 @@ void ak::aLogInDialog::paintEvent(QPaintEvent *pe)
 	rectOfPixmap.moveCenter(centerOfWidget);
 	paint.drawPixmap(rectOfPixmap.topLeft(), m_currentImage);
 }
-
-void ak::aLogInDialog::close(
-	dialogResult				_result
-) { setResult(_result); QDialog::close(); }
 
 ak::ID ak::aLogInDialog::addCustomInput(
 	const QString &						_labelText,

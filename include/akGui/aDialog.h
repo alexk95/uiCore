@@ -44,6 +44,14 @@ namespace ak {
 		//! @brief Will show this dialog an return the result
 		dialogResult showDialog(void);
 
+		//! @brief Will hide the info button
+		void hideInfoButton(void);
+
+		//! @brief Will set the dialog result and close the dialog
+		void Close(
+			dialogResult				_result
+		);
+
 	protected:
 		dialogResult			m_result;		//! The current result of this dialog
 
