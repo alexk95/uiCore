@@ -402,8 +402,10 @@ void ak::aPropertyGridWidget::clear(
 		for (auto itm : m_groups) { itm.second->clear(); }
 	}
 	else {
-		for (auto itm : m_groups) { delete itm.second; }
+		auto oldGroups = m_groups;
 		m_groups.clear();
+
+		for (auto itm : oldGroups) { delete itm.second; }
 	}
 	m_defaultGroup->clear();
 	m_items.clear();
@@ -852,11 +854,14 @@ void ak::aPropertyGridGroup::setColorStyle(
 }
 
 void ak::aPropertyGridGroup::clear(void) {
-	for (auto itm : m_items) {
+	auto oldItems = m_items;
+	m_items.clear();
+
+	for (auto itm : oldItems) {
 		aPropertyGridItem * actualItem = itm;
 		delete actualItem;
 	}
-	m_items.clear();
+
 	m_isAlternateBackground = false;
 }
 
