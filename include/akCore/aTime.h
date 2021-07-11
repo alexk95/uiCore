@@ -73,19 +73,19 @@ namespace ak {
 
 		//! @brief Will set the current hour
 		//! @param _h The value to set
-		void setHour(int _h) { m_h = _h; }
+		void setHour(int _h) { m_h = _h; adjustValues(); }
 
 		//! @brief Will set the current minute
 		//! @param _m The value to set
-		void setMinute (int _m) { m_m = _m; }
+		void setMinute (int _m) { m_m = _m; adjustValues(); }
 
 		//! @brief Will set the current second
 		//! @param _s The value to set
-		void setSecond(int _s) { m_s = _s; }
+		void setSecond(int _s) { m_s = _s; adjustValues(); }
 
 		//! @brief Will set the current millisecond
 		//! @param _ms The value to set
-		void setMilliSecond(int _ms) { m_ms = _ms; }
+		void setMilliSecond(int _ms) { m_ms = _ms; adjustValues(); }
 
 		//! @brief Will set the current time
 		//! @param _h The hour to set
@@ -137,7 +137,10 @@ namespace ak {
 		//! @param _m The minute value
 		//! @param _s The second value
 		//! @param _ms The millisecond value
-		static bool adjustTimeValues(int & _h, int & _m, int & _s, int & _ms);
+		static bool adjustValues(int & _h, int & _m, int & _s, int & _ms);
+
+		//! @brief Will adjust the currently set values
+		bool adjustValues(void);
 
 		// ############################################################################################################
 

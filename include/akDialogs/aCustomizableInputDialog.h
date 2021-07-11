@@ -120,6 +120,30 @@ namespace ak {
 		//! @param _inputUID The input UID
 		bool getChecked(UID _inputUID);
 
+		//! @brief Will return the input with the specified UID
+		//! @param _inputUID The input UID
+		aWidget * getInput(UID _inputUID);
+
+		// ################################################################################################################
+
+		// Setter
+
+		//! @brief Will set the current text in a text based input
+		//! @param _inputUID The input UID
+		void setText(UID _inputUID, const QString& _text);
+
+		//! @brief Will set the current date
+		//! @param _inputUID The input UID
+		void setDate(UID _inputUID, const aDate& _date);
+
+		//! @brief Will set the current time
+		//! @param _inputUID The input UID
+		void setTime(UID _inputUID, const aTime& _time);
+
+		//! @brief Will set the current checked state
+		//! @param _inputUID The input UID
+		void setChecked(UID _inputUID, bool _isChecked);
+
 	signals:
 		void buttonClicked(UID _buttonUID);
 		void editFinished(UID _editUID);

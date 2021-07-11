@@ -236,6 +236,80 @@ bool ak::aCustomizableInputDialog::getChecked(UID _inputUID) {
 	}
 }
 
+ak::aWidget * ak::aCustomizableInputDialog::getInput(UID _inputUID) {
+	auto control = m_inputs.find(_inputUID);
+	if (control == m_inputs.end()) {
+		assert(0);
+		return nullptr;
+	}
+	return control->second.second;
+}
+
+// ################################################################################################################
+
+// Setter
+
+void ak::aCustomizableInputDialog::setText(UID _inputUID, const QString& _text) {
+	auto control = m_inputs.find(_inputUID);
+	if (control == m_inputs.end()) {
+		assert(0);
+		return;
+	}
+	aLineEditWidget * input = dynamic_cast<aLineEditWidget *>(control->second.second);
+	if (input) {
+		input->setText(_text);
+	}
+	else {
+		assert(0);
+		return;
+	}
+}
+
+void ak::aCustomizableInputDialog::setDate(UID _inputUID, const aDate& _date) {
+	auto control = m_inputs.find(_inputUID);
+	if (control == m_inputs.end()) {
+		assert(0);
+		return;
+	}
+	aDatePickWidget * input = dynamic_cast<aDatePickWidget *>(control->second.second);
+	if (input) {
+		input->setCurrentDate(_date);
+	}
+	else {
+		assert(0);
+	}
+}
+
+void ak::aCustomizableInputDialog::setTime(UID _inputUID, const aTime& _time) {
+	auto control = m_inputs.find(_inputUID);
+	if (control == m_inputs.end()) {
+		assert(0);
+		return;
+	}
+	aTimePickWidget * input = dynamic_cast<aTimePickWidget *>(control->second.second);
+	if (input) {
+		input->setCurrentTime(_time);
+	}
+	else {
+		assert(0);
+	}
+}
+
+void ak::aCustomizableInputDialog::setChecked(UID _inputUID, bool _isChecked) {
+	auto control = m_inputs.find(_inputUID);
+	if (control == m_inputs.end()) {
+		assert(0);
+		return;
+	}
+	aCheckBoxWidget * input = dynamic_cast<aCheckBoxWidget *>(control->second.second);
+	if (input) {
+		input->setChecked(_isChecked);
+	}
+	else {
+		assert(0);
+	}
+}
+
 // #####################################################################################################################################
 
 // Slots

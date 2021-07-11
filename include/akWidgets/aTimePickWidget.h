@@ -76,7 +76,7 @@ namespace ak {
 		//! @brief Will set the currently selected time
 		//! @param _time The date to set
 		//! @param _refresh If true, the object will be repainted according to the current changes
-		void setCurrentTime(const QTime & _time, bool _refresh = true);
+		void setCurrentTime(const aTime & _time, bool _refresh = true);
 
 		//! @brief Will set the delimiter
 		//! @param _delimiter The delimiter to set

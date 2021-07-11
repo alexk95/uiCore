@@ -20,7 +20,9 @@ ak::aTime::aTime()
 	: m_h(0), m_m(0), m_s(0), m_ms(0) {}
 
 ak::aTime::aTime(int _h, int _m, int _s, int _ms) 
-	: m_h(_h), m_m(_m), m_s(_s), m_ms(_ms) {}
+	: m_h(_h), m_m(_m), m_s(_s), m_ms(_ms) {
+	adjustValues();
+}
 
 ak::aTime::aTime(const QTime & _time)
 	: m_h(_time.hour()), m_m(_time.minute()), m_s(_time.second()), m_ms(_time.msec()) {}
@@ -168,6 +170,7 @@ void ak::aTime::set(int _h, int _m, int _s, int _ms) {
 	m_m = _m;
 	m_s = _s;
 	m_ms = _ms;
+	adjustValues();
 }
 
 void ak::aTime::set(const QTime & _time) {
@@ -175,6 +178,7 @@ void ak::aTime::set(const QTime & _time) {
 	m_m = _time.minute();
 	m_s = _time.second();
 	m_ms = _time.msec();
+	adjustValues();
 }
 
 void ak::aTime::set(const aTime & _time) {
@@ -182,6 +186,7 @@ void ak::aTime::set(const aTime & _time) {
 	m_m = _time.m_m;
 	m_s = _time.m_s;
 	m_ms = _time.m_ms;
+	adjustValues();
 }
 
 // ############################################################################################################
@@ -218,7 +223,7 @@ ak::aTime ak::aTime::parseString(const QString & _string, const QString & _delim
 	}
 }
 
-bool ak::aTime::adjustTimeValues(int & _h, int & _m, int & _s, int & _ms) {
+bool ak::aTime::adjustValues(int & _h, int & _m, int & _s, int & _ms) {
 	while (_ms < 0) { _ms += 1000; _s--; }
 	while (_ms > 999) { _ms -= 1000; _s++; }
 	while (_s < 0) { _s += 60; _m--; }
@@ -229,6 +234,10 @@ bool ak::aTime::adjustTimeValues(int & _h, int & _m, int & _s, int & _ms) {
 	while (_h < 0) { _h += 24; ov = true; }
 	while (_h > 23) { _h -= 24; ov = true; }
 	return ov;
+}
+
+bool ak::aTime::adjustValues(void) {
+	return adjustValues(m_h, m_m, m_s, m_ms);
 }
 
 // ############################################################################################################
@@ -256,7 +265,7 @@ ak::aTime & ak::aTime::operator += (const aTime & _time) {
 	m_m += _time.m_m;
 	m_s += _time.m_s;
 	m_ms += _time.m_ms;
-	adjustTimeValues(m_h, m_m, m_s, m_ms);
+	adjustValues();
 	return *this;
 }
 
@@ -265,7 +274,7 @@ ak::aTime & ak::aTime::operator += (const QTime & _time) {
 	m_m += _time.minute();
 	m_s += _time.second();
 	m_ms += _time.msec();
-	adjustTimeValues(m_h, m_m, m_s, m_ms);
+	adjustValues();
 	return *this;
 }
 
@@ -274,7 +283,7 @@ ak::aTime & ak::aTime::operator -= (const aTime & _time) {
 	m_m -= _time.m_m;
 	m_s -= _time.m_s;
 	m_ms -= _time.m_ms;
-	adjustTimeValues(m_h, m_m, m_s, m_ms);
+	adjustValues();
 	return *this;
 }
 
@@ -283,7 +292,7 @@ ak::aTime & ak::aTime::operator -= (const QTime & _time) {
 	m_m -= _time.minute();
 	m_s -= _time.second();
 	m_ms -= _time.msec();
-	adjustTimeValues(m_h, m_m, m_s, m_ms);
+	adjustValues();
 	return *this;
 }
 
@@ -292,7 +301,6 @@ ak::aTime ak::operator + (const ak::aTime & _lhv, const ak::aTime & _rhv) {
 	int m{ _lhv.minute() + _rhv.minute() };
 	int s{ _lhv.second() + _rhv.second() };
 	int ms{ _lhv.msec() + _rhv.msec() };
-	aTime::adjustTimeValues(h, m, s, ms);
 	return aTime(h, m, s, ms);
 }
 ak::aTime ak::operator + (const ak::aTime & _lhv, const QTime & _rhv) {
@@ -300,7 +308,6 @@ ak::aTime ak::operator + (const ak::aTime & _lhv, const QTime & _rhv) {
 	int m{ _lhv.minute() + _rhv.minute() };
 	int s{ _lhv.second() + _rhv.second() };
 	int ms{ _lhv.msec() + _rhv.msec() };
-	aTime::adjustTimeValues(h, m, s, ms);
 	return aTime(h, m, s, ms);
 }
 ak::aTime ak::operator + (const QTime & _lhv, const ak::aTime & _rhv) {
@@ -308,7 +315,6 @@ ak::aTime ak::operator + (const QTime & _lhv, const ak::aTime & _rhv) {
 	int m{ _rhv.minute() + _lhv.minute() };
 	int s{ _rhv.second() + _lhv.second() };
 	int ms{ _rhv.msec() + _lhv.msec() };
-	aTime::adjustTimeValues(h, m, s, ms);
 	return aTime(h, m, s, ms);
 }
 
@@ -317,7 +323,6 @@ ak::aTime ak::operator - (const ak::aTime & _lhv, const ak::aTime & _rhv) {
 	int m{ _lhv.minute() - _rhv.minute() };
 	int s{ _lhv.second() - _rhv.second() };
 	int ms{ _lhv.msec() - _rhv.msec() };
-	aTime::adjustTimeValues(h, m, s, ms);
 	return aTime(h, m, s, ms);
 }
 ak::aTime ak::operator - (const ak::aTime & _lhv, const QTime & _rhv) {
@@ -325,7 +330,6 @@ ak::aTime ak::operator - (const ak::aTime & _lhv, const QTime & _rhv) {
 	int m{ _lhv.minute() - _rhv.minute() };
 	int s{ _lhv.second() - _rhv.second() };
 	int ms{ _lhv.msec() - _rhv.msec() };
-	aTime::adjustTimeValues(h, m, s, ms);
 	return aTime(h, m, s, ms);
 }
 ak::aTime ak::operator - (const QTime & _lhv, const ak::aTime & _rhv) {
@@ -333,7 +337,6 @@ ak::aTime ak::operator - (const QTime & _lhv, const ak::aTime & _rhv) {
 	int m{ _rhv.minute() - _lhv.minute() };
 	int s{ _rhv.second() - _lhv.second() };
 	int ms{ _rhv.msec() - _lhv.msec() };
-	aTime::adjustTimeValues(h, m, s, ms);
 	return aTime(h, m, s, ms);
 }
 

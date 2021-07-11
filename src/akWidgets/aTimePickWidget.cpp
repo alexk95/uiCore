@@ -65,7 +65,7 @@ void ak::aTimePickWidget::setColorStyle(
 
 // Setter
 
-void ak::aTimePickWidget::setCurrentTime(const QTime & _time, bool _refresh) {
+void ak::aTimePickWidget::setCurrentTime(const aTime & _time, bool _refresh) {
 	m_time = _time;
 	if (_refresh) { setText(m_time.toQString(m_delimiter, m_timeFormat)); }
 }

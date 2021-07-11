@@ -41,14 +41,14 @@ namespace ak {
 		//! @brief Will return the dialog result of this dialog
 		dialogResult result(void) const;
 
-		//! @brief Will show this dialog an return the result
-		dialogResult showDialog(void);
-
 		//! @brief Will hide the info button
 		void hideInfoButton(void);
 
+		//! @brief Will show this dialog an return the result
+		virtual dialogResult showDialog(void);
+
 		//! @brief Will set the dialog result and close the dialog
-		void Close(
+		virtual void Close(
 			dialogResult				_result
 		);
 
