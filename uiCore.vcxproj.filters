@@ -64,6 +64,12 @@
     <Filter Include="Source Files\ak\DB">
       <UniqueIdentifier>{67885434-bfa7-45bb-8c7d-138b424fcf7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ak\Net">
+      <UniqueIdentifier>{347ced06-7683-4909-bf75-92fb2025caae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ak\Net">
+      <UniqueIdentifier>{9ac0c191-f141-499b-9ea4-8b032246fabe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -279,6 +285,9 @@
     <ClCompile Include="src\akDialogs\aCustomizableInputDialog.cpp">
       <Filter>Source Files\ak\Dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="src\akNet\aCurlWrapper.cpp">
+      <Filter>Source Files\ak\Net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\akAPI\uiAPI.h">
@@ -391,6 +400,9 @@
     </ClInclude>
     <ClInclude Include="include\akCore\aTime.h">
       <Filter>Header Files\ak\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\akNet\aCurlWrapper.h">
+      <Filter>Header Files\ak\Net</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

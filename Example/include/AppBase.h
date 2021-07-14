@@ -58,6 +58,9 @@ public:
 	//! If return false then the window will not be closed
 	virtual bool closeEvent(void) override;
 	
+	//! @brief This function is for new component testing
+	void testFunction(void);
+
 private:
 	// We add the TabToolbar as a friend to grant acces to the UIDs and data
 	friend class TabToolbar;

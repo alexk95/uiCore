@@ -1,0 +1,46 @@
+Package: curl
+Version: 7.68.0-3
+Depends: zlib
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 37c48bb0036cb291e288b73dc76772d99f747d33
+Description: A library for transferring data with URLs
+Type: Port
+Default-Features: ssl, non-http
+
+Package: curl
+Feature: non-http
+Architecture: x64-windows
+Multi-Arch: same
+Description: Enables protocols beyond HTTP/HTTPS/HTTP2
+Type: Port
+
+Package: curl
+Feature: ssl
+Depends: curl
+Architecture: x64-windows
+Multi-Arch: same
+Description: Default SSL backend
+Type: Port
+
+Package: curl
+Feature: sspi
+Architecture: x64-windows
+Multi-Arch: same
+Description: SSPI support 
+Type: Port
+
+Package: curl
+Feature: tool
+Architecture: x64-windows
+Multi-Arch: same
+Description: Builds curl executable
+Type: Port
+
+Package: curl
+Feature: winssl
+Depends: curl
+Architecture: x64-windows
+Multi-Arch: same
+Description: SSL support (Secure Channel / "WinSSL")
+Type: Port

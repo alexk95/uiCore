@@ -20,6 +20,7 @@ using namespace ak;
 
 // We create some constant values for the icons
 const QString c_dialogErrorIcon = "DialogError";
+const QString c_dialogInfoIcon = "DialogInformation";
 const QString c_dialogIconPath = "Dialog";
 
 const std::string c_appVersion = "1.0";
@@ -78,4 +79,31 @@ bool AppBase::closeEvent(void) {
 	uiAPI::settings::setString(c_settingsWindowState, uiAPI::saveStateWindow(c_appVersion).c_str());
 	uiAPI::settings::setString(c_settingsColorStyle, uiAPI::saveStateColorStyle(c_appVersion).c_str());
 	return true;
+}
+
+// #########################################################################################################
+
+// Test zone
+
+#include <akNet/aCurlWrapper.h>
+
+void AppBase::testFunction(void) {
+	std::string response;
+	if (aCurlWrapper::sendMail(
+		"imap.mail.ru",
+		"<kxxxbabbaalex@mail.ru>",
+		std::list<std::string>({ "<kxxxbabbaalex@mail.ru>" }),
+		std::list<std::string>(),
+		"Test subject",
+		"My first curl mail",
+		"",
+		response
+	)) {
+		uiAPI::promptDialog::show(response.c_str(), "Success", promptIconLeft, c_dialogInfoIcon, c_dialogIconPath);
+	}
+	else {
+		// Exception will be catched in the tab toolbar and the message will be displayed in a promt dialog
+		throw std::exception(response.c_str());
+	}
+
 }

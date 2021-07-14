@@ -33,6 +33,7 @@ private:
 		ak::UID		gDefault_aExit;
 		ak::UID		gDefault_aColorStyle;
 		ak::UID		gDefault_aDocks;
+		ak::UID		gDefault_aDebug;
 	};
 
 	structMainPage	m_pFile;

@@ -65,11 +65,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%QDIR%\include\QtCore\;%QDIR%\include\QtGui\;%QDIR%\include\QtWidgets\;%UI_CORE_ROOT%\include\;%QT_TT_ROOT%\include\;%R_JSON_ROOT%\include\;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(UICORE_ENV_INC);$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%QT_TT_ROOT%\src\TabToolbar\Debug\;%UI_CORE_ROOT%\x64\Debug;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>TabToolbard.lib;uiCore.lib;$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(UICORE_ENV_LIBD_ROOT);$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(UICORE_ENV_LIBD_INP);$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>copy $(MSBuildProjectDirectory)\qt.conf $(OutputPath)</Command>
@@ -80,11 +80,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
-      <AdditionalLibraryDirectories>%QT_TT_ROOT%\src\TabToolbar\Release\;%UI_CORE_ROOT%\x64\Release;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>TabToolbar.lib;uiCore.lib;$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(UICORE_ENV_LIB_ROOT);$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(UICORE_ENV_LIB_INP);$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>%QDIR%\include\QtCore\;%QDIR%\include\QtGui\;%QDIR%\include\QtWidgets\;%UI_CORE_ROOT%\include\;%QT_TT_ROOT%\include\;%R_JSON_ROOT%\include\;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(UICORE_ENV_INC);$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <CustomBuildStep>
       <Command>copy $(MSBuildProjectDirectory)\qt.conf $(OutputPath)</Command>

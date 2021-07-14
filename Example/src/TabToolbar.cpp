@@ -15,6 +15,7 @@ const QString c_icoExit = "ExitAppBlue";
 const QString c_icoColorStyleBright = "Sun";
 const QString c_icoColorStyleDark = "Moon";
 const QString c_icoDocks = "Docks";
+const QString c_icoDebug = "BugRed";
 
 using namespace ak;
 
@@ -31,17 +32,20 @@ TabToolbar::TabToolbar(AppBase * _app)
 	const QIcon & icoDark = uiAPI::getIcon(c_icoColorStyleDark, c_icoPath);
 	m_pFile.gDefault_aColorStyle = uiAPI::createColorStyleSwitch(m_app->m_uid, "Bright", "Dark", icoBright, icoDark);
 	m_pFile.gDefault_aDocks = uiAPI::createDockWatcher(m_app->m_uid, c_icoDocks, c_icoPath, "Docks");
+	m_pFile.gDefault_aDebug = uiAPI::createToolButton(m_app->m_uid, "Test", c_icoDebug, c_icoPath);
 
 	// To display the buttons, add them to the group
 	uiAPI::container::addObject(m_pFile.gDefault, m_pFile.gDefault_aExit);
 	uiAPI::container::addObject(m_pFile.gDefault, m_pFile.gDefault_aColorStyle);
 	uiAPI::container::addObject(m_pFile.gDefault, m_pFile.gDefault_aDocks);
+	uiAPI::container::addObject(m_pFile.gDefault, m_pFile.gDefault_aDebug);
 
 	// Show the toolBar in the main window
 	uiAPI::window::setTabToolBarVisible(m_app->m_mainWindow);
 
 	// Register callbacks for the exit button
 	uiAPI::registerUidNotifier(m_pFile.gDefault_aExit, this);
+	uiAPI::registerUidNotifier(m_pFile.gDefault_aDebug, this);
 }
 
 TabToolbar::~TabToolbar() {
@@ -56,10 +60,13 @@ void TabToolbar::notify(
 ) {
 	try {
 		if (_sender == m_pFile.gDefault_aExit && _eventType == etClicked) {
-			throw std::exception("This is just a test to demonstrate how the error promt dialog looks like :-)");
+			uiAPI::promptDialog::show("This is just a test to demonstrate how the error promt dialog looks like :-)", "Error", promptIconLeft, "DialogError", "Dialog");
 
 			// Here we know that the exit button was clicked and we will now call the close window
 			uiAPI::window::close(m_app->m_mainWindow);
+		}
+		else if (_sender == m_pFile.gDefault_aDebug && _eventType == etClicked) {
+			m_app->testFunction();
 		}
 	}
 	catch (const std::exception & e) {

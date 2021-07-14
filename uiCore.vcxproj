@@ -51,22 +51,22 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%QDIR%\include\QtCore\;%QDIR%\include\QtGui\;%QDIR%\include\QtWidgets\;%QT_TT_ROOT%\include\;%R_JSON_ROOT%\include\;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(UICORE_PROJ_ENV_INC);$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UICORE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%QT_TT_ROOT%\src\TabToolbar\Debug;%QDIR%\lib;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%QT_TT_ROOT%\src\TabToolbar\Debug\TabToolbard.lib;$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(UICORE_PROJ_ENV_LIBD_ROOT);$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(UICORE_PROJ_ENV_LIBD_INP);$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%QDIR%\include\QtCore\;%QDIR%\include\QtGui\;%QDIR%\include\QtWidgets\;%QT_TT_ROOT%\include\;%R_JSON_ROOT%\include\;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(UICORE_PROJ_ENV_INC);$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UICORE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%QT_TT_ROOT%\src\TabToolbar\Release;%QDIR%\lib;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%QT_TT_ROOT%\src\TabToolbar\Release\TabToolbar.lib;$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(UICORE_PROJ_ENV_LIB_ROOT);$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(UICORE_PROJ_ENV_LIB_INP);$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
@@ -146,6 +146,7 @@
     <ClCompile Include="src\akGui\aSpecialTabBar.cpp" />
     <ClCompile Include="src\akGui\aTimer.cpp" />
     <ClCompile Include="src\akGui\aTtbContainer.cpp" />
+    <ClCompile Include="src\akNet\aCurlWrapper.cpp" />
     <ClCompile Include="src\akWidgets\aCalendarWidget.cpp" />
     <ClCompile Include="src\akWidgets\aCheckBoxWidget.cpp" />
     <ClCompile Include="src\akWidgets\aColorEditButtonWidget.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="include\akGui\aWindowEventHandler.h" />
     <QtMoc Include="include\akWidgets\aGraphicsWidget.h" />
     <QtMoc Include="include\akWidgets\aDatePickWidget.h" />
+    <ClInclude Include="include\akNet\aCurlWrapper.h" />
     <ClInclude Include="include\akWidgets\aCalendarWidget.h" />
     <QtMoc Include="include\akWidgets\aTimePickWidget.h" />
     <QtMoc Include="include\akWidgets\aSpinBoxWidget.h" />

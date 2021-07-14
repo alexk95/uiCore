@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerEnvironment>PATH=$(QtDllPath);%UI_CORE_ROOT%\x64\Debug;%QT_TT_ROOT%\src\TabToolbar\Debug\;$(LocalDebuggerEnvironment);%PATH</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>PATH=$(QtDllPath);$(UICORE_ENV_DLLD);$(LocalDebuggerEnvironment);%PATH</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerEnvironment>ATH=$(QtDllPath);%UI_CORE_ROOT%\x64\Release;%UI_CORE_ROOT%\Third_Party_Libraries\QtTabToolbar\DLL;%PATH%</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>PATH=$(QtDllPath);$(UICORE_ENV_DLL);%PATH%</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>
